@@ -1,0 +1,407 @@
+/* ============================================================
+   24 FRAMES — SCROLL-DRIVEN PHOTOGRAPHIC INSTALLATION
+   Reference Image 2: Spacious, layered rows scrubbed to scroll
+   ============================================================ */
+
+.section {
+  position: relative;
+  background-color: #FAF8F2;
+  padding: clamp(4.5rem, 8vh, 7.5rem) 0 clamp(5rem, 9vh, 8.5rem);
+  overflow: hidden;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 4vw, 3.5rem);
+}
+
+/* ── Section Header ── */
+.header {
+  margin-bottom: clamp(2.5rem, 5vh, 4rem);
+}
+
+.headerMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.label {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #164B40;
+}
+
+.badge {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #77766E;
+  background: #F2EEE5;
+  border: 1px solid #E4DED2;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.title {
+  font-family: var(--font-editorial, 'Italiana', 'Cormorant Garamond', serif);
+  font-size: clamp(2.6rem, 5.5vw, 5rem);
+  font-weight: 400;
+  color: #20231F;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin: 0 0 0.85rem;
+}
+
+.subRow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.goldRule {
+  display: inline-block;
+  width: 36px;
+  height: 2px;
+  background-color: #C8A84E;
+  border-radius: 1px;
+}
+
+.subtitle {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: clamp(0.7rem, 0.85vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #555850;
+  text-transform: uppercase;
+}
+
+/* ── Spatial Scroll-Driven Viewport ── */
+.stageViewport {
+  position: relative;
+  width: 115%;
+  left: -7.5%;
+  padding: 3rem 0;
+  will-change: transform;
+}
+
+.ribbonRow {
+  display: flex;
+  gap: clamp(20px, 2.8vw, 36px);
+  will-change: transform;
+  margin-bottom: clamp(24px, 3.2vw, 44px);
+}
+
+.row1 {
+  transform: translate3d(0, 0, 0);
+}
+
+.row2 {
+  transform: translate3d(-80px, 0, 0);
+}
+
+/* ── Individual Photo Card (Large, elegant rounded corners) ── */
+.photoCard {
+  position: relative;
+  flex: 0 0 clamp(260px, 27vw, 400px);
+  aspect-ratio: 4 / 3.3;
+  border-radius: clamp(18px, 2.2vw, 26px);
+  overflow: hidden;
+  background-color: #EAE5D9;
+  border: 1.5px solid rgba(228, 222, 210, 0.8);
+  box-shadow: 
+    0 12px 32px rgba(22, 75, 64, 0.07),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
+  will-change: transform;
+  outline: none;
+}
+
+.photoCard:hover,
+.photoCard:focus-visible {
+  border-color: #C8A84E;
+  box-shadow: 
+    0 20px 48px rgba(22, 75, 64, 0.15),
+    0 0 20px rgba(200, 168, 78, 0.25);
+  z-index: 10;
+}
+
+.cardImageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.photoCard:hover .cardImage {
+  transform: scale(1.04);
+}
+
+.cardVignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 45%,
+    rgba(14, 48, 40, 0.6) 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Editorial Caption Tag (Clean, authentic project credit) ── */
+.captionTag {
+  position: absolute;
+  bottom: clamp(12px, 1.4vw, 18px);
+  left: clamp(12px, 1.4vw, 18px);
+  right: clamp(12px, 1.4vw, 18px);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  pointer-events: none;
+}
+
+.frameBadge {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  color: #C8A84E;
+  background: rgba(12, 48, 40, 0.65);
+  backdrop-filter: blur(8px);
+  padding: 0.25rem 0.55rem;
+  border-radius: 4px;
+  border: 1px solid rgba(200, 168, 78, 0.3);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.tagTitle {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(0.72rem, 0.85vw, 0.85rem);
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Modal Lightbox (Warm ivory/charcoal backdrop, non-black) ── */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(40, 42, 38, 0.72);
+  backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  animation: modalFade 0.25s ease;
+}
+
+@keyframes modalFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modalContent {
+  position: relative;
+  width: min(94vw, 1000px);
+  max-height: 90vh;
+  background: #FAF8F2;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+  border: 1.5px solid rgba(200, 168, 78, 0.4);
+  display: flex;
+  flex-direction: column;
+}
+
+.modalCloseBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid #E4DED2;
+  color: #20231F;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.2s ease;
+}
+
+.modalCloseBtn:hover {
+  background: #164B40;
+  color: #FFFFFF;
+}
+
+.modalGrid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalPhotoWrap {
+  background: #0C3028;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+}
+
+.modalPhoto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.modalDetails {
+  padding: clamp(1.8rem, 3vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.modalMetaTag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.modalTagBadge {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #164B40;
+  background: rgba(22, 75, 64, 0.08);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+}
+
+.modalId {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.625rem;
+  color: #77766E;
+  letter-spacing: 0.08em;
+}
+
+.modalHeading {
+  font-family: var(--font-editorial, 'Italiana', serif);
+  font-size: clamp(1.8rem, 2.4vw, 2.5rem);
+  color: #20231F;
+  line-height: 1.15;
+  margin: 0 0 0.65rem;
+}
+
+.modalCaption {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #555850;
+  margin: 0 0 1.5rem;
+}
+
+.specifications {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1.1rem 0;
+  border-top: 1px solid #E4DED2;
+  border-bottom: 1px solid #E4DED2;
+  margin-bottom: 1.5rem;
+}
+
+.specItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+}
+
+.specLabel {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  color: #77766E;
+  font-size: 0.72rem;
+}
+
+.specValue {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  color: #20231F;
+  font-weight: 600;
+}
+
+.modalActionRow {
+  display: flex;
+}
+
+.modalInquireBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background: #164B40;
+  color: #FFFFFF;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.modalInquireBtn:hover {
+  background: #0C3028;
+  box-shadow: 0 8px 24px rgba(22, 75, 64, 0.25);
+}
+
+/* ── Responsive Adaptations ── */
+@media (max-width: 900px) {
+  .stageViewport {
+    width: 130%;
+    left: -15%;
+  }
+
+  .photoCard {
+    flex: 0 0 240px;
+    border-radius: 16px;
+  }
+
+  .modalGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .modalPhotoWrap {
+    min-height: 240px;
+    max-height: 300px;
+  }
+}

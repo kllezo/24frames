@@ -1,0 +1,35 @@
+.grainContainer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9990;
+  overflow: hidden;
+}
+
+.svgFilter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.grainOverlay {
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  filter: url(#film-grain-filter);
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grainContainer {
+    display: none;
+  }
+}

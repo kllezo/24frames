@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <rect width="180" height="180" rx="36" fill="#164B40" />
+  <rect x="12" y="12" width="156" height="156" rx="28" fill="none" stroke="#C8A84E" stroke-width="2" />
+  <text x="90" y="105" font-family="'Cinzel', serif" font-size="72" font-weight="700" fill="#FAF8F2" text-anchor="middle">24</text>
+  <text x="90" y="135" font-family="'Space Mono', monospace" font-size="14" font-weight="700" fill="#C8A84E" text-anchor="middle" letter-spacing="4">FRAMES</text>
+</svg>

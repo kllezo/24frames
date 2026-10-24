@@ -1,0 +1,284 @@
+.section {
+  padding: var(--space-4xl) 0;
+  background: var(--color-bg);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  width: 100%;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+/* --- Portrait Frame --- */
+.portraitWrap {
+  position: relative;
+  will-change: transform, opacity, clip-path;
+  width: 100%;
+}
+
+.portraitFrame {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #FFFFFF;
+  border: 1.5px solid var(--color-border);
+  box-shadow: 0 16px 45px rgba(22, 75, 64, 0.08);
+  aspect-ratio: 4 / 5.2;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.portraitFrame:hover {
+  transform: perspective(1000px) rotateY(3deg) rotateX(-2deg) scale(1.02);
+  border-color: #C8A84E;
+  box-shadow: 
+    0 24px 60px rgba(22, 75, 64, 0.18),
+    0 0 35px rgba(200, 168, 78, 0.25);
+}
+
+.imageOverflow {
+  position: absolute;
+  inset: -8% 0 -8% 0;
+  height: 116%;
+  overflow: hidden;
+}
+
+.portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  will-change: transform;
+}
+
+.frameApertureBadge {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--color-border);
+}
+
+.frameApertureBadge span {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: var(--ls-mono);
+  color: #164B40;
+  text-transform: uppercase;
+}
+
+.portraitShadow {
+  position: absolute;
+  bottom: -20px;
+  left: 5%;
+  width: 90%;
+  height: 30px;
+  background: radial-gradient(ellipse at center, rgba(22, 75, 64, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* --- Content Column --- */
+.content {
+  will-change: transform, opacity;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+  color: #164B40;
+}
+
+.locationTag {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: var(--ls-mono);
+  color: #77766E;
+  text-transform: uppercase;
+}
+
+.quote {
+  font-family: var(--font-editorial);
+  font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+  font-weight: 400;
+  line-height: 1.38;
+  font-style: italic;
+  color: #20231F;
+  margin-bottom: 1.75rem;
+  position: relative;
+  border-left: 2px solid #164B40;
+  padding-left: clamp(1rem, 2vw, 1.75rem);
+}
+
+.attribution {
+  margin-bottom: 1.5rem;
+}
+
+.name {
+  font-family: var(--font-cinema);
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #20231F;
+}
+
+.role {
+  font-family: var(--font-body);
+  font-size: 0.78125rem;
+  color: #77766E;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-nav);
+  margin-top: 0.15rem;
+  font-weight: 600;
+}
+
+.biography {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.25rem;
+}
+
+.bio,
+.bioSecondary {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: #77766E;
+}
+
+/* --- Milestones Strip --- */
+.milestones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 2.25rem;
+}
+
+.milestone {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.milestoneValue {
+  font-family: var(--font-cinema);
+  font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1;
+  color: #164B40;
+}
+
+.milestoneLabel {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+  color: #77766E;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.inquireBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 2rem;
+  background: #164B40;
+  color: #FAF8F2;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-nav);
+  transition: all 0.3s var(--ease-out);
+  box-shadow: 0 6px 20px rgba(22, 75, 64, 0.2);
+  text-decoration: none;
+}
+
+.inquireBtn:hover {
+  background: #0E352D;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(22, 75, 64, 0.3);
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+}
+
+.inquireBtn:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* --- Responsive Adaptations --- */
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .portraitFrame {
+    max-width: 440px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .milestones {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .quote {
+    font-size: 1.25rem;
+  }
+
+  .inquireBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait {
+    transform: none !important;
+  }
+  .portraitWrap {
+    clip-path: none !important;
+  }
+}

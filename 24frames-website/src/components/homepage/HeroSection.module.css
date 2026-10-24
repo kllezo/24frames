@@ -1,0 +1,513 @@
+/* ============================================================
+   24 FRAMES — HERO SECTION
+   Cinematic Card Carousel (Reference 1)
+   ============================================================ */
+
+.heroSection {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--color-bg);
+  padding: clamp(6rem, 10vh, 7.5rem) 0 clamp(3rem, 6vh, 5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Narrative Header ───────────────────────────────── */
+.narrativeHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto clamp(2rem, 4vh, 3rem);
+  will-change: transform, opacity;
+}
+
+.kickerRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.chapterBadge {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: #164B40;
+}
+
+.heritageBadge {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: #77766E;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+}
+
+.headline {
+  font-family: var(--font-cinema);
+  font-size: var(--fs-hero);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #20231F;
+  line-height: 1.08;
+  margin-bottom: 1rem;
+}
+
+.subheadline {
+  font-family: var(--font-editorial);
+  font-size: var(--fs-subtitle);
+  font-weight: 400;
+  font-style: italic;
+  color: #77766E;
+  line-height: 1.5;
+  max-width: 720px;
+}
+
+/* ── Cinematic Card Carousel ────────────────────────── */
+.carouselViewport {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.carouselTrack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: clamp(420px, 56vh, 640px);
+  perspective: 1200px;
+  gap: clamp(12px, 1.5vw, 24px);
+  padding: 0 clamp(4px, 1vw, 20px);
+}
+
+/* ── Card Base ─────────────────────────────────────── */
+.card {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: clamp(16px, 2vw, 28px);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+  box-shadow: 0 8px 32px rgba(22, 75, 64, 0.08);
+}
+
+.card:hover {
+  box-shadow: 0 16px 48px rgba(22, 75, 64, 0.14);
+}
+
+.cardImageWrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover .cardImage {
+  transform: scale(1.03);
+}
+
+.cardVignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 30%,
+    rgba(12, 48, 40, 0.15) 60%,
+    rgba(12, 48, 40, 0.45) 100%
+  );
+  pointer-events: none;
+}
+
+.cardLink {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+
+/* ── Prev Card ─────────────────────────────────────── */
+.cardPrev {
+  width: clamp(100px, 18vw, 240px);
+  height: 85%;
+  opacity: 0.6;
+  transform: scale(0.92) translateX(10%);
+  z-index: 1;
+}
+
+.cardPrev:hover {
+  opacity: 0.8;
+  transform: scale(0.94) translateX(8%);
+}
+
+/* ── Active Card ───────────────────────────────────── */
+.cardActive {
+  width: clamp(280px, 50vw, 580px);
+  height: 100%;
+  z-index: 10;
+  cursor: default;
+  box-shadow: 
+    0 24px 64px rgba(22, 75, 64, 0.2),
+    0 0 35px rgba(200, 168, 78, 0.2);
+  border: 1px solid rgba(200, 168, 78, 0.4);
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.4s ease;
+}
+
+.cardActive:hover {
+  box-shadow: 
+    0 30px 75px rgba(22, 75, 64, 0.26),
+    0 0 45px rgba(200, 168, 78, 0.35);
+  border-color: rgba(200, 168, 78, 0.8);
+}
+
+/* ── Futuristic Camera Viewfinder HUD ── */
+.viewfinderHud {
+  position: absolute;
+  inset: 12px;
+  pointer-events: none;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hudTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.3rem 0.6rem;
+  background: rgba(12, 48, 40, 0.35);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.recIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 0.1em;
+}
+
+.recDot {
+  width: 7px;
+  height: 7px;
+  background: #E53935;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #E53935;
+  animation: recBlink 1s infinite alternate;
+}
+
+@keyframes recBlink {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+.telemetryLens {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  color: #C8A84E;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.reticleCornerTL,
+.reticleCornerTR,
+.reticleCornerBL,
+.reticleCornerBR {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: rgba(200, 168, 78, 0.7);
+  pointer-events: none;
+}
+
+.reticleCornerTL {
+  top: 14px;
+  left: 14px;
+  border-top: 2px solid rgba(200, 168, 78, 0.7);
+  border-left: 2px solid rgba(200, 168, 78, 0.7);
+}
+
+.reticleCornerTR {
+  top: 14px;
+  right: 14px;
+  border-top: 2px solid rgba(200, 168, 78, 0.7);
+  border-right: 2px solid rgba(200, 168, 78, 0.7);
+}
+
+.reticleCornerBL {
+  bottom: 14px;
+  left: 14px;
+  border-bottom: 2px solid rgba(200, 168, 78, 0.7);
+  border-left: 2px solid rgba(200, 168, 78, 0.7);
+}
+
+.reticleCornerBR {
+  bottom: 14px;
+  right: 14px;
+  border-bottom: 2px solid rgba(200, 168, 78, 0.7);
+  border-right: 2px solid rgba(200, 168, 78, 0.7);
+}
+
+/* ── Next Card ─────────────────────────────────────── */
+.cardNext {
+  width: clamp(100px, 18vw, 240px);
+  height: 85%;
+  opacity: 0.6;
+  transform: scale(0.92) translateX(-10%);
+  z-index: 1;
+}
+
+.cardNext:hover {
+  opacity: 0.8;
+  transform: scale(0.94) translateX(-8%);
+}
+
+/* ── Card Label (Prev/Next) ────────────────────────── */
+.cardLabel {
+  position: absolute;
+  top: clamp(10px, 1.5vw, 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+}
+
+.cardLabel span {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(32, 35, 31, 0.3);
+  backdrop-filter: blur(8px);
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+/* ── Title Overlay on Active Card ──────────────────── */
+.cardTitleOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 15;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  will-change: transform, opacity;
+}
+
+.dayLabel {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.cardTitle {
+  font-family: var(--font-cinema);
+  font-size: clamp(1.6rem, 3.2vw, 2.8rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #FFFFFF;
+  line-height: 1.1;
+  text-transform: uppercase;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+.cardSubtitle {
+  font-family: var(--font-editorial);
+  font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 0.15rem;
+}
+
+.categoryLabel {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 0.5rem;
+}
+
+/* ── Navigation Dots ───────────────────────────────── */
+.dotsRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: clamp(1rem, 2vh, 1.5rem);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.dot:hover {
+  background: #77766E;
+}
+
+.dotActive {
+  background: #164B40;
+  width: 24px;
+  border-radius: var(--radius-full);
+}
+
+/* ── Metrics Bar ───────────────────────────────────── */
+.metricsBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  padding: 1.25rem 2.25rem;
+  background: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 20px rgba(32, 35, 31, 0.04);
+  margin-top: clamp(2rem, 4vh, 3rem);
+}
+
+.metricItem {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.metricValue {
+  font-family: var(--font-cinema);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #164B40;
+  line-height: 1;
+}
+
+.metricLabel {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: #77766E;
+}
+
+.metricDivider {
+  color: var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .carouselTrack {
+    height: clamp(340px, 50vh, 480px);
+    gap: 8px;
+    padding: 0 4px;
+  }
+
+  .cardPrev,
+  .cardNext {
+    width: 60px;
+    opacity: 0.4;
+  }
+
+  .cardActive {
+    width: 75vw;
+  }
+
+  .cardTitleOverlay {
+    padding: 1.2rem;
+  }
+
+  .cardTitle {
+    font-size: 1.3rem;
+  }
+
+  .metricsBar {
+    flex-direction: column;
+    border-radius: var(--radius-md);
+    gap: 0.75rem;
+    padding: 1.25rem;
+  }
+
+  .metricDivider {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardPrev,
+  .cardNext {
+    width: 40px;
+    opacity: 0.3;
+  }
+
+  .cardTitle {
+    font-size: 1.1rem;
+  }
+
+  .cardSubtitle {
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,412 @@
+.section {
+  padding: clamp(3.5rem, 7vh, 7rem) 0 clamp(4rem, 8vh, 8rem);
+  background: var(--color-surface-alt);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.container {
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3.5vw, 2.5rem);
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: clamp(2rem, 4vh, 3.5rem);
+  will-change: transform, opacity;
+}
+
+.label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+  color: #123C34;
+  margin-bottom: 0.65rem;
+}
+
+.title {
+  font-family: var(--font-cinema);
+  font-size: var(--fs-section-title);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #181817;
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-family: var(--font-editorial);
+  font-size: var(--fs-subtitle);
+  font-weight: 400;
+  font-style: italic;
+  color: #5C5850;
+  max-width: 660px;
+  margin: 0 auto;
+  line-height: 1.45;
+}
+
+/* ── Immersive Interactive Stage ── */
+.stage {
+  display: grid;
+  grid-template-columns: 1.65fr 1fr;
+  gap: clamp(1.5rem, 3.5vw, 3.5rem);
+  align-items: stretch;
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+/* --- Monumental Photography Display --- */
+.monumentalDisplay {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #FFFFFF;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 16px 45px rgba(22, 75, 64, 0.08);
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.monumentalDisplay:hover {
+  transform: perspective(1000px) rotateY(-2deg) rotateX(1.5deg);
+  box-shadow: 0 24px 60px rgba(22, 75, 64, 0.16);
+}
+
+.displayImgWrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.displayImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: displayFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes displayFade {
+  from {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.displayVignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(32, 35, 31, 0.88) 0%,
+    rgba(32, 35, 31, 0.3) 50%,
+    rgba(32, 35, 31, 0.05) 100%
+  );
+  pointer-events: none;
+}
+
+/* Floating Supporting Still Frame */
+.floatingStillWrap {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: clamp(140px, 16vw, 220px);
+  aspect-ratio: 4 / 5.2;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1.5px solid var(--color-border);
+  box-shadow: 0 12px 30px rgba(32, 35, 31, 0.15);
+  background: #FFFFFF;
+  z-index: 6;
+  pointer-events: none;
+  display: block;
+}
+
+.floatingStill {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: displayFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.floatingLabel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.35rem 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: var(--ls-mono);
+  color: #D4AF37;
+  background: rgba(11, 11, 12, 0.85);
+  backdrop-filter: blur(6px);
+  text-align: center;
+}
+
+/* Display Content Overlay */
+.displayOverlay {
+  position: relative;
+  z-index: 5;
+  padding: clamp(1.8rem, 3.5vw, 3rem);
+}
+
+.displayTags {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.worldNumber {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: var(--ls-mono);
+  color: #FAF8F2;
+  background: #164B40;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
+}
+
+.worldCountBadge {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+  color: rgba(244, 244, 246, 0.75);
+}
+
+.worldTitle {
+  font-family: var(--font-cinema);
+  font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #F4F4F6;
+  margin-bottom: 0.35rem;
+  line-height: 1.15;
+}
+
+.worldTagline {
+  font-family: var(--font-editorial);
+  font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+  font-style: italic;
+  color: rgba(244, 244, 246, 0.85);
+  margin-bottom: 0.65rem;
+}
+
+.worldDesc {
+  font-family: var(--font-body);
+  font-size: clamp(0.875rem, 1vw, 0.95rem);
+  line-height: 1.6;
+  color: rgba(244, 244, 246, 0.7);
+  max-width: 580px;
+  margin-bottom: 1.5rem;
+}
+
+.worldCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.8rem;
+  background: #123C34;
+  color: #F3F0E9;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-nav);
+  transition: all 0.3s var(--ease-out);
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(18, 60, 52, 0.25);
+}
+
+.worldCta:hover {
+  background: #0E2E28;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(18, 60, 52, 0.35);
+}
+
+.arrow {
+  color: #D4AF37;
+  transition: transform 0.25s ease;
+}
+
+.worldCta:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* ── Interactive Category Selector Rail ── */
+.categoryRail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 0;
+}
+
+.railHeader {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+  color: #123C34;
+  margin-bottom: 0.75rem;
+  padding-left: 1rem;
+}
+
+.railList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.railItem {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.15rem 1.35rem;
+  border-radius: var(--radius-md);
+  background: #FFFFFF;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  width: 100%;
+}
+
+.railItem:hover {
+  background: #FFFFFF;
+  border-color: #164B40;
+  transform: translateX(6px);
+  box-shadow: 0 6px 20px rgba(22, 75, 64, 0.08);
+}
+
+.railItemActive {
+  background: #164B40 !important;
+  border-color: #164B40 !important;
+  box-shadow: 0 10px 28px rgba(22, 75, 64, 0.2) !important;
+  transform: translateX(8px);
+}
+
+.railNumber {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: var(--ls-mono);
+  color: #164B40;
+  transition: color 0.25s ease;
+}
+
+.railItemActive .railNumber {
+  color: #C8A84E;
+}
+
+.railInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.railLabel {
+  font-family: var(--font-cinema);
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #181817;
+  transition: color 0.25s ease;
+}
+
+.railItemActive .railLabel {
+  color: #F4F4F6;
+}
+
+.railCount {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: var(--ls-mono);
+  color: #5C5850;
+  text-transform: uppercase;
+  transition: color 0.25s ease;
+}
+
+.railItemActive .railCount {
+  color: rgba(244, 244, 246, 0.7);
+}
+
+.railIndicator {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: #123C34;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all 0.25s ease;
+}
+
+.railItem:hover .railIndicator {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.railItemActive .railIndicator {
+  opacity: 1;
+  color: #D4AF37;
+  transform: translateX(0);
+}
+
+/* ── Responsive Adaptations ── */
+@media (max-width: 1024px) {
+  .stage {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .floatingStillWrap {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .monumentalDisplay {
+    min-height: 420px;
+  }
+
+  .displayOverlay {
+    padding: 1.35rem;
+  }
+
+  .worldTitle {
+    font-size: 1.6rem;
+  }
+
+  .worldCta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .railItem {
+    padding: 0.85rem 1rem;
+  }
+}

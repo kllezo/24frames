@@ -1,0 +1,520 @@
+/* ============================================================
+   24 FRAMES — SIGNATURE COLLECTION / ARCHIVAL STACKS
+   Reference 3: "every:second" — 3D photo stacks with pull-out
+   ============================================================ */
+
+.section {
+  position: relative;
+  width: 100%;
+  padding: var(--space-3xl) 0;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ── Section Header ─────────────────────────────────── */
+.header {
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 5vh, 4rem);
+}
+
+.headerMeta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: #164B40;
+}
+
+.stackBadge {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #77766E;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+}
+
+.title {
+  font-family: var(--font-cinema);
+  font-size: var(--fs-section-title);
+  font-weight: 500;
+  letter-spacing: var(--ls-cinema);
+  text-transform: uppercase;
+  color: #20231F;
+  line-height: 1.12;
+  margin-bottom: 0.75rem;
+}
+
+.subtitle {
+  font-family: var(--font-editorial);
+  font-size: var(--fs-subtitle);
+  font-weight: 400;
+  font-style: italic;
+  color: #77766E;
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* ── Archive Stage ──────────────────────────────────── */
+.archiveStage {
+  position: relative;
+  background: #F2EEE5;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  overflow: hidden;
+}
+
+.archiveHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: clamp(1rem, 2vw, 2rem);
+}
+
+.datestamp {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.dateMain {
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
+  font-weight: 600;
+  color: #20231F;
+}
+
+.dateTime {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #77766E;
+  letter-spacing: 0.06em;
+}
+
+.archiveBrand {
+  font-family: var(--font-body);
+  font-size: clamp(0.75rem, 0.95vw, 0.9rem);
+  font-weight: 600;
+  color: #20231F;
+  letter-spacing: 0.08em;
+}
+
+/* ── Stacks Viewport ────────────────────────────────── */
+.stacksViewport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 3vw, 3rem);
+  min-height: clamp(300px, 45vh, 480px);
+  position: relative;
+  perspective: 1200px;
+}
+
+/* ── 3D Stack Cluster ───────────────────────────────── */
+.stackCluster {
+  position: relative;
+  width: clamp(100px, 18vw, 200px);
+  height: clamp(140px, 22vw, 240px);
+  flex-shrink: 0;
+  transform-style: preserve-3d;
+}
+
+.stackBL {
+  transform: rotateY(28deg) rotateX(8deg);
+}
+
+.stackTR {
+  transform: rotateY(-28deg) rotateX(-6deg);
+}
+
+.stackedSlice {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(228, 222, 210, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transform: translateZ(calc(var(--i) * -5px)) translateX(calc(var(--i) * 3px));
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.stackCluster:hover .stackedSlice {
+  transform: translateZ(calc(var(--i) * -12px)) translateX(calc(var(--i) * 6px)) rotateZ(calc(var(--i) * 2deg));
+  box-shadow: 0 6px 20px rgba(22, 75, 64, 0.18);
+}
+
+/* ── Focal Pulled Photo ─────────────────────────────── */
+.focalPhoto {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  will-change: transform, opacity;
+}
+
+.focalFrame {
+  position: relative;
+  width: clamp(260px, 38vw, 480px);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #FFFFFF;
+  border: 1px solid rgba(200, 168, 78, 0.35);
+  box-shadow:
+    0 24px 68px rgba(22, 75, 64, 0.18),
+    0 0 35px rgba(200, 168, 78, 0.15);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.focalFrame:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 32px 85px rgba(22, 75, 64, 0.25),
+    0 0 50px rgba(200, 168, 78, 0.3);
+}
+
+.focalImage {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.focalShadow {
+  position: absolute;
+  bottom: -12px;
+  left: 10%;
+  right: 10%;
+  height: 20px;
+  background: radial-gradient(ellipse at center, rgba(32, 35, 31, 0.12) 0%, transparent 70%);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+/* ── Pull-out Metadata ──────────────────────────────── */
+.pullMeta {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  width: 100%;
+  max-width: clamp(260px, 38vw, 480px);
+}
+
+.pullDate {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #20231F;
+  text-transform: uppercase;
+}
+
+.pullLocation {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #77766E;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pullCredit {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  color: #9B988E;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pullActions {
+  margin-top: 0.5rem;
+}
+
+.readMore {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #164B40;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: lowercase;
+  transition: color 0.25s ease;
+}
+
+.readMore:hover {
+  color: #0E352D;
+}
+
+/* ── Tag Cloud / Category Selector ──────────────────── */
+.tagCloud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  margin-top: clamp(1.5rem, 2.5vw, 2rem);
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.tagLabel {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #20231F;
+  margin-right: 0.5rem;
+}
+
+.tagCount {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 700;
+  color: #9B988E;
+  vertical-align: super;
+  margin-left: 2px;
+}
+
+.tagItem {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #77766E;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  background: none;
+  border: none;
+  padding: 0.15rem 0.35rem;
+  border-radius: var(--radius-xs);
+}
+
+.tagItem:hover {
+  color: #20231F;
+}
+
+.tagActive {
+  color: #164B40;
+  font-weight: 700;
+  background: rgba(22, 75, 64, 0.06);
+}
+
+/* ── Details Strip ──────────────────────────────────── */
+.detailsStrip {
+  display: flex;
+  gap: clamp(2rem, 4vw, 4rem);
+  margin-top: clamp(2rem, 4vh, 3rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  background: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.detailMain {
+  flex: 1;
+}
+
+.projectTitle {
+  font-family: var(--font-cinema);
+  font-size: var(--fs-project-title);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #20231F;
+  line-height: 1.15;
+  margin-bottom: 0.3rem;
+}
+
+.projectSubtitle {
+  font-family: var(--font-editorial);
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: italic;
+  color: #77766E;
+  margin-bottom: 0.75rem;
+}
+
+.projectStory {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  color: #77766E;
+  line-height: 1.7;
+}
+
+.detailMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 220px;
+}
+
+.specItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.specLabel {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9B988E;
+}
+
+.specVal {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #20231F;
+}
+
+.viewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #164B40;
+  color: #FAF8F2;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s var(--ease-out);
+  margin-top: auto;
+}
+
+.viewBtn:hover {
+  background: #0E352D;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(22, 75, 64, 0.22);
+}
+
+/* ── Project Rail ───────────────────────────────────── */
+.projectRail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-top: clamp(1.5rem, 3vh, 2.5rem);
+  flex-wrap: wrap;
+}
+
+.railItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.6rem 0.9rem;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.railItem:hover {
+  border-color: var(--color-border);
+  background: var(--color-surface-alt);
+}
+
+.railItemActive {
+  border-color: #164B40 !important;
+  background: rgba(22, 75, 64, 0.04) !important;
+}
+
+.railNumber {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9B988E;
+}
+
+.railItemActive .railNumber {
+  color: #164B40;
+}
+
+.railTitle {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #77766E;
+}
+
+.railItemActive .railTitle {
+  color: #20231F;
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .detailsStrip {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .detailMeta {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .stacksViewport {
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: auto;
+    perspective: none;
+  }
+
+  .stackCluster {
+    display: none;
+  }
+
+  .focalFrame {
+    width: 90%;
+  }
+
+  .pullMeta {
+    max-width: 90%;
+  }
+
+  .tagCloud {
+    justify-content: center;
+  }
+
+  .detailsStrip {
+    padding: 1.25rem;
+  }
+}

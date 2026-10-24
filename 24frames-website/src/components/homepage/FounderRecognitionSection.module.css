@@ -1,0 +1,679 @@
+/* ============================================================
+   24 FRAMES — FOUNDER + RECOGNITION WALL
+   Reference Image 1: Left portrait + Two Curved Gallery Rails
+   ============================================================ */
+
+.section {
+  position: relative;
+  background-color: #FAF8F2;
+  padding: clamp(4.5rem, 9vh, 8.5rem) 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 42% 54%;
+  gap: clamp(2rem, 4vw, 4.5rem);
+  align-items: flex-start;
+}
+
+/* ── LEFT COLUMN: Dominant Founder Portrait ─────────────────── */
+.portraitCol {
+  position: relative;
+  width: 100%;
+}
+
+.portraitWrap {
+  position: relative;
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+.portraitFrame {
+  position: relative;
+  border-radius: clamp(18px, 2.2vw, 28px);
+  overflow: hidden;
+  background: #FFFFFF;
+  border: 1.5px solid #E4DED2;
+  box-shadow: 0 16px 45px rgba(22, 75, 64, 0.08);
+  aspect-ratio: 4 / 5.2;
+}
+
+.portraitImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+  display: block;
+}
+
+.portraitCaption {
+  position: absolute;
+  bottom: clamp(12px, 1.4vw, 18px);
+  left: clamp(12px, 1.4vw, 18px);
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  border: 1px solid rgba(22, 75, 64, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(22, 75, 64, 0.06);
+}
+
+.captionTag {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #164B40;
+}
+
+.captionDivider {
+  color: #C8A84E;
+  font-size: 0.6rem;
+}
+
+.captionName {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #20231F;
+}
+
+.portraitRealisticShadow {
+  position: absolute;
+  bottom: -22px;
+  left: 6%;
+  width: 88%;
+  height: 35px;
+  background: radial-gradient(ellipse at center, rgba(22, 75, 64, 0.12) 0%, transparent 70%);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+/* ── RIGHT COLUMN: Content Column ───────────────────────────── */
+.contentCol {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 2.5vw, 2.5rem);
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.label {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #164B40;
+}
+
+.locationBadge {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #77766E;
+  background: #F2EEE5;
+  border: 1px solid #E4DED2;
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+}
+
+/* ── SCULPTURAL RECOGNITION WALL: Two Curved Gallery Rails ──── */
+.railsInstallation {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(242, 238, 229, 0.5) 100%);
+  border: 1px solid #E4DED2;
+  border-radius: 18px;
+  padding: clamp(1.2rem, 2vw, 1.8rem);
+  box-shadow: 0 10px 30px rgba(22, 75, 64, 0.04);
+  perspective: 1200px;
+}
+
+.railsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.railsTitle {
+  font-family: var(--font-cinema, 'Cinzel', serif);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #20231F;
+}
+
+.railsHint {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.625rem;
+  color: #77766E;
+  letter-spacing: 0.08em;
+}
+
+/* Curved Rail Container */
+.curvedRail {
+  position: relative;
+  margin-bottom: 2rem;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.curvedRail:last-child {
+  margin-bottom: 0.5rem;
+}
+
+.upperRail .railTrack {
+  transform: perspective(1000px) rotateY(-3.5deg) rotateX(1.5deg);
+}
+
+.lowerRail .railTrack {
+  transform: perspective(1000px) rotateY(-3deg) rotateX(2deg);
+}
+
+/* The actual physical rail ledge */
+.railTrack {
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    #EDE7DB 0%,
+    #F4F0E6 40%,
+    #FAF8F2 85%,
+    #FFFFFF 100%
+  );
+  border-top: 1.5px solid #FFFFFF;
+  border-bottom: 2px solid #D5CEBE;
+  border-radius: 8px;
+  padding: 1rem 1rem 1.4rem;
+  box-shadow:
+    0 10px 24px rgba(22, 75, 64, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: transform 0.4s ease;
+}
+
+.railSurfaceHighlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(200, 168, 78, 0.6) 60%, rgba(200, 168, 78, 0.9) 100%);
+  border-radius: 8px 8px 0 0;
+}
+
+.railLedgeUnderlay {
+  position: absolute;
+  bottom: -6px;
+  left: 3%;
+  right: 3%;
+  height: 12px;
+  background: radial-gradient(ellipse at center, rgba(32, 35, 31, 0.12) 0%, transparent 70%);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+/* Artefacts Row on the Rail */
+.artefactsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(10px, 1.5vw, 20px);
+  align-items: flex-end;
+}
+
+.artefact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  outline: none;
+}
+
+.artefact:hover,
+.artefact:focus-visible {
+  transform: translateY(-8px) scale(1.03);
+}
+
+.artefactVisual {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3.4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #FFFFFF;
+  border: 1px solid #E4DED2;
+  box-shadow: 0 6px 18px rgba(22, 75, 64, 0.08);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.artefact:hover .artefactVisual,
+.artefact:focus-visible .artefactVisual {
+  border-color: #C8A84E;
+  box-shadow: 0 12px 30px rgba(22, 75, 64, 0.16), 0 0 15px rgba(200, 168, 78, 0.25);
+}
+
+.artefactCover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.artefact:hover .artefactCover {
+  transform: scale(1.04);
+}
+
+.artefactGlow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(12, 48, 40, 0.4) 100%);
+  pointer-events: none;
+}
+
+.artefactAnchorShadow {
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.artefactInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.15rem;
+  width: 100%;
+}
+
+.artefactTitle {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #20231F;
+  line-height: 1.2;
+}
+
+.artefactOrg {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.5625rem;
+  color: #77766E;
+  letter-spacing: 0.04em;
+}
+
+/* ── EDITORIAL CONTENT BELOW THE WALL ───────────────────────── */
+.bioBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pullQuote {
+  margin: 0;
+  padding-left: 1.5rem;
+  border-left: 2px solid #C8A84E;
+  font-family: var(--font-editorial, 'Italiana', 'Cormorant Garamond', serif);
+  font-size: clamp(1.2rem, 1.8vw, 1.65rem);
+  font-style: italic;
+  line-height: 1.45;
+  color: #20231F;
+}
+
+.artistIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.name {
+  font-family: var(--font-cinema, 'Cinzel', serif);
+  font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #20231F;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.role {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #164B40;
+  text-transform: uppercase;
+}
+
+.narrative {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.narrative p {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #555850;
+  margin: 0;
+}
+
+.editorialDivider {
+  width: 100%;
+  height: 1px;
+  background: #E4DED2;
+  margin: 0.5rem 0;
+}
+
+/* Verified Statistics */
+.statisticsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2vw, 2rem);
+  padding: 0.5rem 0;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statValue {
+  font-family: var(--font-cinema, 'Cinzel', serif);
+  font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+  font-weight: 700;
+  color: #164B40;
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #77766E;
+  text-transform: uppercase;
+}
+
+/* Commission CTA */
+.actionRow {
+  margin-top: 0.5rem;
+}
+
+.commissionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #164B40;
+  color: #FAF8F2;
+  padding: 0.9rem 2rem;
+  border-radius: 999px;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(22, 75, 64, 0.2);
+}
+
+.commissionBtn:hover {
+  background: #0C3028;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(22, 75, 64, 0.3);
+}
+
+.btnArrow {
+  color: #C8A84E;
+  transition: transform 0.25s ease;
+}
+
+.commissionBtn:hover .btnArrow {
+  transform: translateX(4px);
+}
+
+/* ── CLICK-TO-EXPAND EDITORIAL MODAL (Warm Ivory/Subdued, NOT Black) ── */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(40, 42, 38, 0.65);
+  backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modalCard {
+  position: relative;
+  width: min(94vw, 860px);
+  max-height: 90vh;
+  background: #FAF8F2;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  border: 1.5px solid #C8A84E;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalCloseBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid #E4DED2;
+  color: #20231F;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.2s ease;
+}
+
+.modalCloseBtn:hover {
+  background: #164B40;
+  color: #FFFFFF;
+}
+
+.modalGrid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.3fr;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalCoverWrap {
+  background: #0C3028;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 340px;
+}
+
+.modalCoverImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.modalContent {
+  padding: clamp(1.8rem, 3vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.modalHeaderMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.modalCategoryBadge {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #164B40;
+  background: rgba(22, 75, 64, 0.08);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.modalYear {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #C8A84E;
+}
+
+.modalTitle {
+  font-family: var(--font-cinema, 'Cinzel', serif);
+  font-size: clamp(1.4rem, 2vw, 1.85rem);
+  color: #20231F;
+  line-height: 1.2;
+  margin: 0 0 0.35rem;
+}
+
+.modalOrg {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #77766E;
+  margin: 0 0 1.25rem;
+}
+
+.modalCitationBox {
+  background: #FFFFFF;
+  border-left: 2px solid #C8A84E;
+  padding: 0.85rem 1rem;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 1.25rem;
+}
+
+.citationLabel {
+  display: block;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #C8A84E;
+  margin-bottom: 0.25rem;
+}
+
+.citationText {
+  font-family: var(--font-editorial, 'Italiana', serif);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #20231F;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.modalSummary {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #555850;
+  margin: 0 0 1.5rem;
+}
+
+.modalLinkRow {
+  display: flex;
+}
+
+.modalSourceLink {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #164B40;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color 0.2s ease;
+}
+
+.modalSourceLink:hover {
+  color: #C8A84E;
+}
+
+/* ── Responsive Adaptations ── */
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .portraitWrap {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .modalGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .modalCoverWrap {
+    min-height: 240px;
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 640px) {
+  .artefactsRow {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .statisticsRow {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
