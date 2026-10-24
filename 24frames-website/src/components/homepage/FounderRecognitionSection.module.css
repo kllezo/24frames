@@ -1,7 +1,7 @@
 /* ============================================================
-   24 FRAMES — CHAPTER 05: FOUNDER & RECOGNITION SECTION
-   Warm Ivory Architectural Interior · Master Lighting
-   Left Portrait · Center Biography · Right Architectural Niche
+   24 FRAMES — CHAPTER 05: FOUNDER & EDITORIAL MAGAZINE WALL
+   Warm Sunlit Ivory Plaster Aesthetic · Architectural Shelf
+   Left Portrait · Upper-Right Shelf · Lower-Right Biography
    ============================================================ */
 
 .section {
@@ -14,20 +14,20 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(3rem, 6vh, 5.5rem) 0 clamp(2.5rem, 5vh, 4.5rem);
+  padding: clamp(3.5rem, 6vh, 6rem) 0 clamp(3rem, 5vh, 5rem);
 }
 
-/* Ambient Dappled Sunlight & Tree Foliage Shadows (Upper-Left) */
+/* Ambient Dappled Sunlight & Foliage Shadows */
 .sunlightLayer {
   position: absolute;
   top: 0;
   left: 0;
-  width: 50%;
+  width: 55%;
   height: 65%;
   background: radial-gradient(
     ellipse at top left,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 248, 230, 0.2) 45%,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 248, 230, 0.22) 45%,
     transparent 75%
   );
   pointer-events: none;
@@ -38,63 +38,62 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: clamp(260px, 35vw, 520px);
-  height: clamp(260px, 38vw, 560px);
+  width: clamp(280px, 38vw, 560px);
+  height: clamp(280px, 40vw, 600px);
   background-image: radial-gradient(circle at 20% 20%, rgba(50, 45, 35, 0.08) 0%, transparent 60%),
     radial-gradient(circle at 45% 35%, rgba(60, 55, 40, 0.06) 0%, transparent 55%),
     radial-gradient(circle at 10% 50%, rgba(45, 40, 30, 0.07) 0%, transparent 50%);
-  filter: blur(28px);
+  filter: blur(30px);
   pointer-events: none;
   z-index: 2;
   mix-blend-mode: multiply;
 }
 
-/* Main Container: Full-Width Scene */
+/* Full Width Scene Container */
 .container {
   width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding-left: clamp(1rem, 3.5vw, 4rem);
-  padding-right: 0; /* Right niche touches right edge */
+  max-width: 1480px;
+  margin: 0 auto;
+  padding-left: clamp(1.25rem, 3.5vw, 4rem);
+  padding-right: clamp(1.25rem, 3.5vw, 4rem);
   position: relative;
   z-index: 3;
 }
 
-/* Three-Part Architectural Grid: Portrait (30%) · Bio (32%) · Niche (38%) */
-.sceneGrid {
+/* Two-Part Macro Layout: Left Portrait (32%) · Right Column (68%) */
+.sceneLayout {
   display: grid;
-  grid-template-columns: minmax(280px, 30%) minmax(320px, 32%) minmax(380px, 38%);
-  align-items: center;
-  min-height: calc(100vh - 8rem);
-  gap: clamp(1rem, 2vw, 2.5rem);
-  position: relative;
+  grid-template-columns: minmax(300px, 32%) 1fr;
+  gap: clamp(2rem, 3.5vw, 4.5rem);
+  align-items: start;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   1. LEFT COLUMN: DOMINANT FOUNDER PORTRAIT
+   1. LEFT COLUMN: FOUNDER PORTRAIT (~1/3 Viewport)
    ───────────────────────────────────────────────────────────── */
 .portraitCol {
   position: relative;
   height: 100%;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .portraitWrap {
-  position: relative;
+  position: sticky;
+  top: clamp(2rem, 5vh, 4rem);
   width: 100%;
   max-width: 440px;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  align-items: center;
 }
 
 .portraitImg {
   width: 100%;
   height: auto;
-  max-height: clamp(520px, 78vh, 760px);
+  max-height: clamp(540px, 76vh, 740px);
   object-fit: cover;
   object-position: center top;
   display: block;
@@ -104,7 +103,6 @@
   filter: drop-shadow(0 20px 40px rgba(70, 60, 45, 0.12));
 }
 
-/* Subtle architectural grounding shadow beneath portrait */
 .portraitGroundShadow {
   position: absolute;
   bottom: 0;
@@ -117,15 +115,312 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   2. CENTER COLUMN: EDITORIAL BIOGRAPHY & STATISTICS
+   2. RIGHT COLUMN: MAGAZINE SHELF (TOP) + FOUNDER BIO (BOTTOM)
    ───────────────────────────────────────────────────────────── */
-.bioCol {
+.rightContentCol {
   display: flex;
   flex-direction: column;
+  gap: clamp(2.5rem, 5vh, 4.25rem);
+  width: 100%;
+  min-width: 0; /* Prevents grid blowout */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2.A UPPER RIGHT: WIDE ARCHITECTURAL MAGAZINE SHELF
+   ───────────────────────────────────────────────────────────── */
+.shelfNicheWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.shelfHeaderRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+}
+
+.shelfHeaderMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.shelfEyebrow {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: clamp(0.625rem, 0.75vw, 0.75rem);
+  font-weight: 700;
+  color: #164B40;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.shelfTitle {
+  font-family: var(--font-cinema, 'Cinzel', serif);
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+  font-weight: 700;
+  color: #20231F;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+/* Arrow Navigation Controls */
+.shelfNavControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navArrowBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(220, 210, 192, 0.85);
+  background-color: #FAF8F2;
+  color: #20231F;
+  font-size: 1.25rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  padding: clamp(1rem, 2vw, 2rem) clamp(0.5rem, 1.5vw, 1.5rem);
-  max-width: 540px;
-  z-index: 4;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(32, 35, 31, 0.05);
+  user-select: none;
+}
+
+.navArrowBtn:hover:not(:disabled) {
+  background-color: #164B40;
+  color: #FFFFFF;
+  border-color: #164B40;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(22, 75, 64, 0.2);
+}
+
+.navArrowBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Architectural Niche Housing the Shelf */
+.architecturalShelfNiche {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(145deg, #ECE4D6 0%, #F3ECDC 50%, #FAF4E8 100%);
+  border-radius: clamp(18px, 2.5vw, 32px);
+  border: 1px solid rgba(220, 210, 192, 0.9);
+  box-shadow:
+    inset 10px 12px 30px rgba(140, 125, 100, 0.18),
+    inset -2px -2px 12px rgba(255, 255, 255, 0.8),
+    0 16px 36px rgba(60, 50, 35, 0.06);
+  padding: clamp(1.8rem, 3.2vh, 2.75rem) clamp(1.2rem, 2vw, 2.2rem) clamp(2.2rem, 3.8vh, 3.2rem);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Integrated Cove Light Strip along ceiling */
+.coveLightStrip {
+  position: absolute;
+  top: 14px;
+  left: 30px;
+  right: 30px;
+  height: 10px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 238, 195, 0.95) 0%,
+    rgba(255, 225, 160, 0.85) 60%,
+    rgba(255, 215, 140, 0.5) 100%
+  );
+  border-radius: 9999px;
+  filter: blur(8px);
+  box-shadow:
+    0 8px 30px rgba(255, 220, 145, 0.65),
+    0 18px 50px rgba(255, 210, 130, 0.45);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Horizontally Scrollable Magazine Track */
+.magazineTrack {
+  display: flex;
+  gap: clamp(16px, 2.2vw, 28px);
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0.75rem 0.5rem 0.5rem;
+  position: relative;
+  z-index: 3;
+  overscroll-behavior-x: contain;
+}
+
+.magazineTrack::-webkit-scrollbar {
+  display: none;
+}
+
+/* Individual Magazine Item on Shelf */
+.magazineCoverItem {
+  flex: 0 0 clamp(145px, 16.5vw, 195px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.coverImageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.42;
+  border-radius: 4px;
+  overflow: visible;
+  background-color: #FAF8F2;
+  border: 1px solid rgba(220, 212, 198, 0.7);
+  box-shadow:
+    0 8px 20px rgba(45, 38, 28, 0.16),
+    0 2px 4px rgba(0, 0, 0, 0.06);
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.32s ease;
+  will-change: transform, box-shadow;
+}
+
+.magazineCoverItem:hover .coverImageWrap {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow:
+    0 18px 36px rgba(45, 38, 28, 0.22),
+    0 0 20px rgba(255, 220, 150, 0.45);
+}
+
+.magazineCoverItem:focus-visible .coverImageWrap {
+  outline: 2px solid #164B40;
+  outline-offset: 4px;
+}
+
+.coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 3px;
+}
+
+/* Spine Highlight & Edge Shadow for Realism */
+.spineHighlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.45), transparent);
+  pointer-events: none;
+}
+
+.pageEdgeShadow {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 10%;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.08), transparent);
+  pointer-events: none;
+}
+
+.magazineCaptionTitle {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #77766E;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.magazineCoverItem:hover .magazineCaptionTitle {
+  color: #164B40;
+}
+
+/* Physical Shelf Lip */
+.shelfLip {
+  position: relative;
+  width: 100%;
+  height: 12px;
+  margin-top: 2px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5EFE2 35%, #E4DCB9 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(200, 190, 170, 0.85);
+  box-shadow:
+    0 8px 24px rgba(110, 95, 75, 0.2),
+    0 2px 6px rgba(0, 0, 0, 0.06);
+  z-index: 2;
+}
+
+/* Under-Shelf Warm Cove Glow */
+.shelfUnderGlow {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 228, 165, 0.68) 0%,
+    rgba(255, 218, 145, 0.3) 50%,
+    transparent 100%
+  );
+  filter: blur(6px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Discoverability Cue (Bottom-Right of Shelf) */
+.discoverCue {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: clamp(0.5625rem, 0.7vw, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #164B40;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 0.85rem;
+  margin-right: 0.5rem;
+  transition: opacity 0.4s ease, color 0.2s ease;
+  user-select: none;
+}
+
+.discoverCue:hover {
+  color: #0C3028;
+}
+
+.discoverCueFaded {
+  opacity: 0.35;
+}
+
+.cueArrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.discoverCue:hover .cueArrow {
+  transform: translateX(3px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2.B BELOW THE SHELF: FOUNDER BIOGRAPHY & STATISTICS
+   ───────────────────────────────────────────────────────────── */
+.founderBioBlock {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0.5rem;
+  max-width: 820px;
 }
 
 .chapterKicker {
@@ -135,20 +430,17 @@
   color: #164B40;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  margin-bottom: clamp(1rem, 2vh, 1.75rem);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  margin-bottom: clamp(0.75rem, 1.4vh, 1.25rem);
 }
 
 .founderName {
   font-family: var(--font-cinema, 'Cinzel', serif);
-  font-size: clamp(2.4rem, 4.4vw, 4.6rem);
+  font-size: clamp(2.4rem, 4.4vw, 4.4rem);
   font-weight: 700;
   line-height: 0.95;
   letter-spacing: 0.03em;
   color: #20231F;
-  margin: 0 0 clamp(0.75rem, 1.4vh, 1.25rem);
+  margin: 0 0 clamp(0.6rem, 1.2vh, 1rem);
   display: flex;
   flex-direction: column;
 }
@@ -160,14 +452,15 @@
   color: #164B40;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin-bottom: clamp(1.25rem, 2.5vh, 2rem);
+  margin-bottom: clamp(1rem, 2vh, 1.75rem);
 }
 
 .narrative {
   display: flex;
   flex-direction: column;
-  gap: clamp(0.85rem, 1.5vh, 1.25rem);
-  margin-bottom: clamp(1.5rem, 2.8vh, 2.25rem);
+  gap: clamp(0.75rem, 1.4vh, 1.15rem);
+  margin-bottom: clamp(1.25rem, 2.4vh, 1.85rem);
+  max-width: 680px;
 }
 
 .narrative p {
@@ -178,20 +471,21 @@
   font-weight: 400;
 }
 
-/* Fine Horizontal Divider Line */
+/* Thin Horizontal Divider */
 .divider {
   width: 100%;
   height: 1px;
-  background: rgba(216, 208, 194, 0.8);
-  margin: 0 0 clamp(1.25rem, 2.4vh, 2rem);
+  background: rgba(216, 208, 194, 0.85);
+  margin: 0 0 clamp(1.25rem, 2.2vh, 1.85rem);
 }
 
-/* Three Evenly Spaced Statistics */
+/* Three Statistics in a Clean Row */
 .statsRow {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(0.75rem, 1.5vw, 1.5rem);
-  margin-bottom: clamp(1.75rem, 3.2vh, 2.5rem);
+  gap: clamp(1rem, 2.5vw, 2.5rem);
+  margin-bottom: clamp(1.5rem, 2.8vh, 2.25rem);
+  max-width: 620px;
 }
 
 .statItem {
@@ -202,7 +496,7 @@
 
 .statValue {
   font-family: var(--font-cinema, 'Cinzel', serif);
-  font-size: clamp(1.6rem, 2.4vw, 2.5rem);
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
   font-weight: 700;
   color: #164B40;
   line-height: 1;
@@ -263,190 +557,7 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   3. RIGHT COLUMN: ARCHITECTURAL ILLUMINATED NICHE & SHELVES
-   ───────────────────────────────────────────────────────────── */
-.nicheCol {
-  position: relative;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.architecturalNiche {
-  position: relative;
-  width: 100%;
-  background: linear-gradient(145deg, #EBE3D4 0%, #F2EADA 50%, #FAF4E8 100%);
-  border-top-left-radius: clamp(70px, 9vw, 110px);
-  border-bottom-left-radius: clamp(16px, 2vw, 24px);
-  border: 1px solid rgba(220, 210, 192, 0.85);
-  border-right: none;
-  box-shadow:
-    inset 12px 14px 36px rgba(140, 125, 100, 0.22),
-    inset -2px -2px 14px rgba(255, 255, 255, 0.85),
-    -10px 18px 45px rgba(80, 70, 50, 0.08);
-  padding: clamp(2.4rem, 5vh, 4.2rem) clamp(1.2rem, 2.5vw, 2.5rem) clamp(2.2rem, 4vh, 3.8rem);
-  display: flex;
-  flex-direction: column;
-  gap: clamp(2.5rem, 5vh, 4rem);
-  overflow: visible;
-}
-
-/* Integrated Cove Lighting Strip (Curved Top Arch) */
-.coveLightStrip {
-  position: absolute;
-  top: clamp(16px, 2.5vh, 26px);
-  left: clamp(40px, 6vw, 85px);
-  right: 0;
-  height: 12px;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 238, 195, 0.95) 0%,
-    rgba(255, 225, 160, 0.85) 60%,
-    rgba(255, 215, 140, 0.5) 100%
-  );
-  border-radius: 9999px;
-  filter: blur(8px);
-  box-shadow:
-    0 10px 36px rgba(255, 220, 145, 0.7),
-    0 24px 64px rgba(255, 210, 130, 0.5);
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Display Shelf Component */
-.displayShelf {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-/* Row of 4 Magazines Standing on Shelf */
-.magazineRow {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(10px, 1.8vw, 24px);
-  align-items: flex-end;
-  width: 100%;
-  position: relative;
-  z-index: 3;
-}
-
-/* Individual Standing Magazine */
-.magazineCover {
-  position: relative;
-  aspect-ratio: 1 / 1.42;
-  border-radius: 3px;
-  overflow: visible;
-  cursor: pointer;
-  background-color: #FAF8F2;
-  border: 1px solid rgba(220, 212, 198, 0.65);
-  box-shadow:
-    0 8px 20px rgba(45, 38, 28, 0.16),
-    0 2px 4px rgba(0, 0, 0, 0.06);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.35s ease;
-  will-change: transform, box-shadow;
-  display: flex;
-  flex-direction: column;
-}
-
-.magazineCover:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow:
-    0 18px 36px rgba(45, 38, 28, 0.24),
-    0 0 20px rgba(255, 220, 150, 0.45);
-}
-
-.magazineCover:focus-visible {
-  outline: 2px solid #164B40;
-  outline-offset: 4px;
-}
-
-.coverImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 2px;
-}
-
-/* Realistic Spine Depth & Edge Highlight */
-.spineHighlight {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 5%;
-  height: 100%;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent);
-  pointer-events: none;
-}
-
-.pageEdgeShadow {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 10%;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.08), transparent);
-  pointer-events: none;
-}
-
-/* Shelf Lip (Physical Architectural Ledge) */
-.shelfLip {
-  position: relative;
-  width: 100%;
-  height: 12px;
-  margin-top: 1px;
-  background: linear-gradient(180deg, #FFFFFF 0%, #F5EFE2 35%, #E4DCB9 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.95);
-  border-bottom: 1px solid rgba(200, 190, 170, 0.85);
-  box-shadow:
-    0 8px 24px rgba(110, 95, 75, 0.2),
-    0 2px 6px rgba(0, 0, 0, 0.06);
-  z-index: 2;
-}
-
-/* Under-Shelf Warm Cove Lighting */
-.shelfUnderGlow {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  height: 18px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 228, 165, 0.68) 0%,
-    rgba(255, 218, 145, 0.3) 50%,
-    transparent 100%
-  );
-  filter: blur(6px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Foreground Depth Layer (Sunlit Table & Turned Bowl at Bottom-Right) */
-.foregroundLayer {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: clamp(180px, 22vw, 320px);
-  height: auto;
-  pointer-events: none;
-  z-index: 5;
-  mix-blend-mode: multiply;
-  opacity: 0.95;
-}
-
-.foregroundImg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   4. CLICKABLE MAGAZINE DETAIL MODAL
+   3. EDITORIAL MAGAZINE DETAIL MODAL
    ───────────────────────────────────────────────────────────── */
 .modalBackdrop {
   position: fixed;
@@ -474,7 +585,7 @@
 .modalCard {
   position: relative;
   background-color: #FFFFFF;
-  border: 1px solid rgba(228, 222, 210, 0.8);
+  border: 1px solid rgba(228, 222, 210, 0.85);
   border-radius: 20px;
   box-shadow:
     0 24px 60px rgba(32, 35, 31, 0.12),
@@ -659,37 +770,28 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   5. RESPONSIVE ART DIRECTION
+   4. RESPONSIVE DESIGN (TABLET & MOBILE)
    ───────────────────────────────────────────────────────────── */
 
-/* Tablet & Smaller Laptops (1024px and below) */
-@media (max-width: 1080px) {
-  .sceneGrid {
+/* Tablet (1024px and below) */
+@media (max-width: 1024px) {
+  .sceneLayout {
     grid-template-columns: 1fr;
     gap: 3rem;
   }
 
-  .container {
-    padding-right: clamp(1rem, 3.5vw, 4rem);
-  }
-
   .portraitCol {
-    justify-content: flex-start;
+    justify-content: center;
   }
 
   .portraitWrap {
+    position: relative;
+    top: 0;
     max-width: 360px;
   }
 
-  .bioCol {
-    max-width: 100%;
-    padding: 0;
-  }
-
-  .architecturalNiche {
-    border-right: 1px solid rgba(220, 210, 192, 0.85);
-    border-top-right-radius: clamp(16px, 2vw, 24px);
-    border-bottom-right-radius: clamp(16px, 2vw, 24px);
+  .rightContentCol {
+    gap: 3rem;
   }
 
   .modalGrid {
@@ -709,12 +811,26 @@
     padding: 2.5rem 0;
   }
 
-  .sceneGrid {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .sceneLayout {
     gap: 2.5rem;
   }
 
   .portraitWrap {
     max-width: 280px;
+  }
+
+  .architecturalShelfNiche {
+    border-radius: 20px;
+    padding: 1.5rem 1rem 1.8rem;
+  }
+
+  .magazineCoverItem {
+    flex: 0 0 135px;
   }
 
   .founderName {
@@ -723,25 +839,11 @@
 
   .statsRow {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: 1.2rem;
   }
 
   .commissionPillBtn {
     width: 100%;
     text-align: center;
-  }
-
-  .architecturalNiche {
-    border-top-left-radius: 40px;
-    padding: 2rem 1rem 1.8rem;
-    gap: 2rem;
-  }
-
-  .magazineRow {
-    gap: 8px;
-  }
-
-  .coveLightStrip {
-    left: 20px;
   }
 }

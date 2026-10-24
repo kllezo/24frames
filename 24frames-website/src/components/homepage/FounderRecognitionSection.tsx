@@ -7,11 +7,9 @@ import styles from "./FounderRecognitionSection.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ── Verified Magazine Artefacts on the Architectural Shelves ── */
+/* ── Verified Magazine Artefacts on the Architectural Shelf ── */
 export interface MagazineArtefact {
   id: string;
-  shelf: 1 | 2; // 1 = Top shelf, 2 = Bottom shelf
-  position: number; // 1–4
   publication: "KINFOLK" | "CEREAL" | "MONOCLE" | "LOEWE";
   editionTitle: string;
   verifiedMilestone: string;
@@ -26,11 +24,8 @@ export interface MagazineArtefact {
 }
 
 const MAGAZINE_ITEMS: MagazineArtefact[] = [
-  /* ── SHELF 1 (TOP) ── */
   {
     id: "mag-1-kinfolk",
-    shelf: 1,
-    position: 1,
     publication: "KINFOLK",
     editionTitle: "The Editorial Feature · Volume 42",
     verifiedMilestone: "ET Excellence Award 2025",
@@ -39,15 +34,13 @@ const MAGAZINE_ITEMS: MagazineArtefact[] = [
     category: "Luxury Wedding Cinematography",
     citation: "Excellence in Luxury Wedding Photography & Cinematic Storytelling",
     summary:
-      "Conferred at Novotel HICC, Hyderabad before industry leaders and cultural luminaries. Guest of Honour: Bollywood icon and UN Goodwill Ambassador Dia Mirza. Awarded for consistent excellence and cultural preservation in high-end wedding cinematography across South India.",
+      "Conferred at Novotel HICC, Hyderabad before cultural luminaries and industry leaders. Guest of Honour: Bollywood icon and UN Goodwill Ambassador Dia Mirza. Awarded for consistent excellence and cultural preservation in high-end wedding cinematography across South India.",
     coverImage: "/images/magazines/mag-1-kinfolk.jpg",
     sourceUrl: "https://www.youtube.com/shorts/Lh45ZBRJ1b8",
     sourceLabel: "Watch Award Ceremony Film →",
   },
   {
     id: "mag-2-cereal",
-    shelf: 1,
-    position: 2,
     publication: "CEREAL",
     editionTitle: "Architectural Volume · The Heritage Issue",
     verifiedMilestone: "Fourteen Years Preserving South Indian Heritage",
@@ -63,8 +56,6 @@ const MAGAZINE_ITEMS: MagazineArtefact[] = [
   },
   {
     id: "mag-3-monocle",
-    shelf: 1,
-    position: 3,
     publication: "MONOCLE",
     editionTitle: "The Global Dispatch · Destination Edition",
     verifiedMilestone: "Official Nikon India Creator Alliance",
@@ -80,8 +71,6 @@ const MAGAZINE_ITEMS: MagazineArtefact[] = [
   },
   {
     id: "mag-4-loewe",
-    shelf: 1,
-    position: 4,
     publication: "LOEWE",
     editionTitle: "Art & Intimacy · The Creative Director",
     verifiedMilestone: "Visionary CEO in Photography & Cinema Workflow",
@@ -95,12 +84,8 @@ const MAGAZINE_ITEMS: MagazineArtefact[] = [
     sourceUrl: "https://www.youtube.com/@24framesphotography",
     sourceLabel: "View Keynote Address →",
   },
-
-  /* ── SHELF 2 (BOTTOM) ── */
   {
     id: "mag-5-kinfolk-travel",
-    shelf: 2,
-    position: 1,
     publication: "KINFOLK",
     editionTitle: "TRAVEL · Destination Unions",
     verifiedMilestone: "Winner — IndiGo #NoFilter Reality Contest",
@@ -116,8 +101,6 @@ const MAGAZINE_ITEMS: MagazineArtefact[] = [
   },
   {
     id: "mag-6-cereal-arch",
-    shelf: 2,
-    position: 2,
     publication: "CEREAL",
     editionTitle: "Form & Light · Sacred Rituals",
     verifiedMilestone: "National Geographic Mega Icons Cinematography",
@@ -133,8 +116,6 @@ const MAGAZINE_ITEMS: MagazineArtefact[] = [
   },
   {
     id: "mag-7-monocle-bw",
-    shelf: 2,
-    position: 3,
     publication: "MONOCLE",
     editionTitle: "The Monograph · Noir & Silver Halide",
     verifiedMilestone: "WedMeGood 5.0 Star Platform Badge",
@@ -150,8 +131,6 @@ const MAGAZINE_ITEMS: MagazineArtefact[] = [
   },
   {
     id: "mag-8-loewe-chair",
-    shelf: 2,
-    position: 4,
     publication: "LOEWE",
     editionTitle: "Interiors & Heirlooms · Generational Keepsakes",
     verifiedMilestone: "500+ Master Wedding Commissions Delivered",
@@ -170,14 +149,56 @@ const MAGAZINE_ITEMS: MagazineArtefact[] = [
 export default function FounderRecognitionSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const portraitWrapRef = useRef<HTMLDivElement>(null);
-  const bioColRef = useRef<HTMLDivElement>(null);
-  const nicheRef = useRef<HTMLDivElement>(null);
-  const coveLightRef = useRef<HTMLDivElement>(null);
+  const shelfNicheRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const bioBlockRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   const [activeItem, setActiveItem] = useState<MagazineArtefact | null>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const triggerRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
-  /* ── GSAP Scroll Trigger Entrance Sequence ── */
+  /* ── Track Scroll Handlers ── */
+  const checkScrollBounds = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const atStart = el.scrollLeft <= 4;
+    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 8;
+    setCanScrollLeft(!atStart);
+    setCanScrollRight(!atEnd);
+  }, []);
+
+  const handleScroll = () => {
+    checkScrollBounds();
+    const el = trackRef.current;
+    if (el && el.scrollLeft > 25 && !hasScrolled) {
+      setHasScrolled(true);
+    }
+  };
+
+  const scrollTrack = (direction: "left" | "right") => {
+    const el = trackRef.current;
+    if (!el) return;
+    const scrollDistance = el.clientWidth * 0.58;
+    el.scrollBy({
+      left: direction === "right" ? scrollDistance : -scrollDistance,
+      behavior: "smooth",
+    });
+    if (!hasScrolled) {
+      setHasScrolled(true);
+    }
+  };
+
+  useEffect(() => {
+    checkScrollBounds();
+    window.addEventListener("resize", checkScrollBounds);
+    return () => window.removeEventListener("resize", checkScrollBounds);
+  }, [checkScrollBounds]);
+
+  /* ── Coordinated GSAP ScrollTrigger Reveal ── */
   useEffect(() => {
     const isReduced =
       typeof window !== "undefined" &&
@@ -189,107 +210,91 @@ export default function FounderRecognitionSection() {
       const section = sectionRef.current;
       if (!section) return;
 
-      // 1. Founder portrait reveals through a soft vertical mask
-      if (portraitWrapRef.current) {
-        gsap.fromTo(
-          portraitWrapRef.current,
-          { clipPath: "inset(12% 0% 12% 0%)", opacity: 0, y: 30 },
-          {
-            clipPath: "inset(0% 0% 0% 0%)",
-            opacity: 1,
-            y: 0,
-            duration: 1.1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 72%",
-              toggleActions: "play none none reverse",
-            },
-          }
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 72%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      // 1. Architectural shelf appears first
+      if (shelfNicheRef.current) {
+        tl.fromTo(
+          shelfNicheRef.current,
+          { opacity: 0, y: 28 },
+          { opacity: 1, y: 0, duration: 0.75, ease: "power2.out" }
         );
       }
 
-      // 2. Editorial biography & heading fade in with restrained stagger
-      if (bioColRef.current) {
-        const bioElements = bioColRef.current.children;
-        gsap.fromTo(
-          bioElements,
-          { opacity: 0, y: 22 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.08,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 70%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }
-
-      // 3. The architectural niche reveals smoothly from the right
-      if (nicheRef.current) {
-        gsap.fromTo(
-          nicheRef.current,
-          { opacity: 0, x: 45 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.95,
-            delay: 0.2,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 68%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }
-
-      // 4. Magazine covers appear sequentially, settling onto shelves
-      const magazineElements = gsap.utils.toArray<HTMLElement>(
-        `.${styles.magazineCover}`
+      // 2. Magazine covers enter in a gentle stagger, settling on the shelf
+      const covers = gsap.utils.toArray<HTMLElement>(
+        `.${styles.magazineCoverItem}`
       );
-      if (magazineElements.length) {
-        gsap.fromTo(
-          magazineElements,
-          { opacity: 0, y: 18, scale: 0.94 },
+      if (covers.length) {
+        tl.fromTo(
+          covers,
+          { opacity: 0, y: 16, scale: 0.94 },
           {
             opacity: 1,
             y: 0,
             scale: 1,
-            duration: 0.6,
+            duration: 0.5,
             stagger: 0.05,
-            ease: "back.out(1.3)",
-            scrollTrigger: {
-              trigger: nicheRef.current,
-              start: "top 70%",
-              toggleActions: "play none none reverse",
-            },
-          }
+            ease: "back.out(1.2)",
+          },
+          "-=0.35"
         );
       }
 
-      // 5. The shelf and cove lighting resolves subtly after covers arrive
-      if (coveLightRef.current) {
-        gsap.fromTo(
-          coveLightRef.current,
-          { opacity: 0.3 },
+      // 3. Founder portrait reveals with complementary clip-path
+      if (portraitWrapRef.current) {
+        tl.fromTo(
+          portraitWrapRef.current,
+          { clipPath: "inset(12% 0% 12% 0%)", opacity: 0, y: 25 },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            ease: "power3.out",
+          },
+          "-=0.45"
+        );
+      }
+
+      // 4. Biography text elements fade in with restrained stagger
+      if (bioBlockRef.current) {
+        const textNodes = Array.from(bioBlockRef.current.children).filter(
+          (child) => child !== statsRef.current && child !== ctaRef.current
+        );
+        tl.fromTo(
+          textNodes,
+          { opacity: 0, y: 16 },
           {
             opacity: 1,
-            duration: 0.8,
-            delay: 0.5,
+            y: 0,
+            duration: 0.65,
+            stagger: 0.06,
             ease: "power2.out",
-            scrollTrigger: {
-              trigger: nicheRef.current,
-              start: "top 70%",
-              toggleActions: "play none none reverse",
-            },
-          }
+          },
+          "-=0.4"
+        );
+      }
+
+      // 5. Statistics and Commission CTA appear last
+      if (statsRef.current && ctaRef.current) {
+        tl.fromTo(
+          [statsRef.current, ctaRef.current],
+          { opacity: 0, y: 18 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.55,
+            stagger: 0.08,
+            ease: "power2.out",
+          },
+          "-=0.2"
         );
       }
     }, sectionRef);
@@ -297,7 +302,7 @@ export default function FounderRecognitionSection() {
     return () => ctx.revert();
   }, []);
 
-  /* ── Modal and Accessibility Controls ── */
+  /* ── Accessible Modal Handlers ── */
   const handleOpenItem = (item: MagazineArtefact) => {
     setActiveItem(item);
   };
@@ -320,23 +325,20 @@ export default function FounderRecognitionSection() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeItem, handleCloseItem]);
 
-  const shelf1Magazines = MAGAZINE_ITEMS.filter((m) => m.shelf === 1);
-  const shelf2Magazines = MAGAZINE_ITEMS.filter((m) => m.shelf === 2);
-
   return (
     <section
       ref={sectionRef}
       id="artist"
       className={styles.section}
-      aria-label="Founder & Recognition — Phani Gogireddy"
+      aria-label="Founder & Editorial Magazine Wall — Phani Gogireddy"
     >
-      {/* Ambient Dappled Sunlight & Tree Shadows Layer */}
+      {/* Ambient Dappled Sunlight & Foliage Shadows */}
       <div className={styles.sunlightLayer} aria-hidden="true" />
       <div className={styles.leafShadowOverlay} aria-hidden="true" />
 
       <div className={styles.container}>
-        <div className={styles.sceneGrid}>
-          {/* ── 1. LEFT: DOMINANT FOUNDER PORTRAIT (28–32% Viewport Width) ── */}
+        <div className={styles.sceneLayout}>
+          {/* ── 1. LEFT COLUMN: DOMINANT FOUNDER PORTRAIT (~1/3 Viewport) ── */}
           <div className={styles.portraitCol}>
             <div ref={portraitWrapRef} className={styles.portraitWrap}>
               <img
@@ -349,92 +351,65 @@ export default function FounderRecognitionSection() {
             </div>
           </div>
 
-          {/* ── 2. CENTER: EDITORIAL BIOGRAPHY & STATISTICS ── */}
-          <div ref={bioColRef} className={styles.bioCol}>
-            {/* Chapter Kicker */}
-            <div className={styles.chapterKicker}>
-              CHAPTER 05 — THE VISIONARY & RECOGNITION
-            </div>
+          {/* ── 2. RIGHT COLUMN: MAGAZINE SHELF (TOP) + FOUNDER BIO (BOTTOM) ── */}
+          <div className={styles.rightContentCol}>
+            {/* 2.A UPPER RIGHT: WIDE ARCHITECTURAL MAGAZINE SHELF */}
+            <div className={styles.shelfNicheWrapper}>
+              <div className={styles.shelfHeaderRow}>
+                <div className={styles.shelfHeaderMeta}>
+                  <span className={styles.shelfEyebrow}>IN PRINT & IN FRAME</span>
+                  <h3 className={styles.shelfTitle}>The Editorial Archive</h3>
+                </div>
 
-            {/* Monumental Founder Heading */}
-            <h2 className={styles.founderName}>
-              <span>PHANI</span>
-              <span>GOGIREDDY</span>
-            </h2>
-
-            {/* Role Subtitle */}
-            <div className={styles.founderRole}>
-              FOUNDER & CREATIVE DIRECTOR
-            </div>
-
-            {/* Narrative Paragraphs */}
-            <div className={styles.narrative}>
-              <p>
-                From the film sets of Tollywood to directing one of South
-                India's most revered cinematic wedding studios, Phani has spent
-                fourteen years preserving Telugu heritage, high-profile royal
-                unions, and the quiet intimacy of families.
-              </p>
-              <p>
-                Every commission is treated as a bespoke feature film — shot on
-                optical cinema primes, graded with archival color discipline,
-                and delivered as generational heirlooms.
-              </p>
-            </div>
-
-            {/* Fine Horizontal Divider */}
-            <div className={styles.divider} />
-
-            {/* Three Evenly Spaced Statistics */}
-            <div className={styles.statsRow}>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>2012</span>
-                <span className={styles.statLabel}>FOUNDED IN HYDERABAD</span>
+                {/* Previous / Next Shelf Arrow Controls */}
+                <div className={styles.shelfNavControls}>
+                  <button
+                    type="button"
+                    className={styles.navArrowBtn}
+                    onClick={() => scrollTrack("left")}
+                    disabled={!canScrollLeft}
+                    aria-label="Previous magazine covers"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.navArrowBtn}
+                    onClick={() => scrollTrack("right")}
+                    disabled={!canScrollRight}
+                    aria-label="Next magazine covers"
+                  >
+                    ›
+                  </button>
+                </div>
               </div>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>500+</span>
-                <span className={styles.statLabel}>MASTER COMMISSIONS</span>
-              </div>
-              <div className={styles.statItem}>
-                <span className={styles.statValue}>5.0</span>
-                <span className={styles.statLabel}>WEDMEGOOD SCORE</span>
-              </div>
-            </div>
 
-            {/* Commission CTA Pill Button */}
-            <div className={styles.ctaRow}>
-              <a href="#inquire" className={styles.commissionPillBtn}>
-                COMMISSION PHANI GOGIREDDY{" "}
-                <span className={styles.btnArrow}>→</span>
-              </a>
-            </div>
-          </div>
-
-          {/* ── 3. RIGHT: ARCHITECTURAL ILLUMINATED NICHE & DISPLAY SHELVES (38–42% Width) ── */}
-          <div className={styles.nicheCol}>
-            <div
-              ref={nicheRef}
-              className={styles.architecturalNiche}
-              role="region"
-              aria-label="Recognition & Publication Shelves"
-            >
-              {/* Integrated Cove Light Strip along curved ceiling */}
+              {/* Architectural Plaster Niche */}
               <div
-                ref={coveLightRef}
-                className={styles.coveLightStrip}
-                aria-hidden="true"
-              />
+                ref={shelfNicheRef}
+                className={styles.architecturalShelfNiche}
+                role="region"
+                aria-label="Architectural Magazine Shelf Track"
+              >
+                {/* Champagne Cove Lighting Strip */}
+                <div className={styles.coveLightStrip} aria-hidden="true" />
 
-              {/* Shelf 1 (Upper Shelf — 4 Magazines) */}
-              <div className={styles.displayShelf}>
-                <div className={styles.magazineRow}>
-                  {shelf1Magazines.map((mag) => (
+                {/* Horizontally Scrollable Magazine Track */}
+                <div
+                  ref={trackRef}
+                  className={styles.magazineTrack}
+                  onScroll={handleScroll}
+                  tabIndex={0}
+                  role="region"
+                  aria-label="Interactive magazine covers"
+                >
+                  {MAGAZINE_ITEMS.map((mag) => (
                     <div
                       key={mag.id}
                       ref={(el) => {
                         triggerRefs.current[mag.id] = el;
                       }}
-                      className={styles.magazineCover}
+                      className={styles.magazineCoverItem}
                       onClick={() => handleOpenItem(mag)}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
@@ -447,78 +422,107 @@ export default function FounderRecognitionSection() {
                       aria-haspopup="dialog"
                       aria-label={`View ${mag.publication}: ${mag.verifiedMilestone}`}
                     >
-                      <img
-                        src={mag.coverImage}
-                        alt={`${mag.publication} cover`}
-                        className={styles.coverImage}
-                        loading="lazy"
-                      />
-                      <div
-                        className={styles.spineHighlight}
-                        aria-hidden="true"
-                      />
-                      <div
-                        className={styles.pageEdgeShadow}
-                        aria-hidden="true"
-                      />
+                      <div className={styles.coverImageWrap}>
+                        <img
+                          src={mag.coverImage}
+                          alt={`${mag.publication} cover`}
+                          className={styles.coverImage}
+                          loading="lazy"
+                        />
+                        <div
+                          className={styles.spineHighlight}
+                          aria-hidden="true"
+                        />
+                        <div
+                          className={styles.pageEdgeShadow}
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <span className={styles.magazineCaptionTitle}>
+                        {mag.publication}
+                      </span>
                     </div>
                   ))}
                 </div>
+
+                {/* Architectural Shelf Lip & Under Glow */}
                 <div className={styles.shelfLip} aria-hidden="true" />
                 <div className={styles.shelfUnderGlow} aria-hidden="true" />
-              </div>
 
-              {/* Shelf 2 (Lower Shelf — 4 Magazines) */}
-              <div className={styles.displayShelf}>
-                <div className={styles.magazineRow}>
-                  {shelf2Magazines.map((mag) => (
-                    <div
-                      key={mag.id}
-                      ref={(el) => {
-                        triggerRefs.current[mag.id] = el;
-                      }}
-                      className={styles.magazineCover}
-                      onClick={() => handleOpenItem(mag)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          handleOpenItem(mag);
-                        }
-                      }}
-                      role="button"
-                      tabIndex={0}
-                      aria-haspopup="dialog"
-                      aria-label={`View ${mag.publication}: ${mag.verifiedMilestone}`}
-                    >
-                      <img
-                        src={mag.coverImage}
-                        alt={`${mag.publication} cover`}
-                        className={styles.coverImage}
-                        loading="lazy"
-                      />
-                      <div
-                        className={styles.spineHighlight}
-                        aria-hidden="true"
-                      />
-                      <div
-                        className={styles.pageEdgeShadow}
-                        aria-hidden="true"
-                      />
-                    </div>
-                  ))}
+                {/* Subtle Discoverability Cue at Bottom-Right */}
+                <div
+                  className={`${styles.discoverCue} ${
+                    hasScrolled ? styles.discoverCueFaded : ""
+                  }`}
+                  onClick={() => scrollTrack("right")}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Scroll right to discover more magazine covers"
+                >
+                  <span>EXPLORE THE COLLECTION</span>
+                  <span className={styles.cueArrow}>→</span>
                 </div>
-                <div className={styles.shelfLip} aria-hidden="true" />
-                <div className={styles.shelfUnderGlow} aria-hidden="true" />
+              </div>
+            </div>
+
+            {/* 2.B BELOW THE SHELF: FOUNDER EDITORIAL INFORMATION */}
+            <div ref={bioBlockRef} className={styles.founderBioBlock}>
+              {/* Chapter Kicker */}
+              <div className={styles.chapterKicker}>
+                CHAPTER 05 — THE VISIONARY & RECOGNITION
               </div>
 
-              {/* Bottom-Right Foreground Architectural Depth (Sunlit Table & Bowl) */}
-              <div className={styles.foregroundLayer} aria-hidden="true">
-                <img
-                  src="/images/foreground-table.png"
-                  alt=""
-                  className={styles.foregroundImg}
-                  loading="lazy"
-                />
+              {/* Large Serif Founder Name */}
+              <h2 className={styles.founderName}>
+                <span>PHANI</span>
+                <span>GOGIREDDY</span>
+              </h2>
+
+              {/* Founder Role */}
+              <div className={styles.founderRole}>
+                FOUNDER & CREATIVE DIRECTOR
+              </div>
+
+              {/* Two Concise Biography Paragraphs */}
+              <div className={styles.narrative}>
+                <p>
+                  From the film sets of Tollywood to directing one of South
+                  India's most revered cinematic wedding studios, Phani has spent
+                  fourteen years preserving Telugu heritage, high-profile royal
+                  unions, and the quiet intimacy of families.
+                </p>
+                <p>
+                  Every commission is treated as a bespoke feature film — shot on
+                  optical cinema primes, graded with archival color discipline,
+                  and delivered as generational heirlooms.
+                </p>
+              </div>
+
+              {/* Thin Horizontal Divider */}
+              <div className={styles.divider} />
+
+              {/* Three Statistics in a Clean Row */}
+              <div ref={statsRef} className={styles.statsRow}>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>2012</span>
+                  <span className={styles.statLabel}>FOUNDED IN HYDERABAD</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>500+</span>
+                  <span className={styles.statLabel}>MASTER COMMISSIONS</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>5.0</span>
+                  <span className={styles.statLabel}>WEDMEGOOD SCORE</span>
+                </div>
+              </div>
+
+              {/* Forest-Green Commission CTA */}
+              <div ref={ctaRef} className={styles.ctaRow}>
+                <a href="#inquire" className={styles.commissionPillBtn}>
+                  COMMISSION PHANI GOGIREDDY{" "}
+                  <span className={styles.btnArrow}>→</span>
+                </a>
               </div>
             </div>
           </div>
@@ -567,9 +571,7 @@ export default function FounderRecognitionSection() {
                 <h3 className={styles.modalTitle}>
                   {activeItem.verifiedMilestone}
                 </h3>
-                <p className={styles.modalOrg}>
-                  {activeItem.organization}
-                </p>
+                <p className={styles.modalOrg}>{activeItem.organization}</p>
 
                 <div className={styles.modalCitationBox}>
                   <span className={styles.citationLabel}>OFFICIAL CITATION</span>
