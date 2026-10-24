@@ -20,14 +20,33 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const tileRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const cueRef = useRef<HTMLDivElement>(null);
   const finalTileRef = useRef<HTMLDivElement>(null);
+  const finalInnerRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(true);
+
+  // Lock body scroll while intro plays
+  useEffect(() => {
+    const origBodyOverflow = document.body.style.overflow;
+    const origHtmlOverflow = document.documentElement.style.overflow;
+    const origBodyMargin = document.body.style.margin;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.margin = "0";
+
+    return () => {
+      document.body.style.overflow = origBodyOverflow;
+      document.documentElement.style.overflow = origHtmlOverflow;
+      document.body.style.margin = origBodyMargin;
+    };
+  }, []);
 
   const runAnimation = useCallback(() => {
     // Respect reduced motion
-    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isReduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isReduced) {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       setVisible(false);
       onComplete();
       return;
@@ -36,11 +55,12 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     const overlay = overlayRef.current;
     const grid = gridRef.current;
     const tiles = tileRefs.current.filter(Boolean) as HTMLDivElement[];
-    const cue = cueRef.current;
     const finalTile = finalTileRef.current;
+    const finalInner = finalInnerRef.current;
 
     if (!overlay || !grid || tiles.length < 23 || !finalTile) {
-      // Fallback if elements not ready
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       onComplete();
       return;
     }
@@ -50,17 +70,21 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     const row3 = tiles.slice(12, 18);
     const row4 = tiles.slice(18, 23); // excludes 24th frame
 
-    // Initial state setup
-    gsap.set(tiles, { opacity: 0, scale: 0.92, y: 14 });
-    gsap.set(finalTile, { opacity: 0, scale: 0.92, y: 14 });
-    if (cue) gsap.set(cue, { opacity: 0, y: -8 });
+    // Initial state setup: tiles positioned in edge-to-edge grid with subtle prep scale
+    gsap.set(tiles, { opacity: 0, scale: 0.94, y: 10 });
+    gsap.set(finalTile, { opacity: 0, scale: 0.94, y: 10 });
+    if (finalInner) gsap.set(finalInner, { opacity: 0.8 });
 
     const tl = gsap.timeline({
       onComplete: () => {
-        // Phase 5 — Smooth coordinated transition to reveal homepage
+        // Unlock scroll right as overlay fades out
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+
+        // Final clean unmount
         gsap.to(overlay, {
           opacity: 0,
-          duration: 0.5,
+          duration: 0.42,
           ease: "power2.inOut",
           onComplete: () => {
             setVisible(false);
@@ -70,81 +94,128 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       },
     });
 
-    /* ── Phase 1: The First Frame ──
-       Opens on warm ivory, subtle cue appears, followed by first frame */
-    if (cue) {
-      tl.to(cue, { opacity: 1, y: 0, duration: 0.25, ease: "power2.out" }, 0.05);
-      tl.to(cue, { opacity: 0, duration: 0.2, ease: "power2.in" }, 0.35);
+    /* ── Step 1: Reveal the first row from left to right (0.08s – 0.44s) ── */
+    tl.to(row1, {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      duration: 0.32,
+      stagger: 0.045,
+      ease: "power2.out",
+    }, 0.08);
+
+    /* ── Step 2: Progressively reveal remaining rows & Step 3: Fade earlier frames away ── */
+    // Row 2 reveals (0.40s – 0.76s)
+    tl.to(row2, {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      duration: 0.32,
+      stagger: 0.045,
+      ease: "power2.out",
+    }, 0.40);
+
+    // Row 1 begins fading as Row 2 establishes (0.48s – 0.78s)
+    tl.to(row1, {
+      opacity: 0,
+      scale: 0.90,
+      duration: 0.30,
+      stagger: 0.03,
+      ease: "power2.inOut",
+    }, 0.48);
+
+    // Row 3 reveals (0.72s – 1.08s)
+    tl.to(row3, {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      duration: 0.32,
+      stagger: 0.045,
+      ease: "power2.out",
+    }, 0.72);
+
+    // Row 2 begins fading as Row 3 establishes (0.80s – 1.10s)
+    tl.to(row2, {
+      opacity: 0,
+      scale: 0.90,
+      duration: 0.30,
+      stagger: 0.03,
+      ease: "power2.inOut",
+    }, 0.80);
+
+    // Row 4 (frames 19–23) reveals left to right (1.04s – 1.36s)
+    tl.to(row4, {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      duration: 0.32,
+      stagger: 0.045,
+      ease: "power2.out",
+    }, 1.04);
+
+    // Final 24th Tile reveals in natural cadence directly after tile 23 (1.24s – 1.62s)
+    tl.to(finalTile, {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      duration: 0.38,
+      ease: "power2.out",
+    }, 1.24);
+
+    // Row 3 begins fading as Row 4 establishes (1.12s – 1.42s)
+    tl.to(row3, {
+      opacity: 0,
+      scale: 0.90,
+      duration: 0.30,
+      stagger: 0.03,
+      ease: "power2.inOut",
+    }, 1.12);
+
+    /* ── Step 4: Continue until only the 24th tile remains ── */
+    // Row 4 (frames 19–23) fades away (1.38s – 1.72s)
+    tl.to(row4, {
+      opacity: 0,
+      scale: 0.90,
+      duration: 0.32,
+      stagger: 0.03,
+      ease: "power2.inOut",
+    }, 1.38);
+
+    /* ── Step 5: Let the final tile resolve into the 24 FRAMES wordmark ── */
+    if (finalInner) {
+      tl.to(finalInner, {
+        opacity: 1,
+        duration: 0.35,
+        ease: "power2.out",
+      }, 1.65);
     }
 
-    /* ── Phase 2 & 3: The Living Grid & Overlapping Fading Sequence ── */
-    // Row 1 reveals (0.15s – 0.50s)
-    tl.to(row1, {
-      opacity: 1, scale: 1, y: 0,
-      duration: 0.35, stagger: 0.04, ease: "power2.out",
-    }, 0.15);
-
-    // Row 2 reveals, while Row 1 begins to fade (0.45s – 0.85s)
-    tl.to(row2, {
-      opacity: 1, scale: 1, y: 0,
-      duration: 0.35, stagger: 0.04, ease: "power2.out",
-    }, 0.45);
-    tl.to(row1, {
-      opacity: 0, scale: 0.88,
-      duration: 0.32, stagger: 0.03, ease: "power2.inOut",
-    }, 0.52);
-
-    // Row 3 reveals, while Row 2 begins to fade (0.78s – 1.18s)
-    tl.to(row3, {
-      opacity: 1, scale: 1, y: 0,
-      duration: 0.35, stagger: 0.04, ease: "power2.out",
-    }, 0.78);
-    tl.to(row2, {
-      opacity: 0, scale: 0.88,
-      duration: 0.32, stagger: 0.03, ease: "power2.inOut",
-    }, 0.86);
-
-    // Row 4 (frames 19–23) reveals, while Row 3 fades (1.10s – 1.50s)
-    tl.to(row4, {
-      opacity: 1, scale: 1, y: 0,
-      duration: 0.35, stagger: 0.04, ease: "power2.out",
-    }, 1.10);
-    tl.to(row3, {
-      opacity: 0, scale: 0.88,
-      duration: 0.32, stagger: 0.03, ease: "power2.inOut",
-    }, 1.18);
-
-    // Row 4 fades away (1.35s – 1.70s), progressively reducing until only 24th remains
-    tl.to(row4, {
-      opacity: 0, scale: 0.88,
-      duration: 0.35, stagger: 0.03, ease: "power2.inOut",
-    }, 1.35);
-
-    /* ── Phase 4: The Final 24th Frame Standalone ──
-       The last surviving tile is the 24th frame against warm ivory */
+    // Subtle breath & luminous warm gold elevation on the standalone 24th frame
     tl.to(finalTile, {
-      opacity: 1, scale: 1.05, y: 0,
-      duration: 0.42, ease: "power3.out",
-    }, 1.48);
+      scale: 1.03,
+      boxShadow: "0 18px 48px rgba(22, 75, 64, 0.16), 0 0 28px rgba(200, 168, 78, 0.32)",
+      duration: 0.35,
+      ease: "power2.out",
+    }, 1.70);
 
-    // Subtle breath / highlight on the final 24 FRAMES signature
     tl.to(finalTile, {
       scale: 1.0,
-      duration: 0.35, ease: "power2.out",
-    }, 1.90);
+      duration: 0.30,
+      ease: "power2.inOut",
+    }, 2.05);
 
-    /* ── Phase 5: Homepage Reveal ──
-       Final tile fades out completely */
+    /* ── Step 6: Fade the final tile and wordmark out completely to reveal the homepage ── */
     tl.to(finalTile, {
-      opacity: 0, scale: 0.94,
-      duration: 0.38, ease: "power2.in",
-    }, 2.25);
+      opacity: 0,
+      scale: 0.94,
+      duration: 0.36,
+      ease: "power2.in",
+    }, 2.38);
 
   }, [onComplete]);
 
   useEffect(() => {
-    // Brief timer for DOM layout
-    const timer = setTimeout(runAnimation, 40);
+    const timer = setTimeout(runAnimation, 30);
     return () => clearTimeout(timer);
   }, [runAnimation]);
 
@@ -157,15 +228,10 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       aria-hidden="true"
       role="presentation"
     >
-      {/* Subtle First Frame Visual Cue */}
-      <div ref={cueRef} className={styles.firstCue}>
-        <span className={styles.cueReticle}>┌ ┐</span>
-        <span className={styles.cueText}>01 / 24</span>
-      </div>
-
       <div ref={gridRef} className={styles.grid}>
         {FRAME_COLORS.map((color, index) => {
           const isFinal = index === 23;
+          const isDarkTile = index < 12;
 
           if (isFinal) {
             return (
@@ -174,9 +240,12 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                 ref={finalTileRef}
                 className={`${styles.tile} ${styles.finalTile}`}
               >
-                <div className={styles.finalTileInner}>
+                <div ref={finalInnerRef} className={styles.finalTileInner}>
                   <span className={styles.finalFrameNo}>24 / 24</span>
-                  <span className={styles.finalBrand}>24 FRAMES</span>
+                  <div className={styles.finalBrand}>
+                    <span className={styles.finalNum}>24</span>
+                    <span className={styles.finalWord}>FRAMES</span>
+                  </div>
                   <span className={styles.finalTag}>CINEMA STUDIO</span>
                 </div>
               </div>
@@ -190,7 +259,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               className={styles.tile}
               style={{ backgroundColor: color }}
             >
-              <span className={styles.tileNo}>
+              <span
+                className={`${styles.tileNo} ${
+                  isDarkTile ? styles.tileNoLight : styles.tileNoDark
+                }`}
+              >
                 {String(index + 1).padStart(2, "0")}
               </span>
             </div>
