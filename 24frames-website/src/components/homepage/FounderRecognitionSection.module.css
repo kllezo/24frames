@@ -1,7 +1,7 @@
 /* ============================================================
    24 FRAMES — CHAPTER 05: FOUNDER & EDITORIAL MAGAZINE WALL
    Warm Sunlit Ivory Plaster Aesthetic · Architectural Shelf
-   Left Portrait · Upper-Right Shelf · Lower-Right Biography
+   Left: Portrait + Statistics · Right: Shelf + Biography + CTA
    ============================================================ */
 
 .section {
@@ -60,7 +60,7 @@
   z-index: 3;
 }
 
-/* Two-Part Macro Layout: Left Portrait (32%) · Right Column (68%) */
+/* Two-Part Macro Layout: Left Column (32%) · Right Column (68%) */
 .sceneLayout {
   display: grid;
   grid-template-columns: minmax(300px, 32%) 1fr;
@@ -69,20 +69,18 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   1. LEFT COLUMN: FOUNDER PORTRAIT (~1/3 Viewport)
+   1. LEFT COLUMN: FOUNDER PORTRAIT + DIRECT STATISTICS
    ───────────────────────────────────────────────────────────── */
 .portraitCol {
   position: relative;
-  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
 }
 
 .portraitWrap {
-  position: sticky;
-  top: clamp(2rem, 5vh, 4rem);
+  position: relative;
   width: 100%;
   max-width: 440px;
   display: flex;
@@ -93,13 +91,13 @@
 .portraitImg {
   width: 100%;
   height: auto;
-  max-height: clamp(540px, 76vh, 740px);
+  max-height: clamp(480px, 66vh, 640px);
   object-fit: cover;
   object-position: center top;
   display: block;
   /* Soft natural blend of lower edge into warm ivory plaster */
-  mask-image: linear-gradient(to bottom, black 80%, rgba(0, 0, 0, 0.4) 93%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 80%, rgba(0, 0, 0, 0.4) 93%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 82%, rgba(0, 0, 0, 0.4) 94%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 82%, rgba(0, 0, 0, 0.4) 94%, transparent 100%);
   filter: drop-shadow(0 20px 40px rgba(70, 60, 45, 0.12));
 }
 
@@ -108,19 +106,67 @@
   bottom: 0;
   left: 10%;
   width: 80%;
-  height: 40px;
-  background: radial-gradient(ellipse at center, rgba(80, 70, 50, 0.16) 0%, transparent 70%);
+  height: 36px;
+  background: radial-gradient(ellipse at center, rgba(80, 70, 50, 0.15) 0%, transparent 70%);
   filter: blur(12px);
   pointer-events: none;
 }
 
+/* Statistics Block Directly Beneath the Portrait */
+.leftStatsBlock {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  margin-top: clamp(1.2rem, 2.2vh, 1.85rem);
+}
+
+.leftDivider {
+  width: 100%;
+  height: 1px;
+  background: rgba(216, 208, 194, 0.85);
+  margin-bottom: clamp(1rem, 1.8vh, 1.5rem);
+}
+
+.leftStatsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.75rem, 1.4vw, 1.5rem);
+  width: 100%;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.statValue {
+  font-family: var(--font-cinema, 'Cinzel', serif);
+  font-size: clamp(1.5rem, 2.2vw, 2.3rem);
+  font-weight: 700;
+  color: #164B40;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.statLabel {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: clamp(0.48rem, 0.6vw, 0.625rem);
+  font-weight: 700;
+  color: #77766E;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+
 /* ─────────────────────────────────────────────────────────────
-   2. RIGHT COLUMN: MAGAZINE SHELF (TOP) + FOUNDER BIO (BOTTOM)
+   2. RIGHT COLUMN: MAGAZINE SHELF (TOP) + BIOGRAPHY & CTA (BOTTOM)
    ───────────────────────────────────────────────────────────── */
 .rightContentCol {
   display: flex;
   flex-direction: column;
-  gap: clamp(2.5rem, 5vh, 4.25rem);
+  gap: clamp(2.5rem, 4.8vh, 4rem);
   width: 100%;
   min-width: 0; /* Prevents grid blowout */
 }
@@ -414,7 +460,7 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   2.B BELOW THE SHELF: FOUNDER BIOGRAPHY & STATISTICS
+   2.B BELOW THE SHELF: FOUNDER BIOGRAPHY & COMMISSION CTA
    ───────────────────────────────────────────────────────────── */
 .founderBioBlock {
   display: flex;
@@ -459,7 +505,7 @@
   display: flex;
   flex-direction: column;
   gap: clamp(0.75rem, 1.4vh, 1.15rem);
-  margin-bottom: clamp(1.25rem, 2.4vh, 1.85rem);
+  margin-bottom: clamp(1.25rem, 2.4vh, 2rem);
   max-width: 680px;
 }
 
@@ -471,52 +517,11 @@
   font-weight: 400;
 }
 
-/* Thin Horizontal Divider */
-.divider {
-  width: 100%;
-  height: 1px;
-  background: rgba(216, 208, 194, 0.85);
-  margin: 0 0 clamp(1.25rem, 2.2vh, 1.85rem);
-}
-
-/* Three Statistics in a Clean Row */
-.statsRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1rem, 2.5vw, 2.5rem);
-  margin-bottom: clamp(1.5rem, 2.8vh, 2.25rem);
-  max-width: 620px;
-}
-
-.statItem {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.statValue {
-  font-family: var(--font-cinema, 'Cinzel', serif);
-  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
-  font-weight: 700;
-  color: #164B40;
-  line-height: 1;
-  letter-spacing: 0.02em;
-}
-
-.statLabel {
-  font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: clamp(0.5rem, 0.65vw, 0.6875rem);
-  font-weight: 700;
-  color: #77766E;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  line-height: 1.25;
-}
-
-/* Commission CTA Pill Button */
+/* Commission CTA Pill Button directly beneath narrative */
 .ctaRow {
   display: flex;
   align-items: center;
+  margin-top: clamp(0.4rem, 0.8vh, 0.85rem);
 }
 
 .commissionPillBtn {
@@ -605,7 +610,6 @@
   }
   to {
     transform: translateY(0) scale(1);
-    opacity: 1;
   }
 }
 
@@ -781,12 +785,14 @@
   }
 
   .portraitCol {
-    justify-content: center;
+    align-items: center;
   }
 
   .portraitWrap {
-    position: relative;
-    top: 0;
+    max-width: 360px;
+  }
+
+  .leftStatsBlock {
     max-width: 360px;
   }
 
@@ -824,6 +830,22 @@
     max-width: 280px;
   }
 
+  .leftStatsBlock {
+    max-width: 280px;
+  }
+
+  .leftStatsRow {
+    gap: 0.5rem;
+  }
+
+  .statValue {
+    font-size: 1.35rem;
+  }
+
+  .statLabel {
+    font-size: 0.44rem;
+  }
+
   .architecturalShelfNiche {
     border-radius: 20px;
     padding: 1.5rem 1rem 1.8rem;
@@ -835,11 +857,6 @@
 
   .founderName {
     font-size: 2.2rem;
-  }
-
-  .statsRow {
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
   }
 
   .commissionPillBtn {

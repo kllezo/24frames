@@ -149,10 +149,10 @@ const MAGAZINE_ITEMS: MagazineArtefact[] = [
 export default function FounderRecognitionSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const portraitWrapRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
   const shelfNicheRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const bioBlockRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
   const [activeItem, setActiveItem] = useState<MagazineArtefact | null>(null);
@@ -263,10 +263,25 @@ export default function FounderRecognitionSection() {
         );
       }
 
-      // 4. Biography text elements fade in with restrained stagger
+      // 3.B Left statistics reveal beneath portrait
+      if (statsRef.current) {
+        tl.fromTo(
+          statsRef.current,
+          { opacity: 0, y: 18 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.55,
+            ease: "power2.out",
+          },
+          "-=0.35"
+        );
+      }
+
+      // 4. Biography text elements fade in
       if (bioBlockRef.current) {
         const textNodes = Array.from(bioBlockRef.current.children).filter(
-          (child) => child !== statsRef.current && child !== ctaRef.current
+          (child) => child !== ctaRef.current
         );
         tl.fromTo(
           textNodes,
@@ -282,16 +297,15 @@ export default function FounderRecognitionSection() {
         );
       }
 
-      // 5. Statistics and Commission CTA appear last
-      if (statsRef.current && ctaRef.current) {
+      // 5. Commission CTA appears directly beneath biography
+      if (ctaRef.current) {
         tl.fromTo(
-          [statsRef.current, ctaRef.current],
-          { opacity: 0, y: 18 },
+          ctaRef.current,
+          { opacity: 0, y: 16 },
           {
             opacity: 1,
             y: 0,
             duration: 0.55,
-            stagger: 0.08,
             ease: "power2.out",
           },
           "-=0.2"
@@ -338,8 +352,9 @@ export default function FounderRecognitionSection() {
 
       <div className={styles.container}>
         <div className={styles.sceneLayout}>
-          {/* ── 1. LEFT COLUMN: DOMINANT FOUNDER PORTRAIT (~1/3 Viewport) ── */}
+          {/* ── 1. LEFT COLUMN: FOUNDER PORTRAIT + THREE STATISTICS DIRECTLY BENEATH ── */}
           <div className={styles.portraitCol}>
+            {/* 1.1 Founder Portrait */}
             <div ref={portraitWrapRef} className={styles.portraitWrap}>
               <img
                 src="/images/founder-portrait.jpg"
@@ -349,9 +364,31 @@ export default function FounderRecognitionSection() {
               />
               <div className={styles.portraitGroundShadow} aria-hidden="true" />
             </div>
+
+            {/* 1.2 Statistics Block Directly Beneath Portrait */}
+            <div ref={statsRef} className={styles.leftStatsBlock}>
+              {/* Statistics Divider */}
+              <div className={styles.leftDivider} />
+
+              {/* Three Statistics Arranged Horizontally */}
+              <div className={styles.leftStatsRow}>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>2012</span>
+                  <span className={styles.statLabel}>FOUNDED IN HYDERABAD</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>500+</span>
+                  <span className={styles.statLabel}>MASTER COMMISSIONS</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>5.0</span>
+                  <span className={styles.statLabel}>WEDMEGOOD SCORE</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* ── 2. RIGHT COLUMN: MAGAZINE SHELF (TOP) + FOUNDER BIO (BOTTOM) ── */}
+          {/* ── 2. RIGHT COLUMN: MAGAZINE SHELF (TOP) + EDITORIAL BIOGRAPHY & CTA (BOTTOM) ── */}
           <div className={styles.rightContentCol}>
             {/* 2.A UPPER RIGHT: WIDE ARCHITECTURAL MAGAZINE SHELF */}
             <div className={styles.shelfNicheWrapper}>
@@ -465,7 +502,7 @@ export default function FounderRecognitionSection() {
               </div>
             </div>
 
-            {/* 2.B BELOW THE SHELF: FOUNDER EDITORIAL INFORMATION */}
+            {/* 2.B BELOW THE SHELF: FOUNDER EDITORIAL BIOGRAPHY & COMMISSION CTA */}
             <div ref={bioBlockRef} className={styles.founderBioBlock}>
               {/* Chapter Kicker */}
               <div className={styles.chapterKicker}>
@@ -498,26 +535,7 @@ export default function FounderRecognitionSection() {
                 </p>
               </div>
 
-              {/* Thin Horizontal Divider */}
-              <div className={styles.divider} />
-
-              {/* Three Statistics in a Clean Row */}
-              <div ref={statsRef} className={styles.statsRow}>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>2012</span>
-                  <span className={styles.statLabel}>FOUNDED IN HYDERABAD</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>500+</span>
-                  <span className={styles.statLabel}>MASTER COMMISSIONS</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>5.0</span>
-                  <span className={styles.statLabel}>WEDMEGOOD SCORE</span>
-                </div>
-              </div>
-
-              {/* Forest-Green Commission CTA */}
+              {/* Forest-Green Commission CTA Directly Beneath Biography */}
               <div ref={ctaRef} className={styles.ctaRow}>
                 <a href="#inquire" className={styles.commissionPillBtn}>
                   COMMISSION PHANI GOGIREDDY{" "}
