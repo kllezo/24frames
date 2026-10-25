@@ -258,14 +258,14 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
       "The grand wedding reception of Telugu cinema star Bellamkonda Sai Sreenivas and Kavya Reddy. Documented by 24 Frames with theatrical lighting discipline and high-resolution optical portraiture.",
     story: [
       "Set against monumental floral installations and welcoming luminaries of Indian cinema, this celebration captured both high-glamour public staging and intimate family warmth.",
-      "Archived on Pic-Time under 24 Frames client delivery portal: https://24frames.pic-time.com/8P0kK5ZUmew5F"
+      "Curated directly from the handpicked client archives, balancing the theatrical grandeur of the ballroom with subtle, candid expressions of genuine love."
     ],
     filmReel: {
       camera: "Sony FX6 & FX3 Cinema Line",
       lens: "Sony G-Master Cinema Primes",
       aspectRatio: "16:9 / 2.39:1",
       colorProfile: "S-Cinetone & 24F Custom Warm Grade",
-      framesCount: "Pic-Time Authorized Client Gallery"
+      framesCount: "Curated Master Selection"
     },
     gallery: [
       {
@@ -290,14 +290,14 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
       "A sacred union celebrating authentic Telugu wedding rituals, recorded with quiet observational poise and rich warmth by 24 Frames Photography.",
     story: [
       "From traditional Vedic chants to heartfelt family blessings, every ritual frame was composed to preserve generational permanence.",
-      "Archived on Pic-Time under 24 Frames client delivery portal: https://24frames.pic-time.com/8Nq0pv3SJbxKn"
+      "Framed before a sanctified idol of Lord Venkateswara, this celebration captures the eternal bond between Sireesh & Harshitha, surrounded by family blessings and traditional iconography."
     ],
     filmReel: {
       camera: "Nikon Z9 & Leica SL2",
       lens: "Nikkor Z 50mm f/1.2 S & 85mm f/1.2 S",
       aspectRatio: "4:5 Medium Format Stills",
       colorProfile: "24F Bespoke Warm Emulsion",
-      framesCount: "Pic-Time Authorized Client Gallery"
+      framesCount: "Curated Master Selection"
     },
     gallery: [
       {
@@ -322,14 +322,14 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
       "Spanning nine distinct event scenes, Hrithika & Abhishek's wedding was captured as an editorial visual tapestry balancing candid energy with regal quietude.",
     story: [
       "Documenting multi-day ceremonies including Haldi, Sangeet galas, and traditional rites across Telangana.",
-      "Archived on Pic-Time under 24 Frames client delivery portal: https://24frames.pic-time.com/whZsXRiO6XgQn"
+      "Capturing nine dedicated ceremony scenes from sacred Vratham and Mangalasnanam rites to high-energy concert celebrations."
     ],
     filmReel: {
       camera: "Sony Alpha 1 & A7R V",
       lens: "Sony G-Master 35mm f/1.4 & 85mm f/1.4 GM",
       aspectRatio: "16:9 Wide Editorial",
       colorProfile: "Kodak Portra 400 Curve",
-      framesCount: "9 Dedicated Scenes on Pic-Time"
+      framesCount: "9 Dedicated Ceremony Scenes"
     },
     gallery: [
       {
@@ -354,14 +354,14 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
       "A timeless celebration documented with fine-art photographic discipline, capturing moments of elegance, sacred rites, and joyful family fellowship.",
     story: [
       "Highlights and multi-day ceremonies curated with 24 Frames' signature warmth and natural light mastery.",
-      "Archived on Pic-Time under 24 Frames client delivery portal: https://24frames.pic-time.com/yBCmkKcczvWql"
+      "Curated highlights capturing the quiet intimacy of the mandapam, rich peach florals, and heirloom Kanjeevaram weaves."
     ],
     filmReel: {
       camera: "Hasselblad X2D 100C",
       lens: "Hasselblad XCD 55V & 90V",
       aspectRatio: "3:4 Fine Art Portrait",
       colorProfile: "Natural Color Solution (HNCS)",
-      framesCount: "Pic-Time Curated Highlights"
+      framesCount: "Curated Master Selection"
     },
     gallery: [
       {

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/homepage/HeroSection";
+import TheCollection from "@/components/homepage/TheCollection";
 import LivingContactSheet from "@/components/homepage/LivingContactSheet";
 import ExploreTheWorld from "@/components/homepage/ExploreTheWorld";
 import FounderRecognitionSection from "@/components/homepage/FounderRecognitionSection";
@@ -16,6 +17,13 @@ export default function HomePage() {
   // Preloader plays on every full page refresh / fresh load
   const [showPreloader, setShowPreloader] = useState(true);
   const [siteReady, setSiteReady] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.search.includes("direct")) {
+      setShowPreloader(false);
+      setSiteReady(true);
+    }
+  }, []);
 
   const handlePreloaderComplete = () => {
     setShowPreloader(false);
@@ -37,7 +45,10 @@ export default function HomePage() {
           {/* Chapter 01 — The Opening Frame */}
           <HeroSection />
 
-          {/* Chapter 02 — The Living Contact Sheet (24-Frame Archival Matrix & Curated Exhibition) */}
+          {/* Chapter 02 — The Collection (Photography-First Editorial Showcase) */}
+          <TheCollection />
+
+          {/* Curated Exhibition — The Vows */}
           <LivingContactSheet />
 
           {/* Chapter 04 — Explore the World (Category Worlds) */}

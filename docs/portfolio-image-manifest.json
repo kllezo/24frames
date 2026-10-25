@@ -1,0 +1,481 @@
+{
+  "manifest_version": "1.0.0",
+  "created_at": "2026-10-25T21:15:00+05:30",
+  "source_directory": "~/Documents/24 frames/photos saved/",
+  "total_folders": 5,
+  "total_source_images": 43,
+  "verified_projects_count": 4,
+  "unassigned_images_count": 12,
+  "projects": {
+    "bellam-srikonda": {
+      "project_id": "story-01",
+      "slug": "bellam-srikonda",
+      "title": "Bellamkonda Sai Sreenivas & Kavya Reddy",
+      "short_title": "Bellam Srikonda",
+      "subtitle": "Celebrity Wedding Reception \u00b7 Hyderabad",
+      "category": "Celebrity Wedding Reception",
+      "location": "Shamshabad, Hyderabad",
+      "venue": "GMR Arena & Shamshabad Estate",
+      "year": "2025",
+      "source_folder": "bellam srikonda ",
+      "total_images": 7,
+      "route": "/stories/bellam-srikonda",
+      "cover": {
+        "filename": "IMG_6339.jpg",
+        "url": "/images/stories/bellam-srikonda/IMG_6339.jpg",
+        "webp_url": "/images/stories/bellam-srikonda/IMG_6339.webp",
+        "width": 1108,
+        "height": 1490,
+        "aspect_ratio": "3 / 4",
+        "caption": "Intimate cheek embrace: Kavya Reddy & Bellamkonda Sai Sreenivas",
+        "selection_rationale": "Emotional, high-celebrity editorial impact, genuine tender expression."
+      },
+      "sequence": [
+        {
+          "frame": "01",
+          "filename": "IMG_6340.jpg",
+          "url": "/images/stories/bellam-srikonda/IMG_6340.jpg",
+          "webp_url": "/images/stories/bellam-srikonda/IMG_6340.webp",
+          "width": 1168,
+          "height": 1713,
+          "aspect": "portrait",
+          "caption": "Grand ballroom reception entrance with ballerina sculpture, floral cascades, and crystal chandeliers"
+        },
+        {
+          "frame": "02",
+          "filename": "IMG_6341.jpg",
+          "url": "/images/stories/bellam-srikonda/IMG_6341.jpg",
+          "webp_url": "/images/stories/bellam-srikonda/IMG_6341.webp",
+          "width": 1168,
+          "height": 1693,
+          "aspect": "portrait",
+          "caption": "Kavya Reddy in custom silver embellished couture ascending the grand floral staircase"
+        },
+        {
+          "frame": "03",
+          "filename": "IMG_6342.jpg",
+          "url": "/images/stories/bellam-srikonda/IMG_6342.jpg",
+          "webp_url": "/images/stories/bellam-srikonda/IMG_6342.webp",
+          "width": 1168,
+          "height": 1694,
+          "aspect": "portrait",
+          "caption": "Bellamkonda Sai Sreenivas in bespoke embroidered velvet tuxedo"
+        },
+        {
+          "frame": "04",
+          "filename": "IMG_6339.jpg",
+          "url": "/images/stories/bellam-srikonda/IMG_6339.jpg",
+          "webp_url": "/images/stories/bellam-srikonda/IMG_6339.webp",
+          "width": 1108,
+          "height": 1490,
+          "aspect": "portrait",
+          "caption": "An intimate kiss of affection \u2014 Kavya & Sai Sreenivas"
+        },
+        {
+          "frame": "05",
+          "filename": "IMG_6343.jpg",
+          "url": "/images/stories/bellam-srikonda/IMG_6343.jpg",
+          "webp_url": "/images/stories/bellam-srikonda/IMG_6343.webp",
+          "width": 1170,
+          "height": 769,
+          "aspect": "landscape",
+          "caption": "Megastar Chiranjeevi congratulating the newlyweds with pink roses"
+        },
+        {
+          "frame": "06",
+          "filename": "IMG_6344.jpg",
+          "url": "/images/stories/bellam-srikonda/IMG_6344.jpg",
+          "webp_url": "/images/stories/bellam-srikonda/IMG_6344.webp",
+          "width": 1170,
+          "height": 776,
+          "aspect": "landscape",
+          "caption": "Akkineni Nagarjuna and Naga Chaitanya on stage alongside the couple"
+        },
+        {
+          "frame": "07",
+          "filename": "IMG_6345.jpg",
+          "url": "/images/stories/bellam-srikonda/IMG_6345.jpg",
+          "webp_url": "/images/stories/bellam-srikonda/IMG_6345.webp",
+          "width": 1170,
+          "height": 774,
+          "aspect": "landscape",
+          "caption": "Live classical grand piano performance amidst the reception hall"
+        }
+      ]
+    },
+    "hrithika-abhishek": {
+      "project_id": "story-02",
+      "slug": "hrithika-abhishek",
+      "title": "Hrithika & Abhishek",
+      "short_title": "Hrithika Abhishek",
+      "subtitle": "Sacred Traditions & Grand Celebrations \u00b7 Hyderabad",
+      "category": "Wedding & Multi-Scene Celebrations",
+      "location": "Hyderabad, Telangana",
+      "venue": "Hyderabad Celebration Estate",
+      "year": "2025",
+      "source_folder": "hrithika abhishek",
+      "total_images": 8,
+      "route": "/stories/hrithika-abhishek",
+      "cover": {
+        "filename": "IMG_6333.jpg",
+        "url": "/images/stories/hrithika-abhishek/IMG_6333.jpg",
+        "webp_url": "/images/stories/hrithika-abhishek/IMG_6333.webp",
+        "width": 1170,
+        "height": 1434,
+        "aspect_ratio": "4 / 5",
+        "caption": "Editorial portrait of Hrithika & Abhishek in harmonized lavender couture",
+        "selection_rationale": "Stately composition, calm poise, impeccable couture harmonization."
+      },
+      "sequence": [
+        {
+          "frame": "01",
+          "filename": "IMG_6324.jpg",
+          "url": "/images/stories/hrithika-abhishek/IMG_6324.jpg",
+          "webp_url": "/images/stories/hrithika-abhishek/IMG_6324.webp",
+          "width": 1170,
+          "height": 1737,
+          "aspect": "portrait",
+          "caption": "Traditional heritage wooden temple doorway with brass urulis and marigold garlands"
+        },
+        {
+          "frame": "02",
+          "filename": "IMG_6337.jpg",
+          "url": "/images/stories/hrithika-abhishek/IMG_6337.jpg",
+          "webp_url": "/images/stories/hrithika-abhishek/IMG_6337.webp",
+          "width": 1170,
+          "height": 1747,
+          "aspect": "portrait",
+          "caption": "Sacred Mangalasnanam ritual \u2014 holy water poured through perforated brass plate with frozen droplets"
+        },
+        {
+          "frame": "03",
+          "filename": "IMG_6334.jpg",
+          "url": "/images/stories/hrithika-abhishek/IMG_6334.jpg",
+          "webp_url": "/images/stories/hrithika-abhishek/IMG_6334.webp",
+          "width": 1050,
+          "height": 1415,
+          "aspect": "portrait",
+          "caption": "Bridal solo portrait of Hrithika in crimson Kanjeevaram silk saree beside floral tapestry"
+        },
+        {
+          "frame": "04",
+          "filename": "IMG_6338.jpg",
+          "url": "/images/stories/hrithika-abhishek/IMG_6338.jpg",
+          "webp_url": "/images/stories/hrithika-abhishek/IMG_6338.webp",
+          "width": 1168,
+          "height": 1736,
+          "aspect": "portrait",
+          "caption": "Groom portrait of Abhishek in regal gold embroidered sherwani and multi-strand emerald haar"
+        },
+        {
+          "frame": "05",
+          "filename": "IMG_6325.jpg",
+          "url": "/images/stories/hrithika-abhishek/IMG_6325.jpg",
+          "webp_url": "/images/stories/hrithika-abhishek/IMG_6325.webp",
+          "width": 1170,
+          "height": 766,
+          "aspect": "landscape",
+          "caption": "Pastel ceremony day stage with cane sofa and draped color streamers"
+        },
+        {
+          "frame": "06",
+          "filename": "IMG_6322.jpg",
+          "url": "/images/stories/hrithika-abhishek/IMG_6322.jpg",
+          "webp_url": "/images/stories/hrithika-abhishek/IMG_6322.webp",
+          "width": 1170,
+          "height": 744,
+          "aspect": "landscape",
+          "caption": "Monochrome celestial installation with suspended mirror disco balls and crystal chains"
+        },
+        {
+          "frame": "07",
+          "filename": "IMG_6323.jpg",
+          "url": "/images/stories/hrithika-abhishek/IMG_6323.jpg",
+          "webp_url": "/images/stories/hrithika-abhishek/IMG_6323.webp",
+          "width": 1170,
+          "height": 765,
+          "aspect": "landscape",
+          "caption": "Sangeet concert stage featuring illuminated H & A monogram and concert lighting"
+        },
+        {
+          "frame": "08",
+          "filename": "IMG_6333.jpg",
+          "url": "/images/stories/hrithika-abhishek/IMG_6333.jpg",
+          "webp_url": "/images/stories/hrithika-abhishek/IMG_6333.webp",
+          "width": 1170,
+          "height": 1434,
+          "aspect": "portrait",
+          "caption": "Editorial couple portrait of Hrithika & Abhishek in harmonized lavender couture"
+        }
+      ]
+    },
+    "karthik-and-gayathri": {
+      "project_id": "story-03",
+      "slug": "karthik-and-gayathri",
+      "title": "Karthik & Gayathri",
+      "short_title": "Karthik and Gayathri",
+      "subtitle": "Botanical Splendor & Fine-Art Wedding \u00b7 Hyderabad",
+      "category": "Fine-Art Wedding Celebrations",
+      "location": "Hyderabad, Telangana",
+      "venue": "Botanical Pavilion & Glasshouse",
+      "year": "2025",
+      "source_folder": "karthik and gayathri",
+      "total_images": 9,
+      "route": "/stories/karthik-and-gayathri",
+      "cover": {
+        "filename": "IMG_6330.jpg",
+        "url": "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
+        "webp_url": "/images/stories/karthik-and-gayathri/IMG_6330.webp",
+        "width": 1170,
+        "height": 1523,
+        "aspect_ratio": "3 / 4",
+        "caption": "Intimate forehead-to-forehead embrace: Gayathri in emerald silk & Karthik in ivory",
+        "selection_rationale": "Profound intimacy, striking contrast between emerald green silk and ivory sherwani."
+      },
+      "sequence": [
+        {
+          "frame": "01",
+          "filename": "IMG_6328.jpg",
+          "url": "/images/stories/karthik-and-gayathri/IMG_6328.jpg",
+          "webp_url": "/images/stories/karthik-and-gayathri/IMG_6328.webp",
+          "width": 1170,
+          "height": 1715,
+          "aspect": "portrait",
+          "caption": "Botanical glasshouse installation with peach urns, pearl spheres, and trailing vines"
+        },
+        {
+          "frame": "02",
+          "filename": "IMG_6329.jpg",
+          "url": "/images/stories/karthik-and-gayathri/IMG_6329.jpg",
+          "webp_url": "/images/stories/karthik-and-gayathri/IMG_6329.webp",
+          "width": 1170,
+          "height": 1710,
+          "aspect": "portrait",
+          "caption": "Full vertical vista of the botanical mandap with cascading pink floral hangings"
+        },
+        {
+          "frame": "03",
+          "filename": "IMG_6327.jpg",
+          "url": "/images/stories/karthik-and-gayathri/IMG_6327.jpg",
+          "webp_url": "/images/stories/karthik-and-gayathri/IMG_6327.webp",
+          "width": 1168,
+          "height": 760,
+          "aspect": "landscape",
+          "caption": "Wide mandap perspective with woven cane sofa and floral arrangements"
+        },
+        {
+          "frame": "04",
+          "filename": "IMG_6336.jpg",
+          "url": "/images/stories/karthik-and-gayathri/IMG_6336.jpg",
+          "webp_url": "/images/stories/karthik-and-gayathri/IMG_6336.webp",
+          "width": 1107,
+          "height": 1475,
+          "aspect": "portrait",
+          "caption": "Gayathri walking gracefully down the architectural veranda in blush pink lehenga"
+        },
+        {
+          "frame": "05",
+          "filename": "IMG_6335.jpg",
+          "url": "/images/stories/karthik-and-gayathri/IMG_6335.jpg",
+          "webp_url": "/images/stories/karthik-and-gayathri/IMG_6335.webp",
+          "width": 1168,
+          "height": 1533,
+          "aspect": "portrait",
+          "caption": "Monochrome portrait of Karthik in traditional ceremonial attire and emerald haar"
+        },
+        {
+          "frame": "06",
+          "filename": "IMG_6331.jpg",
+          "url": "/images/stories/karthik-and-gayathri/IMG_6331.jpg",
+          "webp_url": "/images/stories/karthik-and-gayathri/IMG_6331.webp",
+          "width": 969,
+          "height": 1415,
+          "aspect": "portrait",
+          "caption": "Textural crop of varmala floral garlands and intricate lehenga zardozi embroidery"
+        },
+        {
+          "frame": "07",
+          "filename": "IMG_6326.jpg",
+          "url": "/images/stories/karthik-and-gayathri/IMG_6326.jpg",
+          "webp_url": "/images/stories/karthik-and-gayathri/IMG_6326.webp",
+          "width": 1124,
+          "height": 1525,
+          "aspect": "portrait",
+          "caption": "Exuberant celebration dance by Karthik & Gayathri in front of the mandap"
+        },
+        {
+          "frame": "08",
+          "filename": "IMG_6330.jpg",
+          "url": "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
+          "webp_url": "/images/stories/karthik-and-gayathri/IMG_6330.webp",
+          "width": 1170,
+          "height": 1523,
+          "aspect": "portrait",
+          "caption": "Intimate forehead-to-forehead moment holding hands"
+        },
+        {
+          "frame": "09",
+          "filename": "IMG_6332.jpg",
+          "url": "/images/stories/karthik-and-gayathri/IMG_6332.jpg",
+          "webp_url": "/images/stories/karthik-and-gayathri/IMG_6332.webp",
+          "width": 1170,
+          "height": 1579,
+          "aspect": "portrait",
+          "caption": "Vintage wooden tripod photobooth on the garden lawn"
+        }
+      ]
+    },
+    "sirish-and-harshitha": {
+      "project_id": "story-04",
+      "slug": "sirish-and-harshitha",
+      "title": "Sireesh & Harshitha",
+      "short_title": "Sirish and Harshitha",
+      "subtitle": "Sacred Union & Royal Celebration \u00b7 Hyderabad",
+      "category": "Sacred Wedding Union",
+      "location": "Hyderabad, Telangana",
+      "venue": "Palace Grounds & Temple Pavilion",
+      "year": "2025",
+      "source_folder": "sirish and harshitha",
+      "total_images": 7,
+      "route": "/stories/sirish-and-harshitha",
+      "cover": {
+        "filename": "IMG_6353.jpg",
+        "url": "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
+        "webp_url": "/images/stories/sirish-and-harshitha/IMG_6353.webp",
+        "width": 1116,
+        "height": 1425,
+        "aspect_ratio": "4 / 5",
+        "caption": "Sacred union in front of Lord Venkateswara: \u0c26\u0c48\u0c35 \u0c38\u0c02\u0c15\u0c32\u0c4d\u0c2a\u0c02\u0c24\u0c4b \u0c15\u0c32\u0c3f\u0c38\u0c3f\u0c28 \u0c2c\u0c02\u0c27\u0c02",
+        "selection_rationale": "Majestic spiritual gravitas, deep devotion, rich cultural authenticity."
+      },
+      "sequence": [
+        {
+          "frame": "01",
+          "filename": "IMG_6356.jpg",
+          "url": "/images/stories/sirish-and-harshitha/IMG_6356.jpg",
+          "webp_url": "/images/stories/sirish-and-harshitha/IMG_6356.webp",
+          "width": 1170,
+          "height": 1901,
+          "aspect": "portrait",
+          "caption": "Editorial bridal preparation montage: jewelry, embroidered Telugu heirloom border, and antique vaddanam"
+        },
+        {
+          "frame": "02",
+          "filename": "IMG_6350.jpg",
+          "url": "/images/stories/sirish-and-harshitha/IMG_6350.jpg",
+          "webp_url": "/images/stories/sirish-and-harshitha/IMG_6350.webp",
+          "width": 1113,
+          "height": 1409,
+          "aspect": "portrait",
+          "caption": "Architectural portrait of Sireesh leaning against textured wall with dramatic shadow geometry"
+        },
+        {
+          "frame": "03",
+          "filename": "IMG_6347.jpg",
+          "url": "/images/stories/sirish-and-harshitha/IMG_6347.jpg",
+          "webp_url": "/images/stories/sirish-and-harshitha/IMG_6347.webp",
+          "width": 1170,
+          "height": 1426,
+          "aspect": "portrait",
+          "caption": "Couple walking hand in hand through an ethereal meadow lined with golden autumnal trees"
+        },
+        {
+          "frame": "04",
+          "filename": "IMG_6353.jpg",
+          "url": "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
+          "webp_url": "/images/stories/sirish-and-harshitha/IMG_6353.webp",
+          "width": 1116,
+          "height": 1425,
+          "aspect": "portrait",
+          "caption": "Sacred wedding portrait of Sireesh & Harshitha in front of the Lord Venkateswara deity"
+        },
+        {
+          "frame": "05",
+          "filename": "IMG_6346.jpg",
+          "url": "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
+          "webp_url": "/images/stories/sirish-and-harshitha/IMG_6346.webp",
+          "width": 1168,
+          "height": 1724,
+          "aspect": "portrait",
+          "caption": "Grand palace reception stage with wisteria floral ceiling and crystal chandeliers"
+        },
+        {
+          "frame": "06",
+          "filename": "IMG_6348.jpg",
+          "url": "/images/stories/sirish-and-harshitha/IMG_6348.jpg",
+          "webp_url": "/images/stories/sirish-and-harshitha/IMG_6348.webp",
+          "width": 1170,
+          "height": 1385,
+          "aspect": "portrait",
+          "caption": "Sireesh solo portrait in embellished velvet tuxedo in neon purple light tunnel"
+        },
+        {
+          "frame": "07",
+          "filename": "IMG_6349.jpg",
+          "url": "/images/stories/sirish-and-harshitha/IMG_6349.jpg",
+          "webp_url": "/images/stories/sirish-and-harshitha/IMG_6349.webp",
+          "width": 1170,
+          "height": 701,
+          "aspect": "landscape",
+          "caption": "Confetti explosion during couple stage dance"
+        }
+      ]
+    }
+  },
+  "unassigned_review": {
+    "source_folder": "random",
+    "status": "RESTRICTED / EXCLUDED FROM PUBLIC PORTFOLIO",
+    "total_images": 12,
+    "rationale": "No unambiguous visual match to the four client portfolios. Preserved in source folder without public publication.",
+    "items": [
+      {
+        "filename": "IMG_6274.jpg",
+        "visual_summary": "Couple at historic monument in lavender ruffled ballgown & grey suit"
+      },
+      {
+        "filename": "IMG_6275.jpg",
+        "visual_summary": "Couple with Yakshagana/Kathakali dancers"
+      },
+      {
+        "filename": "IMG_6277.jpg",
+        "visual_summary": "Same couple as 6275 outdoors in daylight with pink/yellow attire"
+      },
+      {
+        "filename": "IMG_6278.jpg",
+        "visual_summary": "Actor Kartikeya Gummakonda in black embellished blazer on stage"
+      },
+      {
+        "filename": "IMG_6279.jpg",
+        "visual_summary": "Bride close-up smelling rose with diamond/emerald jewelry"
+      },
+      {
+        "filename": "IMG_6280.jpg",
+        "visual_summary": "Same bride as 6279 in pink/gold silk saree in front of wooden grid window"
+      },
+      {
+        "filename": "IMG_6281.jpg",
+        "visual_summary": "Man in white kurta stepping out of black Thar SUV"
+      },
+      {
+        "filename": "IMG_6285.jpg",
+        "visual_summary": "Same bride as 6279 in purple saree with antique temple nakshi jewelry"
+      },
+      {
+        "filename": "IMG_6286.jpg",
+        "visual_summary": "Same bride as 6279 in sepia film tone behind Nataraja bronze sculpture"
+      },
+      {
+        "filename": "IMG_6288.jpg",
+        "visual_summary": "Horse rider at Champ Riding Club"
+      },
+      {
+        "filename": "IMG_6289.jpg",
+        "visual_summary": "Sunset silhouette of couple under stone arch"
+      },
+      {
+        "filename": "IMG_6290.jpg",
+        "visual_summary": "Couple portrait in modern geometric tunnel frame with spotlights"
+      }
+    ]
+  }
+}

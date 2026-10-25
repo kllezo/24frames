@@ -8,10 +8,11 @@ import styles from "./LivingContactSheet.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ── Types & Interfaces ────────────────────────────────────────── */
-export interface ExhibitionPhoto {
+/* ── Content Interfaces ────────────────────────────────────────── */
+export interface GalleryProjectItem {
   id: string;
-  title: string;
+  orderNumber: string;
+  movementLabel: string;
   clientNames: string;
   captionTitle: string;
   captionSub: string;
@@ -20,187 +21,129 @@ export interface ExhibitionPhoto {
   image: string;
   webpImage: string;
   aspectRatio: string;
-  widthPercent: number;
-  offsetY?: number;
-  projectSlug: string;
-  sourceUrl: string;
-  platform: "Pic-Time";
+  storyUrl: string;
 }
 
-export interface ExhibitionFilm {
+export interface GalleryFilmItem {
   id: string;
-  title: string;
+  orderNumber: string;
+  movementLabel: string;
   filmTitle: string;
   category: string;
   duration: string;
-  uploadDate: string;
   youtubeId: string;
   embedUrl: string;
   poster: string;
   webpPoster: string;
-  sourceUrl: string;
   description: string;
 }
 
-export interface ExhibitionPairingMovement {
-  id: string;
-  type: "pairing";
-  movementLabel: string;
-  primary: ExhibitionPhoto;
-  secondary: ExhibitionPhoto;
-}
+/* ── Six Verified Alternating Items ───────────────────────────────
+   Rhythm: Project 1 → Video 1 → Project 2 → Project 3 → Video 2 → Project 4
+   ──────────────────────────────────────────────────────────────── */
 
-export interface ExhibitionCinemaMovement {
-  id: string;
-  type: "cinema";
-  movementLabel: string;
-  film: ExhibitionFilm;
-}
+/* Item 1: Wedding Project 1 — Bellamkonda Sai Sreenivas & Kavya Reddy */
+export const ITEM_PROJECT_01: GalleryProjectItem = {
+  id: "project-01",
+  orderNumber: "01",
+  movementLabel: "01 / ROYAL RECEPTION ARCHIVE",
+  clientNames: "Bellamkonda Sai Sreenivas & Kavya Reddy",
+  captionTitle: "BELLAMKONDA SAI SREENIVAS & KAVYA REDDY",
+  captionSub: "ROYAL RECEPTION · HYDERABAD",
+  category: "Celebrity Wedding Reception",
+  location: "GMR Arena & Shamshabad Estate, Hyderabad",
+  image: "/images/stories/bellam-srikonda/IMG_6339.jpg",
+  webpImage: "/images/stories/bellam-srikonda/IMG_6339.webp",
+  aspectRatio: "3 / 4",
+  storyUrl: "/stories/bellam-srikonda",
+};
 
-export type ExhibitionMovement = ExhibitionPairingMovement | ExhibitionCinemaMovement;
-
-/* ── Verified Cinema Films (Swapped per Requirement 3) ──────────── */
-/* Position 1: Vinitha & Vivekananda (Swapped from position 2) */
-export const FILM_VINITHA_VIVEKANANDA: ExhibitionFilm = {
-  id: "film-01",
-  title: "Vinitha & Vivekananda",
+/* Item 2: Video 1 — The Existing First Video (Vinitha & Vivekananda) */
+export const ITEM_VIDEO_01: GalleryFilmItem = {
+  id: "video-01",
+  orderNumber: "02",
+  movementLabel: "02 / CINEMATIC FEATURE FILM",
   filmTitle: "Vinitha & Vivekananda | Wedding Feature Film",
   category: "Wedding Feature Film",
   duration: "14:55",
-  uploadDate: "August 2023",
   youtubeId: "LNtlLgfT5uY",
   embedUrl: "https://www.youtube-nocookie.com/embed/LNtlLgfT5uY?autoplay=1&rel=0&playsinline=1&modestbranding=1",
   poster: "/videos/portfolio/vinitha-vivekananda/poster.jpg",
   webpPoster: "/videos/portfolio/vinitha-vivekananda/poster.webp",
-  sourceUrl: "https://youtu.be/LNtlLgfT5uY",
   description: "A journey of love, patience, and devotion — where two years of togetherness lead to one life-changing sacred promise.",
 };
 
-/* Position 2: Nishanth X Sanzena (Swapped from position 1) */
-export const FILM_NISHANTH_SANZENA: ExhibitionFilm = {
-  id: "film-02",
-  title: "Nishanth & Sanzena",
+/* Item 3: Wedding Project 2 — Sireesh & Harshitha */
+export const ITEM_PROJECT_02: GalleryProjectItem = {
+  id: "project-02",
+  orderNumber: "03",
+  movementLabel: "03 / SACRED WEDDING UNION",
+  clientNames: "Sireesh & Harshitha",
+  captionTitle: "SIREESH & HARSHITHA",
+  captionSub: "SACRED WEDDING UNION · TELANGANA",
+  category: "Sacred Wedding Union",
+  location: "Hyderabad, Telangana",
+  image: "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
+  webpImage: "/images/stories/sirish-and-harshitha/IMG_6353.webp",
+  aspectRatio: "4 / 5",
+  storyUrl: "/stories/sirish-and-harshitha",
+};
+
+/* Item 4: Wedding Project 3 — Hrithika & Abhishek */
+export const ITEM_PROJECT_03: GalleryProjectItem = {
+  id: "project-03",
+  orderNumber: "04",
+  movementLabel: "04 / CEREMONY & CELEBRATIONS",
+  clientNames: "Hrithika & Abhishek",
+  captionTitle: "HRITHIKA & ABHISHEK",
+  captionSub: "NINE-SCENE CELEBRATION · HYDERABAD",
+  category: "Ceremony & Celebrations",
+  location: "Hyderabad, Telangana",
+  image: "/images/stories/hrithika-abhishek/IMG_6333.jpg",
+  webpImage: "/images/stories/hrithika-abhishek/IMG_6333.webp",
+  aspectRatio: "4 / 3",
+  storyUrl: "/stories/hrithika-abhishek",
+};
+
+/* Item 5: Video 2 — The Existing Second Video (Nishanth X Sanzena - Noticeably Smaller) */
+export const ITEM_VIDEO_02: GalleryFilmItem = {
+  id: "video-02",
+  orderNumber: "05",
+  movementLabel: "05 / CINEMA COUPLE INSERT",
   filmTitle: "Nishanth X Sanzena | Couple Shoot Film",
   category: "Couple Shoot Cinema Film",
   duration: "03:12",
-  uploadDate: "July 2024",
   youtubeId: "s32UT21hnBg",
   embedUrl: "https://www.youtube-nocookie.com/embed/s32UT21hnBg?autoplay=1&rel=0&playsinline=1&modestbranding=1",
   poster: "/videos/portfolio/nishanth-sanzena/poster.jpg",
   webpPoster: "/videos/portfolio/nishanth-sanzena/poster.webp",
-  sourceUrl: "https://youtu.be/s32UT21hnBg",
   description: "The unfolding love story of Nishanth & Sanzena — where every moment, every frame, and every smile captures their eternal bond.",
 };
 
-/* ── Verified The Vows Editorial Movements ─────────────────────── */
-export const VOWS_MOVEMENTS: ExhibitionMovement[] = [
-  /* Movement 01: Cinema Feature Film (Position 1 — Vinitha & Vivekananda) */
-  {
-    id: "movement-01",
-    type: "cinema",
-    movementLabel: "MOVEMENT 01 / FEATURE WEDDING FILM",
-    film: FILM_VINITHA_VIVEKANANDA,
-  },
-
-  /* Movement 02: Royal Reception & Sacred Vows (Pairing) */
-  {
-    id: "movement-02",
-    type: "pairing",
-    movementLabel: "MOVEMENT 02 / ROYAL RECEPTION & SACRED VOWS",
-    primary: {
-      id: "vow-photo-01",
-      title: "Celebrity Wedding Reception",
-      clientNames: "Bellamkonda Sai Sreenivas & Kavya Reddy",
-      captionTitle: "BELLAMKONDA SAI SREENIVAS & KAVYA REDDY",
-      captionSub: "ROYAL RECEPTION · HYDERABAD",
-      category: "Celebrity Wedding Reception",
-      location: "GMR Arena & Shamshabad Estate, Hyderabad",
-      image: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
-      webpImage: "/images/portfolio/bellamkonda-kavya-reception/cover.webp",
-      aspectRatio: "16 / 9",
-      widthPercent: 54,
-      projectSlug: "bellamkonda-kavya-reception",
-      sourceUrl: "https://24frames.pic-time.com/8P0kK5ZUmew5F",
-      platform: "Pic-Time",
-    },
-    secondary: {
-      id: "vow-photo-02",
-      title: "Sacred Wedding Union",
-      clientNames: "Sireesh & Harshitha",
-      captionTitle: "SIREESH & HARSHITHA",
-      captionSub: "WEDDING CELEBRATION · TELANGANA",
-      category: "Wedding Celebration",
-      location: "Hyderabad, Telangana",
-      image: "/images/portfolio/sireesh-harshitha/cover.jpg",
-      webpImage: "/images/portfolio/sireesh-harshitha/cover.webp",
-      aspectRatio: "4 / 5",
-      widthPercent: 34,
-      offsetY: 55,
-      projectSlug: "sireesh-harshitha",
-      sourceUrl: "https://24frames.pic-time.com/8Nq0pv3SJbxKn",
-      platform: "Pic-Time",
-    },
-  },
-
-  /* Movement 03: Cinema Couple Film (Position 2 — Nishanth X Sanzena) */
-  {
-    id: "movement-03",
-    type: "cinema",
-    movementLabel: "MOVEMENT 03 / CINEMATIC COUPLE FILM",
-    film: FILM_NISHANTH_SANZENA,
-  },
-
-  /* Movement 04: Classical Fine-Art & Multi-Day Rituals (Pairing) */
-  {
-    id: "movement-04",
-    type: "pairing",
-    movementLabel: "MOVEMENT 04 / FINE-ART HERITAGE & SACRED CELEBRATION",
-    primary: {
-      id: "vow-photo-03",
-      title: "Ceremony & Celebrations",
-      clientNames: "Hrithika & Abhishek",
-      captionTitle: "HRITHIKA & ABHISHEK",
-      captionSub: "WEDDING & NINE-SCENE CELEBRATION",
-      category: "Wedding & Celebrations",
-      location: "Hyderabad, Telangana",
-      image: "/images/portfolio/hrithika-abhishek/cover.jpg",
-      webpImage: "/images/portfolio/hrithika-abhishek/cover.webp",
-      aspectRatio: "16 / 9",
-      widthPercent: 54,
-      projectSlug: "hrithika-abhishek",
-      sourceUrl: "https://24frames.pic-time.com/whZsXRiO6XgQn",
-      platform: "Pic-Time",
-    },
-    secondary: {
-      id: "vow-photo-04",
-      title: "Fine-Art Heritage Wedding",
-      clientNames: "Karthik & Gayathri",
-      captionTitle: "KARTHIK & GAYATHRI",
-      captionSub: "FINE-ART WEDDING · HYDERABAD",
-      category: "Wedding Celebrations",
-      location: "Hyderabad, Telangana",
-      image: "/images/portfolio/karthik-gayathri/cover.jpg",
-      webpImage: "/images/portfolio/karthik-gayathri/cover.webp",
-      aspectRatio: "3 / 4",
-      widthPercent: 34,
-      offsetY: -30,
-      projectSlug: "karthik-gayathri",
-      sourceUrl: "https://24frames.pic-time.com/yBCmkKcczvWql",
-      platform: "Pic-Time",
-    },
-  },
-];
+/* Item 6: Wedding Project 4 — Karthik & Gayathri */
+export const ITEM_PROJECT_04: GalleryProjectItem = {
+  id: "project-04",
+  orderNumber: "06",
+  movementLabel: "06 / FINE-ART HERITAGE ARCHIVE",
+  clientNames: "Karthik & Gayathri",
+  captionTitle: "KARTHIK & GAYATHRI",
+  captionSub: "FINE-ART WEDDING · HYDERABAD",
+  category: "Fine-Art Heritage Wedding",
+  location: "Hyderabad, Telangana",
+  image: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
+  webpImage: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
+  aspectRatio: "3 / 4",
+  storyUrl: "/stories/karthik-and-gayathri",
+};
 
 export default function LivingContactSheet() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  const movementsRef = useRef<HTMLDivElement>(null);
 
-  /* Inline video player state: when set to film.id, plays directly in the same area */
+  /* Inline video player state */
   const [activeInlineVideo, setActiveInlineVideo] = useState<string | null>(null);
-  const [selectedPhoto, setSelectedPhoto] = useState<ExhibitionPhoto | null>(null);
 
-  /* GSAP entrance animation */
+  /* GSAP scroll-triggered entrance animations */
   useEffect(() => {
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isReduced) return;
@@ -218,13 +161,13 @@ export default function LivingContactSheet() {
             scrollTrigger: {
               trigger: headerRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
       }
 
-      const blocks = gsap.utils.toArray<HTMLElement>(`.${styles.movementBlock}`);
+      const blocks = gsap.utils.toArray<HTMLElement>(`.${styles.rhythmBlock}`);
       blocks.forEach((block) => {
         gsap.fromTo(
           block,
@@ -236,8 +179,8 @@ export default function LivingContactSheet() {
             ease: "power2.out",
             scrollTrigger: {
               trigger: block,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
+              start: "top 90%",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -247,12 +190,11 @@ export default function LivingContactSheet() {
     return () => ctx.revert();
   }, []);
 
-  /* Keyboard escape for inline video or photo lightbox */
+  /* Keyboard escape to dismiss inline video players */
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setActiveInlineVideo(null);
-        setSelectedPhoto(null);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -264,11 +206,10 @@ export default function LivingContactSheet() {
       ref={sectionRef}
       id="vows"
       className={styles.section}
-      aria-label="The Vows — Cinematic Wedding Films & Photography"
+      aria-label="The Vows — Wedding Projects & Cinematic Films"
     >
       <div className={styles.container}>
-        {/* Anchor aliases for backward compatibility */}
-        <div id="collection" className={styles.anchorOffset} aria-hidden="true" />
+        {/* Curated Exhibition Anchor */}
         <div id="exhibition" className={styles.anchorOffset} aria-hidden="true" />
 
         {/* ── Section Header ───────────────────────────────────── */}
@@ -288,302 +229,386 @@ export default function LivingContactSheet() {
           </div>
         </div>
 
-        {/* ── Editorial Movements Stream (Spacious Ivory Whitespace) ── */}
-        <div ref={movementsRef} className={styles.movementsContainer}>
-          {VOWS_MOVEMENTS.map((mov) => {
-            if (mov.type === "cinema") {
-              const film = mov.film;
-              const isPlaying = activeInlineVideo === film.id;
+        {/* ── Editorial Asymmetric Stream: 6 Alternating Items ─────────────── */}
+        <div className={styles.editorialStream}>
+          {/* ─────────────────────────────────────────────────────────────
+              ITEM 1: Wedding Project 1 — Bellamkonda Sai Sreenivas & Kavya Reddy
+              Leads the sequence · Left-aligned · Tall portrait composition
+              ───────────────────────────────────────────────────────────── */}
+          <div className={`${styles.rhythmBlock} ${styles.itemLeadWrapper}`}>
+            <div className={styles.itemLabelRow}>
+              <span className={styles.itemLabel}>{ITEM_PROJECT_01.movementLabel}</span>
+            </div>
 
-              return (
-                <div key={mov.id} className={`${styles.movementBlock} ${styles.cinemaMovement}`}>
-                  <div className={styles.movementLabelRow}>
-                    <span className={styles.movementLabel}>{mov.movementLabel}</span>
-                    <span className={styles.movementDurationBadge}>DURATION · {film.duration}</span>
-                  </div>
-
-                  <div className={styles.cinemaStage}>
-                    <div className={styles.cinemaFrame}>
-                      {isPlaying ? (
-                        /* Inline Official Video Player — Plays directly inside container */
-                        <div className={styles.inlinePlayerContainer}>
-                          <iframe
-                            src={film.embedUrl}
-                            title={film.filmTitle}
-                            className={styles.inlineIframe}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                          />
-                          <button
-                            type="button"
-                            className={styles.inlineCloseBtn}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveInlineVideo(null);
-                            }}
-                            aria-label="Stop video and return to preview"
-                          >
-                            ✕ Close Player
-                          </button>
-                        </div>
-                      ) : (
-                        /* Standalone Video Preview with Gold Play Affordance */
-                        <div
-                          className={styles.previewClickArea}
-                          onClick={() => setActiveInlineVideo(film.id)}
-                          role="button"
-                          tabIndex={0}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                              e.preventDefault();
-                              setActiveInlineVideo(film.id);
-                            }
-                          }}
-                          aria-label={`Play ${film.filmTitle} inline`}
-                        >
-                          <picture>
-                            <source srcSet={film.webpPoster} type="image/webp" />
-                            <img
-                              src={film.poster}
-                              alt={film.filmTitle}
-                              className={styles.cinemaPoster}
-                              loading="lazy"
-                            />
-                          </picture>
-                          <div className={styles.cinemaVignette} />
-
-                          {/* Gold Play Button Affordance */}
-                          <div className={styles.playBeacon}>
-                            <div className={styles.playPulse} />
-                            <svg className={styles.playIcon} viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                          </div>
-
-                          {/* Top Badges */}
-                          <div className={styles.cinemaTopBar}>
-                            <span className={styles.cinemaBadge}>24 FRAMES WEDDING FILMS</span>
-                            <span className={styles.cinemaDuration}>{film.duration}</span>
-                          </div>
-
-                          {/* Bottom Film Narrative */}
-                          <div className={styles.cinemaBottomBar}>
-                            <span className={styles.cinemaCategory}>{film.category.toUpperCase()}</span>
-                            <h3 className={styles.cinemaTitle}>{film.filmTitle}</h3>
-                            <p className={styles.cinemaQuote}>&ldquo;{film.description}&rdquo;</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className={styles.filmUnderMeta}>
-                      <span className={styles.filmClickHint}>
-                        {isPlaying
-                          ? "Playing inline — use player controls for volume or full-screen"
-                          : "Click preview to begin playback inline without navigating away"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            }
-
-            /* Pairing Movement: Two balanced photographs with generous 14% canal */
-            return (
-              <div key={mov.id} className={`${styles.movementBlock} ${styles.pairingMovement}`}>
-                <div className={styles.movementLabelRow}>
-                  <span className={styles.movementLabel}>{mov.movementLabel}</span>
-                </div>
-
-                <div className={styles.pairingRow}>
-                  {/* Primary Photograph */}
-                  <div
-                    className={`${styles.galleryFigure} ${styles.primaryFigure}`}
-                    style={{
-                      "--photo-width": `${mov.primary.widthPercent}%`,
-                      "--photo-offset-y": `${mov.primary.offsetY || 0}px`,
-                    } as React.CSSProperties}
-                    onClick={() => setSelectedPhoto(mov.primary)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setSelectedPhoto(mov.primary);
-                      }
-                    }}
-                    aria-label={`${mov.primary.clientNames} — ${mov.primary.category}. Click to enlarge.`}
-                  >
-                    <div
-                      className={styles.imageContainer}
-                      style={{ aspectRatio: mov.primary.aspectRatio }}
-                    >
-                      <picture>
-                        <source srcSet={mov.primary.webpImage} type="image/webp" />
-                        <img
-                          src={mov.primary.image}
-                          alt={mov.primary.title}
-                          className={styles.galleryImage}
-                          loading="lazy"
-                        />
-                      </picture>
-                      <div className={styles.imageCornerBadge}>PIC-TIME ARCHIVE</div>
-                    </div>
-                    <div className={styles.editorialCaption}>
-                      <div className={styles.captionMain}>
-                        <span className={styles.captionTitle}>{mov.primary.captionTitle}</span>
-                        <span className={styles.captionMeta}>{mov.primary.captionSub}</span>
-                      </div>
-                      <a
-                        href={mov.primary.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.sourceExternalLink}
-                        onClick={(e) => e.stopPropagation()}
-                        title="Open official Pic-Time gallery"
-                      >
-                        Pic-Time ↗
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Secondary Photograph */}
-                  <div
-                    className={`${styles.galleryFigure} ${styles.secondaryFigure}`}
-                    style={{
-                      "--photo-width": `${mov.secondary.widthPercent}%`,
-                      "--photo-offset-y": `${mov.secondary.offsetY || 0}px`,
-                    } as React.CSSProperties}
-                    onClick={() => setSelectedPhoto(mov.secondary)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setSelectedPhoto(mov.secondary);
-                      }
-                    }}
-                    aria-label={`${mov.secondary.clientNames} — ${mov.secondary.category}. Click to enlarge.`}
-                  >
-                    <div
-                      className={styles.imageContainer}
-                      style={{ aspectRatio: mov.secondary.aspectRatio }}
-                    >
-                      <picture>
-                        <source srcSet={mov.secondary.webpImage} type="image/webp" />
-                        <img
-                          src={mov.secondary.image}
-                          alt={mov.secondary.title}
-                          className={styles.galleryImage}
-                          loading="lazy"
-                        />
-                      </picture>
-                      <div className={styles.imageCornerBadge}>PIC-TIME ARCHIVE</div>
-                    </div>
-                    <div className={styles.editorialCaption}>
-                      <div className={styles.captionMain}>
-                        <span className={styles.captionTitle}>{mov.secondary.captionTitle}</span>
-                        <span className={styles.captionMeta}>{mov.secondary.captionSub}</span>
-                      </div>
-                      <a
-                        href={mov.secondary.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.sourceExternalLink}
-                        onClick={(e) => e.stopPropagation()}
-                        title="Open official Pic-Time gallery"
-                      >
-                        Pic-Time ↗
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ── 35MM PHOTOGRAPH LIGHTBOX MODAL ───────────────────── */}
-      {selectedPhoto && (
-        <div
-          className={styles.modalBackdrop}
-          onClick={() => setSelectedPhoto(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={selectedPhoto.title}
-        >
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className={styles.modalCloseBtn}
-              onClick={() => setSelectedPhoto(null)}
-              aria-label="Close frame preview"
+            <Link
+              href={ITEM_PROJECT_01.storyUrl}
+              className={`${styles.photoFigure} ${styles.figureLead}`}
+              aria-label={`Open Bellam Srikonda archive — ${ITEM_PROJECT_01.clientNames}`}
             >
-              ✕
-            </button>
+              <div
+                className={styles.imageContainer}
+                style={{ aspectRatio: ITEM_PROJECT_01.aspectRatio }}
+              >
+                <picture>
+                  <source srcSet={ITEM_PROJECT_01.webpImage} type="image/webp" />
+                  <img
+                    src={ITEM_PROJECT_01.image}
+                    alt={ITEM_PROJECT_01.clientNames}
+                    className={styles.galleryImage}
+                    loading="eager"
+                  />
+                </picture>
+              </div>
+              <div className={styles.editorialCaption}>
+                <div className={styles.captionMain}>
+                  <div className={styles.captionTitleRow}>
+                    <span className={styles.captionTitle}>{ITEM_PROJECT_01.captionTitle}</span>
+                    <span
+                      className={styles.cardArrow}
+                      aria-label="Open Bellam Srikonda archive"
+                      title="Open Bellam Srikonda archive"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                  <span className={styles.captionMeta}>{ITEM_PROJECT_01.captionSub}</span>
+                </div>
+              </div>
+            </Link>
+          </div>
 
-            <div className={styles.modalLayout}>
-              <div className={styles.modalImageWrap}>
-                <img
-                  src={selectedPhoto.webpImage || selectedPhoto.image}
-                  alt={selectedPhoto.title}
-                  className={styles.modalImage}
-                />
+          {/* ─────────────────────────────────────────────────────────────
+              ITEM 2: Video 1 — Existing First Video (Vinitha & Vivekananda)
+              Grand Cinema Stage · Wide Hero Span (92%) · Full Height Presence
+              ───────────────────────────────────────────────────────────── */}
+          <div className={`${styles.rhythmBlock} ${styles.itemVideoHeroWrapper}`}>
+            <div className={styles.itemLabelRow}>
+              <span className={styles.itemLabel}>{ITEM_VIDEO_01.movementLabel}</span>
+              <span className={styles.durationBadge}>DURATION · {ITEM_VIDEO_01.duration}</span>
+            </div>
+
+            <div className={styles.cinemaStageHero}>
+              <div className={styles.cinemaFrameHero}>
+                {activeInlineVideo === ITEM_VIDEO_01.id ? (
+                  <div className={styles.inlinePlayerContainer}>
+                    <iframe
+                      src={ITEM_VIDEO_01.embedUrl}
+                      title={ITEM_VIDEO_01.filmTitle}
+                      className={styles.inlineIframe}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                    <button
+                      type="button"
+                      className={styles.inlineCloseBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveInlineVideo(null);
+                      }}
+                      aria-label="Stop video and return to preview"
+                    >
+                      ✕ Close Player
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    className={styles.previewClickArea}
+                    onClick={() => setActiveInlineVideo(ITEM_VIDEO_01.id)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setActiveInlineVideo(ITEM_VIDEO_01.id);
+                      }
+                    }}
+                    aria-label={`Play ${ITEM_VIDEO_01.filmTitle} inline`}
+                  >
+                    <picture>
+                      <source srcSet={ITEM_VIDEO_01.webpPoster} type="image/webp" />
+                      <img
+                        src={ITEM_VIDEO_01.poster}
+                        alt={ITEM_VIDEO_01.filmTitle}
+                        className={styles.cinemaPoster}
+                        loading="lazy"
+                      />
+                    </picture>
+                    <div className={styles.cinemaVignette} />
+
+                    <div className={styles.playBeacon}>
+                      <div className={styles.playPulse} />
+                      <svg className={styles.playIcon} viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+
+                    <div className={styles.cinemaTopBar}>
+                      <span className={styles.cinemaBadge}>24 FRAMES WEDDING FILMS</span>
+                      <span className={styles.cinemaDuration}>{ITEM_VIDEO_01.duration}</span>
+                    </div>
+
+                    <div className={styles.cinemaBottomBar}>
+                      <span className={styles.cinemaCategory}>{ITEM_VIDEO_01.category.toUpperCase()}</span>
+                      <h3 className={styles.cinemaTitle}>{ITEM_VIDEO_01.filmTitle}</h3>
+                      <p className={styles.cinemaQuote}>&ldquo;{ITEM_VIDEO_01.description}&rdquo;</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <div className={styles.modalSidebar}>
-                <div className={styles.modalHeaderStrip}>
-                  <span className={styles.modalFrameNo}>VERIFIED ARCHIVE</span>
-                  <span className={styles.modalCategory}>
-                    {selectedPhoto.category.toUpperCase()}
-                  </span>
-                </div>
-
-                <h3 className={styles.modalTitle}>{selectedPhoto.clientNames}</h3>
-                <p className={styles.modalLocation}>{selectedPhoto.location}</p>
-
-                <div className={styles.specBox}>
-                  <div className={styles.specRow}>
-                    <span className={styles.specLabel}>Provenance</span>
-                    <span className={styles.specVal}>Official 24 Frames Pic-Time Gallery</span>
-                  </div>
-                  <div className={styles.specRow}>
-                    <span className={styles.specLabel}>Color Emulsion</span>
-                    <span className={styles.specVal}>24F Custom Warm Curve</span>
-                  </div>
-                  <div className={styles.specRow}>
-                    <span className={styles.specLabel}>Master Curator</span>
-                    <span className={styles.specVal}>Phani Gogireddy</span>
-                  </div>
-                </div>
-
-                <div className={styles.modalActions}>
-                  <a
-                    href={selectedPhoto.sourceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.modalExternalBtn}
-                  >
-                    Open Official Pic-Time Gallery ↗
-                  </a>
-                  {selectedPhoto.projectSlug && (
-                    <Link
-                      href={`/work/${selectedPhoto.projectSlug}`}
-                      className={styles.modalStoryBtn}
-                      onClick={() => setSelectedPhoto(null)}
-                    >
-                      Step Inside Project Archive →
-                    </Link>
-                  )}
-                </div>
+              <div className={styles.filmUnderMeta}>
+                <span className={styles.filmClickHint}>
+                  {activeInlineVideo === ITEM_VIDEO_01.id
+                    ? "Playing inline — use player controls for volume or full-screen"
+                    : "Click preview to begin playback inline without navigating away"}
+                </span>
               </div>
             </div>
           </div>
+
+          {/* ─────────────────────────────────────────────────────────────
+              MIDDLE SECTION: Two Projects (Items 3 & 4)
+              Forms a visually distinct middle section with asymmetric widths,
+              contrasting orientations (portrait vs wider landscape), and vertical offset.
+              ───────────────────────────────────────────────────────────── */}
+          <div className={`${styles.rhythmBlock} ${styles.middleSection}`}>
+            {/* ITEM 3: Wedding Project 2 — Sireesh & Harshitha (Left, Portrait, Elevated) */}
+            <div className={styles.middleColLeft}>
+              <div className={styles.itemLabelRow}>
+                <span className={styles.itemLabel}>{ITEM_PROJECT_02.movementLabel}</span>
+              </div>
+
+              <Link
+                href={ITEM_PROJECT_02.storyUrl}
+                className={`${styles.photoFigure} ${styles.figureMiddleL}`}
+                aria-label={`Open Sireesh & Harshitha archive — ${ITEM_PROJECT_02.clientNames}`}
+              >
+                <div
+                  className={styles.imageContainer}
+                  style={{ aspectRatio: ITEM_PROJECT_02.aspectRatio }}
+                >
+                  <picture>
+                    <source srcSet={ITEM_PROJECT_02.webpImage} type="image/webp" />
+                    <img
+                      src={ITEM_PROJECT_02.image}
+                      alt={ITEM_PROJECT_02.clientNames}
+                      className={styles.galleryImage}
+                      loading="eager"
+                    />
+                  </picture>
+                </div>
+                <div className={styles.editorialCaption}>
+                  <div className={styles.captionMain}>
+                    <div className={styles.captionTitleRow}>
+                      <span className={styles.captionTitle}>{ITEM_PROJECT_02.captionTitle}</span>
+                      <span
+                        className={styles.cardArrow}
+                        aria-label="Open Sireesh & Harshitha archive"
+                        title="Open Sireesh & Harshitha archive"
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </span>
+                    </div>
+                    <span className={styles.captionMeta}>{ITEM_PROJECT_02.captionSub}</span>
+                  </div>
+                </div>
+              </Link>
+            </div>
+
+            {/* ITEM 4: Wedding Project 3 — Hrithika & Abhishek (Right, Wider Landscape, Dropped) */}
+            <div className={styles.middleColRight}>
+              <div className={styles.itemLabelRow}>
+                <span className={styles.itemLabel}>{ITEM_PROJECT_03.movementLabel}</span>
+              </div>
+
+              <Link
+                href={ITEM_PROJECT_03.storyUrl}
+                className={`${styles.photoFigure} ${styles.figureMiddleR}`}
+                aria-label={`Open Hrithika & Abhishek archive — ${ITEM_PROJECT_03.clientNames}`}
+              >
+                <div
+                  className={styles.imageContainer}
+                  style={{ aspectRatio: ITEM_PROJECT_03.aspectRatio }}
+                >
+                  <picture>
+                    <source srcSet={ITEM_PROJECT_03.webpImage} type="image/webp" />
+                    <img
+                      src={ITEM_PROJECT_03.image}
+                      alt={ITEM_PROJECT_03.clientNames}
+                      className={styles.galleryImage}
+                      style={{ objectPosition: "center 22%" }}
+                      loading="eager"
+                    />
+                  </picture>
+                </div>
+                <div className={styles.editorialCaption}>
+                  <div className={styles.captionMain}>
+                    <div className={styles.captionTitleRow}>
+                      <span className={styles.captionTitle}>{ITEM_PROJECT_03.captionTitle}</span>
+                      <span
+                        className={styles.cardArrow}
+                        aria-label="Open Hrithika & Abhishek archive"
+                        title="Open Hrithika & Abhishek archive"
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </span>
+                    </div>
+                    <span className={styles.captionMeta}>{ITEM_PROJECT_03.captionSub}</span>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* ─────────────────────────────────────────────────────────────
+              ITEM 5: Video 2 — Existing Second Video (Nishanth X Sanzena)
+              NOTICEABLY SMALLER: ~52% width, shorter frame, generous negative space,
+              anchored to the right to offset from Video 1's position.
+              ───────────────────────────────────────────────────────────── */}
+          <div className={`${styles.rhythmBlock} ${styles.itemVideoInsertWrapper}`}>
+            <div className={styles.insertHeaderRow}>
+              <span className={styles.itemLabel}>{ITEM_VIDEO_02.movementLabel}</span>
+              <span className={styles.durationBadge}>DURATION · {ITEM_VIDEO_02.duration}</span>
+            </div>
+
+            <div className={styles.cinemaStageInsert}>
+              <div className={styles.cinemaFrameInsert}>
+                {activeInlineVideo === ITEM_VIDEO_02.id ? (
+                  <div className={styles.inlinePlayerContainer}>
+                    <iframe
+                      src={ITEM_VIDEO_02.embedUrl}
+                      title={ITEM_VIDEO_02.filmTitle}
+                      className={styles.inlineIframe}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                    <button
+                      type="button"
+                      className={styles.inlineCloseBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveInlineVideo(null);
+                      }}
+                      aria-label="Stop video and return to preview"
+                    >
+                      ✕ Close Player
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    className={styles.previewClickArea}
+                    onClick={() => setActiveInlineVideo(ITEM_VIDEO_02.id)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setActiveInlineVideo(ITEM_VIDEO_02.id);
+                      }
+                    }}
+                    aria-label={`Play ${ITEM_VIDEO_02.filmTitle} inline`}
+                  >
+                    <picture>
+                      <source srcSet={ITEM_VIDEO_02.webpPoster} type="image/webp" />
+                      <img
+                        src={ITEM_VIDEO_02.poster}
+                        alt={ITEM_VIDEO_02.filmTitle}
+                        className={styles.cinemaPoster}
+                        loading="lazy"
+                      />
+                    </picture>
+                    <div className={styles.cinemaVignette} />
+
+                    <div className={`${styles.playBeacon} ${styles.playBeaconInsert}`}>
+                      <div className={styles.playPulse} />
+                      <svg className={styles.playIcon} viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+
+                    <div className={styles.cinemaTopBar}>
+                      <span className={styles.cinemaBadge}>CINEMA INSERT</span>
+                      <span className={styles.cinemaDuration}>{ITEM_VIDEO_02.duration}</span>
+                    </div>
+
+                    <div className={styles.cinemaBottomBar}>
+                      <span className={styles.cinemaCategory}>{ITEM_VIDEO_02.category.toUpperCase()}</span>
+                      <h3 className={`${styles.cinemaTitle} ${styles.cinemaTitleInsert}`}>{ITEM_VIDEO_02.filmTitle}</h3>
+                      <p className={`${styles.cinemaQuote} ${styles.cinemaQuoteInsert}`}>&ldquo;{ITEM_VIDEO_02.description}&rdquo;</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.filmUnderMeta}>
+                <span className={styles.filmClickHint}>
+                  {activeInlineVideo === ITEM_VIDEO_02.id
+                    ? "Playing inline — use player controls for volume or full-screen"
+                    : "Click preview to begin playback inline"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* ─────────────────────────────────────────────────────────────
+              ITEM 6: Wedding Project 4 — Karthik & Gayathri
+              The remaining wedding project · Concludes sequence · Left-center placement
+              ───────────────────────────────────────────────────────────── */}
+          <div className={`${styles.rhythmBlock} ${styles.itemFinalWrapper}`}>
+            <div className={styles.itemLabelRow}>
+              <span className={styles.itemLabel}>{ITEM_PROJECT_04.movementLabel}</span>
+            </div>
+
+            <Link
+              href={ITEM_PROJECT_04.storyUrl}
+              className={`${styles.photoFigure} ${styles.figureFinal}`}
+              aria-label={`Open Karthik & Gayathri archive — ${ITEM_PROJECT_04.clientNames}`}
+            >
+              <div
+                className={styles.imageContainer}
+                style={{ aspectRatio: ITEM_PROJECT_04.aspectRatio }}
+              >
+                <picture>
+                  <source srcSet={ITEM_PROJECT_04.webpImage} type="image/webp" />
+                  <img
+                    src={ITEM_PROJECT_04.image}
+                    alt={ITEM_PROJECT_04.clientNames}
+                    className={styles.galleryImage}
+                    loading="eager"
+                  />
+                </picture>
+              </div>
+              <div className={styles.editorialCaption}>
+                <div className={styles.captionMain}>
+                  <div className={styles.captionTitleRow}>
+                    <span className={styles.captionTitle}>{ITEM_PROJECT_04.captionTitle}</span>
+                    <span
+                      className={styles.cardArrow}
+                      aria-label="Open Karthik & Gayathri archive"
+                      title="Open Karthik & Gayathri archive"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                  <span className={styles.captionMeta}>{ITEM_PROJECT_04.captionSub}</span>
+                </div>
+              </div>
+            </Link>
+          </div>
         </div>
-      )}
+      </div>
     </section>
   );
 }

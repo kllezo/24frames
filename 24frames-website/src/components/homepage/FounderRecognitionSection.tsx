@@ -365,13 +365,13 @@ export default function FounderRecognitionSection() {
               <div className={styles.portraitGroundShadow} aria-hidden="true" />
             </div>
 
-            {/* 1.2 Statistics Block Directly Beneath Portrait — Single Vertical Column */}
+            {/* 1.2 Statistics Block Directly Beneath Portrait — Three Statistics Arranged Horizontally */}
             <div ref={statsRef} className={styles.leftStatsBlock}>
-              {/* Statistics Top Divider */}
+              {/* Statistics Divider Beneath Portrait */}
               <div className={styles.leftDivider} />
 
-              {/* Three Statistics Arranged in a Single Vertical Column */}
-              <div className={styles.leftStatsVertical}>
+              {/* Three Statistics Arranged Horizontally: 2012, 500+, 5.0 */}
+              <div className={styles.leftStatsRow}>
                 <div className={styles.statItem}>
                   <span className={styles.statValue}>2012</span>
                   <span className={styles.statLabel}>FOUNDED IN HYDERABAD</span>

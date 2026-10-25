@@ -59,8 +59,8 @@
 /* Two-Part Macro Layout: Left Column (Portrait + Stats) · Right Column (Shelf + Bio) */
 .sceneLayout {
   display: grid;
-  grid-template-columns: minmax(320px, 28%) 1fr;
-  gap: clamp(3rem, 5.5vw, 6.5rem);
+  grid-template-columns: minmax(340px, 31%) 1fr;
+  gap: clamp(2.5rem, 4.5vw, 5.5rem);
   align-items: start;
 }
 
@@ -108,7 +108,7 @@
   pointer-events: none;
 }
 
-/* Statistics Block Directly Beneath the Portrait — Single Vertical Column */
+/* Statistics Block Directly Beneath the Portrait — Three Statistics Arranged Horizontally */
 .leftStatsBlock {
   width: 100%;
   max-width: 440px;
@@ -124,29 +124,23 @@
   margin-bottom: clamp(1.25rem, 2vh, 1.75rem);
 }
 
-.leftStatsVertical {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(1.25rem, 2.2vh, 1.75rem);
+.leftStatsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.75rem, 1.2vw, 1.4rem);
   width: 100%;
+  align-items: start;
 }
 
 .statItem {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  padding-bottom: clamp(1.1rem, 1.8vh, 1.5rem);
-  border-bottom: 1px solid rgba(228, 222, 210, 0.65);
-}
-
-.statItem:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
 }
 
 .statValue {
   font-family: var(--font-cinema, 'Cinzel', serif);
-  font-size: clamp(2.5rem, 3.2vw, 3rem); /* ~40–48px on desktop */
+  font-size: clamp(1.75rem, 2.3vw, 2.4rem);
   font-weight: 700;
   color: #164B40;
   line-height: 1;
@@ -155,13 +149,13 @@
 
 .statLabel {
   font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: clamp(0.6875rem, 0.75vw, 0.75rem);
+  font-size: clamp(0.53rem, 0.64vw, 0.6875rem);
   font-weight: 700;
   color: #77766E;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  line-height: 1.35;
-  white-space: nowrap;
+  line-height: 1.3;
+  white-space: normal;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -867,21 +861,22 @@
     margin-top: 1.25rem;
   }
 
-  .leftStatsVertical {
-    gap: 1.15rem;
+  .leftStatsRow {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
   }
 
   .statItem {
-    padding-bottom: 1rem;
+    padding-bottom: 0;
   }
 
   .statValue {
-    font-size: clamp(2.2rem, 9vw, 2.6rem);
+    font-size: clamp(1.4rem, 6vw, 1.85rem);
   }
 
   .statLabel {
-    font-size: 0.65rem;
-    letter-spacing: 0.14em;
+    font-size: clamp(0.48rem, 2vw, 0.58rem);
+    letter-spacing: 0.1em;
     white-space: normal;
   }
 

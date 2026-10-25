@@ -5,7 +5,9 @@ import Link from "next/link";
 import styles from "./Navigation.module.css";
 
 const NAV_LINKS = [
+  { label: "The Collection", href: "/#collection" },
   { label: "The Vows", href: "/#vows" },
+  { label: "Stories", href: "/stories" },
   { label: "24 Frames", href: "/identity" },
   { label: "The Artist", href: "/#artist" },
 ];
