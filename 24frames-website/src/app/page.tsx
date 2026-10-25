@@ -6,8 +6,6 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/homepage/HeroSection";
 import LivingContactSheet from "@/components/homepage/LivingContactSheet";
-import TheVowSection from "@/components/homepage/TheVowSection";
-import SignatureCollection from "@/components/homepage/SignatureCollection";
 import ExploreTheWorld from "@/components/homepage/ExploreTheWorld";
 import FounderRecognitionSection from "@/components/homepage/FounderRecognitionSection";
 import InvitationCTA from "@/components/homepage/InvitationCTA";
@@ -39,14 +37,8 @@ export default function HomePage() {
           {/* Chapter 01 — The Opening Frame */}
           <HeroSection />
 
-          {/* Chapter 02 — The Living Contact Sheet (24-Frame Archival Matrix) */}
+          {/* Chapter 02 — The Living Contact Sheet (24-Frame Archival Matrix & Curated Exhibition) */}
           <LivingContactSheet />
-
-          {/* Chapter 02.b — Scroll-Driven Photographic Installation (Reference Image 2) */}
-          <TheVowSection />
-
-          {/* Chapter 03 — Signature Collection (Archival Stacks) */}
-          <SignatureCollection />
 
           {/* Chapter 04 — Explore the World (Category Worlds) */}
           <ExploreTheWorld />

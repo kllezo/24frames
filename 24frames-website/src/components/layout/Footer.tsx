@@ -2,8 +2,8 @@ import styles from "./Footer.module.css";
 
 const NAV_LINKS = [
   { label: "The Collection", href: "/#collection" },
-  { label: "The Vow", href: "/#the-vow" },
-  { label: "Featured Work", href: "/#work" },
+  { label: "Curated Exhibition", href: "/#exhibition" },
+  { label: "World Tours", href: "/#explore" },
   { label: "24 Frames Identity", href: "/identity" },
   { label: "The Artist", href: "/#artist" },
   { label: "Inquire", href: "/#inquire" },

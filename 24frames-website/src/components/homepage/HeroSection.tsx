@@ -40,7 +40,7 @@ const HERO_SLIDES: HeroSlide[] = [
     label: "FRAME 05",
     title: "Taj Falaknama",
     subtitle: "Karthik & Vijayalakshmi",
-    image: "https://images.unsplash.com/photo-1585071550721-fdb362ae2b8a?w=1800&q=90&auto=format",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1800&q=90&auto=format",
     slug: "karthik-vijayalakshmi",
     color: "#2E6F62",
   },

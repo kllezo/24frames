@@ -1,0 +1,20 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Downloads directory
+downloads/
+
+# Secrets and sessions
+*.session
+*session*
+*cookies*.txt
+cookies.txt
+.env
+.env.*

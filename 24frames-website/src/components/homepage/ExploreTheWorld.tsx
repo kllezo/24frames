@@ -29,7 +29,7 @@ const WORLDS: CategoryWorld[] = [
     description: "Multi-day coverage spanning Mangalasnanam, Sangeet galas, and dawn ceremonies. Documented without invasive lighting or forced poses.",
     mainImage: "https://images.unsplash.com/photo-1519741497674-611481863552?w=2000&q=88&auto=format",
     secondaryImage: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1000&q=85&auto=format",
-    href: "/#work",
+    href: "/#exhibition",
   },
   {
     id: "portraits",
@@ -39,7 +39,7 @@ const WORLDS: CategoryWorld[] = [
     tagline: "High-fashion bridal couture, Tollywood actors, and private family patriarchs.",
     description: "Medium-format optical portraits lit with master cinema fixtures. Preserving quiet dignity and sculptural elegance.",
     mainImage: "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=2000&q=88&auto=format",
-    secondaryImage: "https://images.unsplash.com/photo-1585071550721-fdb362ae2b8a?w=1000&q=85&auto=format",
+    secondaryImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1000&q=85&auto=format",
     href: "/#collection",
   },
   {
@@ -50,7 +50,7 @@ const WORLDS: CategoryWorld[] = [
     tagline: "High-octane Sangeet stages, milestone anniversaries, and national events.",
     description: "Capturing the electric choreography, live orchestral music, and grand architectural ambiance of premier venues.",
     mainImage: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=2000&q=88&auto=format",
-    secondaryImage: "https://images.unsplash.com/photo-1513725673706-7b5609847580?w=1000&q=85&auto=format",
+    secondaryImage: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1000&q=85&auto=format",
     href: "/#collection",
   },
   {
@@ -60,7 +60,7 @@ const WORLDS: CategoryWorld[] = [
     count: "10+ Editorial Spreads",
     tagline: "Bespoke designer lookbooks and high-jewelry editorial campaigns.",
     description: "Crafted for prestigious publications and couture designers, combining experimental art direction with sharp optical discipline.",
-    mainImage: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=2000&q=88&auto=format",
+    mainImage: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=2000&q=88&auto=format",
     secondaryImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1000&q=85&auto=format",
     href: "/#collection",
   },
@@ -72,8 +72,8 @@ const WORLDS: CategoryWorld[] = [
     tagline: "2.39:1 Anamorphic motion pictures paired with orchestral audio scores.",
     description: "Shot with dedicated cinema crews on ARRI and Sony FX cinema lines. Edited as theatrical-grade wedding features.",
     mainImage: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=2000&q=88&auto=format",
-    secondaryImage: "https://images.unsplash.com/photo-1609151162474-e1e0e1d0e8ba?w=1000&q=85&auto=format",
-    href: "/#work",
+    secondaryImage: "https://images.unsplash.com/photo-1460978812857-470ed1c77af0?w=1000&q=85&auto=format",
+    href: "/#exhibition",
   },
   {
     id: "archive",
@@ -140,6 +140,7 @@ export default function ExploreTheWorld() {
   return (
     <section
       ref={sectionRef}
+      id="explore"
       className={styles.section}
       aria-label="Discover the World of 24 Frames — Editorial Disciplines"
     >

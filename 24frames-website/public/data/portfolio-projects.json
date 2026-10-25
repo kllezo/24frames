@@ -1,0 +1,257 @@
+{
+  "projects": [
+    {
+      "id": "gallery-01",
+      "slug": "sireesh-harshitha",
+      "type": "pic-time-gallery",
+      "title": "Sireesh & Harshitha",
+      "verified_title": "SIREESH & HARSHITHA",
+      "client_names": "Sireesh & Harshitha",
+      "category": "Wedding Celebration",
+      "source_url": "https://24frames.pic-time.com/8Nq0pv3SJbxKn",
+      "platform": "Pic-Time",
+      "description": "Authentic wedding celebrations documented by 24 Frames Photography, celebrating sacred traditions and intimate family moments.",
+      "location": "Hyderabad, Telangana",
+      "embed_url": null,
+      "duration": null,
+      "upload_date": null,
+      "download_status": "RESTRICTED — Client PIN / Store order required for in-gallery batch zip download",
+      "local_cover": "/images/portfolio/sireesh-harshitha/cover.jpg",
+      "local_cover_webp": "/images/portfolio/sireesh-harshitha/cover.webp",
+      "cover_dimensions": {
+        "width": 1280,
+        "height": 1600,
+        "aspect_ratio": "1280 / 1600"
+      },
+      "assets": [
+        {
+          "role": "cover",
+          "filename": "cover.jpg",
+          "format": "JPEG",
+          "width": 1280,
+          "height": 1600,
+          "aspect_ratio": "1280 / 1600",
+          "caption": "Sireesh & Harshitha — Editorial Cover Photograph",
+          "raw_path": "tools/portfolio-ingestion/raw/sireesh-harshitha/cover.jpg",
+          "public_path": "images/portfolio/sireesh-harshitha/cover.jpg",
+          "size_bytes": 522670,
+          "sha256": "9765e22fd0498ba04e8528316e2ecd9e552b5594313c9edd690bfd6a44773a19",
+          "webp_derivative": "images/portfolio/sireesh-harshitha/cover.webp",
+          "status": "verified"
+        }
+      ],
+      "audit_timestamp": "2026-10-25T13:17:23.578177+00:00"
+    },
+    {
+      "id": "gallery-02",
+      "slug": "bellamkonda-kavya-reception",
+      "type": "pic-time-gallery",
+      "title": "Bellamkonda Sai Sreenivas & Kavya Reddy",
+      "verified_title": "24 FRAMES BELLAMKONDA SAI SRINIVAS & KAVYA REDDY RECEPTION",
+      "client_names": "Bellamkonda Sai Sreenivas & Kavya Reddy",
+      "category": "Celebrity Wedding Reception",
+      "source_url": "https://24frames.pic-time.com/8P0kK5ZUmew5F",
+      "platform": "Pic-Time",
+      "description": "High-profile grand wedding reception of Telugu cinema star Bellamkonda Sai Sreenivas and Kavya Reddy, featuring distinguished guests and royal stage florals.",
+      "location": "Hyderabad, Telangana",
+      "embed_url": null,
+      "duration": null,
+      "upload_date": null,
+      "download_status": "RESTRICTED — Client PIN / Store order required for in-gallery batch zip download",
+      "local_cover": "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
+      "local_cover_webp": "/images/portfolio/bellamkonda-kavya-reception/cover.webp",
+      "cover_dimensions": {
+        "width": 1280,
+        "height": 720,
+        "aspect_ratio": "1280 / 720"
+      },
+      "assets": [
+        {
+          "role": "cover",
+          "filename": "cover.jpg",
+          "format": "JPEG",
+          "width": 1280,
+          "height": 720,
+          "aspect_ratio": "1280 / 720",
+          "caption": "Bellamkonda Sai Sreenivas & Kavya Reddy — Reception Cover",
+          "raw_path": "tools/portfolio-ingestion/raw/bellamkonda-kavya-reception/cover.jpg",
+          "public_path": "images/portfolio/bellamkonda-kavya-reception/cover.jpg",
+          "size_bytes": 294695,
+          "sha256": "8961489e354e2c35e8dce574371f4791471ee762f525ea4c0a1b97991c56fd15",
+          "webp_derivative": "images/portfolio/bellamkonda-kavya-reception/cover.webp",
+          "status": "verified"
+        }
+      ],
+      "audit_timestamp": "2026-10-25T13:17:23.889718+00:00"
+    },
+    {
+      "id": "gallery-03",
+      "slug": "hrithika-abhishek",
+      "type": "pic-time-gallery",
+      "title": "Hrithika & Abhishek",
+      "verified_title": "HRITHIKA & ABHISHEK",
+      "client_names": "Hrithika & Abhishek",
+      "category": "Wedding & Celebrations",
+      "source_url": "https://24frames.pic-time.com/whZsXRiO6XgQn",
+      "platform": "Pic-Time",
+      "description": "Exquisite wedding rituals and candid family joy documented across nine dedicated multi-day scenes by 24 Frames.",
+      "location": "Hyderabad, Telangana",
+      "embed_url": null,
+      "duration": null,
+      "upload_date": null,
+      "download_status": "RESTRICTED — Client PIN / Store order required for in-gallery batch zip download",
+      "local_cover": "/images/portfolio/hrithika-abhishek/cover.jpg",
+      "local_cover_webp": "/images/portfolio/hrithika-abhishek/cover.webp",
+      "cover_dimensions": {
+        "width": 2400,
+        "height": 1255,
+        "aspect_ratio": "2400 / 1255"
+      },
+      "assets": [
+        {
+          "role": "cover",
+          "filename": "cover.jpg",
+          "format": "JPEG",
+          "width": 2400,
+          "height": 1255,
+          "aspect_ratio": "2400 / 1255",
+          "caption": "Hrithika & Abhishek — Wedding Portrait Cover",
+          "raw_path": "tools/portfolio-ingestion/raw/hrithika-abhishek/cover.jpg",
+          "public_path": "images/portfolio/hrithika-abhishek/cover.jpg",
+          "size_bytes": 450937,
+          "sha256": "f9944db8a2be88189c539ccb28d05d45379c2eb10302847e85eaf2a83fc5e42a",
+          "webp_derivative": "images/portfolio/hrithika-abhishek/cover.webp",
+          "status": "verified"
+        }
+      ],
+      "audit_timestamp": "2026-10-25T13:17:24.418533+00:00"
+    },
+    {
+      "id": "gallery-04",
+      "slug": "karthik-gayathri",
+      "type": "pic-time-gallery",
+      "title": "Karthik & Gayathri",
+      "verified_title": "KARTHIK & GAYATHRI",
+      "client_names": "Karthik & Gayathri",
+      "category": "Wedding Celebrations",
+      "source_url": "https://24frames.pic-time.com/yBCmkKcczvWql",
+      "platform": "Pic-Time",
+      "description": "Fine-art South Indian wedding coverage featuring classical decor, traditional silk sarees, and evocative ambient lighting.",
+      "location": "Hyderabad, Telangana",
+      "embed_url": null,
+      "duration": null,
+      "upload_date": null,
+      "download_status": "RESTRICTED — Client PIN / Store order required for in-gallery batch zip download",
+      "local_cover": "/images/portfolio/karthik-gayathri/cover.jpg",
+      "local_cover_webp": "/images/portfolio/karthik-gayathri/cover.webp",
+      "cover_dimensions": {
+        "width": 1800,
+        "height": 2400,
+        "aspect_ratio": "1800 / 2400"
+      },
+      "assets": [
+        {
+          "role": "cover",
+          "filename": "cover.jpg",
+          "format": "JPEG",
+          "width": 1800,
+          "height": 2400,
+          "aspect_ratio": "1800 / 2400",
+          "caption": "Karthik & Gayathri — Classical Fine-Art Cover",
+          "raw_path": "tools/portfolio-ingestion/raw/karthik-gayathri/cover.jpg",
+          "public_path": "images/portfolio/karthik-gayathri/cover.jpg",
+          "size_bytes": 1434625,
+          "sha256": "47f709121a14ecb42bbbf16f17b2611021b8dcd0b11155bf7c57b94ec151f21a",
+          "webp_derivative": "images/portfolio/karthik-gayathri/cover.webp",
+          "status": "verified"
+        }
+      ],
+      "audit_timestamp": "2026-10-25T13:17:25.479952+00:00"
+    },
+    {
+      "id": "film-01",
+      "slug": "nishanth-sanzena",
+      "type": "youtube-film",
+      "title": "Nishanth & Sanzena",
+      "verified_title": "Nishanth X Sanzena | Couple Shoot Film | 24Frames Wedding Films",
+      "client_names": "Nishanth & Sanzena",
+      "category": "Couple Shoot Cinema Film",
+      "source_url": "https://youtu.be/s32UT21hnBg",
+      "platform": "YouTube",
+      "description": "The Unfold love story of Nishanth❤️Sanzena. Experience the beautiful chemistry of Nishanth and Sanzena in this stunning couple shoot film — where every moment, every frame, and every smile captures their eternal bond.",
+      "location": "Hyderabad, Telangana",
+      "embed_url": "https://www.youtube-nocookie.com/embed/s32UT21hnBg",
+      "duration": "04:17",
+      "upload_date": "2025-09-18",
+      "download_status": "AUTHORIZED EMBED — Original video stream hosted on YouTube; poster thumbnail locally packaged",
+      "local_cover": "/videos/portfolio/nishanth-sanzena/poster.jpg",
+      "local_cover_webp": "/videos/portfolio/nishanth-sanzena/poster.webp",
+      "cover_dimensions": {
+        "width": 1280,
+        "height": 720,
+        "aspect_ratio": "1280 / 720"
+      },
+      "assets": [
+        {
+          "role": "thumbnail",
+          "filename": "poster.jpg",
+          "format": "JPEG",
+          "width": 1280,
+          "height": 720,
+          "aspect_ratio": "1280 / 720",
+          "caption": "Nishanth X Sanzena — Film Poster Thumbnail",
+          "raw_path": "tools/portfolio-ingestion/raw/nishanth-sanzena/poster.jpg",
+          "public_path": "videos/portfolio/nishanth-sanzena/poster.jpg",
+          "size_bytes": 78576,
+          "sha256": "c2d34c3236d4a4f9d0708fea1f3ee91edc81dbb2efbf41cb62d8a2aa8a20b462",
+          "webp_derivative": "videos/portfolio/nishanth-sanzena/poster.webp",
+          "status": "verified"
+        }
+      ],
+      "audit_timestamp": "2026-10-25T13:17:25.935941+00:00"
+    },
+    {
+      "id": "film-02",
+      "slug": "vinitha-vivekananda",
+      "type": "youtube-film",
+      "title": "Vinitha & Vivekananda",
+      "verified_title": "Vinitha & Vivekananda | Two Years, One Question | 24Frames Wedding Films",
+      "client_names": "Vinitha & Vivekananda",
+      "category": "Wedding Teaser & Feature Film",
+      "source_url": "https://youtu.be/LNtlLgfT5uY",
+      "platform": "YouTube",
+      "description": "A journey of love, patience, and devotion — witness the beautiful story of Vinitha and Vivekananda, where two years of togetherness lead to one life-changing moment. This film captures their heartfelt vows and joyful union.",
+      "location": "Hyderabad, Telangana",
+      "embed_url": "https://www.youtube-nocookie.com/embed/LNtlLgfT5uY",
+      "duration": "02:33",
+      "upload_date": "2025-09-18",
+      "download_status": "AUTHORIZED EMBED — Original video stream hosted on YouTube; poster thumbnail locally packaged",
+      "local_cover": "/videos/portfolio/vinitha-vivekananda/poster.jpg",
+      "local_cover_webp": "/videos/portfolio/vinitha-vivekananda/poster.webp",
+      "cover_dimensions": {
+        "width": 1280,
+        "height": 720,
+        "aspect_ratio": "1280 / 720"
+      },
+      "assets": [
+        {
+          "role": "thumbnail",
+          "filename": "poster.jpg",
+          "format": "JPEG",
+          "width": 1280,
+          "height": 720,
+          "aspect_ratio": "1280 / 720",
+          "caption": "Vinitha & Vivekananda — Film Poster Thumbnail",
+          "raw_path": "tools/portfolio-ingestion/raw/vinitha-vivekananda/poster.jpg",
+          "public_path": "videos/portfolio/vinitha-vivekananda/poster.jpg",
+          "size_bytes": 93451,
+          "sha256": "e18977dea1f83659251162e8ac37913dc42b2883462fec00541ad8757a9f6bc6",
+          "webp_derivative": "videos/portfolio/vinitha-vivekananda/poster.webp",
+          "status": "verified"
+        }
+      ],
+      "audit_timestamp": "2026-10-25T13:17:27.163063+00:00"
+    }
+  ],
+  "generated_at": "2026-10-25T13:17:27.163356+00:00"
+}

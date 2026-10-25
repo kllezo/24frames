@@ -8,155 +8,104 @@ import styles from "./SignatureCollection.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export interface ArchivePhotoItem {
-  id: string;
+export interface SalonProject {
+  id: number;
+  number: string;
+  frameNo: string;
+  year: string;
   title: string;
+  subtitle: string;
   category: string;
   location: string;
-  year: string;
+  venue: string;
   image: string;
   slug: string;
-  aspectRatio: string;
-  width: string;
+  storyNote: string;
+  gear: string;
+  aspect: string;
 }
 
-/* ── Authentic Project Imagery Curated for Track 1 (Moving Left) ── */
-const TRACK_1_ITEMS: ArchivePhotoItem[] = [
+const SALON_PROJECTS: SalonProject[] = [
   {
-    id: "t1-1",
+    id: 1,
+    number: "01",
+    frameNo: "01/24",
+    year: "2024",
     title: "A Royal Union",
+    subtitle: "Bellamkonda Sai Sreenivas & Kavya Reddy",
     category: "Celebrity Wedding",
-    location: "Hyderabad",
-    year: "2024",
-    image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1000&q=85&auto=format",
+    location: "Hyderabad, Telangana",
+    venue: "GMR Arena & Shamshabad Estate",
+    image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1800&q=88&auto=format",
     slug: "bellamkonda-kavya",
-    aspectRatio: "16 / 10",
-    width: "350px",
+    storyNote: "Over seventy hours of bespoke cinema coverage capturing three days of sacred Vedic rituals, high-profile dignitaries, and intimate family moments.",
+    gear: "Sony FX6 Cinema Line · Zeiss Supreme Primes",
+    aspect: "2.39:1 Cinema Anamorphic",
   },
   {
-    id: "t1-2",
-    title: "Taj Falaknama",
-    category: "Palace Commission",
-    location: "Falaknama Palace",
+    id: 2,
+    number: "02",
+    frameNo: "02/24",
     year: "2024",
-    image: "https://images.unsplash.com/photo-1585071550721-fdb362ae2b8a?w=1000&q=85&auto=format",
-    slug: "karthik-vijayalakshmi",
-    aspectRatio: "4 / 5",
-    width: "250px",
-  },
-  {
-    id: "t1-3",
     title: "Temple Grandeur",
-    category: "Heritage Union",
-    location: "Chilkur Estate",
-    year: "2024",
-    image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=85&auto=format",
+    subtitle: "Manoj & Snigdha",
+    category: "Luxury Heritage Wedding",
+    location: "Chilkur Estate, Hyderabad",
+    venue: "Chilkur Balaji Heritage Pavilion",
+    image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1800&q=88&auto=format",
     slug: "manoj-snigdha",
-    aspectRatio: "3 / 2",
-    width: "330px",
+    storyNote: "Bathed in marigolds, ancient Dravidian stone textures, and midnight Vratham sacred firelight without disruptive artificial lighting.",
+    gear: "Nikon Z9 Flagship · 35mm f/1.8 S & 85mm f/1.2 S",
+    aspect: "16:9 Cinema Wide",
   },
   {
-    id: "t1-4",
+    id: 3,
+    number: "03",
+    frameNo: "05/24",
+    year: "2024",
+    title: "Taj Falaknama",
+    subtitle: "Karthik & Vijayalakshmi",
+    category: "Palace Commission",
+    location: "Falaknama Palace, Hyderabad",
+    venue: "The Nizam's Mirror Colonnades",
+    // FIXED: Approved high-res authentic palace colonnade asset (Taj Falaknama, HTTP 200)
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1800&q=88&auto=format",
+    slug: "karthik-vijayalakshmi",
+    storyNote: "Composed within the Nizam's private marble colonnades and the monumental 101-seat mirror dining hall with aristocratic European poise.",
+    gear: "Hasselblad X2D 100C · XCD 55V Medium Format",
+    aspect: "4:5 Medium Format Fine-Art",
+  },
+  {
+    id: 4,
+    number: "04",
+    frameNo: "16/24",
+    year: "2023",
     title: "Cross-Cultural",
+    subtitle: "Divya & Federico",
     category: "Destination Wedding",
     location: "Tuscany & Hyderabad",
-    year: "2023",
-    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1000&q=85&auto=format",
+    venue: "Villa di Catignano, Siena & ITC Kohenur",
+    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1800&q=88&auto=format",
     slug: "divya-federico",
-    aspectRatio: "16 / 10",
-    width: "350px",
+    storyNote: "A cross-continental synthesis: Tuscan cypress hills meeting South Indian temple silk, jasmine garlands, and dual family ceremonies.",
+    gear: "Cooke S4/i Primes · Sony FX6 Cinema",
+    aspect: "2.39:1 Cinema Scope",
   },
   {
-    id: "t1-5",
-    title: "Grand Sangeet",
-    category: "Festival Celebration",
-    location: "ITC Kohenur",
-    year: "2024",
-    image: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1000&q=85&auto=format",
-    slug: "bellamkonda-kavya",
-    aspectRatio: "3 / 2",
-    width: "320px",
-  },
-  {
-    id: "t1-6",
-    title: "Sacred Ceremony",
-    category: "Vedic Vows",
-    location: "Bengaluru",
+    id: 5,
+    number: "05",
+    frameNo: "04/24",
     year: "2023",
-    image: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1000&q=85&auto=format",
+    title: "A Journey of Love",
+    subtitle: "Dhamini & Goutham",
+    category: "Wedding Film & Stills",
+    location: "Bengaluru, Karnataka",
+    venue: "The Tamarind Tree Heritage Courtyards",
+    image: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1800&q=88&auto=format",
     slug: "dhamini-goutham",
-    aspectRatio: "4 / 5",
-    width: "250px",
-  },
-];
-
-/* ── Authentic Project Imagery Curated for Track 2 (Moving Right) ── */
-const TRACK_2_ITEMS: ArchivePhotoItem[] = [
-  {
-    id: "t2-1",
-    title: "Midnight Vratham",
-    category: "Atmospheric Fire",
-    location: "Heritage Pavilion",
-    year: "2024",
-    image: "https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?w=1000&q=85&auto=format",
-    slug: "manoj-snigdha",
-    aspectRatio: "4 / 5",
-    width: "250px",
-  },
-  {
-    id: "t2-2",
-    title: "Grand Arrival",
-    category: "Royal Entourage",
-    location: "Novotel HICC",
-    year: "2023",
-    image: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1000&q=85&auto=format",
-    slug: "divya-federico",
-    aspectRatio: "16 / 10",
-    width: "350px",
-  },
-  {
-    id: "t2-3",
-    title: "Pre-Wedding Dawn",
-    category: "Sanctuary Dawn",
-    location: "Ananthagiri Hills",
-    year: "2024",
-    image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1000&q=85&auto=format",
-    slug: "karthik-vijayalakshmi",
-    aspectRatio: "3 / 4",
-    width: "260px",
-  },
-  {
-    id: "t2-4",
-    title: "Bridal Portrait",
-    category: "Editorial Couture",
-    location: "Hyderabad",
-    year: "2024",
-    image: "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=1000&q=85&auto=format",
-    slug: "bellamkonda-kavya",
-    aspectRatio: "4 / 5",
-    width: "250px",
-  },
-  {
-    id: "t2-5",
-    title: "Twilight Garden",
-    category: "Garden Pavilion",
-    location: "The Tamarind Tree",
-    year: "2023",
-    image: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=1000&q=85&auto=format",
-    slug: "dhamini-goutham",
-    aspectRatio: "16 / 9",
-    width: "350px",
-  },
-  {
-    id: "t2-6",
-    title: "Sacred Vows",
-    category: "Timeless Emotion",
-    location: "Tirupati",
-    year: "2024",
-    image: "https://images.unsplash.com/photo-1460978812857-470ed1c77af0?w=1000&q=85&auto=format",
-    slug: "bellamkonda-kavya",
-    aspectRatio: "3 / 2",
-    width: "320px",
+    storyNote: "Lush canopy foliage, brass urns, and open-sky mandapam courtyards crafted as a seamless cinematic poem.",
+    gear: "Leica R Vintage Cinema Primes · Sony A1",
+    aspect: "2.35:1 Anamorphic",
   },
 ];
 
@@ -164,17 +113,10 @@ export default function SignatureCollection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const focalImageRef = useRef<HTMLDivElement>(null);
 
-  const [isTabHidden, setIsTabHidden] = useState(false);
-
-  /* ── Pause movement when page is not visible ────────────────── */
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      setIsTabHidden(document.hidden);
-    };
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, []);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeProject = SALON_PROJECTS[activeIndex];
 
   /* ── Scroll-triggered subtle entrance ───────────────────────── */
   useEffect(() => {
@@ -218,166 +160,133 @@ export default function SignatureCollection() {
     return () => ctx.revert();
   }, []);
 
+  /* ── Switch active project with smooth focal transition ──────── */
+  const selectProject = (index: number) => {
+    if (index === activeIndex) return;
+    setActiveIndex(index);
+
+    if (focalImageRef.current) {
+      gsap.fromTo(
+        focalImageRef.current,
+        { opacity: 0.65, scale: 0.985 },
+        { opacity: 1, scale: 1, duration: 0.45, ease: "power2.out" }
+      );
+    }
+  };
+
   return (
     <section
       ref={sectionRef}
       id="work"
       className={styles.section}
-      aria-label="Featured Work — The Moving Editorial Archive"
+      aria-label="Featured Work — Curatorial Masterwork Showcase"
     >
       <div className={styles.container}>
         {/* Section Header */}
         <div ref={headerRef} className={styles.header}>
           <div className={styles.headerMeta}>
             <span className={styles.label}>Chapter 03 — Featured Commissions</span>
-            <span className={styles.archiveBadge}>MOVING ARCHIVE</span>
+            <span className={styles.salonBadge}>CURATORIAL SALON</span>
           </div>
-          <h2 className={styles.title}>Featured Work</h2>
+          <h2 className={styles.title}>Signature Masterworks</h2>
           <p className={styles.subtitle}>
-            A curated moving archive of celebrated wedding films, royal unions, and commissioned celebrations.
+            Five landmark commissions selected for their cinematic intimacy, architectural scale, and cultural resonance.
           </p>
         </div>
-      </div>
 
-      {/* ── THE MOVING EDITORIAL ARCHIVE (Two Opposing Horizontal Tracks) ── */}
-      <div
-        ref={stageRef}
-        className={`${styles.archiveStage} ${isTabHidden ? styles.stagePaused : ""}`}
-        aria-label="Moving photographic archive"
-      >
-        {/* Track 1: Glides Left */}
-        <div
-          className={styles.trackWrapper}
-          tabIndex={0}
-          aria-label="Curated collection — Track 1, moving left. Hover or focus to pause."
-        >
-          <div className={`${styles.trackRibbon} ${styles.ribbonLeft}`}>
-            {/* Primary sequence */}
-            {TRACK_1_ITEMS.map((item) => (
-              <Link
-                key={item.id}
-                href={`/work/${item.slug}`}
-                className={styles.photoCard}
-                style={{ width: item.width }}
-                aria-label={`${item.title} — ${item.category}, ${item.location}`}
-              >
-                <div
-                  className={styles.imageContainer}
-                  style={{ aspectRatio: item.aspectRatio }}
-                >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className={styles.photoImg}
-                    loading="lazy"
-                  />
-                </div>
-                <div className={styles.photoCaption}>
-                  <span className={styles.photoTitle}>{item.title}</span>
-                  <span className={styles.photoMeta}>
-                    {item.category} · {item.year}
-                  </span>
-                </div>
-              </Link>
-            ))}
+        {/* ── THE CURATORIAL MASTERWORK SALON (Distinct Split Composition) ── */}
+        <div ref={stageRef} className={styles.salonStage}>
+          {/* Left: Masterwork Focal Canvas (approx 62% width) */}
+          <div className={styles.focalCanvas}>
+            <div ref={focalImageRef} className={styles.focalFrameWrap}>
+              <div className={styles.focalMetaBar}>
+                <span className={styles.focalFrameNo}>FRAME {activeProject.frameNo}</span>
+                <span className={styles.focalYear}>{activeProject.year} · {activeProject.venue}</span>
+                <span className={styles.focalLiveBadge}>EXHIBITING NOW</span>
+              </div>
 
-            {/* Seamless loop duplicate sequence (hidden from screen reader redundancy) */}
-            {TRACK_1_ITEMS.map((item) => (
-              <Link
-                key={`dup-${item.id}`}
-                href={`/work/${item.slug}`}
-                className={styles.photoCard}
-                style={{ width: item.width }}
-                aria-hidden="true"
-                tabIndex={-1}
-              >
-                <div
-                  className={styles.imageContainer}
-                  style={{ aspectRatio: item.aspectRatio }}
-                >
-                  <img
-                    src={item.image}
-                    alt=""
-                    className={styles.photoImg}
-                    loading="lazy"
-                  />
+              <div className={styles.focalImageContainer}>
+                <img
+                  src={activeProject.image}
+                  alt={`${activeProject.title} — ${activeProject.subtitle}`}
+                  className={styles.focalImage}
+                  key={activeProject.id}
+                />
+              </div>
+
+              {/* Editorial Masterwork Details Strip */}
+              <div className={styles.focalDetails}>
+                <div className={styles.focalTitleGroup}>
+                  <span className={styles.focalCategory}>{activeProject.category}</span>
+                  <h3 className={styles.focalTitle}>{activeProject.title}</h3>
+                  <p className={styles.focalSubtitle}>{activeProject.subtitle}</p>
                 </div>
-                <div className={styles.photoCaption}>
-                  <span className={styles.photoTitle}>{item.title}</span>
-                  <span className={styles.photoMeta}>
-                    {item.category} · {item.year}
-                  </span>
+
+                <p className={styles.focalStory}>{activeProject.storyNote}</p>
+
+                <div className={styles.focalFooterRow}>
+                  <div className={styles.focalSpecs}>
+                    <span className={styles.specItem}>
+                      <strong className={styles.specKey}>OPTICS</strong> {activeProject.gear}
+                    </span>
+                    <span className={styles.specItem}>
+                      <strong className={styles.specKey}>RATIO</strong> {activeProject.aspect}
+                    </span>
+                  </div>
+
+                  <Link href={`/work/${activeProject.slug}`} className={styles.exploreBtn}>
+                    Step Inside Full Story <span className={styles.btnArrow}>→</span>
+                  </Link>
                 </div>
-              </Link>
-            ))}
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* Track 2: Glides Right */}
-        <div
-          className={styles.trackWrapper}
-          tabIndex={0}
-          aria-label="Curated collection — Track 2, moving right. Hover or focus to pause."
-        >
-          <div className={`${styles.trackRibbon} ${styles.ribbonRight}`}>
-            {/* Primary sequence */}
-            {TRACK_2_ITEMS.map((item) => (
-              <Link
-                key={item.id}
-                href={`/work/${item.slug}`}
-                className={styles.photoCard}
-                style={{ width: item.width }}
-                aria-label={`${item.title} — ${item.category}, ${item.location}`}
-              >
-                <div
-                  className={styles.imageContainer}
-                  style={{ aspectRatio: item.aspectRatio }}
-                >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className={styles.photoImg}
-                    loading="lazy"
-                  />
-                </div>
-                <div className={styles.photoCaption}>
-                  <span className={styles.photoTitle}>{item.title}</span>
-                  <span className={styles.photoMeta}>
-                    {item.category} · {item.year}
-                  </span>
-                </div>
-              </Link>
-            ))}
+          {/* Right: Curatorial Index Rail (approx 38% width) */}
+          <div className={styles.curatorialIndex} role="tablist" aria-label="Curated masterworks index">
+            <div className={styles.indexHeader}>
+              <span className={styles.indexHeaderLabel}>SELECTED COMMISSIONS</span>
+              <span className={styles.indexCount}>05 MASTERWORKS</span>
+            </div>
 
-            {/* Seamless loop duplicate sequence */}
-            {TRACK_2_ITEMS.map((item) => (
-              <Link
-                key={`dup-${item.id}`}
-                href={`/work/${item.slug}`}
-                className={styles.photoCard}
-                style={{ width: item.width }}
-                aria-hidden="true"
-                tabIndex={-1}
-              >
-                <div
-                  className={styles.imageContainer}
-                  style={{ aspectRatio: item.aspectRatio }}
-                >
-                  <img
-                    src={item.image}
-                    alt=""
-                    className={styles.photoImg}
-                    loading="lazy"
-                  />
-                </div>
-                <div className={styles.photoCaption}>
-                  <span className={styles.photoTitle}>{item.title}</span>
-                  <span className={styles.photoMeta}>
-                    {item.category} · {item.year}
-                  </span>
-                </div>
-              </Link>
-            ))}
+            <div className={styles.indexList}>
+              {SALON_PROJECTS.map((proj, idx) => {
+                const isActive = idx === activeIndex;
+                return (
+                  <button
+                    key={proj.id}
+                    role="tab"
+                    aria-selected={isActive}
+                    className={`${styles.indexCard} ${isActive ? styles.indexCardActive : ""}`}
+                    onClick={() => selectProject(idx)}
+                    onMouseEnter={() => selectProject(idx)}
+                  >
+                    {/* Thumbnail preview */}
+                    <div className={styles.indexThumbWrap}>
+                      <img
+                        src={proj.image}
+                        alt=""
+                        className={styles.indexThumb}
+                        loading="lazy"
+                      />
+                    </div>
+
+                    {/* Content */}
+                    <div className={styles.indexInfo}>
+                      <div className={styles.indexTopRow}>
+                        <span className={styles.indexNumber}>{proj.number}</span>
+                        <span className={styles.indexYear}>{proj.year}</span>
+                      </div>
+                      <h4 className={styles.indexTitle}>{proj.title}</h4>
+                      <p className={styles.indexLocation}>{proj.location}</p>
+                    </div>
+
+                    {/* Active Accent Indicator */}
+                    {isActive && <div className={styles.activeIndicator} />}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

@@ -113,7 +113,7 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
         aspect: "landscape"
       },
       {
-        url: "https://images.unsplash.com/photo-1585071550721-fdb362ae2b8a?w=1200&q=85&auto=format",
+        url: "https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?w=1200&q=85&auto=format",
         caption: "Snigdha in heirloom temple jewellery",
         aspect: "portrait"
       }
@@ -159,7 +159,7 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
     location: "Hyderabad, Telangana",
     venue: "Taj Falaknama Palace",
     year: "2024",
-    coverImage: "https://images.unsplash.com/photo-1585071550721-fdb362ae2b8a?w=2400&q=85&auto=format",
+    coverImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=2400&q=85&auto=format",
     heroAspect: "wide",
     overview:
       "Set against the 101-seat dining table and marble colonnades of the Nizam's mirror palace, this visual story reflects high-fashion editorial discipline with regal poise.",
@@ -221,7 +221,7 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
     location: "Hyderabad, Telangana",
     venue: "Taj Falaknama Palace",
     year: "2024",
-    coverImage: "https://images.unsplash.com/photo-1585071550721-fdb362ae2b8a?w=2400&q=85&auto=format",
+    coverImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=2400&q=85&auto=format",
     heroAspect: "wide",
     overview:
       "Set against the 101-seat dining table and marble colonnades of the Nizam's mirror palace, this visual story reflects high-fashion editorial discipline with regal poise.",
@@ -239,6 +239,198 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
       {
         url: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=85&auto=format",
         caption: "Marble corridors and chandelier reflections",
+        aspect: "landscape"
+      }
+    ]
+  },
+  "bellamkonda-kavya-reception": {
+    slug: "bellamkonda-kavya-reception",
+    title: "Bellamkonda Sai Sreenivas & Kavya Reddy",
+    subtitle: "Celebrity Wedding Reception",
+    client: "Bellamkonda Sai Sreenivas & Kavya Reddy",
+    category: "Celebrity Wedding Reception",
+    location: "Hyderabad, Telangana",
+    venue: "GMR Arena / Shamshabad Estate",
+    year: "2024",
+    coverImage: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
+    heroAspect: "wide",
+    overview:
+      "The grand wedding reception of Telugu cinema star Bellamkonda Sai Sreenivas and Kavya Reddy. Documented by 24 Frames with theatrical lighting discipline and high-resolution optical portraiture.",
+    story: [
+      "Set against monumental floral installations and welcoming luminaries of Indian cinema, this celebration captured both high-glamour public staging and intimate family warmth.",
+      "Archived on Pic-Time under 24 Frames client delivery portal: https://24frames.pic-time.com/8P0kK5ZUmew5F"
+    ],
+    filmReel: {
+      camera: "Sony FX6 & FX3 Cinema Line",
+      lens: "Sony G-Master Cinema Primes",
+      aspectRatio: "16:9 / 2.39:1",
+      colorProfile: "S-Cinetone & 24F Custom Warm Grade",
+      framesCount: "Pic-Time Authorized Client Gallery"
+    },
+    gallery: [
+      {
+        url: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
+        caption: "Bellamkonda Sai Sreenivas & Kavya Reddy — Reception Centerpiece",
+        aspect: "landscape"
+      }
+    ]
+  },
+  "sireesh-harshitha": {
+    slug: "sireesh-harshitha",
+    title: "Sireesh & Harshitha",
+    subtitle: "Sacred Wedding Celebration",
+    client: "Sireesh & Harshitha",
+    category: "Wedding Celebration",
+    location: "Hyderabad, Telangana",
+    venue: "Private Estate & Heritage Mandapam",
+    year: "2024",
+    coverImage: "/images/portfolio/sireesh-harshitha/cover.jpg",
+    heroAspect: "tall",
+    overview:
+      "A sacred union celebrating authentic Telugu wedding rituals, recorded with quiet observational poise and rich warmth by 24 Frames Photography.",
+    story: [
+      "From traditional Vedic chants to heartfelt family blessings, every ritual frame was composed to preserve generational permanence.",
+      "Archived on Pic-Time under 24 Frames client delivery portal: https://24frames.pic-time.com/8Nq0pv3SJbxKn"
+    ],
+    filmReel: {
+      camera: "Nikon Z9 & Leica SL2",
+      lens: "Nikkor Z 50mm f/1.2 S & 85mm f/1.2 S",
+      aspectRatio: "4:5 Medium Format Stills",
+      colorProfile: "24F Bespoke Warm Emulsion",
+      framesCount: "Pic-Time Authorized Client Gallery"
+    },
+    gallery: [
+      {
+        url: "/images/portfolio/sireesh-harshitha/cover.jpg",
+        caption: "Sireesh & Harshitha — Editorial Portrait",
+        aspect: "portrait"
+      }
+    ]
+  },
+  "hrithika-abhishek": {
+    slug: "hrithika-abhishek",
+    title: "Hrithika & Abhishek",
+    subtitle: "Wedding Celebrations & Rituals",
+    client: "Hrithika & Abhishek",
+    category: "Wedding & Celebrations",
+    location: "Hyderabad, Telangana",
+    venue: "Heritage Convention & Private Residence",
+    year: "2024",
+    coverImage: "/images/portfolio/hrithika-abhishek/cover.jpg",
+    heroAspect: "wide",
+    overview:
+      "Spanning nine distinct event scenes, Hrithika & Abhishek's wedding was captured as an editorial visual tapestry balancing candid energy with regal quietude.",
+    story: [
+      "Documenting multi-day ceremonies including Haldi, Sangeet galas, and traditional rites across Telangana.",
+      "Archived on Pic-Time under 24 Frames client delivery portal: https://24frames.pic-time.com/whZsXRiO6XgQn"
+    ],
+    filmReel: {
+      camera: "Sony Alpha 1 & A7R V",
+      lens: "Sony G-Master 35mm f/1.4 & 85mm f/1.4 GM",
+      aspectRatio: "16:9 Wide Editorial",
+      colorProfile: "Kodak Portra 400 Curve",
+      framesCount: "9 Dedicated Scenes on Pic-Time"
+    },
+    gallery: [
+      {
+        url: "/images/portfolio/hrithika-abhishek/cover.jpg",
+        caption: "Hrithika & Abhishek — Wedding Portrait",
+        aspect: "landscape"
+      }
+    ]
+  },
+  "karthik-gayathri": {
+    slug: "karthik-gayathri",
+    title: "Karthik & Gayathri",
+    subtitle: "Wedding & Reception Celebrations",
+    client: "Karthik & Gayathri",
+    category: "Wedding & Celebrations",
+    location: "Hyderabad, Telangana",
+    venue: "Royal Palace & Heritage Lawn",
+    year: "2024",
+    coverImage: "/images/portfolio/karthik-gayathri/cover.jpg",
+    heroAspect: "tall",
+    overview:
+      "A timeless celebration documented with fine-art photographic discipline, capturing moments of elegance, sacred rites, and joyful family fellowship.",
+    story: [
+      "Highlights and multi-day ceremonies curated with 24 Frames' signature warmth and natural light mastery.",
+      "Archived on Pic-Time under 24 Frames client delivery portal: https://24frames.pic-time.com/yBCmkKcczvWql"
+    ],
+    filmReel: {
+      camera: "Hasselblad X2D 100C",
+      lens: "Hasselblad XCD 55V & 90V",
+      aspectRatio: "3:4 Fine Art Portrait",
+      colorProfile: "Natural Color Solution (HNCS)",
+      framesCount: "Pic-Time Curated Highlights"
+    },
+    gallery: [
+      {
+        url: "/images/portfolio/karthik-gayathri/cover.jpg",
+        caption: "Karthik & Gayathri — Classical Fine-Art Frame",
+        aspect: "portrait"
+      }
+    ]
+  },
+  "nishanth-sanzena": {
+    slug: "nishanth-sanzena",
+    title: "Nishanth X Sanzena",
+    subtitle: "Couple Shoot Film",
+    client: "Nishanth & Sanzena",
+    category: "Couple Shoot Film",
+    location: "Hyderabad, India",
+    venue: "Outdoor Editorial Location",
+    year: "2024",
+    coverImage: "/images/portfolio/nishanth-sanzena/poster.jpg",
+    heroAspect: "cinematic",
+    overview:
+      "A 3-minute 12-second cinematic couple shoot film directed and produced by 24 Frames Wedding Films. Combining intimate handheld framing with sweeping widescreen compositions.",
+    story: [
+      "Streamed in 4K UHD via YouTube: https://youtu.be/s32UT21hnBg",
+      "Directed and graded by 24 Frames Wedding Films."
+    ],
+    filmReel: {
+      camera: "ARRI Alexa Mini LF / Sony FX6",
+      lens: "Cooke Anamorphic /i Full Frame Plus",
+      aspectRatio: "2.39:1 Anamorphic Cinema",
+      colorProfile: "Arri LogC to 24F Film Print Emulation",
+      framesCount: "Duration: 3m 12s (4K UHD)"
+    },
+    gallery: [
+      {
+        url: "/images/portfolio/nishanth-sanzena/poster.jpg",
+        caption: "Nishanth X Sanzena — Theatrical Poster",
+        aspect: "landscape"
+      }
+    ]
+  },
+  "vinitha-vivekananda": {
+    slug: "vinitha-vivekananda",
+    title: "Vinitha & Vivekananda",
+    subtitle: "Wedding Feature Film",
+    client: "Vinitha & Vivekananda",
+    category: "Wedding Feature Film",
+    location: "Hyderabad, Telangana",
+    venue: "Grand Heritage Convention Center",
+    year: "2024",
+    coverImage: "/images/portfolio/vinitha-vivekananda/poster.jpg",
+    heroAspect: "cinematic",
+    overview:
+      "A 14-minute 55-second theatrical-grade wedding feature film. Chronicling the grand ceremonies, heartfelt speeches, and cinematic spectacle of Vinitha and Vivekananda's wedding.",
+    story: [
+      "Streamed in 4K UHD via YouTube: https://youtu.be/LNtlLgfT5uY",
+      "Produced and edited by 24 Frames Wedding Films."
+    ],
+    filmReel: {
+      camera: "Sony FX9 & Sony FX6 Multi-Cam Cinema Rig",
+      lens: "Angénieux EZ-1 & Sony G-Master Primes",
+      aspectRatio: "2.39:1 Cinema",
+      colorProfile: "S-Gamut3.Cine / S-Log3 Grade",
+      framesCount: "Duration: 14m 55s Feature Length"
+    },
+    gallery: [
+      {
+        url: "/images/portfolio/vinitha-vivekananda/poster.jpg",
+        caption: "Vinitha & Vivekananda — Theatrical Poster",
         aspect: "landscape"
       }
     ]
