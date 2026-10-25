@@ -46,6 +46,11 @@ export default function CinematicTransition() {
   // Pick random effect ensuring no immediate consecutive repeats
   const pickNextEffect = useCallback((): TransitionEffect => {
     try {
+      const forced = sessionStorage.getItem("24f_force_transition_fx") as TransitionEffect | null;
+      if (forced && EFFECTS.includes(forced)) {
+        sessionStorage.removeItem("24f_force_transition_fx");
+        return forced;
+      }
       const last = sessionStorage.getItem(SESSION_KEY) as TransitionEffect | null;
       const candidates = EFFECTS.filter((e) => e !== last);
       const chosen = candidates[Math.floor(Math.random() * candidates.length)] || "through-the-lens";
@@ -197,6 +202,22 @@ export default function CinematicTransition() {
     };
   }, [triggerTransition]);
 
+  // Preload transition optical and photographic assets so they render instantaneously
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const assets = [
+      "/images/transitions/aperture-iris.jpg",
+      "/images/transitions/optical-glass.jpg",
+      "/images/stories/bellam-srikonda/IMG_6339.webp",
+      "/images/stories/sirish-and-harshitha/IMG_6346.webp",
+      "/images/stories/hrithika-abhishek/IMG_6322.webp",
+    ];
+    assets.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   // Clean up on component unmount
   useEffect(() => {
     return () => {
@@ -230,7 +251,7 @@ export default function CinematicTransition() {
       ) : (
         <>
           {/* ────────────────────────────────────────────────────── */}
-          {/* 01 — Through The Lens (Aperture Iris)                  */}
+          {/* 01 — Through The Lens (Photorealistic Aperture Iris)    */}
           {/* ────────────────────────────────────────────────────── */}
           {effect === "through-the-lens" && (
             <div
@@ -238,51 +259,55 @@ export default function CinematicTransition() {
                 isClosing ? styles.apertureClosing : styles.apertureOpening
               }`}
             >
-              <div className={styles.lensBarrel}>
-                {/* Rotating Outer Markings Ring */}
-                <div className={styles.lensRingOuter}>
-                  <span className={styles.lensRingText} style={{ top: "12px" }}>
-                    24 FRAMES · N° 02489 · 50MM F/1.2
-                  </span>
-                  <span className={styles.lensRingText} style={{ bottom: "12px" }}>
-                    CINEMA OPTICAL SYSTEM · APERTURE IRIS
-                  </span>
-                </div>
-
-                {/* SVG Aperture Blades */}
-                <svg
-                  viewBox="0 0 400 400"
-                  className={styles.apertureSvg}
-                  aria-hidden="true"
-                >
-                  <g transform="translate(200, 200)">
-                    {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
-                      <path
-                        key={i}
-                        d="M -70 -160 C 20 -150, 130 -110, 150 -10 L 90 90 C 20 50, -40 20, -70 -160 Z"
-                        transform={`rotate(${angle})`}
-                        className={styles.apertureBlade}
-                      />
-                    ))}
-                  </g>
-                </svg>
-
-                {/* Center Iris Opening */}
-                <div className={styles.apertureCenterHole}>
-                  <span className={styles.apertureBrandText}>24F</span>
-                </div>
+              {/* Optical Glass Streak & Flare Layer */}
+              <div className={styles.opticalGlassOverlay}>
+                <img
+                  src="/images/transitions/optical-glass.jpg"
+                  alt=""
+                  className={styles.opticalGlassImg}
+                />
               </div>
 
+              {/* Central Precision Aperture Housing */}
+              <div className={styles.lensBarrel}>
+                {/* Outer Lens Chassis Ring */}
+                <div className={styles.lensRingOuter}>
+                  <div className={styles.lensRingBezel}>
+                    <span className={styles.lensRingTextTop}>
+                      24 FRAMES PHOTOGRAPHY · 50MM F/1.2 PRIME
+                    </span>
+                    <span className={styles.lensRingTextBottom}>
+                      CINEMA OPTICAL SYSTEM · CALIBRATED IRIS
+                    </span>
+                  </div>
+                </div>
+
+                {/* Photorealistic Aperture Mechanism */}
+                <div className={styles.apertureIrisFrame}>
+                  <img
+                    src="/images/transitions/aperture-iris.jpg"
+                    alt=""
+                    className={styles.apertureIrisImg}
+                  />
+                  {/* Circular Optical Mask */}
+                  <div className={styles.apertureIrisMask} />
+                </div>
+
+                {/* Center Dynamic Iris Core */}
+                <div className={styles.apertureCenterCore} />
+              </div>
+
+              {/* Minimal Luxury Editorial Caption */}
               <div className={styles.apertureFooterMeta}>
                 <span>Through The Lens</span>
-                <span>·</span>
-                <span>Calibrated Iris Transition</span>
+                <span className={styles.metaDot}>·</span>
+                <span>Optical Aperture Iris</span>
               </div>
             </div>
           )}
 
           {/* ────────────────────────────────────────────────────── */}
-          {/* 02 — Contact Sheet Expansion                           */}
+          {/* 02 — Contact Sheet Expansion (35mm Archival Proof)    */}
           {/* ────────────────────────────────────────────────────── */}
           {effect === "contact-sheet" && (
             <div
@@ -293,13 +318,17 @@ export default function CinematicTransition() {
               {/* Top Film Rebate */}
               <div className={styles.filmRebateHeader}>
                 <div className={styles.sprocketTrack}>
-                  {[...Array(12)].map((_, i) => (
+                  {[...Array(14)].map((_, i) => (
                     <div key={i} className={styles.sprocketHole} />
                   ))}
                 </div>
-                <span>KODAK VISION3 500T · 24 FRAMES ARCHIVE</span>
+                <div className={styles.filmRebateText}>
+                  <span>KODAK VISION3 500T · 5219</span>
+                  <span className={styles.rebateSep}>·</span>
+                  <span>24 FRAMES MASTER ARCHIVE</span>
+                </div>
                 <div className={styles.sprocketTrack}>
-                  {[...Array(6)].map((_, i) => (
+                  {[...Array(8)].map((_, i) => (
                     <div key={i} className={styles.sprocketHole} />
                   ))}
                 </div>
@@ -307,43 +336,46 @@ export default function CinematicTransition() {
 
               {/* Contact Sheet Frames Grid */}
               <div className={styles.contactGrid}>
-                {/* Left Side Frame */}
+                {/* Left Flanking Proof Frame */}
                 <div className={`${styles.contactFrame} ${styles.contactFrameSide}`}>
                   <img
-                    src="/images/stories/bellam-srikonda/IMG_6339.jpg"
-                    alt="Archival frame preview"
+                    src="/images/stories/bellam-srikonda/IMG_6339.webp"
+                    alt="Archival proof still"
+                    loading="eager"
                     className={styles.contactImg}
                   />
                   <div className={styles.contactFrameMeta}>
-                    <span>01</span>
+                    <span>FRAME 01</span>
                     <span>BELLA</span>
                   </div>
                 </div>
 
-                {/* Center Hero Frame (Lifting & Expanding) */}
+                {/* Center Anchor Frame (Lifting & Expanding into Destination) */}
                 <div className={`${styles.contactFrame} ${styles.contactFrameCenter}`}>
                   <img
-                    src="/images/stories/sirish-and-harshitha/DSC07086.jpg"
-                    alt="Selected story frame"
+                    src="/images/stories/sirish-and-harshitha/IMG_6346.webp"
+                    alt="Active visual anchor"
+                    loading="eager"
                     className={styles.contactImg}
                   />
                   <div className={styles.cropMarkTL} />
                   <div className={styles.cropMarkBR} />
                   <div className={styles.contactFrameMeta}>
-                    <span>FRAME 02 / 24</span>
-                    <span>SACRED UNION</span>
+                    <span className={styles.framePill}>FRAME 02 / 24</span>
+                    <span className={styles.frameLabel}>SACRED UNION</span>
                   </div>
                 </div>
 
-                {/* Right Side Frame */}
+                {/* Right Flanking Proof Frame */}
                 <div className={`${styles.contactFrame} ${styles.contactFrameSide}`}>
                   <img
-                    src="/images/stories/hrithika-abhishek/DSC06072.jpg"
-                    alt="Archival frame preview"
+                    src="/images/stories/hrithika-abhishek/IMG_6322.webp"
+                    alt="Archival proof still"
+                    loading="eager"
                     className={styles.contactImg}
                   />
                   <div className={styles.contactFrameMeta}>
-                    <span>03</span>
+                    <span>FRAME 03</span>
                     <span>HRITHIKA</span>
                   </div>
                 </div>
@@ -351,9 +383,13 @@ export default function CinematicTransition() {
 
               {/* Bottom Film Rebate */}
               <div className={styles.filmRebateFooter}>
-                <span>SAFETY FILM · EMULSION COATED · 24F PROOF</span>
+                <div className={styles.filmRebateText}>
+                  <span>SAFETY FILM · EMULSION COATED</span>
+                  <span className={styles.rebateSep}>·</span>
+                  <span>24F CURATED PROOF</span>
+                </div>
                 <div className={styles.sprocketTrack}>
-                  {[...Array(18)].map((_, i) => (
+                  {[...Array(20)].map((_, i) => (
                     <div key={i} className={styles.sprocketHole} />
                   ))}
                 </div>
@@ -362,7 +398,7 @@ export default function CinematicTransition() {
           )}
 
           {/* ────────────────────────────────────────────────────── */}
-          {/* 03 — Viewfinder Lock                                  */}
+          {/* 03 — Viewfinder Lock (Restrained Quiet Luxury)         */}
           {/* ────────────────────────────────────────────────────── */}
           {effect === "viewfinder-lock" && (
             <div
@@ -370,45 +406,41 @@ export default function CinematicTransition() {
                 isClosing ? styles.viewfinderClosing : styles.viewfinderOpening
               }`}
             >
-              {/* Top HUD */}
-              <div className={styles.viewfinderTopHUD}>
-                <span className={styles.recIndicator}>
-                  <span className={styles.recDot} />
-                  ● REC 4K 24P
-                </span>
-                <span>RAW UNCOMPRESSED · WB 5600K</span>
-                <span>BAT 98% ▮▮▮</span>
+              {/* Soft Photographic Backdrop */}
+              <div className={styles.viewfinderBackdrop}>
+                <img
+                  src="/images/stories/sirish-and-harshitha/IMG_6346.webp"
+                  alt=""
+                  loading="eager"
+                  className={styles.viewfinderBgImg}
+                />
+                <div className={styles.viewfinderVignette} />
               </div>
 
-              {/* Center HUD with Focus Brackets */}
+              {/* Center Minimal Focus Target */}
               <div className={styles.viewfinderCenterStage}>
                 <div className={styles.focusBox}>
+                  {/* Subtle Titanium 1px Corner Brackets */}
                   <div className={styles.bracketTL} />
                   <div className={styles.bracketTR} />
                   <div className={styles.bracketBL} />
                   <div className={styles.bracketBR} />
 
+                  {/* Restrained Center Reticle */}
                   <div className={styles.centerReticle}>
                     <div className={styles.crossHair} />
                     <div className={`${styles.crossHair} ${styles.crossHairVert}`} />
                   </div>
 
-                  <span className={styles.focusLockPill}>
-                    {shutterFlash ? "EXPOSURE LOCK" : "AF-C · FOCUS LOCK"}
-                  </span>
+                  {/* Minimal Luxury Focus Pill */}
+                  <div className={styles.focusLockBadge}>
+                    <span className={styles.focusDot} />
+                    <span>AF-LOCK · 24 FRAMES</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Bottom HUD */}
-              <div className={styles.viewfinderBottomHUD}>
-                <span>1/250 SEC</span>
-                <span>F/1.4 PRIME</span>
-                <span>ISO 100</span>
-                <span>EV 0.0</span>
-                <span>24 FRAMES CINEMA HUD</span>
-              </div>
-
-              {/* Soft Shutter Flash Bloom */}
+              {/* Whisper-Soft Shutter Flash Bloom */}
               <div
                 className={`${styles.shutterFlashOverlay} ${
                   shutterFlash ? styles.shutterFlashing : ""
@@ -418,7 +450,7 @@ export default function CinematicTransition() {
           )}
 
           {/* ────────────────────────────────────────────────────── */}
-          {/* 04 — Parallax Slide                                   */}
+          {/* 04 — Parallax Slide (Spatial Editorial Depth)          */}
           {/* ────────────────────────────────────────────────────── */}
           {effect === "parallax-slide" && (
             <div
@@ -426,55 +458,45 @@ export default function CinematicTransition() {
                 isClosing ? styles.parallaxClosing : styles.parallaxOpening
               }`}
             >
-              {/* Background Deep Emerald Canvas */}
-              <div className={styles.parallaxLayerBg} />
-
-              {/* Foreground Typography */}
-              <div className={styles.parallaxLayerFore}>
-                <span className={styles.parallaxKicker}>CHAPTER TRANSITION</span>
-                <h2 className={styles.parallaxTitle}>24 Frames Cinematic Passage</h2>
+              {/* Layer 1: Deep Emerald Textured Canvas (Background) */}
+              <div className={styles.parallaxLayerBg}>
+                <div className={styles.parallaxCanvasWatermark}>24 FRAMES</div>
               </div>
 
-              {/* Middle Floating Staggered Photographic Cards */}
-              <div className={styles.parallaxLayerCards}>
-                <div className={styles.parallaxSlideCard}>
-                  <img
-                    src="/images/stories/sirish-and-harshitha/DSC07086.jpg"
-                    alt="Cinematic frame"
-                    className={styles.parallaxCardImg}
-                  />
-                  <div className={styles.parallaxCardGradient} />
-                  <div className={styles.parallaxCardMeta}>
-                    <span className={styles.parallaxCardFrame}>FRAME 01</span>
-                    <h3 className={styles.parallaxCardTitle}>Sacred Union</h3>
-                  </div>
-                </div>
+              {/* Optical Depth Lighting */}
+              <div className={styles.parallaxGlassStreak}>
+                <img
+                  src="/images/transitions/optical-glass.jpg"
+                  alt=""
+                  className={styles.parallaxGlassImg}
+                />
+              </div>
 
-                <div className={styles.parallaxSlideCard}>
+              {/* Layer 2: Main Floating Editorial Print (Middle-ground) */}
+              <div className={styles.parallaxMidPrint}>
+                <div className={styles.printMatting}>
                   <img
-                    src="/images/stories/bellam-srikonda/IMG_6339.jpg"
-                    alt="Cinematic frame"
-                    className={styles.parallaxCardImg}
+                    src="/images/stories/sirish-and-harshitha/IMG_6346.webp"
+                    alt="Editorial wedding print"
+                    loading="eager"
+                    className={styles.printPhoto}
                   />
-                  <div className={styles.parallaxCardGradient} />
-                  <div className={styles.parallaxCardMeta}>
-                    <span className={styles.parallaxCardFrame}>FRAME 02</span>
-                    <h3 className={styles.parallaxCardTitle}>Royal Reception</h3>
+                  <div className={styles.printCaptionRow}>
+                    <span className={styles.printCaptionKicker}>24 FRAMES · PROVENANCE</span>
+                    <span className={styles.printCaptionTitle}>Sacred Union · Hyderabad</span>
                   </div>
                 </div>
+              </div>
 
-                <div className={styles.parallaxSlideCard}>
-                  <img
-                    src="/images/stories/karthik-and-gayathri/DSC04179.jpg"
-                    alt="Cinematic frame"
-                    className={styles.parallaxCardImg}
-                  />
-                  <div className={styles.parallaxCardGradient} />
-                  <div className={styles.parallaxCardMeta}>
-                    <span className={styles.parallaxCardFrame}>FRAME 03</span>
-                    <h3 className={styles.parallaxCardTitle}>Glasshouse Union</h3>
-                  </div>
-                </div>
+              {/* Layer 3: Narrow High-Speed Forefront Still (Foreground) */}
+              <div className={styles.parallaxForeStill}>
+                <img
+                  src="/images/stories/bellam-srikonda/IMG_6339.webp"
+                  alt="Fine art still"
+                  loading="eager"
+                  className={styles.foreStillImg}
+                />
+                <div className={styles.foreStillBorder} />
               </div>
             </div>
           )}
