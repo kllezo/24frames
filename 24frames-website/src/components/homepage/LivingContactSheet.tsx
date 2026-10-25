@@ -8,7 +8,7 @@ import styles from "./LivingContactSheet.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ── Authenticated 24 Tile Data ───────────────────────────────── */
+/* ── Authenticated 24 Tile Data (Preserved for Reference & Archive) ─ */
 export interface ContactTile {
   id: number;
   frameNo: string;
@@ -48,7 +48,7 @@ export const TILES: ContactTile[] = [
   { id: 24, frameNo: "24/24", color: "#FAF8F2", image: "", category: "brand", title: "24 Frames", location: "Est. 2012 · Hyderabad", gear: "Cinema Wedding Studio", projectSlug: "identity" },
 ];
 
-/* ── Transforming Lineup Items (Inspired by Reference 2) ─────── */
+/* ── Transforming Lineup Items ───────────────────────────────── */
 const LINEUP_ITEMS = [
   TILES[0],  // A Royal Union (#0C3028)
   TILES[1],  // Temple Grandeur (#123C34)
@@ -59,23 +59,172 @@ const LINEUP_ITEMS = [
   TILES[23], // 24 Frames Hallmark (#FAF8F2)
 ];
 
-const CATEGORIES = [
-  { key: "all", label: "All Frames (24)" },
-  { key: "weddings", label: "Weddings" },
-  { key: "portraits", label: "Portraits" },
-  { key: "events", label: "Events" },
-  { key: "films", label: "Films" },
+/* ── Editorial Photography Gallery Rows (Art-Directed Multi-Row) ─ */
+export interface EditorialPhotoItem {
+  id: string;
+  title: string;
+  captionTitle: string;
+  captionSub: string;
+  image: string;
+  projectSlug: string;
+  aspectRatio: string;
+  widthPercent: number;
+  offsetY?: number;
+}
+
+export interface EditorialGalleryRow {
+  id: string;
+  rowLabel: string;
+  alignment: "rowA" | "rowB" | "rowC" | "rowD" | "rowE";
+  primary: EditorialPhotoItem;
+  secondary: EditorialPhotoItem;
+}
+
+export const EDITORIAL_GALLERY_ROWS: EditorialGalleryRow[] = [
+  /* Row A: Large landscape left (54%), substantial whitespace, smaller portrait right (32%, offset down) */
+  {
+    id: "row-a",
+    rowLabel: "01 / MAJESTIC UNION",
+    alignment: "rowA",
+    primary: {
+      id: "ea-1",
+      title: "A Royal Union",
+      captionTitle: "A ROYAL UNION",
+      captionSub: "CELEBRITY WEDDING · HYDERABAD",
+      image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1600&q=88&auto=format",
+      projectSlug: "bellamkonda-kavya",
+      aspectRatio: "16 / 10",
+      widthPercent: 54,
+    },
+    secondary: {
+      id: "ea-2",
+      title: "Bridal Portrait",
+      captionTitle: "BRIDAL PORTRAIT",
+      captionSub: "EDITORIAL COUTURE",
+      image: "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=1200&q=85&auto=format",
+      projectSlug: "bellamkonda-kavya",
+      aspectRatio: "3 / 4",
+      widthPercent: 32,
+      offsetY: 48,
+    },
+  },
+  /* Row B: Reverse visual balance. Smaller left (31%, offset up), dominant landscape right (55%) */
+  {
+    id: "row-b",
+    rowLabel: "02 / SACRED SANCTUARY",
+    alignment: "rowB",
+    primary: {
+      id: "eb-1",
+      title: "Heritage Ballroom",
+      captionTitle: "MIDNIGHT VRATHAM",
+      captionSub: "HERITAGE PAVILION",
+      image: "https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?w=1200&q=85&auto=format",
+      projectSlug: "manoj-snigdha",
+      aspectRatio: "4 / 5",
+      widthPercent: 31,
+      offsetY: -28,
+    },
+    secondary: {
+      id: "eb-2",
+      title: "Temple Grandeur",
+      captionTitle: "TEMPLE GRANDEUR",
+      captionSub: "CHILKUR ESTATE · HYDERABAD",
+      image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=88&auto=format",
+      projectSlug: "manoj-snigdha",
+      aspectRatio: "16 / 9",
+      widthPercent: 55,
+    },
+  },
+  /* Row C: Asymmetric composition with varied proportions. Monumental tall left (38%), wide right (52%, offset down) */
+  {
+    id: "row-c",
+    rowLabel: "03 / PALACE & CEREMONY",
+    alignment: "rowC",
+    primary: {
+      id: "ec-1",
+      title: "Taj Falaknama",
+      captionTitle: "TAJ FALAKNAMA",
+      captionSub: "PALACE COMMISSION · MARBLE COLONNADES",
+      image: "https://images.unsplash.com/photo-1585071550721-fdb362ae2b8a?w=1600&q=88&auto=format",
+      projectSlug: "karthik-vijayalakshmi",
+      aspectRatio: "4 / 5",
+      widthPercent: 38,
+    },
+    secondary: {
+      id: "ec-2",
+      title: "Sacred Ceremony",
+      captionTitle: "SACRED CEREMONY",
+      captionSub: "VEDIC VOWS · HYDERABAD",
+      image: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1600&q=88&auto=format",
+      projectSlug: "dhamini-goutham",
+      aspectRatio: "16 / 9",
+      widthPercent: 52,
+      offsetY: 42,
+    },
+  },
+  /* Row D: Expansive wide panoramic left (57%), subtle fine-art vignette right (28%, offset down) */
+  {
+    id: "row-d",
+    rowLabel: "04 / CROSS-CONTINENTAL",
+    alignment: "rowD",
+    primary: {
+      id: "ed-1",
+      title: "Cross-Cultural",
+      captionTitle: "CROSS-CULTURAL",
+      captionSub: "TUSCANY & HYDERABAD",
+      image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1600&q=88&auto=format",
+      projectSlug: "divya-federico",
+      aspectRatio: "16 / 9",
+      widthPercent: 57,
+    },
+    secondary: {
+      id: "ed-2",
+      title: "Pre-Wedding Dawn",
+      captionTitle: "PRE-WEDDING DAWN",
+      captionSub: "ANANTHAGIRI HILLS",
+      image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=85&auto=format",
+      projectSlug: "karthik-vijayalakshmi",
+      aspectRatio: "3 / 4",
+      widthPercent: 28,
+      offsetY: 54,
+    },
+  },
+  /* Row E: Intimate fine-art vertical left (33%, offset up), grand arrival right (54%) */
+  {
+    id: "row-e",
+    rowLabel: "05 / NOBLE CELEBRATION",
+    alignment: "rowE",
+    primary: {
+      id: "ee-1",
+      title: "Sacred Vows",
+      captionTitle: "SACRED VOWS",
+      captionSub: "UNOBTRUSIVE EMOTION",
+      image: "https://images.unsplash.com/photo-1460978812857-470ed1c77af0?w=1200&q=85&auto=format",
+      projectSlug: "bellamkonda-kavya",
+      aspectRatio: "3 / 4",
+      widthPercent: 33,
+      offsetY: -22,
+    },
+    secondary: {
+      id: "ee-2",
+      title: "Grand Arrival",
+      captionTitle: "GRAND ARRIVAL",
+      captionSub: "ROYAL ENTOURAGE · NOVOTEL HICC",
+      image: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1600&q=88&auto=format",
+      projectSlug: "divya-federico",
+      aspectRatio: "16 / 10",
+      widthPercent: 54,
+    },
+  },
 ];
 
 export default function LivingContactSheet() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const lineupRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
 
-  const [activeCategory, setActiveCategory] = useState("all");
   const [lineupActiveId, setLineupActiveId] = useState<number>(TILES[0].id);
-  const [hoveredGridTileId, setHoveredGridTileId] = useState<number | null>(null);
   const [selectedLightboxTile, setSelectedLightboxTile] = useState<ContactTile | null>(null);
 
   /* ── GSAP Scroll Trigger for Section Entrance ─────────────── */
@@ -118,28 +267,25 @@ export default function LivingContactSheet() {
         }
       );
 
-      // Staggered grid reveal
-      const tiles = gsap.utils.toArray<HTMLElement>(`.${styles.gridTile}`);
-      gsap.fromTo(
-        tiles,
-        { opacity: 0, y: 25 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: {
-            grid: [4, 6],
-            from: "start",
-            amount: 0.6,
-          },
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: gridRef.current,
-            start: "top 75%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
+      // Editorial Gallery rows reveal
+      const rows = gsap.utils.toArray<HTMLElement>(`.${styles.galleryRow}`);
+      rows.forEach((row) => {
+        gsap.fromTo(
+          row,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.0,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: row,
+              start: "top 84%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -156,32 +302,27 @@ export default function LivingContactSheet() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const filteredTiles = TILES.filter(
-    (t) => activeCategory === "all" || t.category === activeCategory || t.id === 24
-  );
-
   return (
     <section
       ref={sectionRef}
       id="collection"
       className={styles.section}
-      aria-label="The Living Contact Sheet — 24 Frame Showcase"
+      aria-label="The Living Contact Sheet — Photography Exhibition"
     >
       <div className={styles.container}>
         {/* Section Header */}
         <div ref={headerRef} className={styles.header}>
           <div className={styles.headerMeta}>
             <span className={styles.label}>Chapter 02 — The Living Contact Sheet</span>
-            <span className={styles.referenceBadge}>24 FRAMES ARCHIVE</span>
+            <span className={styles.referenceBadge}>EDITORIAL EXHIBITION</span>
           </div>
           <h2 className={styles.title}>The Collection</h2>
           <p className={styles.subtitle}>
-            Explore the photographic world of 24 Frames. Touch or hover any frame in the lineup to transform
-            the composition, or view the complete 24-frame archival matrix below.
+            An art-directed exhibition of monumental photography, sacred ceremonies, and fleeting emotions captured across South India.
           </p>
         </div>
 
-        {/* ── EXPERIENCE 2: TRANSFORMING PHOTOGRAPHIC LINEUP (Reference 2) ── */}
+        {/* ── EXPERIENCE 2: TRANSFORMING PHOTOGRAPHIC LINEUP ── */}
         <div ref={lineupRef} className={styles.lineupContainer}>
           <div className={styles.lineupStage}>
             {LINEUP_ITEMS.map((item) => {
@@ -271,102 +412,78 @@ export default function LivingContactSheet() {
           </div>
         </div>
 
-        {/* ── COMPLETE 24-FRAME CONTACT MATRIX (6 Columns × 4 Rows) ── */}
-        <div className={styles.matrixSection}>
-          <div className={styles.matrixHeader}>
-            <div className={styles.matrixTitleGroup}>
-              <h3 className={styles.matrixTitle}>The Complete 24-Frame Matrix</h3>
-              <p className={styles.matrixDesc}>
-                All twenty-four archival frames arranged in original forest-green to warm-ivory sequence.
-              </p>
-            </div>
-
-            {/* Filter Pills */}
-            <div className={styles.filters} role="tablist">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat.key}
-                  role="tab"
-                  aria-selected={activeCategory === cat.key}
-                  className={`${styles.filterBtn} ${
-                    activeCategory === cat.key ? styles.filterBtnActive : ""
-                  }`}
-                  onClick={() => setActiveCategory(cat.key)}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
+        {/* ── NEW EDITORIAL PHOTOGRAPHY GALLERY (Art-Directed Multi-Row) ── */}
+        <div ref={galleryRef} className={styles.editorialGallery} aria-label="Editorial Photography Gallery">
+          <div className={styles.galleryDivider}>
+            <span className={styles.galleryDividerLine} />
+            <span className={styles.galleryDividerText}>CURATED EXHIBITION</span>
+            <span className={styles.galleryDividerLine} />
           </div>
 
-          {/* 6x4 Grid Container */}
-          <div ref={gridRef} className={styles.grid}>
-            {filteredTiles.map((tile) => {
-              const isLogoTile = tile.id === 24;
-              const isHovered = hoveredGridTileId === tile.id;
-
-              if (isLogoTile) {
-                return (
-                  <Link
-                    key={tile.id}
-                    href="/identity"
-                    className={`${styles.gridTile} ${styles.logoGridTile}`}
-                    aria-label="24 Frames — Visit dedicated brand identity page"
-                  >
-                    <div className={styles.logoTileContent}>
-                      <span className={styles.logoBadge}>FRAME 24/24</span>
-                      <span className={styles.logoTitle}>24 FRAMES</span>
-                      <span className={styles.logoSub}>The Brand Story →</span>
-                    </div>
-                  </Link>
-                );
-              }
-
-              return (
+          {EDITORIAL_GALLERY_ROWS.map((row) => (
+            <div
+              key={row.id}
+              className={`${styles.galleryRow} ${styles[row.alignment]}`}
+            >
+              {/* Primary Photograph */}
+              <Link
+                href={`/work/${row.primary.projectSlug}`}
+                className={`${styles.galleryFigure} ${styles.primaryFigure}`}
+                style={{
+                  "--photo-width": `${row.primary.widthPercent}%`,
+                  "--photo-offset-y": `${row.primary.offsetY || 0}px`,
+                } as React.CSSProperties}
+                aria-label={`${row.primary.title} — ${row.primary.captionSub}`}
+              >
                 <div
-                  key={tile.id}
-                  className={`${styles.gridTile} ${isHovered ? styles.gridTileHovered : ""}`}
-                  style={{ "--tile-accent": tile.color } as React.CSSProperties}
-                  onMouseEnter={() => setHoveredGridTileId(tile.id)}
-                  onMouseLeave={() => setHoveredGridTileId(null)}
-                  onClick={() => setSelectedLightboxTile(tile)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      setSelectedLightboxTile(tile);
-                    }
-                  }}
-                  aria-label={`${tile.title} — Frame ${tile.frameNo}`}
+                  className={styles.imageContainer}
+                  style={{ aspectRatio: row.primary.aspectRatio }}
                 >
-                  {tile.image ? (
-                    <div className={styles.gridImageWrap}>
-                      <img
-                        src={tile.image}
-                        alt={tile.title}
-                        className={styles.gridImage}
-                        loading="lazy"
-                      />
-                    </div>
-                  ) : (
-                    <div
-                      className={styles.gridColorWrap}
-                      style={{ backgroundColor: tile.color }}
-                    />
-                  )}
-
-                  <div className={styles.gridTileFooter}>
-                    <span className={styles.gridFrameNo}>{tile.frameNo}</span>
-                    <span className={styles.gridTitleText}>{tile.title}</span>
-                  </div>
+                  <img
+                    src={row.primary.image}
+                    alt={row.primary.title}
+                    className={styles.galleryImage}
+                    loading="lazy"
+                  />
                 </div>
-              );
-            })}
-          </div>
+                <div className={styles.editorialCaption}>
+                  <span className={styles.captionTitle}>{row.primary.captionTitle}</span>
+                  <span className={styles.captionMeta}>{row.primary.captionSub}</span>
+                </div>
+              </Link>
+
+              {/* Secondary Photograph */}
+              <Link
+                href={`/work/${row.secondary.projectSlug}`}
+                className={`${styles.galleryFigure} ${styles.secondaryFigure}`}
+                style={{
+                  "--photo-width": `${row.secondary.widthPercent}%`,
+                  "--photo-offset-y": `${row.secondary.offsetY || 0}px`,
+                } as React.CSSProperties}
+                aria-label={`${row.secondary.title} — ${row.secondary.captionSub}`}
+              >
+                <div
+                  className={styles.imageContainer}
+                  style={{ aspectRatio: row.secondary.aspectRatio }}
+                >
+                  <img
+                    src={row.secondary.image}
+                    alt={row.secondary.title}
+                    className={styles.galleryImage}
+                    loading="lazy"
+                  />
+                </div>
+                <div className={styles.editorialCaption}>
+                  <span className={styles.captionTitle}>{row.secondary.captionTitle}</span>
+                  <span className={styles.captionMeta}>{row.secondary.captionSub}</span>
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* ── 35MM FILM REEL LIGHTBOX MODAL (Light Theme) ────────────── */}
+      {/* ── 35MM FILM REEL LIGHTBOX MODAL ───────────────────────── */}
       {selectedLightboxTile && (
         <div
           className={styles.modalBackdrop}
