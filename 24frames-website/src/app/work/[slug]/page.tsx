@@ -52,45 +52,71 @@ export default async function ProjectDetailPage({ params }: PageProps) {
       <Navigation />
 
       <main className={styles.main}>
-        {/* Cinematic Hero Frame with Expanding Continuity */}
+        {/* Cinematic Hero Frame with Editorial Two-Column Alignment */}
         <section className={styles.heroSection} aria-label={project.title}>
-          <div className={styles.heroImageWrap}>
-            <img
-              src={project.coverImage}
-              alt={project.title}
-              className={styles.heroImage}
-              loading="eager"
-            />
-            <div className={styles.letterboxTop} />
-            <div className={styles.letterboxBottom} />
-            <div className={styles.heroGradient} />
-          </div>
-
-          <div className={styles.heroContent}>
-            <div className={styles.heroMetaTop}>
+          <div className={styles.container}>
+            <div className={styles.heroNavRow}>
               <Link href="/#vows" className={styles.backLink}>
                 <span className={styles.backArrow}>←</span> Back to Portfolio
               </Link>
-              <span className={styles.categoryBadge}>{project.category}</span>
+              <div className={styles.heroNavBadges}>
+                <span className={styles.chapterKicker}>CHAPTER 03 — MASTER PORTFOLIO</span>
+                <span className={styles.categoryBadge}>{project.category}</span>
+              </div>
             </div>
 
-            <div className={styles.heroHeadingBlock}>
-              <h1 className={styles.title}>{project.title}</h1>
-              <p className={styles.subtitle}>{project.subtitle}</p>
-            </div>
+            <div className={styles.heroGrid}>
+              {/* Left: Controlled Editorial Photograph */}
+              <div className={styles.heroVisualCol}>
+                <div className={styles.heroImageFrame}>
+                  <img
+                    src={project.coverImage}
+                    alt={project.title}
+                    className={styles.heroImage}
+                    loading="eager"
+                  />
+                </div>
+              </div>
 
-            <div className={styles.locationStrip}>
-              <span className={styles.locationItem}>
-                <strong>Location:</strong> {project.location}
-              </span>
-              <span className={styles.locationDivider}>·</span>
-              <span className={styles.locationItem}>
-                <strong>Venue:</strong> {project.venue}
-              </span>
-              <span className={styles.locationDivider}>·</span>
-              <span className={styles.locationItem}>
-                <strong>Year:</strong> {project.year}
-              </span>
+              {/* Right: Editorial Information */}
+              <div className={styles.heroInfoCol}>
+                <div className={styles.heroHeadingBlock}>
+                  <h1 className={styles.title}>{project.title}</h1>
+                  <p className={styles.subtitle}>{project.subtitle}</p>
+                </div>
+
+                <div className={styles.metadataGrid}>
+                  <div className={styles.metaCell}>
+                    <span className={styles.metaLabel}>LOCATION</span>
+                    <span className={styles.metaVal}>{project.location}</span>
+                  </div>
+                  <div className={styles.metaCell}>
+                    <span className={styles.metaLabel}>VENUE</span>
+                    <span className={styles.metaVal}>{project.venue}</span>
+                  </div>
+                  <div className={styles.metaCell}>
+                    <span className={styles.metaLabel}>ARCHIVE YEAR</span>
+                    <span className={styles.metaVal}>{project.year}</span>
+                  </div>
+                  {project.filmReel && (
+                    <div className={styles.metaCell}>
+                      <span className={styles.metaLabel}>MASTER ARCHIVE</span>
+                      <span className={styles.metaVal}>{project.filmReel.framesCount}</span>
+                    </div>
+                  )}
+                </div>
+
+                <p className={styles.overviewLead}>{project.overview}</p>
+
+                <div className={styles.heroActionRow}>
+                  <a href="#story" className={styles.primaryActionBtn}>
+                    VIEW COMMISSION STORY <span>↓</span>
+                  </a>
+                  <a href="#inquire" className={styles.secondaryActionBtn}>
+                    INQUIRE COMMISSION <span>→</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>

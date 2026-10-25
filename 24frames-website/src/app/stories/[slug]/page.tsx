@@ -53,50 +53,77 @@ export default async function StoryDetailPage({ params }: PageProps) {
       <Navigation />
 
       <main className={styles.main}>
-        {/* ── Cinematic Hero Cover ───────────────────────────────── */}
+        {/* ── Editorial Hero Cover (Balanced Two-Column Composition) ── */}
         <section className={styles.heroSection} aria-label={story.title}>
-          <div className={styles.heroImageWrap}>
-            <picture>
-              <source srcSet={story.coverWebp} type="image/webp" />
-              <img
-                src={story.coverImage}
-                alt={story.coverCaption || story.title}
-                className={styles.heroImage}
-                loading="eager"
-              />
-            </picture>
-            <div className={styles.heroGradient} />
-          </div>
-
-          <div className={styles.heroContent}>
+          <div className={styles.container}>
+            {/* Top Navigation Row */}
             <div className={styles.heroNavRow}>
-              <Link href="/#vows" className={styles.backLink}>
-                <span>←</span> Back to The Vows Collection
+              <Link href="/stories" className={styles.backLink}>
+                <span>←</span> Back to All Stories
               </Link>
-              <span className={styles.categoryBadge}>{story.category}</span>
+              <div className={styles.heroNavBadges}>
+                <span className={styles.chapterKicker}>CHAPTER 03 — ARCHIVE STORY</span>
+                <span className={styles.categoryBadge}>{story.category}</span>
+              </div>
             </div>
 
-            <div className={styles.heroTitleBlock}>
-              <h1 className={styles.heroTitle}>{story.title}</h1>
-              <p className={styles.heroSubtitle}>{story.subtitle}</p>
-            </div>
+            {/* Two-Column Grid: Controlled Editorial Photo (Left) + Story Details (Right) */}
+            <div className={styles.heroGrid}>
+              {/* Left: Controlled Editorial Photograph */}
+              <div className={styles.heroVisualCol}>
+                <div className={styles.heroImageFrame}>
+                  <picture>
+                    <source srcSet={story.coverWebp} type="image/webp" />
+                    <img
+                      src={story.coverImage}
+                      alt={story.coverCaption || story.title}
+                      className={styles.heroImage}
+                      loading="eager"
+                    />
+                  </picture>
+                </div>
+                {story.coverCaption && (
+                  <span className={styles.heroImageCaption}>{story.coverCaption}</span>
+                )}
+              </div>
 
-            <div className={styles.metadataStrip}>
-              <span className={styles.metaItem}>
-                <strong>Location</strong> {story.location}
-              </span>
-              <span className={styles.metaDivider}>·</span>
-              <span className={styles.metaItem}>
-                <strong>Venue</strong> {story.venue}
-              </span>
-              <span className={styles.metaDivider}>·</span>
-              <span className={styles.metaItem}>
-                <strong>Archive Year</strong> {story.year}
-              </span>
-              <span className={styles.metaDivider}>·</span>
-              <span className={styles.metaItem}>
-                <strong>Curated Stills</strong> {story.framesCount} Frames
-              </span>
+              {/* Right: Editorial Information */}
+              <div className={styles.heroInfoCol}>
+                <div className={styles.heroTitleBlock}>
+                  <h1 className={styles.heroTitle}>{story.title}</h1>
+                  <p className={styles.heroSubtitle}>{story.subtitle}</p>
+                </div>
+
+                <div className={styles.metadataGrid}>
+                  <div className={styles.metaCell}>
+                    <span className={styles.metaLabel}>LOCATION</span>
+                    <span className={styles.metaVal}>{story.location}</span>
+                  </div>
+                  <div className={styles.metaCell}>
+                    <span className={styles.metaLabel}>VENUE</span>
+                    <span className={styles.metaVal}>{story.venue}</span>
+                  </div>
+                  <div className={styles.metaCell}>
+                    <span className={styles.metaLabel}>ARCHIVE YEAR</span>
+                    <span className={styles.metaVal}>{story.year}</span>
+                  </div>
+                  <div className={styles.metaCell}>
+                    <span className={styles.metaLabel}>CURATED FRAMES</span>
+                    <span className={styles.metaVal}>{story.framesCount} Stills</span>
+                  </div>
+                </div>
+
+                <p className={styles.heroNarrativeLead}>{story.narrativeOverview}</p>
+
+                <div className={styles.heroActionRow}>
+                  <a href="#stills" className={styles.primaryActionBtn}>
+                    EXPLORE CURATED STILLS ({story.frames.length}) <span>↓</span>
+                  </a>
+                  <a href="#inquire" className={styles.secondaryActionBtn}>
+                    COMMISSION 24 FRAMES <span>→</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
