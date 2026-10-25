@@ -68,7 +68,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
           <div className={styles.heroContent}>
             <div className={styles.heroMetaTop}>
-              <Link href="/#exhibition" className={styles.backLink}>
+              <Link href="/#vows" className={styles.backLink}>
                 <span className={styles.backArrow}>←</span> Back to Portfolio
               </Link>
               <span className={styles.categoryBadge}>{project.category}</span>

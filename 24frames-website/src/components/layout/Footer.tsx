@@ -1,9 +1,8 @@
+import Link from "next/link";
 import styles from "./Footer.module.css";
 
 const NAV_LINKS = [
-  { label: "The Collection", href: "/#collection" },
-  { label: "Curated Exhibition", href: "/#exhibition" },
-  { label: "World Tours", href: "/#explore" },
+  { label: "The Vows", href: "/#vows" },
   { label: "24 Frames Identity", href: "/identity" },
   { label: "The Artist", href: "/#artist" },
   { label: "Inquire", href: "/#inquire" },
@@ -21,9 +20,9 @@ export default function Footer() {
         <div className={styles.top}>
           {/* Brand */}
           <div className={styles.brand}>
-            <a href="/" className={styles.logo}>
+            <Link href="/" className={styles.logo}>
               <span className={styles.logoText}>24 Frames</span>
-            </a>
+            </Link>
             <p className={styles.tagline}>
               Cinematic Wedding Photography & Films
             </p>

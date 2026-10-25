@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./RecognitionWall.module.css";
@@ -245,10 +246,10 @@ export default function RecognitionWall() {
         </div>
 
         <div className={styles.footer}>
-          <a href="/#artist" className={styles.viewAll}>
+          <Link href="/#artist" className={styles.viewAll}>
             Discover the artist behind the lens
             <span className={styles.arrow}>↓</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

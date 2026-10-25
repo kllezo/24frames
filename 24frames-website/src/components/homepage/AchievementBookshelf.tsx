@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./AchievementBookshelf.module.css";
@@ -154,6 +155,21 @@ export default function AchievementBookshelf() {
     return () => ctx.revert();
   }, []);
 
+  const closeItem = useCallback(() => {
+    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (isReduced || !expandedRef.current) {
+      setExpandedId(null);
+      return;
+    }
+
+    gsap.to(expandedRef.current, {
+      opacity: 0, scale: 0.92, y: 20,
+      duration: 0.3, ease: "power2.in",
+      onComplete: () => setExpandedId(null),
+    });
+  }, []);
+
   /* ── Pull item from shelf ── */
   const pullItem = useCallback((id: string) => {
     if (expandedId === id) {
@@ -176,22 +192,7 @@ export default function AchievementBookshelf() {
         );
       }
     });
-  }, [expandedId]);
-
-  const closeItem = useCallback(() => {
-    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (isReduced || !expandedRef.current) {
-      setExpandedId(null);
-      return;
-    }
-
-    gsap.to(expandedRef.current, {
-      opacity: 0, scale: 0.92, y: 20,
-      duration: 0.3, ease: "power2.in",
-      onComplete: () => setExpandedId(null),
-    });
-  }, []);
+  }, [expandedId, closeItem]);
 
   /* ── Escape key ── */
   useEffect(() => {
@@ -340,10 +341,10 @@ export default function AchievementBookshelf() {
         )}
 
         <div className={styles.shelfFooter}>
-          <a href="/#artist" className={styles.viewAll}>
+          <Link href="/#artist" className={styles.viewAll}>
             Discover the artist behind the lens
             <span className={styles.arrow}>↓</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

@@ -524,7 +524,7 @@ export default function FounderRecognitionSection() {
               <div className={styles.narrative}>
                 <p>
                   From the film sets of Tollywood to directing one of South
-                  India's most revered cinematic wedding studios, Phani has spent
+                  India&apos;s most revered cinematic wedding studios, Phani has spent
                   fourteen years preserving Telugu heritage, high-profile royal
                   unions, and the quiet intimacy of families.
                 </p>

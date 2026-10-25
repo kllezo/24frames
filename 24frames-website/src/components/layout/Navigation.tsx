@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import styles from "./Navigation.module.css";
 
 const NAV_LINKS = [
-  { label: "The Collection", href: "/#collection" },
-  { label: "Curated Exhibition", href: "/#exhibition" },
-  { label: "World Tours", href: "/#explore" },
+  { label: "The Vows", href: "/#vows" },
   { label: "24 Frames", href: "/identity" },
   { label: "The Artist", href: "/#artist" },
 ];
@@ -67,10 +66,10 @@ export default function Navigation() {
         />
 
         <nav className={styles.nav} aria-label="Main navigation">
-          <a href="/" className={styles.logo} aria-label="24 Frames — Home">
+          <Link href="/" className={styles.logo} aria-label="24 Frames — Home">
             <span className={styles.logoMark}>24</span>
             <span className={styles.logoText}>Frames</span>
-          </a>
+          </Link>
 
           <ul className={styles.links}>
             {NAV_LINKS.map((link) => (
@@ -82,9 +81,9 @@ export default function Navigation() {
             ))}
           </ul>
 
-          <a href="/#inquire" className={styles.cta}>
+          <Link href="/#inquire" className={styles.cta}>
             Inquire
-          </a>
+          </Link>
 
           <button
             className={`${styles.burger} ${menuOpen ? styles.burgerOpen : ""}`}
@@ -126,13 +125,13 @@ export default function Navigation() {
               className={styles.mobileLinkItem}
               style={{ transitionDelay: `${(NAV_LINKS.length + 1) * 80}ms` }}
             >
-              <a
+              <Link
                 href="/#inquire"
                 className={`${styles.mobileLink} ${styles.mobileLinkCta}`}
                 onClick={() => setMenuOpen(false)}
               >
                 Begin Your Story
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

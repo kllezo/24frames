@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./ArtistPreview.module.css";
@@ -161,10 +162,10 @@ export default function ArtistPreview() {
             </div>
 
             <div className={styles.actions}>
-              <a href="/#inquire" className={styles.inquireBtn}>
+              <Link href="/#inquire" className={styles.inquireBtn}>
                 Commission Phani Gogireddy
                 <span className={styles.arrow}>→</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

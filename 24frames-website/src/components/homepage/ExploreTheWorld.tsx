@@ -29,7 +29,7 @@ const WORLDS: CategoryWorld[] = [
     description: "Multi-day coverage spanning Mangalasnanam, Sangeet galas, and dawn ceremonies. Documented without invasive lighting or forced poses.",
     mainImage: "https://images.unsplash.com/photo-1519741497674-611481863552?w=2000&q=88&auto=format",
     secondaryImage: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1000&q=85&auto=format",
-    href: "/#exhibition",
+    href: "/#vows",
   },
   {
     id: "portraits",
@@ -40,7 +40,7 @@ const WORLDS: CategoryWorld[] = [
     description: "Medium-format optical portraits lit with master cinema fixtures. Preserving quiet dignity and sculptural elegance.",
     mainImage: "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=2000&q=88&auto=format",
     secondaryImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1000&q=85&auto=format",
-    href: "/#collection",
+    href: "/#vows",
   },
   {
     id: "events",
@@ -51,7 +51,7 @@ const WORLDS: CategoryWorld[] = [
     description: "Capturing the electric choreography, live orchestral music, and grand architectural ambiance of premier venues.",
     mainImage: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=2000&q=88&auto=format",
     secondaryImage: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1000&q=85&auto=format",
-    href: "/#collection",
+    href: "/#vows",
   },
   {
     id: "fashion",
@@ -62,7 +62,7 @@ const WORLDS: CategoryWorld[] = [
     description: "Crafted for prestigious publications and couture designers, combining experimental art direction with sharp optical discipline.",
     mainImage: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=2000&q=88&auto=format",
     secondaryImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1000&q=85&auto=format",
-    href: "/#collection",
+    href: "/#vows",
   },
   {
     id: "films",
@@ -73,7 +73,7 @@ const WORLDS: CategoryWorld[] = [
     description: "Shot with dedicated cinema crews on ARRI and Sony FX cinema lines. Edited as theatrical-grade wedding features.",
     mainImage: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=2000&q=88&auto=format",
     secondaryImage: "https://images.unsplash.com/photo-1460978812857-470ed1c77af0?w=1000&q=85&auto=format",
-    href: "/#exhibition",
+    href: "/#vows",
   },
   {
     id: "archive",
@@ -84,7 +84,7 @@ const WORLDS: CategoryWorld[] = [
     description: "A continuous visual lineage established in 2012 by founder Phani Gogireddy.",
     mainImage: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=2000&q=88&auto=format",
     secondaryImage: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1000&q=85&auto=format",
-    href: "/#collection",
+    href: "/#vows",
   },
 ];
 
