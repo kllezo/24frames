@@ -3,6 +3,7 @@ import FilmGrain from "@/components/ui/FilmGrain";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://24frames-kllezo.vercel.app"),
   title: "24 Frames Photography — Cinematic Wedding Films & Photography | Hyderabad",
   description:
     "Premium cinematic wedding photography and films by Phani Gogireddy. Capturing South India's grandest celebrations with editorial artistry. ET Excellence Award 2025 Winner. Official Nikon India Partner.",

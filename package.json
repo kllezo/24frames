@@ -1,0 +1,10 @@
+{
+  "name": "24frames-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix 24frames-website run dev",
+    "build": "npm --prefix 24frames-website run build",
+    "start": "npm --prefix 24frames-website run start"
+  }
+}
