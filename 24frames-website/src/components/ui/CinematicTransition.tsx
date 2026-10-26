@@ -2,36 +2,18 @@
 
 import {
   useEffect,
-  useState,
   useRef,
   useCallback,
   useSyncExternalStore,
 } from "react";
 import { useRouter } from "next/navigation";
+import gsap from "gsap";
 import {
   resolveRouteVisual,
-  type TransitionEffect,
-  type RouteVisualMeta,
 } from "@/lib/transitions";
 import styles from "./CinematicTransition.module.css";
 
-const SESSION_KEY = "24frames_last_camera_transition";
-const EFFECTS: TransitionEffect[] = ["through-the-lens", "viewfinder-lock"];
-
-type TransitionPhase =
-  | "idle"
-  | "focusing"
-  | "closing"
-  | "swapping"
-  | "opening"
-  | "revealing";
-
-const F_STOPS = ["1.2", "1.4", "2", "2.8", "4", "5.6", "8", "11", "16"];
-
-// 8-Blade Aperture Diaphragm geometry
-const BLADE_PATH =
-  "M 440 250 A 235 235 0 0 1 330 460 L 200 420 C 185 350, 230 260, 440 250 Z";
-
+// ── Accessibility Helper: Reduced Motion ────────────────────────────────
 function subscribeReducedMotion(callback: () => void) {
   if (typeof window === "undefined") return () => {};
   const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -48,6 +30,18 @@ function getReducedMotionServerSnapshot() {
   return false;
 }
 
+// ── 8-Blade Aperture Geometry Constants ─────────────────────────────────
+const PIVOT_X = 750;
+const PIVOT_Y = 320;
+const BLADE_PATH =
+  "M 750 320 " +
+  "C 460 490, 150 500, -165 415 " +
+  "C -190 390, -220 360, -250 320 " +
+  "L -500 1600 " +
+  "L 1600 1600 " +
+  "L 1600 320 " +
+  "Z";
+
 export default function CinematicTransition() {
   const router = useRouter();
 
@@ -57,37 +51,20 @@ export default function CinematicTransition() {
     getReducedMotionServerSnapshot
   );
 
-  const [phase, setPhase] = useState<TransitionPhase>("idle");
-  const [effect, setEffect] = useState<TransitionEffect>("through-the-lens");
-  const [outgoingVisual, setOutgoingVisual] = useState<RouteVisualMeta | null>(null);
-  const [incomingVisual, setIncomingVisual] = useState<RouteVisualMeta | null>(null);
+  // Animation DOM refs
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const outgoingPhotoRef = useRef<HTMLImageElement>(null);
+  const incomingPhotoRef = useRef<HTMLImageElement>(null);
+  const vignetteRef = useRef<HTMLDivElement>(null);
+  const cornersRef = useRef<HTMLDivElement>(null);
+  const focusRingRef = useRef<HTMLDivElement>(null);
+  const guideRingsRef = useRef<SVGSVGElement>(null);
+  const bladeActuatorsRef = useRef<SVGGElement[]>([]);
 
+  // Safety & timeline control refs
   const isTransitioningRef = useRef(false);
+  const masterTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const safetyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Alternating effect selection (Strictly alternates between the two transitions)
-  const pickNextEffect = useCallback((): TransitionEffect => {
-    try {
-      // Allow testing override if explicitly set in sessionStorage
-      const forced = sessionStorage.getItem("24f_force_transition_fx") as TransitionEffect | null;
-      if (forced && EFFECTS.includes(forced)) {
-        return forced;
-      }
-      const last = sessionStorage.getItem(SESSION_KEY) as TransitionEffect | null;
-      let chosen: TransitionEffect;
-      if (last === "through-the-lens") {
-        chosen = "viewfinder-lock";
-      } else if (last === "viewfinder-lock") {
-        chosen = "through-the-lens";
-      } else {
-        chosen = Math.random() > 0.5 ? "through-the-lens" : "viewfinder-lock";
-      }
-      sessionStorage.setItem(SESSION_KEY, chosen);
-      return chosen;
-    } catch {
-      return Math.random() > 0.5 ? "through-the-lens" : "viewfinder-lock";
-    }
-  }, []);
 
   // Clear safety watchdog timeout
   const clearSafetyTimeout = useCallback(() => {
@@ -100,109 +77,229 @@ export default function CinematicTransition() {
   // Force reset transition overlay and restore interaction
   const forceReset = useCallback(() => {
     clearSafetyTimeout();
-    setPhase("idle");
+    if (masterTimelineRef.current) {
+      masterTimelineRef.current.kill();
+      masterTimelineRef.current = null;
+    }
     isTransitioningRef.current = false;
+
+    if (overlayRef.current) {
+      overlayRef.current.classList.remove(styles.overlayRootActive);
+      gsap.set(overlayRef.current, {
+        opacity: 0,
+        visibility: "hidden",
+        pointerEvents: "none",
+      });
+    }
+
+    if (bladeActuatorsRef.current.length > 0) {
+      gsap.set(bladeActuatorsRef.current, {
+        svgOrigin: `${PIVOT_X} ${PIVOT_Y}`,
+        rotation: -38,
+      });
+    }
   }, [clearSafetyTimeout]);
 
-  // Execute the animated camera transition
+  // Execute the animated camera shutter transition
   const triggerTransition = useCallback(
     (
       targetUrl: string,
       targetHash: string,
-      customOutgoingImage?: string,
-      forcedEffect?: TransitionEffect
+      customOutgoingImage?: string
     ) => {
       // Prevent duplicate transitions during rapid repeated clicks
-      if (isTransitioningRef.current || phase !== "idle") return;
+      if (isTransitioningRef.current) return;
       isTransitioningRef.current = true;
 
-      const chosenEffect = forcedEffect || pickNextEffect();
-      setEffect(chosenEffect);
-
-      // Resolve outgoing photographic anchor (from clicked image or current route)
+      // Resolve outgoing & incoming photographic anchors synchronously
       const currentRouteMeta = resolveRouteVisual(window.location.pathname);
-      const outgoing: RouteVisualMeta = {
-        image: customOutgoingImage || currentRouteMeta.image,
-        webp: currentRouteMeta.webp,
-        title: currentRouteMeta.title,
-        subtitle: currentRouteMeta.subtitle,
-      };
-      setOutgoingVisual(outgoing);
-
-      // Resolve incoming photographic anchor
+      const outgoingSrc = customOutgoingImage || currentRouteMeta.image;
       const targetPath = targetUrl.split("?")[0].split("#")[0];
-      const incoming = resolveRouteVisual(targetPath);
-      setIncomingVisual(incoming);
+      const incomingMeta = resolveRouteVisual(targetPath);
+      const incomingSrc = incomingMeta.image || outgoingSrc;
 
-      // Safety fallback timeout
+      if (outgoingPhotoRef.current) {
+        outgoingPhotoRef.current.src = outgoingSrc;
+        outgoingPhotoRef.current.style.opacity = "1";
+      }
+      if (incomingPhotoRef.current) {
+        incomingPhotoRef.current.src = incomingSrc;
+        incomingPhotoRef.current.style.opacity = "0";
+      }
+
+      if (overlayRef.current) {
+        overlayRef.current.classList.add(styles.overlayRootActive);
+      }
+
+      // Safety watchdog fallback (2.4s limit)
       clearSafetyTimeout();
       safetyTimeoutRef.current = setTimeout(() => {
         forceReset();
       }, 2400);
 
+      // ── ACCESSIBILITY: REDUCED MOTION FADE ──
       if (isReducedMotion) {
-        setPhase("closing");
-        setTimeout(() => {
-          setPhase("swapping");
+        const reducedTl = gsap.timeline({
+          onComplete: () => {
+            forceReset();
+          },
+        });
+        masterTimelineRef.current = reducedTl;
+
+        reducedTl.set(overlayRef.current, { visibility: "visible", pointerEvents: "auto" });
+        reducedTl.to(overlayRef.current, {
+          opacity: 1,
+          duration: 0.12,
+          ease: "power1.inOut",
+        });
+        reducedTl.call(() => {
           router.push(targetUrl);
-          setTimeout(() => {
-            setPhase("opening");
-            if (targetHash && targetHash.length > 1) {
-              const el = document.querySelector(targetHash);
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            } else {
-              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-            }
-            setTimeout(() => {
-              forceReset();
-            }, 120);
-          }, 60);
-        }, 120);
+          if (targetHash && targetHash.length > 1) {
+            const el = document.querySelector(targetHash);
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+          } else {
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+          }
+        }, undefined, 0.12);
+        reducedTl.to(overlayRef.current, {
+          opacity: 0,
+          duration: 0.12,
+          ease: "power1.inOut",
+        }, 0.16);
         return;
       }
 
-      // ── Sequence Timing (~760–840ms total) ──
-      // State 2: Focus starts & scene stabilizes (50ms)
-      setPhase("focusing");
+      // ── FULL MECHANICAL CAMERA SHUTTER (30-FRAME GSAP MASTER TIMELINE) ──
+      if (masterTimelineRef.current) {
+        masterTimelineRef.current.kill();
+      }
 
-      // State 3: Aperture closes inward / Viewfinder locks focus (340ms)
-      setTimeout(() => {
-        setPhase("closing");
+      const tl = gsap.timeline({
+        onComplete: () => {
+          forceReset();
+        },
+      });
+      masterTimelineRef.current = tl;
 
-        // State 4: Route swap initiated underneath the camera overlay
-        setTimeout(() => {
-          setPhase("swapping");
-          router.push(targetUrl);
+      // Pre-set initial states at 0.00s (Frame 01: Activation)
+      tl.set(overlayRef.current, { opacity: 1, visibility: "visible", pointerEvents: "auto" }, 0.00);
+      tl.set(outgoingPhotoRef.current, { opacity: 1, scale: 1 }, 0.00);
+      tl.set(incomingPhotoRef.current, { opacity: 0, scale: 1.04 }, 0.00);
+      tl.set(vignetteRef.current, { opacity: 0 }, 0.00);
+      tl.set(cornersRef.current, { opacity: 0 }, 0.00);
+      tl.set(focusRingRef.current, { opacity: 0, scale: 1.25 }, 0.00);
+      tl.set(guideRingsRef.current, { opacity: 0 }, 0.00);
 
-          // State 4 opening: aperture opens onto incoming photo / optical bloom bridges
-          setTimeout(() => {
-            setPhase("opening");
+      // Initialize all 8 blades to retracted position (-38 deg)
+      if (bladeActuatorsRef.current.length > 0) {
+        tl.set(bladeActuatorsRef.current, {
+          svgOrigin: `${PIVOT_X} ${PIVOT_Y}`,
+          rotation: -38,
+        }, 0.00);
+      }
 
-            // Reset scroll position or scroll to target anchor underneath overlay
-            if (targetHash && targetHash.length > 1) {
-              const targetEl = document.querySelector(targetHash);
-              if (targetEl) {
-                targetEl.scrollIntoView({ behavior: "smooth" });
-              }
-            } else {
-              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-            }
+      // ── ACT I: NAVIGATION AND FOCUS (0.00s - 0.20s) ──
+      // Frame 02 (0.04s): Subtle darkening vignette begins
+      tl.to(vignetteRef.current, {
+        opacity: 1,
+        duration: 0.04,
+        ease: "power1.out",
+      }, 0.04);
 
-            // State 5: Destination reveals with gentle fade & settling motion
-            setTimeout(() => {
-              setPhase("revealing");
-              setTimeout(() => {
-                forceReset();
-              }, 120);
-            }, 300);
-          }, 80);
-        }, 340);
-      }, 50);
+      // Frame 03 (0.08s): Viewfinder corners fade in
+      tl.to(cornersRef.current, {
+        opacity: 1,
+        duration: 0.04,
+        ease: "power1.out",
+      }, 0.08);
+
+      // Frame 04 (0.12s): Central focus reticle circle appears
+      tl.to(focusRingRef.current, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.04,
+        ease: "power2.out",
+      }, 0.12);
+
+      // Frame 05 (0.16s): Shutter concentric guide rings form around focus circle
+      tl.to(guideRingsRef.current, {
+        opacity: 0.65,
+        duration: 0.04,
+        ease: "power1.out",
+      }, 0.16);
+
+      // ── ACT II: SHUTTER CLOSING (0.20s - 0.52s) ──
+      // Frames 06 - 14: 8 camera aperture blades rotate inward into full closure
+      // Interpolates through 70% (0.24s), 55% (0.28s), 35% (0.32s), 20% (0.36s), 10% (0.40s), 5% (0.44s), 2% (0.48s), 0% (0.52s)
+      if (bladeActuatorsRef.current.length > 0) {
+        tl.to(bladeActuatorsRef.current, {
+          rotation: 32,
+          duration: 0.32,
+          ease: "power2.inOut",
+        }, 0.20);
+      }
+
+      // Frame 14 (0.52s): Complete shutter lock with zero light leak
+
+      // ── ACT III: ROUTE CHANGE IN DARKNESS (0.52s - 0.68s) ──
+      // Frame 15 (0.56s): Commit route swap while screen is completely covered in darkness
+      tl.call(() => {
+        router.push(targetUrl);
+
+        // Hide outgoing photo, reveal incoming photo beneath the closed shutter
+        if (outgoingPhotoRef.current) outgoingPhotoRef.current.style.opacity = "0";
+        if (incomingPhotoRef.current) incomingPhotoRef.current.style.opacity = "1";
+
+        // Scroll management underneath closed shutter
+        if (targetHash && targetHash.length > 1) {
+          const el = document.querySelector(targetHash);
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        } else {
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        }
+      }, undefined, 0.56);
+
+      // Frame 16 (0.60s) & Frame 17 (0.64s): Brief hold at full close
+
+      // ── ACT IV: SHUTTER OPENING (0.68s - 1.00s) ──
+      // Frames 18 - 26: Blades rotate outward in reverse, revealing destination page
+      // Interpolates through 5% (0.72s), 10% (0.76s), 20% (0.80s), 35% (0.84s), 55% (0.88s), 70% (0.92s), 85% (0.96s), 100% (1.00s)
+      if (bladeActuatorsRef.current.length > 0) {
+        tl.to(bladeActuatorsRef.current, {
+          rotation: -38,
+          duration: 0.32,
+          ease: "power2.inOut",
+        }, 0.68);
+      }
+
+      // Subtle incoming photo optical settle (scale 1.04 -> 1.00)
+      tl.to(incomingPhotoRef.current, {
+        scale: 1,
+        duration: 0.36,
+        ease: "power2.out",
+      }, 0.68);
+
+      // ── ACT V: SETTLE AND RELEASE (1.00s - 1.20s) ──
+      // Frame 27 (1.04s): HUD marks, focus circle, and guide rings fade out cleanly
+      tl.to([cornersRef.current, focusRingRef.current, guideRingsRef.current], {
+        opacity: 0,
+        duration: 0.04,
+        ease: "power1.out",
+      }, 1.00);
+
+      // Frame 28 & 29 (1.08s - 1.12s): Settle and release overlay
+      tl.to(overlayRef.current, {
+        opacity: 0,
+        duration: 0.08,
+        ease: "power1.out",
+      }, 1.08);
+
+      // Frame 30 (1.20s): Complete settlement handled by tl.onComplete
     },
-    [phase, pickNextEffect, isReducedMotion, router, clearSafetyTimeout, forceReset]
+    [isReducedMotion, router, clearSafetyTimeout, forceReset]
   );
 
-  // Global click interceptor for eligible internal links and cards
+  // Global click interceptor for eligible internal links
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -216,7 +313,7 @@ export default function CinematicTransition() {
       const anchor = target?.closest("a") as HTMLAnchorElement | null;
       if (!anchor) return;
 
-      // Exclude external links, downloads and new tabs
+      // Exclude external links, downloads, and new tabs
       if (anchor.target && anchor.target !== "_self") return;
       if (anchor.hasAttribute("download")) return;
       if (anchor.getAttribute("rel")?.includes("external")) return;
@@ -238,10 +335,10 @@ export default function CinematicTransition() {
         return;
       }
 
-      // Exclude different origin
+      // Exclude different origins
       if (url.origin !== window.location.origin) return;
 
-      // Pure in-page scroll on the same page (e.g. clicking /#vows while already at /)
+      // In-page scroll on the same page (e.g. clicking /#vows while already at /)
       const currentUrl = new URL(window.location.href);
       if (
         url.pathname === currentUrl.pathname &&
@@ -260,7 +357,7 @@ export default function CinematicTransition() {
         return;
       }
 
-      // Check if clicked element or card has a photograph
+      // Check if clicked element or card has a photograph for optical bridge
       let customPhoto: string | undefined;
       const cardImg =
         anchor.querySelector("img") ||
@@ -283,7 +380,7 @@ export default function CinematicTransition() {
     };
   }, [triggerTransition]);
 
-  // Handle programmatic navigation custom events (e.g. interactive tabs or buttons)
+  // Handle programmatic navigation custom events (24f-navigate)
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -291,14 +388,12 @@ export default function CinematicTransition() {
       const customEvent = e as CustomEvent<{
         url: string;
         image?: string;
-        effect?: TransitionEffect;
       }>;
       if (customEvent.detail?.url) {
         triggerTransition(
           customEvent.detail.url,
           "",
-          customEvent.detail.image,
-          customEvent.detail.effect
+          customEvent.detail.image
         );
       }
     };
@@ -312,7 +407,6 @@ export default function CinematicTransition() {
     if (typeof window === "undefined") return;
 
     const handlePopState = () => {
-      // If a transition was mid-flight, safely reset to avoid stuck overlays
       if (isTransitioningRef.current) {
         forceReset();
       }
@@ -322,13 +416,11 @@ export default function CinematicTransition() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [forceReset]);
 
-  // Preload optical and photographic assets so transitions render instantaneously
+  // Preload primary optical assets so transitions render instantaneously
   useEffect(() => {
     if (typeof window === "undefined") return;
     const assets = [
-      "/images/transitions/optical-glass.jpg",
       "/images/stories/sirish-and-harshitha/IMG_6346.webp",
-      "/images/portfolio/sireesh-harshitha/cover.jpg",
       "/images/stories/bellam-srikonda/IMG_6339.webp",
       "/images/stories/hrithika-abhishek/IMG_6322.webp",
       "/images/founder-portrait.jpg",
@@ -343,287 +435,158 @@ export default function CinematicTransition() {
   useEffect(() => {
     return () => {
       clearSafetyTimeout();
+      if (masterTimelineRef.current) {
+        masterTimelineRef.current.kill();
+      }
     };
   }, [clearSafetyTimeout]);
 
-  if (phase === "idle") {
-    return null;
-  }
-
-  const isFocusing = phase === "focusing";
-  const isClosing = phase === "closing" || phase === "swapping";
-  const isOpening = phase === "opening";
-  const isRevealing = phase === "revealing";
-
-  const outgoingImgSrc = outgoingVisual?.image || "/images/stories/sirish-and-harshitha/IMG_6346.webp";
-  const incomingImgSrc = incomingVisual?.image || outgoingImgSrc;
-
-  // Active F-Stop index for Through the Lens
-  const currentFStopIdx = isClosing ? 8 : 0; // f/1.2 when open, f/16 when closed
+  const defaultPhotoSrc = "/images/stories/sirish-and-harshitha/IMG_6346.webp";
 
   return (
     <div
-      className={`${styles.overlayRoot} ${styles.overlayRootActive}`}
+      ref={overlayRef}
+      className={styles.overlayRoot}
       role="status"
       aria-live="polite"
       aria-label="Navigating to new frame"
     >
-      {/* ── Reduced-Motion Accessible Fallback ── */}
+      {/* ── Accessible Reduced-Motion Fallback ── */}
       {isReducedMotion ? (
-        <div
-          className={`${styles.reducedMotionOverlay} ${
-            isClosing ? styles.reducedMotionClosing : styles.reducedMotionOpening
-          }`}
-        />
+        <div className={styles.reducedMotionOverlay} />
       ) : (
         <>
-          {/* ══════════════════════════════════════════════════════════ */}
-          {/* TRANSITION 01 — THROUGH THE LENS (CAMERA APERTURE IRIS)   */}
-          {/* ══════════════════════════════════════════════════════════ */}
-          {effect === "through-the-lens" && (
-            <div
-              className={`${styles.apertureStage} ${
-                isFocusing
-                  ? styles.apertureFocusing
-                  : isClosing
-                  ? styles.apertureClosing
-                  : isOpening
-                  ? styles.apertureOpening
-                  : isRevealing
-                  ? styles.apertureRevealing
-                  : ""
-              }`}
-            >
-              {/* Atmospheric Background Radial Vignette */}
-              <div className={styles.apertureBackdropVignette} />
+          {/* ── Photographic Bridge Layers ── */}
+          <div className={styles.photoChamber}>
+            <img
+              ref={outgoingPhotoRef}
+              src={defaultPhotoSrc}
+              alt=""
+              className={`${styles.photoLayer} ${styles.photoOutgoing}`}
+            />
+            <img
+              ref={incomingPhotoRef}
+              src={defaultPhotoSrc}
+              alt=""
+              className={`${styles.photoLayer} ${styles.photoIncoming}`}
+            />
+          </div>
 
-              {/* Optical Glass Streak & Flare Layer */}
-              <div className={styles.opticalGlassLayer}>
-                <img
-                  src="/images/transitions/optical-glass.jpg"
-                  alt=""
-                  className={styles.opticalGlassImg}
+          {/* ── Radial Optical Vignette ── */}
+          <div ref={vignetteRef} className={styles.vignetteOverlay} />
+
+          {/* ── Viewfinder HUD Corner Brackets [   ] ── */}
+          <div ref={cornersRef} className={styles.hudCorners} aria-hidden="true">
+            <div className={`${styles.cornerBracket} ${styles.cornerTL}`} />
+            <div className={`${styles.cornerBracket} ${styles.cornerTR}`} />
+            <div className={`${styles.cornerBracket} ${styles.cornerBL}`} />
+            <div className={`${styles.cornerBracket} ${styles.cornerBR}`} />
+          </div>
+
+          {/* ── Central Autofocus Reticle Ring ── */}
+          <div ref={focusRingRef} className={styles.focusReticleRing} aria-hidden="true" />
+
+          {/* ── Concentric Shutter Mechanism Guide Rings ── */}
+          <svg
+            ref={guideRingsRef}
+            className={styles.guideRingsSvg}
+            width="800"
+            height="800"
+            viewBox="0 0 800 800"
+            aria-hidden="true"
+          >
+            <circle
+              cx="400"
+              cy="400"
+              r="160"
+              fill="none"
+              stroke="rgba(200, 168, 78, 0.4)"
+              strokeDasharray="4 6"
+            />
+            <circle
+              cx="400"
+              cy="400"
+              r="260"
+              fill="none"
+              stroke="rgba(250, 248, 242, 0.25)"
+              strokeWidth="1"
+            />
+            <circle
+              cx="400"
+              cy="400"
+              r="360"
+              fill="none"
+              stroke="rgba(200, 168, 78, 0.25)"
+              strokeWidth="1"
+            />
+          </svg>
+
+          {/* ── 8-Blade Mechanical Camera Aperture Shutter Diaphragm ── */}
+          <svg
+            className={styles.shutterSvg}
+            viewBox="-1000 -1000 2000 2000"
+            preserveAspectRatio="xMidYMid slice"
+            aria-hidden="true"
+          >
+            <defs>
+              <radialGradient id="shutter-blade-grad" cx="30%" cy="30%" r="70%">
+                <stop offset="0%" stopColor="#24302a" />
+                <stop offset="45%" stopColor="#141c18" />
+                <stop offset="85%" stopColor="#0a0f0d" />
+                <stop offset="100%" stopColor="#050807" />
+              </radialGradient>
+              <linearGradient
+                id="shutter-blade-edge"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
+                <stop offset="0%" stopColor="rgba(212, 175, 55, 0.65)" />
+                <stop offset="50%" stopColor="rgba(255, 255, 255, 0.35)" />
+                <stop offset="100%" stopColor="rgba(200, 168, 78, 0.15)" />
+              </linearGradient>
+              <filter
+                id="shutter-blade-shadow"
+                x="-30%"
+                y="-30%"
+                width="160%"
+                height="160%"
+              >
+                <feDropShadow
+                  dx="-4"
+                  dy="6"
+                  stdDeviation="7"
+                  floodColor="#000000"
+                  floodOpacity="0.95"
                 />
-              </div>
+              </filter>
+            </defs>
 
-              {/* Central Master Camera Lens Barrel */}
-              <div className={styles.lensBarrel}>
-                {/* Outer Precision Chassis Ring */}
-                <div className={styles.lensChassisRing}>
-                  <div className={styles.lensBezelRing}>
-                    <span className={styles.lensTextTop}>
-                      24 FRAMES PHOTOGRAPHY · 50MM F/1.2 PRIME
-                    </span>
-                    <span className={styles.lensTextBottom}>
-                      CINEMA OPTICAL SYSTEM · CALIBRATED IRIS
-                    </span>
-                  </div>
-
-                  {/* F-Stop Scale Index along bottom rim */}
-                  <div className={styles.fStopScale} aria-hidden="true">
-                    {F_STOPS.map((stop, idx) => (
-                      <span
-                        key={stop}
-                        className={`${styles.fStopMark} ${
-                          idx === currentFStopIdx ? styles.fStopActive : ""
-                        }`}
-                      >
-                        <span className={styles.fStopPip} />
-                        f/{stop}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Inner Photographic Chamber */}
-                <div className={styles.irisChamber}>
-                  {/* Dynamic Iris Aperture Mask with Outgoing & Incoming Photos */}
-                  <div className={styles.irisPhotoMask}>
-                    <img
-                      src={outgoingImgSrc}
-                      alt={outgoingVisual?.title || "Selected visual"}
-                      className={`${styles.irisPhotoImg} ${styles.irisPhotoOutgoing}`}
-                    />
-                    <img
-                      src={incomingImgSrc}
-                      alt={incomingVisual?.title || "Destination visual"}
-                      className={`${styles.irisPhotoImg} ${styles.irisPhotoIncoming}`}
-                    />
-                  </div>
-
-                  {/* Soft Optical Bloom when Iris Opens */}
-                  <div className={styles.irisCenterBloom} />
-
-                  {/* 8-Blade Mechanical SVG Aperture Diaphragm */}
-                  <svg
-                    className={styles.apertureSvg}
-                    viewBox="0 0 500 500"
-                    aria-hidden="true"
-                  >
-                    <defs>
-                      <radialGradient id="iris-blade-grad" cx="25%" cy="25%" r="75%">
-                        <stop offset="0%" stop-color="#2a3530" />
-                        <stop offset="40%" stop-color="#1b2420" />
-                        <stop offset="75%" stop-color="#101714" />
-                        <stop offset="100%" stop-color="#070b09" />
-                      </radialGradient>
-                      <linearGradient
-                        id="iris-blade-stroke"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" stop-color="rgba(212, 175, 55, 0.75)" />
-                        <stop offset="50%" stop-color="rgba(255, 255, 255, 0.35)" />
-                        <stop offset="100%" stop-color="rgba(200, 168, 78, 0.1)" />
-                      </linearGradient>
-                      <filter
-                        id="iris-blade-shadow"
-                        x="-20%"
-                        y="-20%"
-                        width="150%"
-                        height="150%"
-                      >
-                        <feDropShadow
-                          dx="-3"
-                          dy="4"
-                          stdDeviation="4.5"
-                          flood-color="#000000"
-                          flood-opacity="0.95"
-                        />
-                      </filter>
-                    </defs>
-
-                    {/* 8 Overlapping Curved Blades pivoted around casing */}
-                    {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-                      <g key={i} transform={`rotate(${i * 45} 250 250)`}>
-                        <path
-                          d={BLADE_PATH}
-                          fill="url(#iris-blade-grad)"
-                          stroke="url(#iris-blade-stroke)"
-                          strokeWidth="1.2"
-                          filter="url(#iris-blade-shadow)"
-                          className={styles.apertureBlade}
-                        />
-                      </g>
-                    ))}
-                  </svg>
-                </div>
-              </div>
-
-              {/* Minimal Editorial Footer Meta */}
-              <div className={styles.transitionFooterMeta}>
-                <span>Through The Lens</span>
-                <span className={styles.metaDot}>·</span>
-                <span>Optical Aperture Iris</span>
-              </div>
-            </div>
-          )}
-
-          {/* ══════════════════════════════════════════════════════════ */}
-          {/* TRANSITION 02 — VIEWFINDER LOCK (EDITORIAL CAMERA FOCUS)  */}
-          {/* ══════════════════════════════════════════════════════════ */}
-          {effect === "viewfinder-lock" && (
-            <div
-              className={`${styles.viewfinderStage} ${
-                isFocusing
-                  ? styles.viewfinderFocusing
-                  : isClosing
-                  ? styles.viewfinderClosing
-                  : isOpening
-                  ? styles.viewfinderOpening
-                  : isRevealing
-                  ? styles.viewfinderRevealing
-                  : ""
-              }`}
-            >
-              {/* Fullscreen Photographic Bridge Canvas */}
-              <div className={styles.viewfinderCanvas}>
-                <img
-                  src={outgoingImgSrc}
-                  alt={outgoingVisual?.title || "Focusing visual"}
-                  className={`${styles.viewfinderPhoto} ${styles.viewfinderPhotoOutgoing}`}
-                />
-                <img
-                  src={incomingImgSrc}
-                  alt={incomingVisual?.title || "Destination visual"}
-                  className={`${styles.viewfinderPhoto} ${styles.viewfinderPhotoIncoming}`}
-                />
-                <div className={styles.viewfinderVignetteOverlay} />
-              </div>
-
-              {/* Editorial Viewfinder HUD Layer */}
-              <div className={styles.viewfinderHudLayer}>
-                {/* Outer Viewfinder Corner Framing Brackets [   ] */}
-                <div className={styles.outerFrameBrackets} aria-hidden="true">
-                  <div className={styles.outerBracketTL} />
-                  <div className={styles.outerBracketTR} />
-                  <div className={styles.outerBracketBL} />
-                  <div className={styles.outerBracketBR} />
-                </div>
-
-                {/* Central Autofocus Circular Reticle */}
-                <div className={styles.centralFocusReticle} aria-hidden="true">
-                  <div className={styles.reticleCenterDot} />
-                </div>
-
-                {/* Converging Inner Focus Target Box [ ▫ ] */}
-                <div className={styles.focusTargetBox} aria-hidden="true">
-                  <div className={styles.innerBracketTL} />
-                  <div className={styles.innerBracketTR} />
-                  <div className={styles.innerBracketBL} />
-                  <div className={styles.innerBracketBR} />
-
-                  {/* Refined "● FOCUS LOCKED" Status Badge */}
-                  <div className={styles.focusLockedBadge}>
-                    <span className={styles.focusStatusDot} />
-                    <span className={styles.focusStatusText}>FOCUS LOCKED</span>
-                  </div>
-                </div>
-
-                {/* Authentic Exposure Compensation Scale (-3 to +3) */}
-                <div className={styles.exposureScaleContainer} aria-hidden="true">
-                  <div className={styles.exposureTicksTrack}>
-                    <div className={styles.exposureNeedle} />
-                    {/* Tick Marks: 19 tick marks total (-3 to +3 with 1/3 EV ticks) */}
-                    {[...Array(19)].map((_, i) => {
-                      const isMajor = i % 3 === 0;
-                      return (
-                        <div
-                          key={i}
-                          className={`${styles.exposureTick} ${
-                            isMajor ? styles.exposureTickMajor : ""
-                          }`}
-                        />
-                      );
-                    })}
-                  </div>
-                  <div className={styles.exposureNumbersRow}>
-                    <span>-3</span>
-                    <span>-2</span>
-                    <span>-1</span>
-                    <span className={styles.exposureNumZero}>0</span>
-                    <span>+1</span>
-                    <span>+2</span>
-                    <span>+3</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Soft Optical Bloom Transition Overlay (No Strobe Flash) */}
-              <div className={styles.opticalBloomOverlay} />
-
-              {/* Minimal Editorial Footer Meta */}
-              <div className={styles.transitionFooterMeta}>
-                <span>Viewfinder Lock</span>
-                <span className={styles.metaDot}>·</span>
-                <span>Editorial Focus Target</span>
-              </div>
-            </div>
-          )}
+            {/* 8 Radially-Symmetric Mechanical Blades */}
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+              <g key={i} transform={`rotate(${i * 45} 0 0)`}>
+                <g
+                  ref={(el) => {
+                    if (el) bladeActuatorsRef.current[i] = el;
+                  }}
+                  className={styles.bladeActuator}
+                >
+                  <path
+                    d={BLADE_PATH}
+                    fill="url(#shutter-blade-grad)"
+                    stroke="url(#shutter-blade-edge)"
+                    strokeWidth="1.8"
+                    filter="url(#shutter-blade-shadow)"
+                  />
+                </g>
+              </g>
+            ))}
+          </svg>
         </>
       )}
     </div>
   );
 }
+
+export { CinematicTransition as CameraShutterTransition };

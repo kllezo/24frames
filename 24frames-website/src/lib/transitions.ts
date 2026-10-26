@@ -1,7 +1,7 @@
 import { DISCIPLINES_DATA } from "@/data/disciplines";
 import { STORIES_DATA } from "@/data/stories";
 
-export type TransitionEffect = "through-the-lens" | "viewfinder-lock";
+export type TransitionEffect = "camera-shutter";
 
 export interface RouteVisualMeta {
   image: string;

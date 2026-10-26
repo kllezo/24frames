@@ -1,11 +1,10 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   24 FRAMES — CAMERA-INSPIRED PAGE TRANSITION SYSTEM
-   Strictly two premium transitions:
-   1. Through the Lens (Photorealistic Animated Camera Aperture)
-   2. Viewfinder Lock (Editorial Camera Focus Lock & Optical Bridge)
+   24 FRAMES — CAMERA SHUTTER TRANSITION
+   Strictly ONE unified transition: Photorealistic Multi-Blade Camera Iris
+   Orchestrated natively via GSAP Timeline
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── Global Overlay Container ────────────────────────────────────────── */
+/* ── Global Fullscreen Overlay Container ─────────────────────────────── */
 .overlayRoot {
   position: fixed;
   inset: 0;
@@ -18,709 +17,156 @@
   opacity: 0;
   overflow: hidden;
   background: #040D0B;
-  transition: opacity 0.18s ease-out;
-  will-change: opacity, transform;
+  will-change: opacity;
 }
 
 .overlayRootActive {
   pointer-events: auto;
   visibility: visible;
-  opacity: 1;
 }
 
-/* ── Reduced Motion Fallback (WCAG AAA 120ms Quick Fade) ─────────────── */
+/* ── Accessible Reduced Motion Fallback (WCAG AAA 120ms Quick Fade) ───── */
 .reducedMotionOverlay {
   position: absolute;
   inset: 0;
   background: #FAF8F2;
   opacity: 0;
-  transition: opacity 0.12s ease-in-out;
+  will-change: opacity;
 }
 
-.reducedMotionClosing {
-  opacity: 1;
-}
-
-.reducedMotionOpening {
-  opacity: 0;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   TRANSITION 01 — THROUGH THE LENS (CAMERA APERTURE IRIS)
-   Reference Image 1: Overlapping Blades, Metallic Barrel, F-Stop Scale
-   ═══════════════════════════════════════════════════════════════════════ */
-.apertureStage {
+/* ── Photographic Bridge Chamber ─────────────────────────────────────── */
+.photoChamber {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #040D0B;
   overflow: hidden;
-  opacity: 0;
-  transition: opacity 0.22s ease-out, transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+  pointer-events: none;
 }
 
-.apertureFocusing {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.apertureClosing {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.apertureOpening {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.apertureRevealing {
-  opacity: 0;
-  transform: scale(1.06);
-  transition: opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1), transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Background Atmospheric Radial Vignette */
-.apertureBackdropVignette {
+.photoLayer {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(9, 69, 62, 0.25) 0%, rgba(4, 13, 11, 0.95) 75%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Optical Glass Flare & Anamorphic Streak */
-.opticalGlassLayer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  opacity: 0.45;
-  z-index: 20;
-  transition: opacity 0.3s ease;
-}
-
-.apertureClosing .opticalGlassLayer {
-  opacity: 0.65;
-}
-
-.apertureOpening .opticalGlassLayer {
-  opacity: 0.85;
-}
-
-.opticalGlassImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1.05);
+  will-change: transform, opacity;
 }
 
-/* Master Precision Lens Barrel Chassis */
-.lensBarrel {
-  position: relative;
-  width: clamp(340px, 46vw, 620px);
-  height: clamp(340px, 46vw, 620px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  filter: drop-shadow(0 25px 60px rgba(0, 0, 0, 0.95));
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+.photoOutgoing {
+  opacity: 1;
 }
 
-.apertureRevealing .lensBarrel {
-  transform: scale(1.1);
+.photoIncoming {
+  opacity: 0;
 }
 
-/* Outer Machined Metal Rim & Knurling */
-.lensChassisRing {
+/* ── Atmospheric Radial Optical Vignette ─────────────────────────────── */
+.vignetteOverlay {
   position: absolute;
   inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle, #15201c 45%, #0b1310 80%, #050a08 100%);
-  border: 4px solid #23312c;
-  box-shadow: 
-    0 0 80px rgba(0, 0, 0, 0.95),
-    inset 0 2px 4px rgba(255, 255, 255, 0.15),
-    inset 0 -3px 8px rgba(0, 0, 0, 0.95);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: radial-gradient(
+    circle at center,
+    rgba(9, 69, 62, 0.22) 0%,
+    rgba(4, 13, 11, 0.88) 70%,
+    rgba(2, 6, 5, 0.98) 100%
+  );
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* ── Viewfinder HUD Framing Brackets [   ] ───────────────────────────── */
+.hudCorners {
+  position: absolute;
+  inset: clamp(24px, 5vw, 64px);
   pointer-events: none;
   z-index: 8;
-}
-
-/* Inner Engraved Bezel Ring with Champagne Accent */
-.lensBezelRing {
-  position: absolute;
-  inset: 12px;
-  border-radius: 50%;
-  border: 1px dashed rgba(200, 168, 78, 0.45);
-  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lensTextTop {
-  position: absolute;
-  top: 10px;
-  font-family: var(--font-mono, "Space Mono", monospace);
-  font-size: clamp(0.5rem, 0.8vw, 0.65rem);
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: #C8A84E;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-}
-
-.lensTextBottom {
-  position: absolute;
-  bottom: 10px;
-  font-family: var(--font-mono, "Space Mono", monospace);
-  font-size: clamp(0.5rem, 0.8vw, 0.65rem);
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: #C8A84E;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-}
-
-/* Calibrated F-Stop Index Scale */
-.fStopScale {
-  position: absolute;
-  bottom: 26px;
-  display: flex;
-  align-items: center;
-  gap: clamp(6px, 1.2vw, 14px);
-  font-family: var(--font-mono, "Space Mono", monospace);
-  font-size: clamp(0.48rem, 0.75vw, 0.6rem);
-  letter-spacing: 0.1em;
-  color: rgba(200, 168, 78, 0.4);
-  z-index: 15;
-  pointer-events: none;
-}
-
-.fStopMark {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  transition: all 0.28s ease;
-}
-
-.fStopPip {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: rgba(200, 168, 78, 0.35);
-  transition: all 0.28s ease;
-}
-
-.fStopActive {
-  color: #FAF8F2;
-  font-weight: 700;
-  text-shadow: 0 0 8px rgba(200, 168, 78, 0.9);
-}
-
-.fStopActive .fStopPip {
-  background: #C8A84E;
-  transform: scale(1.4);
-  box-shadow: 0 0 6px #C8A84E;
-}
-
-/* Central Optical Photographic Chamber */
-.irisChamber {
-  position: absolute;
-  inset: clamp(28px, 4vw, 42px);
-  border-radius: 50%;
-  overflow: hidden;
-  background: #030806;
-  box-shadow: inset 0 0 45px rgba(0, 0, 0, 0.95);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 4;
-}
-
-/* Photograph Layer with Smooth Crossfade & Mask */
-.irisPhotoMask {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: clip-path 0.34s cubic-bezier(0.22, 1, 0.36, 1);
-  clip-path: circle(48% at center);
-}
-
-.apertureClosing .irisPhotoMask {
-  clip-path: circle(13% at center);
-}
-
-.apertureOpening .irisPhotoMask {
-  clip-path: circle(48% at center);
-}
-
-.irisPhotoImg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.02);
-  transition: opacity 0.2s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
-}
-
-.irisPhotoOutgoing {
-  opacity: 1;
-}
-
-.irisPhotoIncoming {
   opacity: 0;
+  will-change: opacity;
 }
 
-.apertureOpening .irisPhotoOutgoing {
-  opacity: 0;
-}
-
-.apertureOpening .irisPhotoIncoming {
-  opacity: 1;
-  filter: brightness(1.06);
-}
-
-/* 8-Blade Mechanical SVG Aperture Diaphragm */
-.apertureSvg {
+.cornerBracket {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 6;
+  width: clamp(24px, 3.5vw, 36px);
+  height: clamp(24px, 3.5vw, 36px);
+  border-color: rgba(250, 248, 242, 0.82);
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
 }
 
-.apertureBlade {
-  transform-origin: 440px 250px;
-  transform: rotate(-28deg);
-  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+.cornerTL {
+  top: 0;
+  left: 0;
+  border-top: 2px solid;
+  border-left: 2px solid;
 }
 
-.apertureClosing .apertureBlade {
-  transform: rotate(34deg);
+.cornerTR {
+  top: 0;
+  right: 0;
+  border-top: 2px solid;
+  border-right: 2px solid;
 }
 
-.apertureOpening .apertureBlade {
-  transform: rotate(-28deg);
+.cornerBL {
+  bottom: 0;
+  left: 0;
+  border-bottom: 2px solid;
+  border-left: 2px solid;
 }
 
-/* Soft Optical Bloom over the Iris Opening */
-.irisCenterBloom {
+.cornerBR {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+/* ── Central Autofocus Reticle Ring ──────────────────────────────────── */
+.focusReticleRing {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, rgba(200, 168, 78, 0.2) 0%, transparent 60%);
-  mix-blend-mode: screen;
+  top: 50%;
+  left: 50%;
+  width: clamp(100px, 14vw, 150px);
+  height: clamp(100px, 14vw, 150px);
+  margin-left: calc(-0.5 * clamp(100px, 14vw, 150px));
+  margin-top: calc(-0.5 * clamp(100px, 14vw, 150px));
+  border-radius: 50%;
+  border: 1px solid rgba(200, 168, 78, 0.65);
+  box-shadow: 0 0 16px rgba(200, 168, 78, 0.35), inset 0 0 16px rgba(200, 168, 78, 0.2);
   pointer-events: none;
+  z-index: 8;
   opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ── Concentric Shutter Mechanism Guide Rings ────────────────────────── */
+.guideRingsSvg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(380px, 60vw, 800px);
+  height: clamp(380px, 60vw, 800px);
+  pointer-events: none;
   z-index: 7;
-  transition: opacity 0.3s ease;
+  opacity: 0;
+  will-change: opacity;
 }
 
-.apertureOpening .irisCenterBloom {
-  opacity: 0.8;
-}
-
-/* Editorial Minimal Footer Meta */
-.transitionFooterMeta {
-  position: absolute;
-  bottom: 2.25rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-family: var(--font-mono, "Space Mono", monospace);
-  font-size: 0.6875rem;
-  letter-spacing: 0.22em;
-  color: rgba(250, 248, 242, 0.75);
-  text-transform: uppercase;
-  z-index: 25;
-}
-
-.metaDot {
-  color: #C8A84E;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   TRANSITION 02 — VIEWFINDER LOCK (EDITORIAL CAMERA FOCUS)
-   Reference Image 2: Framing Brackets, Center Reticle, Exposure Scale
-   ═══════════════════════════════════════════════════════════════════════ */
-.viewfinderStage {
+/* ── 8-Blade Mechanical Camera Aperture SVG Diaphragm ────────────────── */
+.shutterSvg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #040D0B;
-  overflow: hidden;
-  opacity: 0;
-  transition: opacity 0.22s ease-out, transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.viewfinderFocusing {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.viewfinderClosing {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.viewfinderOpening {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.viewfinderRevealing {
-  opacity: 0;
-  transform: scale(1.05);
-  transition: opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1), transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Fullscreen Photographic Canvas */
-.viewfinderCanvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-
-.viewfinderPhoto {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: filter 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.24s ease, transform 0.35s ease;
-  transform: scale(1.02);
-}
-
-/* State 2 Focus hunting softening */
-.viewfinderFocusing .viewfinderPhoto {
-  filter: blur(4px) brightness(0.92);
-}
-
-/* State 3 Focus lock natural sharpening */
-.viewfinderClosing .viewfinderPhoto {
-  filter: blur(0px) brightness(1.04);
-}
-
-/* State 4 Bridge into destination */
-.viewfinderOpening .viewfinderPhotoOutgoing {
-  opacity: 0;
-}
-
-.viewfinderOpening .viewfinderPhotoIncoming {
-  opacity: 1;
-  filter: blur(0px) brightness(1.05);
-}
-
-/* Quiet Dark Vignette */
-.viewfinderVignetteOverlay {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, transparent 35%, rgba(4, 13, 11, 0.88) 85%);
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* ── Viewfinder Camera HUD Layer ── */
-.viewfinderHudLayer {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   pointer-events: none;
   z-index: 10;
+  filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.95));
 }
 
-/* Outer Viewfinder Composition Framing Brackets [   ] */
-.outerFrameBrackets {
-  position: absolute;
-  width: min(88vw, 1100px);
-  height: min(78vh, 750px);
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.outerBracketTL,
-.outerBracketTR,
-.outerBracketBL,
-.outerBracketBR {
-  position: absolute;
-  width: clamp(28px, 4vw, 44px);
-  height: clamp(28px, 4vw, 44px);
-  border-color: rgba(250, 248, 242, 0.8);
-  pointer-events: none;
-  transition: border-color 0.28s ease, transform 0.3s ease;
-}
-
-.outerBracketTL {
-  top: 0;
-  left: 0;
-  border-top: 1.5px solid rgba(250, 248, 242, 0.8);
-  border-left: 1.5px solid rgba(250, 248, 242, 0.8);
-}
-
-.outerBracketTR {
-  top: 0;
-  right: 0;
-  border-top: 1.5px solid rgba(250, 248, 242, 0.8);
-  border-right: 1.5px solid rgba(250, 248, 242, 0.8);
-}
-
-.outerBracketBL {
-  bottom: 0;
-  left: 0;
-  border-bottom: 1.5px solid rgba(250, 248, 242, 0.8);
-  border-left: 1.5px solid rgba(250, 248, 242, 0.8);
-}
-
-.outerBracketBR {
-  bottom: 0;
-  right: 0;
-  border-bottom: 1.5px solid rgba(250, 248, 242, 0.8);
-  border-right: 1.5px solid rgba(250, 248, 242, 0.8);
-}
-
-/* Center Active Focus Reticle */
-.centralFocusReticle {
-  position: relative;
-  width: clamp(50px, 8vw, 70px);
-  height: clamp(50px, 8vw, 70px);
-  border-radius: 50%;
-  border: 1px dashed rgba(250, 248, 242, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.viewfinderClosing .centralFocusReticle {
-  border-color: #C8A84E;
-  border-style: solid;
-  transform: scale(1.08);
-  box-shadow: 0 0 16px rgba(200, 168, 78, 0.55);
-}
-
-.reticleCenterDot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #FAF8F2;
-  transition: background 0.3s ease;
-}
-
-.viewfinderClosing .reticleCenterDot {
-  background: #C8A84E;
-}
-
-/* Converging Inner Focus Target Box [ ▫ ] */
-.focusTargetBox {
-  position: absolute;
-  width: clamp(140px, 22vw, 240px);
-  height: clamp(100px, 16vh, 180px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease;
-  transform: scale(1.35);
-  opacity: 0.35;
-}
-
-.viewfinderClosing .focusTargetBox {
-  transform: scale(1);
-  opacity: 1;
-}
-
-.innerBracketTL,
-.innerBracketTR,
-.innerBracketBL,
-.innerBracketBR {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border-color: #C8A84E;
-  pointer-events: none;
-}
-
-.innerBracketTL {
-  top: 0;
-  left: 0;
-  border-top: 2px solid #C8A84E;
-  border-left: 2px solid #C8A84E;
-}
-
-.innerBracketTR {
-  top: 0;
-  right: 0;
-  border-top: 2px solid #C8A84E;
-  border-right: 2px solid #C8A84E;
-}
-
-.innerBracketBL {
-  bottom: 0;
-  left: 0;
-  border-bottom: 2px solid #C8A84E;
-  border-left: 2px solid #C8A84E;
-}
-
-.innerBracketBR {
-  bottom: 0;
-  right: 0;
-  border-bottom: 2px solid #C8A84E;
-  border-right: 2px solid #C8A84E;
-}
-
-/* Subtle Focus Locked Pill Indicator */
-.focusLockedBadge {
-  position: absolute;
-  bottom: -2.6rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.3rem 0.85rem;
-  border-radius: 9999px;
-  background: rgba(9, 69, 62, 0.85);
-  border: 1px solid rgba(200, 168, 78, 0.45);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-  opacity: 0;
-  transform: translateY(6px);
-  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.viewfinderClosing .focusLockedBadge {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.focusStatusDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 8px #10b981;
-}
-
-.focusStatusText {
-  font-family: var(--font-mono, "Space Mono", monospace);
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: #FAF8F2;
-  text-transform: uppercase;
-}
-
-/* Authentic Camera Exposure Compensation Scale (-3 to +3) */
-.exposureScaleContainer {
-  position: absolute;
-  bottom: clamp(1.8rem, 4vh, 3.5rem);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  pointer-events: none;
-  z-index: 15;
-}
-
-.exposureTicksTrack {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  gap: clamp(4px, 0.75vw, 8px);
-  height: 16px;
-}
-
-.exposureNeedle {
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 5px solid #C8A84E;
-  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Needle shifts from hunting (-1) to calibrated locked (0) */
-.viewfinderFocusing .exposureNeedle {
-  transform: translateX(calc(-50% - 24px));
-}
-
-.viewfinderClosing .exposureNeedle {
-  transform: translateX(-50%);
-}
-
-.exposureTick {
-  width: 1px;
-  height: 6px;
-  background: rgba(250, 248, 242, 0.45);
-}
-
-.exposureTickMajor {
-  height: 12px;
-  background: rgba(200, 168, 78, 0.85);
-}
-
-.exposureNumbersRow {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 260px;
-  font-family: var(--font-mono, "Space Mono", monospace);
-  font-size: 0.5625rem;
-  letter-spacing: 0.1em;
-  color: rgba(250, 248, 242, 0.75);
-}
-
-.exposureNumZero {
-  color: #C8A84E;
-  font-weight: 700;
-}
-
-/* Soft Optical Bloom Transition Overlay (No Strobe Flash) */
-.opticalBloomOverlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  opacity: 0;
-  background: radial-gradient(circle at center, rgba(200, 168, 78, 0.35) 0%, transparent 65%);
-  transition: opacity 0.3s ease;
-  z-index: 18;
-}
-
-.viewfinderOpening .opticalBloomOverlay {
-  opacity: 0.75;
+.bladeActuator {
+  will-change: transform;
 }
