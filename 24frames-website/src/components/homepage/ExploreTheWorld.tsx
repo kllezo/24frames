@@ -2,16 +2,15 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DISCIPLINES_LIST, DisciplineItem } from "@/data/disciplines";
+import { navigateWithCameraTransition } from "@/lib/transitions";
 import styles from "./ExploreTheWorld.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ExploreTheWorld() {
-  const router = useRouter();
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -82,25 +81,29 @@ export default function ExploreTheWorld() {
   /* ── Click / Touch Navigation ───────────────────────────────── */
   const handleClick = useCallback(
     (discipline: DisciplineItem) => {
-      // If already active (hovered on desktop or tapped once on mobile), navigate to page
+      // If already active (hovered on desktop or tapped once on mobile), navigate with camera transition
       if (activeDiscipline.id === discipline.id) {
-        router.push(discipline.href);
+        navigateWithCameraTransition(discipline.href, {
+          image: discipline.heroImage,
+        });
       } else {
         // First tap on touch devices: activate preview
         setActiveDiscipline(discipline);
       }
     },
-    [activeDiscipline.id, router]
+    [activeDiscipline.id]
   );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent, discipline: DisciplineItem) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        router.push(discipline.href);
+        navigateWithCameraTransition(discipline.href, {
+          image: discipline.heroImage,
+        });
       }
     },
-    [router]
+    []
   );
 
   return (
