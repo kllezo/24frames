@@ -44,16 +44,16 @@
 
 .tagline {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.9rem;
-  color: var(--color-charcoal-muted, #77766E);
-  line-height: 1.5;
+  font-size: 0.925rem;
+  color: #383C38;
+  line-height: 1.6;
 }
 
 .location {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
-  color: var(--color-charcoal-muted, #77766E);
+  color: #555850;
   text-transform: uppercase;
 }
 

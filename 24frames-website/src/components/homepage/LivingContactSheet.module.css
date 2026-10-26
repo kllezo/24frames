@@ -1,12 +1,12 @@
 /* ==========================================================================
-   THE VOWS — ASYMMETRIC EDITORIAL WEDDING GALLERY & CINEMA FILMS
-   Editorial Luxury Design System · 24 Frames Photography
+   24 FRAMES PHOTOGRAPHY — CHAPTER 02: THE VOWS
+   High-End Editorial Composition & Curated Client Archive
+   Palette: Warm Ivory (#FAF8F2), Kllezo Green (#09453e), Deep Charcoal (#141713)
    ========================================================================== */
 
-/* ── Section Overall Layout ─────────────────────────────────────────────── */
 .section {
-  padding: clamp(4rem, 7vh, 6.5rem) 0;
-  background-color: var(--color-ivory, #FDFBF7);
+  padding: clamp(4.5rem, 8vh, 7.5rem) 0;
+  background-color: var(--color-bg, #FAF8F2);
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -31,11 +31,11 @@
   pointer-events: none;
 }
 
-/* ── Section Header ──────────────────────────────────────────────────────── */
+/* ── 01: THE OPENING (SECTION HEADER) ─────────────────────────────────── */
 .header {
-  margin-bottom: clamp(2.5rem, 5vh, 4rem);
+  margin-bottom: clamp(3rem, 6vh, 4.5rem);
   text-align: center;
-  max-width: 760px;
+  max-width: 780px;
   margin-inline: auto;
   will-change: transform, opacity;
 }
@@ -44,48 +44,64 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.85rem;
-  margin-bottom: 0.85rem;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
 }
 
-.label {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.6875rem;
-  font-weight: 600;
+.chapterTag {
+  font-family: var(--font-emphasis, Montserrat, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.18em;
   color: var(--color-kllezo-green, #09453e);
+}
+
+.metaDivider {
+  color: rgba(9, 69, 62, 0.3);
+  font-size: 0.85rem;
+}
+
+.curatorialTag {
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-charcoal, #141713);
 }
 
 .referenceBadge {
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.625rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-charcoal-muted, #77766E);
+  color: var(--color-kllezo-green, #09453e);
   padding: 0.2rem 0.65rem;
-  border-radius: 2px;
-  background: rgba(9, 69, 62, 0.05);
-  border: 1px solid rgba(9, 69, 62, 0.14);
+  border-radius: 999px;
+  background: rgba(9, 69, 62, 0.06);
+  border: 1px solid rgba(9, 69, 62, 0.16);
+  margin-left: 0.4rem;
 }
 
 .title {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: -0.015em;
+  text-transform: none;
   color: var(--color-charcoal, #141713);
-  margin-bottom: 0.85rem;
-  line-height: 1.1;
+  margin: 0.2rem 0 0.85rem 0;
+  line-height: 1.05;
 }
 
 .cursiveAccent {
   font-family: var(--font-cursive, Allura, cursive);
   font-weight: 400;
   color: var(--color-kllezo-green, #09453e);
-  font-size: 1.28em;
+  font-size: 1.24em;
   text-transform: none;
   letter-spacing: 0;
   display: inline-block;
@@ -95,749 +111,712 @@
 
 .subtitle {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: clamp(0.9rem, 1.15vw, 1.025rem);
+  font-size: clamp(0.95rem, 1.15vw, 1.08rem);
   font-weight: 400;
-  color: var(--color-charcoal-muted, #5C5B54);
-  line-height: 1.65;
-  max-width: 620px;
-  margin: 0 auto 1.5rem auto;
-}
-
-.headerRuleRow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.25rem;
-  max-width: 320px;
+  color: #383C38;
+  line-height: 1.72;
+  max-width: 660px;
   margin: 0 auto;
 }
 
-.headerRule {
-  flex: 1;
+.headerDividerLine {
+  width: 80px;
   height: 1px;
-  background: rgba(9, 69, 62, 0.16);
+  background: rgba(9, 69, 62, 0.2);
+  margin: 1.75rem auto 0 auto;
 }
 
-.headerRuleLabel {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.5625rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-kllezo-green, #09453e);
-}
-
-/* ── Editorial Stream: Controlled Vertical Rhythm ────────────────────────── */
-.editorialStream {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(3rem, 5.5vh, 4.5rem);
-  width: 100%;
-}
-
+/* ── RHYTHM BLOCK BASE ────────────────────────────────────────────────── */
 .rhythmBlock {
   width: 100%;
   position: relative;
   will-change: transform, opacity;
+  margin-bottom: clamp(4rem, 7vh, 6rem);
 }
 
-.itemLabelRow {
-  display: flex;
+/* ── 02: THE FEATURED STORY (DOMINANT EDITORIAL CENTERPIECE) ──────────── */
+.featuredStoryWrapper {
+  width: 100%;
+}
+
+.featuredGrid {
+  display: grid;
+  grid-template-columns: minmax(360px, 1.15fr) 1fr;
+  gap: clamp(2.5rem, 4.5vw, 5rem);
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.85rem;
-  padding-bottom: 0.45rem;
+  width: 100%;
+  padding-bottom: clamp(2.5rem, 4vw, 3.5rem);
   border-bottom: 1px solid rgba(9, 69, 62, 0.12);
 }
 
-.itemLabel {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-kllezo-green, #09453e);
+.featuredVisualCol {
+  width: 100%;
 }
 
-.durationBadge {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-charcoal-muted, #77766E);
-  background: #FFFFFF;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
+.featuredPhotoLink {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.featuredImageCanvas {
+  position: relative;
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #EFECE6;
+  box-shadow: 0 20px 48px rgba(9, 69, 62, 0.10);
   border: 1px solid rgba(9, 69, 62, 0.14);
 }
 
-/* ── ITEM 1: Scaled-Down Lead Photo & Editorial Journal ───────────────────── */
-.itemLeadWrapper {
-  width: 100%;
-}
-
-.leadJournalGrid {
-  display: grid;
-  grid-template-columns: minmax(280px, 400px) 1fr;
-  gap: clamp(2rem, 4vw, 4.5rem);
-  align-items: center;
-  width: 100%;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(9, 69, 62, 0.1);
-}
-
-.leadVisualCol {
-  width: 100%;
-  max-width: 400px;
-}
-
-.figureLead {
-  width: 100%;
-}
-
-.leadEditorialCol {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.leadLabelBadge {
-  margin-bottom: 0.75rem;
-}
-
-.leadTitle {
-  font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(1.85rem, 2.8vw, 2.5rem);
-  font-weight: 600;
-  line-height: 1.15;
-  color: var(--color-charcoal, #141713);
-  margin: 0 0 0.5rem 0;
-  letter-spacing: -0.01em;
-}
-
-.leadMeta {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-kllezo-green, #09453e);
-  margin-bottom: 1.15rem;
-}
-
-.leadNarrative {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.95rem;
-  font-weight: 400;
-  line-height: 1.68;
-  color: var(--color-charcoal-muted, #555850);
-  margin: 0 0 1.5rem 0;
-  max-width: 480px;
-}
-
-.leadActionRow {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.leadStoryLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #FFFFFF;
-  background: var(--color-kllezo-green, #09453e);
-  padding: 0.65rem 1.3rem;
-  border-radius: 999px;
-  text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 14px rgba(9, 69, 62, 0.2);
-}
-
-.leadStoryLink:hover {
-  background: #06312c;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(9, 69, 62, 0.28);
-}
-
-.linkArrow {
-  transition: transform 0.25s ease;
-}
-
-.leadStoryLink:hover .linkArrow {
-  transform: translateX(3px);
-}
-
-/* ── ITEM 2: Centered 16:9 Cinema Feature (Vinitha & Vivekananda) ─────────── */
-.itemVideoHeroWrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.cinemaStageHero {
-  width: 100%;
-  max-width: 840px;
-  margin-inline: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.cinemaFrameHero {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  border-radius: 4px;
-  background-color: #070B09;
-  box-shadow: 0 18px 42px rgba(12, 48, 40, 0.12);
-  border: 1px solid rgba(9, 69, 62, 0.16);
-}
-
-/* ── MIDDLE SECTION: Asymmetric Editorial Pair (Items 3 & 4) ──────────────── */
-.middleSection {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: clamp(2rem, 5vw, 4.5rem);
-  width: 100%;
-}
-
-.middleColLeft {
-  flex: 0 1 420px;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-}
-
-.figureMiddleL {
-  width: 100%;
-}
-
-.middleColRight {
-  flex: 0 1 420px;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  margin-top: clamp(1.5rem, 3.5vw, 3rem); /* Deliberate editorial vertical stagger */
-}
-
-.figureMiddleR {
-  width: 100%;
-}
-
-/* ── CONCLUDING DUET: Cinema Insert & Fine-Art Portrait Paired ───────────── */
-.concludingDuet {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(2rem, 5vw, 4.5rem);
-  width: 100%;
-}
-
-.concludingFilmCol {
-  flex: 0 1 520px;
-  max-width: 520px;
-  display: flex;
-  flex-direction: column;
-}
-
-.concludingStillCol {
-  flex: 0 1 360px;
-  max-width: 360px;
-  display: flex;
-  flex-direction: column;
-}
-
-.insertHeaderRow {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.85rem;
-  padding-bottom: 0.45rem;
-  border-bottom: 1px solid rgba(9, 69, 62, 0.12);
-}
-
-.cinemaStageInsert {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.cinemaFrameInsert {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  border-radius: 4px;
-  background-color: #070B09;
-  box-shadow: 0 16px 36px rgba(12, 48, 40, 0.1);
-  border: 1px solid rgba(9, 69, 62, 0.16);
-}
-
-.figureFinal {
-  width: 100%;
-}
-
-.playBeaconInsert {
-  width: clamp(48px, 4.5vw, 60px) !important;
-  height: clamp(48px, 4.5vw, 60px) !important;
-}
-
-.cinemaTitleInsert {
-  font-size: clamp(1.05rem, 1.4vw, 1.35rem) !important;
-}
-
-.cinemaQuoteInsert {
-  font-size: clamp(0.8rem, 0.9vw, 0.875rem) !important;
-  max-width: 440px !important;
-}
-
-/* ── Shared Photographic Figure & Typography Styles ──────────────────────── */
-.photoFigure {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.imageContainer {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  background: #EFECE6;
-  border-radius: 3px;
-  box-shadow: 0 14px 36px rgba(9, 69, 62, 0.08);
-  border: 1px solid rgba(9, 69, 62, 0.1);
-}
-
-.galleryImage {
+.featuredImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.photoFigure:hover .galleryImage {
+.featuredPhotoLink:hover .featuredImg {
   transform: scale(1.025);
 }
 
-.editorialCaption {
-  margin-top: 0.95rem;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
+.imageHighlightGlow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
 }
 
-.captionMain {
+.featuredNarrativeCol {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  align-items: flex-start;
+  justify-content: center;
 }
 
-.captionTitle {
-  font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(1.05rem, 1.25vw, 1.25rem);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-charcoal, #141713);
-  transition: color 0.3s ease;
-}
-
-.photoFigure:hover .captionTitle {
-  color: var(--color-kllezo-green, #09453e);
-}
-
-.captionMeta {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.6875rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-charcoal-muted, #77766E);
-}
-
-.captionTitleRow {
+.featuredBadgeRow {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap;
+  margin-bottom: 0.85rem;
 }
 
-.cardArrow {
+.badgeEmphasis {
+  font-family: var(--font-emphasis, Montserrat, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-kllezo-green, #09453e);
+}
+
+.badgeBullet {
+  color: rgba(9, 69, 62, 0.4);
+  font-size: 0.85rem;
+}
+
+.badgeSub {
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #555850;
+}
+
+.featuredTitle {
+  font-family: var(--font-headline, "Cormorant Garamond", serif);
+  font-size: clamp(2.3rem, 3.4vw, 3.2rem);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--color-charcoal, #141713);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.015em;
+}
+
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.titleLink:hover {
+  color: var(--color-kllezo-green, #09453e);
+}
+
+.featuredLocation {
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-kllezo-green, #09453e);
+  margin-bottom: 1.35rem;
+}
+
+.featuredPullQuote {
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.75;
+  color: #2D312E;
+  margin: 0 0 1.65rem 0;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--color-kllezo-green, #09453e);
+  max-width: 520px;
+}
+
+.specificationsTable {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(9, 69, 62, 0.12);
+  margin-bottom: 2rem;
+}
+
+.specRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.specKey {
+  font-family: var(--font-emphasis, Montserrat, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #6C706A;
+}
+
+.specValue {
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-charcoal, #141713);
+}
+
+.featuredActionRow {
+  display: flex;
+  align-items: center;
+}
+
+.btnPrimaryCTA {
   display: inline-flex;
   align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: var(--color-kllezo-green, #09453e);
+  padding: 0.85rem 1.8rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 20px rgba(9, 69, 62, 0.22);
+}
+
+.btnPrimaryCTA:hover {
+  background: #06312c;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(9, 69, 62, 0.32);
+}
+
+.btnArrow {
+  transition: transform 0.25s ease;
+}
+
+.btnPrimaryCTA:hover .btnArrow {
+  transform: translateX(3px);
+}
+
+/* ── 03: SPREAD PART A — MASTER CINEMA FEATURE (Vinitha & Vivekananda) ── */
+.cinemaSpreadWrapper {
+  width: 100%;
+  max-width: 980px;
+  margin-inline: auto;
+}
+
+.cinemaSpreadHeader {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+.cinemaMetaGroup {
+  display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.cinemaTag {
+  font-family: var(--font-emphasis, Montserrat, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
   color: var(--color-kllezo-green, #09453e);
-  opacity: 0.75;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, color 0.2s ease;
 }
 
-.photoFigure:hover .cardArrow {
-  opacity: 1;
-  color: #06312c;
-  transform: translateX(4px);
-}
-
-/* ── Shared Cinema Player & Interaction Styles ──────────────────────────── */
-.inlinePlayerContainer {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: #000000;
-}
-
-.inlineIframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-  background-color: #000000;
-}
-
-.inlineCloseBtn {
-  position: absolute;
-  top: 0.85rem;
-  right: 0.85rem;
-  z-index: 20;
-  background: rgba(9, 69, 62, 0.92);
-  color: #FDFBF7;
-  border: 1px solid rgba(253, 251, 247, 0.35);
-  backdrop-filter: blur(8px);
-  padding: 0.4rem 0.85rem;
+.cinemaDurationPill {
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  color: #4C504A;
+  background: #FFFFFF;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(9, 69, 62, 0.16);
 }
 
-.inlineCloseBtn:hover {
-  background: var(--color-kllezo-green, #09453e);
-  color: #FFFFFF;
-  border-color: #FFFFFF;
-  transform: translateY(-1px);
+.cinemaHeading {
+  font-family: var(--font-headline, "Cormorant Garamond", serif);
+  font-size: clamp(2.1rem, 3.2vw, 2.9rem);
+  font-weight: 600;
+  color: var(--color-charcoal, #141713);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.15;
 }
 
-.previewClickArea {
+.cinemaExcerpt {
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #4C504A;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cinemaStageContainer {
+  width: 100%;
+}
+
+.cinemaFrame {
   position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 6px;
+  background-color: #070B09;
+  box-shadow: 0 24px 56px rgba(12, 48, 40, 0.14);
+  border: 1px solid rgba(9, 69, 62, 0.16);
+}
+
+.videoPosterArea {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   cursor: pointer;
-  display: block;
+  outline: none;
 }
 
-.cinemaPoster {
+.videoPosterImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  display: block;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
 }
 
-.previewClickArea:hover .cinemaPoster {
-  transform: scale(1.02);
+.videoPosterArea:hover .videoPosterImg {
+  transform: scale(1.025);
+  filter: brightness(0.92);
 }
 
-.cinemaVignette {
+.videoPosterVignette {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(7, 11, 9, 0.35) 0%,
-    rgba(7, 11, 9, 0.05) 40%,
-    rgba(7, 11, 9, 0.85) 100%
-  );
+  background: radial-gradient(circle at center, transparent 40%, rgba(7, 11, 9, 0.45) 100%);
   pointer-events: none;
 }
 
+/* Play Beacon with Optical Ring */
 .playBeacon {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: clamp(56px, 5.5vw, 76px);
-  height: clamp(56px, 5.5vw, 76px);
+  width: clamp(64px, 6vw, 84px);
+  height: clamp(64px, 6vw, 84px);
   border-radius: 50%;
-  background: rgba(9, 69, 62, 0.9);
-  border: 2px solid rgba(253, 251, 247, 0.8);
+  background: var(--color-kllezo-green, #09453e);
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #FDFBF7;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 5;
+  box-shadow: 0 10px 32px rgba(9, 69, 62, 0.4);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+  z-index: 3;
 }
 
-.previewClickArea:hover .playBeacon {
-  transform: translate(-50%, -50%) scale(1.08);
-  background: var(--color-kllezo-green, #09453e);
-  border-color: #FFFFFF;
-  box-shadow: 0 14px 40px rgba(9, 69, 62, 0.5);
+.videoPosterArea:hover .playBeacon {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: #06312c;
 }
 
-.playPulse {
+.playBeaconRing {
   position: absolute;
-  inset: -8px;
+  inset: -6px;
   border-radius: 50%;
-  border: 1px solid rgba(253, 251, 247, 0.4);
-  animation: beaconPulse 2.8s infinite ease-out;
-  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  animation: beaconPulse 2.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes beaconPulse {
-  0% {
-    transform: scale(0.9);
-    opacity: 0.8;
-  }
-  60% {
-    transform: scale(1.35);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1.4);
-    opacity: 0;
-  }
+  0% { transform: scale(0.96); opacity: 0.8; }
+  50% { transform: scale(1.12); opacity: 0.2; }
+  100% { transform: scale(0.96); opacity: 0.8; }
 }
 
-.playIcon {
-  width: clamp(20px, 2vw, 26px);
-  height: clamp(20px, 2vw, 26px);
-  margin-left: 3px;
+.playBeaconIcon {
+  width: 42%;
+  height: 42%;
+  margin-left: 5%;
 }
 
-.cinemaTopBar {
+.posterBottomCredit {
   position: absolute;
-  top: 1rem;
-  left: 1.15rem;
-  right: 1.15rem;
+  bottom: 1.25rem;
+  left: 1.5rem;
+  right: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 4;
-}
-
-.cinemaBadge {
+  z-index: 3;
+  color: #FAF8F2;
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #FDFBF7;
-  background: rgba(7, 11, 9, 0.7);
-  backdrop-filter: blur(6px);
-  padding: 0.3rem 0.75rem;
-  border-radius: 2px;
-  border: 1px solid rgba(253, 251, 247, 0.15);
 }
 
-.cinemaDuration {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.625rem;
+.creditBrand {
   font-weight: 600;
-  letter-spacing: 0.1em;
-  color: #FDFBF7;
-  background: rgba(7, 11, 9, 0.7);
-  backdrop-filter: blur(6px);
-  padding: 0.3rem 0.75rem;
-  border-radius: 2px;
-  border: 1px solid rgba(253, 251, 247, 0.15);
+  opacity: 0.9;
 }
 
-.cinemaBottomBar {
+.creditAction {
+  font-weight: 500;
+  color: #C8A84E;
+}
+
+.videoPlayerContainer {
   position: absolute;
-  bottom: 1.25rem;
-  left: 1.25rem;
-  right: 1.25rem;
-  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  z-index: 10;
+}
+
+.videoIframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.closePlayerBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 20;
+  background: rgba(14, 20, 16, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FAF8F2;
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+}
+
+.closePlayerBtn:hover {
+  background: #09453e;
+  border-color: #09453e;
+}
+
+/* ── 03: SPREAD PART B — THE HERITAGE DIPTYCH (Items 3 & 4) ───────────── */
+.editorialDiptych {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: start;
+  width: 100%;
+}
+
+.diptychColLeft {
+  width: 100%;
+}
+
+.diptychColRight {
+  width: 100%;
+  margin-top: clamp(2.5rem, 5vw, 4.5rem); /* Asymmetrical vertical offset */
+}
+
+.storyCardLink {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.storyImageCanvas {
+  position: relative;
+  width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #EFECE6;
+  box-shadow: 0 16px 40px rgba(9, 69, 62, 0.09);
+  border: 1px solid rgba(9, 69, 62, 0.12);
+}
+
+.storyCardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.storyCardLink:hover .storyCardImg {
+  transform: scale(1.03);
+}
+
+.imageHoverSheen {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+  border-radius: 5px;
+}
+
+.storyCardDetails {
+  margin-top: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
 }
 
-.cinemaCategory {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.625rem;
-  font-weight: 700;
+.storyCategory {
+  font-family: var(--font-emphasis, Montserrat, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-champagne-gold, #C5A880);
+  color: var(--color-kllezo-green, #09453e);
 }
 
-.cinemaTitle {
+.storyHeadline {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(1.3rem, 2.2vw, 2rem);
+  font-size: clamp(1.75rem, 2.3vw, 2.3rem);
   font-weight: 600;
-  letter-spacing: 0.03em;
-  color: #FDFBF7;
+  color: var(--color-charcoal, #141713);
+  margin: 0;
   line-height: 1.15;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  letter-spacing: -0.01em;
+  transition: color 0.3s ease;
 }
 
-.cinemaQuote {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: clamp(0.85rem, 1.1vw, 1rem);
-  color: rgba(253, 251, 247, 0.9);
-  max-width: 720px;
-  line-height: 1.5;
+.storyCardLink:hover .storyHeadline {
+  color: var(--color-kllezo-green, #09453e);
 }
 
-.filmUnderMeta {
-  margin-top: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.filmClickHint {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.6875rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-charcoal-muted, #77766E);
-}
-
-/* ── Editorial Conclusion Row ────────────────────────────────────────────── */
-.conclusionRow {
+.storyMetaRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: clamp(3rem, 5vh, 4.5rem);
-  padding-top: 1.75rem;
-  border-top: 1px solid rgba(9, 69, 62, 0.12);
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  width: 100%;
+  margin-top: 0.25rem;
 }
 
-.conclusionText {
+.storyLocation {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.85rem;
-  color: var(--color-charcoal-muted, #77766E);
+  font-size: 0.8125rem;
+  color: #555850;
+  letter-spacing: 0.02em;
 }
 
-.conclusionLink {
+.storyLinkArrow {
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--color-kllezo-green, #09453e);
-  text-decoration: none;
+  transition: transform 0.25s ease;
+}
+
+.storyCardLink:hover .storyLinkArrow {
+  transform: translateX(4px);
+}
+
+/* ── 03: SPREAD PART C — MOTION & INTIMACY DUET (Items 5 & 6) ─────────── */
+.duetSpread {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.15fr) minmax(280px, 0.85fr);
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: center;
+  width: 100%;
+}
+
+.duetColFilm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.filmHeaderBar {
+  margin-bottom: 1.25rem;
+}
+
+.duetHeading {
+  font-family: var(--font-headline, "Cormorant Garamond", serif);
+  font-size: clamp(1.85rem, 2.4vw, 2.4rem);
+  font-weight: 600;
+  color: var(--color-charcoal, #141713);
+  margin: 0.3rem 0 0.5rem 0;
+  line-height: 1.15;
+}
+
+.duetExcerpt {
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #555850;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.duetVideoStage {
+  width: 100%;
+}
+
+.duetColStill {
+  width: 100%;
+}
+
+/* ── 04: SECTION TRANSITION ───────────────────────────────────────────── */
+.conclusionTransition {
+  width: 100%;
+  margin-top: clamp(3rem, 5vh, 4.5rem);
+}
+
+.conclusionRule {
+  width: 100%;
+  height: 1px;
+  background: rgba(9, 69, 62, 0.12);
+  margin-bottom: 1.75rem;
+}
+
+.conclusionActionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.conclusionNote {
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.875rem;
+  color: #555850;
+  margin: 0;
+}
+
+.conclusionLink {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  transition: all 0.25s ease;
+  gap: 0.5rem;
+  font-family: var(--font-headline, "Cormorant Garamond", serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-kllezo-green, #09453e);
+  text-decoration: none;
+  transition: transform 0.25s ease, color 0.2s ease;
 }
 
 .conclusionLink:hover {
   color: #06312c;
+  transform: translateX(4px);
+}
+
+.conclusionArrow {
+  transition: transform 0.25s ease;
+}
+
+.conclusionLink:hover .conclusionArrow {
   transform: translateX(3px);
 }
 
-/* ── RESPONSIVE ADAPTATIONS ──────────────────────────────────────────────── */
-@media (max-width: 1024px) {
-  .leadJournalGrid {
-    grid-template-columns: minmax(260px, 340px) 1fr;
-    gap: 2rem;
-  }
-
-  .middleSection {
-    gap: 2rem;
-  }
-
-  .middleColLeft,
-  .middleColRight {
-    flex: 0 1 360px;
-    max-width: 360px;
-  }
-
-  .concludingDuet {
-    gap: 2rem;
-  }
-
-  .concludingFilmCol {
-    flex: 0 1 460px;
-  }
-
-  .concludingStillCol {
-    flex: 0 1 320px;
-  }
-}
-
-@media (max-width: 768px) {
-  .section {
-    padding: 3rem 0;
-  }
-
-  .editorialStream {
-    gap: 2.75rem;
-  }
-
-  .leadJournalGrid {
+/* ── RESPONSIVE ADAPTATIONS ───────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .featuredGrid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
-  .leadVisualCol,
-  .figureLead {
-    max-width: 100%;
-  }
-
-  .middleSection,
-  .concludingDuet {
-    flex-direction: column;
-    align-items: stretch;
+  .editorialDiptych {
+    grid-template-columns: 1fr;
     gap: 2.5rem;
   }
 
-  .cinemaStageHero,
-  .middleColLeft,
-  .middleColRight,
-  .figureMiddleL,
-  .figureMiddleR,
-  .concludingFilmCol,
-  .concludingStillCol,
-  .figureFinal {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    margin-top: 0 !important;
-    flex: none !important;
+  .diptychColRight {
+    margin-top: 0;
   }
 
-  .cinemaBottomBar {
-    bottom: 1rem;
-    left: 1rem;
-    right: 1rem;
+  .duetSpread {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 3.5rem 0;
   }
 
-  .cinemaQuote {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  .title {
+    font-size: 2.4rem;
+  }
+
+  .featuredTitle {
+    font-size: 2rem;
+  }
+
+  .cinemaHeading {
+    font-size: 1.85rem;
+  }
+
+  .storyHeadline {
+    font-size: 1.65rem;
+  }
+
+  .duetHeading {
+    font-size: 1.65rem;
+  }
+
+  .conclusionActionRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
 }

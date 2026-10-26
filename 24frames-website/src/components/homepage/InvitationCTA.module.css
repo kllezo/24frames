@@ -22,9 +22,9 @@
 
 .label {
   display: block;
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.6875rem;
-  font-weight: 600;
+  font-family: var(--font-emphasis, Montserrat, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   color: var(--color-kllezo-green, #09453e);
@@ -33,10 +33,10 @@
 
 .title {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  text-transform: none;
   color: var(--color-charcoal, #141713);
   margin-bottom: 0.65rem;
   line-height: 1.1;
@@ -46,7 +46,7 @@
   font-family: var(--font-cursive, Allura, cursive);
   font-weight: 400;
   color: var(--color-kllezo-green, #09453e);
-  font-size: 1.28em;
+  font-size: 1.25em;
   text-transform: none;
   letter-spacing: 0;
   display: inline-block;
@@ -56,12 +56,12 @@
 
 .subtitle {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: clamp(0.9rem, 1.15vw, 1.025rem);
+  font-size: clamp(0.95rem, 1.15vw, 1.05rem);
   font-weight: 400;
-  color: var(--color-charcoal-muted, #5C5B54);
+  color: #383C38;
+  line-height: 1.68;
   max-width: 620px;
   margin: 0 auto;
-  line-height: 1.65;
 }
 
 /* --- Dual Cards --- */
@@ -155,9 +155,9 @@
 }
 
 .cardCategory {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.625rem;
-  font-weight: 600;
+  font-family: var(--font-emphasis, Montserrat, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 800;
   letter-spacing: 0.14em;
   color: var(--color-kllezo-green, #09453e);
   text-transform: uppercase;
@@ -166,10 +166,10 @@
 
 .cardTitle {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(1.5rem, 2.2vw, 1.95rem);
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
   font-weight: 600;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  text-transform: none;
   color: var(--color-charcoal, #141713);
   margin-bottom: 0.55rem;
   line-height: 1.15;
@@ -177,9 +177,9 @@
 
 .cardDesc {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: var(--color-charcoal-muted, #555850);
+  font-size: 0.925rem;
+  line-height: 1.65;
+  color: #383C38;
   margin-bottom: 1.5rem;
 }
 
