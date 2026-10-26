@@ -7,142 +7,82 @@ import styles from "./FounderRecognitionSection.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ── Verified Magazine Artefacts on the Architectural Shelf ── */
-export interface MagazineArtefact {
+/* ── Verified Honours, Editorial Features & Manufacturer Distinctions ── */
+export interface VerifiedRecognition {
   id: string;
-  publication: "KINFOLK" | "CEREAL" | "MONOCLE" | "LOEWE";
-  editionTitle: string;
-  verifiedMilestone: string;
-  organization: string;
+  badgeLabel: string;
+  milestoneTitle: string;
+  conferringBody: string;
   year: string;
   category: string;
   citation: string;
   summary: string;
-  coverImage: string;
-  sourceUrl?: string;
-  sourceLabel?: string;
+  imageSrc: string;
+  imageAlt: string;
+  sourceUrl: string;
+  sourceLabel: string;
 }
 
-const MAGAZINE_ITEMS: MagazineArtefact[] = [
+export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
   {
-    id: "mag-1-kinfolk",
-    publication: "KINFOLK",
-    editionTitle: "The Editorial Feature · Volume 42",
-    verifiedMilestone: "ET Excellence Award 2025",
-    organization: "The Times of India / ET Now",
+    id: "et-excellence-2025",
+    badgeLabel: "JURIED INDUSTRY AWARD",
+    milestoneTitle: "ET Excellence Award 2025",
+    conferringBody: "The Times of India / ET Now · Conferred by Dia Mirza",
     year: "2025",
     category: "Luxury Wedding Cinematography",
     citation: "Excellence in Luxury Wedding Photography & Cinematic Storytelling",
     summary:
-      "Conferred at Novotel HICC, Hyderabad before cultural luminaries and industry leaders. Guest of Honour: Bollywood icon and UN Goodwill Ambassador Dia Mirza. Awarded for consistent excellence and cultural preservation in high-end wedding cinematography across South India.",
-    coverImage: "/images/magazines/mag-1-kinfolk.jpg",
+      "Conferred at Novotel HICC, Hyderabad before industry leaders and media dignitaries. Presented by Bollywood icon and UN Goodwill Ambassador Dia Mirza. Awarded for defining high-production cinematic storytelling and cultural preservation in luxury South Indian weddings.",
+    imageSrc: "/assets/artist/recognition/et-excellence-award-2025.jpg",
+    imageAlt: "Phani Gogireddy receiving the ET Excellence Award 2025 with framed citation and trophy on TV9 Telugu",
     sourceUrl: "https://www.youtube.com/shorts/Lh45ZBRJ1b8",
     sourceLabel: "Watch Award Ceremony Film →",
   },
   {
-    id: "mag-2-cereal",
-    publication: "CEREAL",
-    editionTitle: "Architectural Volume · The Heritage Issue",
-    verifiedMilestone: "Fourteen Years Preserving South Indian Heritage",
-    organization: "24 Frames Archival Monograph",
-    year: "2024",
-    category: "Heritage Documentation",
-    citation: "Monograph on South Indian Architectural Weddings & Royal Lineages",
-    summary:
-      "An architectural study documenting fourteen years of South Indian wedding heritage — from heritage palace courtyards to sacred temple ceremonies. Capturing the timeless intimacy of Telugu traditions with master optical primes.",
-    coverImage: "/images/magazines/mag-2-cereal.jpg",
-    sourceUrl: "https://www.instagram.com/24framesphotography_official/",
-    sourceLabel: "Explore Archival Monograph →",
-  },
-  {
-    id: "mag-3-monocle",
-    publication: "MONOCLE",
-    editionTitle: "The Global Dispatch · Destination Edition",
-    verifiedMilestone: "Official Nikon India Creator Alliance",
-    organization: "Nikon India Private Limited",
+    id: "nikon-creator-2023",
+    badgeLabel: "MANUFACTURER PARTNERSHIP",
+    milestoneTitle: "Official Nikon India Creator & Influencer",
+    conferringBody: "Nikon India Private Limited",
     year: "2023",
-    category: "Brand Ambassador Alliance",
-    citation: "National Optical Hardware & Cinema Prime Partner",
+    category: "Official Creator Alliance",
+    citation: "Welcoming Phani Gogireddy to the Nikon Creator Family across AP & Telangana",
     summary:
-      "Recognized as an established master in wedding photography across Andhra Pradesh and Telangana. Selected by Nikon India Private Limited to test, review, and advocate flagship Nikon Z-series mirrorless cinema cameras and prime optical glass.",
-    coverImage: "/images/magazines/mag-3-monocle.jpg",
+      "Formally appointed by Nikon India Private Limited as an official Nikon Creator and Influencer. Selected to advocate flagship Z-series cinema optics and mirrorless technology, leading educational masterclasses and championing uncompromised camera craft across South India.",
+    imageSrc: "/assets/artist/recognition/nikon-creator-announcement-2023.jpg",
+    imageAlt: "Official Nikon India Creator announcement creative for Phani Gogireddy",
     sourceUrl: "https://www.instagram.com/p/CqovGPUoPle/",
     sourceLabel: "View Official Nikon Announcement →",
   },
   {
-    id: "mag-4-loewe",
-    publication: "LOEWE",
-    editionTitle: "Art & Intimacy · The Creative Director",
-    verifiedMilestone: "Visionary CEO in Photography & Cinema Workflow",
-    organization: "Hyderabad Photo Trade Expo",
-    year: "2024",
-    category: "Industry Leadership",
-    citation: "Creative Entrepreneurship & Cinematic Innovation",
+    id: "thecconnects-ceo-2026",
+    badgeLabel: "EXECUTIVE LEADERSHIP",
+    milestoneTitle: "Visionary CEO in Luxury Wedding Photography",
+    conferringBody: "TheCconnects Global Platform · Growth Story Summit",
+    year: "2026",
+    category: "Industry Leadership & Entrepreneurship",
+    citation: "Visionary CEO in Luxury Wedding Photography & Cinematic Storytelling",
     summary:
-      "Keynote presentation at Hyderabad Photo Trade Expo honoring Phani Gogireddy for scaling profitable photography studios and integrating high-end cinema camera workflows into commercial wedding productions across South India.",
-    coverImage: "/images/magazines/mag-4-loewe.jpg",
-    sourceUrl: "https://www.youtube.com/@24framesphotography",
-    sourceLabel: "View Keynote Address →",
+      "Conferred at the Growth Story Summit & Awards in Hyderabad by senior leadership including Sri Jayesh Ranjan IAS (Special Chief Secretary, Telangana Government). Honoring Phani Gogireddy for scaling 24 Frames into a high-ticket, institutionalized luxury wedding media company.",
+    imageSrc: "/assets/artist/recognition/thecconnects-visionary-ceo-award-2026.jpg",
+    imageAlt: "Phani Gogireddy receiving the Visionary CEO Award from Sri Jayesh Ranjan IAS on stage",
+    sourceUrl: "https://www.youtube.com/post/Ugkxg9gXlVttAKARijuEYBdupvGDuHk8eQtN",
+    sourceLabel: "View Ceremony Announcement →",
   },
   {
-    id: "mag-5-kinfolk-travel",
-    publication: "KINFOLK",
-    editionTitle: "TRAVEL · Destination Unions",
-    verifiedMilestone: "Winner — IndiGo #NoFilter Reality Contest",
-    organization: "IndiGo Airlines (InterGlobe Aviation Ltd)",
-    year: "2019",
-    category: "Documentary Photography",
-    citation: "National Juried Competition for Pure Optical Storytelling",
+    id: "borok-times-2023",
+    badgeLabel: "NATIONAL PRESS PROFILE",
+    milestoneTitle: "“The Art of Storytelling Through Photography”",
+    conferringBody: "Borok Times Editorial Press Feature",
+    year: "2023",
+    category: "Editorial Press Profile",
+    citation: "A Look at Phani Gogireddy’s Award-Winning Work & Client Dedication",
     summary:
-      "Winner of the national reality competition run by IndiGo Airlines celebrating pure, unmanipulated optical storytelling and cultural documentation without synthetic retouching. Selected for raw framing talent and documentary authenticity.",
-    coverImage: "/images/magazines/mag-5-kinfolk-travel.jpg",
-    sourceUrl: "https://www.instagram.com/phanigogireddy24/",
-    sourceLabel: "View Competition Archive →",
-  },
-  {
-    id: "mag-6-cereal-arch",
-    publication: "CEREAL",
-    editionTitle: "Form & Light · Sacred Rituals",
-    verifiedMilestone: "National Geographic Mega Icons Cinematography",
-    organization: "National Geographic India / JK Tyre",
-    year: "2020",
-    category: "Documentary Broadcast",
-    citation: "Broadcast Documentary Production Photography",
-    summary:
-      "Contributed documentary cinematography footage and production photography to the Mega Icons television documentary series broadcast nationally on National Geographic India.",
-    coverImage: "/images/magazines/mag-6-cereal-arch.jpg",
-    sourceUrl: "https://www.youtube.com/@24framesphotography",
-    sourceLabel: "View National Geographic Feature →",
-  },
-  {
-    id: "mag-7-monocle-bw",
-    publication: "MONOCLE",
-    editionTitle: "The Monograph · Noir & Silver Halide",
-    verifiedMilestone: "WedMeGood 5.0 Star Platform Badge",
-    organization: "WedMeGood Verified Platform",
-    year: "2015–2026",
-    category: "Platform Excellence",
-    citation: "28 Comprehensive Verified Client Reviews · 9+ Seasons",
-    summary:
-      "Unbroken 5.0-star rating across nine consecutive wedding seasons on India's premier luxury wedding portal. Recognized for artistic consistency, client discretion, and archival photo & film delivery.",
-    coverImage: "/images/magazines/mag-7-monocle-bw.jpg",
-    sourceUrl: "https://www.wedmegood.com/profile/24framesphotography-174332",
-    sourceLabel: "Inspect WedMeGood Profile →",
-  },
-  {
-    id: "mag-8-loewe-chair",
-    publication: "LOEWE",
-    editionTitle: "Interiors & Heirlooms · Generational Keepsakes",
-    verifiedMilestone: "500+ Master Wedding Commissions Delivered",
-    organization: "24 Frames Master Archive",
-    year: "2012–2026",
-    category: "Master Archive",
-    citation: "Generational Heirlooms & Archival Print Albums",
-    summary:
-      "Over five hundred royal, celebrity, and high-profile wedding commissions completed across Hyderabad, Bengaluru, Chennai, Udaipur, and international destinations. Handcrafted Italian leather-bound archival albums and 4K cinema master recordings.",
-    coverImage: "/images/magazines/mag-8-loewe-chair.jpg",
-    sourceUrl: "https://www.24framesphotography.com",
-    sourceLabel: "Explore Archive Collection →",
+      "An in-depth editorial profile investigating Phani Gogireddy's cinematic visual language and client relationships. Explores his background in Telugu cinema and how it informed 24 Frames' narrative-led approach to royal South Indian weddings and generational keepsakes.",
+    imageSrc: "/assets/artist/recognition/borok-times-phani-gogireddy.jpeg",
+    imageAlt: "Borok Times editorial feature header showing Indian Eminent Awards 2023 recognition",
+    sourceUrl: "https://boroktimes.com/the-art-of-storytelling-through-photography-a-look-at-phani-gogireddys-award-winning-work/",
+    sourceLabel: "Read Editorial Feature →",
   },
 ];
 
@@ -155,7 +95,7 @@ export default function FounderRecognitionSection() {
   const bioBlockRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
-  const [activeItem, setActiveItem] = useState<MagazineArtefact | null>(null);
+  const [activeItem, setActiveItem] = useState<VerifiedRecognition | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -182,7 +122,7 @@ export default function FounderRecognitionSection() {
   const scrollTrack = (direction: "left" | "right") => {
     const el = trackRef.current;
     if (!el) return;
-    const scrollDistance = el.clientWidth * 0.58;
+    const scrollDistance = el.clientWidth * 0.65;
     el.scrollBy({
       left: direction === "right" ? scrollDistance : -scrollDistance,
       behavior: "smooth",
@@ -227,7 +167,7 @@ export default function FounderRecognitionSection() {
         );
       }
 
-      // 2. Magazine covers enter in a gentle stagger, settling on the shelf
+      // 2. Recognition cards enter in a gentle stagger
       const covers = gsap.utils.toArray<HTMLElement>(
         `.${styles.magazineCoverItem}`
       );
@@ -240,7 +180,7 @@ export default function FounderRecognitionSection() {
             y: 0,
             scale: 1,
             duration: 0.5,
-            stagger: 0.05,
+            stagger: 0.08,
             ease: "back.out(1.2)",
           },
           "-=0.35"
@@ -317,7 +257,7 @@ export default function FounderRecognitionSection() {
   }, []);
 
   /* ── Accessible Modal Handlers ── */
-  const handleOpenItem = (item: MagazineArtefact) => {
+  const handleOpenItem = (item: VerifiedRecognition) => {
     setActiveItem(item);
   };
 
@@ -344,8 +284,11 @@ export default function FounderRecognitionSection() {
       ref={sectionRef}
       id="artist"
       className={styles.section}
-      aria-label="Founder & Editorial Magazine Wall — Phani Gogireddy"
+      aria-label="Founder & Verified Recognition — Phani Gogireddy"
     >
+      {/* Anchor alias to support legacy #founder links smoothly */}
+      <div id="founder" className={styles.anchorOffset} aria-hidden="true" />
+
       {/* Ambient Dappled Sunlight & Foliage Shadows */}
       <div className={styles.sunlightLayer} aria-hidden="true" />
       <div className={styles.leafShadowOverlay} aria-hidden="true" />
@@ -388,14 +331,19 @@ export default function FounderRecognitionSection() {
             </div>
           </div>
 
-          {/* ── 2. RIGHT COLUMN: MAGAZINE SHELF (TOP) + EDITORIAL BIOGRAPHY & CTA (BOTTOM) ── */}
+          {/* ── 2. RIGHT COLUMN: ARCHITECTURAL RECOGNITION NICHE (TOP) + EDITORIAL BIOGRAPHY & CTA (BOTTOM) ── */}
           <div className={styles.rightContentCol}>
-            {/* 2.A UPPER RIGHT: WIDE ARCHITECTURAL MAGAZINE SHELF */}
+            {/* 2.A UPPER RIGHT: WIDE ARCHITECTURAL RECOGNITION NICHE */}
             <div className={styles.shelfNicheWrapper}>
               <div className={styles.shelfHeaderRow}>
                 <div className={styles.shelfHeaderMeta}>
-                  <span className={styles.shelfEyebrow}>IN PRINT & IN FRAME</span>
-                  <h3 className={styles.shelfTitle}>The Editorial Archive</h3>
+                  <span className={styles.shelfEyebrow}>
+                    HONOURS & EDITORIAL RECOGNITION
+                  </span>
+                  <div className={styles.shelfTitleRow}>
+                    <h3 className={styles.shelfTitle}>The Verified Archive</h3>
+                    <span className={styles.shelfScriptAccent}>Heritage & Honours</span>
+                  </div>
                 </div>
 
                 {/* Previous / Next Shelf Arrow Controls */}
@@ -405,7 +353,7 @@ export default function FounderRecognitionSection() {
                     className={styles.navArrowBtn}
                     onClick={() => scrollTrack("left")}
                     disabled={!canScrollLeft}
-                    aria-label="Previous magazine covers"
+                    aria-label="Previous recognition entry"
                   >
                     ‹
                   </button>
@@ -414,7 +362,7 @@ export default function FounderRecognitionSection() {
                     className={styles.navArrowBtn}
                     onClick={() => scrollTrack("right")}
                     disabled={!canScrollRight}
-                    aria-label="Next magazine covers"
+                    aria-label="Next recognition entry"
                   >
                     ›
                   </button>
@@ -426,58 +374,60 @@ export default function FounderRecognitionSection() {
                 ref={shelfNicheRef}
                 className={styles.architecturalShelfNiche}
                 role="region"
-                aria-label="Architectural Magazine Shelf Track"
+                aria-label="Architectural Recognition Shelf Track"
               >
                 {/* Champagne Cove Lighting Strip */}
                 <div className={styles.coveLightStrip} aria-hidden="true" />
 
-                {/* Horizontally Scrollable Magazine Track */}
+                {/* Horizontally Scrollable Recognition Track */}
                 <div
                   ref={trackRef}
                   className={styles.magazineTrack}
                   onScroll={handleScroll}
                   tabIndex={0}
                   role="region"
-                  aria-label="Interactive magazine covers"
+                  aria-label="Interactive verified recognition archive"
                 >
-                  {MAGAZINE_ITEMS.map((mag) => (
+                  {VERIFIED_RECOGNITIONS.map((item) => (
                     <div
-                      key={mag.id}
+                      key={item.id}
                       ref={(el) => {
-                        triggerRefs.current[mag.id] = el;
+                        triggerRefs.current[item.id] = el;
                       }}
-                      className={styles.magazineCoverItem}
-                      onClick={() => handleOpenItem(mag)}
+                      className={`${styles.recognitionCardItem} ${styles.magazineCoverItem}`}
+                      onClick={() => handleOpenItem(item)}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault();
-                          handleOpenItem(mag);
+                          handleOpenItem(item);
                         }
                       }}
                       role="button"
                       tabIndex={0}
                       aria-haspopup="dialog"
-                      aria-label={`View ${mag.publication}: ${mag.verifiedMilestone}`}
+                      aria-label={`View evidence for ${item.milestoneTitle}`}
                     >
-                      <div className={styles.coverImageWrap}>
+                      <div className={styles.cardTopMeta}>
+                        <span className={styles.cardBadge}>{item.badgeLabel}</span>
+                        <span className={styles.cardYear}>{item.year}</span>
+                      </div>
+
+                      <div className={styles.cardImageWrap}>
                         <img
-                          src={mag.coverImage}
-                          alt={`${mag.publication} cover`}
-                          className={styles.coverImage}
+                          src={item.imageSrc}
+                          alt={item.imageAlt}
+                          className={styles.cardImage}
                           loading="lazy"
                         />
-                        <div
-                          className={styles.spineHighlight}
-                          aria-hidden="true"
-                        />
-                        <div
-                          className={styles.pageEdgeShadow}
-                          aria-hidden="true"
-                        />
                       </div>
-                      <span className={styles.magazineCaptionTitle}>
-                        {mag.publication}
-                      </span>
+
+                      <div className={styles.cardContent}>
+                        <h4 className={styles.cardTitle}>{item.milestoneTitle}</h4>
+                        <span className={styles.cardOrg}>{item.conferringBody}</span>
+                        <span className={styles.cardAffordance}>
+                          Inspect Evidence →
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -494,9 +444,9 @@ export default function FounderRecognitionSection() {
                   onClick={() => scrollTrack("right")}
                   role="button"
                   tabIndex={0}
-                  aria-label="Scroll right to discover more magazine covers"
+                  aria-label="Scroll right to discover more recognition entries"
                 >
-                  <span>EXPLORE THE COLLECTION</span>
+                  <span>EXPLORE VERIFIED EVIDENCE</span>
                   <span className={styles.cueArrow}>→</span>
                 </div>
               </div>
@@ -506,7 +456,7 @@ export default function FounderRecognitionSection() {
             <div ref={bioBlockRef} className={styles.founderBioBlock}>
               {/* Chapter Kicker */}
               <div className={styles.chapterKicker}>
-                CHAPTER 04 — THE VISIONARY & RECOGNITION
+                CHAPTER 04 — THE ARTIST & RECOGNITION
               </div>
 
               {/* Large Serif Founder Name */}
@@ -547,14 +497,14 @@ export default function FounderRecognitionSection() {
         </div>
       </div>
 
-      {/* ── CLICKABLE MAGAZINE DETAIL MODAL (Prominent Editorial View) ── */}
+      {/* ── CLICKABLE RECOGNITION DETAIL MODAL (Forensic Evidence View) ── */}
       {activeItem && (
         <div
           className={styles.modalBackdrop}
           onClick={handleCloseItem}
           role="dialog"
           aria-modal="true"
-          aria-label={activeItem.verifiedMilestone}
+          aria-label={activeItem.milestoneTitle}
         >
           <div
             className={styles.modalCard}
@@ -572,8 +522,8 @@ export default function FounderRecognitionSection() {
             <div className={styles.modalGrid}>
               <div className={styles.modalCoverWrap}>
                 <img
-                  src={activeItem.coverImage}
-                  alt={activeItem.editionTitle}
+                  src={activeItem.imageSrc}
+                  alt={activeItem.imageAlt}
                   className={styles.modalCoverImg}
                 />
               </div>
@@ -581,15 +531,15 @@ export default function FounderRecognitionSection() {
               <div className={styles.modalContent}>
                 <div className={styles.modalHeaderMeta}>
                   <span className={styles.modalCategoryBadge}>
-                    {activeItem.publication} · {activeItem.category}
+                    {activeItem.badgeLabel} · {activeItem.category}
                   </span>
                   <span className={styles.modalYear}>{activeItem.year}</span>
                 </div>
 
                 <h3 className={styles.modalTitle}>
-                  {activeItem.verifiedMilestone}
+                  {activeItem.milestoneTitle}
                 </h3>
-                <p className={styles.modalOrg}>{activeItem.organization}</p>
+                <p className={styles.modalOrg}>{activeItem.conferringBody}</p>
 
                 <div className={styles.modalCitationBox}>
                   <span className={styles.citationLabel}>OFFICIAL CITATION</span>
@@ -607,7 +557,7 @@ export default function FounderRecognitionSection() {
                     rel="noopener noreferrer"
                     className={styles.modalSourceLink}
                   >
-                    {activeItem.sourceLabel || "View Official Record →"}
+                    {activeItem.sourceLabel || "View Primary Source →"}
                   </a>
                 )}
               </div>

@@ -19,8 +19,10 @@ export default function HomePage() {
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.search.includes("direct")) {
-      setShowPreloader(false);
-      setSiteReady(true);
+      queueMicrotask(() => {
+        setShowPreloader(false);
+        setSiteReady(true);
+      });
     }
   }, []);
 

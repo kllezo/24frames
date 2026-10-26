@@ -120,7 +120,9 @@ export default function ExploreTheWorld() {
             <span className={styles.label}>Chapter 04 — Editorial Disciplines</span>
             <span className={styles.disciplineBadge}>SIX PRACTICES OF CINEMA & OPTICS</span>
           </div>
-          <h2 className={styles.title}>Discover the World of 24 Frames</h2>
+          <h2 className={styles.title}>
+            Discover the <span className={styles.cursiveAccent}>World</span> of 24 Frames
+          </h2>
           <p className={styles.subtitle}>
             From intimate Vedic rituals to high-fashion spreads and cinematic master films.
             Select any discipline to enter its dedicated portfolio.

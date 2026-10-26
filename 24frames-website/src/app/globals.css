@@ -1,84 +1,105 @@
 /* ============================================================
-   24 FRAMES PHOTOGRAPHY — Design System & Typography
+   24 FRAMES PHOTOGRAPHY — Luxury Art-Direction & Design System
    ============================================================
-   Dual-Foundation Palette:
-   - Warm Ivory: brand contexts, forms, journal, artist
-   - Obsidian Cinema: photography, hero, projects, recognition
+   Palette:
+   - Warm Ivory (#FAF8F2) / Light Plaster (#F4EFE6)
+   - Kllezo Forest Green (#09453e)
+   - Champagne Gold (#C8A84E, #D4AF37)
+   - Deep Photographic Charcoal (#181C1A)
 
-   Four-Tier Cinematic Typographic System:
-   1. Cinzel: Monumental cinema titles, chapter headers & brand mark
-   2. Italiana & Cormorant Garamond: Haute-couture editorial serifs & pull quotes
-   3. Plus Jakarta Sans: Clean modern luxury interface & body copy
-   4. Space Mono: Optical 35mm film slate metadata, lens specs & citations
+   Four-Tier Typographic System:
+   1. Cormorant Garamond SemiBold: Monumental & haute-couture editorial headlines
+   2. Montserrat ExtraBold: High-impact punch & modern authority emphasis
+   3. Allura: Restrained, expressive cursive accents in Kllezo Green
+   4. Inter: Clean, comfortable luxury interface & body copy
    ============================================================ */
 
 /* --- Google Fonts Import --- */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Italiana&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:ital,wght@0,600;0,700;0,800;1,700;1,800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
 /* --- CSS Custom Properties --- */
 :root {
-  /* === WARM WHITE & IVORY LIGHT FOUNDATION (Universal) === */
+  /* === WARM IVORY & NATURAL PALETTE === */
   --color-bg: #FAF8F2;
   --color-surface: #FFFFFF;
-  --color-surface-alt: #F2EEE5;
+  --color-surface-alt: #F4EFE6;
   --color-surface-elevated: #FFFFFF;
-  --color-text-primary: #20231F;
-  --color-text-secondary: #77766E;
-  --color-text-tertiary: #9B988E;
-  --color-accent: #164B40;          /* Forest green accent only */
-  --color-accent-light: #2A6E60;
-  --color-accent-hover: #0E352D;
-  --color-gold: #C8A84E;            /* Gold accent */
+  --color-surface-card: #FAF6EF;
+  
+  --color-text-primary: #181C1A;
+  --color-text-secondary: #585D58;
+  --color-text-tertiary: #888E87;
+  
+  /* Brand Green */
+  --color-kllezo-green: #09453e;
+  --color-accent: #09453e;
+  --color-accent-light: #165b53;
+  --color-accent-hover: #052c27;
+  --color-accent-muted: rgba(9, 69, 62, 0.08);
+
+  /* Subtle Champagne / Gold */
+  --color-gold: #C8A84E;
   --color-gold-hover: #B5933C;
-  --color-border: #E4DED2;          /* Subtle borders */
+  --color-champagne: #D4AF37;
+  --color-champagne-subtle: rgba(200, 168, 78, 0.16);
+
+  /* Borders & Dividers */
+  --color-border: #E5DFD5;
+  --color-border-subtle: rgba(9, 69, 62, 0.08);
   --color-border-strong: #D5CEBE;
-  --color-shadow-subtle: 0 4px 20px rgba(32, 35, 31, 0.05);
-  --color-shadow-card: 0 10px 30px rgba(22, 75, 64, 0.06);
-  --color-shadow-hover: 0 16px 40px rgba(22, 75, 64, 0.12);
+  
+  /* Refined Shadows */
+  --color-shadow-subtle: 0 4px 20px rgba(24, 28, 26, 0.04);
+  --color-shadow-card: 0 12px 32px rgba(9, 69, 62, 0.05);
+  --color-shadow-hover: 0 18px 44px rgba(9, 69, 62, 0.10);
 
   /* === Backwards compatibility aliases mapped to light theme === */
   --obsidian-bg: #FAF8F2;
   --obsidian-surface: #FFFFFF;
-  --obsidian-surface-elevated: #F2EEE5;
-  --obsidian-text-primary: #20231F;
-  --obsidian-text-secondary: #77766E;
-  --obsidian-text-tertiary: #9B988E;
-  --obsidian-accent: #164B40;
-  --obsidian-accent-light: #2A6E60;
-  --obsidian-accent-hover: #0E352D;
-  --obsidian-border: #E4DED2;
+  --obsidian-surface-elevated: #F4EFE6;
+  --obsidian-text-primary: #181C1A;
+  --obsidian-text-secondary: #585D58;
+  --obsidian-text-tertiary: #888E87;
+  --obsidian-accent: #09453e;
+  --obsidian-accent-light: #165b53;
+  --obsidian-accent-hover: #052c27;
+  --obsidian-border: #E5DFD5;
   --obsidian-border-strong: #D5CEBE;
   --obsidian-border-glow: rgba(200, 168, 78, 0.25);
 
-  /* === Cinematic Typographic Hierarchy === */
-  --font-cinema: 'Cinzel', 'Trajan Pro', 'Georgia', serif;
-  --font-editorial: 'Italiana', 'Cormorant Garamond', 'Georgia', serif;
-  --font-serif: 'Cormorant Garamond', 'Georgia', serif;
-  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* === Unified Typography Hierarchy === */
+  --font-headline: 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-editorial: 'Cormorant Garamond', Georgia, serif;
+  --font-cinema: 'Cormorant Garamond', Georgia, serif;
+  --font-emphasis: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-cursive: 'Allura', cursive;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Space Mono', 'JetBrains Mono', 'Courier New', monospace;
 
   /* Aliases for backwards compatibility */
-  --font-display: var(--font-cinema);
+  --font-display: var(--font-headline);
 
   /* Fluid Responsive Typographic Scale */
-  --fs-hero: clamp(2.4rem, 5.2vw + 0.5rem, 5.4rem);
-  --fs-section-title: clamp(1.85rem, 3.4vw + 0.2rem, 3.4rem);
-  --fs-project-title: clamp(1.5rem, 2.4vw, 2.2rem);
-  --fs-subtitle: clamp(1rem, 1.3vw + 0.2rem, 1.35rem);
-  --fs-body-large: clamp(1rem, 1.1vw, 1.2rem);
-  --fs-body: clamp(0.9rem, 0.95vw, 1.02rem);
+  --fs-hero: clamp(2.6rem, 5.2vw + 0.5rem, 5.6rem);
+  --fs-section-title: clamp(2rem, 3.4vw + 0.3rem, 3.6rem);
+  --fs-project-title: clamp(1.5rem, 2.4vw, 2.3rem);
+  --fs-subtitle: clamp(1rem, 1.25vw + 0.15rem, 1.3rem);
+  --fs-body-large: clamp(1rem, 1.05vw, 1.18rem);
+  --fs-body: clamp(0.92rem, 0.95vw, 1.02rem);
   --fs-caption: 0.875rem;
   --fs-nav: 0.8125rem;
   --fs-micro: 0.6875rem;
 
-  --lh-display: 1.12;
-  --lh-body: 1.7;
+  --lh-display: 1.1;
+  --lh-body: 1.68;
   --lh-caption: 1.5;
 
-  --ls-cinema: 0.12em;
-  --ls-nav: 0.1em;
-  --ls-micro: 0.16em;
+  --ls-headline: -0.015em;
+  --ls-nav: 0.08em;
+  --ls-micro: 0.14em;
   --ls-mono: 0.06em;
+  --ls-emphasis: 0.04em;
 
   /* === Responsive Spacing Tokens === */
   --space-xs: clamp(0.35rem, 0.6vw, 0.5rem);
@@ -91,10 +112,10 @@
   --space-4xl: clamp(5.5rem, 9vw, 8.5rem);
 
   /* === Layout & Gutters === */
-  --max-width: 1440px;
-  --content-width: 1200px;
-  --narrow-width: 840px;
-  --gutter: clamp(1.25rem, 5vw, 3.5rem);
+  --max-width: 1400px;
+  --content-width: 1180px;
+  --narrow-width: 820px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
 
   /* === Transitions & Easings === */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -108,7 +129,7 @@
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
-  --radius-xl: 30px;
+  --radius-xl: 28px;
   --radius-full: 9999px;
 }
 
@@ -116,14 +137,14 @@
 [data-theme="obsidian"] {
   --color-bg: #FAF8F2;
   --color-surface: #FFFFFF;
-  --color-surface-elevated: #F2EEE5;
-  --color-text-primary: #20231F;
-  --color-text-secondary: #77766E;
-  --color-text-tertiary: #9B988E;
-  --color-accent: #164B40;
-  --color-accent-light: #2A6E60;
-  --color-accent-hover: #0E352D;
-  --color-border: #E4DED2;
+  --color-surface-elevated: #F4EFE6;
+  --color-text-primary: #181C1A;
+  --color-text-secondary: #585D58;
+  --color-text-tertiary: #888E87;
+  --color-accent: #09453e;
+  --color-accent-light: #165b53;
+  --color-accent-hover: #052c27;
+  --color-border: #E5DFD5;
   --color-border-strong: #D5CEBE;
 }
 
@@ -197,27 +218,43 @@ ul, ol {
 
 /* --- Typography Classes --- */
 .heading-cinema {
-  font-family: var(--font-cinema);
+  font-family: var(--font-headline);
   font-size: var(--fs-section-title);
-  font-weight: 500;
-  letter-spacing: var(--ls-cinema);
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: var(--ls-headline);
   line-height: var(--lh-display);
+  color: var(--color-text-primary);
 }
 
 .heading-editorial {
   font-family: var(--font-editorial);
   font-size: var(--fs-subtitle);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--color-text-primary);
+}
+
+.text-cursive {
+  font-family: var(--font-cursive);
   font-weight: 400;
-  line-height: 1.4;
-  font-style: italic;
+  color: var(--color-kllezo-green);
+  text-transform: none !important;
+  display: inline-block;
+}
+
+.text-emphasis {
+  font-family: var(--font-emphasis);
+  font-weight: 800;
+  letter-spacing: var(--ls-emphasis);
 }
 
 .text-slate {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--fs-micro);
-  letter-spacing: var(--ls-mono);
+  font-weight: 600;
+  letter-spacing: var(--ls-micro);
   text-transform: uppercase;
+  color: var(--color-text-secondary);
 }
 
 /* --- Responsive Layout Utilities --- */
@@ -248,18 +285,17 @@ ul, ol {
   padding-block: 0;
 }
 
-/* --- Button Styles --- */
+/* --- Refined Editorial Buttons --- */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.85rem 1.85rem;
+  gap: 0.55rem;
+  padding: 0.75rem 1.65rem;
   font-family: var(--font-body);
   font-size: var(--fs-caption);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: var(--ls-nav);
+  letter-spacing: 0.04em;
   border-radius: var(--radius-full);
   transition: all var(--duration-normal) var(--ease-out);
   white-space: nowrap;
@@ -267,13 +303,13 @@ ul, ol {
 
 .btn--primary {
   background: var(--color-accent);
-  color: #F3F0E9;
+  color: #FAF8F2;
 }
 
 .btn--primary:hover {
   background: var(--color-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(18, 60, 52, 0.25);
+  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.22);
 }
 
 .btn--secondary {
@@ -285,6 +321,7 @@ ul, ol {
 .btn--secondary:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
+  background: rgba(9, 69, 62, 0.04);
 }
 
 /* --- Screen-Reader Only --- */
@@ -308,11 +345,11 @@ ul, ol {
 
 /* --- Selection Highlights --- */
 ::selection {
-  background: #164B40;
+  background: var(--color-accent);
   color: #FAF8F2;
 }
 
 [data-theme="obsidian"] ::selection {
-  background: #164B40;
+  background: var(--color-accent);
   color: #FAF8F2;
 }

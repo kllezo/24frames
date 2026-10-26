@@ -84,11 +84,16 @@ export default function InvitationCTA() {
       className={styles.section}
       aria-label="Begin Your Story — Inquiry Options"
     >
+      {/* Anchor alias to support both #inquire and #invitation */}
+      <div id="invitation" className={styles.anchorOffset} aria-hidden="true" />
+
       <div className={styles.container}>
         {/* Calmer, intimate header */}
         <div ref={headerRef} className={styles.header}>
           <span className={styles.label}>Chapter 05 — The Invitation</span>
-          <h2 className={styles.title}>Begin your story</h2>
+          <h2 className={styles.title}>
+            Begin your <span className={styles.cursiveAccent}>story</span>
+          </h2>
           <p className={styles.subtitle}>
             Every celebration deserves a cinematic memory that lasts generations.
             We take on a limited number of commissions each season to maintain meticulous craft.
@@ -107,7 +112,7 @@ export default function InvitationCTA() {
           >
             <div className={styles.cardImageWrap}>
               <img
-                src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80&auto=format"
+                src="/images/portfolio/sireesh-harshitha/cover.jpg"
                 alt=""
                 className={styles.cardBg}
                 loading="lazy"
@@ -142,7 +147,7 @@ export default function InvitationCTA() {
           >
             <div className={styles.cardImageWrap}>
               <img
-                src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1000&q=80&auto=format"
+                src="/images/stories/bellam-srikonda/IMG_6341.jpg"
                 alt=""
                 className={styles.cardBg}
                 loading="lazy"

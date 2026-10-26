@@ -19,48 +19,48 @@ interface HeroSlide {
 const HERO_SLIDES: HeroSlide[] = [
   {
     id: 1,
-    label: "FRAME 01",
-    title: "A Royal Union",
-    subtitle: "Bellamkonda Sai Sreenivas & Kavya Reddy",
-    image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1800&q=90&auto=format",
-    slug: "bellamkonda-kavya",
+    label: "FRAME 01 / 05",
+    title: "Bellamkonda Sai Sreenivas & Kavya Reddy",
+    subtitle: "Celebrity Wedding Reception · Shamshabad Estate, Hyderabad",
+    image: "/images/stories/bellam-srikonda/IMG_6339.jpg",
+    slug: "/stories/bellam-srikonda",
     color: "#0C3028",
   },
   {
     id: 2,
-    label: "FRAME 02",
-    title: "Temple Grandeur",
-    subtitle: "Manoj & Snigdha",
-    image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1800&q=90&auto=format",
-    slug: "manoj-snigdha",
+    label: "FRAME 02 / 05",
+    title: "Sireesh & Harshitha",
+    subtitle: "Sacred Telugu Union & Royal Reception · Hyderabad",
+    image: "/images/stories/sirish-and-harshitha/IMG_6347.jpg",
+    slug: "/stories/sirish-and-harshitha",
     color: "#1A4D42",
   },
   {
     id: 3,
-    label: "FRAME 05",
-    title: "Taj Falaknama",
-    subtitle: "Karthik & Vijayalakshmi",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1800&q=90&auto=format",
-    slug: "karthik-vijayalakshmi",
+    label: "FRAME 03 / 05",
+    title: "Hrithika & Abhishek",
+    subtitle: "Sacred Traditions & Nine-Scene Celebrations · Hyderabad",
+    image: "/images/stories/hrithika-abhishek/IMG_6333.jpg",
+    slug: "/stories/hrithika-abhishek",
     color: "#2E6F62",
   },
   {
     id: 4,
-    label: "FRAME 16",
-    title: "Cross-Cultural",
-    subtitle: "Divya & Federico · Tuscany & Hyderabad",
-    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1800&q=90&auto=format",
-    slug: "divya-federico",
+    label: "FRAME 04 / 05",
+    title: "Karthik & Gayathri",
+    subtitle: "Botanical Glasshouse Splendor & Fine-Art Wedding",
+    image: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
+    slug: "/stories/karthik-and-gayathri",
     color: "#4D8F80",
   },
   {
     id: 5,
-    label: "FRAME 04",
-    title: "A Journey of Love",
-    subtitle: "Dhamini & Goutham",
-    image: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1800&q=90&auto=format",
-    slug: "dhamini-goutham",
-    color: "#A6B0A3",
+    label: "FRAME 05 / 05",
+    title: "Taj Falaknuma Palace Film",
+    subtitle: "Anamorphic Cinema Feature · The Royal Courtyards",
+    image: "/images/portfolio/karthik-falaknama/cover.jpg",
+    slug: "/disciplines/cinema",
+    color: "#0C3028",
   },
 ];
 
@@ -202,7 +202,11 @@ export default function HeroSection() {
             <span className={styles.heritageBadge}>Hyderabad · Worldwide</span>
           </div>
           <h1 className={styles.headline}>
-            A Living Photographic World
+            <span className={styles.headlinePrimary}>A LIVING</span>
+            <span className={styles.headlineSecondary}>
+              <span className={styles.headlineMain}>PHOTOGRAPHIC</span>
+              <span className={styles.cursiveAccent}>world</span>
+            </span>
           </h1>
           <p className={styles.subheadline}>
             Documenting monumental South Indian heritage, royal celebrations, and intimate human truth
@@ -248,7 +252,7 @@ export default function HeroSection() {
               className={`${styles.card} ${styles.cardActive}`}
               aria-current="true"
             >
-              <Link href={`/work/${activeSlide.slug}`} className={styles.cardLink}>
+              <Link href={activeSlide.slug} className={styles.cardLink} aria-label={`Open story: ${activeSlide.title}`}>
                 <div className={styles.cardImageWrap}>
                   <img
                     src={activeSlide.image}
@@ -258,30 +262,23 @@ export default function HeroSection() {
                   />
                   <div className={styles.cardVignette} />
                 </div>
-              </Link>
 
-              {/* Viewfinder Telemetry Reticle HUD */}
-              <div className={styles.viewfinderHud}>
-                <div className={styles.hudTop}>
-                  <div className={styles.recIndicator}>
-                    <span className={styles.recDot} />
-                    <span>REC ● 24 FPS</span>
-                  </div>
-                  <span className={styles.telemetryLens}>50mm ƒ/1.2 · 1/48s · 8K RAW</span>
+                {/* Quiet Luxury Top Eyebrow Badge */}
+                <div className={styles.cardTopBadge}>
+                  <span className={styles.curatorialFrameBadge}>{activeSlide.label}</span>
+                  <span className={styles.heritagePill}>Master Collection</span>
                 </div>
-                <div className={styles.reticleCornerTL} />
-                <div className={styles.reticleCornerTR} />
-                <div className={styles.reticleCornerBL} />
-                <div className={styles.reticleCornerBR} />
-              </div>
 
-              {/* Overlaid Title Text */}
-              <div ref={titleRef} className={styles.cardTitleOverlay}>
-                <span className={styles.dayLabel}>{activeSlide.label}</span>
-                <h2 className={styles.cardTitle}>{activeSlide.title}</h2>
-                <p className={styles.cardSubtitle}>{activeSlide.subtitle}</p>
-                <span className={styles.categoryLabel}>24 Frames Collection</span>
-              </div>
+                {/* Overlaid Title Text */}
+                <div ref={titleRef} className={styles.cardTitleOverlay}>
+                  <h2 className={styles.cardTitle}>{activeSlide.title}</h2>
+                  <p className={styles.cardSubtitle}>{activeSlide.subtitle}</p>
+                  <div className={styles.exploreStoryPrompt}>
+                    <span>Step Inside Archival Story</span>
+                    <span className={styles.storyPromptArrow}>→</span>
+                  </div>
+                </div>
+              </Link>
             </div>
 
             {/* Next Card (Right Peek) */}
@@ -290,7 +287,14 @@ export default function HeroSection() {
               className={`${styles.card} ${styles.cardNext}`}
               onClick={goNext}
               role="button"
-              tabIndex={-1}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  goNext();
+                }
+              }}
+              aria-label={`Next slide: ${HERO_SLIDES[nextIdx].title}`}
             >
               <div className={styles.cardImageWrap}>
                 <img
@@ -319,21 +323,26 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Quick Metrics Bar */}
+        {/* Quick Metrics Bar with Verified Pedigree */}
         <div className={styles.metricsBar}>
           <div className={styles.metricItem}>
-            <span className={styles.metricValue}>24</span>
-            <span className={styles.metricLabel}>Frames Per Second</span>
-          </div>
-          <span className={styles.metricDivider}>/</span>
-          <div className={styles.metricItem}>
             <span className={styles.metricValue}>14</span>
-            <span className={styles.metricLabel}>Years of Archival Craft</span>
+            <span className={styles.metricLabel}>Years Preserving Heritage</span>
           </div>
           <span className={styles.metricDivider}>/</span>
           <div className={styles.metricItem}>
             <span className={styles.metricValue}>500+</span>
-            <span className={styles.metricLabel}>Master Commissions</span>
+            <span className={styles.metricLabel}>Royal &amp; Bespoke Commissions</span>
+          </div>
+          <span className={styles.metricDivider}>/</span>
+          <div className={styles.metricItem}>
+            <span className={styles.metricValue}>ET Excellence</span>
+            <span className={styles.metricLabel}>Award 2025 Winner</span>
+          </div>
+          <span className={styles.metricDivider}>/</span>
+          <div className={styles.metricItem}>
+            <span className={styles.metricValue}>Nikon India</span>
+            <span className={styles.metricLabel}>Official Optical Partner</span>
           </div>
         </div>
       </div>

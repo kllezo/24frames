@@ -71,24 +71,57 @@
 }
 
 .headline {
-  font-family: var(--font-cinema);
+  font-family: var(--font-headline);
   font-size: var(--fs-hero);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  color: var(--color-text-primary);
+  line-height: 1.06;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.headlinePrimary {
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: #20231F;
-  line-height: 1.08;
-  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.headlineSecondary {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.headlineMain {
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.cursiveAccent {
+  font-family: var(--font-cursive);
+  color: var(--color-kllezo-green);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 4.4vw, 4.5rem);
+  text-transform: none;
+  letter-spacing: normal;
+  line-height: 0.8;
+  transform: translateY(2px);
 }
 
 .subheadline {
-  font-family: var(--font-editorial);
+  font-family: var(--font-body);
   font-size: var(--fs-subtitle);
   font-weight: 400;
-  font-style: italic;
-  color: #77766E;
-  line-height: 1.5;
-  max-width: 720px;
+  font-style: normal;
+  color: var(--color-text-secondary);
+  line-height: 1.68;
+  max-width: 680px;
 }
 
 /* ── Cinematic Card Carousel ────────────────────────── */
@@ -151,9 +184,10 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    transparent 30%,
-    rgba(12, 48, 40, 0.15) 60%,
-    rgba(12, 48, 40, 0.45) 100%
+    rgba(12, 48, 40, 0.25) 0%,
+    transparent 28%,
+    rgba(12, 48, 40, 0.2) 55%,
+    rgba(7, 18, 15, 0.82) 100%
   );
   pointer-events: none;
 }
@@ -184,115 +218,83 @@
   width: clamp(280px, 50vw, 580px);
   height: 100%;
   z-index: 10;
-  cursor: default;
+  cursor: pointer;
   box-shadow: 
-    0 24px 64px rgba(22, 75, 64, 0.2),
-    0 0 35px rgba(200, 168, 78, 0.2);
-  border: 1px solid rgba(200, 168, 78, 0.4);
+    0 24px 64px rgba(9, 69, 62, 0.16),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transform-style: preserve-3d;
-  transition: transform 0.15s ease-out, box-shadow 0.4s ease;
+  transition: transform 0.35s ease-out, box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
 .cardActive:hover {
   box-shadow: 
-    0 30px 75px rgba(22, 75, 64, 0.26),
-    0 0 45px rgba(200, 168, 78, 0.35);
-  border-color: rgba(200, 168, 78, 0.8);
+    0 30px 75px rgba(9, 69, 62, 0.22),
+    0 6px 24px rgba(0, 0, 0, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* ── Futuristic Camera Viewfinder HUD ── */
-.viewfinderHud {
+/* ── Quiet Luxury Card Badges ── */
+.cardTopBadge {
   position: absolute;
-  inset: 12px;
-  pointer-events: none;
+  top: clamp(14px, 2vw, 22px);
+  left: clamp(14px, 2vw, 22px);
+  right: clamp(14px, 2vw, 22px);
   z-index: 12;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.hudTop {
-  display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.3rem 0.6rem;
-  background: rgba(12, 48, 40, 0.35);
-  backdrop-filter: blur(8px);
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.recIndicator {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-family: var(--font-mono);
-  font-size: 0.5625rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  letter-spacing: 0.1em;
-}
-
-.recDot {
-  width: 7px;
-  height: 7px;
-  background: #E53935;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #E53935;
-  animation: recBlink 1s infinite alternate;
-}
-
-@keyframes recBlink {
-  from { opacity: 0.3; }
-  to { opacity: 1; }
-}
-
-.telemetryLens {
-  font-family: var(--font-mono);
-  font-size: 0.5625rem;
-  font-weight: 700;
-  color: #C8A84E;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.reticleCornerTL,
-.reticleCornerTR,
-.reticleCornerBL,
-.reticleCornerBR {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border-color: rgba(200, 168, 78, 0.7);
   pointer-events: none;
 }
 
-.reticleCornerTL {
-  top: 14px;
-  left: 14px;
-  border-top: 2px solid rgba(200, 168, 78, 0.7);
-  border-left: 2px solid rgba(200, 168, 78, 0.7);
+.curatorialFrameBadge {
+  font-family: var(--font-body);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: rgba(9, 69, 62, 0.65);
+  backdrop-filter: blur(10px);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-.reticleCornerTR {
-  top: 14px;
-  right: 14px;
-  border-top: 2px solid rgba(200, 168, 78, 0.7);
-  border-right: 2px solid rgba(200, 168, 78, 0.7);
+.heritagePill {
+  font-family: var(--font-body);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(24, 28, 26, 0.45);
+  backdrop-filter: blur(8px);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.reticleCornerBL {
-  bottom: 14px;
-  left: 14px;
-  border-bottom: 2px solid rgba(200, 168, 78, 0.7);
-  border-left: 2px solid rgba(200, 168, 78, 0.7);
+.exploreStoryPrompt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin-top: 0.65rem;
+  transition: color 0.25s ease;
 }
 
-.reticleCornerBR {
-  bottom: 14px;
-  right: 14px;
-  border-bottom: 2px solid rgba(200, 168, 78, 0.7);
-  border-right: 2px solid rgba(200, 168, 78, 0.7);
+.storyPromptArrow {
+  transition: transform 0.25s ease;
+}
+
+.cardActive:hover .storyPromptArrow {
+  transform: translateX(4px);
 }
 
 /* ── Next Card ─────────────────────────────────────── */
@@ -356,33 +358,32 @@
 }
 
 .cardTitle {
-  font-family: var(--font-cinema);
-  font-size: clamp(1.6rem, 3.2vw, 2.8rem);
+  font-family: var(--font-headline);
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: -0.01em;
   color: #FFFFFF;
   line-height: 1.1;
-  text-transform: uppercase;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
 }
 
 .cardSubtitle {
-  font-family: var(--font-editorial);
-  font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+  font-family: var(--font-body);
+  font-size: clamp(0.85rem, 1.05vw, 1.05rem);
   font-weight: 400;
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.85);
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.9);
   margin-top: 0.15rem;
 }
 
 .categoryLabel {
-  font-family: var(--font-mono);
-  font-size: 0.5625rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-family: var(--font-body);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-  margin-top: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.4rem;
 }
 
 /* ── Navigation Dots ───────────────────────────────── */
@@ -406,11 +407,11 @@
 }
 
 .dot:hover {
-  background: #77766E;
+  background: var(--color-text-secondary);
 }
 
 .dotActive {
-  background: #164B40;
+  background: var(--color-accent);
   width: 24px;
   border-radius: var(--radius-full);
 }
@@ -420,13 +421,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(1rem, 2.5vw, 2rem);
-  padding: 1.25rem 2.25rem;
-  background: #FFFFFF;
-  border: 1px solid var(--color-border);
+  gap: clamp(1.5rem, 3.5vw, 3.5rem);
+  margin-top: clamp(2.5rem, 4.5vh, 4rem);
+  padding: clamp(0.85rem, 1.5vw, 1.25rem) clamp(1.5rem, 3vw, 2.5rem);
   border-radius: var(--radius-full);
-  box-shadow: 0 4px 20px rgba(32, 35, 31, 0.04);
-  margin-top: clamp(2rem, 4vh, 3rem);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--color-shadow-subtle);
+  flex-wrap: wrap;
 }
 
 .metricItem {
@@ -436,27 +438,28 @@
 }
 
 .metricValue {
-  font-family: var(--font-cinema);
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #164B40;
+  font-family: var(--font-emphasis);
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  font-weight: 800;
+  color: var(--color-kllezo-green);
+  letter-spacing: -0.02em;
   line-height: 1;
 }
 
 .metricLabel {
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: var(--ls-mono);
-  text-transform: uppercase;
-  color: #77766E;
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .metricDivider {
   color: var(--color-border);
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: 1.2rem;
+  font-weight: 300;
 }
+
 
 /* ── Responsive ─────────────────────────────────────── */
 @media (max-width: 768px) {

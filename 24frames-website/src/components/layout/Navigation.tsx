@@ -5,11 +5,11 @@ import Link from "next/link";
 import styles from "./Navigation.module.css";
 
 const NAV_LINKS = [
-  { label: "The Collection", href: "/#collection" },
   { label: "The Vows", href: "/#vows" },
+  { label: "The Collection", href: "/#collection" },
   { label: "Stories", href: "/stories" },
-  { label: "24 Frames", href: "/identity" },
   { label: "The Artist", href: "/#artist" },
+  { label: "24 Frames", href: "/identity" },
 ];
 
 export default function Navigation() {

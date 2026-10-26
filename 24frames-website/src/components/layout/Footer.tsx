@@ -2,11 +2,11 @@ import Link from "next/link";
 import styles from "./Footer.module.css";
 
 const NAV_LINKS = [
-  { label: "The Collection", href: "/#collection" },
   { label: "The Vows", href: "/#vows" },
+  { label: "The Collection", href: "/#collection" },
   { label: "Stories", href: "/stories" },
-  { label: "24 Frames Identity", href: "/identity" },
   { label: "The Artist", href: "/#artist" },
+  { label: "24 Frames Identity", href: "/identity" },
   { label: "Inquire", href: "/#inquire" },
 ];
 
