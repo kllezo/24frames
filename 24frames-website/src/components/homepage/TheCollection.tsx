@@ -1,141 +1,141 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { navigateWithCameraTransition } from "@/lib/transitions";
 import styles from "./TheCollection.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export interface CollectionProject {
+export interface CollectionDiscipline {
   id: string;
+  slug: string;
   number: string;
-  frameNo: string;
   title: string;
-  coupleName: string;
-  category: string;
-  location: string;
-  venue: string;
-  venueShort: string;
-  year: string;
+  shortTitle: string;
+  count: string;
+  tagline: string;
+  heroDescription: string;
   image: string;
   webpImage?: string;
   fallbackImage: string;
-  archiveUrl: string;
-  storyNote: string;
+  href: string;
+  objectPosition?: string;
 }
 
-export const COLLECTION_PROJECTS: CollectionProject[] = [
+// Aliases for backward compatibility
+export type CollectionProject = CollectionDiscipline;
+
+export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
   {
-    id: "bellamkonda-kavya",
+    id: "weddings",
+    slug: "weddings",
     number: "01",
-    frameNo: "01/24",
-    title: "A Royal Union",
-    coupleName: "Bellamkonda Sai Sreenivas & Kavya Reddy",
-    category: "Celebrity Wedding Reception",
-    location: "Shamshabad, Hyderabad",
-    venue: "GMR Arena & Shamshabad Estate",
-    venueShort: "GMR ARENA",
-    year: "2025",
-    image: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
-    webpImage: "/images/portfolio/bellamkonda-kavya-reception/cover.webp",
-    fallbackImage: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1600&q=88&auto=format",
-    archiveUrl: "/stories/bellam-srikonda",
-    storyNote: "A grand three-day celebration blending royal Telugu heritage with contemporary cinematic grandeur across seventy hours of bespoke coverage.",
-  },
-  {
-    id: "sireesh-harshitha",
-    number: "02",
-    frameNo: "02/24",
-    title: "Sacred Union",
-    coupleName: "Sireesh & Harshitha",
-    category: "Sacred Wedding Union",
-    location: "Hyderabad",
-    venue: "Palace Grounds, Hyderabad",
-    venueShort: "PALACE GROUNDS",
-    year: "2024",
+    title: "Weddings & Royal Unions",
+    shortTitle: "Weddings",
+    count: "40+ Master Stories",
+    tagline: "Sacred Telugu traditions, royal muhurthams & emotional generational tears.",
+    heroDescription:
+      "Multi-day coverage spanning Mangalasnanam, Sangeet galas, and dawn ceremonies. Documented without invasive lighting or forced poses.",
     image: "/images/portfolio/sireesh-harshitha/cover.jpg",
     webpImage: "/images/portfolio/sireesh-harshitha/cover.webp",
-    fallbackImage: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=88&auto=format",
-    archiveUrl: "/stories/sirish-and-harshitha",
-    storyNote: "Steeped in ancient Dravidian temple stone textures, marigolds, and sacred midnight Vratham firelight without disruptive artificial lighting.",
+    fallbackImage: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1800&q=88&auto=format",
+    href: "/disciplines/weddings",
+    objectPosition: "center 22%",
   },
   {
-    id: "karthik-vijayalakshmi",
+    id: "celebrities",
+    slug: "celebrities",
+    number: "02",
+    title: "Celebrities & Portraits",
+    shortTitle: "Celebrities",
+    count: "15+ Character Studies",
+    tagline: "High-fashion bridal couture, Tollywood actors, and private family patriarchs.",
+    heroDescription:
+      "Medium-format optical portraits lit with master cinema fixtures. Preserving quiet dignity, sculptural elegance, and commanding presence.",
+    image: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
+    webpImage: "/images/portfolio/bellamkonda-kavya-reception/cover.webp",
+    fallbackImage: "/images/stories/bellam-srikonda/IMG_6339.jpg",
+    href: "/disciplines/celebrities",
+    objectPosition: "center 20%",
+  },
+  {
+    id: "events",
+    slug: "events",
     number: "03",
-    frameNo: "03/24",
-    title: "Taj Falaknama",
-    coupleName: "Karthik & Vijayalakshmi",
-    category: "Palace Commission",
-    location: "Falaknama Palace, Hyderabad",
-    venue: "The Nizam's Mirror Colonnades",
-    venueShort: "THE NIZAM'S MIRR...",
-    year: "2024",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=88&auto=format",
-    fallbackImage: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=88&auto=format",
-    archiveUrl: "/stories/karthik-and-gayathri",
-    storyNote: "Composed within the Nizam's private marble colonnades and monumental 101-seat mirror dining hall with aristocratic European poise.",
+    title: "Events & Cultural Galas",
+    shortTitle: "Events",
+    count: "20+ Grand Celebrations",
+    tagline: "High-octane Sangeet stages, milestone anniversaries, and national events.",
+    heroDescription:
+      "Capturing the electric choreography, live orchestral music, and grand architectural ambiance of premier celebration venues.",
+    image: "/images/stories/bellam-srikonda/IMG_6340.jpg",
+    webpImage: "/images/stories/bellam-srikonda/IMG_6340.webp",
+    fallbackImage: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1800&q=88&auto=format",
+    href: "/disciplines/events",
+    objectPosition: "center 30%",
   },
   {
-    id: "hrithika-abhishek",
+    id: "fashion",
+    slug: "fashion",
     number: "04",
-    frameNo: "04/24",
-    title: "Ceremony & Celebrations",
-    coupleName: "Hrithika & Abhishek",
-    category: "Wedding & Celebrations",
-    location: "Hyderabad, Telangana",
-    venue: "Celebration Estate",
-    venueShort: "CELEBRATION ESTA...",
-    year: "2024",
-    image: "/images/portfolio/hrithika-abhishek/cover.jpg",
-    webpImage: "/images/portfolio/hrithika-abhishek/cover.webp",
-    fallbackImage: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1600&q=88&auto=format",
-    archiveUrl: "/stories/hrithika-abhishek",
-    storyNote: "A multi-day anthology transitioning from quiet sacred Mangalasnanam rituals to the vibrant energy of the concert Sangeet stage.",
+    title: "Fashion & Editorial",
+    shortTitle: "Fashion",
+    count: "10+ Editorial Spreads",
+    tagline: "Bespoke designer lookbooks and high-jewelry editorial campaigns.",
+    heroDescription:
+      "Crafted for prestigious publications and couture designers, combining experimental art direction with sharp optical discipline.",
+    image: "/images/stories/bellam-srikonda/IMG_6341.jpg",
+    webpImage: "/images/stories/bellam-srikonda/IMG_6341.webp",
+    fallbackImage: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=1800&q=88&auto=format",
+    href: "/disciplines/fashion",
+    objectPosition: "center 20%",
   },
   {
-    id: "karthik-gayathri",
+    id: "cinema",
+    slug: "cinema",
     number: "05",
-    frameNo: "05/24",
-    title: "Botanical Splendor",
-    coupleName: "Karthik & Gayathri",
-    category: "Fine-Art Heritage Wedding",
-    location: "Hyderabad",
-    venue: "Glasshouse Conservatory",
-    venueShort: "GLASSHOUSE CONSE...",
-    year: "2024",
-    image: "/images/portfolio/karthik-gayathri/cover.jpg",
-    webpImage: "/images/portfolio/karthik-gayathri/cover.webp",
-    fallbackImage: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1600&q=88&auto=format",
-    archiveUrl: "/stories/karthik-and-gayathri",
-    storyNote: "Lush botanical glasshouse foliage, peach urns, and open-sky mandapam courtyards crafted as an intimate fine-art poem.",
+    title: "Cinema & Feature Films",
+    shortTitle: "Cinema",
+    count: "50+ Anamorphic Films",
+    tagline: "2.39:1 Anamorphic motion pictures paired with orchestral audio scores.",
+    heroDescription:
+      "Shot with dedicated cinema crews on ARRI and Sony FX cinema lines. Edited as theatrical-grade wedding features.",
+    image: "/videos/portfolio/nishanth-sanzena/poster.jpg",
+    webpImage: "/videos/portfolio/nishanth-sanzena/poster.webp",
+    fallbackImage: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1800&q=88&auto=format",
+    href: "/disciplines/cinema",
+    objectPosition: "center 35%",
   },
   {
-    id: "nishanth-sanzena",
+    id: "archive",
+    slug: "archive",
     number: "06",
-    frameNo: "06/24",
-    title: "A Journey of Love",
-    coupleName: "Nishanth & Sanzena",
-    category: "Outdoor Fine Art Wedding",
-    location: "Bengaluru, Karnataka",
-    venue: "Heritage Villa Grounds",
-    venueShort: "HERITAGE VILLA G...",
-    year: "2024",
-    image: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1800&q=88&auto=format",
-    fallbackImage: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1800&q=88&auto=format",
-    archiveUrl: "/stories/bellam-srikonda",
-    storyNote: "Embracing beneath open skies and whispering eucalyptus trees, captured on master optical cinema glass with natural archival light.",
+    title: "The Complete Archive",
+    shortTitle: "Archive",
+    count: "500+ Commissions",
+    tagline: "Fourteen years of optical storytelling across South India and abroad.",
+    heroDescription:
+      "A continuous visual lineage established in 2012 by founder Phani Gogireddy, preserving over 500 bespoke commissions.",
+    image: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
+    webpImage: "/images/stories/sirish-and-harshitha/IMG_6346.webp",
+    fallbackImage: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=1800&q=88&auto=format",
+    href: "/disciplines/archive",
+    objectPosition: "center 25%",
   },
 ];
+
+export const COLLECTION_PROJECTS = COLLECTION_DISCIPLINES;
 
 export default function TheCollection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const showcaseRef = useRef<HTMLDivElement>(null);
 
-  // Default active commission is 02 (Sireesh & Harshitha) exactly matching Reference Image 2
-  const [activeId, setActiveId] = useState<string>("sireesh-harshitha");
+  // Default active discipline is 01 (Weddings & Royal Unions)
+  const [activeId, setActiveId] = useState<string>("weddings");
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
 
   /* ── GSAP Scroll-Triggered Entrance ─────────────────────────── */
@@ -188,72 +188,105 @@ export default function TheCollection() {
     setImgErrors((prev) => ({ ...prev, [id]: true }));
   };
 
-  const activeProject =
-    COLLECTION_PROJECTS.find((p) => p.id === activeId) || COLLECTION_PROJECTS[1];
+  const handleCardClick = useCallback(
+    (discipline: CollectionDiscipline, displayImage: string) => {
+      if (activeId === discipline.id) {
+        navigateWithCameraTransition(discipline.href, {
+          image: displayImage,
+        });
+      } else {
+        setActiveId(discipline.id);
+      }
+    },
+    [activeId]
+  );
+
+  const handleCardKeyDown = useCallback(
+    (e: React.KeyboardEvent, discipline: CollectionDiscipline, displayImage: string) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleCardClick(discipline, displayImage);
+      }
+    },
+    [handleCardClick]
+  );
+
+  const handleNavigateClick = useCallback(
+    (e: React.MouseEvent, discipline: CollectionDiscipline, displayImage: string) => {
+      e.stopPropagation();
+      e.preventDefault();
+      navigateWithCameraTransition(discipline.href, {
+        image: displayImage,
+      });
+    },
+    []
+  );
 
   return (
     <section
       ref={sectionRef}
       id="collection"
       className={styles.section}
-      aria-label="The Collection — Featured Photographic Commissions"
+      aria-label="The Collection — Six Practices of Cinema & Optics"
     >
+      {/* Anchor alias to support legacy #explore anchor links smoothly */}
+      <div id="explore" className={styles.anchorOffset} aria-hidden="true" />
+
       <div className={styles.container}>
         {/* ── Section Header ────────────────────────────────────── */}
         <div ref={headerRef} className={styles.header}>
           <div className={styles.headerMeta}>
-            <span className={styles.chapterLabel}>CHAPTER 02 — THE COLLECTION</span>
-            <span className={styles.curatorialBadge}>SIX MASTER COMMISSIONS</span>
+            <span className={styles.chapterLabel}>Chapter 03 — The Collection</span>
+            <span className={styles.curatorialBadge}>Six Practices of Optics</span>
           </div>
-          <h2 className={styles.title}>The Collection</h2>
+          <h2 className={styles.title}>
+            The <span className={styles.cursiveAccent}>Collection</span>
+          </h2>
           <p className={styles.subtitle}>
-            Explore the photographic world of 24 Frames. Select any commission to reveal the full
-            story, or explore the complete archival portfolio.
+            From intimate Vedic rituals to high-fashion spreads and cinematic master films.
+            Select any discipline to enter its dedicated portfolio.
           </p>
         </div>
 
-        {/* ── Outer Showcase Frame (Shared Soft Rounded Container) ── */}
+        {/* ── Outer Showcase Frame (Shared Soft Rounded Outer Container) ── */}
         <div
           ref={showcaseRef}
           className={styles.showcaseContainer}
           role="region"
-          aria-label="Six-Project Horizontal Editorial Showcase"
+          aria-label="Six-Discipline Horizontal Editorial Showcase"
         >
           <div className={styles.accordionTrack}>
-            {COLLECTION_PROJECTS.map((project) => {
-              const isSelected = project.id === activeId;
-              const hasError = imgErrors[project.id];
-              const displayImage = hasError ? project.fallbackImage : project.image;
+            {COLLECTION_DISCIPLINES.map((discipline) => {
+              const isSelected = discipline.id === activeId;
+              const hasError = imgErrors[discipline.id];
+              const displayImage = hasError ? discipline.fallbackImage : discipline.image;
 
               return (
                 <div
-                  key={project.id}
-                  className={`${styles.card} ${isSelected ? styles.cardActive : styles.cardInactive}`}
-                  onClick={() => setActiveId(project.id)}
-                  onMouseEnter={() => setActiveId(project.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setActiveId(project.id);
-                    }
-                  }}
+                  key={discipline.id}
+                  className={`${styles.card} ${
+                    isSelected ? styles.cardActive : styles.cardInactive
+                  }`}
+                  onClick={() => handleCardClick(discipline, displayImage)}
+                  onKeyDown={(e) => handleCardKeyDown(e, discipline, displayImage)}
                   tabIndex={0}
                   role="button"
                   aria-expanded={isSelected}
-                  aria-label={`${project.number} — ${project.coupleName} (${project.title})`}
+                  aria-label={`${discipline.number} — ${discipline.title}`}
                 >
                   {/* Background Photographic Canvas */}
                   <div className={styles.imageCanvas}>
                     <picture>
-                      {!hasError && project.webpImage && (
-                        <source srcSet={project.webpImage} type="image/webp" />
+                      {!hasError && discipline.webpImage && (
+                        <source srcSet={discipline.webpImage} type="image/webp" />
                       )}
                       <img
                         src={displayImage}
-                        alt={`${project.title} — ${project.coupleName}`}
+                        alt={discipline.title}
                         className={styles.cardImage}
+                        style={{ objectPosition: discipline.objectPosition || "center 25%" }}
                         loading="lazy"
-                        onError={() => handleImageError(project.id)}
+                        onError={() => handleImageError(discipline.id)}
                       />
                     </picture>
 
@@ -267,36 +300,41 @@ export default function TheCollection() {
                   {/* ── Active Featured Panel Content ── */}
                   {isSelected ? (
                     <div className={styles.activeContent}>
-                      {/* Top Header Row with Badges */}
+                      {/* Top Header Row with Restrained Editorial Metadata */}
                       <div className={styles.activeTopRow}>
-                        <div className={styles.activeTopMeta}>
-                          <span className={styles.watermarkBrand}>24 FRAMES</span>
-                          <span className={styles.framePill}>FRAME {project.frameNo}</span>
-                          <span className={styles.categoryPill}>{project.category}</span>
+                        <div className={styles.activeMetaTag}>
+                          <span className={styles.activeNumber}>DISCIPLINE {discipline.number}</span>
+                          <span className={styles.activeDivider}>/</span>
+                          <span className={styles.activeCategory}>{discipline.shortTitle}</span>
                         </div>
-                        <div className={styles.activeCommissionBadge}>
-                          <span>Active Commission</span>
-                        </div>
+                        <span className={styles.activeStatusPill}>{discipline.count}</span>
                       </div>
 
                       {/* Bottom Story & Action Block */}
                       <div className={styles.activeBottomBlock}>
-                        <h3 className={styles.activeTitle}>{project.title}</h3>
-                        <p className={styles.activeCouple}>{project.coupleName}</p>
+                        <h3 className={styles.activeTitle}>{discipline.title}</h3>
+                        <p className={styles.activeTagline}>{discipline.tagline}</p>
 
-                        <p className={styles.activeMeta}>
-                          {project.location ? `${project.location.toUpperCase()} · ` : ""}
-                          {project.year}
-                        </p>
-
-                        <p className={styles.activeDescription}>{project.storyNote}</p>
+                        <p className={styles.activeDescription}>{discipline.heroDescription}</p>
 
                         <div className={styles.activeButtonRow}>
-                          <Link href={project.archiveUrl} className={styles.btnPrimary}>
-                            VIEW STORY <span>→</span>
+                          <Link
+                            href={discipline.href}
+                            className={styles.btnPrimary}
+                            onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
+                            aria-label={`Enter the full ${discipline.title} portfolio`}
+                          >
+                            Explore {discipline.shortTitle} Gallery{" "}
+                            <span className={styles.arrowIcon} aria-hidden="true">
+                              →
+                            </span>
                           </Link>
-                          <Link href="/stories" className={styles.btnSecondary}>
-                            Archival Index <span>↗</span>
+                          <Link
+                            href="/disciplines/archive"
+                            className={styles.btnSecondary}
+                            aria-label="View the complete 24 Frames archive"
+                          >
+                            Archival Index <span aria-hidden="true">↗</span>
                           </Link>
                         </div>
                       </div>
@@ -304,16 +342,20 @@ export default function TheCollection() {
                   ) : (
                     /* ── Inactive Collapsed Card Content ── */
                     <div className={styles.collapsedContent}>
-                      {/* Top Frame Number Pill */}
+                      {/* Top Number */}
                       <div className={styles.collapsedTop}>
-                        <span className={styles.collapsedNumber}>{project.number}</span>
+                        <span className={styles.collapsedNumber}>{discipline.number}</span>
                       </div>
 
-                      {/* Bottom Minimal Project Info */}
+                      {/* Bottom Readable Discipline Info */}
                       <div className={styles.collapsedBottom}>
-                        <h4 className={styles.collapsedTitle}>{project.coupleName}</h4>
-                        <p className={styles.collapsedVenue}>{project.venueShort}</p>
-                        <span className={styles.collapsedView}>VIEW →</span>
+                        <div className={styles.collapsedMeta}>
+                          <h4 className={styles.collapsedTitle}>{discipline.title}</h4>
+                          <p className={styles.collapsedCount}>{discipline.count}</p>
+                        </div>
+                        <span className={styles.collapsedArrow} aria-hidden="true">
+                          →
+                        </span>
                       </div>
                     </div>
                   )}
@@ -326,10 +368,10 @@ export default function TheCollection() {
         {/* ── Footnote / Discoverability Row ──────────────────────── */}
         <div className={styles.footerCueRow}>
           <span className={styles.footerCue}>
-            SELECT ANY COMMISSION TO REVEAL STORY DETAILS · HOVER OR CLICK TO EXPAND
+            Select any discipline to reveal details · Hover or tap to expand
           </span>
-          <Link href="/stories" className={styles.footerArchiveLink}>
-            EXPLORE ALL 24 FRAMES IN ARCHIVE →
+          <Link href="/disciplines/archive" className={styles.footerArchiveLink}>
+            Explore Complete 24 Frames Archive →
           </Link>
         </div>
       </div>

@@ -22,6 +22,7 @@ export interface GalleryProjectItem {
   webpImage: string;
   aspectRatio: string;
   storyUrl: string;
+  objectPosition?: string;
 }
 
 export interface GalleryFilmItem {
@@ -38,31 +39,30 @@ export interface GalleryFilmItem {
   description: string;
 }
 
-/* ── Six Verified Alternating Items ───────────────────────────────
-   Rhythm: Project 1 → Video 1 → Project 2 → Project 3 → Video 2 → Project 4
-   ──────────────────────────────────────────────────────────────── */
+/* ── Six Verified Items (Rhythm: Lead Project → Film 1 → Pair 3 & 4 → Duet 5 & 6) ── */
 
-/* Item 1: Wedding Project 1 — Bellamkonda Sai Sreenivas & Kavya Reddy */
+/* Item 1: Lead Editorial Feature — Bellamkonda Sai Sreenivas & Kavya Reddy */
 export const ITEM_PROJECT_01: GalleryProjectItem = {
   id: "project-01",
   orderNumber: "01",
-  movementLabel: "01 / ROYAL RECEPTION ARCHIVE",
+  movementLabel: "01 / Royal Reception Archive",
   clientNames: "Bellamkonda Sai Sreenivas & Kavya Reddy",
-  captionTitle: "BELLAMKONDA SAI SREENIVAS & KAVYA REDDY",
-  captionSub: "ROYAL RECEPTION · HYDERABAD",
+  captionTitle: "Bellamkonda Sai Sreenivas & Kavya Reddy",
+  captionSub: "Celebrity Wedding Reception · Hyderabad",
   category: "Celebrity Wedding Reception",
   location: "GMR Arena & Shamshabad Estate, Hyderabad",
   image: "/images/stories/bellam-srikonda/IMG_6339.jpg",
   webpImage: "/images/stories/bellam-srikonda/IMG_6339.webp",
   aspectRatio: "3 / 4",
   storyUrl: "/stories/bellam-srikonda",
+  objectPosition: "center 22%",
 };
 
-/* Item 2: Video 1 — The Existing First Video (Vinitha & Vivekananda) */
+/* Item 2: Video 1 — Existing First Video (Vinitha & Vivekananda) */
 export const ITEM_VIDEO_01: GalleryFilmItem = {
   id: "video-01",
   orderNumber: "02",
-  movementLabel: "02 / CINEMATIC FEATURE FILM",
+  movementLabel: "02 / Cinematic Feature Film",
   filmTitle: "Vinitha & Vivekananda | Wedding Feature Film",
   category: "Wedding Feature Film",
   duration: "14:55",
@@ -73,43 +73,45 @@ export const ITEM_VIDEO_01: GalleryFilmItem = {
   description: "A journey of love, patience, and devotion — where two years of togetherness lead to one life-changing sacred promise.",
 };
 
-/* Item 3: Wedding Project 2 — Sireesh & Harshitha */
+/* Item 3: Wedding Project 2 — Sireesh & Harshitha (Temple Mandapam Portrait) */
 export const ITEM_PROJECT_02: GalleryProjectItem = {
   id: "project-02",
   orderNumber: "03",
-  movementLabel: "03 / SACRED WEDDING UNION",
+  movementLabel: "03 / Sacred Wedding Union",
   clientNames: "Sireesh & Harshitha",
-  captionTitle: "SIREESH & HARSHITHA",
-  captionSub: "SACRED WEDDING UNION · TELANGANA",
+  captionTitle: "Sireesh & Harshitha",
+  captionSub: "Sacred Wedding Union · Telangana",
   category: "Sacred Wedding Union",
   location: "Hyderabad, Telangana",
   image: "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
   webpImage: "/images/stories/sirish-and-harshitha/IMG_6353.webp",
   aspectRatio: "4 / 5",
   storyUrl: "/stories/sirish-and-harshitha",
+  objectPosition: "center center",
 };
 
-/* Item 4: Wedding Project 3 — Hrithika & Abhishek */
+/* Item 4: Wedding Project 3 — Hrithika & Abhishek (Royal Couture Portrait) */
 export const ITEM_PROJECT_03: GalleryProjectItem = {
   id: "project-03",
   orderNumber: "04",
-  movementLabel: "04 / CEREMONY & CELEBRATIONS",
+  movementLabel: "04 / Ceremony & Celebrations",
   clientNames: "Hrithika & Abhishek",
-  captionTitle: "HRITHIKA & ABHISHEK",
-  captionSub: "NINE-SCENE CELEBRATION · HYDERABAD",
+  captionTitle: "Hrithika & Abhishek",
+  captionSub: "Nine-Scene Celebration · Hyderabad",
   category: "Ceremony & Celebrations",
   location: "Hyderabad, Telangana",
   image: "/images/stories/hrithika-abhishek/IMG_6333.jpg",
   webpImage: "/images/stories/hrithika-abhishek/IMG_6333.webp",
-  aspectRatio: "4 / 3",
+  aspectRatio: "4 / 5",
   storyUrl: "/stories/hrithika-abhishek",
+  objectPosition: "center 22%",
 };
 
-/* Item 5: Video 2 — The Existing Second Video (Nishanth X Sanzena - Noticeably Smaller) */
+/* Item 5: Video 2 — Couple Shoot Cinema Film (Nishanth X Sanzena) */
 export const ITEM_VIDEO_02: GalleryFilmItem = {
   id: "video-02",
   orderNumber: "05",
-  movementLabel: "05 / CINEMA COUPLE INSERT",
+  movementLabel: "05 / Cinema Couple Insert",
   filmTitle: "Nishanth X Sanzena | Couple Shoot Film",
   category: "Couple Shoot Cinema Film",
   duration: "03:12",
@@ -120,20 +122,21 @@ export const ITEM_VIDEO_02: GalleryFilmItem = {
   description: "The unfolding love story of Nishanth & Sanzena — where every moment, every frame, and every smile captures their eternal bond.",
 };
 
-/* Item 6: Wedding Project 4 — Karthik & Gayathri */
+/* Item 6: Wedding Project 4 — Karthik & Gayathri (Fine-Art Heritage Embrace) */
 export const ITEM_PROJECT_04: GalleryProjectItem = {
   id: "project-04",
   orderNumber: "06",
-  movementLabel: "06 / FINE-ART HERITAGE ARCHIVE",
+  movementLabel: "06 / Fine-Art Heritage Archive",
   clientNames: "Karthik & Gayathri",
-  captionTitle: "KARTHIK & GAYATHRI",
-  captionSub: "FINE-ART WEDDING · HYDERABAD",
+  captionTitle: "Karthik & Gayathri",
+  captionSub: "Fine-Art Wedding · Hyderabad",
   category: "Fine-Art Heritage Wedding",
   location: "Hyderabad, Telangana",
   image: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
   webpImage: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
   aspectRatio: "3 / 4",
   storyUrl: "/stories/karthik-and-gayathri",
+  objectPosition: "center 12%",
 };
 
 export default function LivingContactSheet() {
@@ -152,12 +155,12 @@ export default function LivingContactSheet() {
       if (headerRef.current) {
         gsap.fromTo(
           headerRef.current,
-          { opacity: 0, y: 35 },
+          { opacity: 0, y: 30 },
           {
             opacity: 1,
             y: 0,
-            duration: 1,
-            ease: "power3.out",
+            duration: 0.9,
+            ease: "power2.out",
             scrollTrigger: {
               trigger: headerRef.current,
               start: "top 85%",
@@ -171,15 +174,15 @@ export default function LivingContactSheet() {
       blocks.forEach((block) => {
         gsap.fromTo(
           block,
-          { opacity: 0, y: 40 },
+          { opacity: 0, y: 35 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.9,
+            duration: 0.85,
             ease: "power2.out",
             scrollTrigger: {
               trigger: block,
-              start: "top 90%",
+              start: "top 88%",
               toggleActions: "play none none none",
             },
           }
@@ -190,7 +193,7 @@ export default function LivingContactSheet() {
     return () => ctx.revert();
   }, []);
 
-  /* Keyboard escape to dismiss inline video players */
+  /* Escape key closes inline video */
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -215,29 +218,32 @@ export default function LivingContactSheet() {
         {/* ── Section Header ───────────────────────────────────── */}
         <div ref={headerRef} className={styles.header}>
           <div className={styles.headerMeta}>
-            <span className={styles.label}>Chapter 02 — Archival Cinema &amp; Photography</span>
-            <span className={styles.referenceBadge}>ORIGINAL COMMISSIONS</span>
+            <span className={styles.label}>Chapter 02 — The Vows</span>
+            <span className={styles.referenceBadge}>Curated Commissions</span>
           </div>
-          <h2 className={styles.title}>THE VOWS</h2>
+          <h2 className={styles.title}>
+            The <span className={styles.cursiveAccent}>Vows</span>
+          </h2>
           <p className={styles.subtitle}>
-            An intimate anthology of sacred promises, royal unions, and cinematic wedding films, capturing monumental celebrations and quiet generational moments.
+            An intimate anthology of sacred promises, royal unions, and cinematic wedding films,
+            capturing monumental celebrations and quiet generational moments.
           </p>
           <div className={styles.headerRuleRow}>
             <span className={styles.headerRule} />
-            <span className={styles.headerRuleLabel}>CURATED SELECTION</span>
+            <span className={styles.headerRuleLabel}>Curated Selection</span>
             <span className={styles.headerRule} />
           </div>
         </div>
 
-        {/* ── Editorial Asymmetric Stream: Refined Balanced Compositions ─────────────── */}
+        {/* ── Editorial Asymmetric Stream: Reworked Composition ─────────────── */}
         <div className={styles.editorialStream}>
           {/* ─────────────────────────────────────────────────────────────
               ITEM 1: Lead Editorial Feature — Bellamkonda Sai Sreenivas & Kavya Reddy
-              Balanced Two-Column Journal Composition: Controlled Image (Left) + Editorial Panel (Right)
+              Controlled Proportion: Scaled Down Photo (Left) + Refined Story (Right)
               ───────────────────────────────────────────────────────────── */}
           <div className={`${styles.rhythmBlock} ${styles.itemLeadWrapper}`}>
             <div className={styles.leadJournalGrid}>
-              {/* Left: Controlled Editorial Photo (scaled down ~25%, 480–520px) */}
+              {/* Left: Controlled Editorial Photo (scaled down ~25%, max 420px) */}
               <div className={styles.leadVisualCol}>
                 <Link
                   href={ITEM_PROJECT_01.storyUrl}
@@ -254,6 +260,7 @@ export default function LivingContactSheet() {
                         src={ITEM_PROJECT_01.image}
                         alt={ITEM_PROJECT_01.clientNames}
                         className={styles.galleryImage}
+                        style={{ objectPosition: ITEM_PROJECT_01.objectPosition || "center 22%" }}
                         loading="eager"
                       />
                     </picture>
@@ -268,15 +275,18 @@ export default function LivingContactSheet() {
                 </div>
 
                 <h3 className={styles.leadTitle}>{ITEM_PROJECT_01.clientNames}</h3>
-                <p className={styles.leadMeta}>{ITEM_PROJECT_01.category} · {ITEM_PROJECT_01.location}</p>
+                <p className={styles.leadMeta}>
+                  {ITEM_PROJECT_01.category} · {ITEM_PROJECT_01.location}
+                </p>
 
                 <p className={styles.leadNarrative}>
-                  The quiet sacred moments captured right before the grand celebration procession begins. Documented with theatrical lighting discipline, quiet poise, and prime cinema optics.
+                  The quiet sacred moments captured right before the grand celebration procession begins.
+                  Documented with theatrical lighting discipline, quiet poise, and prime cinema optics.
                 </p>
 
                 <div className={styles.leadActionRow}>
                   <Link href={ITEM_PROJECT_01.storyUrl} className={styles.leadStoryLink}>
-                    Step Inside Archival Story <span>→</span>
+                    Step Inside Archival Story <span className={styles.linkArrow}>→</span>
                   </Link>
                 </div>
               </div>
@@ -285,12 +295,12 @@ export default function LivingContactSheet() {
 
           {/* ─────────────────────────────────────────────────────────────
               ITEM 2: Video 1 — Existing First Video (Vinitha & Vivekananda)
-              Refined Cinema Stage · Balanced 80% Span (~860px) · Elegant Controls
+              Restrained Cinema Feature · Centered 860px · Clean Playback
               ───────────────────────────────────────────────────────────── */}
           <div className={`${styles.rhythmBlock} ${styles.itemVideoHeroWrapper}`}>
             <div className={styles.itemLabelRow}>
               <span className={styles.itemLabel}>{ITEM_VIDEO_01.movementLabel}</span>
-              <span className={styles.durationBadge}>DURATION · {ITEM_VIDEO_01.duration}</span>
+              <span className={styles.durationBadge}>Duration · {ITEM_VIDEO_01.duration}</span>
             </div>
 
             <div className={styles.cinemaStageHero}>
@@ -349,7 +359,7 @@ export default function LivingContactSheet() {
                     </div>
 
                     <div className={styles.cinemaTopBar}>
-                      <span className={styles.cinemaBadge}>24 FRAMES WEDDING FILMS</span>
+                      <span className={styles.cinemaBadge}>24 Frames Wedding Films</span>
                       <span className={styles.cinemaDuration}>{ITEM_VIDEO_01.duration}</span>
                     </div>
 
@@ -373,11 +383,11 @@ export default function LivingContactSheet() {
           </div>
 
           {/* ─────────────────────────────────────────────────────────────
-              MIDDLE SECTION: Two Projects (Items 3 & 4)
-              Balanced Asymmetric Pair: Sireesh & Harshitha (Portrait) + Hrithika & Abhishek (Landscape)
+              MIDDLE SECTION: Asymmetric Editorial Pair (Items 3 & 4)
+              Sireesh & Harshitha (Left, 4:5 Portrait) + Hrithika & Abhishek (Right, 4:5 Staggered)
               ───────────────────────────────────────────────────────────── */}
           <div className={`${styles.rhythmBlock} ${styles.middleSection}`}>
-            {/* ITEM 3: Wedding Project 2 — Sireesh & Harshitha (Left, Portrait) */}
+            {/* ITEM 3: Wedding Project 2 — Sireesh & Harshitha (Left, 4:5 Portrait) */}
             <div className={styles.middleColLeft}>
               <div className={styles.itemLabelRow}>
                 <span className={styles.itemLabel}>{ITEM_PROJECT_02.movementLabel}</span>
@@ -398,6 +408,7 @@ export default function LivingContactSheet() {
                       src={ITEM_PROJECT_02.image}
                       alt={ITEM_PROJECT_02.clientNames}
                       className={styles.galleryImage}
+                      style={{ objectPosition: ITEM_PROJECT_02.objectPosition || "center center" }}
                       loading="eager"
                     />
                   </picture>
@@ -405,17 +416,8 @@ export default function LivingContactSheet() {
                 <div className={styles.editorialCaption}>
                   <div className={styles.captionMain}>
                     <div className={styles.captionTitleRow}>
-                      <span className={styles.captionTitle}>{ITEM_PROJECT_02.captionTitle}</span>
-                      <span
-                        className={styles.cardArrow}
-                        aria-label="Open Sireesh & Harshitha archive"
-                        title="Open Sireesh & Harshitha archive"
-                      >
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <line x1="5" y1="12" x2="19" y2="12"></line>
-                          <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                      </span>
+                      <h4 className={styles.captionTitle}>{ITEM_PROJECT_02.captionTitle}</h4>
+                      <span className={styles.cardArrow} aria-hidden="true">→</span>
                     </div>
                     <span className={styles.captionMeta}>{ITEM_PROJECT_02.captionSub}</span>
                   </div>
@@ -423,7 +425,7 @@ export default function LivingContactSheet() {
               </Link>
             </div>
 
-            {/* ITEM 4: Wedding Project 3 — Hrithika & Abhishek (Right, Landscape) */}
+            {/* ITEM 4: Wedding Project 3 — Hrithika & Abhishek (Right, 4:5 Portrait) */}
             <div className={styles.middleColRight}>
               <div className={styles.itemLabelRow}>
                 <span className={styles.itemLabel}>{ITEM_PROJECT_03.movementLabel}</span>
@@ -444,7 +446,7 @@ export default function LivingContactSheet() {
                       src={ITEM_PROJECT_03.image}
                       alt={ITEM_PROJECT_03.clientNames}
                       className={styles.galleryImage}
-                      style={{ objectPosition: "center 22%" }}
+                      style={{ objectPosition: ITEM_PROJECT_03.objectPosition || "center 22%" }}
                       loading="eager"
                     />
                   </picture>
@@ -452,17 +454,8 @@ export default function LivingContactSheet() {
                 <div className={styles.editorialCaption}>
                   <div className={styles.captionMain}>
                     <div className={styles.captionTitleRow}>
-                      <span className={styles.captionTitle}>{ITEM_PROJECT_03.captionTitle}</span>
-                      <span
-                        className={styles.cardArrow}
-                        aria-label="Open Hrithika & Abhishek archive"
-                        title="Open Hrithika & Abhishek archive"
-                      >
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <line x1="5" y1="12" x2="19" y2="12"></line>
-                          <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                      </span>
+                      <h4 className={styles.captionTitle}>{ITEM_PROJECT_03.captionTitle}</h4>
+                      <span className={styles.cardArrow} aria-hidden="true">→</span>
                     </div>
                     <span className={styles.captionMeta}>{ITEM_PROJECT_03.captionSub}</span>
                   </div>
@@ -472,16 +465,16 @@ export default function LivingContactSheet() {
           </div>
 
           {/* ─────────────────────────────────────────────────────────────
-              CONCLUDING COMPOSITION: Motion & Still Duet (Items 5 & 6 Paired)
+              CONCLUDING COMPOSITION: Motion & Still Duet (Items 5 & 6)
               Left: Item 5 (Nishanth X Sanzena Film) · Right: Item 6 (Karthik & Gayathri Portrait)
-              Eliminates accidental empty columns and long vertical scroll
+              Intentional framing: Karthik & Gayathri foreheads-touching embrace perfectly centered
               ───────────────────────────────────────────────────────────── */}
           <div className={`${styles.rhythmBlock} ${styles.concludingDuet}`}>
             {/* Left: Couple Shoot Cinema Film (Nishanth X Sanzena) */}
             <div className={styles.concludingFilmCol}>
               <div className={styles.insertHeaderRow}>
                 <span className={styles.itemLabel}>{ITEM_VIDEO_02.movementLabel}</span>
-                <span className={styles.durationBadge}>DURATION · {ITEM_VIDEO_02.duration}</span>
+                <span className={styles.durationBadge}>Duration · {ITEM_VIDEO_02.duration}</span>
               </div>
 
               <div className={styles.cinemaStageInsert}>
@@ -540,14 +533,18 @@ export default function LivingContactSheet() {
                       </div>
 
                       <div className={styles.cinemaTopBar}>
-                        <span className={styles.cinemaBadge}>CINEMA INSERT</span>
+                        <span className={styles.cinemaBadge}>Cinema Insert</span>
                         <span className={styles.cinemaDuration}>{ITEM_VIDEO_02.duration}</span>
                       </div>
 
                       <div className={styles.cinemaBottomBar}>
                         <span className={styles.cinemaCategory}>{ITEM_VIDEO_02.category.toUpperCase()}</span>
-                        <h3 className={`${styles.cinemaTitle} ${styles.cinemaTitleInsert}`}>{ITEM_VIDEO_02.filmTitle}</h3>
-                        <p className={`${styles.cinemaQuote} ${styles.cinemaQuoteInsert}`}>&ldquo;{ITEM_VIDEO_02.description}&rdquo;</p>
+                        <h3 className={`${styles.cinemaTitle} ${styles.cinemaTitleInsert}`}>
+                          {ITEM_VIDEO_02.filmTitle}
+                        </h3>
+                        <p className={`${styles.cinemaQuote} ${styles.cinemaQuoteInsert}`}>
+                          &ldquo;{ITEM_VIDEO_02.description}&rdquo;
+                        </p>
                       </div>
                     </div>
                   )}
@@ -565,7 +562,7 @@ export default function LivingContactSheet() {
 
             {/* Right: Fine-Art Wedding Portrait (Karthik & Gayathri) */}
             <div className={styles.concludingStillCol}>
-              <div className={styles.itemLabelRow}>
+              <div className={styles.insertHeaderRow}>
                 <span className={styles.itemLabel}>{ITEM_PROJECT_04.movementLabel}</span>
               </div>
 
@@ -584,24 +581,16 @@ export default function LivingContactSheet() {
                       src={ITEM_PROJECT_04.image}
                       alt={ITEM_PROJECT_04.clientNames}
                       className={styles.galleryImage}
-                      loading="eager"
+                      style={{ objectPosition: ITEM_PROJECT_04.objectPosition || "center 12%" }}
+                      loading="lazy"
                     />
                   </picture>
                 </div>
                 <div className={styles.editorialCaption}>
                   <div className={styles.captionMain}>
                     <div className={styles.captionTitleRow}>
-                      <span className={styles.captionTitle}>{ITEM_PROJECT_04.captionTitle}</span>
-                      <span
-                        className={styles.cardArrow}
-                        aria-label="Open Karthik & Gayathri archive"
-                        title="Open Karthik & Gayathri archive"
-                      >
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <line x1="5" y1="12" x2="19" y2="12"></line>
-                          <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                      </span>
+                      <h4 className={styles.captionTitle}>{ITEM_PROJECT_04.captionTitle}</h4>
+                      <span className={styles.cardArrow} aria-hidden="true">→</span>
                     </div>
                     <span className={styles.captionMeta}>{ITEM_PROJECT_04.captionSub}</span>
                   </div>
@@ -609,6 +598,16 @@ export default function LivingContactSheet() {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* ── Editorial Conclusion Row ──────────────────────── */}
+        <div className={styles.conclusionRow}>
+          <span className={styles.conclusionText}>
+            Each story curated directly from master 35mm optical cinema archives.
+          </span>
+          <Link href="/stories" className={styles.conclusionLink}>
+            Explore Complete Stories Archive →
+          </Link>
         </div>
       </div>
     </section>

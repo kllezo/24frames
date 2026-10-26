@@ -506,7 +506,7 @@ export default function FounderRecognitionSection() {
             <div ref={bioBlockRef} className={styles.founderBioBlock}>
               {/* Chapter Kicker */}
               <div className={styles.chapterKicker}>
-                CHAPTER 05 — THE VISIONARY & RECOGNITION
+                CHAPTER 04 — THE VISIONARY & RECOGNITION
               </div>
 
               {/* Large Serif Founder Name */}

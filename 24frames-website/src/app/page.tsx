@@ -5,9 +5,8 @@ import dynamic from "next/dynamic";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/homepage/HeroSection";
-import TheCollection from "@/components/homepage/TheCollection";
 import LivingContactSheet from "@/components/homepage/LivingContactSheet";
-import ExploreTheWorld from "@/components/homepage/ExploreTheWorld";
+import TheCollection from "@/components/homepage/TheCollection";
 import FounderRecognitionSection from "@/components/homepage/FounderRecognitionSection";
 import InvitationCTA from "@/components/homepage/InvitationCTA";
 
@@ -45,19 +44,16 @@ export default function HomePage() {
           {/* Chapter 01 — The Opening Frame */}
           <HeroSection />
 
-          {/* Chapter 02 — The Collection (Photography-First Editorial Showcase) */}
-          <TheCollection />
-
-          {/* Curated Exhibition — The Vows */}
+          {/* Chapter 02 — The Vows (Curated Exhibition & Wedding Films) */}
           <LivingContactSheet />
 
-          {/* Chapter 04 — Explore the World (Category Worlds) */}
-          <ExploreTheWorld />
+          {/* Chapter 03 — The Collection (Six Editorial Disciplines Showcase) */}
+          <TheCollection />
 
-          {/* Chapter 05 — Founder & Recognition Wall (Reference Image 1: Left Portrait + Two Curved Rails) */}
+          {/* Chapter 04 — Founder & Recognition Wall */}
           <FounderRecognitionSection />
 
-          {/* Chapter 06 — The Invitation (Bespoke Commission Portals) */}
+          {/* Chapter 05 — The Invitation (Bespoke Commission Portals) */}
           <InvitationCTA />
         </main>
         <Footer />

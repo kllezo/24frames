@@ -57,11 +57,11 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
         {/* ── Return Navigation Bar ──────────────────────────────── */}
         <div className={styles.topBar}>
           <div className={styles.container}>
-            <Link href="/#explore" className={styles.backLink}>
+            <Link href="/#collection" className={styles.backLink}>
               <span className={styles.backArrow} aria-hidden="true">
                 ←
               </span>{" "}
-              Return to Editorial Disciplines
+              Return to The Collection
             </Link>
             <span className={styles.disciplineIndexBadge}>
               PRACTICE {discipline.number} OF 06
@@ -334,7 +334,7 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
                   Inquire for Bespoke Dates →
                 </Link>
                 <Link href="/#collection" className={styles.inquirySecondaryBtn}>
-                  View Signature Collection ↗
+                  View The Collection ↗
                 </Link>
               </div>
             </div>

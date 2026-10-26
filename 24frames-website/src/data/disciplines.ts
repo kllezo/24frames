@@ -70,7 +70,8 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "By utilizing ultra-fast prime cinema lenses and available ambient light, we preserve the authentic textures of marigold garlands, sacred homam fire, and pure Kanjeevaram silks.",
       "The result is a timeless photographic testament that balances monumental architectural scale with tender, unscripted human joy."
     ],
-    heroImage: "https://images.unsplash.com/photo-1519741497674-611481863552?w=2400&q=88&auto=format",
+    heroImage: "/images/portfolio/sireesh-harshitha/cover.jpg",
+    heroWebp: "/images/portfolio/sireesh-harshitha/cover.webp",
     heroAspect: "cinematic",
     href: "/disciplines/weddings",
     metadata: {
@@ -370,7 +371,8 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Working closely with renowned stylists and designers across Hyderabad, Mumbai, and Chennai, our creative direction fuses classical Indian motifs with stark, modern compositional geometry.",
       "Every frame is retouched with restraint: honoring authentic skin textures and natural fabric movement while maintaining magazine-cover polish."
     ],
-    heroImage: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=2400&q=88&auto=format",
+    heroImage: "/images/stories/bellam-srikonda/IMG_6341.jpg",
+    heroWebp: "/images/stories/bellam-srikonda/IMG_6341.webp",
     heroAspect: "cinematic",
     href: "/disciplines/fashion",
     metadata: {
@@ -570,7 +572,8 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Our archival methodology prioritizes historical truth over transient visual trends: natural skin tones, timeless contrast curves, and unscripted human emotion that never grow dated.",
       "Explore individual curated stories below, or contact our Hyderabad studio to request access to specific regional or historical portfolios."
     ],
-    heroImage: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=2400&q=88&auto=format",
+    heroImage: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
+    heroWebp: "/images/stories/sirish-and-harshitha/IMG_6346.webp",
     heroAspect: "cinematic",
     href: "/disciplines/archive",
     metadata: {

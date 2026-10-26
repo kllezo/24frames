@@ -87,7 +87,7 @@ export default function InvitationCTA() {
       <div className={styles.container}>
         {/* Calmer, intimate header */}
         <div ref={headerRef} className={styles.header}>
-          <span className={styles.label}>Chapter 07 — The Invitation</span>
+          <span className={styles.label}>Chapter 05 — The Invitation</span>
           <h2 className={styles.title}>Begin your story</h2>
           <p className={styles.subtitle}>
             Every celebration deserves a cinematic memory that lasts generations.
