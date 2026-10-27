@@ -25,7 +25,6 @@ export interface CollectionDiscipline {
   objectPosition?: string;
 }
 
-// Aliases for backward compatibility
 export type CollectionProject = CollectionDiscipline;
 
 export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
@@ -138,104 +137,47 @@ export default function TheCollection() {
   const [activeId, setActiveId] = useState<string>("weddings");
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
 
-  // Element Refs for GSAP Continuous Flex Redistribution
-  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const activeContentRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const collapsedContentRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const leaveTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isTouchRef = useRef(false);
 
-  /* ── Continuous GSAP Width Redistribution Engine ─────────────── */
-  const animateToCard = useCallback((targetId: string, immediate: boolean = false) => {
-    const isDesktop = typeof window !== "undefined" && window.matchMedia("(min-width: 821px)").matches;
-    if (!isDesktop) return;
-
-    COLLECTION_DISCIPLINES.forEach((disc) => {
-      const card = cardRefs.current[disc.id];
-      const activeEl = activeContentRefs.current[disc.id];
-      const collapsedEl = collapsedContentRefs.current[disc.id];
-      if (!card) return;
-
-      const isActive = disc.id === targetId;
-      const targetFlexGrow = isActive ? 2.85 : 1.0;
-
-      if (immediate) {
-        gsap.set(card, { flexGrow: targetFlexGrow });
-        if (activeEl) gsap.set(activeEl, { opacity: isActive ? 1 : 0 });
-        if (collapsedEl) gsap.set(collapsedEl, { opacity: isActive ? 0 : 1 });
-        return;
-      }
-
-      // Smooth, continuous flexGrow morph (1.0s with power2.inOut)
-      gsap.to(card, {
-        flexGrow: targetFlexGrow,
-        duration: 1.0,
-        ease: "power2.inOut",
-        overwrite: "auto",
-      });
-
-      // Active content: reveal smoothly as width becomes available
-      if (activeEl) {
-        if (isActive) {
-          gsap.to(activeEl, {
-            opacity: 1,
-            duration: 0.55,
-            delay: 0.32,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-        } else {
-          gsap.to(activeEl, {
-            opacity: 0,
-            duration: 0.28,
-            ease: "power2.in",
-            overwrite: "auto",
-          });
-        }
-      }
-
-      // Collapsed content: cross-fade gracefully
-      if (collapsedEl) {
-        if (isActive) {
-          gsap.to(collapsedEl, {
-            opacity: 0,
-            duration: 0.25,
-            ease: "power2.in",
-            overwrite: "auto",
-          });
-        } else {
-          gsap.to(collapsedEl, {
-            opacity: 1,
-            duration: 0.55,
-            delay: 0.35,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-        }
-      }
-    });
+  /* ── Clean Single-Source Card Activation ─────────────────────── */
+  const activateCard = useCallback((id: string) => {
+    if (leaveTimerRef.current) {
+      clearTimeout(leaveTimerRef.current);
+      leaveTimerRef.current = null;
+    }
+    setActiveId(id);
   }, []);
 
-  // Initial Layout Setup
-  useEffect(() => {
-    animateToCard("weddings", true);
-  }, [animateToCard]);
-
-  // Handle Window Resize
-  useEffect(() => {
-    const handleResize = () => {
-      const isDesktop = window.matchMedia("(min-width: 821px)").matches;
-      if (isDesktop) {
-        animateToCard(activeId, true);
-      } else {
-        // Reset inline flexGrow on mobile
-        COLLECTION_DISCIPLINES.forEach((disc) => {
-          const card = cardRefs.current[disc.id];
-          if (card) gsap.set(card, { clearProps: "flexGrow" });
-        });
+  const handleCardPointerEnter = useCallback(
+    (id: string, e: React.PointerEvent) => {
+      if (e.pointerType === "touch") {
+        isTouchRef.current = true;
+        return;
       }
+      isTouchRef.current = false;
+      activateCard(id);
+    },
+    [activateCard]
+  );
+
+  const handleTrackPointerLeave = useCallback(
+    (e: React.PointerEvent) => {
+      if (e.pointerType === "touch" || isTouchRef.current) return;
+      if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
+      // Graceful 380ms cooldown before returning to default
+      leaveTimerRef.current = setTimeout(() => {
+        setActiveId("weddings");
+      }, 380);
+    },
+    []
+  );
+
+  useEffect(() => {
+    return () => {
+      if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
     };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [activeId, animateToCard]);
+  }, []);
 
   /* ── GSAP Scroll-Triggered Entrance ─────────────────────────── */
   useEffect(() => {
@@ -287,44 +229,6 @@ export default function TheCollection() {
     setImgErrors((prev) => ({ ...prev, [id]: true }));
   };
 
-  const isTouchRef = useRef(false);
-
-  const switchActiveCard = useCallback(
-    (id: string) => {
-      if (id === activeId) return;
-      setActiveId(id);
-      animateToCard(id, false);
-    },
-    [activeId, animateToCard]
-  );
-
-  const handlePointerMove = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      if (e.pointerType === "touch") {
-        isTouchRef.current = true;
-        return;
-      }
-      isTouchRef.current = false;
-      const target = e.target as HTMLElement | null;
-      const card = target?.closest("[data-discipline-id]") as HTMLElement | null;
-      if (card) {
-        const id = card.getAttribute("data-discipline-id");
-        if (id && id !== activeId) {
-          switchActiveCard(id);
-        }
-      }
-    },
-    [activeId, switchActiveCard]
-  );
-
-  const handlePointerLeave = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      if (e.pointerType === "touch" || isTouchRef.current) return;
-      switchActiveCard("weddings");
-    },
-    [switchActiveCard]
-  );
-
   const handleCardClick = useCallback(
     (discipline: CollectionDiscipline, displayImage: string) => {
       if (activeId === discipline.id || !isTouchRef.current) {
@@ -332,10 +236,10 @@ export default function TheCollection() {
           image: displayImage,
         });
       } else {
-        switchActiveCard(discipline.id);
+        activateCard(discipline.id);
       }
     },
-    [activeId, switchActiveCard]
+    [activeId, activateCard]
   );
 
   const handleCardKeyDown = useCallback(
@@ -366,7 +270,6 @@ export default function TheCollection() {
       className={styles.section}
       aria-label="The Collection — Six Practices of Cinema & Optics"
     >
-      {/* Anchor alias to support legacy #explore anchor links smoothly */}
       <div id="explore" className={styles.anchorOffset} aria-hidden="true" />
 
       <div className={styles.container}>
@@ -385,7 +288,7 @@ export default function TheCollection() {
           </p>
         </div>
 
-        {/* ── Outer Showcase Frame (Shared Soft Rounded Outer Container) ── */}
+        {/* ── Outer Showcase Frame ──────────────────────────────── */}
         <div
           ref={showcaseRef}
           className={styles.showcaseContainer}
@@ -394,11 +297,7 @@ export default function TheCollection() {
         >
           <div
             className={styles.accordionTrack}
-            onPointerMove={handlePointerMove}
-            onPointerLeave={handlePointerLeave}
-            onMouseLeave={() => {
-              if (!isTouchRef.current) switchActiveCard("weddings");
-            }}
+            onPointerLeave={handleTrackPointerLeave}
           >
             {COLLECTION_DISCIPLINES.map((discipline) => {
               const isSelected = discipline.id === activeId;
@@ -408,25 +307,14 @@ export default function TheCollection() {
               return (
                 <div
                   key={discipline.id}
-                  ref={(el) => {
-                    cardRefs.current[discipline.id] = el;
-                  }}
                   data-discipline-id={discipline.id}
                   className={`${styles.card} ${
                     isSelected ? styles.cardActive : styles.cardInactive
                   }`}
-                  onPointerEnter={(e) => {
-                    if (e.pointerType !== "touch") switchActiveCard(discipline.id);
-                  }}
-                  onPointerOver={(e) => {
-                    if (e.pointerType !== "touch") switchActiveCard(discipline.id);
-                  }}
-                  onMouseEnter={() => {
-                    if (!isTouchRef.current) switchActiveCard(discipline.id);
-                  }}
+                  onPointerEnter={(e) => handleCardPointerEnter(discipline.id, e)}
                   onClick={() => handleCardClick(discipline, displayImage)}
                   onKeyDown={(e) => handleCardKeyDown(e, discipline, displayImage)}
-                  onFocus={() => switchActiveCard(discipline.id)}
+                  onFocus={() => activateCard(discipline.id)}
                   tabIndex={0}
                   role="button"
                   aria-expanded={isSelected}
@@ -448,22 +336,17 @@ export default function TheCollection() {
                       />
                     </picture>
 
-                    {/* Gradient Overlay tailored for active vs collapsed states */}
                     <div
                       className={isSelected ? styles.activeGradient : styles.collapsedGradient}
                       aria-hidden="true"
                     />
                   </div>
 
-                  {/* ── Active Featured Panel Content (Always mounted, cross-faded via GSAP) ── */}
+                  {/* ── Active Featured Panel Content (Fades in smoothly after morph begins) ── */}
                   <div
-                    ref={(el) => {
-                      activeContentRefs.current[discipline.id] = el;
-                    }}
                     className={styles.activeContent}
                     aria-hidden={!isSelected}
                   >
-                    {/* Top Header Row with Restrained Editorial Metadata */}
                     <div className={styles.activeTopRow}>
                       <div className={styles.activeMetaTag}>
                         <span className={styles.activeNumber}>DISCIPLINE {discipline.number}</span>
@@ -473,11 +356,9 @@ export default function TheCollection() {
                       <span className={styles.activeStatusPill}>{discipline.count}</span>
                     </div>
 
-                    {/* Bottom Story & Action Block */}
                     <div className={styles.activeBottomBlock}>
                       <h3 className={styles.activeTitle}>{discipline.title}</h3>
                       <p className={styles.activeTagline}>{discipline.tagline}</p>
-
                       <p className={styles.activeDescription}>{discipline.heroDescription}</p>
 
                       <div className={styles.activeButtonRow}>
@@ -503,20 +384,15 @@ export default function TheCollection() {
                     </div>
                   </div>
 
-                  {/* ── Inactive Collapsed Card Content (Always mounted, cross-faded via GSAP) ── */}
+                  {/* ── Inactive Collapsed Card Content ─────────────────── */}
                   <div
-                    ref={(el) => {
-                      collapsedContentRefs.current[discipline.id] = el;
-                    }}
                     className={styles.collapsedContent}
                     aria-hidden={isSelected}
                   >
-                    {/* Top Number */}
                     <div className={styles.collapsedTop}>
                       <span className={styles.collapsedNumber}>{discipline.number}</span>
                     </div>
 
-                    {/* Bottom Readable Discipline Info */}
                     <div className={styles.collapsedBottom}>
                       <div className={styles.collapsedMeta}>
                         <h4 className={styles.collapsedTitle}>{discipline.shortTitle}</h4>

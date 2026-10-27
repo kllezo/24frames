@@ -243,42 +243,39 @@
 }
 
 .coreValuesGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(12px, 1.2vw, 16px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
   width: 100%;
-  align-items: stretch;
 }
 
 .coreValueCard {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.75);
   border: 1px solid rgba(220, 210, 192, 0.85);
-  border-radius: 10px;
-  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  padding: 0.75rem 1.15rem;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  height: 100%;
-  box-sizing: border-box;
+  gap: 0.2rem;
   transition: all 0.25s ease;
 }
 
 .coreValueCard:hover {
   background: #FFFFFF;
-  border-color: rgba(9, 69, 62, 0.35);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(9, 69, 62, 0.08);
+  border-color: rgba(9, 69, 62, 0.3);
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(9, 69, 62, 0.06);
 }
 
 .coreValueHeader {
   display: flex;
-  align-items: baseline;
-  gap: 0.45rem;
+  align-items: center;
+  gap: 0.55rem;
 }
 
 .coreValueNumber {
   font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
   color: #C8A84E;
   letter-spacing: 0.1em;
@@ -286,26 +283,18 @@
 
 .coreValueTitle {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: 1.08rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: var(--color-charcoal, #141713);
   margin: 0;
-  line-height: 1.2;
 }
 
 .coreValueDesc {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   line-height: 1.5;
   color: #555850;
   margin: 0;
-}
-
-@media (max-width: 640px) {
-  .coreValuesGrid {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -818,301 +807,109 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   3. HONOURS & EDITORIAL RECOGNITION (OVERSIZED TILTED FRAME)
-   ───────────────────────────────────────────────────────────── */
-.honoursShowcaseSection {
-  position: relative;
-  width: 100%;
-  margin: clamp(4rem, 7vh, 6.5rem) 0;
-  padding: clamp(3rem, 5vw, 4.5rem) clamp(1rem, 3.5vw, 2.5rem);
-  box-sizing: border-box;
-  background-color: #FAF8F2;
-  background-image: radial-gradient(circle, rgba(165, 160, 150, 0.42) 1.2px, transparent 1.2px);
-  background-size: 24px 24px;
-  overflow: visible;
-}
-
-/* The oversized, crisp, clockwise-tilted rectangular outline frame (+10° desktop) */
-.tiltedOutlineFrame {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 96%;
-  height: clamp(440px, 48vw, 580px);
-  max-width: 1340px;
-  transform: translate(-50%, -50%) rotate(10deg);
-  border: 5px solid #000000;
-  border-radius: 0;
-  background: transparent;
-  pointer-events: none;
-  z-index: 1;
-  box-sizing: border-box;
-}
-
-@media (max-width: 1100px) {
-  .tiltedOutlineFrame {
-    transform: translate(-50%, -50%) rotate(5deg);
-    border-width: 4px;
-    height: clamp(420px, 52vw, 540px);
-  }
-}
-
-@media (max-width: 768px) {
-  .tiltedOutlineFrame {
-    transform: translate(-50%, -50%) rotate(0deg);
-    width: 98%;
-    border-width: 3px;
-    height: 100%;
-  }
-}
-
-.honoursContentWrap {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   4. THE PRIVATE CLIENT SUITE — CINEMATIC 3-CARD SHOWCASE
+   3. LUXURY GALLERY EXPERIENCE FEATURES (PHASE 5)
    ───────────────────────────────────────────────────────────── */
 .clientGallerySection {
   width: 100%;
-  margin-top: clamp(4.5rem, 8vh, 7rem);
-  padding: clamp(3.5rem, 6vw, 5.5rem) clamp(1.25rem, 4vw, 3.5rem);
-  background: #080B0A;
-  border-radius: 24px;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 28px 72px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  margin-top: clamp(4.5rem, 7vh, 6.5rem);
+  padding-top: clamp(3rem, 5vh, 4rem);
+  border-top: 1px solid rgba(220, 210, 192, 0.7);
   display: flex;
   flex-direction: column;
   gap: clamp(2rem, 3.5vh, 2.75rem);
 }
 
 .clientGalleryHeader {
-  max-width: 840px;
-  margin: 0 auto clamp(1rem, 2vw, 1.5rem) auto;
-  text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
+  gap: 0.4rem;
+  max-width: 720px;
 }
 
 .clientGalleryEyebrow {
   font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #C8A84E;
+  color: var(--color-kllezo-green, #09453e);
 }
 
 .clientGalleryHeading {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  font-size: clamp(1.8rem, 2.8vw, 2.5rem);
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--color-charcoal, #141713);
   margin: 0;
   line-height: 1.15;
 }
 
 .clientGallerySub {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: clamp(0.88rem, 1.05vw, 1rem);
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.72);
-  margin: 0;
-}
-
-/* 3-Card Portrait Showcase Stage */
-.threeCardStage {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1.25rem, 2.5vw, 2.25rem);
-  width: 100%;
-  max-width: 1240px;
-  margin: 0 auto;
-  align-items: stretch;
-}
-
-@media (max-width: 860px) {
-  .threeCardStage {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-}
-
-/* Individual Showcase Card */
-.showcaseCard {
-  position: relative;
-  border-radius: 20px;
-  padding: clamp(1.75rem, 2.8vw, 2.5rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: clamp(460px, 52vh, 540px);
-  overflow: hidden;
-  cursor: pointer;
-  box-sizing: border-box;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.4s ease,
-    box-shadow 0.4s ease,
-    opacity 0.4s ease;
-  transform-style: preserve-3d;
-}
-
-/* Card 01: Violet / Indigo Treatment */
-.cardViolet {
-  background: linear-gradient(155deg, rgba(34, 26, 68, 0.94) 0%, rgba(16, 12, 36, 0.98) 100%);
-  border: 1px solid rgba(147, 112, 219, 0.28);
-  box-shadow: 0 16px 40px rgba(12, 8, 28, 0.6);
-}
-
-.cardVioletActive,
-.cardViolet:hover {
-  border-color: rgba(175, 145, 255, 0.65);
-  box-shadow: 0 24px 60px rgba(138, 110, 220, 0.25), 0 0 32px rgba(138, 110, 220, 0.15);
-}
-
-/* Card 02: Warm Coral / Cream Hero Treatment (Middle card, default emphasis) */
-.cardCoral {
-  background: linear-gradient(155deg, rgba(54, 30, 22, 0.94) 0%, rgba(26, 14, 10, 0.98) 100%);
-  border: 1.5px solid rgba(235, 160, 120, 0.42);
-  box-shadow: 0 20px 48px rgba(30, 12, 8, 0.65), 0 0 28px rgba(235, 160, 120, 0.12);
-}
-
-.cardCoralActive,
-.cardCoral:hover {
-  border-color: rgba(255, 185, 150, 0.75);
-  box-shadow: 0 28px 70px rgba(235, 140, 95, 0.3), 0 0 40px rgba(235, 140, 95, 0.2);
-}
-
-/* Card 03: Cool Silver / Charcoal Treatment */
-.cardSilver {
-  background: linear-gradient(155deg, rgba(28, 36, 40, 0.94) 0%, rgba(14, 18, 20, 0.98) 100%);
-  border: 1px solid rgba(185, 205, 215, 0.28);
-  box-shadow: 0 16px 40px rgba(10, 14, 16, 0.6);
-}
-
-.cardSilverActive,
-.cardSilver:hover {
-  border-color: rgba(215, 235, 245, 0.65);
-  box-shadow: 0 24px 60px rgba(160, 190, 205, 0.22), 0 0 32px rgba(160, 190, 205, 0.12);
-}
-
-/* Top Meta Row */
-.cardTopRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  position: relative;
-  z-index: 5;
-}
-
-.cardNumber {
-  font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: 1.85rem;
-  font-weight: 600;
-  line-height: 1;
-}
-
-.cardViolet .cardNumber {
-  color: #C4B5FD;
-}
-
-.cardCoral .cardNumber {
-  color: #FED7AA;
-}
-
-.cardSilver .cardNumber {
-  color: #E2E8F0;
-}
-
-.cardPillBadge {
-  font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  padding: 0.35rem 0.85rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-}
-
-/* Middle Visual Artwork Clipping Canvas */
-.cardArtworkCanvas {
-  position: relative;
-  width: 100%;
-  height: clamp(170px, 20vh, 210px);
-  border-radius: 14px;
-  overflow: hidden;
-  margin: 1.5rem 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  z-index: 3;
-}
-
-.cardArtworkInner {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  will-change: transform, opacity;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
-}
-
-/* Card Bottom Narrative Content */
-.cardBottomContent {
-  position: relative;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-
-.cardTitle {
-  font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(1.35rem, 1.8vw, 1.65rem);
-  font-weight: 600;
-  color: #FFFFFF;
-  line-height: 1.2;
-  margin: 0;
-}
-
-.cardDescription {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.84rem;
+  font-size: 0.92rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.72);
+  color: #555850;
   margin: 0;
 }
 
-.cardInteractiveAffordance {
-  display: inline-flex;
+.galleryFeaturesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+  width: 100%;
+}
+
+.galleryFeatureCard {
+  background: #FAF8F2;
+  border: 1px solid rgba(220, 210, 192, 0.85);
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 4px 16px rgba(32, 35, 31, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.galleryFeatureCard:hover {
+  transform: translateY(-4px);
+  background: #FFFFFF;
+  border-color: rgba(9, 69, 62, 0.35);
+  box-shadow: 0 12px 28px rgba(9, 69, 62, 0.09);
+}
+
+.featureIconBadge {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background-color: rgba(9, 69, 62, 0.08);
+  color: var(--color-kllezo-green, #09453e);
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-  font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #C8A84E;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+}
+
+.featureIconBadge svg {
+  width: 20px;
+  height: 20px;
+}
+
+.featureTitle {
+  font-family: var(--font-headline, "Cormorant Garamond", serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-charcoal, #141713);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.featureDescription {
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #555850;
+  margin: 0;
 }
 
 /* ─────────────────────────────────────────────────────────────

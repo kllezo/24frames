@@ -172,31 +172,58 @@ export default async function StoryDetailPage({ params }: PageProps) {
               </p>
             </div>
 
-            <div className={styles.galleryFlow}>
+            <div className={styles.galleryGrid}>
               {story.frames.map((frame, index) => {
                 const isLandscape = frame.aspect === "landscape";
-                const alignmentClass = isLandscape
-                  ? styles.frameCentered
-                  : index % 3 === 0
-                  ? styles.frameCentered
-                  : index % 3 === 1
-                  ? styles.frameOffsetLeft
-                  : styles.frameOffsetRight;
+                const isLastItem = index === story.frames.length - 1 && story.frames.length % 2 === 1;
+
+                // Interlocking editorial placement cadence:
+                // 0: Left Primary (cols 1-7)
+                // 1: Right Companion (cols 8-12, staggered vertically ~15-20% overlap)
+                // 2: Right Primary (cols 6-12)
+                // 3: Left Companion (cols 1-5, staggered vertically ~15-20% overlap)
+                let layoutClass = styles.gridColLeftPrimary;
+                if (isLastItem) {
+                  layoutClass = styles.gridColCenterAnchor;
+                } else if (index % 4 === 1) {
+                  layoutClass = styles.gridColRightCompanion;
+                } else if (index % 4 === 2) {
+                  layoutClass = styles.gridColRightPrimary;
+                } else if (index % 4 === 3) {
+                  layoutClass = styles.gridColLeftCompanion;
+                }
+
+                // Individual intentional crop alignment based on subject focal point
+                const objectPosition =
+                  frame.id === "bs-01"
+                    ? "center 30%"
+                    : frame.id === "bs-02"
+                    ? "center 15%"
+                    : frame.id === "bs-03"
+                    ? "center 20%"
+                    : frame.id === "bs-04"
+                    ? "center 25%"
+                    : isLandscape
+                    ? "center 35%"
+                    : "center 22%";
 
                 return (
                   <figure
                     key={frame.id}
-                    className={`${styles.frameFigure} ${
-                      isLandscape ? styles.frameLandscape : styles.framePortrait
-                    } ${alignmentClass}`}
+                    className={`${styles.frameFigure} ${layoutClass}`}
                   >
-                    <div className={styles.imageFrameWrap}>
+                    <div
+                      className={`${styles.imageFrameWrap} ${
+                        isLandscape ? styles.aspectLandscape : styles.aspectPortrait
+                      }`}
+                    >
                       <picture>
                         <source srcSet={frame.webpUrl} type="image/webp" />
                         <img
                           src={frame.url}
                           alt={frame.caption}
                           className={styles.galleryImg}
+                          style={{ objectPosition }}
                           loading={index < 2 ? "eager" : "lazy"}
                           decoding="async"
                           width={frame.width}
@@ -206,13 +233,15 @@ export default async function StoryDetailPage({ params }: PageProps) {
                     </div>
 
                     <figcaption className={styles.captionBar}>
-                      <span className={styles.frameIdentifier}>
-                        FRAME {frame.frameNo} · 24 FRAMES ARCHIVE
-                      </span>
-                      <span className={styles.captionText}>{frame.caption}</span>
-                      <span className={styles.filmBadge}>
-                        {frame.width} × {frame.height}PX
-                      </span>
+                      <div className={styles.captionHeaderRow}>
+                        <span className={styles.frameIdentifier}>
+                          FRAME {frame.frameNo} · 24 FRAMES ARCHIVE
+                        </span>
+                        <span className={styles.filmBadge}>
+                          {frame.width} × {frame.height}PX
+                        </span>
+                      </div>
+                      <p className={styles.captionText}>{frame.caption}</p>
                     </figcaption>
                   </figure>
                 );
