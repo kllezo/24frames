@@ -97,7 +97,7 @@ export default function Navigation() {
             ))}
           </ul>
 
-          <Link href="/#inquire" className={styles.cta}>
+          <Link href="/inquire" className={styles.cta}>
             Inquire
           </Link>
 
@@ -142,11 +142,11 @@ export default function Navigation() {
               style={{ transitionDelay: `${(NAV_LINKS.length + 1) * 80}ms` }}
             >
               <Link
-                href="/#inquire"
+                href="/inquire"
                 className={`${styles.mobileLink} ${styles.mobileLinkCta}`}
                 onClick={() => setMenuOpen(false)}
               >
-                Begin Your Story
+                Inquire
               </Link>
             </li>
           </ul>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import LiquidDotCanvas from "./LiquidDotCanvas";
@@ -154,11 +155,79 @@ export default function FounderRecognitionSection() {
     }
   };
 
+  /* ── The Private Client Suite 3-Card Interaction State & GSAP ── */
+  const [activeSuiteCard, setActiveSuiteCard] = useState<number>(1); // Middle card 02 is active initial target
+  const suiteCardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const artworkRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const handleCardPointerMove = (index: number, e: React.PointerEvent<HTMLDivElement>) => {
+    const card = suiteCardRefs.current[index];
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    gsap.to(card, {
+      rotateY: x * 7,
+      rotateX: -y * 7,
+      duration: 0.25,
+      ease: "power1.out",
+      transformPerspective: 1000,
+    });
+  };
+
+  const handleCardPointerLeave = (index: number) => {
+    const card = suiteCardRefs.current[index];
+    if (!card) return;
+    gsap.to(card, {
+      rotateY: 0,
+      rotateX: 0,
+      duration: 0.45,
+      ease: "power2.out",
+    });
+  };
+
   useEffect(() => {
-    checkScrollBounds();
-    window.addEventListener("resize", checkScrollBounds);
-    return () => window.removeEventListener("resize", checkScrollBounds);
-  }, [checkScrollBounds]);
+    suiteCardRefs.current.forEach((card, idx) => {
+      if (!card) return;
+      const artwork = artworkRefs.current[idx];
+      const isActive = idx === activeSuiteCard;
+      if (isActive) {
+        gsap.to(card, {
+          y: -8,
+          scale: 1.02,
+          opacity: 1,
+          duration: 0.55,
+          ease: "power2.out",
+        });
+        if (artwork) {
+          gsap.to(artwork, {
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            duration: 0.65,
+            ease: "power2.out",
+          });
+        }
+      } else {
+        gsap.to(card, {
+          y: 0,
+          scale: 0.98,
+          opacity: 0.72,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+        if (artwork) {
+          gsap.to(artwork, {
+            y: 14,
+            scale: 0.94,
+            opacity: 0.65,
+            duration: 0.4,
+            ease: "power2.out",
+          });
+        }
+      }
+    });
+  }, [activeSuiteCard]);
 
   /* ── Coordinated GSAP ScrollTrigger Reveal ── */
   useEffect(() => {
@@ -395,144 +464,6 @@ export default function FounderRecognitionSection() {
 
           {/* ════ RIGHT COLUMN ════ */}
           <div ref={bioBlockRef} className={styles.artistRightCol}>
-            {/* 1. The Verified Archive Shelf Card Panel */}
-            <div className={styles.shelfCardPanel}>
-              <div className={styles.shelfHeaderRow}>
-                <div className={styles.shelfHeaderMeta}>
-                  <span className={styles.shelfEyebrow}>
-                    HONOURS & EDITORIAL RECOGNITION
-                  </span>
-                  <div className={styles.shelfTitleRow}>
-                    <h3 className={styles.shelfTitle}>The Verified Archive</h3>
-                    <span className={styles.shelfScriptAccent}>Heritage & Honours</span>
-                  </div>
-                </div>
-
-                {/* Previous / Next Shelf Arrow Controls */}
-                <div className={styles.shelfNavControls}>
-                  <button
-                    type="button"
-                    className={styles.navArrowBtn}
-                    onClick={() => scrollTrack("left")}
-                    disabled={!canScrollLeft}
-                    aria-label="Previous recognition entry"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.navArrowBtn}
-                    onClick={() => scrollTrack("right")}
-                    disabled={!canScrollRight}
-                    aria-label="Next recognition entry"
-                  >
-                    ›
-                  </button>
-                </div>
-              </div>
-
-              {/* Architectural Plaster Niche */}
-              <div
-                ref={shelfNicheRef}
-                className={styles.architecturalShelfNiche}
-                role="region"
-                aria-label="Architectural Recognition Shelf Track"
-              >
-                {/* Champagne Cove Lighting Strip */}
-                <div className={styles.coveLightStrip} aria-hidden="true" />
-
-                {/* Horizontally Scrollable Recognition Track */}
-                <div
-                  ref={trackRef}
-                  className={styles.magazineTrack}
-                  onScroll={handleScroll}
-                  tabIndex={0}
-                  role="region"
-                  aria-label="Interactive verified recognition archive"
-                >
-                  {VERIFIED_RECOGNITIONS.map((item) => (
-                    <div
-                      key={item.id}
-                      ref={(el) => {
-                        triggerRefs.current[item.id] = el;
-                      }}
-                      className={`${styles.recognitionCardItem} ${styles.magazineCoverItem}`}
-                      onClick={() => handleOpenItem(item)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          handleOpenItem(item);
-                        }
-                      }}
-                      role="button"
-                      tabIndex={0}
-                      aria-haspopup="dialog"
-                      aria-label={`View evidence for ${item.milestoneTitle}`}
-                    >
-                      <div className={styles.cardTopMeta}>
-                        <span className={styles.cardBadge}>{item.badgeLabel}</span>
-                        <span className={styles.cardYear}>{item.year}</span>
-                      </div>
-
-                      <div className={styles.cardImageWrap}>
-                        <img
-                          src={item.imageSrc}
-                          alt={item.imageAlt}
-                          className={styles.cardImage}
-                          style={{ objectPosition: item.objectPosition || "center 20%" }}
-                          loading="lazy"
-                        />
-                      </div>
-
-                      <div className={styles.cardContent}>
-                        <div className={styles.cardInfoRow}>
-                          <div className={styles.cardTitleWrap}>
-                            <h4 className={styles.cardTitle}>{item.milestoneTitle}</h4>
-                            <span className={styles.cardOrg}>{item.conferringBody}</span>
-                          </div>
-                          <div
-                            className={styles.cardArrowAffordance}
-                            aria-label={`View evidence for ${item.milestoneTitle}`}
-                          >
-                            <svg
-                              className={styles.cardArrowIcon}
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              aria-hidden="true"
-                            >
-                              <line x1="5" y1="12" x2="19" y2="12" />
-                              <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Architectural Shelf Lip & Under Glow */}
-                <div className={styles.shelfLip} aria-hidden="true" />
-                <div className={styles.shelfUnderGlow} aria-hidden="true" />
-
-                {/* Subtle Discoverability Cue */}
-                <div
-                  className={`${styles.discoverCue} ${
-                    hasScrolled ? styles.discoverCueFaded : ""
-                  }`}
-                  onClick={() => scrollTrack("right")}
-                  role="button"
-                  tabIndex={0}
-                  aria-label="Scroll right to discover more recognition entries"
-                >
-                  <span>EXPLORE VERIFIED EVIDENCE</span>
-                  <span className={styles.cueArrow}>→</span>
-                </div>
-              </div>
-            </div>
 
             {/* 2. Concise Source-Derived Biography Card Panel */}
             <div className={styles.bioCardPanel}>
@@ -551,18 +482,163 @@ export default function FounderRecognitionSection() {
               </span>
             </div>
 
-            {/* 4. Forest-Green Commission CTA Card Panel */}
+            {/* 3. Forest-Green Commission CTA Card Panel */}
             <div ref={ctaRef} className={styles.ctaCardPanel}>
-              <a href="#inquire" className={styles.commissionPillBtn}>
+              <Link href="/inquire" className={styles.commissionPillBtn}>
                 COMMISSION PHANI GOGIREDDY{" "}
                 <span className={styles.btnArrow}>→</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* ── 3. LUXURY CLIENT GALLERY EXPERIENCE SUITE ── */}
-        <div className={styles.clientGallerySection}>
+        {/* ── 2. HONOURS & EDITORIAL RECOGNITION (OVERSIZED TILTED FRAME REDESIGN) ── */}
+        <div className={styles.honoursShowcaseSection} role="region" aria-label="Honours and Editorial Recognition">
+          {/* Dedicated Clockwise-Tilted Sharp Rectangular Outline Frame (+10° desktop) */}
+          <div className={styles.tiltedOutlineFrame} aria-hidden="true" />
+
+          {/* Upright, Fully Interactive Content Container */}
+          <div className={styles.honoursContentWrap}>
+            <div className={styles.shelfHeaderRow}>
+              <div className={styles.shelfHeaderMeta}>
+                <span className={styles.shelfEyebrow}>
+                  HONOURS & EDITORIAL RECOGNITION
+                </span>
+                <div className={styles.shelfTitleRow}>
+                  <h3 className={styles.shelfTitle}>The Verified Archive</h3>
+                  <span className={styles.shelfScriptAccent}>Heritage & Honours</span>
+                </div>
+              </div>
+
+              {/* Previous / Next Shelf Arrow Controls */}
+              <div className={styles.shelfNavControls}>
+                <button
+                  type="button"
+                  className={styles.navArrowBtn}
+                  onClick={() => scrollTrack("left")}
+                  disabled={!canScrollLeft}
+                  aria-label="Previous recognition entry"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  className={styles.navArrowBtn}
+                  onClick={() => scrollTrack("right")}
+                  disabled={!canScrollRight}
+                  aria-label="Next recognition entry"
+                >
+                  ›
+                </button>
+              </div>
+            </div>
+
+            {/* Architectural Plaster Niche */}
+            <div
+              ref={shelfNicheRef}
+              className={styles.architecturalShelfNiche}
+              role="region"
+              aria-label="Architectural Recognition Shelf Track"
+            >
+              {/* Champagne Cove Lighting Strip */}
+              <div className={styles.coveLightStrip} aria-hidden="true" />
+
+              {/* Horizontally Scrollable Recognition Track */}
+              <div
+                ref={trackRef}
+                className={styles.magazineTrack}
+                onScroll={handleScroll}
+                tabIndex={0}
+                role="region"
+                aria-label="Interactive verified recognition archive"
+              >
+                {VERIFIED_RECOGNITIONS.map((item) => (
+                  <div
+                    key={item.id}
+                    ref={(el) => {
+                      triggerRefs.current[item.id] = el;
+                    }}
+                    className={`${styles.recognitionCardItem} ${styles.magazineCoverItem}`}
+                    onClick={() => handleOpenItem(item)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleOpenItem(item);
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-haspopup="dialog"
+                    aria-label={`View evidence for ${item.milestoneTitle}`}
+                  >
+                    <div className={styles.cardTopMeta}>
+                      <span className={styles.cardBadge}>{item.badgeLabel}</span>
+                      <span className={styles.cardYear}>{item.year}</span>
+                    </div>
+
+                    <div className={styles.cardImageWrap}>
+                      <img
+                        src={item.imageSrc}
+                        alt={item.imageAlt}
+                        className={styles.cardImage}
+                        style={{ objectPosition: item.objectPosition || "center 20%" }}
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <div className={styles.cardContent}>
+                      <div className={styles.cardInfoRow}>
+                        <div className={styles.cardTitleWrap}>
+                          <h4 className={styles.cardTitle}>{item.milestoneTitle}</h4>
+                          <span className={styles.cardOrg}>{item.conferringBody}</span>
+                        </div>
+                        <div
+                          className={styles.cardArrowAffordance}
+                          aria-label={`View evidence for ${item.milestoneTitle}`}
+                        >
+                          <svg
+                            className={styles.cardArrowIcon}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                          >
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Architectural Shelf Lip & Under Glow */}
+              <div className={styles.shelfLip} aria-hidden="true" />
+              <div className={styles.shelfUnderGlow} aria-hidden="true" />
+
+              {/* Subtle Discoverability Cue */}
+              <div
+                className={`${styles.discoverCue} ${
+                  hasScrolled ? styles.discoverCueFaded : ""
+                }`}
+                onClick={() => scrollTrack("right")}
+                role="button"
+                tabIndex={0}
+                aria-label="Scroll right to discover more recognition entries"
+              >
+                <span>EXPLORE VERIFIED EVIDENCE</span>
+                <span className={styles.cueArrow}>→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── 3. THE PRIVATE CLIENT SUITE — CINEMATIC 3-CARD SHOWCASE ── */}
+        <div className={styles.clientGallerySection} aria-label="The Private Client Suite">
           <div className={styles.clientGalleryHeader}>
             <span className={styles.clientGalleryEyebrow}>THE PRIVATE CLIENT SUITE</span>
             <h3 className={styles.clientGalleryHeading}>The 24 Frames Client Gallery Experience</h3>
@@ -571,70 +647,165 @@ export default function FounderRecognitionSection() {
             </p>
           </div>
 
-          <div className={styles.galleryFeaturesGrid}>
-            <div className={styles.galleryFeatureCard}>
-              <div className={styles.featureIconBadge}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M15 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                  <path d="M4 20c0-3.3 2.7-6 6-6h4c3.3 0 6 2.7 6 6" />
-                </svg>
+          <div className={styles.threeCardStage}>
+            {/* Card 01: Violet / Indigo — AI-Powered Moments */}
+            <div
+              ref={(el) => {
+                suiteCardRefs.current[0] = el;
+              }}
+              className={`${styles.showcaseCard} ${styles.cardViolet} ${
+                activeSuiteCard === 0 ? styles.cardVioletActive : ""
+              }`}
+              onPointerEnter={() => setActiveSuiteCard(0)}
+              onPointerMove={(e) => handleCardPointerMove(0, e)}
+              onPointerLeave={() => handleCardPointerLeave(0)}
+              onClick={() => setActiveSuiteCard(0)}
+              role="button"
+              tabIndex={0}
+              aria-label="Card 01: AI-Powered Favorite Moments"
+            >
+              <div className={styles.cardTopRow}>
+                <span className={styles.cardNumber}>01</span>
+                <span className={styles.cardPillBadge}>AI VAULT</span>
               </div>
-              <h4 className={styles.featureTitle}>AI-Powered Favorite Moments</h4>
-              <p className={styles.featureDescription}>
-                Smart face recognition enables couples and family guests to effortlessly find their loved ones across thousands of high-resolution stills.
-              </p>
+
+              <div className={styles.cardArtworkCanvas}>
+                <div
+                  ref={(el) => {
+                    artworkRefs.current[0] = el;
+                  }}
+                  className={styles.cardArtworkInner}
+                >
+                  <svg width="150" height="120" viewBox="0 0 150 120" fill="none" aria-hidden="true">
+                    <circle cx="75" cy="55" r="38" stroke="rgba(196, 181, 253, 0.4)" strokeDasharray="4 4" />
+                    <circle cx="75" cy="55" r="26" stroke="#C4B5FD" strokeWidth="1.5" />
+                    <circle cx="75" cy="55" r="4" fill="#C4B5FD" />
+                    {/* Targeting Brackets */}
+                    <path d="M 45 35 L 45 25 L 55 25" stroke="#C4B5FD" strokeWidth="2" strokeLinecap="round" />
+                    <path d="M 105 35 L 105 25 L 95 25" stroke="#C4B5FD" strokeWidth="2" strokeLinecap="round" />
+                    <path d="M 45 75 L 45 85 L 55 85" stroke="#C4B5FD" strokeWidth="2" strokeLinecap="round" />
+                    <path d="M 105 75 L 105 85 L 95 85" stroke="#C4B5FD" strokeWidth="2" strokeLinecap="round" />
+                    <text x="75" y="110" fill="#C4B5FD" fontSize="9" fontFamily="monospace" textAnchor="middle" letterSpacing="2">
+                      FACE RECOGNITION AI
+                    </text>
+                  </svg>
+                </div>
+              </div>
+
+              <div className={styles.cardBottomContent}>
+                <h4 className={styles.cardTitle}>AI-Powered Favorite Moments</h4>
+                <p className={styles.cardDescription}>
+                  Smart facial recognition enables couples and family guests to effortlessly locate every smile and candid ritual across thousands of high-resolution master stills.
+                </p>
+                <div className={styles.cardInteractiveAffordance}>
+                  <span>SMART SEARCH ENGINE</span>
+                  <span>→</span>
+                </div>
+              </div>
             </div>
 
-            <div className={styles.galleryFeatureCard}>
-              <div className={styles.featureIconBadge}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="m22 8-6 4 6 4V8Z" />
-                  <rect x="2" y="6" width="14" height="12" rx="2" />
-                </svg>
+            {/* Card 02: Warm Coral / Cream Hero — Luxury 4K Cinema Theater (Middle Hero) */}
+            <div
+              ref={(el) => {
+                suiteCardRefs.current[1] = el;
+              }}
+              className={`${styles.showcaseCard} ${styles.cardCoral} ${
+                activeSuiteCard === 1 ? styles.cardCoralActive : ""
+              }`}
+              onPointerEnter={() => setActiveSuiteCard(1)}
+              onPointerMove={(e) => handleCardPointerMove(1, e)}
+              onPointerLeave={() => handleCardPointerLeave(1)}
+              onClick={() => setActiveSuiteCard(1)}
+              role="button"
+              tabIndex={0}
+              aria-label="Card 02: Luxury 4K Video Experience"
+            >
+              <div className={styles.cardTopRow}>
+                <span className={styles.cardNumber}>02</span>
+                <span className={styles.cardPillBadge}>4K STREAMING</span>
               </div>
-              <h4 className={styles.featureTitle}>Luxury 4K Video Experience</h4>
-              <p className={styles.featureDescription}>
-                A cinematic streaming theater for your full-length wedding films, signature teasers, and vertical highlight reels in uncompressed clarity.
-              </p>
+
+              <div className={styles.cardArtworkCanvas}>
+                <div
+                  ref={(el) => {
+                    artworkRefs.current[1] = el;
+                  }}
+                  className={styles.cardArtworkInner}
+                >
+                  <svg width="150" height="120" viewBox="0 0 150 120" fill="none" aria-hidden="true">
+                    <rect x="20" y="25" width="110" height="65" rx="6" stroke="#FED7AA" strokeWidth="1.5" />
+                    <polygon points="68,48 90,58 68,68" fill="#FED7AA" />
+                    <circle cx="75" cy="58" r="28" stroke="rgba(254, 215, 170, 0.35)" strokeDasharray="3 4" />
+                    <text x="75" y="108" fill="#FED7AA" fontSize="9" fontFamily="monospace" textAnchor="middle" letterSpacing="2">
+                      MASTER CINEMA 4K
+                    </text>
+                  </svg>
+                </div>
+              </div>
+
+              <div className={styles.cardBottomContent}>
+                <h4 className={styles.cardTitle}>Luxury 4K Video Experience</h4>
+                <p className={styles.cardDescription}>
+                  A private high-bitrate streaming theater for your full-length wedding films, signature teasers, and vertical highlight reels in uncompressed optical clarity.
+                </p>
+                <div className={styles.cardInteractiveAffordance}>
+                  <span>THEATER STREAMING</span>
+                  <span>→</span>
+                </div>
+              </div>
             </div>
 
-            <div className={styles.galleryFeatureCard}>
-              <div className={styles.featureIconBadge}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                </svg>
+            {/* Card 03: Cool Silver / Charcoal — Generational Legacy Archive */}
+            <div
+              ref={(el) => {
+                suiteCardRefs.current[2] = el;
+              }}
+              className={`${styles.showcaseCard} ${styles.cardSilver} ${
+                activeSuiteCard === 2 ? styles.cardSilverActive : ""
+              }`}
+              onPointerEnter={() => setActiveSuiteCard(2)}
+              onPointerMove={(e) => handleCardPointerMove(2, e)}
+              onPointerLeave={() => handleCardPointerLeave(2)}
+              onClick={() => setActiveSuiteCard(2)}
+              role="button"
+              tabIndex={0}
+              aria-label="Card 03: Generational Legacy Archive"
+            >
+              <div className={styles.cardTopRow}>
+                <span className={styles.cardNumber}>03</span>
+                <span className={styles.cardPillBadge}>HEIRLOOM VAULT</span>
               </div>
-              <h4 className={styles.featureTitle}>Instagram-Ready Signature Shots</h4>
-              <p className={styles.featureDescription}>
-                Master color-graded portraits and candid moments individually calibrated and proportioned for seamless, high-fidelity social sharing.
-              </p>
-            </div>
 
-            <div className={styles.galleryFeatureCard}>
-              <div className={styles.featureIconBadge}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                </svg>
+              <div className={styles.cardArtworkCanvas}>
+                <div
+                  ref={(el) => {
+                    artworkRefs.current[2] = el;
+                  }}
+                  className={styles.cardArtworkInner}
+                >
+                  <svg width="150" height="120" viewBox="0 0 150 120" fill="none" aria-hidden="true">
+                    {/* Tiered photo ceremony stories stack */}
+                    <rect x="25" y="42" width="70" height="48" rx="4" stroke="rgba(226, 232, 240, 0.4)" strokeWidth="1.2" />
+                    <rect x="40" y="32" width="70" height="48" rx="4" stroke="rgba(226, 232, 240, 0.7)" strokeWidth="1.2" />
+                    <rect x="55" y="22" width="70" height="48" rx="4" stroke="#E2E8F0" strokeWidth="1.5" />
+                    <circle cx="102" cy="35" r="4" fill="#E2E8F0" />
+                    <text x="75" y="108" fill="#E2E8F0" fontSize="9" fontFamily="monospace" textAnchor="middle" letterSpacing="2">
+                      EVENT-WISE TIMELINE
+                    </text>
+                  </svg>
+                </div>
               </div>
-              <h4 className={styles.featureTitle}>Event-Wise Photo Stories</h4>
-              <p className={styles.featureDescription}>
-                Your wedding memories meticulously structured by ritual, ceremony, and intimate timeline — from Pellikuthuru to the grand reception.
-              </p>
-            </div>
 
-            <div className={styles.galleryFeatureCard}>
-              <div className={styles.featureIconBadge}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
+              <div className={styles.cardBottomContent}>
+                <h4 className={styles.cardTitle}>Generational Legacy & Social Stories</h4>
+                <p className={styles.cardDescription}>
+                  Master color-graded stills and event-wise ceremony timelines proportioned for seamless social sharing and long-term multi-generational preservation.
+                </p>
+                <div className={styles.cardInteractiveAffordance}>
+                  <span>TIMELESS PRESERVATION</span>
+                  <span>→</span>
+                </div>
               </div>
-              <h4 className={styles.featureTitle}>The 24 Frames Touch</h4>
-              <p className={styles.featureDescription}>
-                An exclusive digital heirloom vault designed to keep your wedding story vibrant, accessible, and timeless for generations to come.
-              </p>
             </div>
           </div>
         </div>

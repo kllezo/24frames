@@ -175,12 +175,20 @@ export default async function StoryDetailPage({ params }: PageProps) {
             <div className={styles.galleryFlow}>
               {story.frames.map((frame, index) => {
                 const isLandscape = frame.aspect === "landscape";
+                const alignmentClass = isLandscape
+                  ? styles.frameCentered
+                  : index % 3 === 0
+                  ? styles.frameCentered
+                  : index % 3 === 1
+                  ? styles.frameOffsetLeft
+                  : styles.frameOffsetRight;
+
                 return (
                   <figure
                     key={frame.id}
                     className={`${styles.frameFigure} ${
                       isLandscape ? styles.frameLandscape : styles.framePortrait
-                    }`}
+                    } ${alignmentClass}`}
                   >
                     <div className={styles.imageFrameWrap}>
                       <picture>
@@ -254,7 +262,7 @@ export default async function StoryDetailPage({ params }: PageProps) {
                 We accept a limited number of bespoke wedding commissions worldwide each calendar year, dedicating deep observational care to every union.
               </p>
               <div className={styles.ctaActions}>
-                <Link href="/#invitation" className={styles.primaryCtaBtn}>
+                <Link href="/inquire" className={styles.primaryCtaBtn}>
                   Request Commission Consultation →
                 </Link>
                 <Link href="/stories" className={styles.secondaryCtaBtn}>

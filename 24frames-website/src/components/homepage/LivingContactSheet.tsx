@@ -235,7 +235,21 @@ export default function LivingContactSheet() {
     return `M 0 ${c.topY0.toFixed(4)} C 0.35 ${c.topCp1Y.toFixed(4)}, 0.65 ${c.topCp2Y.toFixed(4)}, 1 ${c.topY1.toFixed(4)} L 1 ${c.botY1.toFixed(4)} C 0.65 ${c.botCp2Y.toFixed(4)}, 0.35 ${c.botCp1Y.toFixed(4)}, 0 ${c.botY0.toFixed(4)} Z`;
   };
 
-  // Trigger Vinitha Video Morph (Curved -> Rectangular Player)
+  // Calculate centered 60% viewport playback dimensions (preserving 16:9)
+  const getPlaybackDimensions = () => {
+    if (typeof window === "undefined") return { width: 960, height: 540 };
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const isMobile = vw < 768;
+    const maxW = isMobile ? vw * 0.88 : vw * 0.60;
+    const maxH = isMobile ? vh * 0.58 : vh * 0.60;
+    let targetW = Math.min(maxW, maxH * (16 / 9));
+    if (!isMobile) targetW = Math.min(targetW, 1040);
+    const targetH = targetW * (9 / 16);
+    return { width: Math.round(targetW), height: Math.round(targetH) };
+  };
+
+  // Trigger Vinitha Video Morph (Curved -> Centered 60% Viewport Player)
   const openVinithaVideo = useCallback(() => {
     if (vinithaMorphingRef.current || vinithaVideoActive) return;
     vinithaMorphingRef.current = true;
@@ -249,6 +263,7 @@ export default function LivingContactSheet() {
       return;
     }
 
+    const { width: targetW, height: targetH } = getPlaybackDimensions();
     const currentCoords = { ...CURVED_COORDS };
     const tl = gsap.timeline({
       onComplete: () => {
@@ -276,15 +291,18 @@ export default function LivingContactSheet() {
       },
     }, 0);
 
-    // 3. Coordinate container geometry into clean 16:9 cinematic rectangle
+    // 3. Smoothly animate stage dimensions and shape into centered 60% viewport frame
     tl.to(stage, {
+      width: `${targetW}px`,
+      height: `${targetH}px`,
       borderRadius: "12px",
+      boxShadow: "0 24px 64px rgba(0, 0, 0, 0.28)",
       duration: 1.05,
       ease: "power2.inOut",
     }, 0);
   }, [vinithaVideoActive]);
 
-  // Close Vinitha Video Morph (Rectangular -> Curved)
+  // Close Vinitha Video Morph (60% Frame -> Original Full-Bleed Curved Poster)
   const closeVinithaVideo = useCallback(() => {
     if (vinithaMorphingRef.current) return;
     vinithaMorphingRef.current = true;
@@ -302,6 +320,7 @@ export default function LivingContactSheet() {
     const currentCoords = { ...RECT_COORDS };
     const tl = gsap.timeline({
       onComplete: () => {
+        gsap.set(stage, { clearProps: "width,height" });
         vinithaMorphingRef.current = false;
       },
     });
@@ -316,14 +335,17 @@ export default function LivingContactSheet() {
       },
     }, 0);
 
-    // 2. Animate container back to organic frame
+    // 2. Animate container back to original poster dimensions
     tl.to(stage, {
+      width: "100%",
+      height: "",
       borderRadius: "0px",
+      boxShadow: "0 24px 64px rgba(0, 0, 0, 0.18)",
       duration: 0.95,
       ease: "power2.inOut",
     }, 0);
 
-    // 3. Fade text overlays & play beacon back in
+    // 3. Fade text overlays & play beacon back in as unified single element
     if (overlays) {
       tl.to(overlays, {
         opacity: 1,
@@ -333,7 +355,7 @@ export default function LivingContactSheet() {
     }
   }, []);
 
-  // Trigger Nishanth Video Morph (Curved -> Rectangular Player)
+  // Trigger Nishanth Video Morph (Curved -> Centered 60% Viewport Player)
   const openNishanthVideo = useCallback(() => {
     if (nishanthMorphingRef.current || nishanthVideoActive) return;
     nishanthMorphingRef.current = true;
@@ -347,6 +369,7 @@ export default function LivingContactSheet() {
       return;
     }
 
+    const { width: targetW, height: targetH } = getPlaybackDimensions();
     const currentCoords = { ...NISHANTH_CURVED_COORDS };
     const tl = gsap.timeline({
       onComplete: () => {
@@ -374,15 +397,18 @@ export default function LivingContactSheet() {
       },
     }, 0);
 
-    // 3. Coordinate container geometry into clean 16:9 cinematic rectangle
+    // 3. Smoothly animate stage dimensions and shape into centered 60% viewport frame
     tl.to(stage, {
+      width: `${targetW}px`,
+      height: `${targetH}px`,
       borderRadius: "12px",
+      boxShadow: "0 24px 64px rgba(0, 0, 0, 0.28)",
       duration: 1.05,
       ease: "power2.inOut",
     }, 0);
   }, [nishanthVideoActive]);
 
-  // Close Nishanth Video Morph (Rectangular -> Curved)
+  // Close Nishanth Video Morph (60% Frame -> Original Full-Bleed Curved Poster)
   const closeNishanthVideo = useCallback(() => {
     if (nishanthMorphingRef.current) return;
     nishanthMorphingRef.current = true;
@@ -400,6 +426,7 @@ export default function LivingContactSheet() {
     const currentCoords = { ...RECT_COORDS };
     const tl = gsap.timeline({
       onComplete: () => {
+        gsap.set(stage, { clearProps: "width,height" });
         nishanthMorphingRef.current = false;
       },
     });
@@ -414,14 +441,17 @@ export default function LivingContactSheet() {
       },
     }, 0);
 
-    // 2. Animate container back to organic frame
+    // 2. Animate container back to original poster dimensions
     tl.to(stage, {
+      width: "100%",
+      height: "",
       borderRadius: "0px",
+      boxShadow: "0 24px 64px rgba(0, 0, 0, 0.18)",
       duration: 0.95,
       ease: "power2.inOut",
     }, 0);
 
-    // 3. Fade text overlays & play beacon back in
+    // 3. Fade text overlays & play beacon back in as unified single element
     if (overlays) {
       tl.to(overlays, {
         opacity: 1,
@@ -511,10 +541,81 @@ export default function LivingContactSheet() {
           0.30
         );
       }
+
+      // Slow, elegant opacity fade-in for Vinitha video text blocks (title -> description -> CTA)
+      const vinithaTextElements = gsap.utils.toArray<HTMLElement>(
+        `.${styles.filmNarrativeSide} > *`
+      );
+      if (vinithaTextElements.length && vinithaStageRef.current) {
+        gsap.fromTo(
+          vinithaTextElements,
+          { opacity: 0, y: 8 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.0,
+            stagger: 0.12,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: vinithaStageRef.current,
+              start: "top 80%",
+              once: true,
+            },
+          }
+        );
+      }
+
+      // Slow, elegant opacity fade-in for Nishanth video text blocks
+      const nishanthTextElements = gsap.utils.toArray<HTMLElement>(
+        `.${styles.nishanthRightNarrative} > *`
+      );
+      if (nishanthTextElements.length && nishanthStageRef.current) {
+        gsap.fromTo(
+          nishanthTextElements,
+          { opacity: 0, y: 8 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.0,
+            stagger: 0.12,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: nishanthStageRef.current,
+              start: "top 80%",
+              once: true,
+            },
+          }
+        );
+      }
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
+
+  /* Recalculate target playback frame on viewport resize */
+  useEffect(() => {
+    const handleResize = () => {
+      const dims = getPlaybackDimensions();
+      if (vinithaVideoActive && vinithaStageRef.current) {
+        gsap.to(vinithaStageRef.current, {
+          width: `${dims.width}px`,
+          height: `${dims.height}px`,
+          duration: 0.2,
+          ease: "power1.out",
+        });
+      }
+      if (nishanthVideoActive && nishanthStageRef.current) {
+        gsap.to(nishanthStageRef.current, {
+          width: `${dims.width}px`,
+          height: `${dims.height}px`,
+          duration: 0.2,
+          ease: "power1.out",
+        });
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [vinithaVideoActive, nishanthVideoActive]);
 
   /* Escape key closes inline video players */
   useEffect(() => {

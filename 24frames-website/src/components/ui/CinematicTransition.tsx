@@ -470,10 +470,10 @@ export default function CinematicTransition() {
           >
             <defs>
               <radialGradient id="shutter-blade-grad" cx="30%" cy="30%" r="70%">
-                <stop offset="0%" stopColor="#24302a" />
-                <stop offset="45%" stopColor="#141c18" />
-                <stop offset="85%" stopColor="#0a0f0d" />
-                <stop offset="100%" stopColor="#050807" />
+                <stop offset="0%" stopColor="#222222" />
+                <stop offset="45%" stopColor="#141414" />
+                <stop offset="85%" stopColor="#080808" />
+                <stop offset="100%" stopColor="#000000" />
               </radialGradient>
               <linearGradient
                 id="shutter-blade-edge"
@@ -482,9 +482,9 @@ export default function CinematicTransition() {
                 x2="100%"
                 y2="100%"
               >
-                <stop offset="0%" stopColor="rgba(212, 175, 55, 0.65)" />
-                <stop offset="50%" stopColor="rgba(255, 255, 255, 0.35)" />
-                <stop offset="100%" stopColor="rgba(200, 168, 78, 0.15)" />
+                <stop offset="0%" stopColor="rgba(255, 255, 255, 0.45)" />
+                <stop offset="50%" stopColor="rgba(180, 180, 180, 0.25)" />
+                <stop offset="100%" stopColor="rgba(40, 40, 40, 0.12)" />
               </linearGradient>
               <filter
                 id="shutter-blade-shadow"

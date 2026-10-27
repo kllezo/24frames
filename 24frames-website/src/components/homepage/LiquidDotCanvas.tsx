@@ -26,8 +26,8 @@ export default function LiquidDotCanvas({
   gridSpacing = 30,
   dotRadius = 1.5,
   dotColor = "rgba(175, 165, 145, 0.48)",
-  influenceRadius = 160,
-  maxDisplacement = 8.5,
+  influenceRadius = 230,
+  maxDisplacement = 13,
 }: LiquidDotCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -143,7 +143,7 @@ export default function LiquidDotCanvas({
             const displacement = maxDisplacement * power;
 
             // Soft liquid ripple modulation
-            const ripple = Math.sin(time * 3.5 - dist * 0.05) * power * 1.5;
+            const ripple = Math.sin(time * 3.5 - dist * 0.038) * power * 2.2;
             const totalDisplace = displacement + ripple;
 
             targetX = dot.baseX + Math.cos(angle) * totalDisplace;
