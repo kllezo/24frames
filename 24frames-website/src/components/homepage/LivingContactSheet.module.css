@@ -392,7 +392,7 @@
 
 .curvedPanelStage {
   width: 100%;
-  height: clamp(480px, 58vh, 660px);
+  height: clamp(710px, 86vh, 978px);
   position: relative;
   overflow: hidden;
   background-color: #0E1613;
@@ -404,7 +404,7 @@
 
 .curvedPanelStageActive {
   width: 100%;
-  height: clamp(480px, 56.25vw, 820px);
+  height: clamp(710px, 83.25vw, 1214px);
   border-radius: 0;
 }
 
@@ -722,17 +722,17 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   05 — SIREESH & HARSHITHA (LAYERED EDITORIAL GRID)
+   05 — SIREESH & HARSHITHA (ASYMMETRIC EDITORIAL STILLS COMPOSITION)
    ══════════════════════════════════════════════════════════════════════════ */
 .layeredSireeshBlock {
   max-width: 1180px;
-  margin: 0 auto clamp(5rem, 9.5vh, 8.5rem) auto;
+  margin: 0 auto clamp(6.5rem, 12vh, 10rem) auto;
 }
 
 .layeredGrid {
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
-  gap: clamp(2rem, 4.5vw, 4rem);
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(3rem, 6vw, 6.5rem);
   align-items: center;
 }
 
@@ -747,32 +747,13 @@
   overflow: hidden;
   position: relative;
   background-color: #E6E1D7;
-  box-shadow: 0 16px 44px rgba(9, 69, 62, 0.09);
+  box-shadow: 0 20px 48px rgba(9, 69, 62, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
-.layeredContentCol {
+.sireeshContentCol {
   display: flex;
   flex-direction: column;
-  gap: clamp(2rem, 4vh, 3.2rem);
-}
-
-.sireeshNarrativeArea {
-  display: flex;
-  flex-direction: column;
-}
-
-.sireeshMandapArea {
-  width: 100%;
-}
-
-.wideMandapCanvas {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border-radius: 14px;
-  overflow: hidden;
   position: relative;
-  background-color: #E6E1D7;
-  box-shadow: 0 16px 44px rgba(9, 69, 62, 0.09);
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -782,12 +763,12 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: clamp(4.5rem, 8vh, 7rem);
+  margin-bottom: clamp(5rem, 9vh, 8rem);
 }
 
 .nishanthCurvedStage {
   width: 100%;
-  height: clamp(520px, 64vh, 720px);
+  height: clamp(770px, 95vh, 1066px);
   position: relative;
   overflow: hidden;
   background-color: #0E1613;
@@ -799,7 +780,7 @@
 
 .nishanthCurvedStageActive {
   width: 100%;
-  height: clamp(480px, 56.25vw, 820px);
+  height: clamp(710px, 83.25vw, 1214px);
   border-radius: 0;
 }
 

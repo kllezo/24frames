@@ -174,28 +174,59 @@ export default function FounderRecognitionSection() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 72%",
+          start: "top 74%",
           toggleActions: "play none none reverse",
         },
       });
 
-      // 1. Architectural shelf appears first
-      if (shelfNicheRef.current) {
+      // 1. Portrait reveals with clip-path
+      if (portraitWrapRef.current) {
         tl.fromTo(
-          shelfNicheRef.current,
-          { opacity: 0, y: 28 },
-          { opacity: 1, y: 0, duration: 0.75, ease: "power2.out" }
+          portraitWrapRef.current,
+          { clipPath: "inset(8% 0% 8% 0%)", opacity: 0, y: 22 },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            ease: "power3.out",
+          }
         );
       }
 
-      // 2. Recognition cards enter in a gentle stagger
+      // 2. Statistics reveal beneath portrait
+      if (statsRef.current) {
+        tl.fromTo(
+          statsRef.current,
+          { opacity: 0, y: 16 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.55,
+            ease: "power2.out",
+          },
+          "-=0.4"
+        );
+      }
+
+      // 3. Architectural shelf reveals
+      if (shelfNicheRef.current) {
+        tl.fromTo(
+          shelfNicheRef.current,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.75, ease: "power2.out" },
+          "-=0.35"
+        );
+      }
+
+      // 4. Recognition cards enter in a gentle stagger
       const covers = gsap.utils.toArray<HTMLElement>(
         `.${styles.magazineCoverItem}`
       );
       if (covers.length) {
         tl.fromTo(
           covers,
-          { opacity: 0, y: 16, scale: 0.94 },
+          { opacity: 0, y: 14, scale: 0.95 },
           {
             opacity: 1,
             y: 0,
@@ -204,65 +235,30 @@ export default function FounderRecognitionSection() {
             stagger: 0.08,
             ease: "back.out(1.2)",
           },
-          "-=0.35"
+          "-=0.4"
         );
       }
 
-      // 3. Founder portrait reveals with complementary clip-path
-      if (portraitWrapRef.current) {
-        tl.fromTo(
-          portraitWrapRef.current,
-          { clipPath: "inset(12% 0% 12% 0%)", opacity: 0, y: 25 },
-          {
-            clipPath: "inset(0% 0% 0% 0%)",
-            opacity: 1,
-            y: 0,
-            duration: 0.85,
-            ease: "power3.out",
-          },
-          "-=0.45"
-        );
-      }
-
-      // 3.B Left statistics reveal beneath portrait
-      if (statsRef.current) {
-        tl.fromTo(
-          statsRef.current,
-          { opacity: 0, y: 18 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.55,
-            ease: "power2.out",
-          },
-          "-=0.35"
-        );
-      }
-
-      // 4. Biography text elements fade in
+      // 5. Biography & quotation fade in
       if (bioBlockRef.current) {
-        const textNodes = Array.from(bioBlockRef.current.children).filter(
-          (child) => child !== ctaRef.current
-        );
         tl.fromTo(
-          textNodes,
+          bioBlockRef.current,
           { opacity: 0, y: 16 },
           {
             opacity: 1,
             y: 0,
             duration: 0.65,
-            stagger: 0.06,
             ease: "power2.out",
           },
-          "-=0.4"
+          "-=0.3"
         );
       }
 
-      // 5. Commission CTA appears directly beneath biography
+      // 6. Commission CTA appears
       if (ctaRef.current) {
         tl.fromTo(
           ctaRef.current,
-          { opacity: 0, y: 16 },
+          { opacity: 0, y: 14 },
           {
             opacity: 1,
             y: 0,
@@ -315,10 +311,20 @@ export default function FounderRecognitionSection() {
       <div className={styles.leafShadowOverlay} aria-hidden="true" />
 
       <div className={styles.container}>
-        {/* ── 1. HIGH-END EDITORIAL FOUNDER PROFILE (TWO-COLUMN DESKTOP, ORDERED MOBILE) ── */}
-        <div className={styles.founderEditorialProfile}>
-          {/* 1.1 Left: Large Primary Portrait Anchor */}
-          <div className={styles.portraitCol}>
+        {/* ── HIGH-END EDITORIAL FOUNDER PROFILE (TWO-COLUMN DESKTOP MATCHING IMAGE 5) ── */}
+        <div className={styles.artistSectionGrid}>
+          {/* ════ LEFT COLUMN ════ */}
+          <div className={styles.artistLeftCol}>
+            {/* 1. Header Card Panel */}
+            <div className={styles.artistHeaderCard}>
+              <div className={styles.chapterKicker}>
+                CHAPTER 04 — THE ARTIST & VISIONARY
+              </div>
+              <h2 className={styles.founderName}>PHANI GOGIREDDY</h2>
+              <div className={styles.founderRole}>MANAGING DIRECTOR</div>
+            </div>
+
+            {/* 2. Large Portrait Frame Card */}
             <div ref={portraitWrapRef} className={styles.portraitWrap}>
               <img
                 src="/images/founder-portrait.jpg"
@@ -326,29 +332,10 @@ export default function FounderRecognitionSection() {
                 className={styles.portraitImg}
                 loading="eager"
               />
-              <div className={styles.portraitGroundShadow} aria-hidden="true" />
-            </div>
-          </div>
-
-          {/* 1.2 Right: Editorial Details (Name, Role, Statistics, Bio, Principles, Quote, CTA) */}
-          <div ref={bioBlockRef} className={styles.profileDetailsCol}>
-            {/* Chapter Kicker */}
-            <div className={styles.chapterKicker}>
-              CHAPTER 04 — THE ARTIST & VISIONARY
             </div>
 
-            {/* Founder Name */}
-            <h2 className={styles.founderName}>
-              <span>PHANI GOGIREDDY</span>
-            </h2>
-
-            {/* Founder Official Title */}
-            <div className={styles.founderRole}>
-              MANAGING DIRECTOR
-            </div>
-
-            {/* Prominent Horizontal Statistics Row */}
-            <div ref={statsRef} className={styles.prominentStatsRow}>
+            {/* 3. Prominent Statistics Card */}
+            <div ref={statsRef} className={styles.statsCardPanel}>
               <div className={styles.statItem}>
                 <span className={styles.statValue}>2016</span>
                 <span className={styles.statLabel}>ESTABLISHED IN HYDERABAD</span>
@@ -365,15 +352,8 @@ export default function FounderRecognitionSection() {
               </div>
             </div>
 
-            {/* Concise Source-Derived Biography (2-3 Sentences) */}
-            <div className={styles.narrative}>
-              <p>
-                Established in 2016 from a modest setup of two computers, 24 Frames was founded on an unyielding dedication to heartfelt visual storytelling. Bringing cinematic framing, lighting nuance, and deep emotional sensitivity from Telugu cinema to real weddings, Phani Gogireddy has shaped South India's premier luxury wedding film aesthetic. Today, backed by a 6,000 sq. ft. studio and an award-winning creative team, the company has documented over 1,000 celebrated unions across India and abroad.
-              </p>
-            </div>
-
-            {/* Three Core Principles */}
-            <div className={styles.coreValuesBlock}>
+            {/* 4. Three Core Principles Card */}
+            <div className={styles.principlesCardPanel}>
               <span className={styles.coreValuesHeading}>THREE CORE PRINCIPLES</span>
               <div className={styles.coreValuesGrid}>
                 <div className={styles.coreValueCard}>
@@ -407,19 +387,168 @@ export default function FounderRecognitionSection() {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Closing Signature Pull Quote */}
-            <div className={styles.quoteBlock}>
+          {/* ════ RIGHT COLUMN ════ */}
+          <div ref={bioBlockRef} className={styles.artistRightCol}>
+            {/* 1. The Verified Archive Shelf Card Panel */}
+            <div className={styles.shelfCardPanel}>
+              <div className={styles.shelfHeaderRow}>
+                <div className={styles.shelfHeaderMeta}>
+                  <span className={styles.shelfEyebrow}>
+                    HONOURS & EDITORIAL RECOGNITION
+                  </span>
+                  <div className={styles.shelfTitleRow}>
+                    <h3 className={styles.shelfTitle}>The Verified Archive</h3>
+                    <span className={styles.shelfScriptAccent}>Heritage & Honours</span>
+                  </div>
+                </div>
+
+                {/* Previous / Next Shelf Arrow Controls */}
+                <div className={styles.shelfNavControls}>
+                  <button
+                    type="button"
+                    className={styles.navArrowBtn}
+                    onClick={() => scrollTrack("left")}
+                    disabled={!canScrollLeft}
+                    aria-label="Previous recognition entry"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.navArrowBtn}
+                    onClick={() => scrollTrack("right")}
+                    disabled={!canScrollRight}
+                    aria-label="Next recognition entry"
+                  >
+                    ›
+                  </button>
+                </div>
+              </div>
+
+              {/* Architectural Plaster Niche */}
+              <div
+                ref={shelfNicheRef}
+                className={styles.architecturalShelfNiche}
+                role="region"
+                aria-label="Architectural Recognition Shelf Track"
+              >
+                {/* Champagne Cove Lighting Strip */}
+                <div className={styles.coveLightStrip} aria-hidden="true" />
+
+                {/* Horizontally Scrollable Recognition Track */}
+                <div
+                  ref={trackRef}
+                  className={styles.magazineTrack}
+                  onScroll={handleScroll}
+                  tabIndex={0}
+                  role="region"
+                  aria-label="Interactive verified recognition archive"
+                >
+                  {VERIFIED_RECOGNITIONS.map((item) => (
+                    <div
+                      key={item.id}
+                      ref={(el) => {
+                        triggerRefs.current[item.id] = el;
+                      }}
+                      className={`${styles.recognitionCardItem} ${styles.magazineCoverItem}`}
+                      onClick={() => handleOpenItem(item)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          handleOpenItem(item);
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
+                      aria-haspopup="dialog"
+                      aria-label={`View evidence for ${item.milestoneTitle}`}
+                    >
+                      <div className={styles.cardTopMeta}>
+                        <span className={styles.cardBadge}>{item.badgeLabel}</span>
+                        <span className={styles.cardYear}>{item.year}</span>
+                      </div>
+
+                      <div className={styles.cardImageWrap}>
+                        <img
+                          src={item.imageSrc}
+                          alt={item.imageAlt}
+                          className={styles.cardImage}
+                          style={{ objectPosition: item.objectPosition || "center 20%" }}
+                          loading="lazy"
+                        />
+                      </div>
+
+                      <div className={styles.cardContent}>
+                        <div className={styles.cardInfoRow}>
+                          <div className={styles.cardTitleWrap}>
+                            <h4 className={styles.cardTitle}>{item.milestoneTitle}</h4>
+                            <span className={styles.cardOrg}>{item.conferringBody}</span>
+                          </div>
+                          <div
+                            className={styles.cardArrowAffordance}
+                            aria-label={`View evidence for ${item.milestoneTitle}`}
+                          >
+                            <svg
+                              className={styles.cardArrowIcon}
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              aria-hidden="true"
+                            >
+                              <line x1="5" y1="12" x2="19" y2="12" />
+                              <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Architectural Shelf Lip & Under Glow */}
+                <div className={styles.shelfLip} aria-hidden="true" />
+                <div className={styles.shelfUnderGlow} aria-hidden="true" />
+
+                {/* Subtle Discoverability Cue */}
+                <div
+                  className={`${styles.discoverCue} ${
+                    hasScrolled ? styles.discoverCueFaded : ""
+                  }`}
+                  onClick={() => scrollTrack("right")}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Scroll right to discover more recognition entries"
+                >
+                  <span>EXPLORE VERIFIED EVIDENCE</span>
+                  <span className={styles.cueArrow}>→</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. Concise Source-Derived Biography Card Panel */}
+            <div className={styles.bioCardPanel}>
+              <p className={styles.narrativeText}>
+                Established in 2016 from a modest setup of two computers, 24 Frames was founded on an unyielding dedication to heartfelt visual storytelling. Bringing cinematic framing, lighting nuance, and deep emotional sensitivity from Telugu cinema to real weddings, Phani Gogireddy has shaped South India's premier luxury wedding film aesthetic. Today, backed by a 6,000 sq. ft. studio and an award-winning creative team, the company has documented over 1,000 celebrated unions across India and abroad.
+              </p>
+            </div>
+
+            {/* 3. Closing Signature Editorial Pull Quote Card Panel */}
+            <div className={styles.quoteCardPanel}>
               <p className={styles.quoteText}>
                 “From reel to real, every dream pursued with heart becomes a timeless shot.”
               </p>
               <span className={styles.quoteAuthor}>
-                — Phani Gogireddy, Managing Director
+                — PHANI GOGIREDDY, MANAGING DIRECTOR
               </span>
             </div>
 
-            {/* Forest-Green Commission CTA */}
-            <div ref={ctaRef} className={styles.ctaRow}>
+            {/* 4. Forest-Green Commission CTA Card Panel */}
+            <div ref={ctaRef} className={styles.ctaCardPanel}>
               <a href="#inquire" className={styles.commissionPillBtn}>
                 COMMISSION PHANI GOGIREDDY{" "}
                 <span className={styles.btnArrow}>→</span>
@@ -428,146 +557,7 @@ export default function FounderRecognitionSection() {
           </div>
         </div>
 
-        {/* ── 2. THE VERIFIED ARCHIVE (FULL-WIDTH ARCHITECTURAL SHELF) ── */}
-        <div className={styles.shelfNicheWrapper}>
-          <div className={styles.shelfHeaderRow}>
-            <div className={styles.shelfHeaderMeta}>
-              <span className={styles.shelfEyebrow}>
-                HONOURS & EDITORIAL RECOGNITION
-              </span>
-              <div className={styles.shelfTitleRow}>
-                <h3 className={styles.shelfTitle}>The Verified Archive</h3>
-                <span className={styles.shelfScriptAccent}>Heritage & Honours</span>
-              </div>
-            </div>
-
-            {/* Previous / Next Shelf Arrow Controls */}
-            <div className={styles.shelfNavControls}>
-              <button
-                type="button"
-                className={styles.navArrowBtn}
-                onClick={() => scrollTrack("left")}
-                disabled={!canScrollLeft}
-                aria-label="Previous recognition entry"
-              >
-                ‹
-              </button>
-              <button
-                type="button"
-                className={styles.navArrowBtn}
-                onClick={() => scrollTrack("right")}
-                disabled={!canScrollRight}
-                aria-label="Next recognition entry"
-              >
-                ›
-              </button>
-            </div>
-          </div>
-
-          {/* Architectural Plaster Niche */}
-          <div
-            ref={shelfNicheRef}
-            className={styles.architecturalShelfNiche}
-            role="region"
-            aria-label="Architectural Recognition Shelf Track"
-          >
-            {/* Champagne Cove Lighting Strip */}
-            <div className={styles.coveLightStrip} aria-hidden="true" />
-
-            {/* Horizontally Scrollable Recognition Track */}
-            <div
-              ref={trackRef}
-              className={styles.magazineTrack}
-              onScroll={handleScroll}
-              tabIndex={0}
-              role="region"
-              aria-label="Interactive verified recognition archive"
-            >
-              {VERIFIED_RECOGNITIONS.map((item) => (
-                <div
-                  key={item.id}
-                  ref={(el) => {
-                    triggerRefs.current[item.id] = el;
-                  }}
-                  className={`${styles.recognitionCardItem} ${styles.magazineCoverItem}`}
-                  onClick={() => handleOpenItem(item)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      handleOpenItem(item);
-                    }
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  aria-haspopup="dialog"
-                  aria-label={`View evidence for ${item.milestoneTitle}`}
-                >
-                  <div className={styles.cardTopMeta}>
-                    <span className={styles.cardBadge}>{item.badgeLabel}</span>
-                    <span className={styles.cardYear}>{item.year}</span>
-                  </div>
-
-                  <div className={styles.cardImageWrap}>
-                    <img
-                      src={item.imageSrc}
-                      alt={item.imageAlt}
-                      className={styles.cardImage}
-                      style={{ objectPosition: item.objectPosition || "center 20%" }}
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div className={styles.cardContent}>
-                    <div className={styles.cardInfoRow}>
-                      <div className={styles.cardTitleWrap}>
-                        <h4 className={styles.cardTitle}>{item.milestoneTitle}</h4>
-                        <span className={styles.cardOrg}>{item.conferringBody}</span>
-                      </div>
-                      <div
-                        className={styles.cardArrowAffordance}
-                        aria-label={`View evidence for ${item.milestoneTitle}`}
-                      >
-                        <svg
-                          className={styles.cardArrowIcon}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          aria-hidden="true"
-                        >
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                          <polyline points="12 5 19 12 12 19" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Architectural Shelf Lip & Under Glow */}
-            <div className={styles.shelfLip} aria-hidden="true" />
-            <div className={styles.shelfUnderGlow} aria-hidden="true" />
-
-            {/* Subtle Discoverability Cue at Bottom-Right */}
-            <div
-              className={`${styles.discoverCue} ${
-                hasScrolled ? styles.discoverCueFaded : ""
-              }`}
-              onClick={() => scrollTrack("right")}
-              role="button"
-              tabIndex={0}
-              aria-label="Scroll right to discover more recognition entries"
-            >
-              <span>EXPLORE VERIFIED EVIDENCE</span>
-              <span className={styles.cueArrow}>→</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ── 3. LUXURY CLIENT GALLERY EXPERIENCE SUITE (PHASE 5 FEATURES) ── */}
+        {/* ── 3. LUXURY CLIENT GALLERY EXPERIENCE SUITE ── */}
         <div className={styles.clientGallerySection}>
           <div className={styles.clientGalleryHeader}>
             <span className={styles.clientGalleryEyebrow}>THE PRIVATE CLIENT SUITE</span>

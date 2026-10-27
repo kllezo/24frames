@@ -185,6 +185,7 @@ export default function LivingContactSheet() {
   /* Nishanth SVG Morph References */
   const nishanthPathRef = useRef<SVGPathElement>(null);
   const nishanthStageRef = useRef<HTMLDivElement>(null);
+  const nishanthPosterRef = useRef<HTMLImageElement>(null);
   const nishanthOverlaysRef = useRef<HTMLDivElement>(null);
   const nishanthIframeRef = useRef<HTMLDivElement>(null);
   const [nishanthVideoActive, setNishanthVideoActive] = useState(false);
@@ -474,6 +475,42 @@ export default function LivingContactSheet() {
           }
         );
       });
+
+      // Coordinated controlled image scaling for Nishanth X Sanzena matching Image 2
+      if (nishanthStageRef.current && nishanthPosterRef.current) {
+        const nishanthImg = nishanthPosterRef.current;
+        const scaleTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: nishanthStageRef.current,
+            start: "top 95%",
+            end: "top 15%",
+            scrub: 1.2,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        // 0% - 15%: Smoothly increase in scale
+        scaleTl.fromTo(
+          nishanthImg,
+          { scale: 1.0, transformOrigin: "center center" },
+          { scale: 1.12, duration: 0.15, ease: "sine.inOut" },
+          0
+        );
+
+        // 15% - 30%: Smoothly reverse direction and decrease to intended final scale
+        scaleTl.to(
+          nishanthImg,
+          { scale: 1.02, duration: 0.15, ease: "sine.inOut", transformOrigin: "center center" },
+          0.15
+        );
+
+        // 30% - 100%: Hold scale constant while remaining reveal animation finishes
+        scaleTl.to(
+          nishanthImg,
+          { scale: 1.02, duration: 0.70, ease: "none", transformOrigin: "center center" },
+          0.30
+        );
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -827,30 +864,7 @@ export default function LivingContactSheet() {
         {/* 05 — SIREESH & HARSHITHA (ASYMMETRIC EDITORIAL STILLS COMPOSITION) */}
         <div className={`${styles.editorialBlock} ${styles.layeredSireeshBlock}`}>
           <div className={styles.layeredGrid}>
-            {/* Left: Royal Mandapam Architecture Still under Golden Chandeliers */}
-            <div className={styles.layeredContentCol}>
-              <Link
-                href={ITEM_PROJECT_02.storyUrl}
-                className={styles.cardImageLink}
-                aria-label="View traditional heritage mandapam architecture"
-              >
-                <div className={styles.wideMandapCanvas}>
-                  <picture>
-                    <source srcSet={ITEM_PROJECT_02_MANDAP.webpImage} type="image/webp" />
-                    <img
-                      src={ITEM_PROJECT_02_MANDAP.image}
-                      alt={ITEM_PROJECT_02_MANDAP.clientNames}
-                      className={styles.storyCoverImg}
-                      style={{ objectPosition: ITEM_PROJECT_02_MANDAP.objectPosition }}
-                      loading="lazy"
-                    />
-                  </picture>
-                  <div className={styles.imageHoverShimmer} />
-                </div>
-              </Link>
-            </div>
-
-            {/* Right: Sacred Wedding Couple Walking on Tree-Lined Pathway */}
+            {/* Left: Sacred Wedding Couple Walking on Tree-Lined Pathway (Swapped from right, prominent tall portrait) */}
             <div className={styles.layeredPortraitCol}>
               <Link
                 href={ITEM_PROJECT_02.storyUrl}
@@ -872,6 +886,20 @@ export default function LivingContactSheet() {
                 </div>
               </Link>
             </div>
+
+            {/* Right: Editorial Narrative Details (Rebalanced layout with wide image removed) */}
+            <div className={styles.sireeshContentCol}>
+              <span className={styles.storySerialTag}>{ITEM_PROJECT_02.categoryLabel}</span>
+              <h4 className={styles.storyTitleLarge}>
+                <Link href={ITEM_PROJECT_02.storyUrl} className={styles.nameLink}>
+                  {ITEM_PROJECT_02.clientNames}
+                </Link>
+              </h4>
+              <p className={styles.storyDescription}>{ITEM_PROJECT_02.narrative}</p>
+              <Link href={ITEM_PROJECT_02.storyUrl} className={styles.btnViewStoryText}>
+                VIEW STORY <span className={styles.actionArrow}>——→</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -890,6 +918,7 @@ export default function LivingContactSheet() {
           <picture>
             <source srcSet={ITEM_VIDEO_02.webpPoster} type="image/webp" />
             <img
+              ref={nishanthPosterRef}
               src={ITEM_VIDEO_02.poster}
               alt={ITEM_VIDEO_02.filmTitle}
               className={styles.nishanthPosterImg}

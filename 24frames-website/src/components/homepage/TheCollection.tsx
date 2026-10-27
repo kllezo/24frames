@@ -164,28 +164,28 @@ export default function TheCollection() {
         return;
       }
 
-      // Smooth, luxurious flexGrow interpolation (750ms with power2.inOut)
+      // Smooth, continuous flexGrow morph (1.0s with power2.inOut)
       gsap.to(card, {
         flexGrow: targetFlexGrow,
-        duration: 0.75,
+        duration: 1.0,
         ease: "power2.inOut",
         overwrite: "auto",
       });
 
-      // Active content: reveal smoothly as width expands
+      // Active content: reveal smoothly as width becomes available
       if (activeEl) {
         if (isActive) {
           gsap.to(activeEl, {
             opacity: 1,
-            duration: 0.45,
-            delay: 0.22,
+            duration: 0.55,
+            delay: 0.32,
             ease: "power2.out",
             overwrite: "auto",
           });
         } else {
           gsap.to(activeEl, {
             opacity: 0,
-            duration: 0.22,
+            duration: 0.28,
             ease: "power2.in",
             overwrite: "auto",
           });
@@ -197,15 +197,15 @@ export default function TheCollection() {
         if (isActive) {
           gsap.to(collapsedEl, {
             opacity: 0,
-            duration: 0.2,
+            duration: 0.25,
             ease: "power2.in",
             overwrite: "auto",
           });
         } else {
           gsap.to(collapsedEl, {
             opacity: 1,
-            duration: 0.45,
-            delay: 0.25,
+            duration: 0.55,
+            delay: 0.35,
             ease: "power2.out",
             overwrite: "auto",
           });
