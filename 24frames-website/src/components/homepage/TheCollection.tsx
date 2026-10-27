@@ -133,19 +133,15 @@ export default function TheCollection() {
   const headerRef = useRef<HTMLDivElement>(null);
   const showcaseRef = useRef<HTMLDivElement>(null);
 
-  // Default active discipline is 01 (Weddings & Royal Unions)
+  // Default active discipline on initial load is 01 (Weddings & Royal Unions)
   const [activeId, setActiveId] = useState<string>("weddings");
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
 
-  const leaveTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isTouchRef = useRef(false);
 
-  /* ── Clean Single-Source Card Activation ─────────────────────── */
+  /* ── Clean Single-Source Card Activation & Persistence ──────── */
+  // The most recently activated card remains expanded; pointer leaving does not reset it.
   const activateCard = useCallback((id: string) => {
-    if (leaveTimerRef.current) {
-      clearTimeout(leaveTimerRef.current);
-      leaveTimerRef.current = null;
-    }
     setActiveId(id);
   }, []);
 
@@ -160,24 +156,6 @@ export default function TheCollection() {
     },
     [activateCard]
   );
-
-  const handleTrackPointerLeave = useCallback(
-    (e: React.PointerEvent) => {
-      if (e.pointerType === "touch" || isTouchRef.current) return;
-      if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
-      // Graceful 380ms cooldown before returning to default
-      leaveTimerRef.current = setTimeout(() => {
-        setActiveId("weddings");
-      }, 380);
-    },
-    []
-  );
-
-  useEffect(() => {
-    return () => {
-      if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
-    };
-  }, []);
 
   /* ── GSAP Scroll-Triggered Entrance ─────────────────────────── */
   useEffect(() => {
@@ -210,7 +188,7 @@ export default function TheCollection() {
           {
             opacity: 1,
             y: 0,
-            duration: 0.9,
+            duration: 0.95,
             ease: "power2.out",
             scrollTrigger: {
               trigger: showcaseRef.current,
@@ -295,10 +273,7 @@ export default function TheCollection() {
           role="region"
           aria-label="Six-Discipline Horizontal Editorial Showcase"
         >
-          <div
-            className={styles.accordionTrack}
-            onPointerLeave={handleTrackPointerLeave}
-          >
+          <div className={styles.accordionTrack}>
             {COLLECTION_DISCIPLINES.map((discipline) => {
               const isSelected = discipline.id === activeId;
               const hasError = imgErrors[discipline.id];
@@ -342,7 +317,7 @@ export default function TheCollection() {
                     />
                   </div>
 
-                  {/* ── Active Featured Panel Content (Fades in smoothly after morph begins) ── */}
+                  {/* ── Active Featured Panel Content (Complete Synchronized Fade Reveal) ── */}
                   <div
                     className={styles.activeContent}
                     aria-hidden={!isSelected}
@@ -368,17 +343,24 @@ export default function TheCollection() {
                           onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
                           aria-label={`Enter the full ${discipline.title} portfolio`}
                         >
-                          Explore {discipline.shortTitle} Gallery{" "}
-                          <span className={styles.arrowIcon} aria-hidden="true">
-                            →
-                          </span>
+                          <span>EXPLORE {discipline.shortTitle.toUpperCase()} GALLERY</span>
+                          <span className={styles.btnArrow}>→</span>
                         </Link>
+
                         <Link
-                          href="/disciplines/archive"
+                          href="/stories"
                           className={styles.btnSecondary}
-                          aria-label="View the complete 24 Frames archive"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            navigateWithCameraTransition("/stories", {
+                              image: displayImage,
+                            });
+                          }}
+                          aria-label="View archival index"
                         >
-                          Archival Index <span aria-hidden="true">↗</span>
+                          <span>ARCHIVAL INDEX</span>
+                          <span className={styles.btnSubArrow}>↗</span>
                         </Link>
                       </div>
                     </div>
@@ -396,11 +378,11 @@ export default function TheCollection() {
                     <div className={styles.collapsedBottom}>
                       <div className={styles.collapsedMeta}>
                         <h4 className={styles.collapsedTitle}>{discipline.shortTitle}</h4>
-                        <p className={styles.collapsedCount}>{discipline.count}</p>
+                        <div className={styles.collapsedCountRow}>
+                          <span className={styles.collapsedCount}>{discipline.count.split(" ")[0]}</span>
+                          <span className={styles.collapsedArrow}>→</span>
+                        </div>
                       </div>
-                      <span className={styles.collapsedArrow} aria-hidden="true">
-                        →
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -409,13 +391,20 @@ export default function TheCollection() {
           </div>
         </div>
 
-        {/* ── Footnote / Discoverability Row ──────────────────────── */}
-        <div className={styles.footerCueRow}>
-          <span className={styles.footerCue}>
+        {/* ── Bottom Subtle Interaction Cue & Complete Archive Link ── */}
+        <div className={styles.footerRow}>
+          <span className={styles.interactionCue}>
             Select any discipline to reveal details · Hover or tap to expand
           </span>
-          <Link href="/disciplines/archive" className={styles.footerArchiveLink}>
-            Explore Complete 24 Frames Archive →
+          <Link
+            href="/stories"
+            className={styles.archiveLink}
+            onClick={(e) => {
+              e.preventDefault();
+              navigateWithCameraTransition("/stories");
+            }}
+          >
+            EXPLORE COMPLETE 24 FRAMES ARCHIVE →
           </Link>
         </div>
       </div>

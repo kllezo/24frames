@@ -134,7 +134,14 @@ export default function CinematicTransition() {
         });
         reducedTl.call(() => {
           router.push(targetUrl);
-          if (targetHash && targetHash.length > 1) {
+          if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
+            const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
+            if (targetHash && targetHash.length > 1) {
+              l.scrollTo(targetHash, { offset: -80, immediate: true });
+            } else {
+              l.scrollTo(0, { immediate: true });
+            }
+          } else if (targetHash && targetHash.length > 1) {
             const el = document.querySelector(targetHash);
             if (el) el.scrollIntoView({ behavior: "smooth" });
           } else {
@@ -232,8 +239,15 @@ export default function CinematicTransition() {
       tl.call(() => {
         router.push(targetUrl);
 
-        // Scroll management underneath closed shutter
-        if (targetHash && targetHash.length > 1) {
+        // Scroll management underneath closed shutter (coordinate with Lenis if active)
+        if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
+          const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
+          if (targetHash && targetHash.length > 1) {
+            l.scrollTo(targetHash, { offset: -80, immediate: true });
+          } else {
+            l.scrollTo(0, { immediate: true });
+          }
+        } else if (targetHash && targetHash.length > 1) {
           const el = document.querySelector(targetHash);
           if (el) el.scrollIntoView({ behavior: "smooth" });
         } else {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import FilmGrain from "@/components/ui/FilmGrain";
 import CinematicTransition from "@/components/ui/CinematicTransition";
+import SmoothScroll from "@/components/ui/SmoothScroll";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -45,6 +46,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <FilmGrain />
         <CinematicTransition />
+        <SmoothScroll />
         {children}
       </body>
     </html>

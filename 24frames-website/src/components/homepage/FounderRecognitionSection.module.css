@@ -1,19 +1,20 @@
 /* ============================================================
    24 FRAMES — CHAPTER 04: FOUNDER PROFILE & VERIFIED RECOGNITION ARCHIVE
    Warm Sunlit Ivory Plaster Aesthetic · Architectural Shelf
-   High-End Editorial Founder Profile + Filled Magazine Frames
+   High-End Editorial Founder Profile + Restored Full-Width Magazine Shelf
    ============================================================ */
 
 .section {
   position: relative;
   width: 100%;
-  background-color: #FAF7F0;
+  background: linear-gradient(135deg, #FAF7F0 0%, #F5EFE4 45%, #EFE8DC 100%);
   color: #20231F;
   overflow: hidden;
   padding: clamp(3.5rem, 6vw, 6rem) 0 clamp(3.5rem, 5vw, 5.5rem);
   scroll-margin-top: clamp(70px, 10vh, 100px);
 }
 
+/* Interactive Liquid Dot Matrix Field (Full Bleed Background Canvas) */
 .liquidCanvas {
   position: absolute;
   top: 0;
@@ -22,6 +23,7 @@
   height: 100%;
   pointer-events: none;
   z-index: 1;
+  opacity: 0.85;
 }
 
 /* Anchor alias for smooth header/footer link navigation */
@@ -67,51 +69,167 @@
   mix-blend-mode: multiply;
 }
 
-/* Immersive Editorial Scene Container — Reaches Viewport Walls with Safe Insets */
+/* Full Width Scene Container — Spacious Luxury Measure */
 .container {
   width: 100%;
-  max-width: 100%;
+  max-width: var(--content-width, 1180px);
   margin: 0 auto;
-  padding-left: clamp(1.75rem, 4.5vw, 5rem);
-  padding-right: clamp(1.75rem, 4.5vw, 5rem);
+  padding-left: clamp(1.25rem, 3.5vw, 2.5rem);
+  padding-right: clamp(1.25rem, 3.5vw, 2.5rem);
   position: relative;
   z-index: 3;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   1. EDITORIAL FOUNDER PROFILE (TWO-COLUMN NEAR FULL-BLEED GRID)
+   1. EDITORIAL FOUNDER PROFILE (TWO-COLUMN DESKTOP GRID)
    ───────────────────────────────────────────────────────────── */
-.artistSectionGrid {
+.founderEditorialProfile {
   display: grid;
-  grid-template-columns: minmax(340px, 38%) 1fr;
-  gap: clamp(2rem, 3.5vw, 4.5rem);
+  grid-template-columns: minmax(360px, 440px) 1fr;
+  gap: clamp(2.5rem, 5vw, 5.5rem);
   align-items: start;
   margin-bottom: clamp(4rem, 7vh, 6rem);
-  width: 100%;
 }
 
-.artistLeftCol {
+/* 1.1 Left: Large Primary Portrait Anchor */
+.portraitCol {
+  position: relative;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.25rem, 2vh, 1.75rem);
-  width: 100%;
+  align-items: flex-start;
 }
 
-.artistRightCol {
+/* Living Portrait Container */
+.portraitWrap {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 24px 50px rgba(25, 30, 25, 0.12),
+    0 6px 18px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(220, 210, 192, 0.9);
+  background-color: #121413;
+}
+
+.portraitImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 12%;
+  display: block;
+  transform: scale(1.03);
+  filter: blur(4px);
+  will-change: transform, filter;
+}
+
+/* Darkroom Overlay for Subdued Opening */
+.darkroomOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 35%, rgba(10, 12, 11, 0.35) 0%, rgba(10, 12, 11, 0.75) 100%);
+  pointer-events: none;
+  z-index: 2;
+  will-change: opacity;
+}
+
+/* Feathered Warm-Neutral Light Reveal Beam */
+.lightSweepBeam {
+  position: absolute;
+  top: -20%;
+  left: -60%;
+  width: 60%;
+  height: 140%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 248, 230, 0.06) 20%,
+    rgba(255, 248, 230, 0.42) 50%,
+    rgba(255, 248, 230, 0.06) 80%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 3;
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+}
+
+/* Delicate Viewfinder Corners HUD */
+.viewfinderHud {
+  position: absolute;
+  inset: 18px;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.vfCorner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: rgba(245, 240, 228, 0.85);
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vfCornerTL {
+  top: 0;
+  left: 0;
+  border-top-width: 2px;
+  border-left-width: 2px;
+  transform: translate(-4px, -4px);
+}
+
+.vfCornerTR {
+  top: 0;
+  right: 0;
+  border-top-width: 2px;
+  border-right-width: 2px;
+  transform: translate(4px, -4px);
+}
+
+.vfCornerBL {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 2px;
+  border-left-width: 2px;
+  transform: translate(-4px, 4px);
+}
+
+.vfCornerBR {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+  transform: translate(4px, 4px);
+}
+
+.portraitGroundShadow {
+  position: absolute;
+  bottom: -15px;
+  left: 8%;
+  width: 84%;
+  height: 32px;
+  background: radial-gradient(ellipse at center, rgba(60, 50, 40, 0.16) 0%, transparent 70%);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+/* 1.2 Right: Editorial Details (Name, Role, Statistics, Bio, Principles, Quote, CTA) */
+.profileDetailsCol {
   display: flex;
   flex-direction: column;
-  gap: clamp(1.25rem, 2vh, 1.75rem);
+  align-items: flex-start;
   width: 100%;
   min-width: 0;
-}
-
-/* 1.1 Left: Clean Editorial Header Masthead (Removing redundant outer card box) */
-.artistHeaderCard {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0 0 0.25rem 0;
-  box-shadow: none;
 }
 
 .chapterKicker {
@@ -124,11 +242,19 @@
   margin-bottom: 0.5rem;
 }
 
+/* Signature Block: Founder Name & Official Title */
+.signatureBlock {
+  opacity: 0;
+  transform: translateY(8px);
+  will-change: opacity, transform;
+  margin-bottom: 0.5rem;
+}
+
 .founderName {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+  font-size: clamp(2.4rem, 4.2vw, 3.6rem);
   font-weight: 600;
-  line-height: 1;
+  line-height: 0.95;
   letter-spacing: 0.02em;
   color: var(--color-charcoal, #141713);
   margin: 0 0 0.5rem;
@@ -141,70 +267,41 @@
   color: var(--color-kllezo-green, #09453e);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  margin: 0;
+  margin-bottom: 0.75rem;
 }
 
-/* 1.2 Left: Large Primary Portrait Anchor */
-.portraitWrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow:
-    0 20px 48px rgba(25, 30, 25, 0.12),
-    0 4px 16px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(220, 210, 192, 0.85);
-  background-color: #E6DFD2;
-}
-
-.portraitImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 12%;
-  display: block;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.portraitWrap:hover .portraitImg {
-  transform: scale(1.025);
-}
-
-/* 1.3 Left: Prominent Statistics Card Panel */
-.statsCardPanel {
-  background: #FAF8F2;
-  border: 1px solid rgba(220, 210, 192, 0.75);
-  border-radius: 16px;
-  padding: clamp(1.2rem, 2vw, 1.6rem);
-  box-shadow: 0 4px 20px rgba(45, 40, 30, 0.04);
+/* Prominent Horizontal Statistics Row */
+.prominentStatsRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: clamp(0.75rem, 1.5vw, 1.5rem);
+  justify-content: flex-start;
+  gap: clamp(1.25rem, 2.5vw, 2.75rem);
   width: 100%;
+  max-width: 640px;
+  padding: clamp(1rem, 1.8vh, 1.35rem) 0;
+  margin: clamp(0.75rem, 1.2vh, 1rem) 0 clamp(1.25rem, 2vh, 1.6rem) 0;
+  border-top: 1px solid rgba(9, 69, 62, 0.14);
+  border-bottom: 1px solid rgba(9, 69, 62, 0.14);
 }
 
 .statItem {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  flex: 1;
-  min-width: 0;
 }
 
 .statValue {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(1.8rem, 2.4vw, 2.5rem);
+  font-size: clamp(2.4rem, 3.4vw, 3.6rem);
   font-weight: 600;
-  color: var(--color-charcoal, #141713);
+  color: var(--color-kllezo-green, #09453e);
   line-height: 1;
   letter-spacing: -0.01em;
 }
 
 .statLabel {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: clamp(0.55rem, 0.65vw, 0.65rem);
+  font-size: clamp(0.6rem, 0.72vw, 0.68rem);
   font-weight: 600;
   color: #484C45;
   letter-spacing: 0.12em;
@@ -215,22 +312,34 @@
 
 .statDividerVertical {
   width: 1px;
-  height: 38px;
+  height: 44px;
   background: rgba(9, 69, 62, 0.15);
   flex-shrink: 0;
 }
 
-/* 1.4 Left: Three Core Principles Card Panel */
-.principlesCardPanel {
-  background: #FAF8F2;
-  border: 1px solid rgba(220, 210, 192, 0.75);
-  border-radius: 16px;
-  padding: clamp(1.2rem, 2vw, 1.6rem);
-  box-shadow: 0 4px 20px rgba(45, 40, 30, 0.04);
+/* Concise Narrative Biography */
+.narrative {
+  max-width: 620px;
+  margin-bottom: clamp(1.25rem, 2vh, 1.75rem);
+}
+
+.narrative p {
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.95rem;
+  line-height: 1.72;
+  color: #4A4D46;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Three Core Principles */
+.coreValuesBlock {
+  width: 100%;
+  max-width: 620px;
+  margin-bottom: clamp(1.25rem, 2vh, 1.75rem);
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
-  width: 100%;
+  gap: 0.75rem;
 }
 
 .coreValuesHeading {
@@ -297,60 +406,23 @@
   margin: 0;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   2. RIGHT COLUMN CARD PANELS (MATCHING IMAGE 5)
-   ───────────────────────────────────────────────────────────── */
-
-/* 2.1 The Verified Archive Shelf Card Panel */
-.shelfCardPanel {
-  background: #FAF8F2;
-  border: 1px solid rgba(220, 210, 192, 0.75);
-  border-radius: 16px;
-  padding: clamp(1.2rem, 1.8vw, 1.6rem);
-  box-shadow: 0 4px 20px rgba(45, 40, 30, 0.04);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
-}
-
-/* 2.2 Concise Source-Derived Biography Card Panel */
-.bioCardPanel {
-  background: rgba(250, 248, 242, 0.9);
-  border: 1px solid rgba(220, 210, 192, 0.75);
-  border-radius: 16px;
-  padding: clamp(1.4rem, 2.2vw, 2.2rem);
-  box-shadow: 0 4px 20px rgba(45, 40, 30, 0.03);
-  width: 100%;
-}
-
-.narrativeText {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: clamp(0.94rem, 1.05vw, 1.04rem);
-  line-height: 1.76;
-  color: #4A4D46;
-  font-weight: 400;
-  margin: 0;
-}
-
-/* 2.3 Closing Signature Editorial Pull Quote Card Panel */
-.quoteCardPanel {
-  background: #FAF8F2;
-  border: 1px solid rgba(220, 210, 192, 0.75);
-  border-left: 4px solid var(--color-kllezo-green, #09453e);
-  border-radius: 16px;
-  padding: clamp(1.2rem, 1.8vw, 1.6rem);
-  box-shadow: 0 4px 20px rgba(45, 40, 30, 0.03);
-  width: 100%;
+/* Closing Signature Editorial Pull Quote */
+.quoteBlock {
+  margin-bottom: clamp(1.25rem, 2vh, 1.75rem);
+  padding: 1rem 1.25rem;
+  background-color: #FAF8F2;
+  border-left: 3px solid var(--color-kllezo-green, #09453e);
+  border-radius: 0 8px 8px 0;
+  max-width: 620px;
 }
 
 .quoteText {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-style: italic;
-  font-size: clamp(1.15rem, 1.4vw, 1.35rem);
+  font-size: clamp(1.1rem, 1.4vw, 1.3rem);
   line-height: 1.45;
   color: var(--color-charcoal, #141713);
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.4rem 0;
 }
 
 .quoteAuthor {
@@ -363,36 +435,29 @@
   margin: 0;
 }
 
-/* 2.4 Forest-Green Commission CTA Card Panel (Integrated without redundant outer box) */
-.ctaCardPanel {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0.25rem 0 0 0;
-  box-shadow: none;
-  width: 100%;
+/* Commission CTA */
+.ctaRow {
   display: flex;
   align-items: center;
-  justify-content: center;
+  align-self: flex-start;
 }
 
 .commissionPillBtn {
-  width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: clamp(0.95rem, 1.4vh, 1.15rem) 2rem;
+  gap: 0.65rem;
+  padding: 0.75rem 1.75rem;
   background-color: var(--color-kllezo-green, #09453e);
   color: #FFFFFF;
   border-radius: 9999px;
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: clamp(0.78rem, 0.9vw, 0.88rem);
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
-  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.28);
+  box-shadow: 0 6px 18px rgba(9, 69, 62, 0.24);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
     background-color 0.3s ease,
     box-shadow 0.3s ease;
@@ -402,7 +467,7 @@
 .commissionPillBtn:hover {
   background-color: #06312c;
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(9, 69, 62, 0.38);
+  box-shadow: 0 10px 24px rgba(9, 69, 62, 0.34);
 }
 
 .btnArrow {
@@ -422,6 +487,7 @@
   flex-direction: column;
   gap: 1.25rem;
   width: 100%;
+  margin-bottom: clamp(4rem, 7vh, 6rem);
 }
 
 .shelfHeaderRow {
@@ -497,11 +563,11 @@
 }
 
 .navArrowBtn:hover:not(:disabled) {
-  background-color: #164B40;
+  background-color: #09453e;
   color: #FFFFFF;
-  border-color: #164B40;
+  border-color: #09453e;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(22, 75, 64, 0.2);
+  box-shadow: 0 4px 14px rgba(9, 69, 62, 0.2);
 }
 
 .navArrowBtn:disabled {
@@ -515,13 +581,13 @@
   position: relative;
   width: 100%;
   background: linear-gradient(145deg, #ECE4D6 0%, #F3ECDC 50%, #FAF4E8 100%);
-  border-radius: 14px;
+  border-radius: clamp(18px, 2.5vw, 32px);
   border: 1px solid rgba(220, 210, 192, 0.9);
   box-shadow:
-    inset 6px 8px 20px rgba(140, 125, 100, 0.14),
-    inset -2px -2px 10px rgba(255, 255, 255, 0.8),
-    0 8px 20px rgba(60, 50, 35, 0.04);
-  padding: clamp(1.2rem, 2vh, 1.6rem) clamp(0.75rem, 1.2vw, 1.25rem) clamp(1.2rem, 2vh, 1.6rem);
+    inset 10px 12px 30px rgba(140, 125, 100, 0.18),
+    inset -2px -2px 12px rgba(255, 255, 255, 0.8),
+    0 16px 36px rgba(60, 50, 35, 0.06);
+  padding: clamp(1.8rem, 3.2vh, 2.75rem) clamp(1.2rem, 2vw, 2.2rem) clamp(2.2rem, 3.8vh, 3.2rem);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -538,108 +604,96 @@
     90deg,
     rgba(255, 238, 195, 0.95) 0%,
     rgba(255, 225, 160, 0.85) 60%,
-    rgba(255, 215, 140, 0.5) 100%
+    rgba(255, 240, 205, 0.95) 100%
   );
   border-radius: 9999px;
-  filter: blur(8px);
+  filter: blur(5px);
   box-shadow:
-    0 8px 30px rgba(255, 220, 145, 0.65),
-    0 18px 50px rgba(255, 210, 130, 0.45);
+    0 4px 24px rgba(255, 215, 140, 0.8),
+    0 10px 45px rgba(255, 220, 150, 0.55);
   pointer-events: none;
-  z-index: 2;
+  z-index: 1;
 }
 
 /* Horizontally Scrollable Magazine Track */
 .magazineTrack {
   display: flex;
-  gap: clamp(12px, 1.4vw, 18px);
+  gap: clamp(1.25rem, 2vw, 1.85rem);
   overflow-x: auto;
   scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  padding: 0.5rem 0.25rem;
+  padding: 1.25rem 0.5rem 1rem;
   position: relative;
-  z-index: 3;
-  overscroll-behavior-x: contain;
+  z-index: 2;
+  outline: none;
 }
 
 .magazineTrack::-webkit-scrollbar {
   display: none;
 }
 
-/* Individual Recognition Card Item on Shelf */
-.recognitionCardItem,
-.magazineCoverItem {
-  flex: 0 0 clamp(175px, 18vw, 205px);
+/* Individual Recognition Card Item */
+.recognitionCardItem {
+  flex: 0 0 clamp(240px, 24vw, 290px);
+  scroll-snap-align: start;
+  background: #FFFFFF;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(220, 210, 192, 0.9);
+  box-shadow:
+    0 8px 24px rgba(60, 50, 35, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.65rem;
   cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+  user-select: none;
   outline: none;
-  background: #FAF8F2;
-  border: 1px solid rgba(220, 210, 192, 0.85);
-  border-radius: 12px;
-  padding: 0.75rem;
-  box-shadow: 0 4px 14px rgba(32, 35, 31, 0.05);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
-  will-change: transform, box-shadow;
 }
 
 .recognitionCardItem:hover,
-.magazineCoverItem:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(22, 75, 64, 0.12), 0 0 16px rgba(200, 168, 78, 0.12);
-  border-color: rgba(22, 75, 64, 0.35);
-}
-
-.recognitionCardItem:focus-visible,
-.magazineCoverItem:focus-visible {
-  outline: 2px solid var(--color-kllezo-green, #09453e);
-  outline-offset: 4px;
+.recognitionCardItem:focus-visible {
+  transform: translateY(-6px);
+  box-shadow:
+    0 16px 36px rgba(9, 69, 62, 0.16),
+    0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: rgba(9, 69, 62, 0.4);
 }
 
 .cardTopMeta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  gap: 0.35rem;
+  padding: 0.65rem 0.85rem;
+  background-color: #FAF8F2;
+  border-bottom: 1px solid rgba(220, 210, 192, 0.6);
 }
 
 .cardBadge {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.52rem;
+  font-size: 0.55rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.12em;
   color: var(--color-kllezo-green, #09453e);
-  background-color: rgba(9, 69, 62, 0.08);
-  padding: 0.18rem 0.45rem;
-  border-radius: 9999px;
-  white-space: nowrap;
+  text-transform: uppercase;
 }
 
 .cardYear {
-  font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #77766E;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #8C8472;
 }
 
-/* Card Image Wrap — Fills the frame cleanly without awkward padding or letterboxing */
 .cardImageWrap {
-  position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1.05;
-  border-radius: 8px;
+  aspect-ratio: 4 / 3.2;
   overflow: hidden;
-  background-color: #ECE5D8;
-  border: 1px solid rgba(216, 206, 190, 0.6);
-  padding: 0;
-  box-sizing: border-box;
+  position: relative;
+  background-color: #E6DFD2;
 }
 
 .cardImage {
@@ -647,42 +701,42 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.recognitionCardItem:hover .cardImage,
-.magazineCoverItem:hover .cardImage {
+.recognitionCardItem:hover .cardImage {
   transform: scale(1.04);
 }
 
 .cardContent {
+  padding: 0.85rem 1rem 1rem;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  gap: 0.4rem;
+  background: #FFFFFF;
+  flex: 1;
+  justify-content: space-between;
 }
 
 .cardInfoRow {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 0.75rem;
-  width: 100%;
+  gap: 0.5rem;
 }
 
 .cardTitleWrap {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  flex: 1;
-  min-width: 0;
+  gap: 0.2rem;
 }
 
 .cardTitle {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(1.05rem, 1.25vw, 1.2rem);
+  font-size: 1.05rem;
   font-weight: 600;
-  line-height: 1.2;
   color: var(--color-charcoal, #141713);
+  line-height: 1.25;
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -692,9 +746,8 @@
 
 .cardOrg {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.68rem;
-  color: #77766E;
-  font-weight: 500;
+  font-size: 0.65rem;
+  color: #6C7066;
   line-height: 1.35;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -702,95 +755,74 @@
   overflow: hidden;
 }
 
-/* Clean Understated Arrow Affordance (Replacing "Inspect Evidence") */
 .cardArrowAffordance {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  background-color: rgba(9, 69, 62, 0.08);
+  background-color: #F5EFE4;
   color: var(--color-kllezo-green, #09453e);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid rgba(9, 69, 62, 0.12);
+  transition: all 0.25s ease;
+}
+
+.recognitionCardItem:hover .cardArrowAffordance {
+  background-color: var(--color-kllezo-green, #09453e);
+  color: #FFFFFF;
+  transform: translateX(2px);
 }
 
 .cardArrowIcon {
   width: 14px;
   height: 14px;
-  transition: transform 0.25s ease;
 }
 
-.recognitionCardItem:hover .cardArrowAffordance,
-.magazineCoverItem:hover .cardArrowAffordance {
-  background-color: var(--color-kllezo-green, #09453e);
-  color: #FFFFFF;
-  border-color: var(--color-kllezo-green, #09453e);
-  transform: translateX(2px);
-  box-shadow: 0 4px 10px rgba(9, 69, 62, 0.25);
-}
-
-.recognitionCardItem:hover .cardArrowAffordance .cardArrowIcon,
-.magazineCoverItem:hover .cardArrowAffordance .cardArrowIcon {
-  transform: translateX(1px);
-}
-
-/* Physical Shelf Lip */
+/* Architectural Shelf Lip & Plaster Under Glow */
 .shelfLip {
-  position: relative;
-  width: 100%;
-  height: 12px;
-  margin-top: 2px;
-  background: linear-gradient(180deg, #FFFFFF 0%, #F5EFE2 35%, #E4DCB9 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.95);
-  border-bottom: 1px solid rgba(200, 190, 170, 0.85);
-  box-shadow:
-    0 8px 24px rgba(110, 95, 75, 0.2),
-    0 2px 6px rgba(0, 0, 0, 0.06);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(180deg, #D4CABB 0%, #BAAE9D 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 10px rgba(60, 50, 35, 0.2);
+  z-index: 3;
+}
+
+.shelfUnderGlow {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  height: 18px;
+  background: linear-gradient(0deg, rgba(60, 50, 35, 0.14) 0%, transparent 100%);
+  pointer-events: none;
   z-index: 2;
 }
 
-/* Under-Shelf Warm Cove Glow */
-.shelfUnderGlow {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  height: 16px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 228, 165, 0.68) 0%,
-    rgba(255, 218, 145, 0.3) 50%,
-    transparent 100%
-  );
-  filter: blur(6px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Discoverability Cue (Bottom-Right of Shelf) */
+/* Discoverability Cue */
 .discoverCue {
-  align-self: flex-end;
+  align-self: center;
+  margin-top: 0.75rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: clamp(0.5625rem, 0.7vw, 0.6875rem);
+  gap: 0.45rem;
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.6rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
-  color: #164B40;
+  color: var(--color-kllezo-green, #09453e);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
-  margin-top: 0.85rem;
-  margin-right: 0.5rem;
-  transition: opacity 0.4s ease, color 0.2s ease;
+  transition: opacity 0.3s ease, transform 0.25s ease;
   user-select: none;
 }
 
 .discoverCue:hover {
-  color: #0C3028;
+  transform: translateX(3px);
 }
 
 .discoverCueFaded {
@@ -798,55 +830,51 @@
 }
 
 .cueArrow {
-  display: inline-block;
-  transition: transform 0.2s ease;
-}
-
-.discoverCue:hover .cueArrow {
-  transform: translateX(3px);
+  font-size: 0.85rem;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   3. LUXURY GALLERY EXPERIENCE FEATURES (PHASE 5)
+   3. LUXURY CLIENT GALLERY EXPERIENCE SUITE
    ───────────────────────────────────────────────────────────── */
 .clientGallerySection {
   width: 100%;
-  margin-top: clamp(4.5rem, 7vh, 6.5rem);
-  padding-top: clamp(3rem, 5vh, 4rem);
-  border-top: 1px solid rgba(220, 210, 192, 0.7);
-  display: flex;
-  flex-direction: column;
-  gap: clamp(2rem, 3.5vh, 2.75rem);
+  margin-top: clamp(2rem, 4vh, 3.5rem);
+  padding: clamp(2.5rem, 4.5vw, 4rem) clamp(1.5rem, 3vw, 3rem);
+  background: #FFFFFF;
+  border-radius: clamp(18px, 2.5vw, 28px);
+  border: 1px solid rgba(220, 210, 192, 0.85);
+  box-shadow: 0 16px 40px rgba(60, 50, 35, 0.06);
 }
 
 .clientGalleryHeader {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  max-width: 720px;
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto clamp(2rem, 3.5vh, 3rem);
 }
 
 .clientGalleryEyebrow {
-  font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: 0.65rem;
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-kllezo-green, #09453e);
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
 .clientGalleryHeading {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
   font-weight: 600;
   color: var(--color-charcoal, #141713);
-  margin: 0;
   line-height: 1.15;
+  margin: 0 0 0.85rem;
 }
 
 .clientGallerySub {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   line-height: 1.6;
   color: #555850;
   margin: 0;
@@ -854,35 +882,35 @@
 
 .galleryFeaturesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: clamp(1rem, 1.8vw, 1.5rem);
-  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.75rem);
 }
 
 .galleryFeatureCard {
   background: #FAF8F2;
-  border: 1px solid rgba(220, 210, 192, 0.85);
-  border-radius: 10px;
-  padding: 1.5rem;
+  border: 1px solid rgba(220, 210, 192, 0.7);
+  border-radius: 12px;
+  padding: clamp(1.25rem, 2vw, 1.65rem);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  box-shadow: 0 4px 16px rgba(32, 35, 31, 0.04);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 0.65rem;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .galleryFeatureCard:hover {
   transform: translateY(-4px);
-  background: #FFFFFF;
   border-color: rgba(9, 69, 62, 0.35);
-  box-shadow: 0 12px 28px rgba(9, 69, 62, 0.09);
+  box-shadow: 0 10px 24px rgba(9, 69, 62, 0.08);
+  background: #FFFFFF;
 }
 
 .featureIconBadge {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  background-color: rgba(9, 69, 62, 0.08);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(9, 69, 62, 0.08);
   color: var(--color-kllezo-green, #09453e);
   display: flex;
   align-items: center;
@@ -891,45 +919,44 @@
 }
 
 .featureIconBadge svg {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
 }
 
 .featureTitle {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: 1.25rem;
+  font-size: 1.18rem;
   font-weight: 600;
   color: var(--color-charcoal, #141713);
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .featureDescription {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   line-height: 1.55;
   color: #555850;
   margin: 0;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   4. EDITORIAL MAGAZINE DETAIL MODAL
+   4. CLICKABLE FORENSIC EVIDENCE MODAL
    ───────────────────────────────────────────────────────────── */
 .modalBackdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(250, 248, 242, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  z-index: 999999;
+  background-color: rgba(18, 20, 18, 0.78);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.2rem, 3vw, 3rem);
-  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  padding: 1.5rem;
+  animation: fadeIn 0.25s ease-out;
 }
 
-@keyframes modalFadeIn {
+@keyframes fadeIn {
   from {
     opacity: 0;
   }
@@ -939,208 +966,197 @@
 }
 
 .modalCard {
-  position: relative;
-  background-color: #FFFFFF;
-  border: 1px solid rgba(228, 222, 210, 0.85);
+  background: #FAF8F2;
+  border: 1px solid rgba(220, 210, 192, 0.9);
   border-radius: 20px;
-  box-shadow:
-    0 24px 60px rgba(32, 35, 31, 0.12),
-    0 0 35px rgba(200, 168, 78, 0.16);
-  max-width: 920px;
   width: 100%;
+  max-width: 820px;
   max-height: 90vh;
   overflow-y: auto;
-  padding: clamp(1.8rem, 3.5vw, 3.2rem);
-  animation: cardSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes cardSlideUp {
+@keyframes popIn {
   from {
-    transform: translateY(24px) scale(0.97);
+    transform: scale(0.95);
     opacity: 0;
   }
   to {
-    transform: translateY(0) scale(1);
+    transform: scale(1);
+    opacity: 1;
   }
 }
 
 .modalCloseBtn {
   position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  width: 40px;
-  height: 40px;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  border: 1px solid #E4DED2;
-  background-color: #FAF8F2;
+  border: 1px solid rgba(220, 210, 192, 0.8);
+  background: #FFFFFF;
   color: #20231F;
-  font-size: 1.1rem;
-  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  z-index: 2;
   transition: all 0.2s ease;
-  z-index: 10;
 }
 
 .modalCloseBtn:hover {
-  background-color: #164B40;
+  background-color: var(--color-kllezo-green, #09453e);
   color: #FFFFFF;
-  border-color: #164B40;
+  border-color: var(--color-kllezo-green, #09453e);
 }
 
 .modalGrid {
   display: grid;
-  grid-template-columns: minmax(260px, 380px) 1fr;
-  gap: clamp(1.8rem, 3vw, 3.2rem);
-  align-items: center;
+  grid-template-columns: minmax(260px, 340px) 1fr;
+  gap: 2rem;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .modalCoverWrap {
-  position: relative;
   width: 100%;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow:
-    0 16px 40px rgba(22, 75, 64, 0.14),
-    0 0 20px rgba(200, 168, 78, 0.2);
-  border: 1px solid rgba(228, 222, 210, 0.8);
-  background-color: #FAF8F2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  background-color: #E6DFD2;
 }
 
 .modalCoverImg {
   width: 100%;
-  height: auto;
-  max-height: 420px;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
 .modalContent {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 0.85rem;
 }
 
 .modalHeaderMeta {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: space-between;
 }
 
 .modalCategoryBadge {
-  font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: 0.6875rem;
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.14em;
+  color: var(--color-kllezo-green, #09453e);
   text-transform: uppercase;
-  color: #164B40;
-  background-color: rgba(22, 75, 64, 0.08);
-  padding: 0.35rem 0.85rem;
-  border-radius: 9999px;
 }
 
 .modalYear {
   font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: 0.75rem;
-  color: #77766E;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  color: #77766E;
 }
 
 .modalTitle {
-  font-family: var(--font-cinema, 'Cinzel', serif);
-  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
-  color: #20231F;
-  font-weight: 700;
+  font-family: var(--font-headline, "Cormorant Garamond", serif);
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: var(--color-charcoal, #141713);
   line-height: 1.15;
   margin: 0;
 }
 
 .modalOrg {
-  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.75rem;
-  color: #C8A84E;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  color: #6C7066;
+  margin: 0;
+  line-height: 1.4;
 }
 
 .modalCitationBox {
-  background-color: #FAF8F2;
-  border-left: 3px solid #164B40;
-  padding: 0.85rem 1.1rem;
+  background: #FFFFFF;
+  border-left: 3px solid var(--color-kllezo-green, #09453e);
+  padding: 0.85rem 1rem;
   border-radius: 0 8px 8px 0;
-  margin: 0.4rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .citationLabel {
   font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: 0.5625rem;
+  font-size: 0.55rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
-  color: #77766E;
+  letter-spacing: 0.16em;
+  color: var(--color-kllezo-green, #09453e);
   text-transform: uppercase;
-  display: block;
-  margin-bottom: 0.25rem;
 }
 
 .citationText {
-  font-family: var(--font-editorial, 'Italiana', serif);
-  font-size: 1.05rem;
+  font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-style: italic;
-  color: #20231F;
-  line-height: 1.4;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: var(--color-charcoal, #141713);
   margin: 0;
 }
 
 .modalSummary {
-  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: #52524C;
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #4A4D46;
   margin: 0;
 }
 
 .modalSourceLink {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono, 'Space Mono', monospace);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #164B40;
-  text-decoration: none;
-  text-transform: uppercase;
-  margin-top: 0.5rem;
-  border-bottom: 1.5px solid #164B40;
-  padding-bottom: 2px;
   align-self: flex-start;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  margin-top: 0.5rem;
+  padding: 0.65rem 1.35rem;
+  background-color: var(--color-kllezo-green, #09453e);
+  color: #FFFFFF;
+  border-radius: 9999px;
+  font-family: var(--font-body, Inter, sans-serif);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s ease;
 }
 
 .modalSourceLink:hover {
-  color: #0C3028;
-  border-color: #0C3028;
+  background-color: #06312c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(9, 69, 62, 0.25);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   5. RESPONSIVE DESIGN (TABLET & MOBILE)
+   RESPONSIVE DESIGN SYSTEM
    ───────────────────────────────────────────────────────────── */
-
-/* Tablet (1024px and below) */
 @media (max-width: 1024px) {
-  .artistSectionGrid {
-    grid-template-columns: minmax(280px, 40%) 1fr;
-    gap: 1.75rem;
+  .founderEditorialProfile {
+    grid-template-columns: minmax(300px, 360px) 1fr;
+    gap: 2.5rem;
   }
 
   .portraitWrap {
     max-width: 100%;
+  }
+
+  .prominentStatsRow {
+    gap: 1.5rem;
   }
 
   .modalGrid {
@@ -1156,15 +1172,24 @@
 
 /* Intermediate Breakpoint (900px and below) */
 @media (max-width: 900px) {
-  .artistSectionGrid {
+  .founderEditorialProfile {
     grid-template-columns: 1fr;
-    gap: 1.75rem;
+    gap: 2.5rem;
     margin-bottom: 3.5rem;
   }
 
-  .portraitWrap {
+  .portraitCol {
+    align-items: center;
     max-width: 440px;
     margin: 0 auto;
+  }
+
+  .profileDetailsCol {
+    align-items: flex-start;
+  }
+
+  .prominentStatsRow {
+    max-width: 100%;
   }
 }
 
@@ -1179,9 +1204,14 @@
     padding-right: 1.25rem;
   }
 
-  .artistSectionGrid {
-    gap: 1.25rem;
+  .founderEditorialProfile {
+    gap: 2rem;
     margin-bottom: 2.75rem;
+  }
+
+  .portraitCol {
+    align-items: center;
+    width: 100%;
   }
 
   .portraitWrap {
@@ -1196,45 +1226,77 @@
     object-position: center 12%;
   }
 
-  .statsCardPanel {
+  .prominentStatsRow {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
-    padding: 1.1rem;
+    padding: 1.1rem 0;
   }
 
   .statDividerVertical {
     display: none;
   }
 
-  .statItem:nth-child(5) {
+  .statItem:last-child {
     grid-column: 1 / -1;
   }
 
   .statValue {
-    font-size: clamp(1.8rem, 7vw, 2.2rem);
+    font-size: 2.2rem;
   }
 
-  .statLabel {
-    font-size: 0.58rem;
-    letter-spacing: 0.1em;
+  .shelfHeaderRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .shelfNavControls {
+    align-self: flex-end;
   }
 
   .architecturalShelfNiche {
-    border-radius: 14px;
-    padding: 1.1rem 0.75rem 1.3rem;
+    padding: 1.5rem 1rem 2rem;
+    border-radius: 18px;
   }
 
-  .magazineCoverItem {
-    flex: 0 0 170px;
+  .recognitionCardItem {
+    flex: 0 0 240px;
   }
 
-  .founderName {
-    font-size: clamp(2rem, 8vw, 2.6rem);
+  .clientGallerySection {
+    padding: 2rem 1.25rem;
+    border-radius: 18px;
   }
 
-  .commissionPillBtn {
-    width: 100%;
-    text-align: center;
+  .galleryFeaturesGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Accessible Reduced-Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .portraitImg {
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+
+  .darkroomOverlay,
+  .lightSweepBeam,
+  .viewfinderHud {
+    display: none !important;
+  }
+
+  .signatureBlock {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .recognitionCardItem,
+  .commissionPillBtn,
+  .galleryFeatureCard {
+    transition: none !important;
+    transform: none !important;
   }
 }
