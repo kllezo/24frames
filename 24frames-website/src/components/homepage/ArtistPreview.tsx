@@ -103,7 +103,7 @@ export default function ArtistPreview() {
               <div className={styles.imageOverflow}>
                 <img
                   ref={portraitImgRef}
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=88&auto=format"
+                  src="/images/founder-portrait.jpg"
                   alt="Phani Gogireddy — Founder & Creative Director of 24 Frames Photography"
                   className={styles.portrait}
                   loading="lazy"

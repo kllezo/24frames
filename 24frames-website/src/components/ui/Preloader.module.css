@@ -125,16 +125,20 @@
 
 .finalBrand {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
-  gap: 0.35em;
-  font-family: var(--font-cinema, 'Cinzel', serif);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  color: #164B40;
-  text-transform: uppercase;
-  line-height: 1.1;
+  width: 100%;
+  padding: 0 8px;
+  box-sizing: border-box;
   margin: 0;
+}
+
+.finalLogoImg {
+  max-width: 85%;
+  height: auto;
+  max-height: clamp(24px, 4vmin, 44px);
+  object-fit: contain;
+  margin: 2px 0;
 }
 
 .finalNum {

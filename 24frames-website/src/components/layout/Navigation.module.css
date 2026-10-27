@@ -56,34 +56,38 @@
 /* --- Logo --- */
 .logo {
   display: flex;
-  align-items: baseline;
-  gap: 0.45rem;
+  align-items: center;
   z-index: 110;
   cursor: pointer;
   text-decoration: none;
 }
 
-.logoMark {
-  font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: 1.45rem;
-  font-weight: 600;
-  color: var(--color-kllezo-green, #09453e);
-  line-height: 1;
+.logoPicture {
+  display: inline-flex;
+  align-items: center;
 }
 
-.logoText {
-  font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: 1.15rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-charcoal, #141713);
-  line-height: 1;
-  transition: color 0.3s ease;
+.logoImg {
+  height: clamp(26px, 2.8vw, 36px);
+  width: auto;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
 }
 
-.themeLight .logoText {
-  color: #20231F;
+/* Default / Dark Theme (over dark hero or before light scroll): show white logo */
+.themeDark .logoImgDark {
+  display: none !important;
+}
+.themeDark .logoImgLight {
+  display: block !important;
+}
+
+/* Light Theme (over warm ivory sections): show dark forest green logo */
+.themeLight .logoImgDark {
+  display: block !important;
+}
+.themeLight .logoImgLight {
+  display: none !important;
 }
 
 /* --- Desktop Links --- */

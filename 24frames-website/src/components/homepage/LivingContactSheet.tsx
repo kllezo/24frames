@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { navigateWithCameraTransition } from "@/lib/transitions";
 import styles from "./LivingContactSheet.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -51,21 +52,21 @@ export const ITEM_PROJECT_01: GalleryProjectItem = {
   captionTitle: "Bellamkonda Sai Sreenivas & Kavya Reddy",
   captionSub: "Celebrity Wedding Reception · Hyderabad",
   category: "Celebrity Wedding Reception",
-  location: "GMR Arena & Shamshabad Estate · Hyderabad",
+  location: "GMR ARENA & SHAMSHABAD ESTATE, HYDERABAD",
   image: "/images/stories/bellam-srikonda/IMG_6339.jpg",
   webpImage: "/images/stories/bellam-srikonda/IMG_6339.webp",
-  aspectRatio: "4 / 5",
+  aspectRatio: "3 / 4",
   storyUrl: "/stories/bellam-srikonda",
-  objectPosition: "center 22%",
+  objectPosition: "center 18%",
   narrative:
-    "The quiet sacred moments documented right before the grand celebration procession begins. Captured with theatrical lighting discipline, quiet poise, and master cinema optics.",
+    "The quiet and overwhelming union of two people, set against the grandeur of celebration, personal moments, and everything in between. A wedding captured with honesty, cinematic depth and timeless transitions.",
 };
 
 /* Item 2: Master Cinema Feature — Vinitha & Vivekananda */
 export const ITEM_VIDEO_01: GalleryFilmItem = {
   id: "video-01",
-  orderNumber: "02",
-  categoryLabel: "Cinematic Wedding Film · Master Edit",
+  orderNumber: "01",
+  categoryLabel: "01 —— WEDDING FILM",
   filmTitle: "Vinitha & Vivekananda",
   category: "Wedding Feature Film",
   duration: "14:55",
@@ -75,31 +76,50 @@ export const ITEM_VIDEO_01: GalleryFilmItem = {
   poster: "/videos/portfolio/vinitha-vivekananda/poster.jpg",
   webpPoster: "/videos/portfolio/vinitha-vivekananda/poster.webp",
   description:
-    "A journey of love, patience, and devotion — where two years of togetherness lead to one life-changing sacred promise.",
+    "A beautiful film that unfolds a soulful celebration — where two journeys became one.",
 };
 
-/* Item 3: Heritage Mandapam — Sireesh & Harshitha */
+/* Item 3: Sacred Wedding Union — Sireesh & Harshitha */
 export const ITEM_PROJECT_02: GalleryProjectItem = {
   id: "project-02",
-  orderNumber: "03",
-  categoryLabel: "Sacred Wedding Union · Telangana",
+  orderNumber: "02",
+  categoryLabel: "02 —— TRADITIONAL WEDDING",
   clientNames: "Sireesh & Harshitha",
   captionTitle: "Sireesh & Harshitha",
   captionSub: "Sacred Wedding Union · Telangana",
   category: "Sacred Wedding Union",
   location: "Hyderabad, Telangana",
-  image: "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
-  webpImage: "/images/stories/sirish-and-harshitha/IMG_6353.webp",
-  aspectRatio: "16 / 10",
+  image: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
+  webpImage: "/images/stories/sirish-and-harshitha/IMG_6346.webp",
+  aspectRatio: "3 / 4",
   storyUrl: "/stories/sirish-and-harshitha",
   objectPosition: "center center",
+  narrative:
+    "Rooted in legacy, celebrated with emotion, and alive with timeless traditions.",
+};
+
+/* Supporting Still: Mandapam Architecture — Sireesh & Harshitha */
+export const ITEM_PROJECT_02_MANDAP: GalleryProjectItem = {
+  id: "project-02-mandap",
+  orderNumber: "02B",
+  categoryLabel: "Mandapam Heritage Stage",
+  clientNames: "Sireesh & Harshitha Mandapam",
+  captionTitle: "Royal Mandapam Under Golden Chandeliers",
+  captionSub: "Sacred Mandapam Architecture",
+  category: "Traditional Wedding",
+  location: "Hyderabad, Telangana",
+  image: "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
+  webpImage: "/images/stories/sirish-and-harshitha/IMG_6353.webp",
+  aspectRatio: "16 / 9",
+  storyUrl: "/stories/sirish-and-harshitha",
+  objectPosition: "center 40%",
 };
 
 /* Item 4: Royal Couture Portrait — Hrithika & Abhishek */
 export const ITEM_PROJECT_03: GalleryProjectItem = {
   id: "project-03",
-  orderNumber: "04",
-  categoryLabel: "Nine-Scene Celebration · Hyderabad",
+  orderNumber: "03",
+  categoryLabel: "03 —— PRE-WEDDING COLLECTION",
   clientNames: "Hrithika & Abhishek",
   captionTitle: "Hrithika & Abhishek",
   captionSub: "Nine-Scene Celebration · Hyderabad",
@@ -109,14 +129,16 @@ export const ITEM_PROJECT_03: GalleryProjectItem = {
   webpImage: "/images/stories/hrithika-abhishek/IMG_6333.webp",
   aspectRatio: "16 / 10",
   storyUrl: "/stories/hrithika-abhishek",
-  objectPosition: "center 22%",
+  objectPosition: "center 24%",
+  narrative:
+    "Modern love in a classic setting — real moments, effortlessly beautiful.",
 };
 
-/* Item 5 (SWAPPED): Fine-Art Heritage Embrace — Karthik & Gayathri */
+/* Item 5: Fine-Art Heritage Embrace — Karthik & Gayathri */
 export const ITEM_PROJECT_04: GalleryProjectItem = {
   id: "project-04",
-  orderNumber: "05",
-  categoryLabel: "Fine-Art Heritage Wedding · Hyderabad",
+  orderNumber: "04",
+  categoryLabel: "04 —— FINE-ART HERITAGE WEDDING",
   clientNames: "Karthik & Gayathri",
   captionTitle: "Karthik & Gayathri",
   captionSub: "Fine-Art Wedding · Botanical Glasshouse",
@@ -126,14 +148,16 @@ export const ITEM_PROJECT_04: GalleryProjectItem = {
   webpImage: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
   aspectRatio: "16 / 10",
   storyUrl: "/stories/karthik-and-gayathri",
-  objectPosition: "center 12%",
+  objectPosition: "center 14%",
+  narrative:
+    "A story of new beginnings, captured in the most honest, cinematic way.",
 };
 
-/* Item 6 (SWAPPED): Couple Shoot Film — Nishanth X Sanzena */
+/* Item 6: Couple Shoot Signature Film — Nishanth X Sanzena */
 export const ITEM_VIDEO_02: GalleryFilmItem = {
   id: "video-02",
-  orderNumber: "06",
-  categoryLabel: "Couple Shoot Cinema Film · 03:12",
+  orderNumber: "05",
+  categoryLabel: "05 —— SIGNATURE FILM",
   filmTitle: "Nishanth X Sanzena",
   category: "Couple Shoot Cinema Film",
   duration: "03:12",
@@ -143,49 +167,185 @@ export const ITEM_VIDEO_02: GalleryFilmItem = {
   poster: "/videos/portfolio/nishanth-sanzena/poster.jpg",
   webpPoster: "/videos/portfolio/nishanth-sanzena/poster.webp",
   description:
-    "The unfolding love story of Nishanth & Sanzena — where every moment, every frame, and every smile captures their eternal bond.",
+    "A story of finding home in the most unexpected places — where love felt inevitable, every frame a new chapter, and real emotions took center stage.",
 };
 
 export default function LivingContactSheet() {
   const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
+  const openingRef = useRef<HTMLDivElement>(null);
+  
+  /* Vinitha SVG Morph References */
+  const vinithaPathRef = useRef<SVGPathElement>(null);
+  const vinithaStageRef = useRef<HTMLDivElement>(null);
+  const vinithaOverlaysRef = useRef<HTMLDivElement>(null);
+  const vinithaIframeRef = useRef<HTMLDivElement>(null);
+  const [vinithaVideoActive, setVinithaVideoActive] = useState(false);
+  const vinithaMorphingRef = useRef(false);
 
-  /* Inline video player state */
-  const [activeInlineVideo, setActiveInlineVideo] = useState<string | null>(null);
+  /* Nishanth Video State */
+  const [nishanthVideoActive, setNishanthVideoActive] = useState(false);
+
+  /* Curved shape normalized coordinates [0, 1] for objectBoundingBox */
+  const CURVED_COORDS = {
+    topY0: 0.11,
+    topCp1Y: 0.18,
+    topCp2Y: 0.02,
+    topY1: 0.09,
+    botY1: 0.89,
+    botCp2Y: 0.98,
+    botCp1Y: 0.80,
+    botY0: 0.88,
+  };
+
+  const RECT_COORDS = {
+    topY0: 0.00,
+    topCp1Y: 0.00,
+    topCp2Y: 0.00,
+    topY1: 0.00,
+    botY1: 1.00,
+    botCp2Y: 1.00,
+    botCp1Y: 1.00,
+    botY0: 1.00,
+  };
+
+  // Helper to build SVG path data string
+  const buildPathData = (c: typeof CURVED_COORDS) => {
+    return `M 0 ${c.topY0.toFixed(4)} C 0.32 ${c.topCp1Y.toFixed(4)}, 0.68 ${c.topCp2Y.toFixed(4)}, 1 ${c.topY1.toFixed(4)} L 1 ${c.botY1.toFixed(4)} C 0.68 ${c.botCp2Y.toFixed(4)}, 0.32 ${c.botCp1Y.toFixed(4)}, 0 ${c.botY0.toFixed(4)} Z`;
+  };
+
+  // Trigger Vinitha Video Morph (Curved -> Rectangular Player)
+  const openVinithaVideo = useCallback(() => {
+    if (vinithaMorphingRef.current || vinithaVideoActive) return;
+    vinithaMorphingRef.current = true;
+
+    const path = vinithaPathRef.current;
+    const stage = vinithaStageRef.current;
+    const overlays = vinithaOverlaysRef.current;
+    if (!path || !stage) {
+      setVinithaVideoActive(true);
+      vinithaMorphingRef.current = false;
+      return;
+    }
+
+    const currentCoords = { ...CURVED_COORDS };
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setVinithaVideoActive(true);
+        vinithaMorphingRef.current = false;
+      },
+    });
+
+    // 1. Fade out text overlays & play beacon gracefully
+    if (overlays) {
+      tl.to(overlays, {
+        opacity: 0,
+        duration: 0.45,
+        ease: "power2.out",
+      }, 0);
+    }
+
+    // 2. Smoothly morph SVG clipPath from curve to flat rectangle
+    tl.to(currentCoords, {
+      ...RECT_COORDS,
+      duration: 1.05,
+      ease: "power2.inOut",
+      onUpdate: () => {
+        path.setAttribute("d", buildPathData(currentCoords));
+      },
+    }, 0);
+
+    // 3. Coordinate container geometry into clean 16:9 cinematic rectangle
+    tl.to(stage, {
+      borderRadius: "12px",
+      duration: 1.05,
+      ease: "power2.inOut",
+    }, 0);
+  }, [vinithaVideoActive]);
+
+  // Close Vinitha Video Morph (Rectangular -> Curved)
+  const closeVinithaVideo = useCallback(() => {
+    if (vinithaMorphingRef.current) return;
+    vinithaMorphingRef.current = true;
+
+    setVinithaVideoActive(false);
+
+    const path = vinithaPathRef.current;
+    const stage = vinithaStageRef.current;
+    const overlays = vinithaOverlaysRef.current;
+    if (!path || !stage) {
+      vinithaMorphingRef.current = false;
+      return;
+    }
+
+    const currentCoords = { ...RECT_COORDS };
+    const tl = gsap.timeline({
+      onComplete: () => {
+        vinithaMorphingRef.current = false;
+      },
+    });
+
+    // 1. Smoothly morph SVG clipPath from flat rectangle back to curve
+    tl.to(currentCoords, {
+      ...CURVED_COORDS,
+      duration: 0.95,
+      ease: "power2.inOut",
+      onUpdate: () => {
+        path.setAttribute("d", buildPathData(currentCoords));
+      },
+    }, 0);
+
+    // 2. Animate container back to organic frame
+    tl.to(stage, {
+      borderRadius: "0px",
+      duration: 0.95,
+      ease: "power2.inOut",
+    }, 0);
+
+    // 3. Fade text overlays & play beacon back in
+    if (overlays) {
+      tl.to(overlays, {
+        opacity: 1,
+        duration: 0.55,
+        ease: "power2.in",
+      }, 0.45);
+    }
+  }, []);
 
   /* GSAP scroll-triggered entrance animations */
   useEffect(() => {
-    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isReduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isReduced) return;
 
     const ctx = gsap.context(() => {
-      if (headerRef.current) {
+      // Animate opening section elements smoothly into view
+      if (openingRef.current) {
         gsap.fromTo(
-          headerRef.current,
-          { opacity: 0, y: 28 },
+          openingRef.current,
+          { opacity: 0, y: 36 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.9,
+            duration: 1.0,
             ease: "power2.out",
             scrollTrigger: {
-              trigger: headerRef.current,
-              start: "top 85%",
+              trigger: openingRef.current,
+              start: "top 86%",
               toggleActions: "play none none none",
             },
           }
         );
       }
 
-      const blocks = gsap.utils.toArray<HTMLElement>(`.${styles.rhythmBlock}`);
+      // Animate editorial rhythm blocks
+      const blocks = gsap.utils.toArray<HTMLElement>(`.${styles.editorialBlock}`);
       blocks.forEach((block) => {
         gsap.fromTo(
           block,
-          { opacity: 0, y: 32 },
+          { opacity: 0, y: 40 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.85,
+            duration: 0.95,
             ease: "power2.out",
             scrollTrigger: {
               trigger: block,
@@ -200,402 +360,499 @@ export default function LivingContactSheet() {
     return () => ctx.revert();
   }, []);
 
-  /* Escape key closes inline video */
+  /* Escape key closes inline video players */
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setActiveInlineVideo(null);
+        if (vinithaVideoActive) closeVinithaVideo();
+        if (nishanthVideoActive) setNishanthVideoActive(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [vinithaVideoActive, nishanthVideoActive, closeVinithaVideo]);
 
   return (
     <section
       ref={sectionRef}
       id="vows"
       className={styles.section}
-      aria-label="The Vows — Wedding Projects & Cinematic Films"
+      aria-label="Chapter 02 — The Vows"
     >
-      <div className={styles.container}>
+      {/* ── Hidden SVG Definition for Smooth Mathematical Path Morphing ── */}
+      <svg
+        className={styles.svgClipDefs}
+        width="1"
+        height="1"
+        viewBox="0 0 1 1"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <defs>
+          <clipPath id="vinithaMorphClip" clipPathUnits="objectBoundingBox">
+            <path
+              ref={vinithaPathRef}
+              d="M 0 0.11 C 0.32 0.18, 0.68 0.02, 1 0.09 L 1 0.89 C 0.68 0.98, 0.32 0.80, 0 0.88 Z"
+            />
+          </clipPath>
+          <clipPath id="nishanthCurveClip" clipPathUnits="objectBoundingBox">
+            <path d="M 0 0.08 C 0.35 0.01, 0.65 0.14, 1 0.09 L 1 0.93 C 0.65 0.86, 0.35 0.99, 0 0.92 Z" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <div className={styles.mainContainer}>
         {/* Curated Exhibition Anchor */}
         <div id="exhibition" className={styles.anchorOffset} aria-hidden="true" />
 
-        {/* ── 01: THE OPENING (SECTION HEADER) ───────────────────── */}
-        <div ref={headerRef} className={styles.header}>
-          <div className={styles.headerMeta}>
-            <span className={styles.chapterTag}>Chapter 02</span>
-            <span className={styles.metaDivider}>—</span>
-            <span className={styles.curatorialTag}>The Vows</span>
-            <span className={styles.referenceBadge}>Curated Commissions</span>
+        {/* ══════════════════════════════════════════════════════════════════════
+            01 — FEATURED EDITORIAL OPENING (EXACT 3-COLUMN COMPOSITION)
+        ══════════════════════════════════════════════════════════════════════ */}
+        <div ref={openingRef} className={styles.openingComposition}>
+          {/* Chapter Progress Rail */}
+          <div className={styles.progressRail} aria-hidden="true">
+            <span className={styles.railNumber}>01</span>
+            <div className={styles.railActiveWrap}>
+              <span className={`${styles.railNumber} ${styles.railNumberActive}`}>02</span>
+              <span className={styles.railIndicatorBar} />
+            </div>
+            <span className={styles.railNumber}>03</span>
+            <span className={styles.railNumber}>05</span>
           </div>
-          <h2 className={styles.title}>
-            The <span className={styles.cursiveAccent}>Vows</span>
-          </h2>
-          <p className={styles.subtitle}>
-            An anthology of sacred Telugu traditions, royal celebrations, and cinematic master films,
-            captured with 35mm optical depth and quiet human truth.
-          </p>
-          <div className={styles.headerDividerLine} />
+
+          {/* Left Column: Chapter Title & Editorial Anthology Thesis */}
+          <div className={styles.openingLeftCol}>
+            <div className={styles.chapterBadgeRow}>
+              <span className={styles.chapterLabel}>CHAPTER 02</span>
+              <span className={styles.labelDividerLine} />
+            </div>
+
+            <h2 className={styles.monumentalHeading}>
+              <span className={styles.headingThe}>The</span>
+              <span className={styles.headingVows}>Vows</span>
+            </h2>
+
+            <p className={styles.openingNarrative}>
+              An anthology of love in its truest, timeless, most authentic form.
+              Intimate stories, iconic days, and 35mm inspired imagery of real human souls.
+            </p>
+
+            <a href="#stories-showcase" className={styles.exploreActionBtn}>
+              <span className={styles.exploreCircleIcon}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <span className={styles.exploreActionText}>EXPLORE THE STORIES</span>
+            </a>
+          </div>
+
+          {/* Center Column: Arched Roman Portrait (Bellamkonda & Kavya) */}
+          <div className={styles.openingCenterCol}>
+            <Link
+              href={ITEM_PROJECT_01.storyUrl}
+              className={styles.archedPhotoLink}
+              aria-label={`Open featured commission: ${ITEM_PROJECT_01.clientNames}`}
+            >
+              <div className={styles.archedFrame}>
+                <picture>
+                  <source srcSet={ITEM_PROJECT_01.webpImage} type="image/webp" />
+                  <img
+                    src={ITEM_PROJECT_01.image}
+                    alt={ITEM_PROJECT_01.clientNames}
+                    className={styles.archedPhotoImg}
+                    style={{ objectPosition: ITEM_PROJECT_01.objectPosition }}
+                    loading="eager"
+                  />
+                </picture>
+                <div className={styles.photoSheenOverlay} />
+              </div>
+            </Link>
+          </div>
+
+          {/* Right Column: Featured Commission Details & Metadata */}
+          <div className={styles.openingRightCol}>
+            <div className={styles.featuredBadgeRow}>
+              <span className={styles.featuredCommissionLabel}>FEATURED COMMISSION</span>
+              <span className={styles.labelDividerLine} />
+            </div>
+
+            <h3 className={styles.featuredCoupleName}>
+              <Link href={ITEM_PROJECT_01.storyUrl} className={styles.nameLink}>
+                {ITEM_PROJECT_01.clientNames}
+              </Link>
+            </h3>
+
+            <p className={styles.featuredVenueSub}>{ITEM_PROJECT_01.location}</p>
+
+            <p className={styles.featuredStoryCopy}>
+              The quiet and overwhelming union of two people, set against the grandeur
+              of celebration, personal moments, and everything in between. A wedding
+              captured with honesty, cinematic depth and timeless transitions.
+            </p>
+
+            <div className={styles.specsTable}>
+              <div className={styles.specRow}>
+                <span className={styles.specKey}>DISCIPLINE</span>
+                <span className={styles.specValue}>Celebrity Wedding</span>
+              </div>
+              <div className={styles.specRow}>
+                <span className={styles.specKey}>LOCATION</span>
+                <span className={styles.specValue}>Hyderabad</span>
+              </div>
+              <div className={styles.specRow}>
+                <span className={styles.specKey}>OPTICAL CREW</span>
+                <span className={styles.specValue}>35mm Prime Cinema Optics</span>
+              </div>
+              <div className={styles.specRow}>
+                <span className={styles.specKey}>ARCHIVE ACCESS</span>
+                <span className={styles.specValue}>Curated Master Story</span>
+              </div>
+            </div>
+
+            <div className={styles.featuredCtaWrap}>
+              <Link href={ITEM_PROJECT_01.storyUrl} className={styles.btnExplorePill}>
+                EXPLORE FULL STORY <span className={styles.pillArrow}>→</span>
+              </Link>
+            </div>
+          </div>
         </div>
 
-        {/* ── 02: THE FEATURED STORY (DOMINANT EDITORIAL CENTERPIECE) ── */}
-        <div className={`${styles.rhythmBlock} ${styles.featuredStoryWrapper}`}>
-          <div className={styles.featuredGrid}>
-            {/* Visual Column: Large, Commandingly Sized Photograph */}
-            <div className={styles.featuredVisualCol}>
+        {/* Anchor for Explore Action */}
+        <div id="stories-showcase" className={styles.anchorOffset} aria-hidden="true" />
+
+        {/* ══════════════════════════════════════════════════════════════════════
+            02 — VINITHA & VIVEKANANDA: CURVED PANEL WITH SVG MORPH ANIMATION
+        ══════════════════════════════════════════════════════════════════════ */}
+        <div className={`${styles.editorialBlock} ${styles.vinithaSectionBlock}`}>
+          <div
+            ref={vinithaStageRef}
+            className={`${styles.curvedPanelStage} ${
+              vinithaVideoActive ? styles.curvedPanelStageActive : ""
+            }`}
+          >
+            {/* Background Poster Image */}
+            <picture>
+              <source srcSet={ITEM_VIDEO_01.webpPoster} type="image/webp" />
+              <img
+                src={ITEM_VIDEO_01.poster}
+                alt={ITEM_VIDEO_01.filmTitle}
+                className={styles.curvedPosterImg}
+                loading="lazy"
+              />
+            </picture>
+
+            {/* Gradient Scrim for Film Typography Legibility */}
+            <div className={styles.filmGradientScrim} />
+
+            {/* Overlay Elements (Fade out when morphing to video) */}
+            <div ref={vinithaOverlaysRef} className={styles.filmOverlaysLayer}>
+              <div className={styles.filmNarrativeSide}>
+                <span className={styles.filmIndexLabel}>01 —— WEDDING FILM</span>
+                <h3 className={styles.filmHeading}>{ITEM_VIDEO_01.filmTitle}</h3>
+                <p className={styles.filmExcerpt}>{ITEM_VIDEO_01.description}</p>
+                <button
+                  type="button"
+                  className={styles.btnWatchFilmText}
+                  onClick={openVinithaVideo}
+                  aria-label={`Watch cinema film: ${ITEM_VIDEO_01.filmTitle}`}
+                >
+                  WATCH FILM <span className={styles.actionArrow}>——→</span>
+                </button>
+              </div>
+
+              <div className={styles.filmPlaySide}>
+                <button
+                  type="button"
+                  className={styles.circularPlayBeacon}
+                  onClick={openVinithaVideo}
+                  aria-label="Play Vinitha & Vivekananda wedding film"
+                >
+                  <svg className={styles.playBeaconIcon} viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Embedded Cinema Player (Revealed upon morph completion) */}
+            {vinithaVideoActive && (
+              <div ref={vinithaIframeRef} className={styles.embeddedPlayerStage}>
+                <iframe
+                  src={ITEM_VIDEO_01.embedUrl}
+                  title={ITEM_VIDEO_01.filmTitle}
+                  className={styles.cinemaIframe}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+                <button
+                  type="button"
+                  className={styles.btnCloseCinema}
+                  onClick={closeVinithaVideo}
+                  aria-label="Close cinema film player"
+                >
+                  ✕ Close Film
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ══════════════════════════════════════════════════════════════════════
+            03 — HRITHIKA & ABHISHEK (USER INSTRUCTION: PHOTO ON LEFT, TEXT ON RIGHT)
+        ══════════════════════════════════════════════════════════════════════ */}
+        <div className={`${styles.editorialBlock} ${styles.duoSpreadBlock}`}>
+          <div className={styles.duoGridHrithika}>
+            {/* LEFT: Photograph (As explicitly instructed) */}
+            <div className={styles.duoVisualSide}>
               <Link
-                href={ITEM_PROJECT_01.storyUrl}
-                className={styles.featuredPhotoLink}
-                aria-label={`Open featured story: ${ITEM_PROJECT_01.clientNames}`}
+                href={ITEM_PROJECT_03.storyUrl}
+                className={styles.cardImageLink}
+                aria-label={`Open story: ${ITEM_PROJECT_03.clientNames}`}
               >
                 <div
-                  className={styles.featuredImageCanvas}
-                  style={{ aspectRatio: ITEM_PROJECT_01.aspectRatio }}
+                  className={styles.roundedImageCanvas}
+                  style={{ aspectRatio: ITEM_PROJECT_03.aspectRatio }}
                 >
                   <picture>
-                    <source srcSet={ITEM_PROJECT_01.webpImage} type="image/webp" />
+                    <source srcSet={ITEM_PROJECT_03.webpImage} type="image/webp" />
                     <img
-                      src={ITEM_PROJECT_01.image}
-                      alt={ITEM_PROJECT_01.clientNames}
-                      className={styles.featuredImg}
-                      style={{ objectPosition: ITEM_PROJECT_01.objectPosition }}
-                      loading="eager"
+                      src={ITEM_PROJECT_03.image}
+                      alt={ITEM_PROJECT_03.clientNames}
+                      className={styles.storyCoverImg}
+                      style={{ objectPosition: ITEM_PROJECT_03.objectPosition }}
+                      loading="lazy"
                     />
                   </picture>
-                  <div className={styles.imageHighlightGlow} />
+                  <div className={styles.imageHoverShimmer} />
                 </div>
               </Link>
             </div>
 
-            {/* Narrative Column: Cohesive Typography & Editorial Information */}
-            <div className={styles.featuredNarrativeCol}>
-              <div className={styles.featuredBadgeRow}>
-                <span className={styles.badgeEmphasis}>Featured Commission</span>
-                <span className={styles.badgeBullet}>·</span>
-                <span className={styles.badgeSub}>Celebrity Reception</span>
-              </div>
-
-              <h3 className={styles.featuredTitle}>
-                <Link href={ITEM_PROJECT_01.storyUrl} className={styles.titleLink}>
-                  {ITEM_PROJECT_01.clientNames}
+            {/* RIGHT: Text and Story Details */}
+            <div className={styles.duoContentSide}>
+              <span className={styles.storySerialTag}>{ITEM_PROJECT_03.categoryLabel}</span>
+              <h4 className={styles.storyTitleLarge}>
+                <Link href={ITEM_PROJECT_03.storyUrl} className={styles.nameLink}>
+                  {ITEM_PROJECT_03.clientNames}
                 </Link>
-              </h3>
+              </h4>
+              <p className={styles.storyDescription}>{ITEM_PROJECT_03.narrative}</p>
+              <Link href={ITEM_PROJECT_03.storyUrl} className={styles.btnViewStoryText}>
+                VIEW STORY <span className={styles.actionArrow}>——→</span>
+              </Link>
 
-              <p className={styles.featuredLocation}>{ITEM_PROJECT_01.location}</p>
-
-              <blockquote className={styles.featuredPullQuote}>
-                &ldquo;{ITEM_PROJECT_01.narrative}&rdquo;
-              </blockquote>
-
-              <div className={styles.specificationsTable}>
-                <div className={styles.specRow}>
-                  <span className={styles.specKey}>Discipline</span>
-                  <span className={styles.specValue}>{ITEM_PROJECT_01.category}</span>
-                </div>
-                <div className={styles.specRow}>
-                  <span className={styles.specKey}>Optical Crew</span>
-                  <span className={styles.specValue}>35mm Prime Cinema Optics</span>
-                </div>
-                <div className={styles.specRow}>
-                  <span className={styles.specKey}>Archive Access</span>
-                  <span className={styles.specValue}>Curated Master Story</span>
-                </div>
-              </div>
-
-              <div className={styles.featuredActionRow}>
-                <Link href={ITEM_PROJECT_01.storyUrl} className={styles.btnPrimaryCTA}>
-                  Explore Full Archival Story <span className={styles.btnArrow}>→</span>
-                </Link>
+              {/* Delicate handwritten accent floating beside */}
+              <div className={styles.floatingCursiveAccent} aria-hidden="true">
+                Real people.
+                <br />
+                Timeless stories.
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── 03: SUPPORTING STORIES (ALIGNED EDITORIAL GRID) ── */}
-
-        {/* SPREAD ROW 1: Stories 02 & 03 (Vinitha & Vivekananda + Sireesh & Harshitha) */}
-        <div className={`${styles.rhythmBlock} ${styles.supportingRowGrid}`}>
-          {/* Story 02: Vinitha & Vivekananda (Cinema Film) */}
-          <div className={styles.editorialCard}>
-            <div className={styles.cardHeaderArea}>
-              <span className={styles.storyCategory}>{ITEM_VIDEO_01.categoryLabel}</span>
-              <h4 className={styles.storyHeadline}>{ITEM_VIDEO_01.filmTitle}</h4>
-              <p className={styles.storyExcerpt}>&ldquo;{ITEM_VIDEO_01.description}&rdquo;</p>
+        {/* ══════════════════════════════════════════════════════════════════════
+            04 — KARTHIK & GAYATRI (TEXT ON LEFT, PHOTO ON RIGHT)
+        ══════════════════════════════════════════════════════════════════════ */}
+        <div className={`${styles.editorialBlock} ${styles.duoSpreadBlock}`}>
+          <div className={styles.duoGridKarthik}>
+            {/* LEFT: Text and Story Details */}
+            <div className={styles.duoContentSide}>
+              <span className={styles.storySerialTag}>{ITEM_PROJECT_04.categoryLabel}</span>
+              <h4 className={styles.storyTitleLarge}>
+                <Link href={ITEM_PROJECT_04.storyUrl} className={styles.nameLink}>
+                  {ITEM_PROJECT_04.clientNames}
+                </Link>
+              </h4>
+              <p className={styles.storyDescription}>{ITEM_PROJECT_04.narrative}</p>
+              <Link href={ITEM_PROJECT_04.storyUrl} className={styles.btnViewStoryText}>
+                VIEW STORY <span className={styles.actionArrow}>——→</span>
+              </Link>
             </div>
 
-            <div className={styles.cinemaFrame}>
-              {activeInlineVideo === ITEM_VIDEO_01.id ? (
-                <div className={styles.videoPlayerContainer}>
-                  <iframe
-                    src={ITEM_VIDEO_01.embedUrl}
-                    title={ITEM_VIDEO_01.filmTitle}
-                    className={styles.videoIframe}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                  <button
-                    type="button"
-                    className={styles.closePlayerBtn}
-                    onClick={() => setActiveInlineVideo(null)}
-                    aria-label="Close cinema player"
-                  >
-                    ✕ Close
-                  </button>
-                </div>
-              ) : (
+            {/* RIGHT: Photograph */}
+            <div className={styles.duoVisualSide}>
+              <Link
+                href={ITEM_PROJECT_04.storyUrl}
+                className={styles.cardImageLink}
+                aria-label={`Open story: ${ITEM_PROJECT_04.clientNames}`}
+              >
                 <div
-                  className={styles.videoPosterArea}
-                  onClick={() => setActiveInlineVideo(ITEM_VIDEO_01.id)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setActiveInlineVideo(ITEM_VIDEO_01.id);
-                    }
-                  }}
-                  aria-label={`Play cinema film: ${ITEM_VIDEO_01.filmTitle}`}
+                  className={styles.roundedImageCanvas}
+                  style={{ aspectRatio: ITEM_PROJECT_04.aspectRatio }}
                 >
                   <picture>
-                    <source srcSet={ITEM_VIDEO_01.webpPoster} type="image/webp" />
+                    <source srcSet={ITEM_PROJECT_04.webpImage} type="image/webp" />
                     <img
-                      src={ITEM_VIDEO_01.poster}
-                      alt={ITEM_VIDEO_01.filmTitle}
-                      className={styles.videoPosterImg}
+                      src={ITEM_PROJECT_04.image}
+                      alt={ITEM_PROJECT_04.clientNames}
+                      className={styles.storyCoverImg}
+                      style={{ objectPosition: ITEM_PROJECT_04.objectPosition }}
                       loading="lazy"
                     />
                   </picture>
-                  <div className={styles.videoPosterVignette} />
-
-                  <div className={styles.playBeacon}>
-                    <div className={styles.playBeaconRing} />
-                    <svg className={styles.playBeaconIcon} viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-
-                  <div className={styles.posterBottomCredit}>
-                    <span className={styles.creditBrand}>{ITEM_VIDEO_01.duration} Master Edit</span>
-                    <span className={styles.creditAction}>Click to Play Inline</span>
-                  </div>
+                  <div className={styles.imageHoverShimmer} />
                 </div>
-              )}
+              </Link>
             </div>
           </div>
-
-          {/* Story 03: Sireesh & Harshitha (Still Story) */}
-          <div className={styles.editorialCard}>
-            <Link
-              href={ITEM_PROJECT_02.storyUrl}
-              className={styles.storyCardLink}
-              aria-label={`Open wedding story: ${ITEM_PROJECT_02.clientNames}`}
-            >
-              <div className={styles.cardHeaderArea}>
-                <span className={styles.storyCategory}>{ITEM_PROJECT_02.categoryLabel}</span>
-                <h4 className={styles.storyHeadline}>{ITEM_PROJECT_02.captionTitle}</h4>
-                <p className={styles.storyExcerpt}>Sacred heritage mandapam documented in quiet dawn light.</p>
-              </div>
-
-              <div
-                className={styles.storyImageCanvas}
-                style={{ aspectRatio: ITEM_PROJECT_02.aspectRatio }}
-              >
-                <picture>
-                  <source srcSet={ITEM_PROJECT_02.webpImage} type="image/webp" />
-                  <img
-                    src={ITEM_PROJECT_02.image}
-                    alt={ITEM_PROJECT_02.clientNames}
-                    className={styles.storyCardImg}
-                    style={{ objectPosition: ITEM_PROJECT_02.objectPosition }}
-                    loading="lazy"
-                  />
-                </picture>
-                <div className={styles.imageHoverSheen} />
-              </div>
-
-              <div className={styles.cardMetaFooter}>
-                <span className={styles.storyLocation}>{ITEM_PROJECT_02.location}</span>
-                <span className={styles.storyLinkArrow}>View Story Archive →</span>
-              </div>
-            </Link>
-          </div>
         </div>
 
-        {/* SPREAD ROW 2: Stories 04 & 05 (Hrithika & Abhishek + Karthik & Gayathri [SWAPPED]) */}
-        <div className={`${styles.rhythmBlock} ${styles.supportingRowGrid}`}>
-          {/* Story 04: Hrithika & Abhishek */}
-          <div className={styles.editorialCard}>
-            <Link
-              href={ITEM_PROJECT_03.storyUrl}
-              className={styles.storyCardLink}
-              aria-label={`Open wedding story: ${ITEM_PROJECT_03.clientNames}`}
-            >
-              <div className={styles.cardHeaderArea}>
-                <span className={styles.storyCategory}>{ITEM_PROJECT_03.categoryLabel}</span>
-                <h4 className={styles.storyHeadline}>{ITEM_PROJECT_03.captionTitle}</h4>
-                <p className={styles.storyExcerpt}>Nine-scene royal bridal celebration in heritage stone corridors.</p>
-              </div>
-
-              <div
-                className={styles.storyImageCanvas}
-                style={{ aspectRatio: ITEM_PROJECT_03.aspectRatio }}
+        {/* ══════════════════════════════════════════════════════════════════════
+            05 — SIREESH & HARSHITHA (LAYERED EDITORIAL COMPOSITION)
+        ══════════════════════════════════════════════════════════════════════ */}
+        <div className={`${styles.editorialBlock} ${styles.layeredSireeshBlock}`}>
+          <div className={styles.layeredGrid}>
+            {/* Left Column: Tall Portrait Photograph */}
+            <div className={styles.layeredPortraitCol}>
+              <Link
+                href={ITEM_PROJECT_02.storyUrl}
+                className={styles.cardImageLink}
+                aria-label={`Open traditional wedding: ${ITEM_PROJECT_02.clientNames}`}
               >
-                <picture>
-                  <source srcSet={ITEM_PROJECT_03.webpImage} type="image/webp" />
-                  <img
-                    src={ITEM_PROJECT_03.image}
-                    alt={ITEM_PROJECT_03.clientNames}
-                    className={styles.storyCardImg}
-                    style={{ objectPosition: ITEM_PROJECT_03.objectPosition }}
-                    loading="lazy"
-                  />
-                </picture>
-                <div className={styles.imageHoverSheen} />
-              </div>
-
-              <div className={styles.cardMetaFooter}>
-                <span className={styles.storyLocation}>{ITEM_PROJECT_03.location}</span>
-                <span className={styles.storyLinkArrow}>View Story Archive →</span>
-              </div>
-            </Link>
-          </div>
-
-          {/* Story 05 (SWAPPED): Karthik & Gayathri */}
-          <div className={styles.editorialCard}>
-            <Link
-              href={ITEM_PROJECT_04.storyUrl}
-              className={styles.storyCardLink}
-              aria-label={`Open fine-art wedding: ${ITEM_PROJECT_04.clientNames}`}
-            >
-              <div className={styles.cardHeaderArea}>
-                <span className={styles.storyCategory}>{ITEM_PROJECT_04.categoryLabel}</span>
-                <h4 className={styles.storyHeadline}>{ITEM_PROJECT_04.captionTitle}</h4>
-                <p className={styles.storyExcerpt}>Fine-art bridal portraits captured under natural conservatory light.</p>
-              </div>
-
-              <div
-                className={styles.storyImageCanvas}
-                style={{ aspectRatio: ITEM_PROJECT_04.aspectRatio }}
-              >
-                <picture>
-                  <source srcSet={ITEM_PROJECT_04.webpImage} type="image/webp" />
-                  <img
-                    src={ITEM_PROJECT_04.image}
-                    alt={ITEM_PROJECT_04.clientNames}
-                    className={styles.storyCardImg}
-                    style={{ objectPosition: ITEM_PROJECT_04.objectPosition }}
-                    loading="lazy"
-                  />
-                </picture>
-                <div className={styles.imageHoverSheen} />
-              </div>
-
-              <div className={styles.cardMetaFooter}>
-                <span className={styles.storyLocation}>{ITEM_PROJECT_04.location}</span>
-                <span className={styles.storyLinkArrow}>View Story Archive →</span>
-              </div>
-            </Link>
-          </div>
-        </div>
-
-        {/* SPREAD ROW 3: Story 06 (Nishanth X Sanzena [SWAPPED]) Closing Feature */}
-        <div className={`${styles.rhythmBlock} ${styles.closingFeatureWrapper}`}>
-          <div className={styles.closingFeatureGrid}>
-            <div className={styles.closingVideoCol}>
-              <div className={styles.cinemaFrame}>
-                {activeInlineVideo === ITEM_VIDEO_02.id ? (
-                  <div className={styles.videoPlayerContainer}>
-                    <iframe
-                      src={ITEM_VIDEO_02.embedUrl}
-                      title={ITEM_VIDEO_02.filmTitle}
-                      className={styles.videoIframe}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
+                <div className={styles.tallPortraitCanvas}>
+                  <picture>
+                    <source srcSet={ITEM_PROJECT_02.webpImage} type="image/webp" />
+                    <img
+                      src={ITEM_PROJECT_02.image}
+                      alt={ITEM_PROJECT_02.clientNames}
+                      className={styles.storyCoverImg}
+                      style={{ objectPosition: ITEM_PROJECT_02.objectPosition }}
+                      loading="lazy"
                     />
-                    <button
-                      type="button"
-                      className={styles.closePlayerBtn}
-                      onClick={() => setActiveInlineVideo(null)}
-                      aria-label="Close cinema player"
-                    >
-                      ✕ Close
-                    </button>
-                  </div>
-                ) : (
-                  <div
-                    className={styles.videoPosterArea}
-                    onClick={() => setActiveInlineVideo(ITEM_VIDEO_02.id)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setActiveInlineVideo(ITEM_VIDEO_02.id);
-                      }
-                    }}
-                    aria-label={`Play couple shoot film: ${ITEM_VIDEO_02.filmTitle}`}
-                  >
+                  </picture>
+                  <div className={styles.imageHoverShimmer} />
+                </div>
+              </Link>
+            </div>
+
+            {/* Right Column: Top Narrative + Bottom Wide Mandapam Still */}
+            <div className={styles.layeredContentCol}>
+              <div className={styles.sireeshNarrativeArea}>
+                <span className={styles.storySerialTag}>{ITEM_PROJECT_02.categoryLabel}</span>
+                <h4 className={styles.storyTitleLarge}>
+                  <Link href={ITEM_PROJECT_02.storyUrl} className={styles.nameLink}>
+                    {ITEM_PROJECT_02.clientNames}
+                  </Link>
+                </h4>
+                <p className={styles.storyDescription}>{ITEM_PROJECT_02.narrative}</p>
+                <Link href={ITEM_PROJECT_02.storyUrl} className={styles.btnViewStoryText}>
+                  VIEW STORY <span className={styles.actionArrow}>——→</span>
+                </Link>
+              </div>
+
+              {/* Second Wide Supporting Photograph: Royal Mandapam Architecture */}
+              <div className={styles.sireeshMandapArea}>
+                <Link
+                  href={ITEM_PROJECT_02.storyUrl}
+                  className={styles.cardImageLink}
+                  aria-label="View traditional heritage mandapam architecture"
+                >
+                  <div className={styles.wideMandapCanvas}>
                     <picture>
-                      <source srcSet={ITEM_VIDEO_02.webpPoster} type="image/webp" />
+                      <source srcSet={ITEM_PROJECT_02_MANDAP.webpImage} type="image/webp" />
                       <img
-                        src={ITEM_VIDEO_02.poster}
-                        alt={ITEM_VIDEO_02.filmTitle}
-                        className={styles.videoPosterImg}
+                        src={ITEM_PROJECT_02_MANDAP.image}
+                        alt={ITEM_PROJECT_02_MANDAP.clientNames}
+                        className={styles.storyCoverImg}
+                        style={{ objectPosition: ITEM_PROJECT_02_MANDAP.objectPosition }}
                         loading="lazy"
                       />
                     </picture>
-                    <div className={styles.videoPosterVignette} />
-
-                    <div className={styles.playBeacon}>
-                      <div className={styles.playBeaconRing} />
-                      <svg className={styles.playBeaconIcon} viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-
-                    <div className={styles.posterBottomCredit}>
-                      <span className={styles.creditBrand}>03:12 Couple Cinema</span>
-                      <span className={styles.creditAction}>Click to Play</span>
-                    </div>
+                    <div className={styles.imageHoverShimmer} />
                   </div>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.closingNarrativeCol}>
-              <span className={styles.storyCategory}>{ITEM_VIDEO_02.categoryLabel}</span>
-              <h4 className={styles.closingHeading}>{ITEM_VIDEO_02.filmTitle}</h4>
-              <p className={styles.closingQuote}>&ldquo;{ITEM_VIDEO_02.description}&rdquo;</p>
-              <p className={styles.closingMeta}>
-                Preserving spontaneous laughter, intimate promises, and architectural symmetry
-                with 35mm anamorphic prime lenses.
-              </p>
-              <div className={styles.closingAction}>
-                <button
-                  type="button"
-                  className={styles.btnSecondaryPlay}
-                  onClick={() => setActiveInlineVideo(ITEM_VIDEO_02.id)}
-                >
-                  Watch Cinema Film (03:12) ▶
-                </button>
+                </Link>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── 04: SECTION TRANSITION ────────────────────────────── */}
-        <div className={styles.conclusionTransition}>
-          <div className={styles.conclusionRule} />
-          <div className={styles.conclusionActionRow}>
-            <p className={styles.conclusionNote}>
-              Each commission documented with the optical discipline of 35mm master cinema.
-            </p>
-            <Link href="/stories" className={styles.conclusionLink}>
-              Explore Complete Vows Archive <span className={styles.conclusionArrow}>→</span>
-            </Link>
+        {/* ══════════════════════════════════════════════════════════════════════
+            06 — NISHANTH X SANZENA: CINEMATIC CLOSING FEATURE
+        ══════════════════════════════════════════════════════════════════════ */}
+        <div className={`${styles.editorialBlock} ${styles.nishanthClosingBlock}`}>
+          <div className={styles.nishanthCurvedStage}>
+            {/* Sunset Mountain Landscape Poster */}
+            <picture>
+              <source srcSet={ITEM_VIDEO_02.webpPoster} type="image/webp" />
+              <img
+                src={ITEM_VIDEO_02.poster}
+                alt={ITEM_VIDEO_02.filmTitle}
+                className={styles.nishanthPosterImg}
+                loading="lazy"
+              />
+            </picture>
+
+            {/* Gradient Scrim */}
+            <div className={styles.nishanthGradientScrim} />
+
+            {/* Left Play Control */}
+            <div className={styles.nishanthLeftControl}>
+              <button
+                type="button"
+                className={styles.circularPlayBeacon}
+                onClick={() => setNishanthVideoActive(true)}
+                aria-label={`Play signature film: ${ITEM_VIDEO_02.filmTitle}`}
+              >
+                <svg className={styles.playBeaconIcon} viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </button>
+              <div className={styles.nishanthFilmLabelGroup}>
+                <span className={styles.nishanthFilmSub}>SIGNATURE FILM</span>
+                <span className={styles.nishanthFilmName}>NISHANTH X SANZENA</span>
+              </div>
+            </div>
+
+            {/* Right Narrative Overlay */}
+            <div className={styles.nishanthRightNarrative}>
+              <span className={styles.nishanthTag}>05 —— SIGNATURE FILM</span>
+              <h3 className={styles.nishanthTitle}>{ITEM_VIDEO_02.filmTitle}</h3>
+              <p className={styles.nishanthExcerpt}>{ITEM_VIDEO_02.description}</p>
+              <button
+                type="button"
+                className={styles.btnNishanthPill}
+                onClick={() => setNishanthVideoActive(true)}
+              >
+                WATCH THE FULL FILM <span className={styles.pillArrow}>——→</span>
+              </button>
+            </div>
+
+            {/* Inline Cinema Player Modal / Overlay */}
+            {nishanthVideoActive && (
+              <div className={styles.embeddedPlayerStage}>
+                <iframe
+                  src={ITEM_VIDEO_02.embedUrl}
+                  title={ITEM_VIDEO_02.filmTitle}
+                  className={styles.cinemaIframe}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+                <button
+                  type="button"
+                  className={styles.btnCloseCinema}
+                  onClick={() => setNishanthVideoActive(false)}
+                  aria-label="Close signature film player"
+                >
+                  ✕ Close Film
+                </button>
+              </div>
+            )}
           </div>
+        </div>
+
+        {/* ══════════════════════════════════════════════════════════════════════
+            07 — SECTION ENDING / BRAND FOOTER BAR
+        ══════════════════════════════════════════════════════════════════════ */}
+        <div className={styles.sectionEndingBar}>
+          <span className={styles.endingBrand}>24 FRAMES PHOTOGRAPHY</span>
+          <span className={styles.endingDividerLine} />
+          <span className={styles.endingCursivePhrase}>Real people. Timeless stories.</span>
+          <span className={styles.endingDividerLine} />
+          <Link href="/disciplines/weddings" className={styles.endingExploreLink}>
+            Bespoke Wedding Photography & Films <span className={styles.linkArrow}>→</span>
+          </Link>
         </div>
       </div>
     </section>

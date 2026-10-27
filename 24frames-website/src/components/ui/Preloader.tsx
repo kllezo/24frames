@@ -243,8 +243,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                 <div ref={finalInnerRef} className={styles.finalTileInner}>
                   <span className={styles.finalFrameNo}>24 / 24</span>
                   <div className={styles.finalBrand}>
-                    <span className={styles.finalNum}>24</span>
-                    <span className={styles.finalWord}>FRAMES</span>
+                    <img
+                      src="/images/logo-dark-header.webp"
+                      alt="24 Frames — Phani Gogireddy"
+                      className={styles.finalLogoImg}
+                    />
                   </div>
                   <span className={styles.finalTag}>CINEMA STUDIO</span>
                 </div>
