@@ -25,64 +25,79 @@ export interface VerifiedRecognition {
 
 export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
   {
-    id: "et-excellence-2025",
-    badgeLabel: "JURIED INDUSTRY AWARD",
-    milestoneTitle: "ET Excellence Award 2025",
-    conferringBody: "The Times of India / ET Now · Conferred by Dia Mirza",
-    year: "2025",
-    category: "Luxury Wedding Cinematography",
-    citation: "Excellence in Luxury Wedding Photography & Cinematic Storytelling",
+    id: "nikon-india",
+    badgeLabel: "INDUSTRY ASSOCIATION",
+    milestoneTitle: "Nikon India Official Association",
+    conferringBody: "Nikon India Official",
+    year: "2023",
+    category: "Creator Community & Imaging Tech",
+    citation: "Welcoming Phani Gogireddy (@24framesphotography_official) to the Nikon Creator family",
     summary:
-      "Conferred at Novotel HICC, Hyderabad before industry leaders and media dignitaries. Presented by Bollywood icon and UN Goodwill Ambassador Dia Mirza. Awarded for defining high-production cinematic storytelling and cultural preservation in luxury South Indian weddings.",
-    imageSrc: "/assets/artist/recognition/et-excellence-award-2025.jpg",
-    imageAlt: "Phani Gogireddy receiving the ET Excellence Award 2025 with framed citation and trophy on TV9 Telugu",
+      "Official creator association with Nikon India, highlighting creative innovation, optical precision, and the high standards of craft brought to South Indian wedding cinematography.",
+    imageSrc: "/images/magazines/nikon.webp",
+    imageAlt: "Official Nikon India association creative welcoming Phani Gogireddy to Nikon Creator family",
+    sourceUrl: "https://www.instagram.com/nikonindiaofficial/",
+    sourceLabel: "View Official Nikon Announcement →",
+  },
+  {
+    id: "times-excellence-dia-mirza",
+    badgeLabel: "JURIED INDUSTRY AWARD",
+    milestoneTitle: "Excellence in Luxury Wedding Photography",
+    conferringBody: "The Times of India · Presented by Dia Mirza at Novotel HICC, Hyderabad",
+    year: "2025",
+    category: "Luxury Wedding Photography",
+    citation: "Conferred for Excellence in Luxury Wedding Photography at Novotel HICC, Hyderabad",
+    summary:
+      "Conferred at Novotel HICC, Hyderabad before industry leaders and media dignitaries. Presented by Bollywood icon and UN Goodwill Ambassador Dia Mirza to Phani Gogireddy (24 Frames Wedding Films) for setting benchmarks in luxury wedding photography.",
+    imageSrc: "/images/magazines/excellence-luxury-photography.webp",
+    imageAlt: "Dia Mirza presenting the Excellence in Luxury Wedding Photography award to Phani Gogireddy at Novotel HICC Hyderabad",
     sourceUrl: "https://www.youtube.com/shorts/Lh45ZBRJ1b8",
     sourceLabel: "Watch Award Ceremony Film →",
   },
   {
-    id: "nikon-creator-2023",
-    badgeLabel: "MANUFACTURER PARTNERSHIP",
-    milestoneTitle: "Official Nikon India Creator & Influencer",
-    conferringBody: "Nikon India Private Limited",
+    id: "inovexia-indian-eminent",
+    badgeLabel: "REGIONAL DISTINCTION",
+    milestoneTitle: "Indian Eminent Awards — Best Photography Service in Hyderabad",
+    conferringBody: "Inovexia International · Conferred by Shri Akunuri Murali, IAS",
     year: "2023",
-    category: "Official Creator Alliance",
-    citation: "Welcoming Phani Gogireddy to the Nikon Creator Family across AP & Telangana",
+    category: "Best Photography Service",
+    citation: "Best Photography Service in Hyderabad, conferred by Guest of Honour Shri Akunuri Murali, IAS",
     summary:
-      "Formally appointed by Nikon India Private Limited as an official Nikon Creator and Influencer. Selected to advocate flagship Z-series cinema optics and mirrorless technology, leading educational masterclasses and championing uncompromised camera craft across South India.",
-    imageSrc: "/assets/artist/recognition/nikon-creator-announcement-2023.jpg",
-    imageAlt: "Official Nikon India Creator announcement creative for Phani Gogireddy",
-    sourceUrl: "https://www.instagram.com/p/CqovGPUoPle/",
-    sourceLabel: "View Official Nikon Announcement →",
-  },
-  {
-    id: "thecconnects-ceo-2026",
-    badgeLabel: "EXECUTIVE LEADERSHIP",
-    milestoneTitle: "Visionary CEO in Luxury Wedding Photography",
-    conferringBody: "TheCconnects Global Platform · Growth Story Summit",
-    year: "2026",
-    category: "Industry Leadership & Entrepreneurship",
-    citation: "Visionary CEO in Luxury Wedding Photography & Cinematic Storytelling",
-    summary:
-      "Conferred at the Growth Story Summit & Awards in Hyderabad by senior leadership including Sri Jayesh Ranjan IAS (Special Chief Secretary, Telangana Government). Honoring Phani Gogireddy for scaling 24 Frames into a high-ticket, institutionalized luxury wedding media company.",
-    imageSrc: "/assets/artist/recognition/thecconnects-visionary-ceo-award-2026.jpg",
-    imageAlt: "Phani Gogireddy receiving the Visionary CEO Award from Sri Jayesh Ranjan IAS on stage",
-    sourceUrl: "https://www.youtube.com/post/Ugkxg9gXlVttAKARijuEYBdupvGDuHk8eQtN",
-    sourceLabel: "View Ceremony Announcement →",
-  },
-  {
-    id: "borok-times-2023",
-    badgeLabel: "NATIONAL PRESS PROFILE",
-    milestoneTitle: "“The Art of Storytelling Through Photography”",
-    conferringBody: "Borok Times Editorial Press Feature",
-    year: "2023",
-    category: "Editorial Press Profile",
-    citation: "A Look at Phani Gogireddy’s Award-Winning Work & Client Dedication",
-    summary:
-      "An in-depth editorial profile investigating Phani Gogireddy's cinematic visual language and client relationships. Explores his background in Telugu cinema and how it informed 24 Frames' narrative-led approach to royal South Indian weddings and generational keepsakes.",
-    imageSrc: "/assets/artist/recognition/borok-times-phani-gogireddy.jpeg",
-    imageAlt: "Borok Times editorial feature header showing Indian Eminent Awards 2023 recognition",
+      "Recognised at the Indian Eminent Awards 2023 presented by Inovexia International, honouring 24 Frames for Best Photography Service in Hyderabad, presented by Guest of Honour Shri Akunuri Murali, IAS.",
+    imageSrc: "/images/magazines/inovexia.webp",
+    imageAlt: "Shri Akunuri Murali IAS conferring the Indian Eminent Award for Best Photography Service in Hyderabad to Phani Gogireddy",
     sourceUrl: "https://boroktimes.com/the-art-of-storytelling-through-photography-a-look-at-phani-gogireddys-award-winning-work/",
-    sourceLabel: "Read Editorial Feature →",
+    sourceLabel: "Read Feature →",
+  },
+  {
+    id: "times-of-india-spotlight",
+    badgeLabel: "EDITORIAL SPOTLIGHT",
+    milestoneTitle: "The Times of India Spotlight Feature",
+    conferringBody: "The Times of India (Hyderabad Spotlight)",
+    year: "2024",
+    category: "Press & Media Spotlight",
+    citation: "24 FRAMES — Giving you more than just memories to cherish",
+    summary:
+      "Full-page editorial spotlight in The Times of India celebrating Phani Gogireddy (Nikon India Official Influencer) and 24 Frames for crafting timeless visual legacies and redefining wedding cinematography.",
+    imageSrc: "/images/magazines/the-times-of-india.webp",
+    imageAlt: "The Times of India full page Hyderabad Spotlight featuring 24 Frames and Phani Gogireddy",
+    sourceUrl: "https://timesofindia.indiatimes.com/",
+    sourceLabel: "Read Editorial Article →",
+  },
+  {
+    id: "gen-next-india-cover",
+    badgeLabel: "MAGAZINE COVER STORY",
+    milestoneTitle: "GenNext-India Magazine Cover Feature",
+    conferringBody: "GenNext-India Magazine",
+    year: "2024",
+    category: "Editorial Cover Profile",
+    citation: "From a Small Room to South India's Leading Studio — A Journey of Passion. People. Persistence.",
+    summary:
+      "Cover story documenting the visionary journey of Phani Gogireddy, from establishing 24 Frames with two computers in 2016 to expanding into a 6,000 sq. ft. corporate office with an award-winning team and over 1,000 weddings captured across India and abroad.",
+    imageSrc: "/images/magazines/gen-next-india.webp",
+    imageAlt: "GenNext-India magazine cover featuring Phani Gogireddy holding the Excellence star award",
+    sourceUrl: "https://www.youtube.com/@24framesphotography",
+    sourceLabel: "Explore Studio Archive →",
   },
 ];
 
@@ -301,31 +316,31 @@ export default function FounderRecognitionSection() {
             <div ref={portraitWrapRef} className={styles.portraitWrap}>
               <img
                 src="/images/founder-portrait.jpg"
-                alt="Phani Gogireddy — Founder & Creative Director of 24 Frames Photography"
+                alt="Phani Gogireddy — Managing Director of 24 Frames Wedding Films"
                 className={styles.portraitImg}
                 loading="eager"
               />
               <div className={styles.portraitGroundShadow} aria-hidden="true" />
             </div>
 
-            {/* 1.2 Statistics Block Directly Beneath Portrait — Three Statistics Arranged Horizontally */}
+            {/* 1.2 Statistics Block Directly Beneath Portrait — Three Verified Milestones */}
             <div ref={statsRef} className={styles.leftStatsBlock}>
               {/* Statistics Divider Beneath Portrait */}
               <div className={styles.leftDivider} />
 
-              {/* Three Statistics Arranged Horizontally: 2012, 500+, 5.0 */}
+              {/* Three Verified Statistics: 2016, 1,000+, 6,000 SQ FT */}
               <div className={styles.leftStatsRow}>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>2012</span>
-                  <span className={styles.statLabel}>FOUNDED IN HYDERABAD</span>
+                  <span className={styles.statValue}>2016</span>
+                  <span className={styles.statLabel}>ESTABLISHED IN HYDERABAD</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>500+</span>
-                  <span className={styles.statLabel}>MASTER COMMISSIONS</span>
+                  <span className={styles.statValue}>1,000+</span>
+                  <span className={styles.statLabel}>WEDDINGS CAPTURED ACROSS INDIA & ABROAD</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>5.0</span>
-                  <span className={styles.statLabel}>WEDMEGOOD SCORE</span>
+                  <span className={styles.statValue}>6,000</span>
+                  <span className={styles.statLabel}>SQ. FT. CORPORATE HEADQUARTERS</span>
                 </div>
               </div>
             </div>
@@ -452,11 +467,11 @@ export default function FounderRecognitionSection() {
               </div>
             </div>
 
-            {/* 2.B BELOW THE SHELF: FOUNDER EDITORIAL BIOGRAPHY & COMMISSION CTA */}
+            {/* 2.B BELOW THE SHELF: FOUNDER EDITORIAL BIOGRAPHY & VALUES */}
             <div ref={bioBlockRef} className={styles.founderBioBlock}>
               {/* Chapter Kicker */}
               <div className={styles.chapterKicker}>
-                CHAPTER 04 — THE ARTIST & RECOGNITION
+                THE VISIONARY FORCE BEHIND 24 FRAMES WEDDING FILMS
               </div>
 
               {/* Large Serif Founder Name */}
@@ -465,24 +480,68 @@ export default function FounderRecognitionSection() {
                 <span>GOGIREDDY</span>
               </h2>
 
-              {/* Founder Role */}
+              {/* Founder Official Title */}
               <div className={styles.founderRole}>
-                FOUNDER & CREATIVE DIRECTOR
+                MANAGING DIRECTOR
               </div>
 
-              {/* Two Concise Biography Paragraphs */}
+              {/* Concise Source-Derived Biography Paragraphs */}
               <div className={styles.narrative}>
                 <p>
-                  From the film sets of Tollywood to directing one of South
-                  India&apos;s most revered cinematic wedding studios, Phani has spent
-                  fourteen years preserving Telugu heritage, high-profile royal
-                  unions, and the quiet intimacy of families.
+                  Established in 2016, 24 Frames began with a modest setup containing just two computers and an unyielding commitment to heartfelt visual storytelling.
                 </p>
                 <p>
-                  Every commission is treated as a bespoke feature film — shot on
-                  optical cinema primes, graded with archival color discipline,
-                  and delivered as generational heirlooms.
+                  With roots in the Telugu film industry, Phani Gogireddy brought cinematic framing, lighting nuance, and deep emotional sensitivity to real-life wedding celebrations.
                 </p>
+                <p>
+                  Over the years, that humble studio has expanded into a 6,000 sq. ft. corporate office and an award-winning creative team that has captured more than 1,000 weddings across India and abroad.
+                </p>
+              </div>
+
+              {/* Three Core Values — Distinct Editorial Principles */}
+              <div className={styles.coreValuesBlock}>
+                <span className={styles.coreValuesHeading}>THREE CORE VALUES</span>
+                <div className={styles.coreValuesGrid}>
+                  <div className={styles.coreValueCard}>
+                    <div className={styles.coreValueHeader}>
+                      <span className={styles.coreValueNumber}>01</span>
+                      <h5 className={styles.coreValueTitle}>On-Time Delivery</h5>
+                    </div>
+                    <p className={styles.coreValueDesc}>
+                      Setting industry benchmarks with a fast, disciplined turnaround for master edits and stills.
+                    </p>
+                  </div>
+
+                  <div className={styles.coreValueCard}>
+                    <div className={styles.coreValueHeader}>
+                      <span className={styles.coreValueNumber}>02</span>
+                      <h5 className={styles.coreValueTitle}>Uncompromising Quality</h5>
+                    </div>
+                    <p className={styles.coreValueDesc}>
+                      Blending technical mastery with creative vision on optical cinema primes and archival grades.
+                    </p>
+                  </div>
+
+                  <div className={styles.coreValueCard}>
+                    <div className={styles.coreValueHeader}>
+                      <span className={styles.coreValueNumber}>03</span>
+                      <h5 className={styles.coreValueTitle}>Heartfelt Storytelling</h5>
+                    </div>
+                    <p className={styles.coreValueDesc}>
+                      Transforming fleeting, unrepeatable moments into enduring generational heirlooms.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Closing Quotation */}
+              <div className={styles.quoteBlock}>
+                <p className={styles.quoteText}>
+                  “From reel to real, every dream pursued with heart becomes a timeless shot.”
+                </p>
+                <span className={styles.quoteAuthor}>
+                  — Phani Gogireddy, Managing Director
+                </span>
               </div>
 
               {/* Forest-Green Commission CTA Directly Beneath Biography */}
@@ -492,6 +551,84 @@ export default function FounderRecognitionSection() {
                   <span className={styles.btnArrow}>→</span>
                 </a>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── 3. LUXURY CLIENT GALLERY EXPERIENCE SUITE (PHASE 5 FEATURES) ── */}
+        <div className={styles.clientGallerySection}>
+          <div className={styles.clientGalleryHeader}>
+            <span className={styles.clientGalleryEyebrow}>THE PRIVATE CLIENT SUITE</span>
+            <h3 className={styles.clientGalleryHeading}>The 24 Frames Client Gallery Experience</h3>
+            <p className={styles.clientGallerySub}>
+              An exclusive digital presentation platform delivered with every master commission, engineered to preserve your family's generational legacy.
+            </p>
+          </div>
+
+          <div className={styles.galleryFeaturesGrid}>
+            <div className={styles.galleryFeatureCard}>
+              <div className={styles.featureIconBadge}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M15 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  <path d="M4 20c0-3.3 2.7-6 6-6h4c3.3 0 6 2.7 6 6" />
+                </svg>
+              </div>
+              <h4 className={styles.featureTitle}>AI-Powered Favorite Moments</h4>
+              <p className={styles.featureDescription}>
+                Smart face recognition enables couples and family guests to effortlessly find their loved ones across thousands of high-resolution stills.
+              </p>
+            </div>
+
+            <div className={styles.galleryFeatureCard}>
+              <div className={styles.featureIconBadge}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="m22 8-6 4 6 4V8Z" />
+                  <rect x="2" y="6" width="14" height="12" rx="2" />
+                </svg>
+              </div>
+              <h4 className={styles.featureTitle}>Luxury 4K Video Experience</h4>
+              <p className={styles.featureDescription}>
+                A cinematic streaming theater for your full-length wedding films, signature teasers, and vertical highlight reels in uncompressed clarity.
+              </p>
+            </div>
+
+            <div className={styles.galleryFeatureCard}>
+              <div className={styles.featureIconBadge}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+              </div>
+              <h4 className={styles.featureTitle}>Instagram-Ready Signature Shots</h4>
+              <p className={styles.featureDescription}>
+                Master color-graded portraits and candid moments individually calibrated and proportioned for seamless, high-fidelity social sharing.
+              </p>
+            </div>
+
+            <div className={styles.galleryFeatureCard}>
+              <div className={styles.featureIconBadge}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                </svg>
+              </div>
+              <h4 className={styles.featureTitle}>Event-Wise Photo Stories</h4>
+              <p className={styles.featureDescription}>
+                Your wedding memories meticulously structured by ritual, ceremony, and intimate timeline — from Pellikuthuru to the grand reception.
+              </p>
+            </div>
+
+            <div className={styles.galleryFeatureCard}>
+              <div className={styles.featureIconBadge}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              </div>
+              <h4 className={styles.featureTitle}>The 24 Frames Touch</h4>
+              <p className={styles.featureDescription}>
+                An exclusive digital heirloom vault designed to keep your wedding story vibrant, accessible, and timeless for generations to come.
+              </p>
             </div>
           </div>
         </div>

@@ -182,8 +182,13 @@ export default function LivingContactSheet() {
   const [vinithaVideoActive, setVinithaVideoActive] = useState(false);
   const vinithaMorphingRef = useRef(false);
 
-  /* Nishanth Video State */
+  /* Nishanth SVG Morph References */
+  const nishanthPathRef = useRef<SVGPathElement>(null);
+  const nishanthStageRef = useRef<HTMLDivElement>(null);
+  const nishanthOverlaysRef = useRef<HTMLDivElement>(null);
+  const nishanthIframeRef = useRef<HTMLDivElement>(null);
   const [nishanthVideoActive, setNishanthVideoActive] = useState(false);
+  const nishanthMorphingRef = useRef(false);
 
   /* Curved shape normalized coordinates [0, 1] for objectBoundingBox */
   const CURVED_COORDS = {
@@ -197,6 +202,17 @@ export default function LivingContactSheet() {
     botY0: 0.88,
   };
 
+  const NISHANTH_CURVED_COORDS = {
+    topY0: 0.08,
+    topCp1Y: 0.01,
+    topCp2Y: 0.14,
+    topY1: 0.09,
+    botY1: 0.93,
+    botCp2Y: 0.86,
+    botCp1Y: 0.99,
+    botY0: 0.92,
+  };
+
   const RECT_COORDS = {
     topY0: 0.00,
     topCp1Y: 0.00,
@@ -208,9 +224,14 @@ export default function LivingContactSheet() {
     botY0: 1.00,
   };
 
-  // Helper to build SVG path data string
+  // Helper to build SVG path data string for Vinitha
   const buildPathData = (c: typeof CURVED_COORDS) => {
     return `M 0 ${c.topY0.toFixed(4)} C 0.32 ${c.topCp1Y.toFixed(4)}, 0.68 ${c.topCp2Y.toFixed(4)}, 1 ${c.topY1.toFixed(4)} L 1 ${c.botY1.toFixed(4)} C 0.68 ${c.botCp2Y.toFixed(4)}, 0.32 ${c.botCp1Y.toFixed(4)}, 0 ${c.botY0.toFixed(4)} Z`;
+  };
+
+  // Helper to build SVG path data string for Nishanth
+  const buildNishanthPathData = (c: typeof NISHANTH_CURVED_COORDS) => {
+    return `M 0 ${c.topY0.toFixed(4)} C 0.35 ${c.topCp1Y.toFixed(4)}, 0.65 ${c.topCp2Y.toFixed(4)}, 1 ${c.topY1.toFixed(4)} L 1 ${c.botY1.toFixed(4)} C 0.65 ${c.botCp2Y.toFixed(4)}, 0.35 ${c.botCp1Y.toFixed(4)}, 0 ${c.botY0.toFixed(4)} Z`;
   };
 
   // Trigger Vinitha Video Morph (Curved -> Rectangular Player)
@@ -311,6 +332,104 @@ export default function LivingContactSheet() {
     }
   }, []);
 
+  // Trigger Nishanth Video Morph (Curved -> Rectangular Player)
+  const openNishanthVideo = useCallback(() => {
+    if (nishanthMorphingRef.current || nishanthVideoActive) return;
+    nishanthMorphingRef.current = true;
+
+    const path = nishanthPathRef.current;
+    const stage = nishanthStageRef.current;
+    const overlays = nishanthOverlaysRef.current;
+    if (!path || !stage) {
+      setNishanthVideoActive(true);
+      nishanthMorphingRef.current = false;
+      return;
+    }
+
+    const currentCoords = { ...NISHANTH_CURVED_COORDS };
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setNishanthVideoActive(true);
+        nishanthMorphingRef.current = false;
+      },
+    });
+
+    // 1. Fade out text overlays & play beacon gracefully
+    if (overlays) {
+      tl.to(overlays, {
+        opacity: 0,
+        duration: 0.45,
+        ease: "power2.out",
+      }, 0);
+    }
+
+    // 2. Smoothly morph SVG clipPath from curve to flat rectangle
+    tl.to(currentCoords, {
+      ...RECT_COORDS,
+      duration: 1.05,
+      ease: "power2.inOut",
+      onUpdate: () => {
+        path.setAttribute("d", buildNishanthPathData(currentCoords));
+      },
+    }, 0);
+
+    // 3. Coordinate container geometry into clean 16:9 cinematic rectangle
+    tl.to(stage, {
+      borderRadius: "12px",
+      duration: 1.05,
+      ease: "power2.inOut",
+    }, 0);
+  }, [nishanthVideoActive]);
+
+  // Close Nishanth Video Morph (Rectangular -> Curved)
+  const closeNishanthVideo = useCallback(() => {
+    if (nishanthMorphingRef.current) return;
+    nishanthMorphingRef.current = true;
+
+    setNishanthVideoActive(false);
+
+    const path = nishanthPathRef.current;
+    const stage = nishanthStageRef.current;
+    const overlays = nishanthOverlaysRef.current;
+    if (!path || !stage) {
+      nishanthMorphingRef.current = false;
+      return;
+    }
+
+    const currentCoords = { ...RECT_COORDS };
+    const tl = gsap.timeline({
+      onComplete: () => {
+        nishanthMorphingRef.current = false;
+      },
+    });
+
+    // 1. Smoothly morph SVG clipPath from flat rectangle back to curve
+    tl.to(currentCoords, {
+      ...NISHANTH_CURVED_COORDS,
+      duration: 0.95,
+      ease: "power2.inOut",
+      onUpdate: () => {
+        path.setAttribute("d", buildNishanthPathData(currentCoords));
+      },
+    }, 0);
+
+    // 2. Animate container back to organic frame
+    tl.to(stage, {
+      borderRadius: "0px",
+      duration: 0.95,
+      ease: "power2.inOut",
+    }, 0);
+
+    // 3. Fade text overlays & play beacon back in
+    if (overlays) {
+      tl.to(overlays, {
+        opacity: 1,
+        duration: 0.55,
+        ease: "power2.in",
+      }, 0.45);
+    }
+  }, []);
+
   /* GSAP scroll-triggered entrance animations */
   useEffect(() => {
     const isReduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -365,12 +484,12 @@ export default function LivingContactSheet() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         if (vinithaVideoActive) closeVinithaVideo();
-        if (nishanthVideoActive) setNishanthVideoActive(false);
+        if (nishanthVideoActive) closeNishanthVideo();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [vinithaVideoActive, nishanthVideoActive, closeVinithaVideo]);
+  }, [vinithaVideoActive, nishanthVideoActive, closeVinithaVideo, closeNishanthVideo]);
 
   return (
     <section
@@ -395,8 +514,11 @@ export default function LivingContactSheet() {
               d="M 0 0.11 C 0.32 0.18, 0.68 0.02, 1 0.09 L 1 0.89 C 0.68 0.98, 0.32 0.80, 0 0.88 Z"
             />
           </clipPath>
-          <clipPath id="nishanthCurveClip" clipPathUnits="objectBoundingBox">
-            <path d="M 0 0.08 C 0.35 0.01, 0.65 0.14, 1 0.09 L 1 0.93 C 0.65 0.86, 0.35 0.99, 0 0.92 Z" />
+          <clipPath id="nishanthMorphClip" clipPathUnits="objectBoundingBox">
+            <path
+              ref={nishanthPathRef}
+              d="M 0 0.08 C 0.35 0.01, 0.65 0.14, 1 0.09 L 1 0.93 C 0.65 0.86, 0.35 0.99, 0 0.92 Z"
+            />
           </clipPath>
         </defs>
       </svg>
@@ -700,11 +822,34 @@ export default function LivingContactSheet() {
         </div>
 
         {/* ══════════════════════════════════════════════════════════════════════
-            05 — SIREESH & HARSHITHA (LAYERED EDITORIAL COMPOSITION)
+            05 — SIREESH & HARSHITHA (ASYMMETRIC EDITORIAL STILLS COMPOSITION)
         ══════════════════════════════════════════════════════════════════════ */}
         <div className={`${styles.editorialBlock} ${styles.layeredSireeshBlock}`}>
           <div className={styles.layeredGrid}>
-            {/* Left Column: Tall Portrait Photograph */}
+            {/* Left: Royal Mandapam Architecture Still under Golden Chandeliers */}
+            <div className={styles.layeredContentCol}>
+              <Link
+                href={ITEM_PROJECT_02.storyUrl}
+                className={styles.cardImageLink}
+                aria-label="View traditional heritage mandapam architecture"
+              >
+                <div className={styles.wideMandapCanvas}>
+                  <picture>
+                    <source srcSet={ITEM_PROJECT_02_MANDAP.webpImage} type="image/webp" />
+                    <img
+                      src={ITEM_PROJECT_02_MANDAP.image}
+                      alt={ITEM_PROJECT_02_MANDAP.clientNames}
+                      className={styles.storyCoverImg}
+                      style={{ objectPosition: ITEM_PROJECT_02_MANDAP.objectPosition }}
+                      loading="lazy"
+                    />
+                  </picture>
+                  <div className={styles.imageHoverShimmer} />
+                </div>
+              </Link>
+            </div>
+
+            {/* Right: Sacred Wedding Couple Walking on Tree-Lined Pathway */}
             <div className={styles.layeredPortraitCol}>
               <Link
                 href={ITEM_PROJECT_02.storyUrl}
@@ -726,53 +871,47 @@ export default function LivingContactSheet() {
                 </div>
               </Link>
             </div>
+          </div>
+        </div>
 
-            {/* Right Column: Top Narrative + Bottom Wide Mandapam Still */}
-            <div className={styles.layeredContentCol}>
-              <div className={styles.sireeshNarrativeArea}>
-                <span className={styles.storySerialTag}>{ITEM_PROJECT_02.categoryLabel}</span>
-                <h4 className={styles.storyTitleLarge}>
-                  <Link href={ITEM_PROJECT_02.storyUrl} className={styles.nameLink}>
-                    {ITEM_PROJECT_02.clientNames}
-                  </Link>
-                </h4>
-                <p className={styles.storyDescription}>{ITEM_PROJECT_02.narrative}</p>
-                <Link href={ITEM_PROJECT_02.storyUrl} className={styles.btnViewStoryText}>
-                  VIEW STORY <span className={styles.actionArrow}>——→</span>
-                </Link>
-              </div>
-
-              {/* Second Wide Supporting Photograph: Royal Mandapam Architecture */}
-              <div className={styles.sireeshMandapArea}>
-                <Link
-                  href={ITEM_PROJECT_02.storyUrl}
-                  className={styles.cardImageLink}
-                  aria-label="View traditional heritage mandapam architecture"
-                >
-                  <div className={styles.wideMandapCanvas}>
-                    <picture>
-                      <source srcSet={ITEM_PROJECT_02_MANDAP.webpImage} type="image/webp" />
-                      <img
-                        src={ITEM_PROJECT_02_MANDAP.image}
-                        alt={ITEM_PROJECT_02_MANDAP.clientNames}
-                        className={styles.storyCoverImg}
-                        style={{ objectPosition: ITEM_PROJECT_02_MANDAP.objectPosition }}
-                        loading="lazy"
-                      />
-                    </picture>
-                    <div className={styles.imageHoverShimmer} />
-                  </div>
-                </Link>
-              </div>
+        {/* ══════════════════════════════════════════════════════════════════════
+            EDITORIAL STORY NARRATIVE BANNER CARD — HRITHIKA & ABHISHEK
+        ══════════════════════════════════════════════════════════════════════ */}
+        <div className={`${styles.editorialBlock} ${styles.storyNarrativeBannerWrap}`}>
+          <div className={styles.storyNarrativeBannerCard}>
+            <div className={styles.bannerImageHeader}>
+              <picture>
+                <source srcSet="/images/stories/hrithika-abhishek/IMG_6322.webp" type="image/webp" />
+                <img
+                  src="/images/stories/hrithika-abhishek/IMG_6322.jpg"
+                  alt="Hrithika & Abhishek"
+                  className={styles.bannerHeaderImg}
+                  loading="lazy"
+                />
+              </picture>
+            </div>
+            <div className={styles.bannerBodyContent}>
+              <h4 className={styles.bannerCoupleTitle}>Hrithika & Abhishek</h4>
+              <p className={styles.bannerSubtitle}>
+                Modern love in a classic setting — real moments, effortlessly beautiful.
+              </p>
+              <Link href="/stories/hrithika-abhishek" className={styles.bannerWatchLink}>
+                WATCH STORY <span className={styles.actionArrow}>——→</span>
+              </Link>
             </div>
           </div>
         </div>
 
         {/* ══════════════════════════════════════════════════════════════════════
-            06 — NISHANTH X SANZENA: CINEMATIC CLOSING FEATURE
+            06 — NISHANTH X SANZENA: CINEMATIC CLOSING FEATURE WITH GSAP MORPH
         ══════════════════════════════════════════════════════════════════════ */}
         <div className={`${styles.editorialBlock} ${styles.nishanthClosingBlock}`}>
-          <div className={styles.nishanthCurvedStage}>
+          <div
+            ref={nishanthStageRef}
+            className={`${styles.nishanthCurvedStage} ${
+              nishanthVideoActive ? styles.nishanthCurvedStageActive : ""
+            }`}
+          >
             {/* Sunset Mountain Landscape Poster */}
             <picture>
               <source srcSet={ITEM_VIDEO_02.webpPoster} type="image/webp" />
@@ -787,41 +926,44 @@ export default function LivingContactSheet() {
             {/* Gradient Scrim */}
             <div className={styles.nishanthGradientScrim} />
 
-            {/* Left Play Control */}
-            <div className={styles.nishanthLeftControl}>
-              <button
-                type="button"
-                className={styles.circularPlayBeacon}
-                onClick={() => setNishanthVideoActive(true)}
-                aria-label={`Play signature film: ${ITEM_VIDEO_02.filmTitle}`}
-              >
-                <svg className={styles.playBeaconIcon} viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </button>
-              <div className={styles.nishanthFilmLabelGroup}>
-                <span className={styles.nishanthFilmSub}>SIGNATURE FILM</span>
-                <span className={styles.nishanthFilmName}>NISHANTH X SANZENA</span>
+            {/* Overlays Layer (Smoothly fades out during GSAP morph) */}
+            <div ref={nishanthOverlaysRef} className={styles.nishanthOverlaysLayer}>
+              {/* Left Play Control */}
+              <div className={styles.nishanthLeftControl}>
+                <button
+                  type="button"
+                  className={styles.circularPlayBeacon}
+                  onClick={openNishanthVideo}
+                  aria-label={`Play signature film: ${ITEM_VIDEO_02.filmTitle}`}
+                >
+                  <svg className={styles.playBeaconIcon} viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
+                <div className={styles.nishanthFilmLabelGroup}>
+                  <span className={styles.nishanthFilmSub}>SIGNATURE FILM</span>
+                  <span className={styles.nishanthFilmName}>NISHANTH X SANZENA</span>
+                </div>
+              </div>
+
+              {/* Right Narrative Overlay */}
+              <div className={styles.nishanthRightNarrative}>
+                <span className={styles.nishanthTag}>05 —— SIGNATURE FILM</span>
+                <h3 className={styles.nishanthTitle}>{ITEM_VIDEO_02.filmTitle}</h3>
+                <p className={styles.nishanthExcerpt}>{ITEM_VIDEO_02.description}</p>
+                <button
+                  type="button"
+                  className={styles.btnNishanthPill}
+                  onClick={openNishanthVideo}
+                >
+                  WATCH THE FULL FILM <span className={styles.pillArrow}>——→</span>
+                </button>
               </div>
             </div>
 
-            {/* Right Narrative Overlay */}
-            <div className={styles.nishanthRightNarrative}>
-              <span className={styles.nishanthTag}>05 —— SIGNATURE FILM</span>
-              <h3 className={styles.nishanthTitle}>{ITEM_VIDEO_02.filmTitle}</h3>
-              <p className={styles.nishanthExcerpt}>{ITEM_VIDEO_02.description}</p>
-              <button
-                type="button"
-                className={styles.btnNishanthPill}
-                onClick={() => setNishanthVideoActive(true)}
-              >
-                WATCH THE FULL FILM <span className={styles.pillArrow}>——→</span>
-              </button>
-            </div>
-
-            {/* Inline Cinema Player Modal / Overlay */}
+            {/* Inline Cinema Player Modal / Overlay (Revealed upon morph completion) */}
             {nishanthVideoActive && (
-              <div className={styles.embeddedPlayerStage}>
+              <div ref={nishanthIframeRef} className={styles.embeddedPlayerStage}>
                 <iframe
                   src={ITEM_VIDEO_02.embedUrl}
                   title={ITEM_VIDEO_02.filmTitle}
@@ -832,7 +974,7 @@ export default function LivingContactSheet() {
                 <button
                   type="button"
                   className={styles.btnCloseCinema}
-                  onClick={() => setNishanthVideoActive(false)}
+                  onClick={closeNishanthVideo}
                   aria-label="Close signature film player"
                 >
                   ✕ Close Film
