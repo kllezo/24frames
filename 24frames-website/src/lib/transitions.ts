@@ -52,8 +52,8 @@ export function resolveRouteVisual(pathname: string): RouteVisualMeta {
     const discipline = DISCIPLINES_DATA[slug];
     if (discipline) {
       return {
-        image: discipline.gallery?.[0]?.image || discipline.heroImage,
-        webp: discipline.gallery?.[0]?.webp || discipline.heroWebp,
+        image: discipline.heroImage || discipline.gallery?.[0]?.image || "",
+        webp: discipline.heroWebp || discipline.gallery?.[0]?.webp,
         title: discipline.title,
         subtitle: discipline.tagline,
       };

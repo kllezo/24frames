@@ -8,9 +8,6 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
-import {
-  resolveRouteVisual,
-} from "@/lib/transitions";
 import styles from "./CinematicTransition.module.css";
 
 // ── Accessibility Helper: Reduced Motion ────────────────────────────────
@@ -37,9 +34,9 @@ const BLADE_PATH =
   "M 750 320 " +
   "C 460 490, 150 500, -165 415 " +
   "C -190 390, -220 360, -250 320 " +
-  "L -500 1600 " +
-  "L 1600 1600 " +
-  "L 1600 320 " +
+  "L -1000 2500 " +
+  "L 2500 2500 " +
+  "L 2500 320 " +
   "Z";
 
 export default function CinematicTransition() {
@@ -53,8 +50,7 @@ export default function CinematicTransition() {
 
   // Animation DOM refs
   const overlayRef = useRef<HTMLDivElement>(null);
-  const outgoingPhotoRef = useRef<HTMLImageElement>(null);
-  const incomingPhotoRef = useRef<HTMLImageElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
   const vignetteRef = useRef<HTMLDivElement>(null);
   const cornersRef = useRef<HTMLDivElement>(null);
   const focusRingRef = useRef<HTMLDivElement>(null);
@@ -92,6 +88,10 @@ export default function CinematicTransition() {
       });
     }
 
+    if (backdropRef.current) {
+      gsap.set(backdropRef.current, { opacity: 0 });
+    }
+
     if (bladeActuatorsRef.current.length > 0) {
       gsap.set(bladeActuatorsRef.current, {
         svgOrigin: `${PIVOT_X} ${PIVOT_Y}`,
@@ -102,30 +102,10 @@ export default function CinematicTransition() {
 
   // Execute the animated camera shutter transition
   const triggerTransition = useCallback(
-    (
-      targetUrl: string,
-      targetHash: string,
-      customOutgoingImage?: string
-    ) => {
+    (targetUrl: string, targetHash: string) => {
       // Prevent duplicate transitions during rapid repeated clicks
       if (isTransitioningRef.current) return;
       isTransitioningRef.current = true;
-
-      // Resolve outgoing & incoming photographic anchors synchronously
-      const currentRouteMeta = resolveRouteVisual(window.location.pathname);
-      const outgoingSrc = customOutgoingImage || currentRouteMeta.image;
-      const targetPath = targetUrl.split("?")[0].split("#")[0];
-      const incomingMeta = resolveRouteVisual(targetPath);
-      const incomingSrc = incomingMeta.image || outgoingSrc;
-
-      if (outgoingPhotoRef.current) {
-        outgoingPhotoRef.current.src = outgoingSrc;
-        outgoingPhotoRef.current.style.opacity = "1";
-      }
-      if (incomingPhotoRef.current) {
-        incomingPhotoRef.current.src = incomingSrc;
-        incomingPhotoRef.current.style.opacity = "0";
-      }
 
       if (overlayRef.current) {
         overlayRef.current.classList.add(styles.overlayRootActive);
@@ -183,8 +163,7 @@ export default function CinematicTransition() {
 
       // Pre-set initial states at 0.00s (Frame 01: Activation)
       tl.set(overlayRef.current, { opacity: 1, visibility: "visible", pointerEvents: "auto" }, 0.00);
-      tl.set(outgoingPhotoRef.current, { opacity: 1, scale: 1 }, 0.00);
-      tl.set(incomingPhotoRef.current, { opacity: 0, scale: 1.04 }, 0.00);
+      tl.set(backdropRef.current, { opacity: 0 }, 0.00);
       tl.set(vignetteRef.current, { opacity: 0 }, 0.00);
       tl.set(cornersRef.current, { opacity: 0 }, 0.00);
       tl.set(focusRingRef.current, { opacity: 0, scale: 1.25 }, 0.00);
@@ -239,16 +218,19 @@ export default function CinematicTransition() {
         }, 0.20);
       }
 
+      // Backdrop smoothly transitions to opaque as blades meet, sealing the screen in darkness
+      tl.to(backdropRef.current, {
+        opacity: 1,
+        duration: 0.24,
+        ease: "power2.in",
+      }, 0.28);
+
       // Frame 14 (0.52s): Complete shutter lock with zero light leak
 
       // ── ACT III: ROUTE CHANGE IN DARKNESS (0.52s - 0.68s) ──
       // Frame 15 (0.56s): Commit route swap while screen is completely covered in darkness
       tl.call(() => {
         router.push(targetUrl);
-
-        // Hide outgoing photo, reveal incoming photo beneath the closed shutter
-        if (outgoingPhotoRef.current) outgoingPhotoRef.current.style.opacity = "0";
-        if (incomingPhotoRef.current) incomingPhotoRef.current.style.opacity = "1";
 
         // Scroll management underneath closed shutter
         if (targetHash && targetHash.length > 1) {
@@ -262,7 +244,7 @@ export default function CinematicTransition() {
       // Frame 16 (0.60s) & Frame 17 (0.64s): Brief hold at full close
 
       // ── ACT IV: SHUTTER OPENING (0.68s - 1.00s) ──
-      // Frames 18 - 26: Blades rotate outward in reverse, revealing destination page
+      // Frames 18 - 26: Blades rotate outward in reverse, revealing the real destination page
       // Interpolates through 5% (0.72s), 10% (0.76s), 20% (0.80s), 35% (0.84s), 55% (0.88s), 70% (0.92s), 85% (0.96s), 100% (1.00s)
       if (bladeActuatorsRef.current.length > 0) {
         tl.to(bladeActuatorsRef.current, {
@@ -272,22 +254,22 @@ export default function CinematicTransition() {
         }, 0.68);
       }
 
-      // Subtle incoming photo optical settle (scale 1.04 -> 1.00)
-      tl.to(incomingPhotoRef.current, {
-        scale: 1,
-        duration: 0.36,
+      // Backdrop fades to reveal new page content cleanly through expanding iris
+      tl.to(backdropRef.current, {
+        opacity: 0,
+        duration: 0.24,
         ease: "power2.out",
       }, 0.68);
 
       // ── ACT V: SETTLE AND RELEASE (1.00s - 1.20s) ──
       // Frame 27 (1.04s): HUD marks, focus circle, and guide rings fade out cleanly
-      tl.to([cornersRef.current, focusRingRef.current, guideRingsRef.current], {
+      tl.to([cornersRef.current, focusRingRef.current, guideRingsRef.current, vignetteRef.current], {
         opacity: 0,
         duration: 0.04,
         ease: "power1.out",
       }, 1.00);
 
-      // Frame 28 & 29 (1.08s - 1.12s): Settle and release overlay
+      // Frame 28 & 29 (1.08s - 1.14s): Settle and release overlay
       tl.to(overlayRef.current, {
         opacity: 0,
         duration: 0.08,
@@ -357,20 +339,10 @@ export default function CinematicTransition() {
         return;
       }
 
-      // Check if clicked element or card has a photograph for optical bridge
-      let customPhoto: string | undefined;
-      const cardImg =
-        anchor.querySelector("img") ||
-        anchor.closest("[class*='card'], [class*='Card'], [class*='item'], [class*='Item']")?.querySelector("img");
-      if (cardImg && (cardImg.currentSrc || cardImg.src)) {
-        customPhoto = cardImg.currentSrc || cardImg.src;
-      }
-
       e.preventDefault();
       triggerTransition(
         url.pathname + url.search + url.hash,
-        url.hash,
-        customPhoto
+        url.hash
       );
     };
 
@@ -387,13 +359,11 @@ export default function CinematicTransition() {
     const handleCustomNav = (e: Event) => {
       const customEvent = e as CustomEvent<{
         url: string;
-        image?: string;
       }>;
       if (customEvent.detail?.url) {
         triggerTransition(
           customEvent.detail.url,
-          "",
-          customEvent.detail.image
+          ""
         );
       }
     };
@@ -416,21 +386,6 @@ export default function CinematicTransition() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [forceReset]);
 
-  // Preload primary optical assets so transitions render instantaneously
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const assets = [
-      "/images/stories/sirish-and-harshitha/IMG_6346.webp",
-      "/images/stories/bellam-srikonda/IMG_6339.webp",
-      "/images/stories/hrithika-abhishek/IMG_6322.webp",
-      "/images/founder-portrait.jpg",
-    ];
-    assets.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
-  }, []);
-
   // Unmount cleanup
   useEffect(() => {
     return () => {
@@ -440,8 +395,6 @@ export default function CinematicTransition() {
       }
     };
   }, [clearSafetyTimeout]);
-
-  const defaultPhotoSrc = "/images/stories/sirish-and-harshitha/IMG_6346.webp";
 
   return (
     <div
@@ -456,21 +409,8 @@ export default function CinematicTransition() {
         <div className={styles.reducedMotionOverlay} />
       ) : (
         <>
-          {/* ── Photographic Bridge Layers ── */}
-          <div className={styles.photoChamber}>
-            <img
-              ref={outgoingPhotoRef}
-              src={defaultPhotoSrc}
-              alt=""
-              className={`${styles.photoLayer} ${styles.photoOutgoing}`}
-            />
-            <img
-              ref={incomingPhotoRef}
-              src={defaultPhotoSrc}
-              alt=""
-              className={`${styles.photoLayer} ${styles.photoIncoming}`}
-            />
-          </div>
+          {/* ── Solid Near-Black Optical Shutter Backdrop ── */}
+          <div ref={backdropRef} className={styles.shutterBackdrop} />
 
           {/* ── Radial Optical Vignette ── */}
           <div ref={vignetteRef} className={styles.vignetteOverlay} />

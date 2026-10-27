@@ -125,7 +125,7 @@
   outline: none;
   background: #0D1612;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  transition: flex 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s ease, box-shadow 0.35s ease;
+  transition: flex 0.52s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease, box-shadow 0.3s ease;
   will-change: flex;
 }
 
@@ -136,12 +136,11 @@
 /* Inactive Collapsed Card (Balanced, Never Squeezed Slivers) */
 .cardInactive {
   flex: 1;
-  min-width: 135px;
+  min-width: 130px;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .cardInactive:hover {
-  flex: 1.18;
   transform: translateY(-2px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
   border-color: rgba(200, 168, 78, 0.45);
@@ -149,7 +148,7 @@
 
 /* Active Featured Card (~36-40% proportion) */
 .cardActive {
-  flex: 2.7;
+  flex: 2.75;
   min-width: 360px;
   border: 1px solid rgba(200, 168, 78, 0.45);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);

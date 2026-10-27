@@ -90,7 +90,7 @@ export const ITEM_PROJECT_02: GalleryProjectItem = {
   location: "Hyderabad, Telangana",
   image: "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
   webpImage: "/images/stories/sirish-and-harshitha/IMG_6353.webp",
-  aspectRatio: "4 / 5",
+  aspectRatio: "16 / 10",
   storyUrl: "/stories/sirish-and-harshitha",
   objectPosition: "center center",
 };
@@ -107,15 +107,32 @@ export const ITEM_PROJECT_03: GalleryProjectItem = {
   location: "Hyderabad, Telangana",
   image: "/images/stories/hrithika-abhishek/IMG_6333.jpg",
   webpImage: "/images/stories/hrithika-abhishek/IMG_6333.webp",
-  aspectRatio: "4 / 5",
+  aspectRatio: "16 / 10",
   storyUrl: "/stories/hrithika-abhishek",
   objectPosition: "center 22%",
 };
 
-/* Item 5: Couple Shoot Film — Nishanth X Sanzena */
+/* Item 5 (SWAPPED): Fine-Art Heritage Embrace — Karthik & Gayathri */
+export const ITEM_PROJECT_04: GalleryProjectItem = {
+  id: "project-04",
+  orderNumber: "05",
+  categoryLabel: "Fine-Art Heritage Wedding · Hyderabad",
+  clientNames: "Karthik & Gayathri",
+  captionTitle: "Karthik & Gayathri",
+  captionSub: "Fine-Art Wedding · Botanical Glasshouse",
+  category: "Fine-Art Heritage Wedding",
+  location: "Botanical Glasshouse · Hyderabad",
+  image: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
+  webpImage: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
+  aspectRatio: "16 / 10",
+  storyUrl: "/stories/karthik-and-gayathri",
+  objectPosition: "center 12%",
+};
+
+/* Item 6 (SWAPPED): Couple Shoot Film — Nishanth X Sanzena */
 export const ITEM_VIDEO_02: GalleryFilmItem = {
   id: "video-02",
-  orderNumber: "05",
+  orderNumber: "06",
   categoryLabel: "Couple Shoot Cinema Film · 03:12",
   filmTitle: "Nishanth X Sanzena",
   category: "Couple Shoot Cinema Film",
@@ -127,23 +144,6 @@ export const ITEM_VIDEO_02: GalleryFilmItem = {
   webpPoster: "/videos/portfolio/nishanth-sanzena/poster.webp",
   description:
     "The unfolding love story of Nishanth & Sanzena — where every moment, every frame, and every smile captures their eternal bond.",
-};
-
-/* Item 6: Fine-Art Heritage Embrace — Karthik & Gayathri */
-export const ITEM_PROJECT_04: GalleryProjectItem = {
-  id: "project-04",
-  orderNumber: "06",
-  categoryLabel: "Fine-Art Heritage Wedding · Hyderabad",
-  clientNames: "Karthik & Gayathri",
-  captionTitle: "Karthik & Gayathri",
-  captionSub: "Fine-Art Wedding · Botanical Glasshouse",
-  category: "Fine-Art Heritage Wedding",
-  location: "Botanical Glasshouse · Hyderabad",
-  image: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
-  webpImage: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
-  aspectRatio: "4 / 5",
-  storyUrl: "/stories/karthik-and-gayathri",
-  objectPosition: "center 12%",
 };
 
 export default function LivingContactSheet() {
@@ -222,7 +222,7 @@ export default function LivingContactSheet() {
         {/* Curated Exhibition Anchor */}
         <div id="exhibition" className={styles.anchorOffset} aria-hidden="true" />
 
-        {/* ── 01: THE OPENING ───────────────────────────────────── */}
+        {/* ── 01: THE OPENING (SECTION HEADER) ───────────────────── */}
         <div ref={headerRef} className={styles.header}>
           <div className={styles.headerMeta}>
             <span className={styles.chapterTag}>Chapter 02</span>
@@ -313,20 +313,18 @@ export default function LivingContactSheet() {
           </div>
         </div>
 
-        {/* ── 03: THE SUPPORTING STORIES (CONTINUOUS EDITORIAL SEQUENCE) ── */}
+        {/* ── 03: SUPPORTING STORIES (ALIGNED EDITORIAL GRID) ── */}
 
-        {/* SPREAD PART A: MASTER CINEMA FEATURE (Vinitha & Vivekananda) */}
-        <div className={`${styles.rhythmBlock} ${styles.cinemaSpreadWrapper}`}>
-          <div className={styles.cinemaSpreadHeader}>
-            <div className={styles.cinemaMetaGroup}>
-              <span className={styles.cinemaTag}>Cinematic Wedding Film</span>
-              <span className={styles.cinemaDurationPill}>14:55 Master Edit</span>
+        {/* SPREAD ROW 1: Stories 02 & 03 (Vinitha & Vivekananda + Sireesh & Harshitha) */}
+        <div className={`${styles.rhythmBlock} ${styles.supportingRowGrid}`}>
+          {/* Story 02: Vinitha & Vivekananda (Cinema Film) */}
+          <div className={styles.editorialCard}>
+            <div className={styles.cardHeaderArea}>
+              <span className={styles.storyCategory}>{ITEM_VIDEO_01.categoryLabel}</span>
+              <h4 className={styles.storyHeadline}>{ITEM_VIDEO_01.filmTitle}</h4>
+              <p className={styles.storyExcerpt}>&ldquo;{ITEM_VIDEO_01.description}&rdquo;</p>
             </div>
-            <h3 className={styles.cinemaHeading}>{ITEM_VIDEO_01.filmTitle}</h3>
-            <p className={styles.cinemaExcerpt}>&ldquo;{ITEM_VIDEO_01.description}&rdquo;</p>
-          </div>
 
-          <div className={styles.cinemaStageContainer}>
             <div className={styles.cinemaFrame}>
               {activeInlineVideo === ITEM_VIDEO_01.id ? (
                 <div className={styles.videoPlayerContainer}>
@@ -343,7 +341,7 @@ export default function LivingContactSheet() {
                     onClick={() => setActiveInlineVideo(null)}
                     aria-label="Close cinema player"
                   >
-                    ✕ Close Cinema
+                    ✕ Close
                   </button>
                 </div>
               ) : (
@@ -379,24 +377,27 @@ export default function LivingContactSheet() {
                   </div>
 
                   <div className={styles.posterBottomCredit}>
-                    <span className={styles.creditBrand}>24 Frames Master Cinema</span>
+                    <span className={styles.creditBrand}>{ITEM_VIDEO_01.duration} Master Edit</span>
                     <span className={styles.creditAction}>Click to Play Inline</span>
                   </div>
                 </div>
               )}
             </div>
           </div>
-        </div>
 
-        {/* SPREAD PART B: THE HERITAGE DIPTYCH (Sireesh & Harshitha + Hrithika & Abhishek) */}
-        <div className={`${styles.rhythmBlock} ${styles.editorialDiptych}`}>
-          {/* Left Column: Sireesh & Harshitha */}
-          <div className={styles.diptychColLeft}>
+          {/* Story 03: Sireesh & Harshitha (Still Story) */}
+          <div className={styles.editorialCard}>
             <Link
               href={ITEM_PROJECT_02.storyUrl}
               className={styles.storyCardLink}
               aria-label={`Open wedding story: ${ITEM_PROJECT_02.clientNames}`}
             >
+              <div className={styles.cardHeaderArea}>
+                <span className={styles.storyCategory}>{ITEM_PROJECT_02.categoryLabel}</span>
+                <h4 className={styles.storyHeadline}>{ITEM_PROJECT_02.captionTitle}</h4>
+                <p className={styles.storyExcerpt}>Sacred heritage mandapam documented in quiet dawn light.</p>
+              </div>
+
               <div
                 className={styles.storyImageCanvas}
                 style={{ aspectRatio: ITEM_PROJECT_02.aspectRatio }}
@@ -414,24 +415,29 @@ export default function LivingContactSheet() {
                 <div className={styles.imageHoverSheen} />
               </div>
 
-              <div className={styles.storyCardDetails}>
-                <span className={styles.storyCategory}>{ITEM_PROJECT_02.categoryLabel}</span>
-                <h4 className={styles.storyHeadline}>{ITEM_PROJECT_02.captionTitle}</h4>
-                <div className={styles.storyMetaRow}>
-                  <span className={styles.storyLocation}>{ITEM_PROJECT_02.location}</span>
-                  <span className={styles.storyLinkArrow}>View Archive →</span>
-                </div>
+              <div className={styles.cardMetaFooter}>
+                <span className={styles.storyLocation}>{ITEM_PROJECT_02.location}</span>
+                <span className={styles.storyLinkArrow}>View Story Archive →</span>
               </div>
             </Link>
           </div>
+        </div>
 
-          {/* Right Column: Hrithika & Abhishek (Vertically Staggered for Editorial Asymmetry) */}
-          <div className={styles.diptychColRight}>
+        {/* SPREAD ROW 2: Stories 04 & 05 (Hrithika & Abhishek + Karthik & Gayathri [SWAPPED]) */}
+        <div className={`${styles.rhythmBlock} ${styles.supportingRowGrid}`}>
+          {/* Story 04: Hrithika & Abhishek */}
+          <div className={styles.editorialCard}>
             <Link
               href={ITEM_PROJECT_03.storyUrl}
               className={styles.storyCardLink}
               aria-label={`Open wedding story: ${ITEM_PROJECT_03.clientNames}`}
             >
+              <div className={styles.cardHeaderArea}>
+                <span className={styles.storyCategory}>{ITEM_PROJECT_03.categoryLabel}</span>
+                <h4 className={styles.storyHeadline}>{ITEM_PROJECT_03.captionTitle}</h4>
+                <p className={styles.storyExcerpt}>Nine-scene royal bridal celebration in heritage stone corridors.</p>
+              </div>
+
               <div
                 className={styles.storyImageCanvas}
                 style={{ aspectRatio: ITEM_PROJECT_03.aspectRatio }}
@@ -449,29 +455,55 @@ export default function LivingContactSheet() {
                 <div className={styles.imageHoverSheen} />
               </div>
 
-              <div className={styles.storyCardDetails}>
-                <span className={styles.storyCategory}>{ITEM_PROJECT_03.categoryLabel}</span>
-                <h4 className={styles.storyHeadline}>{ITEM_PROJECT_03.captionTitle}</h4>
-                <div className={styles.storyMetaRow}>
-                  <span className={styles.storyLocation}>{ITEM_PROJECT_03.location}</span>
-                  <span className={styles.storyLinkArrow}>View Archive →</span>
-                </div>
+              <div className={styles.cardMetaFooter}>
+                <span className={styles.storyLocation}>{ITEM_PROJECT_03.location}</span>
+                <span className={styles.storyLinkArrow}>View Story Archive →</span>
+              </div>
+            </Link>
+          </div>
+
+          {/* Story 05 (SWAPPED): Karthik & Gayathri */}
+          <div className={styles.editorialCard}>
+            <Link
+              href={ITEM_PROJECT_04.storyUrl}
+              className={styles.storyCardLink}
+              aria-label={`Open fine-art wedding: ${ITEM_PROJECT_04.clientNames}`}
+            >
+              <div className={styles.cardHeaderArea}>
+                <span className={styles.storyCategory}>{ITEM_PROJECT_04.categoryLabel}</span>
+                <h4 className={styles.storyHeadline}>{ITEM_PROJECT_04.captionTitle}</h4>
+                <p className={styles.storyExcerpt}>Fine-art bridal portraits captured under natural conservatory light.</p>
+              </div>
+
+              <div
+                className={styles.storyImageCanvas}
+                style={{ aspectRatio: ITEM_PROJECT_04.aspectRatio }}
+              >
+                <picture>
+                  <source srcSet={ITEM_PROJECT_04.webpImage} type="image/webp" />
+                  <img
+                    src={ITEM_PROJECT_04.image}
+                    alt={ITEM_PROJECT_04.clientNames}
+                    className={styles.storyCardImg}
+                    style={{ objectPosition: ITEM_PROJECT_04.objectPosition }}
+                    loading="lazy"
+                  />
+                </picture>
+                <div className={styles.imageHoverSheen} />
+              </div>
+
+              <div className={styles.cardMetaFooter}>
+                <span className={styles.storyLocation}>{ITEM_PROJECT_04.location}</span>
+                <span className={styles.storyLinkArrow}>View Story Archive →</span>
               </div>
             </Link>
           </div>
         </div>
 
-        {/* SPREAD PART C: MOTION & INTIMACY DUET (Nishanth X Sanzena + Karthik & Gayathri) */}
-        <div className={`${styles.rhythmBlock} ${styles.duetSpread}`}>
-          {/* Left Column: Couple Shoot Film */}
-          <div className={styles.duetColFilm}>
-            <div className={styles.filmHeaderBar}>
-              <span className={styles.storyCategory}>{ITEM_VIDEO_02.categoryLabel}</span>
-              <h4 className={styles.duetHeading}>{ITEM_VIDEO_02.filmTitle}</h4>
-              <p className={styles.duetExcerpt}>&ldquo;{ITEM_VIDEO_02.description}&rdquo;</p>
-            </div>
-
-            <div className={styles.duetVideoStage}>
+        {/* SPREAD ROW 3: Story 06 (Nishanth X Sanzena [SWAPPED]) Closing Feature */}
+        <div className={`${styles.rhythmBlock} ${styles.closingFeatureWrapper}`}>
+          <div className={styles.closingFeatureGrid}>
+            <div className={styles.closingVideoCol}>
               <div className={styles.cinemaFrame}>
                 {activeInlineVideo === ITEM_VIDEO_02.id ? (
                   <div className={styles.videoPlayerContainer}>
@@ -488,7 +520,7 @@ export default function LivingContactSheet() {
                       onClick={() => setActiveInlineVideo(null)}
                       aria-label="Close cinema player"
                     >
-                      ✕ Close Cinema
+                      ✕ Close
                     </button>
                   </div>
                 ) : (
@@ -524,48 +556,32 @@ export default function LivingContactSheet() {
                     </div>
 
                     <div className={styles.posterBottomCredit}>
-                      <span className={styles.creditBrand}>Couple Shoot Master Edit</span>
+                      <span className={styles.creditBrand}>03:12 Couple Cinema</span>
                       <span className={styles.creditAction}>Click to Play</span>
                     </div>
                   </div>
                 )}
               </div>
             </div>
-          </div>
 
-          {/* Right Column: Karthik & Gayathri Portrait (Foreheads Touching Visible) */}
-          <div className={styles.duetColStill}>
-            <Link
-              href={ITEM_PROJECT_04.storyUrl}
-              className={styles.storyCardLink}
-              aria-label={`Open fine-art embrace: ${ITEM_PROJECT_04.clientNames}`}
-            >
-              <div
-                className={styles.storyImageCanvas}
-                style={{ aspectRatio: ITEM_PROJECT_04.aspectRatio }}
-              >
-                <picture>
-                  <source srcSet={ITEM_PROJECT_04.webpImage} type="image/webp" />
-                  <img
-                    src={ITEM_PROJECT_04.image}
-                    alt={ITEM_PROJECT_04.clientNames}
-                    className={styles.storyCardImg}
-                    style={{ objectPosition: ITEM_PROJECT_04.objectPosition }}
-                    loading="lazy"
-                  />
-                </picture>
-                <div className={styles.imageHoverSheen} />
+            <div className={styles.closingNarrativeCol}>
+              <span className={styles.storyCategory}>{ITEM_VIDEO_02.categoryLabel}</span>
+              <h4 className={styles.closingHeading}>{ITEM_VIDEO_02.filmTitle}</h4>
+              <p className={styles.closingQuote}>&ldquo;{ITEM_VIDEO_02.description}&rdquo;</p>
+              <p className={styles.closingMeta}>
+                Preserving spontaneous laughter, intimate promises, and architectural symmetry
+                with 35mm anamorphic prime lenses.
+              </p>
+              <div className={styles.closingAction}>
+                <button
+                  type="button"
+                  className={styles.btnSecondaryPlay}
+                  onClick={() => setActiveInlineVideo(ITEM_VIDEO_02.id)}
+                >
+                  Watch Cinema Film (03:12) ▶
+                </button>
               </div>
-
-              <div className={styles.storyCardDetails}>
-                <span className={styles.storyCategory}>{ITEM_PROJECT_04.categoryLabel}</span>
-                <h4 className={styles.storyHeadline}>{ITEM_PROJECT_04.captionTitle}</h4>
-                <div className={styles.storyMetaRow}>
-                  <span className={styles.storyLocation}>{ITEM_PROJECT_04.location}</span>
-                  <span className={styles.storyLinkArrow}>View Archive →</span>
-                </div>
-              </div>
-            </Link>
+            </div>
           </div>
         </div>
 

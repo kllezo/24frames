@@ -188,9 +188,35 @@ export default function TheCollection() {
     setImgErrors((prev) => ({ ...prev, [id]: true }));
   };
 
+  const isTouchRef = useRef(false);
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.pointerType === "touch") {
+        isTouchRef.current = true;
+        return;
+      }
+      isTouchRef.current = false;
+      const target = e.target as HTMLElement | null;
+      const card = target?.closest("[data-discipline-id]") as HTMLElement | null;
+      if (card) {
+        const id = card.getAttribute("data-discipline-id");
+        if (id && id !== activeId) {
+          setActiveId(id);
+        }
+      }
+    },
+    [activeId]
+  );
+
+  const handlePointerLeave = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "touch" || isTouchRef.current) return;
+    setActiveId("weddings");
+  }, []);
+
   const handleCardClick = useCallback(
     (discipline: CollectionDiscipline, displayImage: string) => {
-      if (activeId === discipline.id) {
+      if (activeId === discipline.id || !isTouchRef.current) {
         navigateWithCameraTransition(discipline.href, {
           image: displayImage,
         });
@@ -255,7 +281,14 @@ export default function TheCollection() {
           role="region"
           aria-label="Six-Discipline Horizontal Editorial Showcase"
         >
-          <div className={styles.accordionTrack}>
+          <div
+            className={styles.accordionTrack}
+            onPointerMove={handlePointerMove}
+            onPointerLeave={handlePointerLeave}
+            onMouseLeave={() => {
+              if (!isTouchRef.current) setActiveId("weddings");
+            }}
+          >
             {COLLECTION_DISCIPLINES.map((discipline) => {
               const isSelected = discipline.id === activeId;
               const hasError = imgErrors[discipline.id];
@@ -264,11 +297,25 @@ export default function TheCollection() {
               return (
                 <div
                   key={discipline.id}
+                  data-discipline-id={discipline.id}
                   className={`${styles.card} ${
                     isSelected ? styles.cardActive : styles.cardInactive
                   }`}
+                  onPointerEnter={(e) => {
+                    if (e.pointerType !== "touch") setActiveId(discipline.id);
+                  }}
+                  onPointerOver={(e) => {
+                    if (e.pointerType !== "touch") setActiveId(discipline.id);
+                  }}
+                  onMouseEnter={() => {
+                    if (!isTouchRef.current) setActiveId(discipline.id);
+                  }}
+                  onMouseOver={() => {
+                    if (!isTouchRef.current) setActiveId(discipline.id);
+                  }}
                   onClick={() => handleCardClick(discipline, displayImage)}
                   onKeyDown={(e) => handleCardKeyDown(e, discipline, displayImage)}
+                  onFocus={() => setActiveId(discipline.id)}
                   tabIndex={0}
                   role="button"
                   aria-expanded={isSelected}

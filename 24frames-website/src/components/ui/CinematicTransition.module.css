@@ -2,6 +2,7 @@
    24 FRAMES — CAMERA SHUTTER TRANSITION
    Strictly ONE unified transition: Photorealistic Multi-Blade Camera Iris
    Orchestrated natively via GSAP Timeline
+   Black Shutter Only — Zero Fake Image Zooms — Zero Visual Disconnects
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ── Global Fullscreen Overlay Container ─────────────────────────────── */
@@ -16,7 +17,7 @@
   visibility: hidden;
   opacity: 0;
   overflow: hidden;
-  background: #040D0B;
+  background: transparent;
   will-change: opacity;
 }
 
@@ -25,41 +26,24 @@
   visibility: visible;
 }
 
+/* ── Solid Near-Black Optical Shutter Backdrop ────────────────────────── */
+.shutterBackdrop {
+  position: absolute;
+  inset: 0;
+  background: #040D0B;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  will-change: opacity;
+}
+
 /* ── Accessible Reduced Motion Fallback (WCAG AAA 120ms Quick Fade) ───── */
 .reducedMotionOverlay {
   position: absolute;
   inset: 0;
-  background: #FAF8F2;
+  background: #040D0B;
   opacity: 0;
   will-change: opacity;
-}
-
-/* ── Photographic Bridge Chamber ─────────────────────────────────────── */
-.photoChamber {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.photoLayer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  will-change: transform, opacity;
-}
-
-.photoOutgoing {
-  opacity: 1;
-}
-
-.photoIncoming {
-  opacity: 0;
 }
 
 /* ── Atmospheric Radial Optical Vignette ─────────────────────────────── */
@@ -68,9 +52,9 @@
   inset: 0;
   background: radial-gradient(
     circle at center,
-    rgba(9, 69, 62, 0.22) 0%,
-    rgba(4, 13, 11, 0.88) 70%,
-    rgba(2, 6, 5, 0.98) 100%
+    rgba(9, 69, 62, 0.12) 0%,
+    rgba(4, 13, 11, 0.75) 70%,
+    rgba(2, 6, 5, 0.96) 100%
   );
   pointer-events: none;
   z-index: 3;
