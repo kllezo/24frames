@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import LiquidDotCanvas from "./LiquidDotCanvas";
 import styles from "./FounderRecognitionSection.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -305,6 +306,9 @@ export default function FounderRecognitionSection() {
     >
       {/* Anchor alias to support legacy #founder links smoothly */}
       <div id="founder" className={styles.anchorOffset} aria-hidden="true" />
+
+      {/* Interactive Liquid Dot Matrix Field */}
+      <LiquidDotCanvas className={styles.liquidCanvas} />
 
       {/* Ambient Dappled Sunlight & Foliage Shadows */}
       <div className={styles.sunlightLayer} aria-hidden="true" />

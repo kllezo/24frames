@@ -204,14 +204,14 @@ export default function LivingContactSheet() {
   };
 
   const NISHANTH_CURVED_COORDS = {
-    topY0: 0.08,
+    topY0: 0.06,
     topCp1Y: 0.01,
-    topCp2Y: 0.14,
-    topY1: 0.09,
-    botY1: 0.93,
-    botCp2Y: 0.86,
-    botCp1Y: 0.99,
-    botY0: 0.92,
+    topCp2Y: 0.10,
+    topY1: 0.07,
+    botY1: 0.95,
+    botCp2Y: 0.91,
+    botCp1Y: 0.98,
+    botY0: 0.94,
   };
 
   const RECT_COORDS = {
@@ -554,7 +554,7 @@ export default function LivingContactSheet() {
           <clipPath id="nishanthMorphClip" clipPathUnits="objectBoundingBox">
             <path
               ref={nishanthPathRef}
-              d="M 0 0.08 C 0.35 0.01, 0.65 0.14, 1 0.09 L 1 0.93 C 0.65 0.86, 0.35 0.99, 0 0.92 Z"
+              d="M 0 0.06 C 0.35 0.01, 0.65 0.10, 1 0.07 L 1 0.95 C 0.65 0.91, 0.35 0.98, 0 0.94 Z"
             />
           </clipPath>
         </defs>
