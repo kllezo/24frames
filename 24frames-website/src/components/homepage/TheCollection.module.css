@@ -125,8 +125,11 @@
   outline: none;
   background: #0D1612;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  transition: flex 0.52s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease, box-shadow 0.3s ease;
-  will-change: flex;
+  flex: 1 1 0%;
+  min-width: 90px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.4s ease;
+  will-change: flex-grow;
 }
 
 .card:focus-visible {
@@ -135,9 +138,7 @@
 
 /* Inactive Collapsed Card (Balanced, Never Squeezed Slivers) */
 .cardInactive {
-  flex: 1;
-  min-width: 130px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .cardInactive:hover {
@@ -148,9 +149,7 @@
 
 /* Active Featured Card (~36-40% proportion) */
 .cardActive {
-  flex: 2.75;
-  min-width: 360px;
-  border: 1px solid rgba(200, 168, 78, 0.45);
+  border-color: rgba(200, 168, 78, 0.55);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
 }
 
@@ -231,6 +230,12 @@
   padding: clamp(1.4rem, 2.5vw, 2.2rem);
   z-index: 2;
   color: #FAF8F2;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.cardActive .activeContent {
+  pointer-events: auto;
 }
 
 .activeTopRow {
@@ -398,6 +403,8 @@
   padding: 1.25rem 1.1rem;
   z-index: 2;
   color: #FAF8F2;
+  pointer-events: none;
+  opacity: 1;
 }
 
 .collapsedTop {

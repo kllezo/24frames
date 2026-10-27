@@ -21,6 +21,7 @@ export interface VerifiedRecognition {
   imageAlt: string;
   sourceUrl: string;
   sourceLabel: string;
+  objectPosition?: string;
 }
 
 export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
@@ -38,6 +39,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "Official Nikon India association creative welcoming Phani Gogireddy to Nikon Creator family",
     sourceUrl: "https://www.instagram.com/nikonindiaofficial/",
     sourceLabel: "View Official Nikon Announcement →",
+    objectPosition: "center 15%",
   },
   {
     id: "times-excellence-dia-mirza",
@@ -53,6 +55,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "Dia Mirza presenting the Excellence in Luxury Wedding Photography award to Phani Gogireddy at Novotel HICC Hyderabad",
     sourceUrl: "https://www.youtube.com/shorts/Lh45ZBRJ1b8",
     sourceLabel: "Watch Award Ceremony Film →",
+    objectPosition: "center 22%",
   },
   {
     id: "inovexia-indian-eminent",
@@ -68,6 +71,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "Shri Akunuri Murali IAS conferring the Indian Eminent Award for Best Photography Service in Hyderabad to Phani Gogireddy",
     sourceUrl: "https://boroktimes.com/the-art-of-storytelling-through-photography-a-look-at-phani-gogireddys-award-winning-work/",
     sourceLabel: "Read Feature →",
+    objectPosition: "center center",
   },
   {
     id: "times-of-india-spotlight",
@@ -83,6 +87,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "The Times of India full page Hyderabad Spotlight featuring 24 Frames and Phani Gogireddy",
     sourceUrl: "https://timesofindia.indiatimes.com/",
     sourceLabel: "Read Editorial Article →",
+    objectPosition: "center top",
   },
   {
     id: "gen-next-india-cover",
@@ -98,6 +103,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "GenNext-India magazine cover featuring Phani Gogireddy holding the Excellence star award",
     sourceUrl: "https://www.youtube.com/@24framesphotography",
     sourceLabel: "Explore Studio Archive →",
+    objectPosition: "center 20%",
   },
 ];
 
@@ -309,10 +315,10 @@ export default function FounderRecognitionSection() {
       <div className={styles.leafShadowOverlay} aria-hidden="true" />
 
       <div className={styles.container}>
-        <div className={styles.sceneLayout}>
-          {/* ── 1. LEFT COLUMN: FOUNDER PORTRAIT + THREE STATISTICS DIRECTLY BENEATH ── */}
+        {/* ── 1. HIGH-END EDITORIAL FOUNDER PROFILE (TWO-COLUMN DESKTOP, ORDERED MOBILE) ── */}
+        <div className={styles.founderEditorialProfile}>
+          {/* 1.1 Left: Large Primary Portrait Anchor */}
           <div className={styles.portraitCol}>
-            {/* 1.1 Founder Portrait */}
             <div ref={portraitWrapRef} className={styles.portraitWrap}>
               <img
                 src="/images/founder-portrait.jpg"
@@ -322,235 +328,241 @@ export default function FounderRecognitionSection() {
               />
               <div className={styles.portraitGroundShadow} aria-hidden="true" />
             </div>
+          </div>
 
-            {/* 1.2 Statistics Block Directly Beneath Portrait — Three Verified Milestones */}
-            <div ref={statsRef} className={styles.leftStatsBlock}>
-              {/* Statistics Divider Beneath Portrait */}
-              <div className={styles.leftDivider} />
+          {/* 1.2 Right: Editorial Details (Name, Role, Statistics, Bio, Principles, Quote, CTA) */}
+          <div ref={bioBlockRef} className={styles.profileDetailsCol}>
+            {/* Chapter Kicker */}
+            <div className={styles.chapterKicker}>
+              CHAPTER 04 — THE ARTIST & VISIONARY
+            </div>
 
-              {/* Three Verified Statistics: 2016, 1,000+, 6,000 SQ FT */}
-              <div className={styles.leftStatsRow}>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>2016</span>
-                  <span className={styles.statLabel}>ESTABLISHED IN HYDERABAD</span>
+            {/* Founder Name */}
+            <h2 className={styles.founderName}>
+              <span>PHANI GOGIREDDY</span>
+            </h2>
+
+            {/* Founder Official Title */}
+            <div className={styles.founderRole}>
+              MANAGING DIRECTOR
+            </div>
+
+            {/* Prominent Horizontal Statistics Row */}
+            <div ref={statsRef} className={styles.prominentStatsRow}>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>2016</span>
+                <span className={styles.statLabel}>ESTABLISHED IN HYDERABAD</span>
+              </div>
+              <div className={styles.statDividerVertical} />
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>1,000+</span>
+                <span className={styles.statLabel}>WEDDINGS CAPTURED</span>
+              </div>
+              <div className={styles.statDividerVertical} />
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>6,000</span>
+                <span className={styles.statLabel}>SQ. FT. CORPORATE HEADQUARTERS</span>
+              </div>
+            </div>
+
+            {/* Concise Source-Derived Biography (2-3 Sentences) */}
+            <div className={styles.narrative}>
+              <p>
+                Established in 2016 from a modest setup of two computers, 24 Frames was founded on an unyielding dedication to heartfelt visual storytelling. Bringing cinematic framing, lighting nuance, and deep emotional sensitivity from Telugu cinema to real weddings, Phani Gogireddy has shaped South India's premier luxury wedding film aesthetic. Today, backed by a 6,000 sq. ft. studio and an award-winning creative team, the company has documented over 1,000 celebrated unions across India and abroad.
+              </p>
+            </div>
+
+            {/* Three Core Principles */}
+            <div className={styles.coreValuesBlock}>
+              <span className={styles.coreValuesHeading}>THREE CORE PRINCIPLES</span>
+              <div className={styles.coreValuesGrid}>
+                <div className={styles.coreValueCard}>
+                  <div className={styles.coreValueHeader}>
+                    <span className={styles.coreValueNumber}>01</span>
+                    <h5 className={styles.coreValueTitle}>On-Time Delivery</h5>
+                  </div>
+                  <p className={styles.coreValueDesc}>
+                    Setting industry benchmarks with a fast, disciplined turnaround for master edits and stills.
+                  </p>
                 </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>1,000+</span>
-                  <span className={styles.statLabel}>WEDDINGS CAPTURED ACROSS INDIA & ABROAD</span>
+
+                <div className={styles.coreValueCard}>
+                  <div className={styles.coreValueHeader}>
+                    <span className={styles.coreValueNumber}>02</span>
+                    <h5 className={styles.coreValueTitle}>Uncompromising Quality</h5>
+                  </div>
+                  <p className={styles.coreValueDesc}>
+                    Blending technical mastery with creative vision on optical cinema primes and archival grades.
+                  </p>
                 </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>6,000</span>
-                  <span className={styles.statLabel}>SQ. FT. CORPORATE HEADQUARTERS</span>
+
+                <div className={styles.coreValueCard}>
+                  <div className={styles.coreValueHeader}>
+                    <span className={styles.coreValueNumber}>03</span>
+                    <h5 className={styles.coreValueTitle}>Heartfelt Storytelling</h5>
+                  </div>
+                  <p className={styles.coreValueDesc}>
+                    Transforming fleeting, unrepeatable moments into enduring generational heirlooms.
+                  </p>
                 </div>
               </div>
+            </div>
+
+            {/* Closing Signature Pull Quote */}
+            <div className={styles.quoteBlock}>
+              <p className={styles.quoteText}>
+                “From reel to real, every dream pursued with heart becomes a timeless shot.”
+              </p>
+              <span className={styles.quoteAuthor}>
+                — Phani Gogireddy, Managing Director
+              </span>
+            </div>
+
+            {/* Forest-Green Commission CTA */}
+            <div ref={ctaRef} className={styles.ctaRow}>
+              <a href="#inquire" className={styles.commissionPillBtn}>
+                COMMISSION PHANI GOGIREDDY{" "}
+                <span className={styles.btnArrow}>→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* ── 2. THE VERIFIED ARCHIVE (FULL-WIDTH ARCHITECTURAL SHELF) ── */}
+        <div className={styles.shelfNicheWrapper}>
+          <div className={styles.shelfHeaderRow}>
+            <div className={styles.shelfHeaderMeta}>
+              <span className={styles.shelfEyebrow}>
+                HONOURS & EDITORIAL RECOGNITION
+              </span>
+              <div className={styles.shelfTitleRow}>
+                <h3 className={styles.shelfTitle}>The Verified Archive</h3>
+                <span className={styles.shelfScriptAccent}>Heritage & Honours</span>
+              </div>
+            </div>
+
+            {/* Previous / Next Shelf Arrow Controls */}
+            <div className={styles.shelfNavControls}>
+              <button
+                type="button"
+                className={styles.navArrowBtn}
+                onClick={() => scrollTrack("left")}
+                disabled={!canScrollLeft}
+                aria-label="Previous recognition entry"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                className={styles.navArrowBtn}
+                onClick={() => scrollTrack("right")}
+                disabled={!canScrollRight}
+                aria-label="Next recognition entry"
+              >
+                ›
+              </button>
             </div>
           </div>
 
-          {/* ── 2. RIGHT COLUMN: ARCHITECTURAL RECOGNITION NICHE (TOP) + EDITORIAL BIOGRAPHY & CTA (BOTTOM) ── */}
-          <div className={styles.rightContentCol}>
-            {/* 2.A UPPER RIGHT: WIDE ARCHITECTURAL RECOGNITION NICHE */}
-            <div className={styles.shelfNicheWrapper}>
-              <div className={styles.shelfHeaderRow}>
-                <div className={styles.shelfHeaderMeta}>
-                  <span className={styles.shelfEyebrow}>
-                    HONOURS & EDITORIAL RECOGNITION
-                  </span>
-                  <div className={styles.shelfTitleRow}>
-                    <h3 className={styles.shelfTitle}>The Verified Archive</h3>
-                    <span className={styles.shelfScriptAccent}>Heritage & Honours</span>
-                  </div>
-                </div>
+          {/* Architectural Plaster Niche */}
+          <div
+            ref={shelfNicheRef}
+            className={styles.architecturalShelfNiche}
+            role="region"
+            aria-label="Architectural Recognition Shelf Track"
+          >
+            {/* Champagne Cove Lighting Strip */}
+            <div className={styles.coveLightStrip} aria-hidden="true" />
 
-                {/* Previous / Next Shelf Arrow Controls */}
-                <div className={styles.shelfNavControls}>
-                  <button
-                    type="button"
-                    className={styles.navArrowBtn}
-                    onClick={() => scrollTrack("left")}
-                    disabled={!canScrollLeft}
-                    aria-label="Previous recognition entry"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.navArrowBtn}
-                    onClick={() => scrollTrack("right")}
-                    disabled={!canScrollRight}
-                    aria-label="Next recognition entry"
-                  >
-                    ›
-                  </button>
-                </div>
-              </div>
-
-              {/* Architectural Plaster Niche */}
-              <div
-                ref={shelfNicheRef}
-                className={styles.architecturalShelfNiche}
-                role="region"
-                aria-label="Architectural Recognition Shelf Track"
-              >
-                {/* Champagne Cove Lighting Strip */}
-                <div className={styles.coveLightStrip} aria-hidden="true" />
-
-                {/* Horizontally Scrollable Recognition Track */}
+            {/* Horizontally Scrollable Recognition Track */}
+            <div
+              ref={trackRef}
+              className={styles.magazineTrack}
+              onScroll={handleScroll}
+              tabIndex={0}
+              role="region"
+              aria-label="Interactive verified recognition archive"
+            >
+              {VERIFIED_RECOGNITIONS.map((item) => (
                 <div
-                  ref={trackRef}
-                  className={styles.magazineTrack}
-                  onScroll={handleScroll}
-                  tabIndex={0}
-                  role="region"
-                  aria-label="Interactive verified recognition archive"
-                >
-                  {VERIFIED_RECOGNITIONS.map((item) => (
-                    <div
-                      key={item.id}
-                      ref={(el) => {
-                        triggerRefs.current[item.id] = el;
-                      }}
-                      className={`${styles.recognitionCardItem} ${styles.magazineCoverItem}`}
-                      onClick={() => handleOpenItem(item)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          handleOpenItem(item);
-                        }
-                      }}
-                      role="button"
-                      tabIndex={0}
-                      aria-haspopup="dialog"
-                      aria-label={`View evidence for ${item.milestoneTitle}`}
-                    >
-                      <div className={styles.cardTopMeta}>
-                        <span className={styles.cardBadge}>{item.badgeLabel}</span>
-                        <span className={styles.cardYear}>{item.year}</span>
-                      </div>
-
-                      <div className={styles.cardImageWrap}>
-                        <img
-                          src={item.imageSrc}
-                          alt={item.imageAlt}
-                          className={styles.cardImage}
-                          loading="lazy"
-                        />
-                      </div>
-
-                      <div className={styles.cardContent}>
-                        <h4 className={styles.cardTitle}>{item.milestoneTitle}</h4>
-                        <span className={styles.cardOrg}>{item.conferringBody}</span>
-                        <span className={styles.cardAffordance}>
-                          Inspect Evidence →
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Architectural Shelf Lip & Under Glow */}
-                <div className={styles.shelfLip} aria-hidden="true" />
-                <div className={styles.shelfUnderGlow} aria-hidden="true" />
-
-                {/* Subtle Discoverability Cue at Bottom-Right */}
-                <div
-                  className={`${styles.discoverCue} ${
-                    hasScrolled ? styles.discoverCueFaded : ""
-                  }`}
-                  onClick={() => scrollTrack("right")}
+                  key={item.id}
+                  ref={(el) => {
+                    triggerRefs.current[item.id] = el;
+                  }}
+                  className={`${styles.recognitionCardItem} ${styles.magazineCoverItem}`}
+                  onClick={() => handleOpenItem(item)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleOpenItem(item);
+                    }
+                  }}
                   role="button"
                   tabIndex={0}
-                  aria-label="Scroll right to discover more recognition entries"
+                  aria-haspopup="dialog"
+                  aria-label={`View evidence for ${item.milestoneTitle}`}
                 >
-                  <span>EXPLORE VERIFIED EVIDENCE</span>
-                  <span className={styles.cueArrow}>→</span>
+                  <div className={styles.cardTopMeta}>
+                    <span className={styles.cardBadge}>{item.badgeLabel}</span>
+                    <span className={styles.cardYear}>{item.year}</span>
+                  </div>
+
+                  <div className={styles.cardImageWrap}>
+                    <img
+                      src={item.imageSrc}
+                      alt={item.imageAlt}
+                      className={styles.cardImage}
+                      style={{ objectPosition: item.objectPosition || "center 20%" }}
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <div className={styles.cardContent}>
+                    <div className={styles.cardInfoRow}>
+                      <div className={styles.cardTitleWrap}>
+                        <h4 className={styles.cardTitle}>{item.milestoneTitle}</h4>
+                        <span className={styles.cardOrg}>{item.conferringBody}</span>
+                      </div>
+                      <div
+                        className={styles.cardArrowAffordance}
+                        aria-label={`View evidence for ${item.milestoneTitle}`}
+                      >
+                        <svg
+                          className={styles.cardArrowIcon}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
 
-            {/* 2.B BELOW THE SHELF: FOUNDER EDITORIAL BIOGRAPHY & VALUES */}
-            <div ref={bioBlockRef} className={styles.founderBioBlock}>
-              {/* Chapter Kicker */}
-              <div className={styles.chapterKicker}>
-                THE VISIONARY FORCE BEHIND 24 FRAMES WEDDING FILMS
-              </div>
+            {/* Architectural Shelf Lip & Under Glow */}
+            <div className={styles.shelfLip} aria-hidden="true" />
+            <div className={styles.shelfUnderGlow} aria-hidden="true" />
 
-              {/* Large Serif Founder Name */}
-              <h2 className={styles.founderName}>
-                <span>PHANI</span>
-                <span>GOGIREDDY</span>
-              </h2>
-
-              {/* Founder Official Title */}
-              <div className={styles.founderRole}>
-                MANAGING DIRECTOR
-              </div>
-
-              {/* Concise Source-Derived Biography Paragraphs */}
-              <div className={styles.narrative}>
-                <p>
-                  Established in 2016, 24 Frames began with a modest setup containing just two computers and an unyielding commitment to heartfelt visual storytelling.
-                </p>
-                <p>
-                  With roots in the Telugu film industry, Phani Gogireddy brought cinematic framing, lighting nuance, and deep emotional sensitivity to real-life wedding celebrations.
-                </p>
-                <p>
-                  Over the years, that humble studio has expanded into a 6,000 sq. ft. corporate office and an award-winning creative team that has captured more than 1,000 weddings across India and abroad.
-                </p>
-              </div>
-
-              {/* Three Core Values — Distinct Editorial Principles */}
-              <div className={styles.coreValuesBlock}>
-                <span className={styles.coreValuesHeading}>THREE CORE VALUES</span>
-                <div className={styles.coreValuesGrid}>
-                  <div className={styles.coreValueCard}>
-                    <div className={styles.coreValueHeader}>
-                      <span className={styles.coreValueNumber}>01</span>
-                      <h5 className={styles.coreValueTitle}>On-Time Delivery</h5>
-                    </div>
-                    <p className={styles.coreValueDesc}>
-                      Setting industry benchmarks with a fast, disciplined turnaround for master edits and stills.
-                    </p>
-                  </div>
-
-                  <div className={styles.coreValueCard}>
-                    <div className={styles.coreValueHeader}>
-                      <span className={styles.coreValueNumber}>02</span>
-                      <h5 className={styles.coreValueTitle}>Uncompromising Quality</h5>
-                    </div>
-                    <p className={styles.coreValueDesc}>
-                      Blending technical mastery with creative vision on optical cinema primes and archival grades.
-                    </p>
-                  </div>
-
-                  <div className={styles.coreValueCard}>
-                    <div className={styles.coreValueHeader}>
-                      <span className={styles.coreValueNumber}>03</span>
-                      <h5 className={styles.coreValueTitle}>Heartfelt Storytelling</h5>
-                    </div>
-                    <p className={styles.coreValueDesc}>
-                      Transforming fleeting, unrepeatable moments into enduring generational heirlooms.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Closing Quotation */}
-              <div className={styles.quoteBlock}>
-                <p className={styles.quoteText}>
-                  “From reel to real, every dream pursued with heart becomes a timeless shot.”
-                </p>
-                <span className={styles.quoteAuthor}>
-                  — Phani Gogireddy, Managing Director
-                </span>
-              </div>
-
-              {/* Forest-Green Commission CTA Directly Beneath Biography */}
-              <div ref={ctaRef} className={styles.ctaRow}>
-                <a href="#inquire" className={styles.commissionPillBtn}>
-                  COMMISSION PHANI GOGIREDDY{" "}
-                  <span className={styles.btnArrow}>→</span>
-                </a>
-              </div>
+            {/* Subtle Discoverability Cue at Bottom-Right */}
+            <div
+              className={`${styles.discoverCue} ${
+                hasScrolled ? styles.discoverCueFaded : ""
+              }`}
+              onClick={() => scrollTrack("right")}
+              role="button"
+              tabIndex={0}
+              aria-label="Scroll right to discover more recognition entries"
+            >
+              <span>EXPLORE VERIFIED EVIDENCE</span>
+              <span className={styles.cueArrow}>→</span>
             </div>
           </div>
         </div>

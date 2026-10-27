@@ -138,6 +138,105 @@ export default function TheCollection() {
   const [activeId, setActiveId] = useState<string>("weddings");
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
 
+  // Element Refs for GSAP Continuous Flex Redistribution
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const activeContentRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const collapsedContentRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  /* ── Continuous GSAP Width Redistribution Engine ─────────────── */
+  const animateToCard = useCallback((targetId: string, immediate: boolean = false) => {
+    const isDesktop = typeof window !== "undefined" && window.matchMedia("(min-width: 821px)").matches;
+    if (!isDesktop) return;
+
+    COLLECTION_DISCIPLINES.forEach((disc) => {
+      const card = cardRefs.current[disc.id];
+      const activeEl = activeContentRefs.current[disc.id];
+      const collapsedEl = collapsedContentRefs.current[disc.id];
+      if (!card) return;
+
+      const isActive = disc.id === targetId;
+      const targetFlexGrow = isActive ? 2.85 : 1.0;
+
+      if (immediate) {
+        gsap.set(card, { flexGrow: targetFlexGrow });
+        if (activeEl) gsap.set(activeEl, { opacity: isActive ? 1 : 0 });
+        if (collapsedEl) gsap.set(collapsedEl, { opacity: isActive ? 0 : 1 });
+        return;
+      }
+
+      // Smooth, luxurious flexGrow interpolation (750ms with power2.inOut)
+      gsap.to(card, {
+        flexGrow: targetFlexGrow,
+        duration: 0.75,
+        ease: "power2.inOut",
+        overwrite: "auto",
+      });
+
+      // Active content: reveal smoothly as width expands
+      if (activeEl) {
+        if (isActive) {
+          gsap.to(activeEl, {
+            opacity: 1,
+            duration: 0.45,
+            delay: 0.22,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        } else {
+          gsap.to(activeEl, {
+            opacity: 0,
+            duration: 0.22,
+            ease: "power2.in",
+            overwrite: "auto",
+          });
+        }
+      }
+
+      // Collapsed content: cross-fade gracefully
+      if (collapsedEl) {
+        if (isActive) {
+          gsap.to(collapsedEl, {
+            opacity: 0,
+            duration: 0.2,
+            ease: "power2.in",
+            overwrite: "auto",
+          });
+        } else {
+          gsap.to(collapsedEl, {
+            opacity: 1,
+            duration: 0.45,
+            delay: 0.25,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        }
+      }
+    });
+  }, []);
+
+  // Initial Layout Setup
+  useEffect(() => {
+    animateToCard("weddings", true);
+  }, [animateToCard]);
+
+  // Handle Window Resize
+  useEffect(() => {
+    const handleResize = () => {
+      const isDesktop = window.matchMedia("(min-width: 821px)").matches;
+      if (isDesktop) {
+        animateToCard(activeId, true);
+      } else {
+        // Reset inline flexGrow on mobile
+        COLLECTION_DISCIPLINES.forEach((disc) => {
+          const card = cardRefs.current[disc.id];
+          if (card) gsap.set(card, { clearProps: "flexGrow" });
+        });
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [activeId, animateToCard]);
+
   /* ── GSAP Scroll-Triggered Entrance ─────────────────────────── */
   useEffect(() => {
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -190,6 +289,15 @@ export default function TheCollection() {
 
   const isTouchRef = useRef(false);
 
+  const switchActiveCard = useCallback(
+    (id: string) => {
+      if (id === activeId) return;
+      setActiveId(id);
+      animateToCard(id, false);
+    },
+    [activeId, animateToCard]
+  );
+
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       if (e.pointerType === "touch") {
@@ -202,17 +310,20 @@ export default function TheCollection() {
       if (card) {
         const id = card.getAttribute("data-discipline-id");
         if (id && id !== activeId) {
-          setActiveId(id);
+          switchActiveCard(id);
         }
       }
     },
-    [activeId]
+    [activeId, switchActiveCard]
   );
 
-  const handlePointerLeave = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType === "touch" || isTouchRef.current) return;
-    setActiveId("weddings");
-  }, []);
+  const handlePointerLeave = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.pointerType === "touch" || isTouchRef.current) return;
+      switchActiveCard("weddings");
+    },
+    [switchActiveCard]
+  );
 
   const handleCardClick = useCallback(
     (discipline: CollectionDiscipline, displayImage: string) => {
@@ -221,10 +332,10 @@ export default function TheCollection() {
           image: displayImage,
         });
       } else {
-        setActiveId(discipline.id);
+        switchActiveCard(discipline.id);
       }
     },
-    [activeId]
+    [activeId, switchActiveCard]
   );
 
   const handleCardKeyDown = useCallback(
@@ -286,7 +397,7 @@ export default function TheCollection() {
             onPointerMove={handlePointerMove}
             onPointerLeave={handlePointerLeave}
             onMouseLeave={() => {
-              if (!isTouchRef.current) setActiveId("weddings");
+              if (!isTouchRef.current) switchActiveCard("weddings");
             }}
           >
             {COLLECTION_DISCIPLINES.map((discipline) => {
@@ -297,25 +408,25 @@ export default function TheCollection() {
               return (
                 <div
                   key={discipline.id}
+                  ref={(el) => {
+                    cardRefs.current[discipline.id] = el;
+                  }}
                   data-discipline-id={discipline.id}
                   className={`${styles.card} ${
                     isSelected ? styles.cardActive : styles.cardInactive
                   }`}
                   onPointerEnter={(e) => {
-                    if (e.pointerType !== "touch") setActiveId(discipline.id);
+                    if (e.pointerType !== "touch") switchActiveCard(discipline.id);
                   }}
                   onPointerOver={(e) => {
-                    if (e.pointerType !== "touch") setActiveId(discipline.id);
+                    if (e.pointerType !== "touch") switchActiveCard(discipline.id);
                   }}
                   onMouseEnter={() => {
-                    if (!isTouchRef.current) setActiveId(discipline.id);
-                  }}
-                  onMouseOver={() => {
-                    if (!isTouchRef.current) setActiveId(discipline.id);
+                    if (!isTouchRef.current) switchActiveCard(discipline.id);
                   }}
                   onClick={() => handleCardClick(discipline, displayImage)}
                   onKeyDown={(e) => handleCardKeyDown(e, discipline, displayImage)}
-                  onFocus={() => setActiveId(discipline.id)}
+                  onFocus={() => switchActiveCard(discipline.id)}
                   tabIndex={0}
                   role="button"
                   aria-expanded={isSelected}
@@ -344,68 +455,78 @@ export default function TheCollection() {
                     />
                   </div>
 
-                  {/* ── Active Featured Panel Content ── */}
-                  {isSelected ? (
-                    <div className={styles.activeContent}>
-                      {/* Top Header Row with Restrained Editorial Metadata */}
-                      <div className={styles.activeTopRow}>
-                        <div className={styles.activeMetaTag}>
-                          <span className={styles.activeNumber}>DISCIPLINE {discipline.number}</span>
-                          <span className={styles.activeDivider}>/</span>
-                          <span className={styles.activeCategory}>{discipline.shortTitle}</span>
-                        </div>
-                        <span className={styles.activeStatusPill}>{discipline.count}</span>
+                  {/* ── Active Featured Panel Content (Always mounted, cross-faded via GSAP) ── */}
+                  <div
+                    ref={(el) => {
+                      activeContentRefs.current[discipline.id] = el;
+                    }}
+                    className={styles.activeContent}
+                    aria-hidden={!isSelected}
+                  >
+                    {/* Top Header Row with Restrained Editorial Metadata */}
+                    <div className={styles.activeTopRow}>
+                      <div className={styles.activeMetaTag}>
+                        <span className={styles.activeNumber}>DISCIPLINE {discipline.number}</span>
+                        <span className={styles.activeDivider}>/</span>
+                        <span className={styles.activeCategory}>{discipline.shortTitle}</span>
                       </div>
+                      <span className={styles.activeStatusPill}>{discipline.count}</span>
+                    </div>
 
-                      {/* Bottom Story & Action Block */}
-                      <div className={styles.activeBottomBlock}>
-                        <h3 className={styles.activeTitle}>{discipline.title}</h3>
-                        <p className={styles.activeTagline}>{discipline.tagline}</p>
+                    {/* Bottom Story & Action Block */}
+                    <div className={styles.activeBottomBlock}>
+                      <h3 className={styles.activeTitle}>{discipline.title}</h3>
+                      <p className={styles.activeTagline}>{discipline.tagline}</p>
 
-                        <p className={styles.activeDescription}>{discipline.heroDescription}</p>
+                      <p className={styles.activeDescription}>{discipline.heroDescription}</p>
 
-                        <div className={styles.activeButtonRow}>
-                          <Link
-                            href={discipline.href}
-                            className={styles.btnPrimary}
-                            onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
-                            aria-label={`Enter the full ${discipline.title} portfolio`}
-                          >
-                            Explore {discipline.shortTitle} Gallery{" "}
-                            <span className={styles.arrowIcon} aria-hidden="true">
-                              →
-                            </span>
-                          </Link>
-                          <Link
-                            href="/disciplines/archive"
-                            className={styles.btnSecondary}
-                            aria-label="View the complete 24 Frames archive"
-                          >
-                            Archival Index <span aria-hidden="true">↗</span>
-                          </Link>
-                        </div>
+                      <div className={styles.activeButtonRow}>
+                        <Link
+                          href={discipline.href}
+                          className={styles.btnPrimary}
+                          onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
+                          aria-label={`Enter the full ${discipline.title} portfolio`}
+                        >
+                          Explore {discipline.shortTitle} Gallery{" "}
+                          <span className={styles.arrowIcon} aria-hidden="true">
+                            →
+                          </span>
+                        </Link>
+                        <Link
+                          href="/disciplines/archive"
+                          className={styles.btnSecondary}
+                          aria-label="View the complete 24 Frames archive"
+                        >
+                          Archival Index <span aria-hidden="true">↗</span>
+                        </Link>
                       </div>
                     </div>
-                  ) : (
-                    /* ── Inactive Collapsed Card Content ── */
-                    <div className={styles.collapsedContent}>
-                      {/* Top Number */}
-                      <div className={styles.collapsedTop}>
-                        <span className={styles.collapsedNumber}>{discipline.number}</span>
-                      </div>
+                  </div>
 
-                      {/* Bottom Readable Discipline Info */}
-                      <div className={styles.collapsedBottom}>
-                        <div className={styles.collapsedMeta}>
-                          <h4 className={styles.collapsedTitle}>{discipline.title}</h4>
-                          <p className={styles.collapsedCount}>{discipline.count}</p>
-                        </div>
-                        <span className={styles.collapsedArrow} aria-hidden="true">
-                          →
-                        </span>
-                      </div>
+                  {/* ── Inactive Collapsed Card Content (Always mounted, cross-faded via GSAP) ── */}
+                  <div
+                    ref={(el) => {
+                      collapsedContentRefs.current[discipline.id] = el;
+                    }}
+                    className={styles.collapsedContent}
+                    aria-hidden={isSelected}
+                  >
+                    {/* Top Number */}
+                    <div className={styles.collapsedTop}>
+                      <span className={styles.collapsedNumber}>{discipline.number}</span>
                     </div>
-                  )}
+
+                    {/* Bottom Readable Discipline Info */}
+                    <div className={styles.collapsedBottom}>
+                      <div className={styles.collapsedMeta}>
+                        <h4 className={styles.collapsedTitle}>{discipline.shortTitle}</h4>
+                        <p className={styles.collapsedCount}>{discipline.count}</p>
+                      </div>
+                      <span className={styles.collapsedArrow} aria-hidden="true">
+                        →
+                      </span>
+                    </div>
+                  </div>
                 </div>
               );
             })}

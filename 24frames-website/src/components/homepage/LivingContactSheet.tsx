@@ -642,33 +642,35 @@ export default function LivingContactSheet() {
 
         {/* Anchor for Explore Action */}
         <div id="stories-showcase" className={styles.anchorOffset} aria-hidden="true" />
+      </div>
 
-        {/* ══════════════════════════════════════════════════════════════════════
-            02 — VINITHA & VIVEKANANDA: CURVED PANEL WITH SVG MORPH ANIMATION
-        ══════════════════════════════════════════════════════════════════════ */}
-        <div className={`${styles.editorialBlock} ${styles.vinithaSectionBlock}`}>
-          <div
-            ref={vinithaStageRef}
-            className={`${styles.curvedPanelStage} ${
-              vinithaVideoActive ? styles.curvedPanelStageActive : ""
-            }`}
-          >
-            {/* Background Poster Image */}
-            <picture>
-              <source srcSet={ITEM_VIDEO_01.webpPoster} type="image/webp" />
-              <img
-                src={ITEM_VIDEO_01.poster}
-                alt={ITEM_VIDEO_01.filmTitle}
-                className={styles.curvedPosterImg}
-                loading="lazy"
-              />
-            </picture>
+      {/* ══════════════════════════════════════════════════════════════════════
+          02 — VINITHA & VIVEKANANDA: FULL-BLEED CURVED CINEMA SECTION
+      ══════════════════════════════════════════════════════════════════════ */}
+      <div className={`${styles.editorialBlock} ${styles.fullBleedFilmBlock} ${styles.vinithaSectionBlock}`}>
+        <div
+          ref={vinithaStageRef}
+          className={`${styles.curvedPanelStage} ${
+            vinithaVideoActive ? styles.curvedPanelStageActive : ""
+          }`}
+        >
+          {/* Background Poster Image */}
+          <picture>
+            <source srcSet={ITEM_VIDEO_01.webpPoster} type="image/webp" />
+            <img
+              src={ITEM_VIDEO_01.poster}
+              alt={ITEM_VIDEO_01.filmTitle}
+              className={styles.curvedPosterImg}
+              loading="lazy"
+            />
+          </picture>
 
-            {/* Gradient Scrim for Film Typography Legibility */}
-            <div className={styles.filmGradientScrim} />
+          {/* Gradient Scrim for Film Typography Legibility */}
+          <div className={styles.filmGradientScrim} />
 
-            {/* Overlay Elements (Fade out when morphing to video) */}
-            <div ref={vinithaOverlaysRef} className={styles.filmOverlaysLayer}>
+          {/* Overlay Elements (Fade out when morphing to video) */}
+          <div ref={vinithaOverlaysRef} className={styles.filmOverlaysLayer}>
+            <div className={styles.filmOverlaysInnerContainer}>
               <div className={styles.filmNarrativeSide}>
                 <span className={styles.filmIndexLabel}>01 —— WEDDING FILM</span>
                 <h3 className={styles.filmHeading}>{ITEM_VIDEO_01.filmTitle}</h3>
@@ -696,36 +698,39 @@ export default function LivingContactSheet() {
                 </button>
               </div>
             </div>
-
-            {/* Embedded Cinema Player (Revealed upon morph completion) */}
-            {vinithaVideoActive && (
-              <div ref={vinithaIframeRef} className={styles.embeddedPlayerStage}>
-                <iframe
-                  src={ITEM_VIDEO_01.embedUrl}
-                  title={ITEM_VIDEO_01.filmTitle}
-                  className={styles.cinemaIframe}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
-                <button
-                  type="button"
-                  className={styles.btnCloseCinema}
-                  onClick={closeVinithaVideo}
-                  aria-label="Close cinema film player"
-                >
-                  ✕ Close Film
-                </button>
-              </div>
-            )}
           </div>
-        </div>
 
-        {/* ══════════════════════════════════════════════════════════════════════
-            03 — HRITHIKA & ABHISHEK (USER INSTRUCTION: PHOTO ON LEFT, TEXT ON RIGHT)
-        ══════════════════════════════════════════════════════════════════════ */}
+          {/* Embedded Cinema Player (Revealed upon morph completion) */}
+          {vinithaVideoActive && (
+            <div ref={vinithaIframeRef} className={styles.embeddedPlayerStage}>
+              <iframe
+                src={ITEM_VIDEO_01.embedUrl}
+                title={ITEM_VIDEO_01.filmTitle}
+                className={styles.cinemaIframe}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+              <button
+                type="button"
+                className={styles.btnCloseCinema}
+                onClick={closeVinithaVideo}
+                aria-label="Close cinema film player"
+              >
+                ✕ Close Film
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          SUPPORTING STORIES GRID (RESTRICTED TO EDITORIAL CONTAINER)
+      ══════════════════════════════════════════════════════════════════════ */}
+      <div className={styles.mainContainer}>
+        {/* 03 — HRITHIKA & ABHISHEK (PHOTO ON LEFT, TEXT ON RIGHT) */}
         <div className={`${styles.editorialBlock} ${styles.duoSpreadBlock}`}>
           <div className={styles.duoGridHrithika}>
-            {/* LEFT: Photograph (As explicitly instructed) */}
+            {/* LEFT: Photograph */}
             <div className={styles.duoVisualSide}>
               <Link
                 href={ITEM_PROJECT_03.storyUrl}
@@ -774,9 +779,7 @@ export default function LivingContactSheet() {
           </div>
         </div>
 
-        {/* ══════════════════════════════════════════════════════════════════════
-            04 — KARTHIK & GAYATRI (TEXT ON LEFT, PHOTO ON RIGHT)
-        ══════════════════════════════════════════════════════════════════════ */}
+        {/* 04 — KARTHIK & GAYATRI (TEXT ON LEFT, PHOTO ON RIGHT) */}
         <div className={`${styles.editorialBlock} ${styles.duoSpreadBlock}`}>
           <div className={styles.duoGridKarthik}>
             {/* LEFT: Text and Story Details */}
@@ -821,9 +824,7 @@ export default function LivingContactSheet() {
           </div>
         </div>
 
-        {/* ══════════════════════════════════════════════════════════════════════
-            05 — SIREESH & HARSHITHA (ASYMMETRIC EDITORIAL STILLS COMPOSITION)
-        ══════════════════════════════════════════════════════════════════════ */}
+        {/* 05 — SIREESH & HARSHITHA (ASYMMETRIC EDITORIAL STILLS COMPOSITION) */}
         <div className={`${styles.editorialBlock} ${styles.layeredSireeshBlock}`}>
           <div className={styles.layeredGrid}>
             {/* Left: Royal Mandapam Architecture Still under Golden Chandeliers */}
@@ -873,61 +874,35 @@ export default function LivingContactSheet() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* ══════════════════════════════════════════════════════════════════════
-            EDITORIAL STORY NARRATIVE BANNER CARD — HRITHIKA & ABHISHEK
-        ══════════════════════════════════════════════════════════════════════ */}
-        <div className={`${styles.editorialBlock} ${styles.storyNarrativeBannerWrap}`}>
-          <div className={styles.storyNarrativeBannerCard}>
-            <div className={styles.bannerImageHeader}>
-              <picture>
-                <source srcSet="/images/stories/hrithika-abhishek/IMG_6322.webp" type="image/webp" />
-                <img
-                  src="/images/stories/hrithika-abhishek/IMG_6322.jpg"
-                  alt="Hrithika & Abhishek"
-                  className={styles.bannerHeaderImg}
-                  loading="lazy"
-                />
-              </picture>
-            </div>
-            <div className={styles.bannerBodyContent}>
-              <h4 className={styles.bannerCoupleTitle}>Hrithika & Abhishek</h4>
-              <p className={styles.bannerSubtitle}>
-                Modern love in a classic setting — real moments, effortlessly beautiful.
-              </p>
-              <Link href="/stories/hrithika-abhishek" className={styles.bannerWatchLink}>
-                WATCH STORY <span className={styles.actionArrow}>——→</span>
-              </Link>
-            </div>
-          </div>
-        </div>
+      {/* ══════════════════════════════════════════════════════════════════════
+          06 — NISHANTH X SANZENA: FULL-BLEED CINEMATIC CLOSING WITH GSAP MORPH
+      ══════════════════════════════════════════════════════════════════════ */}
+      <div className={`${styles.editorialBlock} ${styles.fullBleedFilmBlock} ${styles.nishanthClosingBlock}`}>
+        <div
+          ref={nishanthStageRef}
+          className={`${styles.nishanthCurvedStage} ${
+            nishanthVideoActive ? styles.nishanthCurvedStageActive : ""
+          }`}
+        >
+          {/* Sunset Mountain Landscape Poster */}
+          <picture>
+            <source srcSet={ITEM_VIDEO_02.webpPoster} type="image/webp" />
+            <img
+              src={ITEM_VIDEO_02.poster}
+              alt={ITEM_VIDEO_02.filmTitle}
+              className={styles.nishanthPosterImg}
+              loading="lazy"
+            />
+          </picture>
 
-        {/* ══════════════════════════════════════════════════════════════════════
-            06 — NISHANTH X SANZENA: CINEMATIC CLOSING FEATURE WITH GSAP MORPH
-        ══════════════════════════════════════════════════════════════════════ */}
-        <div className={`${styles.editorialBlock} ${styles.nishanthClosingBlock}`}>
-          <div
-            ref={nishanthStageRef}
-            className={`${styles.nishanthCurvedStage} ${
-              nishanthVideoActive ? styles.nishanthCurvedStageActive : ""
-            }`}
-          >
-            {/* Sunset Mountain Landscape Poster */}
-            <picture>
-              <source srcSet={ITEM_VIDEO_02.webpPoster} type="image/webp" />
-              <img
-                src={ITEM_VIDEO_02.poster}
-                alt={ITEM_VIDEO_02.filmTitle}
-                className={styles.nishanthPosterImg}
-                loading="lazy"
-              />
-            </picture>
+          {/* Gradient Scrim */}
+          <div className={styles.nishanthGradientScrim} />
 
-            {/* Gradient Scrim */}
-            <div className={styles.nishanthGradientScrim} />
-
-            {/* Overlays Layer (Smoothly fades out during GSAP morph) */}
-            <div ref={nishanthOverlaysRef} className={styles.nishanthOverlaysLayer}>
+          {/* Overlays Layer (Smoothly fades out during GSAP morph) */}
+          <div ref={nishanthOverlaysRef} className={styles.nishanthOverlaysLayer}>
+            <div className={styles.nishanthOverlaysInnerContainer}>
               {/* Left Play Control */}
               <div className={styles.nishanthLeftControl}>
                 <button
@@ -960,33 +935,35 @@ export default function LivingContactSheet() {
                 </button>
               </div>
             </div>
-
-            {/* Inline Cinema Player Modal / Overlay (Revealed upon morph completion) */}
-            {nishanthVideoActive && (
-              <div ref={nishanthIframeRef} className={styles.embeddedPlayerStage}>
-                <iframe
-                  src={ITEM_VIDEO_02.embedUrl}
-                  title={ITEM_VIDEO_02.filmTitle}
-                  className={styles.cinemaIframe}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
-                <button
-                  type="button"
-                  className={styles.btnCloseCinema}
-                  onClick={closeNishanthVideo}
-                  aria-label="Close signature film player"
-                >
-                  ✕ Close Film
-                </button>
-              </div>
-            )}
           </div>
-        </div>
 
-        {/* ══════════════════════════════════════════════════════════════════════
-            07 — SECTION ENDING / BRAND FOOTER BAR
-        ══════════════════════════════════════════════════════════════════════ */}
+          {/* Inline Cinema Player Modal / Overlay (Revealed upon morph completion) */}
+          {nishanthVideoActive && (
+            <div ref={nishanthIframeRef} className={styles.embeddedPlayerStage}>
+              <iframe
+                src={ITEM_VIDEO_02.embedUrl}
+                title={ITEM_VIDEO_02.filmTitle}
+                className={styles.cinemaIframe}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+              <button
+                type="button"
+                className={styles.btnCloseCinema}
+                onClick={closeNishanthVideo}
+                aria-label="Close signature film player"
+              >
+                ✕ Close Film
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          07 — SECTION ENDING / BRAND FOOTER BAR
+      ══════════════════════════════════════════════════════════════════════ */}
+      <div className={styles.mainContainer}>
         <div className={styles.sectionEndingBar}>
           <span className={styles.endingBrand}>24 FRAMES PHOTOGRAPHY</span>
           <span className={styles.endingDividerLine} />
