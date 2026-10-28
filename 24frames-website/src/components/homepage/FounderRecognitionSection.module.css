@@ -603,44 +603,51 @@
 /* ─────────────────────────────────────────────────────────────
    2. THREE CORE PRINCIPLES (ONE HORIZONTAL ROW ACROSS DESKTOP)
    ───────────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────
+   2. THREE CORE PRINCIPLES (Inside Left Column matching reference)
+   ───────────────────────────────────────────────────────────── */
 .principlesContainer {
-  margin-top: 1.75rem;
+  background: #F5EFE4;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 18px;
+  padding: 1.25rem 1.4rem;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.035);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  margin-top: 0;
 }
 
 .principlesKicker {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.625rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #55625B;
-  padding-left: 0.25rem;
+  padding-left: 0.15rem;
 }
 
-.principlesRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1rem, 1.8vw, 1.5rem);
+.principlesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
 }
 
 .principleCard {
-  background: #F5EFE4;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 16px;
-  padding: 1.25rem 1.4rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  background: #FAF7F0;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  padding: 0.85rem 1.1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.35rem;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .principleCard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
 }
 
 .principleTitleRow {
@@ -667,46 +674,42 @@
 .principleDescription {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.75rem;
-  line-height: 1.55;
+  line-height: 1.5;
   color: #4C5952;
   margin: 0;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   3. CENTERED COMMISSION CTA IN OUTER CREAM CONTAINER
+   3. COMMISSION CTA CARD (Inside Right Column matching reference)
    ───────────────────────────────────────────────────────────── */
-.ctaOuterContainer {
-  margin-top: 1.75rem;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
 .ctaCardBox {
   background: #F5EFE4;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 20px;
-  padding: 1.25rem 2rem;
+  border-radius: 18px;
+  padding: 1.25rem 1.5rem;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.035);
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .commissionPillBtn {
   background: #09453E;
   color: #FFFFFF;
   border-radius: 9999px;
-  padding: 1.1rem 2.8rem;
+  padding: 1.1rem clamp(1.5rem, 2.5vw, 2.8rem);
   font-family: var(--font-inter), sans-serif;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
   box-shadow: 0 8px 24px rgba(9, 69, 62, 0.28);
   transition: all 0.25s ease;
 }

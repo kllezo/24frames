@@ -8,76 +8,101 @@ import styles from "./ClientGalleryExperience.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface GalleryExperienceItem {
+interface GalleryCardItem {
   id: string;
   number: string;
-  romanNumeral: string;
-  categoryTag: string;
   title: string;
-  headline: string;
   description: string;
-  mediaImage: string;
-  mediaBadge: string;
-  mediaType: "ai-archive" | "cinema-room" | "heirloom-vault";
-  actionLabel: string;
-  actionUrl: string;
+  artImage: string;
+  artAlt: string;
+  href: string;
+  theme: "indigo" | "light" | "obsidian" | "emerald" | "parchment";
+  gradientClass: string;
+  fillColor: string;
+  textColor: string;
+  descColor: string;
 }
 
-const GALLERY_EXPERIENCES: GalleryExperienceItem[] = [
+const GALLERY_CARDS: GalleryCardItem[] = [
   {
-    id: "private-archive",
+    id: "ai-discovery",
     number: "01",
-    romanNumeral: "I",
-    categoryTag: "FACIAL RECOGNITION & MOMENT DISCOVERY",
     title: "The Private Archive",
-    headline: "AI-Powered Moment Discovery",
-    description:
-      "Intelligent facial recognition discreetly indexes thousands of high-resolution stills into effortless family collections, allowing couples and distinguished guests to uncover cherished candid memories in seconds.",
-    mediaImage: "/images/stories/bellam-srikonda/IMG_6340.jpg",
-    mediaBadge: "AI SMART FACIAL DETECTION · 1,400+ STILLS INDEXED",
-    mediaType: "ai-archive",
-    actionLabel: "Access Archival Vault",
-    actionUrl: "/inquire",
+    description: "Intelligent facial recognition discreetly indexes sacred moments into effortless family collections.",
+    artImage: "/images/gallery-experience/card1_art.png",
+    artAlt: "3D Chrome dynamic prism representing AI moment discovery",
+    href: "/inquire",
+    theme: "indigo",
+    gradientClass: styles.card1Gradient,
+    fillColor: "#141428",
+    textColor: "#FFFFFF",
+    descColor: "rgba(224, 231, 255, 0.72)",
   },
   {
-    id: "cinema-room",
+    id: "private-cinema",
     number: "02",
-    romanNumeral: "II",
-    categoryTag: "PRIVATE 4K STREAMING THEATER",
     title: "The Cinema Room",
-    headline: "Luxury 4K Screening Experience",
-    description:
-      "A bespoke screening room engineered for private home theaters and personal devices, delivering master wedding films, signature teasers, and vertical ceremony reels in uncompressed 4K optical fidelity.",
-    mediaImage: "/videos/portfolio/vinitha-vivekananda/poster.jpg",
-    mediaBadge: "4K DCI · THEATRICAL MASTER GRADE · 24 FPS",
-    mediaType: "cinema-room",
-    actionLabel: "Enter Screening Theater",
-    actionUrl: "/disciplines/cinema",
+    description: "Bespoke screening theater streaming uncompressed master wedding films, trailers, and vertical reels.",
+    artImage: "/images/gallery-experience/card2_art.png",
+    artAlt: "Translucent golden dual cinema screens representing 4K private streaming theater",
+    href: "/disciplines/cinema",
+    theme: "light",
+    gradientClass: styles.card2Gradient,
+    fillColor: "url(#c2-gradient)",
+    textColor: "#0F172A",
+    descColor: "#475569",
   },
   {
-    id: "heirloom-collection",
+    id: "signature-shots",
     number: "03",
-    romanNumeral: "III",
-    categoryTag: "GENERATIONAL HERITAGE PRESERVATION",
+    title: "Instagram-Ready Signature Shots",
+    description: "Master color-graded portraits and candid moments individually calibrated and proportioned for seamless, high-fidelity social sharing.",
+    artImage: "/images/stories/bellam-srikonda/IMG_6341.jpg",
+    artAlt: "Master color-graded portraits proportioned for high-fidelity social sharing",
+    href: "/disciplines/weddings",
+    theme: "emerald",
+    gradientClass: styles.cardEmeraldGradient,
+    fillColor: "#082823",
+    textColor: "#FFFFFF",
+    descColor: "rgba(235, 245, 242, 0.78)",
+  },
+  {
+    id: "photo-stories",
+    number: "04",
+    title: "Event-Wise Photo Stories",
+    description: "Your wedding memories meticulously structured by ritual, ceremony, and intimate timeline — from Pellikuthuru to the grand reception.",
+    artImage: "/images/stories/bellam-srikonda/IMG_6339.jpg",
+    artAlt: "Wedding ritual ceremony timeline structured by event",
+    href: "/stories",
+    theme: "parchment",
+    gradientClass: styles.cardParchmentGradient,
+    fillColor: "#EFE8DA",
+    textColor: "#141713",
+    descColor: "#454D45",
+  },
+  {
+    id: "heirloom-vault",
+    number: "05",
     title: "The Heirloom Collection",
-    headline: "Generational Legacy Vault",
-    description:
-      "Master color-calibrated assets organized ritual-by-ritual into an enduring digital vault, tailored to safeguard family heritage, cultural traditions, and high-fidelity social celebrations across generations.",
-    mediaImage: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
-    mediaBadge: "CERTIFIED HEIRLOOM VAULT · LIFETIME PRESERVATION",
-    mediaType: "heirloom-vault",
-    actionLabel: "Explore Heritage Vault",
-    actionUrl: "/stories",
+    description: "Color-calibrated digital archive engineered to safeguard family traditions and culture across generations.",
+    artImage: "/images/gallery-experience/card3_art.png",
+    artAlt: "Precision optical cinema lens elements representing generational heirloom vault",
+    href: "/stories",
+    theme: "obsidian",
+    gradientClass: styles.card3Gradient,
+    fillColor: "#121418",
+    textColor: "#FFFFFF",
+    descColor: "rgba(203, 213, 225, 0.72)",
   },
 ];
 
 export default function ClientGalleryExperience() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const showcaseRef = useRef<HTMLDivElement>(null);
 
-  // Active card: default to Card 02 ("The Cinema Room" - the visual centerpiece)
-  const [activeId, setActiveId] = useState<string>("cinema-room");
+  // Active hover/touch state for cards
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
   /* ── GSAP Entrance Animation ── */
   useEffect(() => {
@@ -88,35 +113,33 @@ export default function ClientGalleryExperience() {
       if (headerRef.current) {
         gsap.fromTo(
           headerRef.current,
-          { opacity: 0, y: 30 },
+          { opacity: 0, y: 28 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.9,
+            duration: 0.85,
             ease: "power2.out",
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: "top 78%",
+              start: "top 80%",
               once: true,
             },
           }
         );
       }
 
-      const cards = gsap.utils.toArray<HTMLElement>(`.${styles.folderCard}`);
-      if (cards.length) {
+      if (showcaseRef.current) {
         gsap.fromTo(
-          cards,
-          { opacity: 0, y: 36, scale: 0.97 },
+          showcaseRef.current,
+          { opacity: 0, y: 40, scale: 0.98 },
           {
             opacity: 1,
             y: 0,
             scale: 1,
-            duration: 0.75,
-            stagger: 0.14,
+            duration: 0.9,
             ease: "power3.out",
             scrollTrigger: {
-              trigger: cardsContainerRef.current,
+              trigger: showcaseRef.current,
               start: "top 82%",
               once: true,
             },
@@ -128,6 +151,103 @@ export default function ClientGalleryExperience() {
     return () => ctx.revert();
   }, []);
 
+  const renderCard = (item: GalleryCardItem) => {
+    const isOpen = activeCardId === item.id;
+
+    return (
+      <Link
+        key={item.id}
+        href={item.href}
+        className={`${styles.card} ${styles[`card_${item.theme}`]} ${
+          isOpen ? styles.cardOpen : ""
+        }`}
+        onMouseEnter={() => setActiveCardId(item.id)}
+        onClick={(e) => {
+          // On touch devices, first tap opens, second tap follows link
+          if (window.matchMedia("(pointer: coarse)").matches && !isOpen) {
+            e.preventDefault();
+            setActiveCardId(item.id);
+          }
+        }}
+        aria-label={`${item.number} ${item.title} — ${item.description}`}
+      >
+        {/* Layer 1: Artwork Canvas (Top window behind flap) */}
+        <div className={`${styles.artCanvas} ${item.gradientClass}`}>
+          <img
+            src={item.artImage}
+            alt={item.artAlt}
+            className={styles.artImage}
+            loading="lazy"
+          />
+        </div>
+
+        {/* Layer 2: Sliding Notch Flap with SVG Notch Profile */}
+        <div className={styles.slidingFlap}>
+          <svg
+            className={styles.flapSvg}
+            viewBox="0 0 340 500"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            {item.theme === "light" && (
+              <defs>
+                <linearGradient
+                  id="c2-gradient"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop offset="0%" stopColor="#F4F6F9" />
+                  <stop offset="60%" stopColor="#E6E9EF" />
+                  <stop offset="100%" stopColor="#D8DCE4" />
+                </linearGradient>
+              </defs>
+            )}
+            {/* Notch contour: Left high shelf (y=0) -> S-curve step down (y=32) -> Right low shelf */}
+            <path
+              d="M 0 0 L 180 0 C 193 0, 201 8, 205 18 C 209 27, 217 32, 230 32 L 340 32 L 340 500 L 0 500 Z"
+              fill={item.fillColor}
+            />
+          </svg>
+
+          {/* Bold Giant Number on Left */}
+          <div
+            className={styles.cardNumber}
+            style={{ color: item.textColor }}
+          >
+            {item.number}
+          </div>
+
+          {/* Angled Arrow on Right Shoulder */}
+          <div
+            className={styles.cardArrow}
+            style={{ color: item.textColor }}
+            aria-hidden="true"
+          >
+            ↗
+          </div>
+        </div>
+
+        {/* Layer 3: Pinned Bottom Typography */}
+        <div className={styles.cardBottomText}>
+          <h3
+            className={styles.cardTitle}
+            style={{ color: item.textColor }}
+          >
+            {item.title}
+          </h3>
+          <p
+            className={styles.cardDesc}
+            style={{ color: item.descColor }}
+          >
+            {item.description}
+          </p>
+        </div>
+      </Link>
+    );
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -136,14 +256,14 @@ export default function ClientGalleryExperience() {
       aria-label="The 24 Frames Client Gallery Experience"
     >
       <div className={styles.container}>
-        {/* ── 1. EDITORIAL OPENING MOMENT ── */}
+        {/* ── 1. EDITORIAL SECTION HEADER ── */}
         <div ref={headerRef} className={styles.editorialHeader}>
           <div className={styles.chapterBadgeRow}>
-            <span className={styles.antiqueGoldRule} aria-hidden="true" />
+            <span className={styles.goldRule} aria-hidden="true" />
             <span className={styles.chapterMarker}>
-              PRIVATE PALACE ARCHIVE · EXCLUSIVE CLIENT PORTAL
+              PRIVATE PALACE SUITE · GENERATIONAL VAULT
             </span>
-            <span className={styles.antiqueGoldRule} aria-hidden="true" />
+            <span className={styles.goldRule} aria-hidden="true" />
           </div>
 
           <h2 className={styles.editorialTitle}>
@@ -155,136 +275,47 @@ export default function ClientGalleryExperience() {
           </p>
         </div>
 
-        {/* ── 2. THREE ROYAL ARCHIVAL FOLDER CARDS (EXACT REFERENCE ANIMATION) ── */}
-        <div ref={cardsContainerRef} className={styles.cardsGrid}>
-          {GALLERY_EXPERIENCES.map((item) => {
-            const isActive = activeId === item.id;
+        {/* ── 2. DARK LUXURY SHOWCASE CONTAINER (EXACT REFERENCE FRAME) ── */}
+        <div ref={showcaseRef} className={styles.darkShowcaseFrame}>
+          {/* Top Bar matching Reference Video ("CARD" badge + close / indicator) */}
+          <div className={styles.frameTopBar}>
+            <div className={styles.pillBadge}>
+              <span className={styles.pillBadgeDot} />
+              <span>CARD SUITE</span>
+            </div>
 
-            return (
-              <div
-                key={item.id}
-                className={`${styles.folderCard} ${isActive ? styles.folderCardActive : ""}`}
-                onMouseEnter={() => setActiveId(item.id)}
-                onPointerEnter={() => setActiveId(item.id)}
-                onClick={() => setActiveId(item.id)}
-                role="region"
-                aria-label={`${item.title} — ${item.headline}`}
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setActiveId(item.id);
-                  }
-                }}
-              >
-                {/* ── LAYER 1: BACK MEDIA CANVAS (Revealed as flap slides down) ── */}
-                <div className={styles.mediaCanvas}>
-                  <img
-                    src={item.mediaImage}
-                    alt={item.title}
-                    className={styles.mediaImg}
-                    loading="lazy"
-                  />
-                  <div className={styles.mediaAtmosphere} />
-
-                  {/* Curated Interactive Badges per Media Type */}
-                  {item.mediaType === "ai-archive" && (
-                    <div className={styles.aiDetectionOverlay}>
-                      <div className={styles.faceTargetRing}>
-                        <span className={styles.targetCornerTL} />
-                        <span className={styles.targetCornerTR} />
-                        <span className={styles.targetCornerBL} />
-                        <span className={styles.targetCornerBR} />
-                        <div className={styles.targetCenterDot} />
-                      </div>
-                      <div className={styles.aiTagPill}>
-                        <span className={styles.aiTagDot} />
-                        <span>SMART CURATION MATCH 99.4%</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {item.mediaType === "cinema-room" && (
-                    <div className={styles.cinemaPlayOverlay}>
-                      <div className={styles.theatricalPlayBtn} aria-label="Play 4K preview">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                          <polygon points="6 3 20 12 6 21 6 3" />
-                        </svg>
-                      </div>
-                      <div className={styles.theaterSpecsTag}>
-                        <span>4K DCI · 24 FPS · DOLBY COLOR</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {item.mediaType === "heirloom-vault" && (
-                    <div className={styles.heirloomCrestOverlay}>
-                      <div className={styles.heirloomSeal}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                        </svg>
-                      </div>
-                      <div className={styles.heirloomSealText}>
-                        <span>GENERATIONAL HEIRLOOM GRADE</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Top Subtle Media Specification Badge */}
-                  <div className={styles.mediaTopTagRow}>
-                    <span className={styles.mediaSpecBadge}>{item.mediaBadge}</span>
-                  </div>
-                </div>
-
-                {/* ── LAYER 2: SLIDING ARCHIVAL FOLDER FLAP WITH TAB ── */}
-                <div
-                  className={`${styles.slidingFlap} ${
-                    isActive ? styles.slidingFlapDown : styles.slidingFlapUp
-                  }`}
-                >
-                  {/* Distinctive Archival Folder Tab Ear on Left */}
-                  <div className={styles.folderTabEar}>
-                    <div className={styles.tabContentRow}>
-                      <span className={styles.tabNumber}>{item.number}</span>
-                      <span className={styles.tabArrow} aria-hidden="true">↗</span>
-                    </div>
-                  </div>
-
-                  {/* Flap Body with Editorial Details */}
-                  <div className={styles.flapBody}>
-                    <div className={styles.flapEyebrowRow}>
-                      <span className={styles.flapRomanNumeral}>{item.romanNumeral}</span>
-                      <span className={styles.flapDotDivider}>·</span>
-                      <span className={styles.flapCategoryTag}>{item.categoryTag}</span>
-                    </div>
-
-                    <h3 className={styles.flapTitle}>{item.title}</h3>
-                    <h4 className={styles.flapHeadline}>{item.headline}</h4>
-
-                    <p className={styles.flapDescription}>{item.description}</p>
-
-                    <div className={styles.flapActionRow}>
-                      <Link
-                        href={item.actionUrl}
-                        className={styles.flapActionBtn}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <span>{item.actionLabel.toUpperCase()}</span>
-                        <span className={styles.btnArrowIcon}>→</span>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+            <div className={styles.frameActionGroup}>
+              <span className={styles.suiteLabel}>ROYAL CLIENT ARCHIVE SUITE · 5 FEATURES</span>
+              <div className={styles.closeIconCircle} aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12">
+                  <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" />
+                </svg>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          </div>
 
-        {/* ── 3. BOTTOM SUBTLE EXCLUSIVITY FOOTNOTE ── */}
-        <div className={styles.archiveFootnoteRow}>
-          <span className={styles.footnoteText}>
-            Delivered complimentary with every 24 Frames master cinema commission · Cloud-synced &amp; private
-          </span>
+          {/* Balanced 3 + 2 Cards Layout */}
+          <div
+            className={styles.cardsLayout}
+            onMouseLeave={() => setActiveCardId(null)}
+          >
+            {/* Top Row: 3 Feature Cards */}
+            <div className={styles.cardsRowTop}>
+              {GALLERY_CARDS.slice(0, 3).map(renderCard)}
+            </div>
+
+            {/* Bottom Row: 2 Balanced Feature Cards Centered */}
+            <div className={styles.cardsRowBottom}>
+              {GALLERY_CARDS.slice(3, 5).map(renderCard)}
+            </div>
+          </div>
+
+          {/* Bottom Footnote */}
+          <div className={styles.frameFooter}>
+            <span className={styles.footerNote}>
+              Complimentary with every master cinema commission · Biometric facial indexing · Instant uncompressed 4K download
+            </span>
+          </div>
         </div>
       </div>
     </section>

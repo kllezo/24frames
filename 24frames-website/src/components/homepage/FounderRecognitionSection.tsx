@@ -403,6 +403,45 @@ export default function FounderRecognitionSection() {
                 <span className={styles.statDesc}>SQ. FT. CORPORATE HEADQUARTERS</span>
               </div>
             </div>
+
+            {/* 4. Three Core Principles (Contained inside Left Column matching reference) */}
+            <div ref={principlesRef} className={styles.principlesContainer}>
+              <span className={styles.principlesKicker}>THREE CORE PRINCIPLES</span>
+              <div className={styles.principlesList}>
+                {/* Principle 01 */}
+                <div className={styles.principleCard}>
+                  <div className={styles.principleTitleRow}>
+                    <span className={styles.principleNumber}>01</span>
+                    <h4 className={styles.principleTitle}>On-Time Delivery</h4>
+                  </div>
+                  <p className={styles.principleDescription}>
+                    Setting industry benchmarks with a fast, disciplined turnaround for master edits and stills.
+                  </p>
+                </div>
+
+                {/* Principle 02 */}
+                <div className={styles.principleCard}>
+                  <div className={styles.principleTitleRow}>
+                    <span className={styles.principleNumber}>02</span>
+                    <h4 className={styles.principleTitle}>Uncompromising Quality</h4>
+                  </div>
+                  <p className={styles.principleDescription}>
+                    Blending technical mastery with creative vision on optical cinema primes and archival grades.
+                  </p>
+                </div>
+
+                {/* Principle 03 */}
+                <div className={styles.principleCard}>
+                  <div className={styles.principleTitleRow}>
+                    <span className={styles.principleNumber}>03</span>
+                    <h4 className={styles.principleTitle}>Heartfelt Storytelling</h4>
+                  </div>
+                  <p className={styles.principleDescription}>
+                    Transforming fleeting, unrepeatable moments into enduring generational heirlooms.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* ══════════ RIGHT COLUMN ══════════ */}
@@ -529,59 +568,18 @@ export default function FounderRecognitionSection() {
                 — PHANI GOGIREDDY, MANAGING DIRECTOR
               </span>
             </div>
-          </div>
-        </div>
 
-        {/* ── THREE CORE PRINCIPLES (ONE HORIZONTAL ROW ACROSS DESKTOP) ── */}
-        <div ref={principlesRef} className={styles.principlesContainer}>
-          <span className={styles.principlesKicker}>THREE CORE PRINCIPLES</span>
-          <div className={styles.principlesRow}>
-            {/* Principle 01 */}
-            <div className={styles.principleCard}>
-              <div className={styles.principleTitleRow}>
-                <span className={styles.principleNumber}>01</span>
-                <h4 className={styles.principleTitle}>On-Time Delivery</h4>
-              </div>
-              <p className={styles.principleDescription}>
-                Setting industry benchmarks with a fast, disciplined turnaround for master edits and stills.
-              </p>
+            {/* 4. Commission Phani Gogireddy CTA (Matching reference bottom of right column) */}
+            <div ref={ctaContainerRef} className={styles.ctaCardBox}>
+              <Link
+                href="/inquire"
+                className={styles.commissionPillBtn}
+                aria-label="Commission Phani Gogireddy for your wedding film"
+              >
+                <span>COMMISSION PHANI GOGIREDDY</span>
+                <span className={styles.btnArrow}>→</span>
+              </Link>
             </div>
-
-            {/* Principle 02 */}
-            <div className={styles.principleCard}>
-              <div className={styles.principleTitleRow}>
-                <span className={styles.principleNumber}>02</span>
-                <h4 className={styles.principleTitle}>Uncompromising Quality</h4>
-              </div>
-              <p className={styles.principleDescription}>
-                Blending technical mastery with creative vision on optical cinema primes and archival grades.
-              </p>
-            </div>
-
-            {/* Principle 03 */}
-            <div className={styles.principleCard}>
-              <div className={styles.principleTitleRow}>
-                <span className={styles.principleNumber}>03</span>
-                <h4 className={styles.principleTitle}>Heartfelt Storytelling</h4>
-              </div>
-              <p className={styles.principleDescription}>
-                Transforming fleeting, unrepeatable moments into enduring generational heirlooms.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* ── CENTERED COMMISSION CTA IN OUTER CREAM CONTAINER ── */}
-        <div ref={ctaContainerRef} className={styles.ctaOuterContainer}>
-          <div className={styles.ctaCardBox}>
-            <Link
-              href="/inquire"
-              className={styles.commissionPillBtn}
-              aria-label="Commission Phani Gogireddy for your wedding film"
-            >
-              <span>COMMISSION PHANI GOGIREDDY</span>
-              <span className={styles.btnArrow}>→</span>
-            </Link>
           </div>
         </div>
       </div>

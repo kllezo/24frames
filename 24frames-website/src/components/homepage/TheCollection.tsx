@@ -391,20 +391,18 @@ export default function TheCollection() {
           </div>
         </div>
 
-        {/* ── Bottom Subtle Interaction Cue & Complete Archive Link ── */}
-        <div className={styles.footerRow}>
-          <span className={styles.interactionCue}>
-            Select any discipline to reveal details · Hover or tap to expand
-          </span>
+        {/* ── Discreet Standalone Archive Link with Deliberate Whitespace ── */}
+        <div className={styles.standaloneArchiveRow}>
           <Link
             href="/stories"
-            className={styles.archiveLink}
+            className={styles.discreetArchiveLink}
             onClick={(e) => {
               e.preventDefault();
               navigateWithCameraTransition("/stories");
             }}
           >
-            EXPLORE COMPLETE 24 FRAMES ARCHIVE →
+            <span>Explore Complete 24 Frames Archive</span>
+            <span className={styles.archiveArrow} aria-hidden="true">→</span>
           </Link>
         </div>
       </div>

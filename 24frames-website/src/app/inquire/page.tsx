@@ -2,546 +2,1108 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import styles from "./Inquire.module.css";
 
-interface FormData {
-  commissionType: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  eventDate: string;
-  location: string;
-  services: string[];
-  budget: string;
-  notes: string;
+/* ════════════════════════════════════════════════════════════════════════════
+   24 FRAMES — THE COMMISSION ATELIER
+   A bespoke, royal wedding photography and cinema commissioning journey.
+   Warm Ivory, Parchment, Deep Forest Green (#09453E), Antique Gold (#C8A84E).
+   ════════════════════════════════════════════════════════════════════════════ */
+
+export interface EventTimelineEntry {
+  id: string;
+  name: string;
+  date: string;
+  city: string;
+  venue: string;
+  coverage: string;
 }
 
-const COMMISSION_TYPES = [
+export interface CommissionCategory {
+  id: string;
+  title: string;
+  subtitle: string;
+  image: string;
+  isWeddingLike: boolean;
+}
+
+export interface VisualDirectionItem {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+}
+
+export interface ServiceOption {
+  id: string;
+  name: string;
+  description: string;
+  tag: string;
+}
+
+const COMMISSION_CATEGORIES: CommissionCategory[] = [
   {
     id: "weddings",
     title: "Weddings & Celebrations",
-    desc: "Multi-day ceremonies, royal weddings, destination celebrations, and family heritage moments.",
+    subtitle: "Multi-day royal celebrations, sacred muhurthams, destination unions & generational memories.",
+    image: "/images/portfolio/sireesh-harshitha/cover.jpg",
+    isWeddingLike: true,
   },
   {
-    id: "films",
-    title: "Pre-wedding Films",
-    desc: "Cinematic portrait films, destination narratives, and stylized love stories shot on cinema glass.",
+    id: "pre-wedding",
+    title: "Pre-wedding Photography & Films",
+    subtitle: "Cinematic portrait films, destination love stories, and intimate visual poetry on cinema primes.",
+    image: "/videos/portfolio/vinitha-vivekananda/poster.jpg",
+    isWeddingLike: true,
   },
   {
-    id: "editorial",
-    title: "Editorial & Campaigns",
-    desc: "High-fashion campaigns, luxury hospitality showcases, lookbooks, and brand visual direction.",
+    id: "events",
+    title: "Events & Cultural Galas",
+    subtitle: "High-octane Sangeet galas, milestone celebrations, anniversary festivals & national galas.",
+    image: "/images/stories/bellam-srikonda/IMG_6340.jpg",
+    isWeddingLike: true,
+  },
+  {
+    id: "fashion",
+    title: "Fashion & Editorial",
+    subtitle: "Bespoke designer lookbooks, high-jewelry campaigns, and avant-garde couture spreads.",
+    image: "/images/stories/bellam-srikonda/IMG_6341.jpg",
+    isWeddingLike: false,
+  },
+  {
+    id: "commercial",
+    title: "Commercial Campaigns",
+    subtitle: "Brand visual direction, luxury hospitality motion pictures, and architectural commercial narratives.",
+    image: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
+    isWeddingLike: false,
   },
   {
     id: "other",
-    title: "Other Commissions",
-    desc: "Cultural documentaries, private family visual archives, and bespoke artistic commissions.",
+    title: "Other Bespoke Commissions",
+    subtitle: "Private family heritage vaults, cultural documentaries, and custom fine-art commissions.",
+    image: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
+    isWeddingLike: false,
   },
 ];
 
+const VISUAL_DIRECTIONS: VisualDirectionItem[] = [
+  {
+    id: "cinematic",
+    title: "Cinematic & Atmospheric",
+    description: "Rich optical anamorphic depth, natural dusk flares, and chiaroscuro emotional lighting.",
+    image: "/images/portfolio/karthik-falaknama/cover.jpg",
+  },
+  {
+    id: "documentary",
+    title: "Documentary & Candid",
+    description: "Unobtrusive observational mastery capturing unscripted tears, laughter, and family warmth.",
+    image: "/images/stories/bellam-srikonda/IMG_6339.jpg",
+  },
+  {
+    id: "royal",
+    title: "Royal & Editorial",
+    description: "Monumental palace architecture, sculpted royal bridal portraits, and timeless regal composure.",
+    image: "/images/portfolio/sireesh-harshitha/cover.jpg",
+  },
+  {
+    id: "intimate",
+    title: "Intimate & Emotional",
+    description: "Quiet ritual details, shared family glances, sacred promises, and generational tenderness.",
+    image: "/images/portfolio/hrithika-abhishek/cover.jpg",
+  },
+  {
+    id: "fashion-led",
+    title: "Fashion-Led & Art Directed",
+    description: "High-couture lighting, sculptural silhouettes, and avant-garde optical framing.",
+    image: "/images/stories/bellam-srikonda/IMG_6341.jpg",
+  },
+  {
+    id: "balanced",
+    title: "A Harmonious Blend",
+    description: "A balanced symphony combining master cinema films, authentic documentary, and fine-art portraits.",
+    image: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
+  },
+];
+
+const SERVICE_OPTIONS: ServiceOption[] = [
+  {
+    id: "optical-photo",
+    name: "Optical Cinema Master Photography",
+    description: "Medium-format and optical cinema prime stills, color-calibrated and delivered in master high resolution.",
+    tag: "STILLS ARCHIVE",
+  },
+  {
+    id: "theatrical-cinema",
+    name: "Theatrical 4K Master Cinema Film",
+    description: "Feature-length wedding motion picture edited with bespoke orchestral sound design and cinema color grading.",
+    tag: "MASTER CINEMA",
+  },
+  {
+    id: "signature-reels",
+    name: "Signature Teasers & 4K Vertical Reels",
+    description: "Social-first 9:16 cinematic master cuts delivered within 48–72 hours of major rituals.",
+    tag: "SOCIAL MASTER",
+  },
+  {
+    id: "heirloom-albums",
+    name: "Generational Heirloom Bound Albums",
+    description: "Hand-crafted Italian archival leather fine-art books engineered for multi-generational longevity.",
+    tag: "HEIRLOOM VAULT",
+  },
+  {
+    id: "aerial-cinema",
+    name: "Architectural Drone & Aerial Cinematography",
+    description: "Licensed optical cinema drone sweeps capturing grand palace courtyards and monumental settings.",
+    tag: "AERIAL SUITE",
+  },
+  {
+    id: "extended-crew",
+    name: "Extended Multi-Crew Production",
+    description: "Dedicated parallel cinema teams for extensive guest lists and simultaneous bride and groom celebrations.",
+    tag: "PRODUCTION SCALE",
+  },
+];
+
+const INVESTMENT_RANGES = [
+  { id: "tier1", label: "₹12,00,000 – ₹20,00,000", desc: "Essential Master Commission Suite" },
+  { id: "tier2", label: "₹20,00,000 – ₹35,00,000", desc: "Signature Royal Multi-Day Archive" },
+  { id: "tier3", label: "₹35,00,000 – ₹50,00,000+", desc: "Monumental Grand Production Suite" },
+  { id: "custom", label: "Discuss a Custom Commission", desc: "Tailored to your specific creative scope" },
+];
+
 export default function InquirePage() {
-  const [step, setStep] = useState<number>(1);
-  const [formData, setFormData] = useState<FormData>({
-    commissionType: "weddings",
-    fullName: "",
-    email: "",
-    phone: "",
-    eventDate: "",
-    location: "",
-    services: ["photography", "cinematography"],
-    budget: "₹15L – ₹25L",
-    notes: "",
-  });
+  // Stages:
+  // 0: The Invitation (Opening)
+  // 1: The Commission Category
+  // 2: The Occasion Timeline / Project Scope
+  // 3: Visual Direction & Craft Services
+  // 4: The Living Brief & Present Commission
+  // 5: Personalized Confirmation Folio
+  const [stage, setStage] = useState<number>(0);
 
+  // Commission selections
+  const [selectedCategory, setSelectedCategory] = useState<string>("weddings");
+
+  // Timeline events
+  const [events, setEvents] = useState<EventTimelineEntry[]>([
+    {
+      id: "event-1",
+      name: "Sacred Muhurtham & Wedding Ceremony",
+      date: "",
+      city: "Hyderabad",
+      venue: "Grand Palace / Heritage Venue",
+      coverage: "Master Photography & Theatrical Cinema",
+    },
+    {
+      id: "event-2",
+      name: "Sangeet Gala & Celebrations",
+      date: "",
+      city: "Hyderabad",
+      venue: "",
+      coverage: "Evening Celebration Coverage",
+    },
+  ]);
+
+  // Non-wedding project scope
+  const [projectScope, setProjectScope] = useState<string>("");
+
+  // Creative direction
+  const [selectedDirections, setSelectedDirections] = useState<string[]>(["cinematic", "royal"]);
+  const [inspirationNote, setInspirationNote] = useState<string>("");
+
+  // Services & Investment
+  const [selectedServices, setSelectedServices] = useState<string[]>([
+    "optical-photo",
+    "theatrical-cinema",
+    "signature-reels",
+  ]);
+  const [selectedInvestment, setSelectedInvestment] = useState<string>("tier2");
+
+  // Client Details
+  const [fullName, setFullName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [memoriesToRemember, setMemoriesToRemember] = useState<string>("");
+
+  // Validation
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const handleCommissionSelect = (id: string) => {
-    setFormData((prev) => ({ ...prev, commissionType: id }));
+  /* ── Event Composer Actions ── */
+  const handleAddEvent = () => {
+    const newId = `event-${Date.now()}`;
+    setEvents((prev) => [
+      ...prev,
+      {
+        id: newId,
+        name: "Ritual / Celebration",
+        date: "",
+        city: prev[0]?.city || "",
+        venue: "",
+        coverage: "Full Photography & Cinema",
+      },
+    ]);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next[name];
-        return next;
-      });
-    }
+  const handleUpdateEvent = (id: string, field: keyof EventTimelineEntry, value: string) => {
+    setEvents((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
+    );
   };
 
-  const handleServiceToggle = (service: string) => {
-    setFormData((prev) => {
-      const exists = prev.services.includes(service);
-      return {
-        ...prev,
-        services: exists
-          ? prev.services.filter((s) => s !== service)
-          : [...prev.services, service],
-      };
-    });
+  const handleRemoveEvent = (id: string) => {
+    if (events.length <= 1) return;
+    setEvents((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const validateStep3 = () => {
-    const newErrors: Record<string, string> = {};
-    if (!formData.fullName.trim()) newErrors.fullName = "Please provide your name";
-    if (!formData.email.trim()) {
-      newErrors.email = "Please provide your email";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please provide a valid email address";
-    }
-    if (!formData.phone.trim()) newErrors.phone = "Please provide a contact phone number";
-    if (!formData.location.trim()) newErrors.location = "Please enter city or destination";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  /* ── Visual Direction & Service Toggles ── */
+  const toggleDirection = (id: string) => {
+    setSelectedDirections((prev) =>
+      prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id]
+    );
   };
 
+  const toggleService = (id: string) => {
+    setSelectedServices((prev) =>
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+    );
+  };
+
+  /* ── Navigation & Validation ── */
   const handleNext = () => {
-    if (step === 3) {
-      if (!validateStep3()) return;
-    }
-    setStep((prev) => Math.min(5, prev + 1));
+    setStage((prev) => Math.min(5, prev + 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleBack = () => {
-    setStep((prev) => Math.max(1, prev - 1));
+    setStage((prev) => Math.max(0, prev - 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleJumpToStage = (targetStage: number) => {
+    setStage(targetStage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const validateAndPresentCommission = (e: React.FormEvent) => {
     e.preventDefault();
+    const newErrors: Record<string, string> = {};
+
+    if (!fullName.trim()) newErrors.fullName = "Please provide your full name";
+    if (!email.trim()) {
+      newErrors.email = "Please provide your email address";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+    if (!phone.trim()) newErrors.phone = "Please provide your phone or WhatsApp number";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     setIsSubmitting(true);
 
-    // Explicit client-side processing: format brief and advance to verified confirmation
     setTimeout(() => {
       setIsSubmitting(false);
-      setStep(5);
-    }, 450);
+      setStage(5);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 600);
   };
 
-  const getCommissionLabel = (id: string) => {
-    return COMMISSION_TYPES.find((c) => c.id === id)?.title || id;
-  };
+  /* ── Current Category Metadata ── */
+  const currentCategory =
+    COMMISSION_CATEGORIES.find((c) => c.id === selectedCategory) || COMMISSION_CATEGORIES[0];
+  const isWeddingLike = currentCategory.isWeddingLike;
 
-  const whatsappMessage = encodeURIComponent(
-    `*NEW COMMISSION ENQUIRY — 24 FRAMES*\n\n` +
-    `• *Client:* ${formData.fullName}\n` +
-    `• *Commission:* ${getCommissionLabel(formData.commissionType)}\n` +
-    `• *Date:* ${formData.eventDate || "Dates TBD"}\n` +
-    `• *Location:* ${formData.location}\n` +
-    `• *Services:* ${formData.services.join(", ")}\n` +
-    `• *Budget Range:* ${formData.budget}\n` +
-    `• *Contact:* ${formData.email} | ${formData.phone}\n` +
-    (formData.notes ? `• *Brief:* ${formData.notes}\n` : "")
-  );
+  const currentInvestment =
+    INVESTMENT_RANGES.find((r) => r.id === selectedInvestment) || INVESTMENT_RANGES[1];
+
+  /* ── Formatted WhatsApp Dispatch Brief ── */
+  const formattedBriefText =
+    `*ROYAL COMMISSION BRIEF — 24 FRAMES PHOTOGRAPHY*\n` +
+    `----------------------------------------\n` +
+    `• *Client Name:* ${fullName || "Patron"}\n` +
+    `• *Commission Category:* ${currentCategory.title}\n` +
+    (isWeddingLike && events.length > 0
+      ? `• *Occasion Timeline (${events.length} Events):*\n` +
+        events
+          .map(
+            (ev, i) =>
+              `  ${i + 1}. ${ev.name} | ${ev.date || "Date TBD"} | ${ev.city || "City TBD"}${
+                ev.venue ? ` (${ev.venue})` : ""
+              }`
+          )
+          .join("\n") +
+        "\n"
+      : projectScope
+      ? `• *Project Scope:* ${projectScope}\n`
+      : "") +
+    `• *Visual Direction:* ${selectedDirections
+      .map((d) => VISUAL_DIRECTIONS.find((vd) => vd.id === d)?.title || d)
+      .join(", ")}\n` +
+    `• *Requested Craft Services:* ${selectedServices
+      .map((s) => SERVICE_OPTIONS.find((so) => so.id === s)?.name || s)
+      .join(", ")}\n` +
+    `• *Investment Scope:* ${currentInvestment.label}\n` +
+    `• *Contact:* ${email} | ${phone}\n` +
+    (memoriesToRemember ? `• *Memories to Remember:* "${memoriesToRemember}"\n` : "") +
+    (inspirationNote ? `• *Creative Notes:* ${inspirationNote}\n` : "") +
+    `----------------------------------------\n` +
+    `Presented via 24 Frames Commission Atelier.`;
+
+  const whatsappHref = `https://wa.me/919959664567?text=${encodeURIComponent(formattedBriefText)}`;
 
   return (
-    <div className={styles.pageWrap}>
-      {/* Top Header & Progress */}
-      <div className={styles.topBar}>
-        <Link href="/" className={styles.backHomeLink}>
-          <span aria-hidden="true">←</span>
-          <span>Back to Home</span>
-        </Link>
+    <div className={styles.atelierPage}>
+      {/* ── ATELIER MASTHEAD ── */}
+      <header className={styles.atelierHeader} role="banner">
+        <div className={styles.headerInner}>
+          <Link href="/" className={styles.backLink} aria-label="Return to 24 Frames website">
+            <span className={styles.backArrow} aria-hidden="true">←</span>
+            <span>24 FRAMES ARCHIVE</span>
+          </Link>
 
-        {step < 5 && (
-          <div className={styles.progressBarContainer} aria-label={`Step ${step} of 4`}>
-            {[1, 2, 3, 4].map((s) => (
-              <span
-                key={s}
-                className={`${styles.stepDot} ${
-                  s === step ? styles.stepDotActive : s < step ? styles.stepDotCompleted : ""
-                }`}
-              />
-            ))}
-            <span className={styles.stepLabel}>
-              {step === 1 ? "Welcome" : step === 2 ? "Commission" : step === 3 ? "Details" : "Review"}
-            </span>
+          <div className={styles.headerCrest}>
+            <span className={styles.crestText}>24 FRAMES ATELIER</span>
+            <span className={styles.crestDivider}>·</span>
+            <span className={styles.crestSub}>HYDERABAD</span>
           </div>
-        )}
-      </div>
 
-      <main className={styles.mainContainer}>
-        {/* Step 1: Welcome Screen */}
-        {step === 1 && (
-          <div className={`${styles.stepContainer} ${styles.welcomeCard}`}>
-            <div className={styles.welcomeImgWrap}>
-              <Image
-                src="/images/portfolio/sireesh-harshitha/cover.jpg"
-                alt="24 Frames Wedding Commission"
-                fill
-                priority
-                className={styles.welcomeImg}
-              />
-            </div>
-            <div className={styles.welcomeContent}>
-              <span className={styles.welcomeEyebrow}>24 Frames · Commissions 2026/2027</span>
-              <h1 className={styles.welcomeTitle}>Tell us about your story</h1>
-              <p className={styles.welcomeCopy}>
-                Every celebration is singular. To ensure our signature artistry and intimate
-                oversight, founder Phani Gogireddy accepts a carefully calibrated number of
-                commissions each season worldwide.
-              </p>
-              <button
-                type="button"
-                onClick={handleNext}
-                className={styles.btnPrimary}
-                aria-label="Begin enquiry process"
-              >
-                <span>Begin Enquiry</span>
-                <span aria-hidden="true">→</span>
-              </button>
-            </div>
+          <div className={styles.folioIndicator}>
+            <span className={styles.folioTag}>COMMISSION FOLIO</span>
+            <span className={styles.folioId}>24F-2026</span>
           </div>
-        )}
+        </div>
 
-        {/* Step 2: Commission Type */}
-        {step === 2 && (
-          <div className={styles.stepContainer}>
-            <div className={styles.stepHeader}>
-              <span className={styles.stepEyebrow}>Step 01 of 03</span>
-              <h2 className={styles.stepTitle}>Select Commission Type</h2>
-              <p className={styles.stepDesc}>
-                Choose the discipline that best reflects your celebration or project.
-              </p>
-            </div>
-
-            <div className={styles.commissionGrid}>
-              {COMMISSION_TYPES.map((comm) => (
-                <div
-                  key={comm.id}
-                  onClick={() => handleCommissionSelect(comm.id)}
-                  className={`${styles.commissionCard} ${
-                    formData.commissionType === comm.id ? styles.commissionCardActive : ""
+        {/* Editorial Film-Strip Progress Bar (Active Stages 1–4) */}
+        {stage >= 1 && stage <= 4 && (
+          <nav className={styles.filmStripProgress} aria-label="Commission Progress">
+            <div className={styles.progressTrack}>
+              {[
+                { step: 1, label: "I. Commission" },
+                { step: 2, label: "II. Timeline" },
+                { step: 3, label: "III. Direction & Craft" },
+                { step: 4, label: "IV. The Living Brief" },
+              ].map((s) => (
+                <button
+                  key={s.step}
+                  onClick={() => s.step <= stage && handleJumpToStage(s.step)}
+                  disabled={s.step > stage}
+                  className={`${styles.progressTab} ${
+                    s.step === stage
+                      ? styles.progressTabActive
+                      : s.step < stage
+                      ? styles.progressTabComplete
+                      : styles.progressTabDisabled
                   }`}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      handleCommissionSelect(comm.id);
-                    }
-                  }}
-                  aria-pressed={formData.commissionType === comm.id}
+                  aria-current={s.step === stage ? "step" : undefined}
                 >
-                  <div className={styles.cardCheckmark}>✓</div>
-                  <h3 className={styles.commissionCardTitle}>{comm.title}</h3>
-                  <p className={styles.commissionCardDesc}>{comm.desc}</p>
-                </div>
+                  <span className={styles.stepNum}>{s.step < stage ? "✓" : `0${s.step}`}</span>
+                  <span className={styles.stepTitle}>{s.label}</span>
+                </button>
               ))}
             </div>
+          </nav>
+        )}
+      </header>
 
-            <div className={styles.buttonRow}>
-              <button type="button" onClick={handleBack} className={styles.btnSecondary}>
-                Back
-              </button>
-              <button type="button" onClick={handleNext} className={styles.btnPrimary}>
-                Continue to Details →
-              </button>
+      <main className={styles.atelierMain}>
+        {/* ════════════════════════════════════════════════════════════
+           STAGE 0: THE INVITATION (OPENING CINEMATIC EXPERIENCE)
+           ════════════════════════════════════════════════════════════ */}
+        {stage === 0 && (
+          <section className={styles.invitationSection} aria-label="The Invitation">
+            <div className={styles.invitationCard}>
+              <div className={styles.invitationMediaSide}>
+                <img
+                  src="/images/portfolio/sireesh-harshitha/cover.jpg"
+                  alt="Sireesh & Harshitha Sacred Wedding Union by 24 Frames"
+                  className={styles.invitationHeroImg}
+                />
+                <div className={styles.invitationVignette} aria-hidden="true" />
+                <div className={styles.invitationImageTag}>
+                  <span className={styles.tagDot} />
+                  <span>24 FRAMES ARCHIVAL MASTER COMMISSION</span>
+                </div>
+              </div>
+
+              <div className={styles.invitationContentSide}>
+                <div className={styles.invitationEyebrowRow}>
+                  <span className={styles.goldDash} />
+                  <span className={styles.invitationEyebrow}>PRIVATE COMMISSIONS ATELIER</span>
+                </div>
+
+                <h1 className={styles.invitationTitle}>
+                  Tell us what you want to remember.
+                </h1>
+
+                <p className={styles.invitationNarrative}>
+                  A master wedding film is not simply recorded; it is commissioned with purpose.
+                  Through natural light, optical cinema primes, and quiet observation, Phani Gogireddy
+                  and the 24 Frames studio preserve the sacred weight, spontaneous tears, and regal
+                  elegance of your family’s most defining celebration.
+                </p>
+
+                <p className={styles.invitationSubtext}>
+                  This interactive atelier allows you to compose your visual preferences, outline your
+                  celebration rituals, and assemble a live commission brief tailored for your family.
+                </p>
+
+                <div className={styles.invitationActions}>
+                  <button
+                    onClick={handleNext}
+                    className={styles.primaryAtelierBtn}
+                    aria-label="Begin your bespoke commission"
+                  >
+                    <span>BEGIN YOUR COMMISSION</span>
+                    <span className={styles.btnArrowIcon}>→</span>
+                  </button>
+
+                  <Link href="/" className={styles.secondaryAtelierBtn}>
+                    <span>Explore Visual Archive</span>
+                  </Link>
+                </div>
+              </div>
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Step 3: Personal & Project Details */}
-        {step === 3 && (
-          <div className={styles.stepContainer}>
-            <div className={styles.stepHeader}>
-              <span className={styles.stepEyebrow}>Step 02 of 03</span>
-              <h2 className={styles.stepTitle}>Project & Contact Information</h2>
-              <p className={styles.stepDesc}>
-                Help us understand the dates, locations, and vision you are imagining.
+        {/* ════════════════════════════════════════════════════════════
+           STAGE 1: SELECT THE COMMISSION
+           ════════════════════════════════════════════════════════════ */}
+        {stage === 1 && (
+          <section className={styles.stageSection} aria-label="Select Your Commission">
+            <div className={styles.stageHeader}>
+              <span className={styles.stageEyebrow}>STAGE I · THE COMMISSION</span>
+              <h2 className={styles.stageHeadline}>What sacred story shall we document?</h2>
+              <p className={styles.stageSubtitle}>
+                Select the commission that reflects your celebration. Your choice customizes the
+                ritual timeline and creative scope that follows.
               </p>
             </div>
 
-            <div className={styles.formCard}>
-              <div className={styles.formGrid}>
-                <div className={styles.fieldGroup}>
-                  <label htmlFor="fullName" className={styles.fieldLabel}>
-                    Full Name *
-                  </label>
-                  <input
-                    id="fullName"
-                    name="fullName"
-                    type="text"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    placeholder="e.g. Radhika Sharma"
-                    className={styles.fieldInput}
-                    required
-                  />
-                  {errors.fullName && <span className={styles.fieldError}>{errors.fullName}</span>}
-                </div>
+            <div className={styles.categoryGrid}>
+              {COMMISSION_CATEGORIES.map((cat) => {
+                const isSelected = selectedCategory === cat.id;
 
-                <div className={styles.fieldGroup}>
-                  <label htmlFor="email" className={styles.fieldLabel}>
-                    Email Address *
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="e.g. radhika@example.com"
-                    className={styles.fieldInput}
-                    required
-                  />
-                  {errors.email && <span className={styles.fieldError}>{errors.email}</span>}
-                </div>
-
-                <div className={styles.fieldGroup}>
-                  <label htmlFor="phone" className={styles.fieldLabel}>
-                    Phone / WhatsApp *
-                  </label>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="+91 98765 43210"
-                    className={styles.fieldInput}
-                    required
-                  />
-                  {errors.phone && <span className={styles.fieldError}>{errors.phone}</span>}
-                </div>
-
-                <div className={styles.fieldGroup}>
-                  <label htmlFor="eventDate" className={styles.fieldLabel}>
-                    {formData.commissionType === "editorial"
-                      ? "Target Production Window"
-                      : "Celebration / Event Date"}
-                  </label>
-                  <input
-                    id="eventDate"
-                    name="eventDate"
-                    type="text"
-                    value={formData.eventDate}
-                    onChange={handleInputChange}
-                    placeholder="e.g. November 2026 / Winter 2027"
-                    className={styles.fieldInput}
-                  />
-                </div>
-
-                <div className={styles.fieldGroup}>
-                  <label htmlFor="location" className={styles.fieldLabel}>
-                    Destination / City *
-                  </label>
-                  <input
-                    id="location"
-                    name="location"
-                    type="text"
-                    value={formData.location}
-                    onChange={handleInputChange}
-                    placeholder="e.g. Hyderabad / Udaipur / Lake Como"
-                    className={styles.fieldInput}
-                    required
-                  />
-                  {errors.location && <span className={styles.fieldError}>{errors.location}</span>}
-                </div>
-
-                <div className={styles.fieldGroup}>
-                  <label htmlFor="budget" className={styles.fieldLabel}>
-                    Approximate Budget Range
-                  </label>
-                  <select
-                    id="budget"
-                    name="budget"
-                    value={formData.budget}
-                    onChange={handleInputChange}
-                    className={styles.fieldSelect}
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`${styles.categoryCard} ${isSelected ? styles.categoryCardSelected : ""}`}
+                    aria-pressed={isSelected}
                   >
-                    <option value="₹10L – ₹15L">₹10L – ₹15L</option>
-                    <option value="₹15L – ₹25L">₹15L – ₹25L</option>
-                    <option value="₹25L – ₹40L">₹25L – ₹40L</option>
-                    <option value="₹40L+ / Bespoke">₹40L+ / Bespoke Royal Commission</option>
-                    <option value="USD $15,000+ (Destination)">USD $15,000+ (International Destination)</option>
-                  </select>
+                    <div className={styles.categoryImageWrap}>
+                      <img src={cat.image} alt={cat.title} className={styles.categoryCoverImg} />
+                      <div className={styles.categoryOverlay} />
+                      {isSelected && (
+                        <div className={styles.selectedBadge}>
+                          <span>SELECTED</span>
+                          <span className={styles.selectedCheck}>✓</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className={styles.categoryInfo}>
+                      <h3 className={styles.categoryTitle}>{cat.title}</h3>
+                      <p className={styles.categorySubtitle}>{cat.subtitle}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className={styles.stageFooterNav}>
+              <button onClick={handleBack} className={styles.backStepBtn}>
+                <span>← Back</span>
+              </button>
+
+              <button onClick={handleNext} className={styles.primaryAtelierBtn}>
+                <span>CONTINUE TO TIMELINE</span>
+                <span className={styles.btnArrowIcon}>→</span>
+              </button>
+            </div>
+          </section>
+        )}
+
+        {/* ════════════════════════════════════════════════════════════
+           STAGE 2: BUILD THE OCCASION TIMELINE / SCOPE
+           ════════════════════════════════════════════════════════════ */}
+        {stage === 2 && (
+          <section className={styles.stageSection} aria-label="Build the Occasion Timeline">
+            <div className={styles.stageHeader}>
+              <span className={styles.stageEyebrow}>STAGE II · THE OCCASION TIMELINE</span>
+              <h2 className={styles.stageHeadline}>
+                {isWeddingLike ? "Compose your ritual timeline." : "Define your creative project scope."}
+              </h2>
+              <p className={styles.stageSubtitle}>
+                {isWeddingLike
+                  ? "Indian weddings are monuments composed of distinct rituals. Add each major celebration — exact dates and venues can remain open if still being finalized."
+                  : "Detail your campaign timeline, estimated shoot dates, and key shooting destinations."}
+              </p>
+            </div>
+
+            {isWeddingLike ? (
+              <div className={styles.timelineComposer}>
+                <div className={styles.timelineList}>
+                  {events.map((ev, index) => (
+                    <div key={ev.id} className={styles.timelineEntryCard}>
+                      <div className={styles.entryHeaderRow}>
+                        <div className={styles.entryNumberBadge}>
+                          <span className={styles.romanDigit}>{index + 1}</span>
+                          <span className={styles.entryTag}>CELEBRATION EVENT</span>
+                        </div>
+
+                        {events.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveEvent(ev.id)}
+                            className={styles.removeEventBtn}
+                            aria-label={`Remove ${ev.name}`}
+                          >
+                            <span>✕ Remove</span>
+                          </button>
+                        )}
+                      </div>
+
+                      <div className={styles.entryFieldsGrid}>
+                        <div className={styles.fieldGroup}>
+                          <label className={styles.fieldLabel}>Event / Ritual Name</label>
+                          <input
+                            type="text"
+                            value={ev.name}
+                            onChange={(e) => handleUpdateEvent(ev.id, "name", e.target.value)}
+                            placeholder="e.g. Sacred Muhurtham, Sangeet Gala, Pellikuthuru, Reception"
+                            className={styles.atelierInput}
+                          />
+                        </div>
+
+                        <div className={styles.fieldGroup}>
+                          <label className={styles.fieldLabel}>Date (if scheduled or estimated)</label>
+                          <input
+                            type="text"
+                            value={ev.date}
+                            onChange={(e) => handleUpdateEvent(ev.id, "date", e.target.value)}
+                            placeholder="e.g. November 2026, or TBD"
+                            className={styles.atelierInput}
+                          />
+                        </div>
+
+                        <div className={styles.fieldGroup}>
+                          <label className={styles.fieldLabel}>City / Destination</label>
+                          <input
+                            type="text"
+                            value={ev.city}
+                            onChange={(e) => handleUpdateEvent(ev.id, "city", e.target.value)}
+                            placeholder="e.g. Hyderabad, Udaipur, Bengaluru, Falaknuma"
+                            className={styles.atelierInput}
+                          />
+                        </div>
+
+                        <div className={styles.fieldGroup}>
+                          <label className={styles.fieldLabel}>Venue (Optional)</label>
+                          <input
+                            type="text"
+                            value={ev.venue}
+                            onChange={(e) => handleUpdateEvent(ev.id, "venue", e.target.value)}
+                            placeholder="e.g. Taj Falaknuma Palace, ITC Kohenur, Private Estate"
+                            className={styles.atelierInput}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                <div className={`${styles.fieldGroup} ${styles.fullWidth}`}>
-                  <label className={styles.fieldLabel}>Disciplines Required</label>
-                  <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "0.25rem" }}>
-                    {[
-                      { id: "photography", label: "Still Photography" },
-                      { id: "cinematography", label: "Cinematic Films" },
-                      { id: "drone", label: "Aerial Cinematography" },
-                      { id: "album", label: "Handcrafted Heirloom Book" },
-                    ].map((item) => (
-                      <label
-                        key={item.id}
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                          fontSize: "0.9rem",
-                          cursor: "pointer",
-                          fontFamily: "var(--font-body, Inter, sans-serif)",
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={formData.services.includes(item.id)}
-                          onChange={() => handleServiceToggle(item.id)}
-                        />
-                        {item.label}
-                      </label>
-                    ))}
+                <div className={styles.addEventRow}>
+                  <button
+                    type="button"
+                    onClick={handleAddEvent}
+                    className={styles.addEventBtn}
+                    aria-label="Add another event or celebration"
+                  >
+                    <span className={styles.plusIcon}>+</span>
+                    <span>ADD ANOTHER EVENT OR RITUAL</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.scopeComposer}>
+                <div className={styles.fieldGroup}>
+                  <label className={styles.fieldLabel}>Project Scope &amp; Anticipated Shoot Dates</label>
+                  <textarea
+                    rows={6}
+                    value={projectScope}
+                    onChange={(e) => setProjectScope(e.target.value)}
+                    placeholder="Describe your campaign concept, preferred shooting dates, desired locations, and core deliverable requirements..."
+                    className={styles.atelierTextarea}
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className={styles.stageFooterNav}>
+              <button onClick={handleBack} className={styles.backStepBtn}>
+                <span>← Back</span>
+              </button>
+
+              <button onClick={handleNext} className={styles.primaryAtelierBtn}>
+                <span>CONTINUE TO DIRECTION &amp; CRAFT</span>
+                <span className={styles.btnArrowIcon}>→</span>
+              </button>
+            </div>
+          </section>
+        )}
+
+        {/* ════════════════════════════════════════════════════════════
+           STAGE 3: VISUAL DIRECTION & CRAFT SERVICES
+           ════════════════════════════════════════════════════════════ */}
+        {stage === 3 && (
+          <section className={styles.stageSection} aria-label="Visual Direction & Craft Services">
+            <div className={styles.stageHeader}>
+              <span className={styles.stageEyebrow}>STAGE III · VISUAL DIRECTION &amp; CRAFT</span>
+              <h2 className={styles.stageHeadline}>Compose your aesthetic &amp; craft suite.</h2>
+              <p className={styles.stageSubtitle}>
+                Select the visual styles that resonate with your family, and tailor the cinema and
+                photography services required for your commission.
+              </p>
+            </div>
+
+            {/* Part A: Visual Direction Board */}
+            <div className={styles.subSectionBlock}>
+              <div className={styles.subSectionTitleRow}>
+                <h3 className={styles.subSectionTitle}>Visual Direction Preferences</h3>
+                <span className={styles.subSectionNote}>Select one or several creative directions</span>
+              </div>
+
+              <div className={styles.directionGrid}>
+                {VISUAL_DIRECTIONS.map((dir) => {
+                  const isSelected = selectedDirections.includes(dir.id);
+
+                  return (
+                    <button
+                      key={dir.id}
+                      type="button"
+                      onClick={() => toggleDirection(dir.id)}
+                      className={`${styles.directionCard} ${isSelected ? styles.directionCardSelected : ""}`}
+                      aria-pressed={isSelected}
+                    >
+                      <div className={styles.directionImgWrap}>
+                        <img src={dir.image} alt={dir.title} className={styles.directionImg} />
+                        <div className={styles.directionOverlay} />
+                        {isSelected && <span className={styles.checkBadge}>✓</span>}
+                      </div>
+
+                      <div className={styles.directionContent}>
+                        <h4 className={styles.directionCardTitle}>{dir.title}</h4>
+                        <p className={styles.directionCardDesc}>{dir.description}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className={styles.optionalInspoRow}>
+                <label className={styles.fieldLabel}>Specific Visual References or Pinterest / Inspiration Link (Optional)</label>
+                <input
+                  type="text"
+                  value={inspirationNote}
+                  onChange={(e) => setInspirationNote(e.target.value)}
+                  placeholder="Paste reference link or mention specific films, styles, or aesthetics you love..."
+                  className={styles.atelierInput}
+                />
+              </div>
+            </div>
+
+            {/* Part B: Craft Services Selection */}
+            <div className={styles.subSectionBlock}>
+              <div className={styles.subSectionTitleRow}>
+                <h3 className={styles.subSectionTitle}>Selectable Craft Services</h3>
+                <span className={styles.subSectionNote}>Curated for uncompromised archival quality</span>
+              </div>
+
+              <div className={styles.servicesGrid}>
+                {SERVICE_OPTIONS.map((srv) => {
+                  const isChecked = selectedServices.includes(srv.id);
+
+                  return (
+                    <button
+                      key={srv.id}
+                      type="button"
+                      onClick={() => toggleService(srv.id)}
+                      className={`${styles.serviceCard} ${isChecked ? styles.serviceCardChecked : ""}`}
+                      aria-pressed={isChecked}
+                    >
+                      <div className={styles.serviceTopRow}>
+                        <span className={styles.serviceTag}>{srv.tag}</span>
+                        <div className={styles.serviceCheckbox}>
+                          {isChecked ? <span>✓</span> : null}
+                        </div>
+                      </div>
+
+                      <h4 className={styles.serviceName}>{srv.name}</h4>
+                      <p className={styles.serviceDesc}>{srv.description}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Part C: Investment Scope */}
+            <div className={styles.subSectionBlock}>
+              <div className={styles.subSectionTitleRow}>
+                <h3 className={styles.subSectionTitle}>Investment Scope</h3>
+                <span className={styles.subSectionNote}>Helps our studio tailor appropriate optical crew &amp; equipment</span>
+              </div>
+
+              <div className={styles.investmentGrid}>
+                {INVESTMENT_RANGES.map((inv) => {
+                  const isChosen = selectedInvestment === inv.id;
+
+                  return (
+                    <button
+                      key={inv.id}
+                      type="button"
+                      onClick={() => setSelectedInvestment(inv.id)}
+                      className={`${styles.investmentCard} ${isChosen ? styles.investmentCardChosen : ""}`}
+                      aria-pressed={isChosen}
+                    >
+                      <div className={styles.investmentTop}>
+                        <span className={styles.investmentLabel}>{inv.label}</span>
+                        {isChosen && <span className={styles.goldRadioDot} />}
+                      </div>
+                      <span className={styles.investmentDesc}>{inv.desc}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className={styles.stageFooterNav}>
+              <button onClick={handleBack} className={styles.backStepBtn}>
+                <span>← Back</span>
+              </button>
+
+              <button onClick={handleNext} className={styles.primaryAtelierBtn}>
+                <span>REVIEW THE LIVING BRIEF</span>
+                <span className={styles.btnArrowIcon}>→</span>
+              </button>
+            </div>
+          </section>
+        )}
+
+        {/* ════════════════════════════════════════════════════════════
+           STAGE 4: THE LIVING BRIEF & PRESENT COMMISSION
+           ════════════════════════════════════════════════════════════ */}
+        {stage === 4 && (
+          <section className={styles.stageSection} aria-label="The Living Brief">
+            <div className={styles.stageHeader}>
+              <span className={styles.stageEyebrow}>STAGE IV · THE LIVING BRIEF</span>
+              <h2 className={styles.stageHeadline}>Your Master Commission Brief.</h2>
+              <p className={styles.stageSubtitle}>
+                This archival document has been live-assembled from your selections. Review your
+                brief, provide your essential contact details, and present your commission to the studio.
+              </p>
+            </div>
+
+            <div className={styles.briefAndContactLayout}>
+              {/* Left Column: The Living Brief Editorial Folio Document */}
+              <div className={styles.folioDocument}>
+                <div className={styles.folioDocHeader}>
+                  <div className={styles.folioDocBrandRow}>
+                    <span className={styles.docBrandTitle}>24 FRAMES PHOTOGRAPHY &amp; MASTER CINEMA</span>
+                    <span className={styles.docBrandSeal}>ARCHIVAL REGISTER</span>
+                  </div>
+
+                  <h3 className={styles.docMainHeading}>Commission Brief Folio</h3>
+                  <div className={styles.docRule} aria-hidden="true" />
+                </div>
+
+                <div className={styles.folioDocBody}>
+                  {/* Category Section */}
+                  <div className={styles.docSection}>
+                    <div className={styles.docSectionTitleRow}>
+                      <span className={styles.docSectionKicker}>I. COMMISSION TYPE</span>
+                      <button onClick={() => handleJumpToStage(1)} className={styles.editSectionBtn}>
+                        Edit ↗
+                      </button>
+                    </div>
+                    <div className={styles.docValueHighlighted}>{currentCategory.title}</div>
+                    <div className={styles.docValueMuted}>{currentCategory.subtitle}</div>
+                  </div>
+
+                  {/* Timeline Section */}
+                  <div className={styles.docSection}>
+                    <div className={styles.docSectionTitleRow}>
+                      <span className={styles.docSectionKicker}>
+                        II. {isWeddingLike ? `RITUAL TIMELINE (${events.length} EVENTS)` : "PROJECT SCOPE"}
+                      </span>
+                      <button onClick={() => handleJumpToStage(2)} className={styles.editSectionBtn}>
+                        Edit ↗
+                      </button>
+                    </div>
+
+                    {isWeddingLike ? (
+                      <div className={styles.docTimelineList}>
+                        {events.map((ev, i) => (
+                          <div key={ev.id} className={styles.docTimelineItem}>
+                            <span className={styles.docItemIndex}>0{i + 1}</span>
+                            <div className={styles.docItemDetails}>
+                              <div className={styles.docItemName}>{ev.name}</div>
+                              <div className={styles.docItemMeta}>
+                                <span>{ev.date || "Date Pending"}</span>
+                                <span className={styles.docDot}>·</span>
+                                <span>{ev.city || "City Pending"}</span>
+                                {ev.venue ? <span> ({ev.venue})</span> : null}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className={styles.docScopeText}>
+                        {projectScope || "Scope description provided upon consultation."}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Visual Direction Section */}
+                  <div className={styles.docSection}>
+                    <div className={styles.docSectionTitleRow}>
+                      <span className={styles.docSectionKicker}>III. VISUAL DIRECTION</span>
+                      <button onClick={() => handleJumpToStage(3)} className={styles.editSectionBtn}>
+                        Edit ↗
+                      </button>
+                    </div>
+                    <div className={styles.docTagsRow}>
+                      {selectedDirections.map((d) => {
+                        const dir = VISUAL_DIRECTIONS.find((vd) => vd.id === d);
+                        return (
+                          <span key={d} className={styles.docPillTag}>
+                            {dir?.title || d}
+                          </span>
+                        );
+                      })}
+                    </div>
+                    {inspirationNote && (
+                      <div className={styles.docInspoNote}>“{inspirationNote}”</div>
+                    )}
+                  </div>
+
+                  {/* Craft Services Section */}
+                  <div className={styles.docSection}>
+                    <div className={styles.docSectionTitleRow}>
+                      <span className={styles.docSectionKicker}>IV. CRAFT SERVICES &amp; SCOPE</span>
+                      <button onClick={() => handleJumpToStage(3)} className={styles.editSectionBtn}>
+                        Edit ↗
+                      </button>
+                    </div>
+                    <ul className={styles.docServicesList}>
+                      {selectedServices.map((s) => {
+                        const srv = SERVICE_OPTIONS.find((so) => so.id === s);
+                        return (
+                          <li key={s} className={styles.docServiceBullet}>
+                            <span>• {srv?.name || s}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                    <div className={styles.docInvestmentTag}>
+                      <span>Scope: {currentInvestment.label}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className={`${styles.fieldGroup} ${styles.fullWidth}`}>
-                  <label htmlFor="notes" className={styles.fieldLabel}>
-                    Tell us what you are imagining (Optional)
-                  </label>
-                  <textarea
-                    id="notes"
-                    name="notes"
-                    rows={4}
-                    value={formData.notes}
-                    onChange={handleInputChange}
-                    placeholder="Share any special venues, aesthetic references, family traditions, or personal stories..."
-                    className={styles.fieldTextarea}
-                  />
+                <div className={styles.folioDocFooter}>
+                  <span className={styles.folioDocSealText}>OFFICIAL 24 FRAMES ARCHIVAL SPECIFICATION</span>
+                </div>
+              </div>
+
+              {/* Right Column: Contact Details & Submit Form */}
+              <div className={styles.contactDetailsSide}>
+                <div className={styles.contactHeader}>
+                  <h3 className={styles.contactTitle}>Present Your Commission</h3>
+                  <p className={styles.contactSubtitle}>
+                    Enter your contact details so founder Phani Gogireddy and our executive team can
+                    personally review your celebration and respond.
+                  </p>
+                </div>
+
+                <form onSubmit={validateAndPresentCommission} className={styles.contactForm}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="fullName" className={styles.inputLabel}>
+                      Full Name <span className={styles.reqStar}>*</span>
+                    </label>
+                    <input
+                      id="fullName"
+                      type="text"
+                      value={fullName}
+                      onChange={(e) => {
+                        setFullName(e.target.value);
+                        if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: "" }));
+                      }}
+                      placeholder="e.g. Hrithika Reddy & Abhishek Rao"
+                      className={`${styles.atelierFormInput} ${errors.fullName ? styles.inputError : ""}`}
+                    />
+                    {errors.fullName && <span className={styles.errorText}>{errors.fullName}</span>}
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="email" className={styles.inputLabel}>
+                      Email Address <span className={styles.reqStar}>*</span>
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+                      }}
+                      placeholder="e.g. abhishek@family.com"
+                      className={`${styles.atelierFormInput} ${errors.email ? styles.inputError : ""}`}
+                    />
+                    {errors.email && <span className={styles.errorText}>{errors.email}</span>}
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="phone" className={styles.inputLabel}>
+                      Phone / WhatsApp Number <span className={styles.reqStar}>*</span>
+                    </label>
+                    <input
+                      id="phone"
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => {
+                        setPhone(e.target.value);
+                        if (errors.phone) setErrors((prev) => ({ ...prev, phone: "" }));
+                      }}
+                      placeholder="e.g. +91 98765 43210"
+                      className={`${styles.atelierFormInput} ${errors.phone ? styles.inputError : ""}`}
+                    />
+                    {errors.phone && <span className={styles.errorText}>{errors.phone}</span>}
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="memories" className={styles.inputLabel}>
+                      What do you want to remember? (Personal Reflections)
+                    </label>
+                    <textarea
+                      id="memories"
+                      rows={4}
+                      value={memoriesToRemember}
+                      onChange={(e) => setMemoriesToRemember(e.target.value)}
+                      placeholder="Tell us about the people, rituals, or feelings that matter most to you..."
+                      className={styles.atelierFormTextarea}
+                    />
+                  </div>
+
+                  <div className={styles.formActionGroup}>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={styles.presentCommissionBtn}
+                      aria-label="Present my commission to 24 Frames"
+                    >
+                      {isSubmitting ? (
+                        <span>TRANSMITTING COMMISSION BRIEF...</span>
+                      ) : (
+                        <>
+                          <span>PRESENT MY COMMISSION</span>
+                          <span className={styles.btnArrowIcon}>→</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+
+                <div className={styles.privacyNote}>
+                  <span>Strictly confidential · Your details are shared only with the founding team</span>
                 </div>
               </div>
             </div>
 
-            <div className={styles.buttonRow}>
-              <button type="button" onClick={handleBack} className={styles.btnSecondary}>
-                Back
-              </button>
-              <button type="button" onClick={handleNext} className={styles.btnPrimary}>
-                Review Answers →
+            <div className={styles.stageFooterNav}>
+              <button onClick={handleBack} className={styles.backStepBtn}>
+                <span>← Back</span>
               </button>
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Step 4: Review and Submit */}
-        {step === 4 && (
-          <div className={styles.stepContainer}>
-            <div className={styles.stepHeader}>
-              <span className={styles.stepEyebrow}>Step 03 of 03</span>
-              <h2 className={styles.stepTitle}>Review Your Commission Brief</h2>
-              <p className={styles.stepDesc}>
-                Review your selections before transmitting to Phani Gogireddy and executive studio.
+        {/* ════════════════════════════════════════════════════════════
+           STAGE 5: PERSONALIZED CONFIRMATION FOLIO
+           ════════════════════════════════════════════════════════════ */}
+        {stage === 5 && (
+          <section className={styles.confirmationSection} aria-label="Commission Formatted & Presented">
+            <div className={styles.confirmationCard}>
+              <div className={styles.confirmationHeader}>
+                <div className={styles.sealIconWrap}>
+                  <span className={styles.sealCheckMark}>✓</span>
+                </div>
+
+                <span className={styles.confirmationEyebrow}>COMMISSION BRIEF REGISTERED</span>
+
+                <h1 className={styles.confirmationTitle}>
+                  Thank you, {fullName || "Distinguished Patron"}.
+                </h1>
+
+                <p className={styles.confirmationSubtitle}>
+                  Your bespoke brief for <strong>{currentCategory.title}</strong> has been formatted
+                  and presented to Phani Gogireddy and the 24 Frames executive studio team.
+                </p>
+              </div>
+
+              {/* Presented Brief Summary Box */}
+              <div className={styles.confirmationSummaryBox}>
+                <div className={styles.summaryRow}>
+                  <span className={styles.summaryLabel}>Folio Reference:</span>
+                  <span className={styles.summaryValue}>24F-2026-COMMISSION</span>
+                </div>
+                <div className={styles.summaryRow}>
+                  <span className={styles.summaryLabel}>Commission Scope:</span>
+                  <span className={styles.summaryValue}>{currentInvestment.label}</span>
+                </div>
+                <div className={styles.summaryRow}>
+                  <span className={styles.summaryLabel}>Client Contact:</span>
+                  <span className={styles.summaryValue}>{email} · {phone}</span>
+                </div>
+                {isWeddingLike && (
+                  <div className={styles.summaryRow}>
+                    <span className={styles.summaryLabel}>Ritual Count:</span>
+                    <span className={styles.summaryValue}>{events.length} celebrations scheduled</span>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.confirmationActions}>
+                {/* Direct WhatsApp Instant Connect with Preformatted Brief */}
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.whatsAppDispatchBtn}
+                  aria-label="Dispatch commission brief directly via WhatsApp"
+                >
+                  <span>DISPATCH COMMISSION VIA WHATSAPP</span>
+                  <span className={styles.btnArrowIcon}>↗</span>
+                </a>
+
+                <Link href="/" className={styles.returnHomeBtn}>
+                  <span>RETURN TO 24 FRAMES HOME</span>
+                </Link>
+              </div>
+
+              <p className={styles.confirmationClosing}>
+                “From reel to real, every dream pursued with heart becomes a timeless shot.”
+                <br />
+                <strong>— Phani Gogireddy, Managing Director</strong>
               </p>
             </div>
-
-            <div className={styles.reviewGrid}>
-              <div className={styles.reviewItem}>
-                <span className={styles.reviewLabel}>Commission Type</span>
-                <span className={styles.reviewVal}>{getCommissionLabel(formData.commissionType)}</span>
-              </div>
-
-              <div className={styles.reviewItem}>
-                <span className={styles.reviewLabel}>Name</span>
-                <span className={styles.reviewVal}>{formData.fullName}</span>
-              </div>
-
-              <div className={styles.reviewItem}>
-                <span className={styles.reviewLabel}>Contact</span>
-                <span className={styles.reviewVal}>
-                  {formData.email} · {formData.phone}
-                </span>
-              </div>
-
-              <div className={styles.reviewItem}>
-                <span className={styles.reviewLabel}>Date / Production Window</span>
-                <span className={styles.reviewVal}>{formData.eventDate || "Dates TBD"}</span>
-              </div>
-
-              <div className={styles.reviewItem}>
-                <span className={styles.reviewLabel}>Destination / City</span>
-                <span className={styles.reviewVal}>{formData.location}</span>
-              </div>
-
-              <div className={styles.reviewItem}>
-                <span className={styles.reviewLabel}>Budget Bracket</span>
-                <span className={styles.reviewVal}>{formData.budget}</span>
-              </div>
-
-              <div className={`${styles.reviewItem} ${styles.fullWidth}`}>
-                <span className={styles.reviewLabel}>Selected Disciplines</span>
-                <span className={styles.reviewVal}>{formData.services.join(", ")}</span>
-              </div>
-
-              {formData.notes && (
-                <div className={`${styles.reviewItem} ${styles.fullWidth}`}>
-                  <span className={styles.reviewLabel}>Client Vision Notes</span>
-                  <span className={styles.reviewVal}>{formData.notes}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Explicit Integration Boundary Notice */}
-            <div className={styles.integrationNotice}>
-              <strong>Direct Studio Transmission:</strong> Submitting will record your project
-              parameters into your client dossier. You will also have the option to transmit directly to
-              Phani Gogireddy’s studio via encrypted WhatsApp or executive email.
-            </div>
-
-            <div className={styles.buttonRow}>
-              <button type="button" onClick={handleBack} className={styles.btnSecondary}>
-                Edit Details
-              </button>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className={styles.btnPrimary}
-              >
-                {isSubmitting ? "Processing..." : "Confirm & Submit Enquiry ↗"}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 5: Success Confirmation State */}
-        {step === 5 && (
-          <div className={`${styles.stepContainer} ${styles.successCard}`}>
-            <div className={styles.successIcon} aria-hidden="true">
-              ✓
-            </div>
-            <h2 className={styles.successTitle}>Enquiry Brief Received</h2>
-            <p className={styles.successCopy}>
-              Thank you, {formData.fullName}. Your commission brief for{" "}
-              <strong>{getCommissionLabel(formData.commissionType)}</strong> in{" "}
-              <strong>{formData.location}</strong> has been prepared for executive review.
-              Our studio manager will connect with you within 24 hours.
-            </p>
-
-            <div className={styles.directOptions}>
-              <a
-                href={`https://wa.me/919985999999?text=${whatsappMessage}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.btnPrimary}
-              >
-                <span>Instant WhatsApp Concierge ↗</span>
-              </a>
-
-              <a
-                href={`mailto:contact@24frames.in?subject=${encodeURIComponent(
-                  `Commission Brief: ${formData.fullName} - ${getCommissionLabel(formData.commissionType)}`
-                )}&body=${encodeURIComponent(
-                  `Hello Phani,\n\nHere is our commission brief:\n\nName: ${formData.fullName}\nCommission: ${getCommissionLabel(formData.commissionType)}\nDate: ${formData.eventDate}\nLocation: ${formData.location}\nBudget: ${formData.budget}\nServices: ${formData.services.join(", ")}\n\nVision:\n${formData.notes}`
-                )}`}
-                className={styles.btnSecondary}
-              >
-                <span>Send via Email ↗</span>
-              </a>
-            </div>
-
-            <div style={{ marginTop: "2.5rem" }}>
-              <Link href="/" className={styles.backHomeLink}>
-                <span>Return to Homepage</span>
-              </Link>
-            </div>
-          </div>
+          </section>
         )}
       </main>
     </div>
