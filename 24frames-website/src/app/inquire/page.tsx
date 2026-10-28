@@ -1167,7 +1167,7 @@ export default function InquirePage() {
           </section>
         )}
       </main>
-      <Footer />
+      <Footer hideCommissionCta />
     </div>
   );
 }

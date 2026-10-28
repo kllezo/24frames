@@ -121,13 +121,16 @@
 /* Individual Feature Card */
 .card {
   position: relative;
-  height: clamp(380px, 42vw, 440px);
-  border-radius: 20px;
+  height: clamp(275px, 28vw, 310px);
+  border-radius: 16px;
   overflow: hidden;
   text-decoration: none;
   display: block;
   cursor: pointer;
   outline: none;
+  background: #FBF5E9;
+  border: 1px solid #D8CEBC;
+  box-shadow: 0 6px 20px rgba(9, 69, 62, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
   transform: translateY(0);
   transition:
     transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
@@ -138,6 +141,8 @@
 .card:hover,
 .cardOpen {
   transform: translateY(-4px);
+  border-color: #B5985A;
+  box-shadow: 0 14px 30px rgba(9, 69, 62, 0.1), 0 0 16px rgba(181, 152, 90, 0.12);
 }
 
 .card:focus-visible {
@@ -145,65 +150,31 @@
   outline-offset: 3px;
 }
 
-/* Card Themes matching Reference Video */
-.card_indigo {
-  background: #141428;
-  border: 1px solid rgba(139, 92, 246, 0.25);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-}
-
-.card_indigo:hover,
-.card_indigo.cardOpen {
-  border-color: rgba(167, 139, 250, 0.6);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45), 0 0 24px rgba(139, 92, 246, 0.2);
-}
-
-.card_light {
-  background: #ECEFF4;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-}
-
-.card_light:hover,
-.card_light.cardOpen {
-  border-color: rgba(9, 69, 62, 0.35);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.15), 0 0 24px rgba(251, 113, 133, 0.18);
-}
-
-.card_emerald {
-  background: #082823;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-}
-
-.card_emerald:hover,
-.card_emerald.cardOpen {
-  border-color: rgba(52, 211, 153, 0.6);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45), 0 0 24px rgba(16, 185, 129, 0.2);
-}
-
-.card_parchment {
-  background: #EFE8DA;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-}
-
-.card_parchment:hover,
-.card_parchment.cardOpen {
-  border-color: rgba(200, 168, 78, 0.65);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.18), 0 0 24px rgba(200, 168, 78, 0.2);
-}
-
+/* Cohesive Warm Palette Across All Cards */
+.card_warm,
+.card_indigo,
+.card_light,
+.card_emerald,
+.card_parchment,
 .card_obsidian {
-  background: #121418;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  background: #FBF5E9;
+  border: 1px solid #D8CEBC;
 }
 
+.card_warm:hover,
+.card_warm.cardOpen,
+.card_indigo:hover,
+.card_indigo.cardOpen,
+.card_light:hover,
+.card_light.cardOpen,
+.card_emerald:hover,
+.card_emerald.cardOpen,
+.card_parchment:hover,
+.card_parchment.cardOpen,
 .card_obsidian:hover,
 .card_obsidian.cardOpen {
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), 0 0 24px rgba(203, 213, 225, 0.15);
+  border-color: #B5985A;
+  box-shadow: 0 14px 30px rgba(9, 69, 62, 0.1), 0 0 16px rgba(181, 152, 90, 0.12);
 }
 
 /* ── LAYER 1: ARTWORK CANVAS (Upper window behind flap) ── */
@@ -212,28 +183,18 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 220px;
+  height: 135px;
   overflow: hidden;
+  background: #EDE6D8;
 }
 
-.card1Gradient {
-  background: radial-gradient(ellipse at 70% 30%, #6d28d9 0%, #4338ca 45%, #1e1b4b 90%);
-}
-
-.card2Gradient {
-  background: radial-gradient(ellipse at 60% 35%, #fb7185 0%, #f97316 45%, #9f1239 90%);
-}
-
-.cardEmeraldGradient {
-  background: radial-gradient(ellipse at 70% 30%, #059669 0%, #065f46 45%, #064e3b 90%);
-}
-
-.cardParchmentGradient {
-  background: radial-gradient(ellipse at 60% 35%, #fde68a 0%, #d97706 45%, #78350f 90%);
-}
-
+.cardWarmCanvas,
+.card1Gradient,
+.card2Gradient,
+.cardEmeraldGradient,
+.cardParchmentGradient,
 .card3Gradient {
-  background: radial-gradient(ellipse at 50% 30%, #cbd5e1 0%, #64748b 50%, #0f172a 90%);
+  background: linear-gradient(180deg, rgba(240, 234, 222, 0.75) 0%, rgba(228, 219, 203, 0.95) 100%);
 }
 
 .artImage {
@@ -242,65 +203,67 @@
   object-fit: cover;
   object-position: center top;
   display: block;
-  transform: translateY(16px) scale(0.97);
-  opacity: 0.88;
+  transform: translateY(8px) scale(0.98);
+  opacity: 0.92;
   transition:
-    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.5s ease;
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease;
 }
 
 .card:hover .artImage,
 .cardOpen .artImage {
-  transform: translateY(0px) scale(1.03);
+  transform: translateY(0px) scale(1.02);
   opacity: 1;
 }
 
 /* ── LAYER 2: SLIDING NOTCH FLAP ── */
 .slidingFlap {
   position: absolute;
-  top: 72px;
+  top: 50px;
   left: 0;
   right: 0;
-  bottom: -160px;
+  bottom: -80px;
   z-index: 2;
   transform: translateY(0);
-  transition: transform 0.65s cubic-bezier(0.25, 1, 0.35, 1);
+  transition: transform 0.55s cubic-bezier(0.25, 1, 0.35, 1);
   will-change: transform;
 }
 
 .card:hover .slidingFlap,
 .cardOpen .slidingFlap {
-  transform: translateY(72px);
+  transform: translateY(42px);
 }
 
 .flapSvg {
   width: 100%;
   height: 100%;
   display: block;
-  filter: drop-shadow(0 -3px 8px rgba(0, 0, 0, 0.12));
+  filter: drop-shadow(0 -2px 6px rgba(0, 0, 0, 0.08));
 }
 
 /* Card Number on High Left Shelf */
 .cardNumber {
   position: absolute;
-  top: 14px;
-  left: 18px;
+  top: 10px;
+  left: 14px;
   font-family: var(--font-inter), sans-serif;
-  font-size: clamp(2rem, 2.6vw, 2.5rem);
+  font-size: clamp(1.65rem, 2.1vw, 2.1rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.03em;
+  color: #09453E;
   user-select: none;
 }
 
 /* Card Arrow on Right Shoulder */
 .cardArrow {
   position: absolute;
-  top: 32px;
-  right: 18px;
-  font-size: 1rem;
+  top: 24px;
+  right: 14px;
+  font-size: 0.95rem;
   font-weight: 600;
   line-height: 1;
+  color: #09453E;
   transition: transform 0.3s ease;
   user-select: none;
 }
@@ -313,30 +276,32 @@
 /* ── LAYER 3: PINNED BOTTOM TYPOGRAPHY ── */
 .cardBottomText {
   position: absolute;
-  bottom: 20px;
-  left: 18px;
-  right: 18px;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
   z-index: 3;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.25rem;
 }
 
 .cardTitle {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(1.12rem, 1.3vw, 1.3rem);
+  font-size: clamp(0.95rem, 1.15vw, 1.125rem);
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.22;
+  color: #09453E;
   margin: 0;
 }
 
 .cardDesc {
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.72rem;
-  line-height: 1.5;
+  font-size: 0.7rem;
+  line-height: 1.45;
+  color: #4D5450;
   margin: 0;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

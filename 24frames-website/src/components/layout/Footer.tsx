@@ -16,7 +16,11 @@ const SOCIAL_LINKS = [
   { label: "WhatsApp", href: "https://wa.me/919959664567", icon: "WhatsApp" },
 ];
 
-export default function Footer() {
+interface FooterProps {
+  hideCommissionCta?: boolean;
+}
+
+export default function Footer({ hideCommissionCta = false }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -29,10 +33,14 @@ export default function Footer() {
           </p>
           <div className={styles.commissionInvite}>
             <span className={styles.inviteLead}>Commission atelier open for upcoming seasons</span>
-            <Link href="/inquire" className={styles.commissionBtn}>
-              <span>BEGIN A COMMISSION</span>
-              <span className={styles.commissionArrow} aria-hidden="true">→</span>
-            </Link>
+            {hideCommissionCta ? (
+              <span className={styles.closingRefinedNote}>YOUR STORY, CONSIDERED.</span>
+            ) : (
+              <Link href="/inquire" className={styles.commissionBtn}>
+                <span>BEGIN A COMMISSION</span>
+                <span className={styles.commissionArrow} aria-hidden="true">→</span>
+              </Link>
+            )}
           </div>
         </div>
 

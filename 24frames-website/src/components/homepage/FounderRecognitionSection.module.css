@@ -153,27 +153,6 @@
   z-index: 2;
 }
 
-/* Feathered Warm Light Sweep Beam */
-.lightSweepBeam {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 45%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 248, 230, 0.12) 20%,
-    rgba(255, 252, 244, 0.45) 50%,
-    rgba(255, 248, 230, 0.12) 80%,
-    transparent 100%
-  );
-  filter: blur(12px);
-  pointer-events: none;
-  transform: translateX(-110%);
-  z-index: 3;
-}
-
 /* Delicate Viewfinder Corners HUD */
 .viewfinderHud {
   position: absolute;
@@ -454,13 +433,12 @@
 .cardImageContainer {
   position: relative;
   width: 100%;
-  height: 168px;
+  height: 152px;
+  aspect-ratio: 4 / 3;
   border-radius: 8px;
   overflow: hidden;
   background: #EFECE5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -475,9 +453,8 @@
 .cardCoverImgContain {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
-  padding: 6px;
   transition: transform 0.4s ease;
 }
 

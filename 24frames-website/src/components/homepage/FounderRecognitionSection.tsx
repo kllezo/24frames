@@ -42,8 +42,8 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "Official Nikon India association creative welcoming Phani Gogireddy to Nikon Creator family",
     sourceUrl: "https://www.instagram.com/nikonindiaofficial/",
     sourceLabel: "View Official Nikon Announcement →",
-    objectPosition: "center center",
-    fitMode: "contain",
+    objectPosition: "center 20%",
+    fitMode: "cover",
   },
   {
     id: "times-excellence-dia-mirza",
@@ -59,8 +59,8 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "Dia Mirza presenting the Excellence in Luxury Wedding Photography award to Phani Gogireddy at Novotel HICC Hyderabad",
     sourceUrl: "https://www.youtube.com/shorts/Lh45ZBRJ1b8",
     sourceLabel: "Watch Award Ceremony Film →",
-    objectPosition: "center center",
-    fitMode: "contain",
+    objectPosition: "center 22%",
+    fitMode: "cover",
   },
   {
     id: "inovexia-indian-eminent",
@@ -76,8 +76,8 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "Shri Akunuri Murali IAS conferring the Indian Eminent Award for Best Photography Service in Hyderabad to Phani Gogireddy",
     sourceUrl: "https://boroktimes.com/the-art-of-storytelling-through-photography-a-look-at-phani-gogireddys-award-winning-work/",
     sourceLabel: "Read Feature →",
-    objectPosition: "center center",
-    fitMode: "contain",
+    objectPosition: "center 20%",
+    fitMode: "cover",
   },
   {
     id: "times-of-india-spotlight",
@@ -94,7 +94,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     sourceUrl: "https://timesofindia.indiatimes.com/",
     sourceLabel: "Read Editorial Article →",
     objectPosition: "center top",
-    fitMode: "contain",
+    fitMode: "cover",
   },
   {
     id: "gen-next-india-cover",
@@ -110,8 +110,8 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "GenNext-India magazine cover featuring Phani Gogireddy holding the Excellence star award",
     sourceUrl: "https://www.youtube.com/@24framesphotography",
     sourceLabel: "Explore Studio Archive →",
-    objectPosition: "center 20%",
-    fitMode: "contain",
+    objectPosition: "center 18%",
+    fitMode: "cover",
   },
 ];
 
@@ -122,7 +122,6 @@ export default function FounderRecognitionSection() {
   const portraitWrapRef = useRef<HTMLDivElement>(null);
   const portraitImgRef = useRef<HTMLImageElement>(null);
   const darkroomOverlayRef = useRef<HTMLDivElement>(null);
-  const lightSweepRef = useRef<HTMLDivElement>(null);
   const viewfinderHudRef = useRef<HTMLDivElement>(null);
   const namePanelRef = useRef<HTMLDivElement>(null);
   const interactiveGlareRef = useRef<HTMLDivElement>(null);
@@ -226,16 +225,7 @@ export default function FounderRecognitionSection() {
           );
         }
 
-        // Stage 2: Light Sweep (0.3s - 1.2s)
-        if (lightSweepRef.current) {
-          portraitTl.fromTo(
-            lightSweepRef.current,
-            { x: "-110%", opacity: 0 },
-            { x: "130%", opacity: 0.85, duration: 0.9, ease: "power2.inOut" },
-            0.3
-          );
-        }
-
+        // Stage 2: Reveal & Settle (0.3s - 1.2s)
         if (darkroomOverlayRef.current) {
           portraitTl.to(
             darkroomOverlayRef.current,
@@ -405,13 +395,6 @@ export default function FounderRecognitionSection() {
                 aria-hidden="true"
               />
 
-              {/* Feathered Warm Light Sweep Beam */}
-              <div
-                ref={lightSweepRef}
-                className={styles.lightSweepBeam}
-                aria-hidden="true"
-              />
-
               {/* Interactive Cinematic Studio Light Reflection Layer */}
               <div
                 ref={interactiveGlareRef}
@@ -523,7 +506,7 @@ export default function FounderRecognitionSection() {
                         <img
                           src={item.imageSrc}
                           alt={item.imageAlt}
-                          className={item.fitMode === "contain" ? styles.cardCoverImgContain : styles.cardCoverImg}
+                          className={styles.cardCoverImg}
                           style={{ objectPosition: item.objectPosition || "center center" }}
                           loading="lazy"
                         />

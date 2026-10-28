@@ -19,8 +19,8 @@ export interface GalleryCardItem {
   artImage: string;
   artAlt: string;
   href: string;
-  theme: "indigo" | "light" | "emerald" | "parchment" | "obsidian";
-  gradientClass: string;
+  theme?: string;
+  gradientClass?: string;
   fillColor: string;
   textColor: string;
   descColor: string;
@@ -36,11 +36,11 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     artImage: "/images/gallery-experience/card1_art.png",
     artAlt: "3D dynamic prism representing AI moment discovery",
     href: "/client-gallery#private-archive",
-    theme: "indigo",
-    gradientClass: styles.card1Gradient,
-    fillColor: "#141428",
-    textColor: "#FFFFFF",
-    descColor: "rgba(224, 231, 255, 0.76)",
+    theme: "warm",
+    gradientClass: styles.cardWarmCanvas,
+    fillColor: "#EDE6D8",
+    textColor: "#09453E",
+    descColor: "#4D5450",
   },
   {
     id: "cinema-room",
@@ -51,11 +51,11 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     artImage: "/images/gallery-experience/card2_art.png",
     artAlt: "Translucent golden dual cinema screens representing private streaming theater",
     href: "/client-gallery#cinema-room",
-    theme: "light",
-    gradientClass: styles.card2Gradient,
-    fillColor: "#ECEFF4",
-    textColor: "#0F172A",
-    descColor: "#475569",
+    theme: "warm",
+    gradientClass: styles.cardWarmCanvas,
+    fillColor: "#EDE6D8",
+    textColor: "#09453E",
+    descColor: "#4D5450",
   },
   {
     id: "signature-shots",
@@ -66,11 +66,11 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     artImage: "/images/stories/hrithika-abhishek/IMG_6334.jpg",
     artAlt: "Master color-graded portraits proportioned for high-fidelity social sharing",
     href: "/client-gallery#signature-shots",
-    theme: "emerald",
-    gradientClass: styles.cardEmeraldGradient,
-    fillColor: "#082823",
-    textColor: "#FFFFFF",
-    descColor: "rgba(235, 245, 242, 0.8)",
+    theme: "warm",
+    gradientClass: styles.cardWarmCanvas,
+    fillColor: "#EDE6D8",
+    textColor: "#09453E",
+    descColor: "#4D5450",
   },
   {
     id: "event-stories",
@@ -81,11 +81,11 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     artImage: "/images/stories/bellam-srikonda/IMG_6339.jpg",
     artAlt: "Wedding ritual ceremony timeline structured chronologically by event",
     href: "/client-gallery#event-stories",
-    theme: "parchment",
-    gradientClass: styles.cardParchmentGradient,
-    fillColor: "#EFE8DA",
-    textColor: "#141713",
-    descColor: "#454D45",
+    theme: "warm",
+    gradientClass: styles.cardWarmCanvas,
+    fillColor: "#EDE6D8",
+    textColor: "#09453E",
+    descColor: "#4D5450",
   },
   {
     id: "heirloom-collection",
@@ -96,11 +96,11 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     artImage: "/images/gallery-experience/card3_art.png",
     artAlt: "Precision optical cinema lens elements representing generational heirloom vault",
     href: "/client-gallery#heirloom-collection",
-    theme: "obsidian",
-    gradientClass: styles.card3Gradient,
-    fillColor: "#121418",
-    textColor: "#FFFFFF",
-    descColor: "rgba(203, 213, 225, 0.76)",
+    theme: "warm",
+    gradientClass: styles.cardWarmCanvas,
+    fillColor: "#EDE6D8",
+    textColor: "#09453E",
+    descColor: "#4D5450",
   },
 ];
 
