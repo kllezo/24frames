@@ -10,7 +10,7 @@
   background: #FAF7F0;
   background-image: radial-gradient(rgba(35, 45, 40, 0.1) 1.25px, transparent 1.25px);
   background-size: 26px 26px;
-  padding: clamp(5.5rem, 9vw, 8.5rem) 0;
+  padding: clamp(7rem, 11vw, 10.75rem) 0;
   scroll-margin-top: 80px;
   overflow: hidden;
 }

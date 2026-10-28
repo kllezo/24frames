@@ -70,7 +70,7 @@
 
 /* ── Monumental Hero Section ────────────────────────────────────────── */
 .heroSection {
-  padding: clamp(3rem, 6vh, 5.5rem) 0 clamp(2.5rem, 5vh, 4.5rem);
+  padding: clamp(3.75rem, 7.5vh, 7rem) 0 clamp(3.25rem, 6.5vh, 5.75rem);
 }
 
 .heroMetaRow {
@@ -243,7 +243,7 @@
 
 /* ── Curatorial Statement Box ───────────────────────────────────────── */
 .curatorialSection {
-  padding: clamp(2rem, 4vh, 3.5rem) 0;
+  padding: clamp(2.5rem, 5vh, 4.5rem) 0;
 }
 
 .curatorialBox {
@@ -447,7 +447,7 @@
 
 /* ── Photographic Gallery Grid ──────────────────────────────────────── */
 .gallerySection {
-  padding: clamp(3rem, 6vh, 5rem) 0;
+  padding: clamp(3.75rem, 7.5vh, 6.25rem) 0;
   border-top: 1px solid rgba(22, 75, 64, 0.08);
 }
 
@@ -591,7 +591,7 @@
 
 /* ── Related Disciplines Section ────────────────────────────────────── */
 .relatedSection {
-  padding: clamp(3rem, 6vh, 5rem) 0;
+  padding: clamp(3.75rem, 7.5vh, 6.25rem) 0;
   border-top: 1px solid rgba(22, 75, 64, 0.08);
 }
 
@@ -716,7 +716,7 @@
 
 /* ── Restrained Commission Inquiry CTA ──────────────────────────────── */
 .inquirySection {
-  padding: clamp(2.5rem, 5vh, 4rem) 0;
+  padding: clamp(3.25rem, 6.5vh, 5rem) 0;
 }
 
 .inquiryBox {

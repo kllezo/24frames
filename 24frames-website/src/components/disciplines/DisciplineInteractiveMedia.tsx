@@ -11,6 +11,25 @@ interface DisciplineInteractiveMediaProps {
   shortTitle: string;
 }
 
+const CINEMA_EDITORIAL_INTERLUDES = [
+  {
+    quote: "“Every frame holds a world beyond the moment.”",
+    sub: "ANAMORPHIC SCOPE · 2.39:1 CELLULOID GRAIN",
+  },
+  {
+    quote: "“Light becomes memory. Movement becomes story.”",
+    sub: "THEATRICAL DISCIPLINE · VOLUMETRIC ILLUMINATION",
+  },
+  {
+    quote: "“The art of seeing what others feel.”",
+    sub: "ORCHESTRAL SOUND · UNGUARDED TRUTH",
+  },
+  {
+    quote: "“A fleeting moment, composed to endure.”",
+    sub: "ARCHIVAL COLOR SCIENCE · MASTER PRINTS",
+  },
+];
+
 export default function DisciplineInteractiveMedia({
   videos,
   gallery,
@@ -64,29 +83,117 @@ export default function DisciplineInteractiveMedia({
     };
   }, [activeVideo, activeImageIndex]);
 
+  const featuredVideo = videos && videos.length > 0 ? videos[0] : null;
+  const secondaryVideos = videos && videos.length > 1 ? videos.slice(1) : [];
+
   return (
     <>
-      {/* ── MOTION PICTURE ARCHIVE (VIDEOS WITH CINEMA LIGHTBOX) ── */}
-      {videos && videos.length > 0 && (
+      {/* ── FEATURED CINEMATIC MASTERPIECE (WHERE AVAILABLE) ── */}
+      {featuredVideo && (
+        <section
+          className={styles.featuredVideoSection}
+          aria-label="Featured Cinema Masterpiece"
+        >
+          <div className={styles.container}>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionMeta}>
+                <span className={styles.sectionChapter}>FEATURED MOTION PICTURE</span>
+                <span className={styles.sectionBadge}>MASTER SELECTION · 4K THEATRICAL</span>
+              </div>
+              <h2 className={styles.sectionTitle}>The Theatrical Master Film</h2>
+              <p className={styles.sectionSubtitle}>
+                Crafted with prime anamorphic glass, 32-bit float orchestral sound recording, and custom 24F celluloid color science.
+              </p>
+            </div>
+
+            {/* Featured 16:9 Screen */}
+            <div
+              className={styles.featuredPlayerCard}
+              onClick={() => setActiveVideo(featuredVideo)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setActiveVideo(featuredVideo);
+                }
+              }}
+              aria-label={`Watch featured cinema film: ${featuredVideo.title}`}
+            >
+              <div className={styles.featuredPosterWrap}>
+                <img
+                  src={featuredVideo.poster}
+                  alt={featuredVideo.title}
+                  className={styles.featuredPosterImg}
+                  loading="eager"
+                />
+                <div className={styles.featuredVignette} />
+
+                {/* Prominent Golden Play Affordance */}
+                <div className={styles.featuredPlayBtn}>
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="7 4 19 12 7 20 7 4" />
+                  </svg>
+                </div>
+
+                <div className={styles.featuredDurationBadge}>
+                  {featuredVideo.duration} · 2.39:1 ANAMORPHIC
+                </div>
+
+                <div className={styles.featuredTitleOverlay}>
+                  <span className={styles.featuredClientKicker}>
+                    COMMISSION · {featuredVideo.client}
+                  </span>
+                  <h3 className={styles.featuredMovieTitle}>
+                    {featuredVideo.title}
+                  </h3>
+                </div>
+              </div>
+
+              {/* Concise Film Information Strip */}
+              <div className={styles.filmInfoStrip}>
+                <div className={styles.infoCell}>
+                  <span className={styles.infoLabel}>DIRECTOR & LEAD CINEMATOGRAPHER</span>
+                  <span className={styles.infoVal}>Phani Gogireddy</span>
+                </div>
+                <div className={styles.infoCell}>
+                  <span className={styles.infoLabel}>OPTICS & FORMAT</span>
+                  <span className={styles.infoVal}>Sony FX Cinema Line & Anamorphic Primes</span>
+                </div>
+                <div className={styles.infoCell}>
+                  <span className={styles.infoLabel}>AUDIO RECORDING</span>
+                  <span className={styles.infoVal}>32-Bit Float Multi-Track Orchestral</span>
+                </div>
+                <div className={styles.infoCell}>
+                  <span className={styles.infoLabel}>COLOR SCIENCE</span>
+                  <span className={styles.infoVal}>24F Custom Celluloid Emulsion</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── THEATRICAL WEDDING FEATURES (TWO-COLUMN EDITORIAL VIDEO GRID) ── */}
+      {secondaryVideos.length > 0 && (
         <section
           className={styles.videoSection}
-          aria-label="Theatrical Cinema Motion Pictures"
+          aria-label="Theatrical Cinema Wedding Features"
         >
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
               <div className={styles.sectionMeta}>
                 <span className={styles.sectionChapter}>MOTION PICTURE ARCHIVE</span>
-                <span className={styles.sectionBadge}>2.39:1 ANAMORPHIC WIDESCREEN</span>
+                <span className={styles.sectionBadge}>2.39:1 WIDESCREEN REEL</span>
               </div>
               <h2 className={styles.sectionTitle}>Theatrical Wedding Features</h2>
               <p className={styles.sectionSubtitle}>
-                Dedicated cinema units utilizing prime cinema glass, multi-track audio, and
-                custom film emulsion grading. Click any film to watch in the 16:9 Cinema Lightbox.
+                Every film is documented with dedicated cinema units, capturing unscripted family emotion and sacred Telugu ceremonies.
               </p>
             </div>
 
             <div className={styles.videoGrid}>
-              {videos.map((video) => (
+              {secondaryVideos.map((video) => (
                 <div
                   key={video.id}
                   className={styles.videoCard}
@@ -110,18 +217,16 @@ export default function DisciplineInteractiveMedia({
                     />
                     <div className={styles.posterOverlay} />
 
-                    {/* Subtle Play Button Affordance */}
                     <div className={styles.playButton} aria-hidden="true">
                       <svg viewBox="0 0 24 24" fill="currentColor">
                         <polygon points="7 4 19 12 7 20 7 4" />
                       </svg>
                     </div>
 
-                    {/* Duration Badge */}
                     <div className={styles.durationBadge}>{video.duration}</div>
 
                     <div className={styles.playHint}>
-                      <span>PLAY THEATRICAL FILM</span>
+                      <span>PLAY IN 16:9 LIGHTBOX</span>
                       <span className={styles.playHintIcon}>▶</span>
                     </div>
                   </div>
@@ -143,7 +248,7 @@ export default function DisciplineInteractiveMedia({
         </section>
       )}
 
-      {/* ── PHOTOGRAPHIC RECORD WITH FULL-SCREEN LIGHTBOX ── */}
+      {/* ── CINEMA PHOTOGRAPHIC GALLERY (ALTERNATING 2-COLUMN EDITORIAL) ── */}
       <section
         className={styles.gallerySection}
         aria-label={`${shortTitle} Photographic Record`}
@@ -158,80 +263,98 @@ export default function DisciplineInteractiveMedia({
               {shortTitle} Photographic Gallery
             </h2>
             <p className={styles.sectionSubtitle}>
-              Curated master stills and authentic commission coverage in natural medium-format proportions.
+              Curated master stills sequenced in alternating editorial rhythm with natural medium-format proportions.
             </p>
           </div>
 
-          <div className={styles.galleryGrid}>
+          <div className={styles.alternatingGallery}>
             {gallery.map((item, index) => {
-              const isWide = item.aspect === "landscape" || item.aspect === "panoramic";
+              const isLandscape = item.aspect === "landscape" || item.aspect === "panoramic";
+              const isLeft = index % 2 === 0;
+              const shouldShowInterlude = index === 2 || index === 4;
+              const interlude = CINEMA_EDITORIAL_INTERLUDES[index % CINEMA_EDITORIAL_INTERLUDES.length];
 
               return (
-                <article
-                  key={item.id}
-                  className={`${styles.galleryCard} ${
-                    isWide ? styles.galleryCardWide : styles.galleryCardTall
-                  }`}
-                  onClick={() => setActiveImageIndex(index)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setActiveImageIndex(index);
-                    }
-                  }}
-                  aria-label={`View full frame: ${item.title}`}
-                >
-                  <div className={styles.galleryImgWrap}>
-                    <picture>
-                      {item.webp && <source srcSet={item.webp} type="image/webp" />}
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className={styles.galleryImg}
-                        loading="lazy"
-                      />
-                    </picture>
-                    <div className={styles.cardGradient} />
-                    <span className={styles.framePill}>
-                      FRAME {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span className={styles.expandPill} aria-hidden="true">
-                      EXPAND ↗
-                    </span>
-                  </div>
-
-                  <div className={styles.cardMeta}>
-                    <h3 className={styles.cardTitle}>{item.title}</h3>
-                    <p className={styles.cardCaption}>{item.caption}</p>
-
-                    <div className={styles.cardFooter}>
-                      {item.location && (
-                        <span className={styles.cardLocation}>
-                          {item.location} {item.year ? `· ${item.year}` : ""}
-                        </span>
-                      )}
-
-                      {item.storySlug && (
-                        <Link
-                          href={`/stories/${item.storySlug}`}
-                          className={styles.storyLink}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          Read Full Story →
-                        </Link>
-                      )}
+                <div key={item.id} className={styles.galleryItemWrap}>
+                  {shouldShowInterlude && (
+                    <div className={styles.galleryInterlude}>
+                      <span className={styles.interludeKicker}>{interlude.sub}</span>
+                      <blockquote className={styles.interludeQuote}>
+                        {interlude.quote}
+                      </blockquote>
+                      <span className={styles.interludeLine} aria-hidden="true" />
                     </div>
-                  </div>
-                </article>
+                  )}
+
+                  <article
+                    className={`${styles.alternatingCard} ${
+                      isLeft ? styles.cardLeft : styles.cardRight
+                    }`}
+                    onClick={() => setActiveImageIndex(index)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setActiveImageIndex(index);
+                      }
+                    }}
+                    aria-label={`View full frame: ${item.title}`}
+                  >
+                    <div
+                      className={`${styles.galleryImgWrap} ${
+                        isLandscape ? styles.aspectLandscape : styles.aspectPortrait
+                      }`}
+                    >
+                      <picture>
+                        {item.webp && <source srcSet={item.webp} type="image/webp" />}
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className={styles.galleryImg}
+                          loading="lazy"
+                        />
+                      </picture>
+                      <div className={styles.cardGradient} />
+                      <span className={styles.framePill}>
+                        FRAME {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className={styles.expandPill} aria-hidden="true">
+                        EXPAND ↗
+                      </span>
+                    </div>
+
+                    <div className={styles.cardMeta}>
+                      <h3 className={styles.cardTitle}>{item.title}</h3>
+                      <p className={styles.cardCaption}>{item.caption}</p>
+
+                      <div className={styles.cardFooter}>
+                        {item.location && (
+                          <span className={styles.cardLocation}>
+                            {item.location} {item.year ? `· ${item.year}` : ""}
+                          </span>
+                        )}
+
+                        {item.storySlug && (
+                          <Link
+                            href={`/stories/${item.storySlug}`}
+                            className={styles.storyLink}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Read Full Story →
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                </div>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* ── 16:9 VIDEO LIGHTBOX MODAL ── */}
+      {/* ── 16:9 CINEMA LIGHTBOX MODAL ── */}
       {activeVideo && (
         <div
           className={styles.modalBackdrop}
@@ -296,7 +419,6 @@ export default function DisciplineInteractiveMedia({
             className={styles.imageLightboxContainer}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Top Bar with Count & Close */}
             <div className={styles.lightboxTopBar}>
               <span className={styles.lightboxCounter}>
                 FRAME {activeImageIndex + 1} OF {gallery.length}
@@ -310,7 +432,6 @@ export default function DisciplineInteractiveMedia({
               </button>
             </div>
 
-            {/* Central High-Resolution Frame */}
             <div className={styles.lightboxImgArea}>
               <img
                 src={gallery[activeImageIndex].image}
@@ -318,7 +439,6 @@ export default function DisciplineInteractiveMedia({
                 className={styles.lightboxImg}
               />
 
-              {/* Prev / Next Controls */}
               {gallery.length > 1 && (
                 <>
                   <button
@@ -347,7 +467,6 @@ export default function DisciplineInteractiveMedia({
               )}
             </div>
 
-            {/* Metadata Bar */}
             <div className={styles.lightboxCaptionBar}>
               <h3 className={styles.lightboxTitle}>
                 {gallery[activeImageIndex].title}

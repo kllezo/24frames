@@ -10,7 +10,7 @@
   background-color: #FAF7F0;
   color: #20231F;
   overflow: hidden;
-  padding: clamp(5.5rem, 9vw, 8.5rem) 0;
+  padding: clamp(7rem, 11vw, 10.75rem) 0;
   scroll-margin-top: 80px;
 }
 

@@ -8,6 +8,7 @@ import HeroSection from "@/components/homepage/HeroSection";
 import LivingContactSheet from "@/components/homepage/LivingContactSheet";
 import TheCollection from "@/components/homepage/TheCollection";
 import FounderRecognitionSection from "@/components/homepage/FounderRecognitionSection";
+import AsSeenInStrip from "@/components/homepage/AsSeenInStrip";
 import ClientGalleryExperience from "@/components/homepage/ClientGalleryExperience";
 import InvitationCTA from "@/components/homepage/InvitationCTA";
 
@@ -67,6 +68,9 @@ export default function HomePage() {
 
           {/* Act IV — The Artist & Visionary (Phani Gogireddy Exact Reference Composition) */}
           <FounderRecognitionSection />
+
+          {/* Media Recognition & Publication Strip */}
+          <AsSeenInStrip />
 
           {/* Royal Palace Client Suite — The 24 Frames Client Gallery Experience */}
           <ClientGalleryExperience />

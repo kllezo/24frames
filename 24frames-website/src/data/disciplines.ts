@@ -96,18 +96,6 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         storySlug: "sirish-and-harshitha"
       },
       {
-        id: "w-02",
-        title: "Hrithika & Abhishek — Sacred Fire & Vedic Vows",
-        client: "Hrithika & Abhishek",
-        location: "Celebration Estate, Hyderabad",
-        year: "2024",
-        image: "/images/stories/hrithika-abhishek/IMG_6324.jpg",
-        webp: "/images/stories/hrithika-abhishek/IMG_6324.webp",
-        caption: "Holy Akshata blessings and generational prayer at the sacred Mandapam.",
-        aspect: "portrait",
-        storySlug: "hrithika-abhishek"
-      },
-      {
         id: "w-03",
         title: "Karthik & Gayathri — Classical Temple Grandeur",
         client: "Karthik & Gayathri",
@@ -118,18 +106,6 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         caption: "Fine-art South Indian wedding coverage featuring classical temple silk and heritage florals.",
         aspect: "portrait",
         storySlug: "karthik-and-gayathri"
-      },
-      {
-        id: "w-04",
-        title: "Sirish & Harshitha — The Emotional Farewell",
-        client: "Sirish & Harshitha",
-        location: "Heritage Pavilion, Hyderabad",
-        year: "2024",
-        image: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
-        webp: "/images/stories/sirish-and-harshitha/IMG_6346.webp",
-        caption: "An unscripted, tender embrace between father and bride at the conclusion of the Muhurtham.",
-        aspect: "portrait",
-        storySlug: "sirish-and-harshitha"
       },
       {
         id: "w-05",
@@ -144,16 +120,34 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         storySlug: "hrithika-abhishek"
       },
       {
-        id: "w-06",
-        title: "Karthik & Gayathri — Sangeet Evening Radiance",
-        client: "Karthik & Gayathri",
-        location: "The Conservatory Grounds",
+        id: "w-07",
+        title: "Generational Vedic Muhurtham & Sacred Blessings",
+        client: "Royal Vedic Commission",
+        location: "Heritage Palace Grounds",
         year: "2024",
-        image: "/images/stories/karthik-and-gayathri/IMG_6329.jpg",
-        webp: "/images/stories/karthik-and-gayathri/IMG_6329.webp",
-        caption: "Vibrant familial warmth and musical celebration under warm architectural illumination.",
-        aspect: "portrait",
-        storySlug: "karthik-and-gayathri"
+        image: "/images/disciplines/weddings/IMG_6277.jpg",
+        caption: "Akshata blessings showered under the sacred mandapam in natural architectural dawn light.",
+        aspect: "portrait"
+      },
+      {
+        id: "w-08",
+        title: "Sacred Floral Muhurtham Rites & Devotion",
+        client: "Traditional Telugu Union",
+        location: "Pavilion Mandapam",
+        year: "2024",
+        image: "/images/disciplines/weddings/IMG_6274.jpg",
+        caption: "Deep devotion and sacred mantras preserved with cinema-grade optical precision.",
+        aspect: "portrait"
+      },
+      {
+        id: "w-09",
+        title: "Royal Architectural Silhouette & Evening Poise",
+        client: "Grand Heritage Celebration",
+        location: "Courtyard Arcade",
+        year: "2024",
+        image: "/images/disciplines/weddings/IMG_6275.jpg",
+        caption: "Monumental arches and regal bridal composure documented under soft dusk illumination.",
+        aspect: "portrait"
       }
     ],
     relatedSlugs: ["celebrities", "events", "cinema"]
@@ -176,8 +170,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Verified historical commissions include the grand reception coverage of Indian cinema star Bellamkonda Sai Sreenivas & Kavya Reddy, longstanding mentorship associations with Tollywood actor Manchu Manoj, and official collaborations honored by industry stalwarts such as Dia Mirza and veteran cinematographer K.K. Senthil Kumar (ISC).",
       "Every portrait is captured using Hasselblad medium format and custom-calibrated cinema lenses to render nuanced skin tones and authentic textile textures."
     ],
-    heroImage: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
-    heroWebp: "/images/portfolio/bellamkonda-kavya-reception/cover.webp",
+    heroImage: "/images/disciplines/celebrities/IMG_6472.jpg",
     heroAspect: "cinematic",
     href: "/disciplines/celebrities",
     metadata: {
@@ -191,75 +184,73 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     gallery: [
       {
         id: "c-01",
-        title: "Bellamkonda Sai Sreenivas & Kavya Reddy",
-        client: "Bellamkonda Family",
-        location: "GMR Arena / Shamshabad Estate",
+        title: "Tollywood Luminary & Cinema Icon",
+        client: "Bellamkonda Sai Sreenivas Milestone",
+        location: "Grand Reception Stage, Shamshabad",
         year: "2024",
-        image: "/images/stories/bellam-srikonda/IMG_6339.jpg",
-        webp: "/images/stories/bellam-srikonda/IMG_6339.webp",
-        caption: "Indian cinema actor Bellamkonda Sai Sreenivas & Kavya Reddy in custom reception couture.",
-        aspect: "landscape",
-        storySlug: "bellam-srikonda"
+        image: "/images/disciplines/celebrities/IMG_6472.jpg",
+        caption: "Actor Bellamkonda Sai Sreenivas captured with nuanced cinema-grade key illumination and commanding presence.",
+        aspect: "portrait"
       },
       {
         id: "c-02",
-        title: "Kavya Reddy — Grand Staircase Portrait",
-        client: "Kavya Reddy",
-        location: "GMR Arena Grand Foyer",
+        title: "Sculptural Key Light Portraiture & Gaze",
+        client: "Tollywood Celebrity Study",
+        location: "GMR Arena VIP Suite",
         year: "2024",
-        image: "/images/stories/bellam-srikonda/IMG_6341.jpg",
-        webp: "/images/stories/bellam-srikonda/IMG_6341.webp",
-        caption: "Sculptural silver couture portraiture composed along the sweeping floral grand staircase.",
-        aspect: "portrait",
-        storySlug: "bellam-srikonda"
+        image: "/images/disciplines/celebrities/IMG_6473.jpg",
+        caption: "Deliberate chiaroscuro shadow-play rendering sculpted jawlines and introspective depth.",
+        aspect: "portrait"
       },
       {
         id: "c-03",
-        title: "Private Family Poise — Quiet Majesty",
-        client: "Bellamkonda Family & Guests",
-        location: "VIP Reception Enclave",
+        title: "Grand Reception Character Study in Black Tie",
+        client: "Indian Cinema Gala Feature",
+        location: "Grand Foyer",
         year: "2024",
-        image: "/images/stories/bellam-srikonda/IMG_6342.jpg",
-        webp: "/images/stories/bellam-srikonda/IMG_6342.webp",
-        caption: "Quiet dignity and intimate stage celebration between luminaries and welcoming families.",
-        aspect: "landscape",
-        storySlug: "bellam-srikonda"
+        image: "/images/disciplines/celebrities/IMG_6477.jpg",
+        caption: "Formal black-tie elegance documented with optical precision and natural poise.",
+        aspect: "portrait"
       },
       {
         id: "c-04",
-        title: "Bridal Character Study in Gold",
-        client: "Hrithika",
-        location: "Private Bridal Suite",
+        title: "VIP Luminary Milestone & Stage Presence",
+        client: "Celebrity Reception Gathering",
+        location: "VIP Enclave",
         year: "2024",
-        image: "/images/stories/hrithika-abhishek/IMG_6322.jpg",
-        webp: "/images/stories/hrithika-abhishek/IMG_6322.webp",
-        caption: "Medium-format bridal study capturing temple jewellery detailing and serene composure.",
-        aspect: "portrait",
-        storySlug: "hrithika-abhishek"
+        image: "/images/disciplines/celebrities/IMG_6474.jpg",
+        caption: "Quiet dignity and warm engagement captured between high-profile dignitaries and hosts.",
+        aspect: "portrait"
       },
       {
         id: "c-05",
-        title: "Quiet Reflection — Monochrome Elegance",
-        client: "Gayathri",
-        location: "Hyderabad Estate",
+        title: "Celebrity Family Milestone & Quiet Poise",
+        client: "Distinguished Family Portrait",
+        location: "Private Presidential Suite",
         year: "2024",
-        image: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
-        webp: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
-        caption: "Chiaroscuro shadow-play highlighting handcrafted bridal silks and heirloom gemstones.",
-        aspect: "portrait",
-        storySlug: "karthik-and-gayathri"
+        image: "/images/disciplines/celebrities/IMG_6476.jpg",
+        caption: "Generational family warmth documented with respectful restraint and archival clarity.",
+        aspect: "portrait"
       },
       {
         id: "c-06",
-        title: "Grand Stage Lighting Discipline",
-        client: "Bellamkonda Sai Sreenivas Reception",
-        location: "Shamshabad Estate",
+        title: "Classical Bridal Couture & Temple Adornment",
+        client: "High-Profile Bridal Commission",
+        location: "Heritage Suite",
         year: "2024",
-        image: "/images/stories/bellam-srikonda/IMG_6344.jpg",
-        webp: "/images/stories/bellam-srikonda/IMG_6344.webp",
-        caption: "Master cinema fixtures casting volumetric light across the monumental reception stage.",
-        aspect: "landscape",
-        storySlug: "bellam-srikonda"
+        image: "/images/disciplines/celebrities/IMG_6278.jpg",
+        caption: "Medium-format bridal study highlighting handwoven gold silks and traditional uncut gemstone heritage.",
+        aspect: "portrait"
+      },
+      {
+        id: "c-07",
+        title: "Nuanced Chiaroscuro Lighting & Character Study",
+        client: "Cinema Luminary Portraiture",
+        location: "24 Frames Production Stage",
+        year: "2024",
+        image: "/images/disciplines/celebrities/IMG_6468.jpg",
+        caption: "Rich directional lighting revealing nuanced emotional sensitivity and cinematic framing.",
+        aspect: "portrait"
       }
     ],
     relatedSlugs: ["weddings", "fashion", "cinema"]
@@ -282,8 +273,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "From high-octane Sangeet choreographies to prestigious institutional galas—such as the ET Excellence Awards and Sree Vidyanikethan Annual Day celebrations—we document the electric energy of cultural gatherings.",
       "Our proprietary low-light colour science ensures that stage lighting, laser arrays, and floral projections are rendered with cinematic fidelity without blown highlights."
     ],
-    heroImage: "/images/stories/bellam-srikonda/IMG_6340.jpg",
-    heroWebp: "/images/stories/bellam-srikonda/IMG_6340.webp",
+    heroImage: "/images/disciplines/events/IMG_6487.jpg",
     heroAspect: "cinematic",
     href: "/disciplines/events",
     metadata: {
@@ -297,57 +287,72 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     gallery: [
       {
         id: "e-01",
-        title: "Monumental Ballroom Scenography",
+        title: "Monumental Ballroom Scenography & Light",
         client: "Royal Reception Gala",
-        location: "GMR Arena, Hyderabad",
+        location: "GMR Arena Grand Ballroom, Hyderabad",
         year: "2024",
-        image: "/images/stories/bellam-srikonda/IMG_6340.jpg",
-        webp: "/images/stories/bellam-srikonda/IMG_6340.webp",
-        caption: "Grand ballroom entrance installation featuring ballerina sculpture, cascading floral canopies, and crystal chandeliers.",
-        aspect: "landscape"
+        image: "/images/disciplines/events/IMG_6487.jpg",
+        caption: "Monumental floral arches, crystal chandelier arrays, and tiered architectural lighting illuminating the grand ballroom.",
+        aspect: "portrait"
       },
       {
         id: "e-02",
-        title: "Architectural Stage Installation",
-        client: "Grand Wedding Reception",
-        location: "Shamshabad Estate",
+        title: "Grand Cultural Gala Stage Performance",
+        client: "Live Sangeet & Orchestral Evening",
+        location: "Grand Ballroom Stage",
         year: "2024",
-        image: "/images/stories/bellam-srikonda/IMG_6343.jpg",
-        webp: "/images/stories/bellam-srikonda/IMG_6343.webp",
-        caption: "Bespoke floral architecture and custom scenic backdrops illuminated by master lighting design.",
-        aspect: "landscape"
+        image: "/images/disciplines/events/IMG_6492.jpg",
+        caption: "Electric stage energy and live choreography documented with multi-track musical synchronization.",
+        aspect: "portrait"
       },
       {
         id: "e-03",
-        title: "Live Sangeet Choreography & Energy",
-        client: "Karthik & Gayathri",
-        location: "Glasshouse Conservatory",
+        title: "Architectural Floral Canopy & Lighting Symmetry",
+        client: "Grand Reception Gala",
+        location: "Shamshabad Estate",
         year: "2024",
-        image: "/images/stories/karthik-and-gayathri/IMG_6328.jpg",
-        webp: "/images/stories/karthik-and-gayathri/IMG_6328.webp",
-        caption: "Dynamic choreography and family celebrations captured under warm festive lights.",
-        aspect: "landscape"
+        image: "/images/disciplines/events/IMG_6486.jpg",
+        caption: "Bespoke scenic backdrop installations and cascading florals illuminated by master theatrical fixtures.",
+        aspect: "portrait"
       },
       {
         id: "e-04",
-        title: "Intimate Dinner Gala Gathering",
-        client: "Hrithika & Abhishek",
-        location: "Celebration Estate Grounds",
+        title: "Sangeet Dance Energy & Spectacle",
+        client: "Celebration Gala Evening",
+        location: "Main Stage Pavilion",
         year: "2024",
-        image: "/images/stories/hrithika-abhishek/IMG_6333.jpg",
-        webp: "/images/stories/hrithika-abhishek/IMG_6333.webp",
-        caption: "Generational family gathering and joyous dinner hospitality under heritage chandeliers.",
-        aspect: "landscape"
+        image: "/images/disciplines/events/IMG_6490.jpg",
+        caption: "High-octane celebratory movement and joyous familial engagement captured from prime optical angles.",
+        aspect: "portrait"
       },
       {
         id: "e-05",
-        title: "Evening Conservatory Illumination",
-        client: "Karthik & Gayathri",
-        location: "The Conservatory Grounds",
+        title: "Widescreen Panoramic Ballroom Perspective",
+        client: "Grand Gala Scenography",
+        location: "GMR Grand Ballroom",
         year: "2024",
-        image: "/images/stories/karthik-and-gayathri/IMG_6332.jpg",
-        webp: "/images/stories/karthik-and-gayathri/IMG_6332.webp",
-        caption: "Ambient evening gala lighting highlighting glasshouse architectural symmetry and guest arrivals.",
+        image: "/images/disciplines/events/IMG_6485.jpg",
+        caption: "Expansive 2.39:1 scope revealing the full architectural grandeur of thousands of guests gathered in celebration.",
+        aspect: "landscape"
+      },
+      {
+        id: "e-06",
+        title: "Live Stage Performance & Orchestration",
+        client: "Cultural Evening Gala",
+        location: "Theatrical Pavilion Stage",
+        year: "2024",
+        image: "/images/disciplines/events/IMG_6491.jpg",
+        caption: "Dynamic rhythm and dramatic key lighting captured during live musical and dance performances.",
+        aspect: "portrait"
+      },
+      {
+        id: "e-07",
+        title: "Evening Celebration Glow & Scenography",
+        client: "Grand Reception Evening",
+        location: "Estate Grounds",
+        year: "2024",
+        image: "/images/disciplines/events/IMG_6482.jpg",
+        caption: "Ambient dusk illumination highlighting illuminated floral towers and guest reception pathways.",
         aspect: "portrait"
       }
     ],
@@ -371,8 +376,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Working closely with renowned stylists and designers across Hyderabad, Mumbai, and Chennai, our creative direction fuses classical Indian motifs with stark, modern compositional geometry.",
       "Every frame is retouched with restraint: honoring authentic skin textures and natural fabric movement while maintaining magazine-cover polish."
     ],
-    heroImage: "/images/stories/bellam-srikonda/IMG_6341.jpg",
-    heroWebp: "/images/stories/bellam-srikonda/IMG_6341.webp",
+    heroImage: "/images/disciplines/fashion/IMG_6288.jpg",
     heroAspect: "cinematic",
     href: "/disciplines/fashion",
     metadata: {
@@ -386,57 +390,72 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     gallery: [
       {
         id: "f-01",
-        title: "Couture Silver Embellishments",
-        client: "Kavya Reddy Custom Couture",
-        location: "GMR Grand Foyer",
+        title: "High-Fashion Bridal Couture & Zari Weave",
+        client: "Haute Couture Lookbook",
+        location: "Heritage Suite, Hyderabad",
         year: "2024",
-        image: "/images/stories/bellam-srikonda/IMG_6341.jpg",
-        webp: "/images/stories/bellam-srikonda/IMG_6341.webp",
-        caption: "Tactile study of hand-embellished crystal embroidery, metallic threadwork, and sculptural bridal silhouettes.",
+        image: "/images/disciplines/fashion/IMG_6288.jpg",
+        caption: "Tactile study of hand-embellished metallic threadwork, pure silk draping, and sculptural bridal silhouettes.",
         aspect: "portrait"
       },
       {
         id: "f-02",
-        title: "Heritage Jewelry & Heirloom Craftsmanship",
-        client: "Fine Bridal Adornment",
-        location: "Editorial Suite",
+        title: "Couture Silhouette in Natural Directional Light",
+        client: "Designer Lookbook Spread",
+        location: "Courtyard Arcade",
         year: "2024",
-        image: "/images/stories/bellam-srikonda/IMG_6345.jpg",
-        webp: "/images/stories/bellam-srikonda/IMG_6345.webp",
-        caption: "Macro optical capture of uncut diamond chokers, Colombian emerald beads, and artisanal gold filigree.",
+        image: "/images/disciplines/fashion/IMG_6285.jpg",
+        caption: "Soft directional morning daylight capturing pure textile texture, metallic sheen, and architectural lines.",
         aspect: "portrait"
       },
       {
         id: "f-03",
-        title: "Sacred Handloom Silk & Temple Border",
-        client: "Harshitha Heritage Lookbook",
-        location: "Palace Grounds",
+        title: "Tactile Embroidery & Handwoven Silk Study",
+        client: "Archival Textile Campaign",
+        location: "Studio Stage",
         year: "2024",
-        image: "/images/stories/sirish-and-harshitha/IMG_6356.jpg",
-        webp: "/images/stories/sirish-and-harshitha/IMG_6356.webp",
-        caption: "Pure Kanjeevaram silk weave documented in directional natural morning light.",
+        image: "/images/disciplines/fashion/IMG_6280.jpg",
+        caption: "Macro optical focus preserving intricate gold zardozi motifs and artisanal heritage weaving.",
         aspect: "portrait"
       },
       {
         id: "f-04",
-        title: "Botanical Conservatory Editorial",
-        client: "Gayathri Bridal Spread",
-        location: "The Glasshouse",
+        title: "Architectural Draping & Heritage Jewelry",
+        client: "Fine Bridal Adornment",
+        location: "Palace Pavilion",
         year: "2024",
-        image: "/images/stories/karthik-and-gayathri/IMG_6326.jpg",
-        webp: "/images/stories/karthik-and-gayathri/IMG_6326.webp",
-        caption: "Natural daylight filtering through greenhouse architectural glass, creating soft botanical highlights.",
+        image: "/images/disciplines/fashion/IMG_6321.jpg",
+        caption: "Modern compositional geometry paired with classical temple jewelry and pure Kanjeevaram silk.",
         aspect: "portrait"
       },
       {
         id: "f-05",
-        title: "Bridal Veil & Sheer Texture Study",
-        client: "Hrithika Couture Portrait",
-        location: "Celebration Estate",
+        title: "Chiaroscuro Veil & Textural Depth",
+        client: "Bridal Editorial Campaign",
+        location: "Editorial Suite",
         year: "2024",
-        image: "/images/stories/hrithika-abhishek/IMG_6337.jpg",
-        webp: "/images/stories/hrithika-abhishek/IMG_6337.webp",
-        caption: "High-contrast chiaroscuro study of gossamer veil embroidery and quiet contemplation.",
+        image: "/images/disciplines/fashion/IMG_6286.jpg",
+        caption: "Dramatic chiaroscuro shadow-play rendering delicate veil embroidery and reflective diamond detailing.",
+        aspect: "portrait"
+      },
+      {
+        id: "f-06",
+        title: "Modern Editorial Composition & Poise",
+        client: "Contemporary Couture Feature",
+        location: "Conservatory Grounds",
+        year: "2024",
+        image: "/images/disciplines/fashion/IMG_6279.jpg",
+        caption: "Minimalist editorial framing honoring authentic model poise, unhurried posture, and clean lines.",
+        aspect: "portrait"
+      },
+      {
+        id: "f-07",
+        title: "Heirloom Adornment & Diamond Detail",
+        client: "High-Jewelry Editorial Spread",
+        location: "24 Frames Archive",
+        year: "2024",
+        image: "/images/disciplines/fashion/be3a19a9-179c-42a3-b47e-6b9fa7fb2ee8.JPG",
+        caption: "Optical macro clarity capturing uncut emeralds, heritage choker geometry, and fine artisanal setting.",
         aspect: "portrait"
       }
     ],

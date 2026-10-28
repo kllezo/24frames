@@ -36,3 +36,6 @@ next-env.d.ts
 
 # Large screen recording media captures (>25MB)
 *.mov
+
+# Antigravity tooling
+.last-skill-routing.json

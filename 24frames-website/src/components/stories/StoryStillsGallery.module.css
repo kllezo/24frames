@@ -1,0 +1,399 @@
+/* ============================================================
+   24 FRAMES — STORY STILLS GALLERY
+   Editorial Alternating Composition · Balanced Proportions
+   ============================================================ */
+
+.section {
+  position: relative;
+  width: 100%;
+  background-color: #FAF7F0;
+  padding: clamp(5.5rem, 9.5vw, 9rem) 0;
+  scroll-margin-top: 100px;
+  border-top: 1px solid rgba(9, 69, 62, 0.08);
+}
+
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 3.5vw, 3rem);
+  width: 100%;
+}
+
+/* ── Section Header ── */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(3.5rem, 6vw, 5.5rem);
+  gap: 0.75rem;
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 580px;
+}
+
+.ruleLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(9, 69, 62, 0.14);
+}
+
+.badge {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #09453E;
+  white-space: nowrap;
+}
+
+.title {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 500;
+  line-height: 1.15;
+  color: #142821;
+  margin: 0;
+}
+
+.subtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.875rem, 1.05vw, 0.98rem);
+  color: #55625B;
+  max-width: 620px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Editorial Alternating Grid ── */
+.editorialGrid {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3.5rem, 6vw, 5.5rem);
+  width: 100%;
+}
+
+.frameWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Interlaced Text Moments */
+.editorialInterlude {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(1rem, 3vw, 2.5rem);
+  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+  gap: 0.75rem;
+  background: #F4EFE6;
+  border-radius: 16px;
+  border: 1px solid rgba(9, 69, 62, 0.08);
+}
+
+.interludeKicker {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #09453E;
+}
+
+.interludeQuote {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.35;
+  color: #142821;
+  max-width: 680px;
+  margin: 0;
+}
+
+.interludeDivider {
+  width: 48px;
+  height: 2px;
+  background: #B5985A;
+  margin-top: 0.5rem;
+}
+
+/* Individual Figure Card */
+.frameFigure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: #FAF8F2;
+  border: 1px solid #E5DFD3;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.05);
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+  width: clamp(340px, 46%, 520px);
+}
+
+.frameFigure:hover {
+  transform: translateY(-4px);
+  border-color: #B5985A;
+  box-shadow: 0 16px 40px rgba(9, 69, 62, 0.12);
+}
+
+/* Alternating Alignment */
+.figureLeft {
+  align-self: flex-start;
+  margin-left: 0;
+}
+
+.figureRight {
+  align-self: flex-end;
+  margin-right: 0;
+}
+
+.imageFrameWrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #141714;
+}
+
+.aspectLandscape {
+  aspect-ratio: 16 / 10;
+}
+
+.aspectPortrait {
+  aspect-ratio: 4 / 5.2;
+}
+
+.galleryImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.frameFigure:hover .galleryImg {
+  transform: scale(1.03);
+}
+
+.expandTag {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(14, 24, 20, 0.85);
+  backdrop-filter: blur(6px);
+  color: #D4AF37;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  opacity: 0;
+  transform: translateY(3px);
+  transition: all 0.25s ease;
+}
+
+.frameFigure:hover .expandTag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.captionBar {
+  padding: 1.15rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background: #FAF8F2;
+}
+
+.captionHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.frameIdentifier {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #09453E;
+}
+
+.dimensionBadge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.58rem;
+  color: #8A948E;
+}
+
+.captionText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8125rem;
+  color: #4A564F;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── Lightbox Modal ── */
+.lightboxBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 12, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lightboxContainer {
+  max-width: 1140px;
+  width: 100%;
+  max-height: 94vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.lightboxTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 0.5rem;
+}
+
+.lightboxCounter {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #D4AF37;
+  font-weight: 700;
+}
+
+.lightboxCloseBtn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #FAF8F2;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.lightboxCloseBtn:hover {
+  background: #09453E;
+  border-color: #D4AF37;
+  transform: scale(1.06);
+}
+
+.lightboxImgArea {
+  position: relative;
+  width: 100%;
+  max-height: 72vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.lightboxImg {
+  max-width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+  display: block;
+}
+
+.lightboxArrowBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(14, 24, 20, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #FAF8F2;
+  font-size: 1.8rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.lightboxArrowBtn:hover {
+  background: #09453E;
+  border-color: #D4AF37;
+}
+
+.lightboxArrowLeft { left: 16px; }
+.lightboxArrowRight { right: 16px; }
+
+.lightboxCaptionBar {
+  background: #0E1411;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.15rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.lightboxCaptionText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.875rem;
+  color: #FAF8F2;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.lightboxMetadata {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  color: #D4AF37;
+}
+
+/* ── Responsive Behavior ── */
+@media (max-width: 768px) {
+  .frameFigure {
+    width: 100%;
+    align-self: center !important;
+  }
+}
+

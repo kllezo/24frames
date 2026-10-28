@@ -1,0 +1,147 @@
+/* ============================================================
+   24 FRAMES — AS SEEN IN (EDITORIAL MEDIA LOGO STRIP)
+   Warm Ivory Palette · Refined Continuous Horizontal Marquee
+   ============================================================ */
+
+.section {
+  position: relative;
+  width: 100%;
+  background-color: #FAF7F0;
+  padding: clamp(4.5rem, 7.5vw, 7rem) 0;
+  border-top: 1px solid rgba(9, 69, 62, 0.08);
+  border-bottom: 1px solid rgba(9, 69, 62, 0.08);
+  overflow: hidden;
+  z-index: 3;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 3.5vw, 3rem);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  margin-bottom: clamp(2rem, 3.5vw, 3rem);
+}
+
+.kickerRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+.ruleLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(9, 69, 62, 0.15);
+}
+
+.title {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.75rem, 0.9vw, 0.875rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #09453E;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.subtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.75rem, 0.9vw, 0.85rem);
+  color: #6A7770;
+  margin: 0;
+  max-width: 540px;
+  line-height: 1.5;
+}
+
+/* ── Seamless Marquee Track ── */
+.marqueeWrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+}
+
+.marqueeTrack {
+  display: flex;
+  align-items: center;
+  gap: clamp(2.5rem, 4.5vw, 4.5rem);
+  width: max-content;
+  animation: scrollMarquee 42s linear infinite;
+  padding: 0.75rem 0;
+}
+
+.marqueeWrapper:hover .marqueeTrack {
+  animation-play-state: paused;
+}
+
+.logoItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: clamp(34px, 4.2vw, 48px);
+  filter: grayscale(100%) opacity(0.78);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.logoItem:hover {
+  filter: grayscale(0%) opacity(1);
+  transform: scale(1.06);
+}
+
+.logoImg {
+  max-height: 100%;
+  width: auto;
+  max-width: clamp(110px, 14vw, 160px);
+  object-fit: contain;
+  display: block;
+}
+
+@keyframes scrollMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Accessibility: Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .marqueeWrapper {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}

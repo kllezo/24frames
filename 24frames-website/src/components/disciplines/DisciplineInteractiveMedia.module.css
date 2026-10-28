@@ -5,14 +5,15 @@
    ═══════════════════════════════════════════════════════════════════════ */
 
 .container {
-  max-width: 1440px;
+  max-width: 1360px;
   margin: 0 auto;
-  padding: 0 clamp(1.25rem, 4vw, 3.5rem);
+  padding: 0 clamp(1.25rem, 3.5vw, 3rem);
+  width: 100%;
 }
 
 /* ── Section Header ─────────────────────────────────────────────────── */
 .sectionHeader {
-  margin-bottom: clamp(2rem, 4vh, 3rem);
+  margin-bottom: clamp(2rem, 3.5vw, 3rem);
 }
 
 .sectionMeta {
@@ -48,7 +49,7 @@
 
 .sectionTitle {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(2rem, 3.5vw, 2.9rem);
+  font-size: clamp(2rem, 3.2vw, 2.85rem);
   font-weight: 500;
   line-height: 1.2;
   color: #142821;
@@ -64,7 +65,170 @@
   line-height: 1.55;
 }
 
-/* ── Motion Picture Video Section ───────────────────────────────────── */
+/* ── FEATURED CINEMATIC MASTERPIECE ─────────────────────────────────── */
+.featuredVideoSection {
+  padding: clamp(3.5rem, 7vh, 6rem) 0;
+  border-top: 1px solid rgba(9, 69, 62, 0.08);
+}
+
+.featuredPlayerCard {
+  background: #FAF8F2;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #E5DFD3;
+  box-shadow: 0 12px 36px rgba(9, 69, 62, 0.06);
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.featuredPlayerCard:hover {
+  transform: translateY(-4px);
+  border-color: #B5985A;
+  box-shadow: 0 20px 50px rgba(9, 69, 62, 0.12);
+}
+
+.featuredPosterWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #0C1411;
+  overflow: hidden;
+}
+
+.featuredPosterImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.featuredPlayerCard:hover .featuredPosterImg {
+  transform: scale(1.03);
+}
+
+.featuredVignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 20, 16, 0.2) 0%,
+    transparent 40%,
+    rgba(8, 20, 16, 0.85) 100%
+  );
+  pointer-events: none;
+}
+
+.featuredPlayBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(9, 69, 62, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 2px solid #D4AF37;
+  color: #FAF8F2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+}
+
+.featuredPlayBtn svg {
+  width: 28px;
+  height: 28px;
+  margin-left: 4px;
+  fill: #FAF8F2;
+}
+
+.featuredPlayerCard:hover .featuredPlayBtn {
+  transform: translate(-50%, -50%) scale(1.15);
+  background: #0D5C52;
+  border-color: #F5CE68;
+}
+
+.featuredDurationBadge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: rgba(14, 24, 20, 0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #D4AF37;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+}
+
+.featuredTitleOverlay {
+  position: absolute;
+  bottom: 22px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.featuredClientKicker {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #D4AF37;
+}
+
+.featuredMovieTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  font-weight: 600;
+  color: #FAF8F2;
+  margin: 0;
+  line-height: 1.25;
+}
+
+/* Film Information Strip */
+.filmInfoStrip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  padding: 1.35rem 1.75rem;
+  background: #FAF8F2;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.infoCell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.infoLabel {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8A948E;
+}
+
+.infoVal {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #142821;
+}
+
+/* ── Motion Picture Video Section (2-Column Grid) ───────────────────── */
 .videoSection {
   padding: clamp(3.5rem, 7vh, 6rem) 0;
   border-top: 1px solid rgba(9, 69, 62, 0.08);
@@ -126,15 +290,6 @@
   transition: background 0.3s ease;
 }
 
-.videoCard:hover .posterOverlay {
-  background: linear-gradient(
-    180deg,
-    rgba(10, 20, 16, 0.05) 0%,
-    rgba(10, 20, 16, 0.4) 100%
-  );
-}
-
-/* Elegant Center Play Button */
 .playButton {
   position: absolute;
   top: 50%;
@@ -167,7 +322,6 @@
   transform: translate(-50%, -50%) scale(1.15);
   background: #09453E;
   border-color: #F0C450;
-  box-shadow: 0 10px 30px rgba(9, 69, 62, 0.45);
 }
 
 .durationBadge {
@@ -176,7 +330,6 @@
   right: 14px;
   background: rgba(14, 24, 20, 0.85);
   backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
   border: 1px solid rgba(212, 175, 55, 0.4);
   color: #D4AF37;
   font-family: var(--font-mono, monospace);
@@ -278,19 +431,68 @@
   color: #09453E;
 }
 
-/* ── Photographic Gallery Grid ──────────────────────────────────────── */
+/* ── Photographic Gallery (Alternating 2-Column Editorial) ──────────── */
 .gallerySection {
   padding: clamp(3.5rem, 7vh, 6rem) 0;
   border-top: 1px solid rgba(9, 69, 62, 0.08);
 }
 
-.galleryGrid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 1.75rem;
+.alternatingGallery {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 5vw, 4.5rem);
+  width: 100%;
 }
 
-.galleryCard {
+.galleryItemWrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Editorial Interlude */
+.galleryInterlude {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(2rem, 3.5vw, 3rem) clamp(1rem, 3vw, 2.5rem);
+  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+  background: #F4EFE6;
+  border-radius: 16px;
+  border: 1px solid rgba(9, 69, 62, 0.08);
+  gap: 0.65rem;
+}
+
+.interludeKicker {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #09453E;
+}
+
+.interludeQuote {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.35;
+  color: #142821;
+  max-width: 680px;
+  margin: 0;
+}
+
+.interludeLine {
+  width: 48px;
+  height: 2px;
+  background: #B5985A;
+  margin-top: 0.4rem;
+}
+
+/* Alternating Card */
+.alternatingCard {
   background: #FAF8F2;
   border-radius: 16px;
   overflow: hidden;
@@ -300,32 +502,38 @@
   flex-direction: column;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
+  width: clamp(340px, 46%, 540px);
 }
 
-.galleryCard:hover {
+.alternatingCard:hover {
   transform: translateY(-4px);
   border-color: #B5985A;
-  box-shadow: 0 14px 36px rgba(9, 69, 62, 0.12);
+  box-shadow: 0 16px 40px rgba(9, 69, 62, 0.12);
 }
 
-.galleryCardWide {
-  grid-column: span 7;
+.cardLeft {
+  align-self: flex-start;
+  margin-left: 0;
 }
 
-.galleryCardTall {
-  grid-column: span 5;
+.cardRight {
+  align-self: flex-end;
+  margin-right: 0;
 }
 
 .galleryImgWrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10;
   overflow: hidden;
   background: #141714;
 }
 
-.galleryCardTall .galleryImgWrap {
-  aspect-ratio: 4 / 5;
+.aspectLandscape {
+  aspect-ratio: 16 / 10;
+}
+
+.aspectPortrait {
+  aspect-ratio: 4 / 5.2;
 }
 
 .galleryImg {
@@ -336,7 +544,7 @@
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.galleryCard:hover .galleryImg {
+.alternatingCard:hover .galleryImg {
   transform: scale(1.03);
 }
 
@@ -384,7 +592,7 @@
   transition: all 0.25s ease;
 }
 
-.galleryCard:hover .expandPill {
+.alternatingCard:hover .expandPill {
   opacity: 1;
   transform: translateY(0);
 }
@@ -459,12 +667,8 @@
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modalContainer {
@@ -666,13 +870,8 @@
   color: #FFFFFF;
 }
 
-.lightboxArrowLeft {
-  left: 16px;
-}
-
-.lightboxArrowRight {
-  right: 16px;
-}
+.lightboxArrowLeft { left: 16px; }
+.lightboxArrowRight { right: 16px; }
 
 .lightboxCaptionBar {
   background: #0E1411;
@@ -713,12 +912,18 @@
     gap: 1.5rem;
   }
 
-  .galleryCardWide,
-  .galleryCardTall {
-    grid-column: span 12;
+  .filmInfoStrip {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .galleryImgWrap {
-    aspect-ratio: 16 / 10;
+  .alternatingCard {
+    width: 100%;
+    align-self: center !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .filmInfoStrip {
+    grid-template-columns: 1fr;
   }
 }

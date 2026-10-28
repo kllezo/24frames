@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import { STORIES_DATA, StoryDetail } from "@/data/stories";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import StoryExploreStillsButton from "@/components/stories/StoryExploreStillsButton";
+import StoryStillsGallery from "@/components/stories/StoryStillsGallery";
 import styles from "./StoryDetail.module.css";
 
 interface PageProps {
@@ -116,9 +118,7 @@ export default async function StoryDetailPage({ params }: PageProps) {
                 <p className={styles.heroNarrativeLead}>{story.narrativeOverview}</p>
 
                 <div className={styles.heroActionRow}>
-                  <a href="#stills" className={styles.primaryActionBtn}>
-                    EXPLORE CURATED STILLS ({story.frames.length}) <span>↓</span>
-                  </a>
+                  <StoryExploreStillsButton framesCount={story.frames.length} targetId="stills" />
                   <a href="#inquire" className={styles.secondaryActionBtn}>
                     COMMISSION 24 FRAMES <span>→</span>
                   </a>
@@ -161,94 +161,8 @@ export default async function StoryDetailPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* ── Editorial Photography Gallery ─────────────────────── */}
-        <section className={styles.gallerySection}>
-          <div className={styles.container}>
-            <div className={styles.gallerySectionHeader}>
-              <span className={styles.sectionBadge}>ARCHIVAL STILLS · TWELVE-INCH REEL</span>
-              <h2 className={styles.gallerySectionTitle}>Selected Exhibition Stills</h2>
-              <p className={styles.gallerySectionSub}>
-                Sequenced with deliberate pacing, ample ivory whitespace, and pure optical focus. Every frame preserves authentic light and emotion.
-              </p>
-            </div>
-
-            <div className={styles.galleryGrid}>
-              {story.frames.map((frame, index) => {
-                const isLandscape = frame.aspect === "landscape";
-                const isLastItem = index === story.frames.length - 1 && story.frames.length % 2 === 1;
-
-                // Interlocking editorial placement cadence:
-                // 0: Left Primary (cols 1-7)
-                // 1: Right Companion (cols 8-12, staggered vertically ~15-20% overlap)
-                // 2: Right Primary (cols 6-12)
-                // 3: Left Companion (cols 1-5, staggered vertically ~15-20% overlap)
-                let layoutClass = styles.gridColLeftPrimary;
-                if (isLastItem) {
-                  layoutClass = styles.gridColCenterAnchor;
-                } else if (index % 4 === 1) {
-                  layoutClass = styles.gridColRightCompanion;
-                } else if (index % 4 === 2) {
-                  layoutClass = styles.gridColRightPrimary;
-                } else if (index % 4 === 3) {
-                  layoutClass = styles.gridColLeftCompanion;
-                }
-
-                // Individual intentional crop alignment based on subject focal point
-                const objectPosition =
-                  frame.id === "bs-01"
-                    ? "center 30%"
-                    : frame.id === "bs-02"
-                    ? "center 15%"
-                    : frame.id === "bs-03"
-                    ? "center 20%"
-                    : frame.id === "bs-04"
-                    ? "center 25%"
-                    : isLandscape
-                    ? "center 35%"
-                    : "center 22%";
-
-                return (
-                  <figure
-                    key={frame.id}
-                    className={`${styles.frameFigure} ${layoutClass}`}
-                  >
-                    <div
-                      className={`${styles.imageFrameWrap} ${
-                        isLandscape ? styles.aspectLandscape : styles.aspectPortrait
-                      }`}
-                    >
-                      <picture>
-                        <source srcSet={frame.webpUrl} type="image/webp" />
-                        <img
-                          src={frame.url}
-                          alt={frame.caption}
-                          className={styles.galleryImg}
-                          style={{ objectPosition }}
-                          loading={index < 2 ? "eager" : "lazy"}
-                          decoding="async"
-                          width={frame.width}
-                          height={frame.height}
-                        />
-                      </picture>
-                    </div>
-
-                    <figcaption className={styles.captionBar}>
-                      <div className={styles.captionHeaderRow}>
-                        <span className={styles.frameIdentifier}>
-                          FRAME {frame.frameNo} · 24 FRAMES ARCHIVE
-                        </span>
-                        <span className={styles.filmBadge}>
-                          {frame.width} × {frame.height}PX
-                        </span>
-                      </div>
-                      <p className={styles.captionText}>{frame.caption}</p>
-                    </figcaption>
-                  </figure>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        {/* ── Curated Exhibition Stills Gallery (Alternating Editorial Composition) ── */}
+        <StoryStillsGallery frames={story.frames} storyTitle={story.title} />
 
         {/* ── Story Navigation (Prev / Next) ───────────────────── */}
         <section className={styles.storyNavSection}>

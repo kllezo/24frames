@@ -213,7 +213,7 @@ export default function ClientGalleryExperience() {
                   }}
                   aria-label={`${item.number} ${item.title} — Click to view section`}
                 >
-                  {/* Layer 1: Artwork Canvas (Top window with gradient and image) */}
+                  {/* Layer 1: Artwork Canvas (Expands across card on hover) */}
                   <div className={`${styles.artCanvas} ${item.gradientClass}`}>
                     <img
                       src={item.artImage}
@@ -221,6 +221,7 @@ export default function ClientGalleryExperience() {
                       className={styles.artImage}
                       loading="lazy"
                     />
+                    <div className={styles.hoverOverlayGradient} aria-hidden="true" />
                   </div>
 
                   {/* Layer 2: Sliding Notch Flap with Sculpted SVG Contour */}
