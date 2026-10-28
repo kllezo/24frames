@@ -1,15 +1,17 @@
 /* ============================================================
-   24 FRAMES — HERO SECTION
-   Cinematic Card Carousel (Reference 1)
+   24 FRAMES — ACT I: THE FIRST FRAME
+   Large Edge-to-Edge Photographic Scene · Soft Light Sweep Reveal
+   Typography Positioned in Atmospheric Negative Space
    ============================================================ */
 
 .heroSection {
   position: relative;
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
-  background: var(--color-bg);
-  padding: clamp(6rem, 10vh, 7.5rem) 0 clamp(3rem, 6vh, 5rem);
+  min-height: calc(100vh - 70px);
+  background: #FAF7F0;
+  background-image: radial-gradient(rgba(35, 45, 40, 0.09) 1.25px, transparent 1.25px);
+  background-size: 26px 26px;
+  padding: clamp(5rem, 8vh, 6.5rem) 0 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,479 +20,313 @@
 
 .container {
   width: 100%;
-  max-width: var(--max-width);
+  max-width: 1360px;
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: 0 clamp(1.25rem, 3.5vw, 2.5rem);
   position: relative;
-  z-index: 5;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1.75rem;
 }
 
-/* ── Narrative Header ───────────────────────────────── */
-.narrativeHeader {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  max-width: 860px;
-  margin: 0 auto clamp(2rem, 4vh, 3rem);
-  will-change: transform, opacity;
-}
-
-.kickerRow {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.chapterBadge {
-  font-family: var(--font-emphasis, Montserrat, sans-serif);
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-kllezo-green, #09453e);
-}
-
-.heritageBadge {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #383C38;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  background: #FFFFFF;
-  border: 1px solid rgba(9, 69, 62, 0.16);
-}
-
-.headline {
-  font-family: var(--font-headline);
-  font-size: var(--fs-hero);
-  font-weight: 600;
-  color: var(--color-text-primary);
-  line-height: 1.06;
-  margin-bottom: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.15rem;
-}
-
-.headlinePrimary {
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.headlineSecondary {
-  display: inline-flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.headlineMain {
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.cursiveAccent {
-  font-family: var(--font-cursive);
-  color: var(--color-kllezo-green);
-  font-weight: 400;
-  font-size: clamp(2.4rem, 4.4vw, 4.5rem);
-  text-transform: none;
-  letter-spacing: normal;
-  line-height: 0.8;
-  transform: translateY(2px);
-}
-
-.subheadline {
-  font-family: var(--font-body, Inter, sans-serif);
-  font-size: var(--fs-subtitle);
-  font-weight: 400;
-  font-style: normal;
-  color: #383C38;
-  line-height: 1.68;
-  max-width: 680px;
-}
-
-/* ── Cinematic Card Carousel ────────────────────────── */
-.carouselViewport {
+/* ─────────────────────────────────────────────────────────────
+   1. CINEMATIC PHOTOGRAPHIC SCENE
+   ───────────────────────────────────────────────────────────── */
+.cinematicFrame {
   position: relative;
   width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
+  height: clamp(480px, 68vh, 680px);
+  border-radius: 26px;
   overflow: hidden;
-  border-radius: var(--radius-lg);
+  background-color: #0E1613;
+  box-shadow: 0 16px 48px rgba(14, 28, 22, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.carouselTrack {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  height: clamp(420px, 56vh, 640px);
-  perspective: 1200px;
-  gap: clamp(12px, 1.5vw, 24px);
-  padding: 0 clamp(4px, 1vw, 20px);
-}
-
-/* ── Card Base ─────────────────────────────────────── */
-.card {
-  position: relative;
-  flex-shrink: 0;
-  border-radius: clamp(16px, 2vw, 28px);
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform, opacity;
-  box-shadow: 0 8px 32px rgba(22, 75, 64, 0.08);
-}
-
-.card:hover {
-  box-shadow: 0 16px 48px rgba(22, 75, 64, 0.14);
-}
-
-.cardImageWrap {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  border-radius: inherit;
-}
-
-.cardImage {
+.heroImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  object-position: center 30%;
+  display: block;
+  transform-origin: center center;
 }
 
-.card:hover .cardImage {
-  transform: scale(1.03);
+/* Subdued Darkroom Atmosphere Overlay */
+.darkroomOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 65% 45%,
+    rgba(14, 22, 18, 0.08) 0%,
+    rgba(10, 16, 13, 0.55) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
 }
 
-.cardVignette {
+/* Feathered Warm Light Sweep Beam */
+.lightSweepBeam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 248, 230, 0.1) 20%,
+    rgba(255, 252, 244, 0.42) 50%,
+    rgba(255, 248, 230, 0.1) 80%,
+    transparent 100%
+  );
+  filter: blur(14px);
+  pointer-events: none;
+  transform: translateX(-110%);
+  z-index: 3;
+}
+
+/* Framing Vignette */
+.framingVignette {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(12, 48, 40, 0.25) 0%,
+    rgba(12, 18, 15, 0.5) 0%,
     transparent 28%,
-    rgba(12, 48, 40, 0.2) 55%,
-    rgba(7, 18, 15, 0.82) 100%
+    transparent 65%,
+    rgba(12, 18, 15, 0.72) 100%
   );
   pointer-events: none;
+  z-index: 2;
 }
 
-.cardLink {
-  display: block;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-}
-
-/* ── Prev Card ─────────────────────────────────────── */
-.cardPrev {
-  width: clamp(100px, 18vw, 240px);
-  height: 85%;
-  opacity: 0.6;
-  transform: scale(0.92) translateX(10%);
-  z-index: 1;
-}
-
-.cardPrev:hover {
-  opacity: 0.8;
-  transform: scale(0.94) translateX(8%);
-}
-
-/* ── Active Card ───────────────────────────────────── */
-.cardActive {
-  width: clamp(280px, 50vw, 580px);
-  height: 100%;
-  z-index: 10;
-  cursor: pointer;
-  box-shadow: 
-    0 24px 64px rgba(9, 69, 62, 0.16),
-    0 4px 16px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transform-style: preserve-3d;
-  transition: transform 0.35s ease-out, box-shadow 0.4s ease, border-color 0.4s ease;
-}
-
-.cardActive:hover {
-  box-shadow: 
-    0 30px 75px rgba(9, 69, 62, 0.22),
-    0 6px 24px rgba(0, 0, 0, 0.12);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-/* ── Quiet Luxury Card Badges ── */
-.cardTopBadge {
+/* Top Frame Bar */
+.frameTopBar {
   position: absolute;
-  top: clamp(14px, 2vw, 22px);
-  left: clamp(14px, 2vw, 22px);
-  right: clamp(14px, 2vw, 22px);
-  z-index: 12;
+  top: clamp(16px, 2.8vw, 28px);
+  left: clamp(18px, 3vw, 32px);
+  right: clamp(18px, 3vw, 32px);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
+  z-index: 4;
   pointer-events: none;
 }
 
-.curatorialFrameBadge {
-  font-family: var(--font-body);
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #FFFFFF;
-  background: rgba(9, 69, 62, 0.65);
-  backdrop-filter: blur(10px);
-  padding: 0.3rem 0.75rem;
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.heritagePill {
-  font-family: var(--font-body);
-  font-size: 0.5625rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(24, 28, 26, 0.45);
-  backdrop-filter: blur(8px);
-  padding: 0.25rem 0.65rem;
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.exploreStoryPrompt {
+.kickerBadge {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  gap: 0.5rem;
+  background: rgba(14, 22, 18, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 0.35rem 0.8rem;
+  border-radius: 9999px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #FFFFFF;
-  margin-top: 0.65rem;
-  transition: color 0.25s ease;
 }
 
-.storyPromptArrow {
+.kickerDot {
+  width: 6px;
+  height: 6px;
+  background: #34D399;
+  border-radius: 50%;
+}
+
+.frameEdition {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Editorial Headline Overlay (Positioned in Right-Hand Negative Space) */
+.editorialTextOverlay {
+  position: absolute;
+  top: clamp(20%, 25%, 30%);
+  right: clamp(1.5rem, 4.5vw, 4rem);
+  max-width: clamp(340px, 40vw, 560px);
+  text-align: right;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.headline {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.1rem, 3.6vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.14;
+  color: #FFFFFF;
+  margin: 0;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+}
+
+.supportingCopy {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.8125rem, 1.05vw, 0.96875rem);
+  line-height: 1.62;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* Bottom Frame Bar */
+.frameBottomBar {
+  position: absolute;
+  bottom: clamp(16px, 2.8vw, 28px);
+  left: clamp(18px, 3vw, 32px);
+  right: clamp(18px, 3vw, 32px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  z-index: 4;
+}
+
+.filmMetadata {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  pointer-events: none;
+}
+
+.filmStock {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #F5DCA0;
+}
+
+.filmSubject {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.scrollDownBtn {
+  background: rgba(255, 255, 255, 0.92);
+  color: #09453E;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.65rem 1.35rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s ease;
+}
+
+.scrollDownBtn:hover {
+  background: #09453E;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(9, 69, 62, 0.35);
+}
+
+.arrowIcon {
+  font-size: 0.85rem;
   transition: transform 0.25s ease;
 }
 
-.cardActive:hover .storyPromptArrow {
-  transform: translateX(4px);
+.scrollDownBtn:hover .arrowIcon {
+  transform: translateY(3px);
 }
 
-/* ── Next Card ─────────────────────────────────────── */
-.cardNext {
-  width: clamp(100px, 18vw, 240px);
-  height: 85%;
-  opacity: 0.6;
-  transform: scale(0.92) translateX(-10%);
-  z-index: 1;
-}
-
-.cardNext:hover {
-  opacity: 0.8;
-  transform: scale(0.94) translateX(-8%);
-}
-
-/* ── Card Label (Prev/Next) ────────────────────────── */
-.cardLabel {
-  position: absolute;
-  top: clamp(10px, 1.5vw, 20px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
-}
-
-.cardLabel span {
-  font-family: var(--font-mono);
-  font-size: 0.5625rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(32, 35, 31, 0.3);
-  backdrop-filter: blur(8px);
-  padding: 0.3rem 0.65rem;
-  border-radius: var(--radius-full);
-  white-space: nowrap;
-}
-
-/* ── Title Overlay on Active Card ──────────────────── */
-.cardTitleOverlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 15;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  will-change: transform, opacity;
-}
-
-.dayLabel {
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.cardTitle {
-  font-family: var(--font-headline);
-  font-size: clamp(1.6rem, 3vw, 2.6rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: #FFFFFF;
-  line-height: 1.1;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
-}
-
-.cardSubtitle {
-  font-family: var(--font-body);
-  font-size: clamp(0.85rem, 1.05vw, 1.05rem);
-  font-weight: 400;
-  font-style: normal;
-  color: rgba(255, 255, 255, 0.9);
-  margin-top: 0.15rem;
-}
-
-.categoryLabel {
-  font-family: var(--font-body);
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-  margin-top: 0.4rem;
-}
-
-/* ── Navigation Dots ───────────────────────────────── */
-.dotsRow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: clamp(1rem, 2vh, 1.5rem);
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-border);
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
-}
-
-.dot:hover {
-  background: var(--color-text-secondary);
-}
-
-.dotActive {
-  background: var(--color-accent);
-  width: 24px;
-  border-radius: var(--radius-full);
-}
-
-/* ── Metrics Bar ───────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────
+   2. PEDIGREE METRICS BAR
+   ───────────────────────────────────────────────────────────── */
 .metricsBar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: clamp(1.5rem, 3.5vw, 3.5rem);
-  margin-top: clamp(2.5rem, 4.5vh, 4rem);
-  padding: clamp(0.85rem, 1.5vw, 1.25rem) clamp(1.5rem, 3vw, 2.5rem);
-  border-radius: var(--radius-full);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--color-shadow-subtle);
-  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1080px;
+  padding: 1.1rem 2rem;
+  background: #F5EFE4;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.035);
 }
 
 .metricItem {
   display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.2rem;
 }
 
 .metricValue {
-  font-family: var(--font-emphasis);
-  font-size: clamp(1.35rem, 2vw, 1.85rem);
-  font-weight: 800;
-  color: var(--color-kllezo-green);
-  letter-spacing: -0.02em;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 600;
   line-height: 1;
+  color: #142821;
 }
 
 .metricLabel {
-  font-family: var(--font-body);
-  font-size: var(--fs-caption);
-  color: var(--color-text-secondary);
-  font-weight: 500;
-  white-space: nowrap;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #55625B;
 }
 
 .metricDivider {
-  color: var(--color-border);
-  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.12);
+  font-size: 1.1rem;
   font-weight: 300;
 }
 
-
-/* ── Responsive ─────────────────────────────────────── */
-@media (max-width: 768px) {
-  .carouselTrack {
-    height: clamp(340px, 50vh, 480px);
-    gap: 8px;
-    padding: 0 4px;
+/* ─────────────────────────────────────────────────────────────
+   3. RESPONSIVE DESIGN (TABLET & MOBILE)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .editorialTextOverlay {
+    position: absolute;
+    top: auto;
+    bottom: 85px;
+    left: 20px;
+    right: 20px;
+    max-width: 100%;
+    text-align: left;
   }
 
-  .cardPrev,
-  .cardNext {
-    width: 60px;
-    opacity: 0.4;
-  }
-
-  .cardActive {
-    width: 75vw;
-  }
-
-  .cardTitleOverlay {
-    padding: 1.2rem;
-  }
-
-  .cardTitle {
-    font-size: 1.3rem;
+  .cinematicFrame {
+    height: 520px;
   }
 
   .metricsBar {
-    flex-direction: column;
-    border-radius: var(--radius-md);
-    gap: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
     padding: 1.25rem;
   }
 
@@ -499,18 +335,39 @@
   }
 }
 
-@media (max-width: 480px) {
-  .cardPrev,
-  .cardNext {
-    width: 40px;
-    opacity: 0.3;
+@media (max-width: 600px) {
+  .frameTopBar,
+  .frameBottomBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
   }
 
-  .cardTitle {
-    font-size: 1.1rem;
+  .scrollDownBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroImage,
+  .lightSweepBeam,
+  .darkroomOverlay,
+  .scrollDownBtn {
+    transition: none !important;
+    animation: none !important;
   }
 
-  .cardSubtitle {
-    font-size: 0.8rem;
+  .darkroomOverlay {
+    display: none;
+  }
+
+  .lightSweepBeam {
+    display: none;
+  }
+
+  .heroImage {
+    transform: none !important;
+    filter: none !important;
   }
 }

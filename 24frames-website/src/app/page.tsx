@@ -8,6 +8,7 @@ import HeroSection from "@/components/homepage/HeroSection";
 import LivingContactSheet from "@/components/homepage/LivingContactSheet";
 import TheCollection from "@/components/homepage/TheCollection";
 import FounderRecognitionSection from "@/components/homepage/FounderRecognitionSection";
+import ClientGalleryExperience from "@/components/homepage/ClientGalleryExperience";
 import InvitationCTA from "@/components/homepage/InvitationCTA";
 
 const Preloader = dynamic(() => import("@/components/ui/Preloader"), { ssr: false });
@@ -43,19 +44,22 @@ export default function HomePage() {
       >
         <Navigation />
         <main>
-          {/* Chapter 01 — The Opening Frame */}
+          {/* Act I — The First Frame (Cinematic Hero Opening) */}
           <HeroSection />
 
-          {/* Chapter 02 — The Vows (Curated Exhibition & Wedding Films) */}
+          {/* Act II — A Memory in Motion (The Vows Scroll-Driven Narrative) */}
           <LivingContactSheet />
 
-          {/* Chapter 03 — The Collection (Six Editorial Disciplines Showcase) */}
+          {/* Act III — The Archive Opens (The Six Curated Disciplines) */}
           <TheCollection />
 
-          {/* Chapter 04 — Founder & Recognition Wall */}
+          {/* Act IV — The Artist & Visionary (Phani Gogireddy Exact Reference Composition) */}
           <FounderRecognitionSection />
 
-          {/* Chapter 05 — The Invitation (Bespoke Commission Portals) */}
+          {/* Royal Palace Client Suite — The 24 Frames Client Gallery Experience */}
+          <ClientGalleryExperience />
+
+          {/* Act V — The Lasting Frame (Invitation & Conversation) */}
           <InvitationCTA />
         </main>
         <Footer />
