@@ -403,45 +403,6 @@ export default function FounderRecognitionSection() {
                 <span className={styles.statDesc}>SQ. FT. CORPORATE HEADQUARTERS</span>
               </div>
             </div>
-
-            {/* 4. Three Core Principles (Contained inside Left Column matching reference) */}
-            <div ref={principlesRef} className={styles.principlesContainer}>
-              <span className={styles.principlesKicker}>THREE CORE PRINCIPLES</span>
-              <div className={styles.principlesList}>
-                {/* Principle 01 */}
-                <div className={styles.principleCard}>
-                  <div className={styles.principleTitleRow}>
-                    <span className={styles.principleNumber}>01</span>
-                    <h4 className={styles.principleTitle}>On-Time Delivery</h4>
-                  </div>
-                  <p className={styles.principleDescription}>
-                    Setting industry benchmarks with a fast, disciplined turnaround for master edits and stills.
-                  </p>
-                </div>
-
-                {/* Principle 02 */}
-                <div className={styles.principleCard}>
-                  <div className={styles.principleTitleRow}>
-                    <span className={styles.principleNumber}>02</span>
-                    <h4 className={styles.principleTitle}>Uncompromising Quality</h4>
-                  </div>
-                  <p className={styles.principleDescription}>
-                    Blending technical mastery with creative vision on optical cinema primes and archival grades.
-                  </p>
-                </div>
-
-                {/* Principle 03 */}
-                <div className={styles.principleCard}>
-                  <div className={styles.principleTitleRow}>
-                    <span className={styles.principleNumber}>03</span>
-                    <h4 className={styles.principleTitle}>Heartfelt Storytelling</h4>
-                  </div>
-                  <p className={styles.principleDescription}>
-                    Transforming fleeting, unrepeatable moments into enduring generational heirlooms.
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* ══════════ RIGHT COLUMN ══════════ */}
@@ -579,6 +540,48 @@ export default function FounderRecognitionSection() {
                 <span>COMMISSION PHANI GOGIREDDY</span>
                 <span className={styles.btnArrow}>→</span>
               </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* ── THREE CORE PRINCIPLES (Full Container Width Row Beneath Grid) ── */}
+        <div ref={principlesRef} className={styles.principlesContainer}>
+          <div className={styles.principlesHeaderRow}>
+            <span className={styles.principlesKicker}>THREE CORE PRINCIPLES</span>
+            <span className={styles.principlesLine} aria-hidden="true" />
+          </div>
+          <div className={styles.principlesList}>
+            {/* Principle 01 */}
+            <div className={styles.principleCard}>
+              <div className={styles.principleTitleRow}>
+                <span className={styles.principleNumber}>01</span>
+                <h4 className={styles.principleTitle}>On-Time Delivery</h4>
+              </div>
+              <p className={styles.principleDescription}>
+                Setting industry benchmarks with a fast, disciplined turnaround for master edits and stills.
+              </p>
+            </div>
+
+            {/* Principle 02 */}
+            <div className={styles.principleCard}>
+              <div className={styles.principleTitleRow}>
+                <span className={styles.principleNumber}>02</span>
+                <h4 className={styles.principleTitle}>Uncompromising Quality</h4>
+              </div>
+              <p className={styles.principleDescription}>
+                Blending technical mastery with creative vision on optical cinema primes and archival grades.
+              </p>
+            </div>
+
+            {/* Principle 03 */}
+            <div className={styles.principleCard}>
+              <div className={styles.principleTitleRow}>
+                <span className={styles.principleNumber}>03</span>
+                <h4 className={styles.principleTitle}>Heartfelt Storytelling</h4>
+              </div>
+              <p className={styles.principleDescription}>
+                Transforming fleeting, unrepeatable moments into enduring generational heirlooms.
+              </p>
             </div>
           </div>
         </div>

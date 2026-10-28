@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/homepage/HeroSection";
-import LivingContactSheet from "@/components/homepage/LivingContactSheet";
 import TheCollection from "@/components/homepage/TheCollection";
 import FounderRecognitionSection from "@/components/homepage/FounderRecognitionSection";
 import ClientGalleryExperience from "@/components/homepage/ClientGalleryExperience";
@@ -47,8 +46,15 @@ export default function HomePage() {
           {/* Act I — The First Frame (Cinematic Hero Opening) */}
           <HeroSection />
 
-          {/* Act II — A Memory in Motion (The Vows Scroll-Driven Narrative) */}
-          <LivingContactSheet />
+          {/* Clean Editorial Ivory Whitespace Pause (Intentional chapter breather) */}
+          <div
+            style={{
+              width: "100%",
+              height: "clamp(4.5rem, 9vh, 8rem)",
+              backgroundColor: "#FAF7F0",
+            }}
+            aria-hidden="true"
+          />
 
           {/* Act III — The Archive Opens (The Six Curated Disciplines) */}
           <TheCollection />

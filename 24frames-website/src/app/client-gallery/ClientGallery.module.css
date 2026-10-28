@@ -1,0 +1,515 @@
+/* ============================================================
+   24 FRAMES — CLIENT GALLERY DEDICATED EXPERIENCE PAGE
+   Warm Ivory, Deep Forest Green (#09453E), Champagne Gold (#B5985A)
+   Five Distinct Vertically Arranged Sections with Matching Hash IDs
+   ============================================================ */
+
+.clientGalleryMain {
+  position: relative;
+  width: 100%;
+  background-color: #FAF7F0;
+  color: #20231F;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   1. PAGE HEADER & MASTHEAD
+   ───────────────────────────────────────────────────────────── */
+.pageHeader {
+  position: relative;
+  padding: clamp(6.5rem, 12vh, 8.5rem) 0 clamp(3rem, 5vw, 4.5rem);
+  background-color: #FAF7F0;
+  background-image: radial-gradient(rgba(35, 45, 40, 0.12) 1.25px, transparent 1.25px);
+  background-size: 26px 26px;
+  border-bottom: 1px solid rgba(9, 69, 62, 0.08);
+}
+
+.headerContainer {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-left: clamp(1.25rem, 3.5vw, 2.75rem);
+  padding-right: clamp(1.25rem, 3.5vw, 2.75rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.breadcrumbRow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.breadcrumbHome {
+  color: #09453E;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumbHome:hover {
+  color: #B5985A;
+}
+
+.breadcrumbSlash {
+  color: rgba(9, 69, 62, 0.35);
+}
+
+.breadcrumbCurrent {
+  color: #727F78;
+}
+
+.kicker {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #B5985A;
+  margin-bottom: 0.85rem;
+}
+
+.pageMainTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+  font-weight: 600;
+  color: #09453E;
+  margin: 0 0 1.25rem 0;
+  line-height: 1.1;
+  max-width: 860px;
+}
+
+.pageSubtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.95rem, 1.15vw, 1.08rem);
+  line-height: 1.7;
+  color: #4A504C;
+  max-width: 720px;
+  margin: 0 0 2.5rem 0;
+}
+
+/* Quick Jump Pill Navigation */
+.quickAnchorBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.5rem;
+  background: #FFFFFF;
+  border: 1px solid rgba(9, 69, 62, 0.12);
+  border-radius: 9999px;
+  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.05);
+}
+
+.anchorPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #20231F;
+  background: transparent;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.anchorPill:hover {
+  background: #FAF7F0;
+  color: #09453E;
+}
+
+.anchorNum {
+  color: #B5985A;
+  font-weight: 700;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. FIVE VERTICAL FEATURE SECTIONS
+   ───────────────────────────────────────────────────────────── */
+.sectionsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.featureSection {
+  position: relative;
+  width: 100%;
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+  scroll-margin-top: 110px; /* Accounts for sticky header */
+  border-bottom: 1px solid rgba(9, 69, 62, 0.08);
+}
+
+.featureSectionAlt {
+  background: #FCFAF6;
+}
+
+.sectionInner {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-left: clamp(1.25rem, 3.5vw, 2.75rem);
+  padding-right: clamp(1.25rem, 3.5vw, 2.75rem);
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2.5rem, 5vw, 5.5rem);
+  align-items: center;
+}
+
+.gridMediaRight {
+  direction: rtl;
+}
+
+.gridMediaRight > * {
+  direction: ltr;
+}
+
+/* ── Media Column ── */
+.mediaColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.primaryCanvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 48px rgba(9, 69, 62, 0.08);
+  border: 1px solid rgba(9, 69, 62, 0.1);
+  background: #E8E3D8;
+}
+
+.primaryImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.imageScrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(9, 69, 62, 0.1) 0%,
+    transparent 50%,
+    rgba(9, 69, 62, 0.3) 100%
+  );
+  pointer-events: none;
+}
+
+.floatingChapterBadge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #09453E;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(9, 69, 62, 0.15);
+}
+
+.secondaryCanvas {
+  width: 75%;
+  aspect-ratio: 16 / 10;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(9, 69, 62, 0.07);
+  border: 1px solid rgba(9, 69, 62, 0.1);
+  margin-top: -3.5rem;
+  margin-left: auto;
+  position: relative;
+  z-index: 2;
+  background: #E8E3D8;
+}
+
+.gridMediaRight .secondaryCanvas {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.secondaryImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Content Column ── */
+.contentColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.chapterBadgeLine {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.goldLine {
+  width: 28px;
+  height: 2px;
+  background-color: #B5985A;
+}
+
+.sectionKicker {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #B5985A;
+}
+
+.sectionTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 3.2vw, 2.85rem);
+  font-weight: 600;
+  color: #09453E;
+  margin: 0 0 0.85rem 0;
+  line-height: 1.15;
+}
+
+.sectionTagline {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.15rem, 1.4vw, 1.35rem);
+  font-style: italic;
+  font-weight: 500;
+  color: #55625B;
+  margin: 0 0 1.25rem 0;
+  line-height: 1.4;
+}
+
+.sectionIntroduction {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.92rem, 1.05vw, 1rem);
+  line-height: 1.7;
+  color: #2D3330;
+  font-weight: 500;
+  margin: 0 0 1rem 0;
+}
+
+.paragraphsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.75rem;
+}
+
+.deepParagraph {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.68;
+  color: #4D5450;
+  margin: 0;
+}
+
+/* Key Capabilities Card */
+.capabilitiesCard {
+  background: #FFFFFF;
+  border: 1px solid rgba(9, 69, 62, 0.12);
+  border-radius: 14px;
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 18px rgba(9, 69, 62, 0.04);
+}
+
+.capabilitiesHeading {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #09453E;
+  margin: 0 0 0.85rem 0;
+}
+
+.capabilitiesList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.capabilityItem {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #383D3A;
+}
+
+.checkIcon {
+  color: #09453E;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Action CTA */
+.ctaRow {
+  display: flex;
+  align-items: center;
+}
+
+.commissionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #09453E;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 0.9rem 1.85rem;
+  border-radius: 9999px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.commissionBtn:hover {
+  background: #0D5C52;
+  transform: translateX(3px);
+}
+
+.btnArrow {
+  font-size: 0.95rem;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. CLOSING INVITATION BAND
+   ───────────────────────────────────────────────────────────── */
+.closingBand {
+  background: #0E1613;
+  color: #FFFFFF;
+  padding: clamp(5rem, 9vw, 8rem) 0;
+  text-align: center;
+}
+
+.closingInner {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 3.5vw, 2.75rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.closingKicker {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #C8A84E;
+  margin-bottom: 0.85rem;
+}
+
+.closingTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0 0 1.15rem 0;
+  line-height: 1.15;
+}
+
+.closingText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.92rem, 1.1vw, 1.05rem);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 620px;
+  margin: 0 0 2.25rem 0;
+}
+
+.closingCtaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #C8A84E;
+  color: #0E1613;
+  text-decoration: none;
+  padding: 1.05rem 2.25rem;
+  border-radius: 9999px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.closingCtaBtn:hover {
+  background: #D9BD6B;
+  transform: translateY(-2px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. RESPONSIVE DESIGN (TABLET & MOBILE)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .featureGrid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .gridMediaRight {
+    direction: ltr;
+  }
+
+  .secondaryCanvas {
+    width: 60%;
+    margin-top: -2.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .quickAnchorBar {
+    border-radius: 16px;
+    padding: 0.4rem;
+  }
+
+  .anchorPill {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.6875rem;
+  }
+
+  .secondaryCanvas {
+    display: none;
+  }
+}

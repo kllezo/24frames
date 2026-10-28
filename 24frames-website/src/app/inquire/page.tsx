@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import DatePickerPopover from "./DatePickerPopover";
 import styles from "./Inquire.module.css";
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -14,6 +15,9 @@ export interface EventTimelineEntry {
   id: string;
   name: string;
   date: string;
+  startDate?: string;
+  endDate?: string;
+  isTBD?: boolean;
   city: string;
   venue: string;
   coverage: string;
@@ -251,6 +255,28 @@ export default function InquirePage() {
     );
   };
 
+  const handleUpdateEventDate = (
+    id: string,
+    formattedSummary: string,
+    startDate?: string,
+    endDate?: string,
+    isTBD?: boolean
+  ) => {
+    setEvents((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              date: formattedSummary,
+              startDate,
+              endDate,
+              isTBD,
+            }
+          : item
+      )
+    );
+  };
+
   const handleRemoveEvent = (id: string) => {
     if (events.length <= 1) return;
     setEvents((prev) => prev.filter((item) => item.id !== id));
@@ -377,32 +403,44 @@ export default function InquirePage() {
           </div>
         </div>
 
-        {/* Editorial Film-Strip Progress Bar (Active Stages 1–4) */}
+        {/* Refined Luxury Editorial Journey Indicator (Active Stages 1–4) */}
         {stage >= 1 && stage <= 4 && (
-          <nav className={styles.filmStripProgress} aria-label="Commission Progress">
-            <div className={styles.progressTrack}>
+          <nav className={styles.editorialJourneyTracker} aria-label="Commission Progress">
+            <div className={styles.journeyTrack}>
               {[
-                { step: 1, label: "I. Commission" },
-                { step: 2, label: "II. Timeline" },
-                { step: 3, label: "III. Direction & Craft" },
-                { step: 4, label: "IV. The Living Brief" },
-              ].map((s) => (
-                <button
-                  key={s.step}
-                  onClick={() => s.step <= stage && handleJumpToStage(s.step)}
-                  disabled={s.step > stage}
-                  className={`${styles.progressTab} ${
-                    s.step === stage
-                      ? styles.progressTabActive
-                      : s.step < stage
-                      ? styles.progressTabComplete
-                      : styles.progressTabDisabled
-                  }`}
-                  aria-current={s.step === stage ? "step" : undefined}
-                >
-                  <span className={styles.stepNum}>{s.step < stage ? "✓" : `0${s.step}`}</span>
-                  <span className={styles.stepTitle}>{s.label}</span>
-                </button>
+                { step: 1, label: "Commission" },
+                { step: 2, label: "Timeline" },
+                { step: 3, label: "Direction & Craft" },
+                { step: 4, label: "Living Brief" },
+              ].map((s, idx) => (
+                <div key={s.step} className={styles.journeyStageWrapper}>
+                  {idx > 0 && (
+                    <span
+                      className={`${styles.journeyConnector} ${
+                        stage >= s.step ? styles.journeyConnectorActive : ""
+                      }`}
+                      aria-hidden="true"
+                    />
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => s.step <= stage && handleJumpToStage(s.step)}
+                    disabled={s.step > stage}
+                    className={`${styles.journeyTab} ${
+                      s.step === stage
+                        ? styles.journeyTabActive
+                        : s.step < stage
+                        ? styles.journeyTabComplete
+                        : styles.journeyTabUpcoming
+                    }`}
+                    aria-current={s.step === stage ? "step" : undefined}
+                  >
+                    <span className={styles.journeyStepNumber}>
+                      {s.step < stage ? "✓" : `0${s.step}`}
+                    </span>
+                    <span className={styles.journeyStepLabel}>{s.label}</span>
+                  </button>
+                </div>
               ))}
             </div>
           </nav>
@@ -476,12 +514,15 @@ export default function InquirePage() {
         {stage === 1 && (
           <section className={styles.stageSection} aria-label="Select Your Commission">
             <div className={styles.stageHeader}>
-              <span className={styles.stageEyebrow}>STAGE I · THE COMMISSION</span>
+              <div className={styles.stageEyebrowRow}>
+                <span className={styles.stageEyebrow}>STAGE I · THE COMMISSION</span>
+                <span className={styles.stageStepMarker}>01 / 04</span>
+              </div>
               <h2 className={styles.stageHeadline}>What sacred story shall we document?</h2>
               <p className={styles.stageSubtitle}>
-                Select the commission that reflects your celebration. Your choice customizes the
-                ritual timeline and creative scope that follows.
+                Choose the commission that reflects your celebration. Your selection shapes the timeline and creative direction that follow.
               </p>
+              <div className={styles.goldDividerRule} aria-hidden="true" />
             </div>
 
             <div className={styles.categoryGrid}>
@@ -517,12 +558,13 @@ export default function InquirePage() {
             </div>
 
             <div className={styles.stageFooterNav}>
-              <button onClick={handleBack} className={styles.backStepBtn}>
-                <span>← Back</span>
+              <button onClick={handleBack} className={styles.backStepQuietBtn} type="button">
+                <span className={styles.backArrowIcon}>←</span>
+                <span>Back</span>
               </button>
 
-              <button onClick={handleNext} className={styles.primaryAtelierBtn}>
-                <span>CONTINUE TO TIMELINE</span>
+              <button onClick={handleNext} className={styles.primaryAtelierBtn} type="button">
+                <span>Continue to Timeline</span>
                 <span className={styles.btnArrowIcon}>→</span>
               </button>
             </div>
@@ -535,15 +577,19 @@ export default function InquirePage() {
         {stage === 2 && (
           <section className={styles.stageSection} aria-label="Build the Occasion Timeline">
             <div className={styles.stageHeader}>
-              <span className={styles.stageEyebrow}>STAGE II · THE OCCASION TIMELINE</span>
+              <div className={styles.stageEyebrowRow}>
+                <span className={styles.stageEyebrow}>STAGE II · THE OCCASION TIMELINE</span>
+                <span className={styles.stageStepMarker}>02 / 04</span>
+              </div>
               <h2 className={styles.stageHeadline}>
                 {isWeddingLike ? "Compose your ritual timeline." : "Define your creative project scope."}
               </h2>
               <p className={styles.stageSubtitle}>
                 {isWeddingLike
-                  ? "Indian weddings are monuments composed of distinct rituals. Add each major celebration — exact dates and venues can remain open if still being finalized."
+                  ? "From intimate ceremonies to multi-day celebrations, map the moments you want us to preserve. Dates and venues can remain undecided while plans take shape."
                   : "Detail your campaign timeline, estimated shoot dates, and key shooting destinations."}
               </p>
+              <div className={styles.goldDividerRule} aria-hidden="true" />
             </div>
 
             {isWeddingLike ? (
@@ -553,7 +599,7 @@ export default function InquirePage() {
                     <div key={ev.id} className={styles.timelineEntryCard}>
                       <div className={styles.entryHeaderRow}>
                         <div className={styles.entryNumberBadge}>
-                          <span className={styles.romanDigit}>{index + 1}</span>
+                          <span className={styles.romanDigit}>{String(index + 1).padStart(2, "0")}</span>
                           <span className={styles.entryTag}>CELEBRATION EVENT</span>
                         </div>
 
@@ -562,7 +608,7 @@ export default function InquirePage() {
                             type="button"
                             onClick={() => handleRemoveEvent(ev.id)}
                             className={styles.removeEventBtn}
-                            aria-label={`Remove ${ev.name}`}
+                            aria-label={`Remove event ${index + 1}`}
                           >
                             <span>✕ Remove</span>
                           </button>
@@ -570,48 +616,56 @@ export default function InquirePage() {
                       </div>
 
                       <div className={styles.entryFieldsGrid}>
-                        <div className={styles.fieldGroup}>
-                          <label className={styles.fieldLabel}>Event / Ritual Name</label>
-                          <input
-                            type="text"
-                            value={ev.name}
-                            onChange={(e) => handleUpdateEvent(ev.id, "name", e.target.value)}
-                            placeholder="e.g. Sacred Muhurtham, Sangeet Gala, Pellikuthuru, Reception"
-                            className={styles.atelierInput}
-                          />
+                        {/* Left Column: Event Name & Date Calendar */}
+                        <div className={styles.entrySubCol}>
+                          <div className={styles.fieldGroup}>
+                            <label className={styles.fieldLabel}>Event / Ritual Name</label>
+                            <input
+                              type="text"
+                              value={ev.name}
+                              onChange={(e) => handleUpdateEvent(ev.id, "name", e.target.value)}
+                              placeholder="e.g. Sacred Muhurtham, Sangeet Gala, Pellikuthuru, Reception"
+                              className={styles.atelierInput}
+                            />
+                          </div>
+
+                          <div className={styles.fieldGroup}>
+                            <label className={styles.fieldLabel}>Event Date</label>
+                            <DatePickerPopover
+                              value={ev.date}
+                              startDate={ev.startDate}
+                              endDate={ev.endDate}
+                              isTBD={ev.isTBD}
+                              onChange={(dateSummary, startDate, endDate, isTBD) =>
+                                handleUpdateEventDate(ev.id, dateSummary, startDate, endDate, isTBD)
+                              }
+                            />
+                          </div>
                         </div>
 
-                        <div className={styles.fieldGroup}>
-                          <label className={styles.fieldLabel}>Date (if scheduled or estimated)</label>
-                          <input
-                            type="text"
-                            value={ev.date}
-                            onChange={(e) => handleUpdateEvent(ev.id, "date", e.target.value)}
-                            placeholder="e.g. November 2026, or TBD"
-                            className={styles.atelierInput}
-                          />
-                        </div>
+                        {/* Right Column: Destination City & Optional Venue */}
+                        <div className={styles.entrySubCol}>
+                          <div className={styles.fieldGroup}>
+                            <label className={styles.fieldLabel}>City / Destination</label>
+                            <input
+                              type="text"
+                              value={ev.city}
+                              onChange={(e) => handleUpdateEvent(ev.id, "city", e.target.value)}
+                              placeholder="e.g. Hyderabad, Udaipur, Bengaluru, Falaknuma"
+                              className={styles.atelierInput}
+                            />
+                          </div>
 
-                        <div className={styles.fieldGroup}>
-                          <label className={styles.fieldLabel}>City / Destination</label>
-                          <input
-                            type="text"
-                            value={ev.city}
-                            onChange={(e) => handleUpdateEvent(ev.id, "city", e.target.value)}
-                            placeholder="e.g. Hyderabad, Udaipur, Bengaluru, Falaknuma"
-                            className={styles.atelierInput}
-                          />
-                        </div>
-
-                        <div className={styles.fieldGroup}>
-                          <label className={styles.fieldLabel}>Venue (Optional)</label>
-                          <input
-                            type="text"
-                            value={ev.venue}
-                            onChange={(e) => handleUpdateEvent(ev.id, "venue", e.target.value)}
-                            placeholder="e.g. Taj Falaknuma Palace, ITC Kohenur, Private Estate"
-                            className={styles.atelierInput}
-                          />
+                          <div className={styles.fieldGroup}>
+                            <label className={styles.fieldLabel}>Venue (Optional)</label>
+                            <input
+                              type="text"
+                              value={ev.venue}
+                              onChange={(e) => handleUpdateEvent(ev.id, "venue", e.target.value)}
+                              placeholder="e.g. Taj Falaknuma Palace, ITC Kohenur, Private Estate"
+                              className={styles.atelierInput}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -626,8 +680,11 @@ export default function InquirePage() {
                     aria-label="Add another event or celebration"
                   >
                     <span className={styles.plusIcon}>+</span>
-                    <span>ADD ANOTHER EVENT OR RITUAL</span>
+                    <span className={styles.addEventLabel}>Add another event or ritual</span>
                   </button>
+                  <p className={styles.addEventHelperText}>
+                    Wedding day · Pre-wedding event · Reception · Personal shoot
+                  </p>
                 </div>
               </div>
             ) : (
@@ -646,12 +703,13 @@ export default function InquirePage() {
             )}
 
             <div className={styles.stageFooterNav}>
-              <button onClick={handleBack} className={styles.backStepBtn}>
-                <span>← Back</span>
+              <button onClick={handleBack} className={styles.backStepQuietBtn} type="button">
+                <span className={styles.backArrowIcon}>←</span>
+                <span>Back</span>
               </button>
 
-              <button onClick={handleNext} className={styles.primaryAtelierBtn}>
-                <span>CONTINUE TO DIRECTION &amp; CRAFT</span>
+              <button onClick={handleNext} className={styles.primaryAtelierBtn} type="button">
+                <span>Continue to Direction &amp; Craft</span>
                 <span className={styles.btnArrowIcon}>→</span>
               </button>
             </div>
@@ -783,12 +841,13 @@ export default function InquirePage() {
             </div>
 
             <div className={styles.stageFooterNav}>
-              <button onClick={handleBack} className={styles.backStepBtn}>
-                <span>← Back</span>
+              <button onClick={handleBack} className={styles.backStepQuietBtn} type="button">
+                <span className={styles.backArrowIcon}>←</span>
+                <span>Back</span>
               </button>
 
-              <button onClick={handleNext} className={styles.primaryAtelierBtn}>
-                <span>REVIEW THE LIVING BRIEF</span>
+              <button onClick={handleNext} className={styles.primaryAtelierBtn} type="button">
+                <span>Continue to Living Brief</span>
                 <span className={styles.btnArrowIcon}>→</span>
               </button>
             </div>
@@ -1027,8 +1086,9 @@ export default function InquirePage() {
             </div>
 
             <div className={styles.stageFooterNav}>
-              <button onClick={handleBack} className={styles.backStepBtn}>
-                <span>← Back</span>
+              <button onClick={handleBack} className={styles.backStepQuietBtn} type="button">
+                <span className={styles.backArrowIcon}>←</span>
+                <span>Back</span>
               </button>
             </div>
           </section>

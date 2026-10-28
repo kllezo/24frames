@@ -130,9 +130,9 @@
   flex: 1 1 0%;
   min-width: 70px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: flex 0.65s cubic-bezier(0.25, 1, 0.5, 1),
-              box-shadow 0.4s ease,
-              border-color 0.4s ease;
+  transition: flex 950ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.5s ease,
+              border-color 0.5s ease;
   will-change: flex;
 }
 
@@ -144,6 +144,9 @@
 .cardInactive {
   flex: 1 1 0%;
   border-color: rgba(255, 255, 255, 0.1);
+  transition: flex 780ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.4s ease,
+              border-color 0.4s ease;
 }
 
 .cardInactive:hover {
@@ -156,6 +159,9 @@
   flex: 3.8 1 0% !important;
   border-color: rgba(200, 168, 78, 0.55);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
+  transition: flex 950ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.5s ease,
+              border-color 0.5s ease;
 }
 
 /* ── Photographic Image Canvas ───────────────────────────────────────── */

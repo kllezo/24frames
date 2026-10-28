@@ -1,0 +1,251 @@
+/* ============================================================
+   24 FRAMES — DATE PICKER POPOVER STYLES
+   Warm Ivory, Deep Forest Green (#09453E), Champagne Gold (#B5985A)
+   ============================================================ */
+
+.calendarContainer {
+  position: relative;
+  width: 100%;
+}
+
+.triggerButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(9, 69, 62, 0.18);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.875rem;
+  color: #20231F;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.triggerButton:hover {
+  border-color: #09453E;
+}
+
+.triggerButtonOpen {
+  border-color: #09453E;
+  box-shadow: 0 0 0 3px rgba(9, 69, 62, 0.12);
+}
+
+.calendarIcon {
+  color: #09453E;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.triggerValue {
+  flex: 1;
+  font-weight: 600;
+  color: #09453E;
+}
+
+.triggerPlaceholder {
+  flex: 1;
+  color: #8C9690;
+}
+
+.chevronIcon {
+  color: #727F78;
+  font-size: 0.85rem;
+}
+
+/* ── Popover Dropdown ── */
+.popoverDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: min(340px, 92vw);
+  background: #FFFFFF;
+  border: 1px solid rgba(9, 69, 62, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 18px 48px rgba(9, 69, 62, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.25rem;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.popoverHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.monthTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #09453E;
+}
+
+.monthNavBtn {
+  background: #FAF7F0;
+  border: 1px solid rgba(9, 69, 62, 0.12);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #09453E;
+  font-size: 1.15rem;
+  line-height: 1;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.monthNavBtn:hover {
+  background: #09453E;
+  color: #FFFFFF;
+}
+
+/* Weekdays */
+.weekdayRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.weekdayLabel {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8C9690;
+}
+
+/* Days Grid */
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 1.15rem;
+}
+
+.blankDay {
+  height: 34px;
+}
+
+.dayButton {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #20231F;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dayButton:hover {
+  background: #FAF7F0;
+  color: #09453E;
+}
+
+.dayToday {
+  font-weight: 700;
+  border: 1px solid rgba(181, 152, 90, 0.6);
+}
+
+.dayStart {
+  background: #09453E !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  border-radius: 8px 0 0 8px;
+}
+
+.dayEnd {
+  background: #09453E !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  border-radius: 0 8px 8px 0;
+}
+
+.dayStart.dayEnd {
+  border-radius: 8px !important;
+}
+
+.dayInRange {
+  background: rgba(9, 69, 62, 0.12) !important;
+  color: #09453E !important;
+  border-radius: 0 !important;
+}
+
+/* Popover Footer */
+.popoverFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(9, 69, 62, 0.1);
+}
+
+.tbdLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.72rem;
+  color: #55625B;
+  cursor: pointer;
+}
+
+.tbdCheckbox {
+  accent-color: #09453E;
+  cursor: pointer;
+}
+
+.actionButtonsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clearBtn {
+  background: transparent;
+  border: none;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.72rem;
+  color: #727F78;
+  cursor: pointer;
+  padding: 0.35rem 0.55rem;
+}
+
+.clearBtn:hover {
+  color: #09453E;
+}
+
+.doneBtn {
+  background: #09453E;
+  border: none;
+  color: #FFFFFF;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.doneBtn:hover {
+  background: #0D5C52;
+}

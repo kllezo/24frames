@@ -7,9 +7,9 @@
 .heroSection {
   position: relative;
   width: 100%;
-  height: 85vh;
-  min-height: 580px;
-  max-height: 960px;
+  height: 94vh;
+  min-height: 640px;
+  max-height: 1080px;
   margin: 0;
   padding: 0;
   overflow: hidden;

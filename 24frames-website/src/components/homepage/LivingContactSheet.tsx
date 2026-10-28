@@ -125,9 +125,9 @@ export const ITEM_PROJECT_03: GalleryProjectItem = {
   captionSub: "Nine-Scene Celebration · Hyderabad",
   category: "Ceremony & Celebrations",
   location: "Hyderabad, Telangana",
-  image: "/images/stories/hrithika-abhishek/IMG_6333.jpg",
-  webpImage: "/images/stories/hrithika-abhishek/IMG_6333.webp",
-  aspectRatio: "16 / 10",
+  image: "/images/stories/hrithika-abhishek/IMG_6333_cropped.jpg",
+  webpImage: "/images/stories/hrithika-abhishek/IMG_6333_cropped.webp",
+  aspectRatio: "4 / 5",
   storyUrl: "/stories/hrithika-abhishek",
   objectPosition: "center 24%",
   narrative:
@@ -669,17 +669,6 @@ export default function LivingContactSheet() {
             01 — FEATURED EDITORIAL OPENING (EXACT 3-COLUMN COMPOSITION)
         ══════════════════════════════════════════════════════════════════════ */}
         <div ref={openingRef} className={styles.openingComposition}>
-          {/* Chapter Progress Rail */}
-          <div className={styles.progressRail} aria-hidden="true">
-            <span className={styles.railNumber}>01</span>
-            <div className={styles.railActiveWrap}>
-              <span className={`${styles.railNumber} ${styles.railNumberActive}`}>02</span>
-              <span className={styles.railIndicatorBar} />
-            </div>
-            <span className={styles.railNumber}>03</span>
-            <span className={styles.railNumber}>05</span>
-          </div>
-
           {/* Left Column: Chapter Title & Editorial Anthology Thesis */}
           <div className={styles.openingLeftCol}>
             <div className={styles.chapterBadgeRow}>

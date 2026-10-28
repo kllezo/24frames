@@ -50,26 +50,27 @@
   visibility: hidden;
 }
 
-/* Main Container — Exact Proportion Measure */
+/* Main Container — 1400px Centered Architectural Rectangle */
 .container {
   width: 100%;
-  max-width: 1240px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding-left: clamp(1.25rem, 3.5vw, 2.5rem);
-  padding-right: clamp(1.25rem, 3.5vw, 2.5rem);
+  padding-left: clamp(1.5rem, 3.5vw, 3rem);
+  padding-right: clamp(1.5rem, 3.5vw, 3rem);
   position: relative;
   z-index: 3;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   1. TWO-COLUMN DESKTOP GRID (LEFT: FOUNDER / RIGHT: ARCHIVE)
+   1. TWO-COLUMN DESKTOP GRID (38% LEFT: FOUNDER / 62% RIGHT: ARCHIVE)
    ───────────────────────────────────────────────────────────── */
 .twoColumnGrid {
   display: grid;
-  grid-template-columns: minmax(360px, 430px) 1fr;
-  gap: clamp(1.75rem, 2.5vw, 2.5rem);
+  grid-template-columns: 38% calc(62% - 32px);
+  gap: 32px;
   align-items: start;
-  margin-bottom: clamp(2rem, 3.5vw, 3rem);
+  margin-bottom: clamp(2rem, 3vw, 2.75rem);
+  width: 100%;
 }
 
 /* ═════════════════════════════════════════════════════════════
@@ -126,7 +127,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 4 / 4.4;
-  height: clamp(440px, 42vw, 510px);
+  height: clamp(480px, 45vw, 560px);
   border-radius: 22px;
   overflow: hidden;
   background-color: #121816;
@@ -601,21 +602,26 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   2. THREE CORE PRINCIPLES (ONE HORIZONTAL ROW ACROSS DESKTOP)
-   ───────────────────────────────────────────────────────────── */
 /* ─────────────────────────────────────────────────────────────
-   2. THREE CORE PRINCIPLES (Inside Left Column matching reference)
+   2. THREE CORE PRINCIPLES (Full-Width Clean Row Beneath Grid)
    ───────────────────────────────────────────────────────────── */
 .principlesContainer {
+  width: 100%;
   background: #F5EFE4;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 18px;
-  padding: 1.25rem 1.4rem;
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.035);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 0;
+  gap: 1.25rem;
+  margin-top: clamp(1.5rem, 2.5vw, 2.5rem);
+}
+
+.principlesHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 .principlesKicker {
@@ -625,23 +631,32 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #55625B;
-  padding-left: 0.15rem;
+  white-space: nowrap;
+}
+
+.principlesLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .principlesList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
 }
 
 .principleCard {
   background: #FAF7F0;
   border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 12px;
-  padding: 0.85rem 1.1rem;
+  border-radius: 14px;
+  padding: 1.25rem 1.4rem;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  height: 100%;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -924,6 +939,11 @@
 }
 
 @media (max-width: 768px) {
+  .principlesList {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
   .principlesRow {
     grid-template-columns: 1fr;
     gap: 0.85rem;
