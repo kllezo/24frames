@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import { DISCIPLINES_DATA, DisciplineItem } from "@/data/disciplines";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import DisciplineInteractiveMedia from "@/components/disciplines/DisciplineInteractiveMedia";
 import styles from "./DisciplineDetail.module.css";
 
 interface PageProps {
@@ -153,126 +154,12 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* ── Cinema Feature Video Section (Where Available) ─────── */}
-        {discipline.videos && discipline.videos.length > 0 && (
-          <section
-            className={styles.videoSection}
-            aria-label="Theatrical Cinema Motion Pictures"
-          >
-            <div className={styles.container}>
-              <div className={styles.sectionHeader}>
-                <div className={styles.sectionMeta}>
-                  <span className={styles.sectionChapter}>MOTION PICTURE ARCHIVE</span>
-                  <span className={styles.sectionBadge}>
-                    2.39:1 ANAMORPHIC WIDESCREEN
-                  </span>
-                </div>
-                <h2 className={styles.sectionTitle}>Theatrical Wedding Features</h2>
-                <p className={styles.sectionSubtitle}>
-                  Dedicated cinema units utilizing prime cinema glass, multi-track audio, and
-                  custom film emulsion grading.
-                </p>
-              </div>
-
-              <div className={styles.videoGrid}>
-                {discipline.videos.map((video) => (
-                  <div key={video.id} className={styles.videoCard}>
-                    <div className={styles.videoPlayerWrap}>
-                      <iframe
-                        src={video.embedUrl}
-                        title={video.title}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        className={styles.videoIframe}
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className={styles.videoDetails}>
-                      <div className={styles.videoHeader}>
-                        <h3 className={styles.videoTitle}>{video.title}</h3>
-                        <span className={styles.videoDuration}>{video.duration}</span>
-                      </div>
-                      <p className={styles.videoDescription}>{video.description}</p>
-                      <span className={styles.videoClient}>Commission: {video.client}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ── Verified Photographic Gallery ───────────────────────── */}
-        <section
-          className={styles.gallerySection}
-          aria-label={`${discipline.title} Gallery`}
-        >
-          <div className={styles.container}>
-            <div className={styles.sectionHeader}>
-              <div className={styles.sectionMeta}>
-                <span className={styles.sectionChapter}>PHOTOGRAPHIC RECORD</span>
-                <span className={styles.sectionBadge}>VERIFIED MASTER FRAMES</span>
-              </div>
-              <h2 className={styles.sectionTitle}>
-                {discipline.shortTitle} Photographic Gallery
-              </h2>
-              <p className={styles.sectionSubtitle}>
-                Curated medium-format stills and authentic commission coverage.
-              </p>
-            </div>
-
-            <div className={styles.galleryGrid}>
-              {discipline.gallery.map((item, index) => {
-                const isWide = item.aspect === "landscape" || item.aspect === "panoramic";
-
-                return (
-                  <article
-                    key={item.id}
-                    className={`${styles.galleryCard} ${
-                      isWide ? styles.galleryCardWide : styles.galleryCardTall
-                    }`}
-                  >
-                    <div className={styles.galleryImgWrap}>
-                      <picture>
-                        {item.webp && <source srcSet={item.webp} type="image/webp" />}
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className={styles.galleryImg}
-                          loading="lazy"
-                        />
-                      </picture>
-                      <div className={styles.cardGradient} />
-                      <span className={styles.framePill}>FRAME {String(index + 1).padStart(2, "0")}</span>
-                    </div>
-
-                    <div className={styles.cardMeta}>
-                      <h3 className={styles.cardTitle}>{item.title}</h3>
-                      <p className={styles.cardCaption}>{item.caption}</p>
-
-                      <div className={styles.cardFooter}>
-                        {item.location && (
-                          <span className={styles.cardLocation}>
-                            {item.location} {item.year ? `· ${item.year}` : ""}
-                          </span>
-                        )}
-
-                        {item.storySlug && (
-                          <Link
-                            href={`/stories/${item.storySlug}`}
-                            className={styles.storyLink}
-                          >
-                            Read Full Story →
-                          </Link>
-                        )}
-                      </div>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        {/* ── Interactive Cinema Motion Pictures & Full-Screen Gallery ── */}
+        <DisciplineInteractiveMedia
+          videos={discipline.videos}
+          gallery={discipline.gallery}
+          shortTitle={discipline.shortTitle}
+        />
 
         {/* ── Related Editorial Disciplines ───────────────────────── */}
         <section

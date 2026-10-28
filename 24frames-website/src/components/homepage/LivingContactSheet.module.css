@@ -5,7 +5,7 @@
    ========================================================================== */
 
 .section {
-  padding: clamp(4.5rem, 7.5vh, 7.5rem) 0;
+  padding: clamp(5.5rem, 9.5vw, 9rem) 0;
   background-color: var(--color-bg, #FAF8F2);
   position: relative;
   overflow: hidden;

@@ -40,7 +40,7 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
       "Multi-day coverage spanning Mangalasnanam, Sangeet galas, and dawn ceremonies. Documented without invasive lighting or forced poses.",
     image: "/images/portfolio/sireesh-harshitha/cover.jpg",
     webpImage: "/images/portfolio/sireesh-harshitha/cover.webp",
-    fallbackImage: "/images/portfolio/sireesh-harshitha/cover.jpg",
+    fallbackImage: "/images/disciplines/weddings/223fd95b-d4b5-4f7d-840e-3f484b8d8966.JPG",
     href: "/disciplines/weddings",
     objectPosition: "center 22%",
   },
@@ -54,9 +54,8 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     tagline: "High-fashion bridal couture, Tollywood actors, and private family patriarchs.",
     heroDescription:
       "Medium-format optical portraits lit with master cinema fixtures. Preserving quiet dignity, sculptural elegance, and commanding presence.",
-    image: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
-    webpImage: "/images/portfolio/bellamkonda-kavya-reception/cover.webp",
-    fallbackImage: "/images/stories/bellam-srikonda/IMG_6339.jpg",
+    image: "/images/disciplines/celebrities/IMG_6472.jpg",
+    fallbackImage: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
     href: "/disciplines/celebrities",
     objectPosition: "center 20%",
   },
@@ -70,9 +69,8 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     tagline: "High-octane Sangeet stages, milestone anniversaries, and national events.",
     heroDescription:
       "Capturing the electric choreography, live orchestral music, and grand architectural ambiance of premier celebration venues.",
-    image: "/images/stories/bellam-srikonda/IMG_6340.jpg",
-    webpImage: "/images/stories/bellam-srikonda/IMG_6340.webp",
-    fallbackImage: "/images/stories/bellam-srikonda/IMG_6340.jpg",
+    image: "/images/disciplines/events/IMG_6487.jpg",
+    fallbackImage: "/images/disciplines/events/IMG_6491.jpg",
     href: "/disciplines/events",
     objectPosition: "center 30%",
   },
@@ -86,9 +84,8 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     tagline: "Bespoke designer lookbooks and high-jewelry editorial campaigns.",
     heroDescription:
       "Crafted for prestigious publications and couture designers, combining experimental art direction with sharp optical discipline.",
-    image: "/images/stories/bellam-srikonda/IMG_6341.jpg",
-    webpImage: "/images/stories/bellam-srikonda/IMG_6341.webp",
-    fallbackImage: "/images/stories/bellam-srikonda/IMG_6341.jpg",
+    image: "/images/disciplines/fashion/IMG_6288.jpg",
+    fallbackImage: "/images/disciplines/fashion/IMG_6285.jpg",
     href: "/disciplines/fashion",
     objectPosition: "center 20%",
   },
@@ -102,9 +99,8 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     tagline: "2.39:1 Anamorphic motion pictures paired with orchestral audio scores.",
     heroDescription:
       "Shot with dedicated cinema crews on ARRI and Sony FX cinema lines. Edited as theatrical-grade wedding features.",
-    image: "/images/portfolio/karthik-falaknama/cover.jpg",
-    webpImage: "/images/portfolio/karthik-falaknama/cover.jpg",
-    fallbackImage: "/images/portfolio/karthik-falaknama/cover.jpg",
+    image: "/images/disciplines/cinema/IMG_6471.jpg",
+    fallbackImage: "/images/disciplines/cinema/IMG_6467.jpg",
     href: "/disciplines/cinema",
     objectPosition: "center 35%",
   },
@@ -327,25 +323,27 @@ export default function TheCollection() {
                           onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
                           aria-label={`Enter the full ${discipline.title} portfolio`}
                         >
-                          <span>EXPLORE {discipline.shortTitle.toUpperCase()} GALLERY</span>
+                          <span>{discipline.id === "weddings" ? "VIEW WEDDING GALLERY" : "VIEW GALLERY"}</span>
                           <span className={styles.btnArrow}>→</span>
                         </Link>
 
-                        <Link
-                          href="/stories"
-                          className={styles.btnSecondary}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            navigateWithCameraTransition("/stories", {
-                              image: displayImage,
-                            });
-                          }}
-                          aria-label="View archival index"
-                        >
-                          <span>ARCHIVAL INDEX</span>
-                          <span className={styles.btnSubArrow}>↗</span>
-                        </Link>
+                        {discipline.id === "weddings" && (
+                          <Link
+                            href="/stories"
+                            className={styles.btnSecondary}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              navigateWithCameraTransition("/stories", {
+                                image: displayImage,
+                              });
+                            }}
+                            aria-label="Explore client love stories"
+                          >
+                            <span>EXPLORE LOVE STORIES</span>
+                            <span className={styles.btnSubArrow}>↗</span>
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </div>
