@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/homepage/HeroSection";
+import LivingContactSheet from "@/components/homepage/LivingContactSheet";
 import TheCollection from "@/components/homepage/TheCollection";
 import FounderRecognitionSection from "@/components/homepage/FounderRecognitionSection";
 import ClientGalleryExperience from "@/components/homepage/ClientGalleryExperience";
@@ -13,20 +14,32 @@ import InvitationCTA from "@/components/homepage/InvitationCTA";
 const Preloader = dynamic(() => import("@/components/ui/Preloader"), { ssr: false });
 
 export default function HomePage() {
-  // Preloader plays on every full page refresh / fresh load
-  const [showPreloader, setShowPreloader] = useState(true);
-  const [siteReady, setSiteReady] = useState(false);
+  // Preloader runs only on initial browser entry or full page reload, never on internal SPA navigation
+  const [showPreloader, setShowPreloader] = useState(() => {
+    if (typeof window === "undefined") return true;
+    const isDirect = window.location.search.includes("direct");
+    const isInternalNav = (window as unknown as { __24FRAMES_INITIAL_LOAD_DONE__?: boolean }).__24FRAMES_INITIAL_LOAD_DONE__;
+    return !(isDirect || isInternalNav);
+  });
+
+  const [siteReady, setSiteReady] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const isDirect = window.location.search.includes("direct");
+    const isInternalNav = (window as unknown as { __24FRAMES_INITIAL_LOAD_DONE__?: boolean }).__24FRAMES_INITIAL_LOAD_DONE__;
+    return Boolean(isDirect || isInternalNav);
+  });
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.location.search.includes("direct")) {
-      queueMicrotask(() => {
-        setShowPreloader(false);
-        setSiteReady(true);
-      });
+    if (typeof window !== "undefined" && (window.location.search.includes("direct") || (window as unknown as { __24FRAMES_INITIAL_LOAD_DONE__?: boolean }).__24FRAMES_INITIAL_LOAD_DONE__)) {
+      setShowPreloader(false);
+      setSiteReady(true);
     }
   }, []);
 
   const handlePreloaderComplete = () => {
+    if (typeof window !== "undefined") {
+      (window as unknown as { __24FRAMES_INITIAL_LOAD_DONE__?: boolean }).__24FRAMES_INITIAL_LOAD_DONE__ = true;
+    }
     setShowPreloader(false);
     setSiteReady(true);
   };
@@ -46,15 +59,8 @@ export default function HomePage() {
           {/* Act I — The First Frame (Cinematic Hero Opening) */}
           <HeroSection />
 
-          {/* Clean Editorial Ivory Whitespace Pause (Intentional chapter breather) */}
-          <div
-            style={{
-              width: "100%",
-              height: "clamp(4.5rem, 9vh, 8rem)",
-              backgroundColor: "#FAF7F0",
-            }}
-            aria-hidden="true"
-          />
+          {/* Chapter 02 — The Vows (Curated Exhibition & Wedding Stories Archive) */}
+          <LivingContactSheet />
 
           {/* Act III — The Archive Opens (The Six Curated Disciplines) */}
           <TheCollection />

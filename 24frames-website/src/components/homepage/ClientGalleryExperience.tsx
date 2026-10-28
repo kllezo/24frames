@@ -1,10 +1,12 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./ClientGalleryExperience.module.css";
+
+import LiquidDotCanvas from "./LiquidDotCanvas";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,9 +16,14 @@ export interface GalleryCardItem {
   number: string;
   title: string;
   description: string;
-  image: string;
-  imageAlt: string;
+  artImage: string;
+  artAlt: string;
   href: string;
+  theme: "indigo" | "light" | "emerald" | "parchment" | "obsidian";
+  gradientClass: string;
+  fillColor: string;
+  textColor: string;
+  descColor: string;
 }
 
 export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
@@ -26,9 +33,14 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     number: "01",
     title: "The Private Archive",
     description: "AI-assisted facial indexing and moment discovery, categorizing thousands of frames into family albums.",
-    image: "/images/stories/hrithika-abhishek/IMG_6324.jpg",
-    imageAlt: "Intelligent facial recognition moment discovery archive",
+    artImage: "/images/gallery-experience/card1_art.png",
+    artAlt: "3D dynamic prism representing AI moment discovery",
     href: "/client-gallery#private-archive",
+    theme: "indigo",
+    gradientClass: styles.card1Gradient,
+    fillColor: "#141428",
+    textColor: "#FFFFFF",
+    descColor: "rgba(224, 231, 255, 0.76)",
   },
   {
     id: "cinema-room",
@@ -36,9 +48,14 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     number: "02",
     title: "The Cinema Room",
     description: "Private cinematic streaming theater presenting master films, ceremony teasers, and vertical cuts.",
-    image: "/videos/portfolio/vinitha-vivekananda/poster.jpg",
-    imageAlt: "Private cinema playback theater for master wedding films",
+    artImage: "/images/gallery-experience/card2_art.png",
+    artAlt: "Translucent golden dual cinema screens representing private streaming theater",
     href: "/client-gallery#cinema-room",
+    theme: "light",
+    gradientClass: styles.card2Gradient,
+    fillColor: "#ECEFF4",
+    textColor: "#0F172A",
+    descColor: "#475569",
   },
   {
     id: "signature-shots",
@@ -46,9 +63,14 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     number: "03",
     title: "Instagram-Ready Signature Shots",
     description: "Curated, color-calibrated portraits and candids individually proportioned for social sharing.",
-    image: "/images/stories/hrithika-abhishek/IMG_6334.jpg",
-    imageAlt: "High-fidelity color-calibrated portrait ready for social curation",
+    artImage: "/images/stories/hrithika-abhishek/IMG_6334.jpg",
+    artAlt: "Master color-graded portraits proportioned for high-fidelity social sharing",
     href: "/client-gallery#signature-shots",
+    theme: "emerald",
+    gradientClass: styles.cardEmeraldGradient,
+    fillColor: "#082823",
+    textColor: "#FFFFFF",
+    descColor: "rgba(235, 245, 242, 0.8)",
   },
   {
     id: "event-stories",
@@ -56,9 +78,14 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     number: "04",
     title: "Event-Wise Photo Stories",
     description: "Chronological ceremony chapters organizing your journey from Pellikuthuru to the grand reception.",
-    image: "/images/stories/bellam-srikonda/IMG_6339.jpg",
-    imageAlt: "Chronological event-wise ritual organization and timeline",
+    artImage: "/images/stories/bellam-srikonda/IMG_6339.jpg",
+    artAlt: "Wedding ritual ceremony timeline structured chronologically by event",
     href: "/client-gallery#event-stories",
+    theme: "parchment",
+    gradientClass: styles.cardParchmentGradient,
+    fillColor: "#EFE8DA",
+    textColor: "#141713",
+    descColor: "#454D45",
   },
   {
     id: "heirloom-collection",
@@ -66,9 +93,14 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     number: "05",
     title: "The Heirloom Collection",
     description: "Long-term archival preservation safeguarding family heirlooms, albums, and generational cinema.",
-    image: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
-    imageAlt: "Archival generational family preservation vault",
+    artImage: "/images/gallery-experience/card3_art.png",
+    artAlt: "Precision optical cinema lens elements representing generational heirloom vault",
     href: "/client-gallery#heirloom-collection",
+    theme: "obsidian",
+    gradientClass: styles.card3Gradient,
+    fillColor: "#121418",
+    textColor: "#FFFFFF",
+    descColor: "rgba(203, 213, 225, 0.76)",
   },
 ];
 
@@ -76,6 +108,7 @@ export default function ClientGalleryExperience() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
   /* ── GSAP Entrance Animation ── */
   useEffect(() => {
@@ -130,6 +163,9 @@ export default function ClientGalleryExperience() {
       className={styles.section}
       aria-label="The 24 Frames Client Gallery Experience"
     >
+      {/* ── Interactive Liquid Dot Matrix Field (Authentic organic bulge) ── */}
+      <LiquidDotCanvas className={styles.liquidCanvas} />
+
       <div className={styles.container}>
         {/* ── 1. EDITORIAL SECTION HEADER ── */}
         <div ref={headerRef} className={styles.editorialHeader}>
@@ -150,41 +186,94 @@ export default function ClientGalleryExperience() {
           </p>
         </div>
 
-        {/* ── 2. FIVE CARDS IN A SINGLE HORIZONTAL ROW (IVORY & FOREST GREEN) ── */}
+        {/* ── 2. FIVE SCULPTED CARDS IN A SINGLE HORIZONTAL ROW ── */}
         <div ref={gridRef} className={styles.cardsShowcaseWrapper}>
-          <div className={styles.cardsGrid} role="list">
-            {CLIENT_GALLERY_FEATURES.map((item) => (
-              <Link
-                key={item.id}
-                href={item.href}
-                className={styles.card}
-                role="listitem"
-                aria-label={`${item.number} ${item.title} — Click to view section`}
-              >
-                {/* Visual Image Header */}
-                <div className={styles.imageCanvas}>
-                  <img
-                    src={item.image}
-                    alt={item.imageAlt}
-                    className={styles.cardCoverImg}
-                    loading="lazy"
-                  />
-                  <div className={styles.imageOverlay} />
-                  <span className={styles.cardIndexBadge}>{item.number}</span>
-                </div>
+          <div
+            className={styles.cardsGrid}
+            role="list"
+            onMouseLeave={() => setActiveCardId(null)}
+          >
+            {CLIENT_GALLERY_FEATURES.map((item) => {
+              const isOpen = activeCardId === item.id;
+              const themeClass = styles[`card_${item.theme}`] || "";
 
-                {/* Editorial Typography Body */}
-                <div className={styles.cardBody}>
-                  <div className={styles.cardMetaRow}>
-                    <span className={styles.exploreTag}>EXPLORE FEATURE</span>
-                    <span className={styles.cardArrow} aria-hidden="true">↗</span>
+              return (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  className={`${styles.card} ${themeClass} ${isOpen ? styles.cardOpen : ""}`}
+                  role="listitem"
+                  onMouseEnter={() => setActiveCardId(item.id)}
+                  onClick={(e) => {
+                    // On touch devices, first tap opens flap, second tap follows link
+                    if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches && !isOpen) {
+                      e.preventDefault();
+                      setActiveCardId(item.id);
+                    }
+                  }}
+                  aria-label={`${item.number} ${item.title} — Click to view section`}
+                >
+                  {/* Layer 1: Artwork Canvas (Top window with gradient and image) */}
+                  <div className={`${styles.artCanvas} ${item.gradientClass}`}>
+                    <img
+                      src={item.artImage}
+                      alt={item.artAlt}
+                      className={styles.artImage}
+                      loading="lazy"
+                    />
                   </div>
 
-                  <h3 className={styles.cardTitle}>{item.title}</h3>
-                  <p className={styles.cardDescription}>{item.description}</p>
-                </div>
-              </Link>
-            ))}
+                  {/* Layer 2: Sliding Notch Flap with Sculpted SVG Contour */}
+                  <div className={styles.slidingFlap}>
+                    <svg
+                      className={styles.flapSvg}
+                      viewBox="0 0 240 450"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                    >
+                      {/* Sculpted Notch: Left high shelf -> smooth S-curve notch -> Right lower shoulder */}
+                      <path
+                        d="M 0 0 L 118 0 C 128 0, 134 6, 138 14 C 142 22, 149 26, 160 26 L 240 26 L 240 450 L 0 450 Z"
+                        fill={item.fillColor}
+                      />
+                    </svg>
+
+                    {/* Bold Sequence Number on Left Shelf */}
+                    <div
+                      className={styles.cardNumber}
+                      style={{ color: item.textColor }}
+                    >
+                      {item.number}
+                    </div>
+
+                    {/* Angled Action Arrow on Right Shoulder */}
+                    <div
+                      className={styles.cardArrow}
+                      style={{ color: item.textColor }}
+                      aria-hidden="true"
+                    >
+                      ↗
+                    </div>
+                  </div>
+
+                  {/* Layer 3: Pinned Bottom Typography */}
+                  <div className={styles.cardBottomText}>
+                    <h3
+                      className={styles.cardTitle}
+                      style={{ color: item.textColor }}
+                    >
+                      {item.title}
+                    </h3>
+                    <p
+                      className={styles.cardDesc}
+                      style={{ color: item.descColor }}
+                    >
+                      {item.description}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
           {/* Bottom Clarifying Editorial Bar */}

@@ -77,6 +77,31 @@ export default function DatePickerPopover({
 
   // Track if clicking next sets the end date
   const [isSelectingRangeEnd, setIsSelectingRangeEnd] = useState(false);
+  const [dropUp, setDropUp] = useState(false);
+
+  // Position calculation: auto-flip above if insufficient space below
+  useEffect(() => {
+    if (!isOpen || !popoverRef.current) return;
+    const checkPosition = () => {
+      if (!popoverRef.current) return;
+      const rect = popoverRef.current.getBoundingClientRect();
+      const popoverEstimatedHeight = 340;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      if (spaceBelow < popoverEstimatedHeight && spaceAbove > popoverEstimatedHeight) {
+        setDropUp(true);
+      } else {
+        setDropUp(false);
+      }
+    };
+    checkPosition();
+    window.addEventListener("resize", checkPosition);
+    window.addEventListener("scroll", checkPosition, true);
+    return () => {
+      window.removeEventListener("resize", checkPosition);
+      window.removeEventListener("scroll", checkPosition, true);
+    };
+  }, [isOpen]);
 
   // Close popover when clicking outside
   useEffect(() => {
@@ -223,7 +248,11 @@ export default function DatePickerPopover({
 
       {/* Popover Calendar Grid */}
       {isOpen && (
-        <div className={styles.popoverDropdown} role="dialog" aria-label="Select date range">
+        <div
+          className={`${styles.popoverDropdown} ${dropUp ? styles.popoverDropdownUp : ""}`}
+          role="dialog"
+          aria-label="Select date range"
+        >
           {/* Calendar Header with Month Controls */}
           <div className={styles.popoverHeader}>
             <button

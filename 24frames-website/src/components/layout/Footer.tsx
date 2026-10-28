@@ -6,54 +6,95 @@ const NAV_LINKS = [
   { label: "The Collection", href: "/#collection" },
   { label: "Stories", href: "/stories" },
   { label: "The Artist", href: "/#artist" },
-  { label: "24 Frames Identity", href: "/identity" },
-  { label: "Inquire", href: "/#inquire" },
+  { label: "Client Gallery", href: "/client-gallery" },
+  { label: "Identity & Heritage", href: "/identity" },
 ];
 
 const SOCIAL_LINKS = [
-  { label: "Instagram", href: "https://www.instagram.com/24framesphotography_", icon: "IG" },
-  { label: "YouTube", href: "https://www.youtube.com/@24framesweddingfilms", icon: "YT" },
+  { label: "Instagram", href: "https://www.instagram.com/24framesphotography_", icon: "Instagram" },
+  { label: "YouTube", href: "https://www.youtube.com/@24framesweddingfilms", icon: "YouTube" },
+  { label: "WhatsApp", href: "https://wa.me/919959664567", icon: "WhatsApp" },
 ];
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className={styles.footer} role="contentinfo">
       <div className={styles.container}>
-        <div className={styles.top}>
-          {/* Brand */}
-          <div className={styles.brand}>
-            <Link href="/" className={styles.logo}>
-              <span className={styles.logoText}>24 Frames</span>
+        {/* Editorial Top / Brand Closing Statement Banner */}
+        <div className={styles.editorialStatement}>
+          <p className={styles.closingQuote}>
+            “Some moments deserve to outlive time.”
+          </p>
+          <div className={styles.commissionInvite}>
+            <span className={styles.inviteLead}>Commission atelier open for upcoming seasons</span>
+            <Link href="/inquire" className={styles.commissionBtn}>
+              <span>BEGIN A COMMISSION</span>
+              <span className={styles.commissionArrow} aria-hidden="true">→</span>
             </Link>
-            <p className={styles.tagline}>
-              Cinematic Wedding Photography & Films
+          </div>
+        </div>
+
+        {/* Multi-column Editorial Grid */}
+        <div className={styles.mainGrid}>
+          {/* Brand Column */}
+          <div className={styles.brandCol}>
+            <Link href="/" className={styles.logo}>
+              <span className={styles.logoMark}>24 FRAMES</span>
+              <span className={styles.logoSub}>PHOTOGRAPHY & CINEMA</span>
+            </Link>
+            <p className={styles.brandBio}>
+              Bespoke royal wedding cinema and editorial photography founded by Phani Gogireddy.
+              Official Nikon India Partner and recipient of the ET Excellence Award 2025.
             </p>
-            <p className={styles.location}>
-              Jubilee Hills, Hyderabad, Telangana, India
-            </p>
+            <div className={styles.accreditations}>
+              <span className={styles.accreditationBadge}>Nikon India Partner</span>
+              <span className={styles.accreditationBadge}>ET Excellence 2025</span>
+            </div>
           </div>
 
-          {/* Navigation */}
-          <nav className={styles.nav} aria-label="Footer navigation">
-            <h3 className={styles.navHeading}>Navigate</h3>
+          {/* Navigation Column */}
+          <nav className={styles.navCol} aria-label="Footer Navigation">
+            <h3 className={styles.colHeading}>EXPLORE ARCHIVE</h3>
             <ul className={styles.navList}>
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className={styles.navLink}>
+                  <Link href={link.href} className={styles.navLink}>
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          {/* Contact */}
-          <div className={styles.contact}>
-            <h3 className={styles.navHeading}>Get in Touch</h3>
-            <a href="mailto:hello@24framesphotography.com" className={styles.contactLink}>
-              hello@24framesphotography.com
-            </a>
-            <div className={styles.socials}>
+          {/* Studio Atelier Column */}
+          <div className={styles.studioCol}>
+            <h3 className={styles.colHeading}>STUDIO ATELIER</h3>
+            <address className={styles.address}>
+              <p className={styles.studioName}>24 Frames Creative Studio</p>
+              <p>Jubilee Hills, Hyderabad</p>
+              <p>Telangana 500033, India</p>
+              <p className={styles.studioNotice}>Private consultations by bespoke appointment</p>
+            </address>
+          </div>
+
+          {/* Direct Concierge Column */}
+          <div className={styles.contactCol}>
+            <h3 className={styles.colHeading}>DIRECT CONCIERGE</h3>
+            <p className={styles.contactItem}>
+              <span className={styles.contactLabel}>Inquiries:</span>
+              <a href="mailto:hello@24framesphotography.com" className={styles.contactLink}>
+                hello@24framesphotography.com
+              </a>
+            </p>
+            <p className={styles.contactItem}>
+              <span className={styles.contactLabel}>WhatsApp Concierge:</span>
+              <a href="https://wa.me/919959664567" target="_blank" rel="noopener noreferrer" className={styles.contactLink}>
+                +91 99596 64567
+              </a>
+            </p>
+            <div className={styles.socialRow}>
               {SOCIAL_LINKS.map((link) => (
                 <a
                   key={link.label}
@@ -70,13 +111,18 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className={styles.bottom}>
+        {/* Bottom Signature Line */}
+        <div className={styles.bottomBar}>
           <p className={styles.copyright}>
-            © {new Date().getFullYear()} 24 Frames Photography. All rights reserved.
+            © {currentYear} 24 Frames Photography. All rights reserved. Registered trademark.
           </p>
-          <a href="/privacy" className={styles.privacyLink}>
-            Privacy Policy
-          </a>
+          <div className={styles.bottomLinks}>
+            <Link href="/identity" className={styles.bottomLink}>The Heritage</Link>
+            <span className={styles.bottomDot}>·</span>
+            <Link href="/client-gallery" className={styles.bottomLink}>Client Archive</Link>
+            <span className={styles.bottomDot}>·</span>
+            <Link href="/inquire" className={styles.bottomLink}>Commence Dialogue</Link>
+          </div>
         </div>
       </div>
     </footer>

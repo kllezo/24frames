@@ -63,14 +63,21 @@
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  width: min(340px, 92vw);
+  width: min(340px, calc(100vw - 32px));
+  max-width: 100%;
   background: #FFFFFF;
   border: 1px solid rgba(9, 69, 62, 0.16);
   border-radius: 16px;
   box-shadow: 0 18px 48px rgba(9, 69, 62, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
-  padding: 1.25rem;
+  padding: 1.1rem 1.1rem 0.85rem 1.1rem;
   z-index: 100;
   box-sizing: border-box;
+}
+
+.popoverDropdownUp {
+  top: auto;
+  bottom: calc(100% + 8px);
+  box-shadow: 0 -18px 48px rgba(9, 69, 62, 0.15), 0 -4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .popoverHeader {
@@ -131,7 +138,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 4px;
-  margin-bottom: 1.15rem;
+  margin-bottom: 0.5rem;
 }
 
 .blankDay {
@@ -194,8 +201,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding-top: 0.85rem;
+  padding-top: 0.65rem;
+  margin-top: 0.15rem;
   border-top: 1px solid rgba(9, 69, 62, 0.1);
+  box-sizing: border-box;
 }
 
 .tbdLabel {
@@ -203,14 +212,17 @@
   align-items: center;
   gap: 0.45rem;
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.72rem;
-  color: #55625B;
+  font-size: 0.75rem;
+  color: #38433E;
   cursor: pointer;
+  user-select: none;
 }
 
 .tbdCheckbox {
   accent-color: #09453E;
   cursor: pointer;
+  width: 15px;
+  height: 15px;
 }
 
 .actionButtonsRow {
@@ -227,25 +239,31 @@
   color: #727F78;
   cursor: pointer;
   padding: 0.35rem 0.55rem;
+  border-radius: 4px;
 }
 
 .clearBtn:hover {
   color: #09453E;
+  background: rgba(9, 69, 62, 0.05);
 }
 
 .doneBtn {
   background: #09453E;
-  border: none;
+  border: 1px solid #09453E;
   color: #FFFFFF;
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  padding: 0.35rem 0.85rem;
-  border-radius: 6px;
+  letter-spacing: 0.04em;
+  padding: 0.4rem 1rem;
+  border-radius: 7px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  line-height: 1.2;
 }
 
 .doneBtn:hover {
   background: #0D5C52;
+  border-color: #0D5C52;
+  box-shadow: 0 2px 8px rgba(9, 69, 62, 0.2);
 }

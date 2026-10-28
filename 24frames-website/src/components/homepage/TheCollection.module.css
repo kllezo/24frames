@@ -130,9 +130,9 @@
   flex: 1 1 0%;
   min-width: 70px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: flex 950ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.5s ease,
-              border-color 0.5s ease;
+  transition: flex 1100ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.6s ease,
+              border-color 0.6s ease;
   will-change: flex;
 }
 
@@ -144,9 +144,9 @@
 .cardInactive {
   flex: 1 1 0%;
   border-color: rgba(255, 255, 255, 0.1);
-  transition: flex 780ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.4s ease,
-              border-color 0.4s ease;
+  transition: flex 1100ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.5s ease,
+              border-color 0.5s ease;
 }
 
 .cardInactive:hover {
@@ -159,9 +159,9 @@
   flex: 3.8 1 0% !important;
   border-color: rgba(200, 168, 78, 0.55);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
-  transition: flex 950ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.5s ease,
-              border-color 0.5s ease;
+  transition: flex 1100ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.6s ease,
+              border-color 0.6s ease;
 }
 
 /* ── Photographic Image Canvas ───────────────────────────────────────── */
@@ -178,7 +178,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1), filter 0.4s ease;
+  transition: transform 1100ms cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
   filter: brightness(1) contrast(1.05);
 }
 
@@ -188,7 +188,7 @@
 }
 
 .cardInactive:hover .cardImage {
-  transform: scale(1.02);
+  transform: scale(1.015);
 }
 
 /* Gradients Tailored for Absolute Photographic Contrast Without Muddying */
@@ -256,12 +256,14 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+  transition: opacity 380ms cubic-bezier(0.16, 1, 0.3, 1) 320ms,
+              transform 380ms cubic-bezier(0.16, 1, 0.3, 1) 320ms;
 }
 
 .cardInactive .activeContent {
   opacity: 0;
-  transform: translateY(5px);
-  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  transform: translateY(4px);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
   pointer-events: none;
 }
 

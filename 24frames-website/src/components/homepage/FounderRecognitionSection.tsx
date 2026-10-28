@@ -24,6 +24,7 @@ export interface VerifiedRecognition {
   sourceUrl: string;
   sourceLabel: string;
   objectPosition?: string;
+  fitMode?: "contain" | "cover";
 }
 
 export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
@@ -41,7 +42,8 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "Official Nikon India association creative welcoming Phani Gogireddy to Nikon Creator family",
     sourceUrl: "https://www.instagram.com/nikonindiaofficial/",
     sourceLabel: "View Official Nikon Announcement →",
-    objectPosition: "center 15%",
+    objectPosition: "center center",
+    fitMode: "contain",
   },
   {
     id: "times-excellence-dia-mirza",
@@ -57,7 +59,8 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "Dia Mirza presenting the Excellence in Luxury Wedding Photography award to Phani Gogireddy at Novotel HICC Hyderabad",
     sourceUrl: "https://www.youtube.com/shorts/Lh45ZBRJ1b8",
     sourceLabel: "Watch Award Ceremony Film →",
-    objectPosition: "center 22%",
+    objectPosition: "center center",
+    fitMode: "contain",
   },
   {
     id: "inovexia-indian-eminent",
@@ -74,6 +77,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     sourceUrl: "https://boroktimes.com/the-art-of-storytelling-through-photography-a-look-at-phani-gogireddys-award-winning-work/",
     sourceLabel: "Read Feature →",
     objectPosition: "center center",
+    fitMode: "contain",
   },
   {
     id: "times-of-india-spotlight",
@@ -90,6 +94,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     sourceUrl: "https://timesofindia.indiatimes.com/",
     sourceLabel: "Read Editorial Article →",
     objectPosition: "center top",
+    fitMode: "contain",
   },
   {
     id: "gen-next-india-cover",
@@ -106,6 +111,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     sourceUrl: "https://www.youtube.com/@24framesphotography",
     sourceLabel: "Explore Studio Archive →",
     objectPosition: "center 20%",
+    fitMode: "contain",
   },
 ];
 
@@ -119,6 +125,7 @@ export default function FounderRecognitionSection() {
   const lightSweepRef = useRef<HTMLDivElement>(null);
   const viewfinderHudRef = useRef<HTMLDivElement>(null);
   const namePanelRef = useRef<HTMLDivElement>(null);
+  const interactiveGlareRef = useRef<HTMLDivElement>(null);
 
   /* Layout References */
   const statsRef = useRef<HTMLDivElement>(null);
@@ -159,13 +166,47 @@ export default function FounderRecognitionSection() {
     return () => track.removeEventListener("scroll", updateScrollState);
   }, [updateScrollState]);
 
+  /* ── Interactive Artist Portrait Studio Lighting ── */
+  useEffect(() => {
+    const wrap = portraitWrapRef.current;
+    const glare = interactiveGlareRef.current;
+    if (!wrap || !glare) return;
+
+    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isTouch = window.matchMedia("(hover: none)").matches;
+    if (isReduced || isTouch) return;
+
+    const handlePointerMove = (e: PointerEvent) => {
+      const rect = wrap.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      glare.style.setProperty("--glare-x", `${x}%`);
+      glare.style.setProperty("--glare-y", `${y}%`);
+      glare.style.opacity = "0.5";
+    };
+
+    const handlePointerLeave = () => {
+      glare.style.opacity = "0";
+      glare.style.setProperty("--glare-x", "50%");
+      glare.style.setProperty("--glare-y", "40%");
+    };
+
+    wrap.addEventListener("pointermove", handlePointerMove, { passive: true });
+    wrap.addEventListener("pointerleave", handlePointerLeave, { passive: true });
+
+    return () => {
+      wrap.removeEventListener("pointermove", handlePointerMove);
+      wrap.removeEventListener("pointerleave", handlePointerLeave);
+    };
+  }, []);
+
   /* ── Living Portrait & Section GSAP Entrance Animation ── */
   useEffect(() => {
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isReduced) return;
 
     const ctx = gsap.context(() => {
-      /* 1. Living Portrait Reveal Timeline */
+      /* 1. Coordinated 5-Stage Living Portrait Reveal Timeline */
       if (portraitWrapRef.current && portraitImgRef.current) {
         const portraitTl = gsap.timeline({
           scrollTrigger: {
@@ -175,47 +216,57 @@ export default function FounderRecognitionSection() {
           },
         });
 
-        // Phase 01: Frame Recognition (0.0s - 0.3s)
+        // Stage 1: Frame Recognition (0.0s - 0.3s)
         if (viewfinderHudRef.current) {
           portraitTl.fromTo(
             viewfinderHudRef.current,
             { opacity: 0, scale: 1.05 },
-            { opacity: 1, scale: 1.0, duration: 0.35, ease: "power2.out" },
+            { opacity: 1, scale: 1.0, duration: 0.3, ease: "power2.out" },
             0
           );
         }
 
-        // Phase 02: Light Sweep (0.3s - 1.25s)
+        // Stage 2: Light Sweep (0.3s - 1.2s)
         if (lightSweepRef.current) {
           portraitTl.fromTo(
             lightSweepRef.current,
             { x: "-110%", opacity: 0 },
-            { x: "130%", opacity: 0.85, duration: 1.0, ease: "power2.inOut" },
-            0.25
+            { x: "130%", opacity: 0.85, duration: 0.9, ease: "power2.inOut" },
+            0.3
           );
         }
 
         if (darkroomOverlayRef.current) {
           portraitTl.to(
             darkroomOverlayRef.current,
-            { opacity: 0, duration: 0.9, ease: "power2.out" },
+            { opacity: 0, duration: 0.85, ease: "power2.out" },
             0.35
           );
         }
 
-        // Phase 03: Image Lock (1.0s - 1.75s)
+        // Stage 3: Focus Settles (1.2s - 1.8s)
         portraitTl.fromTo(
           portraitImgRef.current,
           { scale: 1.03, filter: "blur(4px)" },
-          { scale: 1.0, filter: "blur(0px)", duration: 0.8, ease: "power2.out" },
-          0.9
+          { scale: 1.0, filter: "blur(0px)", duration: 0.6, ease: "power2.out" },
+          1.2
         );
 
         if (viewfinderHudRef.current) {
           portraitTl.to(
             viewfinderHudRef.current,
-            { opacity: 0, duration: 0.5, ease: "power2.in" },
-            1.4
+            { opacity: 0, duration: 0.4, ease: "power2.in" },
+            1.35
+          );
+        }
+
+        // Stage 5: The Signature (2.0s - 2.3s)
+        if (namePanelRef.current) {
+          portraitTl.fromTo(
+            namePanelRef.current,
+            { opacity: 0, y: 14 },
+            { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+            2.0
           );
         }
       }
@@ -228,15 +279,6 @@ export default function FounderRecognitionSection() {
           once: true,
         },
       });
-
-      if (namePanelRef.current) {
-        panelsTl.fromTo(
-          namePanelRef.current,
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-          0.1
-        );
-      }
 
       if (statsRef.current) {
         panelsTl.fromTo(
@@ -329,11 +371,8 @@ export default function FounderRecognitionSection() {
       {/* Anchor alias to support legacy #founder links smoothly */}
       <div id="founder" className={styles.anchorOffset} aria-hidden="true" />
 
-      {/* Interactive Liquid Dot Matrix Field (Subtle ambient effect) */}
+      {/* Interactive Liquid Dot Matrix Field (Single authentic dotted layer) */}
       <LiquidDotCanvas className={styles.liquidCanvas} />
-
-      {/* Dotted Grid Pattern across the whole section background */}
-      <div className={styles.dotGridOverlay} aria-hidden="true" />
 
       <div className={styles.container}>
         {/* ── TWO-COLUMN DESKTOP COMPOSITION MATCHING REFERENCE SCREENSHOT ── */}
@@ -349,7 +388,7 @@ export default function FounderRecognitionSection() {
               <span className={styles.founderDesignation}>MANAGING DIRECTOR</span>
             </div>
 
-            {/* 2. Large Founder Portrait with Living Portrait Animation */}
+            {/* 2. Large Founder Portrait with Living Portrait Animation & Interactive Studio Glare */}
             <div ref={portraitWrapRef} className={styles.portraitWrap}>
               <img
                 ref={portraitImgRef}
@@ -370,6 +409,13 @@ export default function FounderRecognitionSection() {
               <div
                 ref={lightSweepRef}
                 className={styles.lightSweepBeam}
+                aria-hidden="true"
+              />
+
+              {/* Interactive Cinematic Studio Light Reflection Layer */}
+              <div
+                ref={interactiveGlareRef}
+                className={styles.interactiveGlare}
                 aria-hidden="true"
               />
 
@@ -477,8 +523,8 @@ export default function FounderRecognitionSection() {
                         <img
                           src={item.imageSrc}
                           alt={item.imageAlt}
-                          className={styles.cardCoverImg}
-                          style={{ objectPosition: item.objectPosition || "center 20%" }}
+                          className={item.fitMode === "contain" ? styles.cardCoverImgContain : styles.cardCoverImg}
+                          style={{ objectPosition: item.objectPosition || "center center" }}
                           loading="lazy"
                         />
                       </div>
@@ -529,18 +575,6 @@ export default function FounderRecognitionSection() {
                 — PHANI GOGIREDDY, MANAGING DIRECTOR
               </span>
             </div>
-
-            {/* 4. Commission Phani Gogireddy CTA (Matching reference bottom of right column) */}
-            <div ref={ctaContainerRef} className={styles.ctaCardBox}>
-              <Link
-                href="/inquire"
-                className={styles.commissionPillBtn}
-                aria-label="Commission Phani Gogireddy for your wedding film"
-              >
-                <span>COMMISSION PHANI GOGIREDDY</span>
-                <span className={styles.btnArrow}>→</span>
-              </Link>
-            </div>
           </div>
         </div>
 
@@ -583,6 +617,18 @@ export default function FounderRecognitionSection() {
                 Transforming fleeting, unrepeatable moments into enduring generational heirlooms.
               </p>
             </div>
+          </div>
+
+          {/* Centrally Placed Commission CTA Beneath All Three Principles */}
+          <div ref={ctaContainerRef} className={styles.principlesCtaWrap}>
+            <Link
+              href="/inquire"
+              className={styles.commissionPillBtn}
+              aria-label="Commission Phani Gogireddy for your wedding film"
+            >
+              <span>COMMISSION PHANI GOGIREDDY</span>
+              <span className={styles.btnArrow}>→</span>
+            </Link>
           </div>
         </div>
       </div>
