@@ -64,7 +64,7 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
               Return to The Collection
             </Link>
             <span className={styles.disciplineIndexBadge}>
-              PRACTICE {discipline.number} OF 06
+              PRACTICE {discipline.number} OF 05
             </span>
           </div>
         </div>

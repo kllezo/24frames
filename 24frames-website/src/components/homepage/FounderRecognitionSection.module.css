@@ -383,7 +383,7 @@
 
 /* Individual Magazine Card */
 .magazineCard {
-  flex: 0 0 clamp(190px, 20vw, 215px);
+  flex: 0 0 clamp(200px, 20vw, 235px);
   background: #FFFFFF;
   border-radius: 12px;
   padding: 0.75rem;
@@ -391,6 +391,7 @@
   border: 1px solid rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 0.65rem;
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -433,19 +434,19 @@
 .cardImageContainer {
   position: relative;
   width: 100%;
-  height: 152px;
-  aspect-ratio: 4 / 3;
   border-radius: 8px;
   overflow: hidden;
   background: #EFECE5;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .cardCoverImg {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   transition: transform 0.4s ease;
 }
@@ -453,7 +454,7 @@
 .cardCoverImgContain {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   transition: transform 0.4s ease;
 }

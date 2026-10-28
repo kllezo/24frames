@@ -23,8 +23,7 @@ export interface VerifiedRecognition {
   imageAlt: string;
   sourceUrl: string;
   sourceLabel: string;
-  objectPosition?: string;
-  fitMode?: "contain" | "cover";
+  aspectRatio: string;
 }
 
 export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
@@ -42,8 +41,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "Official Nikon India association creative welcoming Phani Gogireddy to Nikon Creator family",
     sourceUrl: "https://www.instagram.com/nikonindiaofficial/",
     sourceLabel: "View Official Nikon Announcement →",
-    objectPosition: "center 20%",
-    fitMode: "cover",
+    aspectRatio: "620 / 818",
   },
   {
     id: "times-excellence-dia-mirza",
@@ -59,8 +57,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "Dia Mirza presenting the Excellence in Luxury Wedding Photography award to Phani Gogireddy at Novotel HICC Hyderabad",
     sourceUrl: "https://www.youtube.com/shorts/Lh45ZBRJ1b8",
     sourceLabel: "Watch Award Ceremony Film →",
-    objectPosition: "center 22%",
-    fitMode: "cover",
+    aspectRatio: "450 / 604",
   },
   {
     id: "inovexia-indian-eminent",
@@ -76,8 +73,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "Shri Akunuri Murali IAS conferring the Indian Eminent Award for Best Photography Service in Hyderabad to Phani Gogireddy",
     sourceUrl: "https://boroktimes.com/the-art-of-storytelling-through-photography-a-look-at-phani-gogireddys-award-winning-work/",
     sourceLabel: "Read Feature →",
-    objectPosition: "center 20%",
-    fitMode: "cover",
+    aspectRatio: "630 / 686",
   },
   {
     id: "times-of-india-spotlight",
@@ -93,8 +89,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "The Times of India full page Hyderabad Spotlight featuring 24 Frames and Phani Gogireddy",
     sourceUrl: "https://timesofindia.indiatimes.com/",
     sourceLabel: "Read Editorial Article →",
-    objectPosition: "center top",
-    fitMode: "cover",
+    aspectRatio: "512 / 612",
   },
   {
     id: "gen-next-india-cover",
@@ -110,8 +105,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageAlt: "GenNext-India magazine cover featuring Phani Gogireddy holding the Excellence star award",
     sourceUrl: "https://www.youtube.com/@24framesphotography",
     sourceLabel: "Explore Studio Archive →",
-    objectPosition: "center 18%",
-    fitMode: "cover",
+    aspectRatio: "505 / 811",
   },
 ];
 
@@ -502,12 +496,14 @@ export default function FounderRecognitionSection() {
                         <span className={styles.cardYear}>{item.year}</span>
                       </div>
 
-                      <div className={styles.cardImageContainer}>
+                      <div
+                        className={styles.cardImageContainer}
+                        style={{ aspectRatio: item.aspectRatio }}
+                      >
                         <img
                           src={item.imageSrc}
                           alt={item.imageAlt}
                           className={styles.cardCoverImg}
-                          style={{ objectPosition: item.objectPosition || "center center" }}
                           loading="lazy"
                         />
                       </div>

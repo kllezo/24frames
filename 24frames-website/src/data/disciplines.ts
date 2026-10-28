@@ -75,7 +75,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     heroAspect: "cinematic",
     href: "/disciplines/weddings",
     metadata: {
-      disciplineNumber: "01 / 06",
+      disciplineNumber: "01 / 05",
       leadArtist: "Phani Gogireddy",
       opticsProfile: "Leica Summilux & Zeiss Supreme Cinema Primes",
       established: "2012",
@@ -181,7 +181,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     heroAspect: "cinematic",
     href: "/disciplines/celebrities",
     metadata: {
-      disciplineNumber: "02 / 06",
+      disciplineNumber: "02 / 05",
       leadArtist: "Phani Gogireddy",
       opticsProfile: "Medium Format 100MP & ARRI Cinema Lighting",
       established: "2014",
@@ -287,7 +287,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     heroAspect: "cinematic",
     href: "/disciplines/events",
     metadata: {
-      disciplineNumber: "03 / 06",
+      disciplineNumber: "03 / 05",
       leadArtist: "Phani Gogireddy & Production Crew",
       opticsProfile: "Multi-Angle Cinema Rigs & High-Speed Optical Primes",
       established: "2013",
@@ -376,7 +376,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     heroAspect: "cinematic",
     href: "/disciplines/fashion",
     metadata: {
-      disciplineNumber: "04 / 06",
+      disciplineNumber: "04 / 05",
       leadArtist: "Phani Gogireddy",
       opticsProfile: "Medium Format 100MP & Macro Optical Primes",
       established: "2016",
@@ -440,7 +440,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         aspect: "portrait"
       }
     ],
-    relatedSlugs: ["celebrities", "weddings", "archive"]
+    relatedSlugs: ["celebrities", "weddings", "cinema"]
   },
 
   cinema: {
@@ -460,12 +460,11 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Audio is recorded on 32-bit float wireless systems, ensuring sacred Vedic mantras, emotional parental toasts, and delicate acoustic performances are preserved with pristine clarity.",
       "Color grading is performed in DaVinci Resolve using our proprietary custom 24F film emulsion look, honoring organic skin tones while lending timeless celluloid warmth."
     ],
-    heroImage: "/videos/portfolio/nishanth-sanzena/poster.jpg",
-    heroWebp: "/videos/portfolio/nishanth-sanzena/poster.webp",
+    heroImage: "/images/disciplines/cinema/IMG_6471.jpg",
     heroAspect: "cinematic",
     href: "/disciplines/cinema",
     metadata: {
-      disciplineNumber: "05 / 06",
+      disciplineNumber: "05 / 05",
       leadArtist: "Phani Gogireddy & Cinema Unit",
       opticsProfile: "Sony FX6 / FX3 Cinema Line & Anamorphic Primes",
       established: "2012",
@@ -475,188 +474,98 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     videos: [
       {
         id: "vid-01",
-        title: "Nishanth X Sanzena — Couple Shoot Film",
-        client: "Nishanth & Sanzena",
-        embedUrl: "https://www.youtube-nocookie.com/embed/s32UT21hnBg",
-        poster: "/videos/portfolio/nishanth-sanzena/poster.jpg",
-        posterWebp: "/videos/portfolio/nishanth-sanzena/poster.webp",
-        duration: "04:17",
+        title: "A Grand Housewarming Ceremony | Celebrating Dileep & Alekhya’s New Beginning",
+        client: "Dileep & Alekhya",
+        embedUrl: "https://www.youtube-nocookie.com/embed/N7DYak71gu0",
+        poster: "https://i.ytimg.com/vi/N7DYak71gu0/hqdefault.jpg",
+        duration: "03:42",
         description:
-          "The unfolding love story of Nishanth & Sanzena. Captured with lyrical motion, natural intimacy, and rich anamorphic color tones."
+          "A grand housewarming ceremony and celebration of new beginnings, filmed with architectural elegance, familial joy, and radiant festive light."
       },
       {
         id: "vid-02",
-        title: "Vinitha & Vivekananda — Two Years, One Question",
-        client: "Vinitha & Vivekananda",
-        embedUrl: "https://www.youtube-nocookie.com/embed/LNtlLgfT5uY",
-        poster: "/videos/portfolio/vinitha-vivekananda/poster.jpg",
-        posterWebp: "/videos/portfolio/vinitha-vivekananda/poster.webp",
-        duration: "02:33",
+        title: "Manoj X Snigdha | Wedding Story | 24Frames Wedding Films",
+        client: "Manoj & Snigdha",
+        embedUrl: "https://www.youtube-nocookie.com/embed/ASLHqobh4xs",
+        poster: "https://i.ytimg.com/vi/ASLHqobh4xs/hqdefault.jpg",
+        duration: "04:15",
         description:
-          "A journey of love, patience, and devotion—witness the cinematic narrative where two years of togetherness lead to one life-changing question."
+          "The unfolding wedding chapter of Manoj & Snigdha. Documented with tender intimacy, sacred Telugu traditions, and rich cinematic color science."
       },
       {
         id: "vid-03",
-        title: "Bellamkonda Sai Sreenivas & Kavya Reddy — Reception Film",
-        client: "Bellamkonda Family & Kavya Reddy",
-        embedUrl: "https://www.youtube-nocookie.com/embed/2EICGi0eENA",
-        poster: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
-        posterWebp: "/images/portfolio/bellamkonda-kavya-reception/cover.webp",
-        duration: "03:45",
+        title: "రెండు హృదయాలు కలిసిన ఒక అందమైన ప్రేమకథ | Deekshitha & Rohith Varma",
+        client: "Deekshitha & Rohith Varma",
+        embedUrl: "https://www.youtube-nocookie.com/embed/mOK3Abk1meg",
+        poster: "https://i.ytimg.com/vi/mOK3Abk1meg/hqdefault.jpg",
+        duration: "03:50",
         description:
-          "Official cinematic wedding reception film for Telugu cinema star Bellamkonda Sai Sreenivas, featuring distinguished guests and royal stage florals (193k+ views)."
+          "Two hearts united in a beautiful love story — cinematic wedding film captured with rich emotion, timeless framing, and celebratory grace."
       },
       {
         id: "vid-04",
-        title: "Siril Verma & Devi Poojitha — Thambhulam Ceremony Film",
-        client: "Siril Verma (World Jr. No.1) & Devi Poojitha",
-        embedUrl: "https://www.youtube-nocookie.com/embed/wfgKx4j70i4",
-        poster: "/images/portfolio/sireesh-harshitha/cover.jpg",
-        duration: "03:12",
+        title: "SREE VIDYANIKETHAN INTERNATIONAL SCHOOL | ANNUAL DAY 2020 | MANCHU MOHANBABU | MANOJ MANCHU",
+        client: "Dr. M. Mohan Babu & Manchu Manoj / Sree Vidyanikethan",
+        embedUrl: "https://www.youtube-nocookie.com/embed/zOXP_UHtc-M",
+        poster: "https://i.ytimg.com/vi/zOXP_UHtc-M/hqdefault.jpg",
+        duration: "05:10",
         description:
-          "Official cinematic pre-wedding event film for international sports personality Siril Verma, directed and filmed by 24 Frames Wedding Films."
+          "Monumental annual day celebration featuring iconic Telugu cinema legend Dr. M. Mohan Babu and actor Manchu Manoj, captured with multi-camera scale."
       }
     ],
     gallery: [
       {
         id: "film-still-01",
-        title: "Nishanth & Sanzena — Cinema Poster Frame",
-        client: "Nishanth & Sanzena",
-        location: "Heritage Villa Grounds",
-        year: "2025",
-        image: "/videos/portfolio/nishanth-sanzena/poster.jpg",
-        webp: "/videos/portfolio/nishanth-sanzena/poster.webp",
-        caption: "Widescreen couple cinema frame captured on 50mm anamorphic prime.",
+        title: "Theatrical Cinema Scenography & Volumetric Contrast",
+        client: "Feature Cinema Unit",
+        location: "Hyderabad Studio Stage",
+        year: "2024",
+        image: "/images/disciplines/cinema/IMG_6471.jpg",
+        caption: "Widescreen anamorphic cinema frame demonstrating volumetric key lighting and dimensional contrast.",
         aspect: "landscape"
       },
       {
         id: "film-still-02",
-        title: "Vinitha & Vivekananda — Feature Teaser Frame",
-        client: "Vinitha & Vivekananda",
-        location: "Hyderabad Estate",
-        year: "2025",
-        image: "/videos/portfolio/vinitha-vivekananda/poster.jpg",
-        webp: "/videos/portfolio/vinitha-vivekananda/poster.webp",
-        caption: "Quiet dawn golden hour cinema capture with natural depth of field.",
+        title: "Anamorphic Scope & Compositional Geometry",
+        client: "24 Frames Production",
+        location: "Location Set",
+        year: "2024",
+        image: "/images/disciplines/cinema/IMG_6467.jpg",
+        caption: "True 2.39:1 widescreen frame composed on cinema prime optics.",
         aspect: "landscape"
       },
       {
         id: "film-still-03",
-        title: "Bellamkonda Reception — Theatrical Cinema Coverage",
-        client: "Bellamkonda Family",
-        location: "GMR Arena",
+        title: "Dynamic Camera Movement & Cinematic Focus",
+        client: "Production Unit",
+        location: "Heritage Pavilion",
         year: "2024",
-        image: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
-        webp: "/images/portfolio/bellamkonda-kavya-reception/cover.webp",
-        caption: "Master camera dolly movement across the royal reception stage.",
+        image: "/images/disciplines/cinema/IMG_6469.jpg",
+        caption: "Precision camera dolly track capturing emotional human expressions with organic lens flares.",
         aspect: "landscape"
+      },
+      {
+        id: "film-still-04",
+        title: "Architectural Silhouette Through Triple Arches",
+        client: "Widescreen Feature Commission",
+        location: "Palace Courtyard",
+        year: "2024",
+        image: "/images/disciplines/cinema/IMG_6289.jpg",
+        caption: "Dramatic sunset silhouette portrait composed through heritage palace arches.",
+        aspect: "portrait"
+      },
+      {
+        id: "film-still-05",
+        title: "Chiaroscuro Studio Character Lighting",
+        client: "Tollywood Character Study",
+        location: "24 Frames Studio",
+        year: "2024",
+        image: "/images/disciplines/cinema/IMG_6319.jpg",
+        caption: "Sculptural portrait lighting highlighting emotional poise and deep textured shadows.",
+        aspect: "portrait"
       }
     ],
     relatedSlugs: ["weddings", "celebrities", "events"]
-  },
-
-  archive: {
-    id: "archive",
-    slug: "archive",
-    number: "06",
-    title: "The Complete Archive",
-    shortTitle: "Archive",
-    count: "500+ Commissions",
-    tagline: "Fourteen years of optical storytelling across South India and abroad.",
-    heroDescription:
-      "A continuous visual lineage established in 2012 by founder Phani Gogireddy, preserving over 500 bespoke commissions.",
-    fullDescription:
-      "Founded in 2012 by Phani Gogireddy, 24 Frames has meticulously preserved fourteen continuous years of visual heritage. Over five hundred private wedding commissions, celebrity character studies, and cultural galas constitute our permanent archival ledger, maintained under strict standards of museum-grade preservation.",
-    curatorialNotes: [
-      "Every frame in the 24 Frames archive is stored on dual-redundant cold storage arrays with verified checksum audits, ensuring clients' most precious memories remain intact for generations.",
-      "Our archival methodology prioritizes historical truth over transient visual trends: natural skin tones, timeless contrast curves, and unscripted human emotion that never grow dated.",
-      "Explore individual curated stories below, or contact our Hyderabad studio to request access to specific regional or historical portfolios."
-    ],
-    heroImage: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
-    heroWebp: "/images/stories/sirish-and-harshitha/IMG_6346.webp",
-    heroAspect: "cinematic",
-    href: "/disciplines/archive",
-    metadata: {
-      disciplineNumber: "06 / 06",
-      leadArtist: "Phani Gogireddy (Founder)",
-      opticsProfile: "Full Optical Vault & 4K Cinema Preservation",
-      established: "2012",
-      archiveVolume: "500+ Commissions & Over 250,000 Curated Frames",
-      primaryLocations: ["Hyderabad", "Bengaluru", "Chennai", "Delhi", "Global"]
-    },
-    gallery: [
-      {
-        id: "a-01",
-        title: "Bellamkonda Sai Sreenivas & Kavya Reddy Story",
-        client: "Bellamkonda Family",
-        location: "Shamshabad, Hyderabad",
-        year: "2024",
-        image: "/images/stories/bellam-srikonda/IMG_6339.jpg",
-        webp: "/images/stories/bellam-srikonda/IMG_6339.webp",
-        caption: "Master Commission 01 — Seven curated frames in full archival preservation.",
-        aspect: "landscape",
-        storySlug: "bellam-srikonda"
-      },
-      {
-        id: "a-02",
-        title: "Hrithika & Abhishek Story",
-        client: "Hrithika & Abhishek",
-        location: "Celebration Estate",
-        year: "2024",
-        image: "/images/stories/hrithika-abhishek/IMG_6324.jpg",
-        webp: "/images/stories/hrithika-abhishek/IMG_6324.webp",
-        caption: "Master Commission 02 — Nine dedicated scenes documenting Vedic rituals and emotional joy.",
-        aspect: "portrait",
-        storySlug: "hrithika-abhishek"
-      },
-      {
-        id: "a-03",
-        title: "Karthik & Gayathri Story",
-        client: "Karthik & Gayathri",
-        location: "Glasshouse Conservatory",
-        year: "2024",
-        image: "/images/stories/karthik-and-gayathri/IMG_6326.jpg",
-        webp: "/images/stories/karthik-and-gayathri/IMG_6326.webp",
-        caption: "Master Commission 03 — Classical South Indian temple heritage documented under conservatory daylight.",
-        aspect: "portrait",
-        storySlug: "karthik-and-gayathri"
-      },
-      {
-        id: "a-04",
-        title: "Sirish & Harshitha Story",
-        client: "Sirish & Harshitha",
-        location: "Heritage Pavilion",
-        year: "2024",
-        image: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
-        webp: "/images/stories/sirish-and-harshitha/IMG_6346.webp",
-        caption: "Master Commission 04 — Authentic Dravidian temple stone textures and sacred firelight.",
-        aspect: "portrait",
-        storySlug: "sirish-and-harshitha"
-      },
-      {
-        id: "a-05",
-        title: "Nishanth & Sanzena Cinema Archive",
-        client: "Nishanth & Sanzena",
-        location: "Heritage Villa",
-        year: "2025",
-        image: "/videos/portfolio/nishanth-sanzena/poster.jpg",
-        webp: "/videos/portfolio/nishanth-sanzena/poster.webp",
-        caption: "Cinema Archive 01 — Theatrical 2.39:1 anamorphic motion picture.",
-        aspect: "landscape"
-      },
-      {
-        id: "a-06",
-        title: "Vinitha & Vivekananda Cinema Archive",
-        client: "Vinitha & Vivekananda",
-        location: "Hyderabad Estate",
-        year: "2025",
-        image: "/videos/portfolio/vinitha-vivekananda/poster.jpg",
-        webp: "/videos/portfolio/vinitha-vivekananda/poster.webp",
-        caption: "Cinema Archive 02 — Authentic wedding vows and documentary cinema feature.",
-        aspect: "landscape"
-      }
-    ],
-    relatedSlugs: ["weddings", "celebrities", "cinema"]
   }
 };
 

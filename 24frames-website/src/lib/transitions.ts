@@ -26,7 +26,7 @@ const STATIC_ROUTE_MAP: Record<string, RouteVisualMeta> = {
     image: "/images/portfolio/sireesh-harshitha/cover.jpg",
     webp: "/images/portfolio/sireesh-harshitha/cover.webp",
     title: "Editorial Disciplines",
-    subtitle: "Six Practices of Cinema & Optics",
+    subtitle: "Five Practices of Cinema & Optics",
   },
   "/identity": {
     image: "/images/founder-portrait.jpg",

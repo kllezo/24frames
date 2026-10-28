@@ -108,22 +108,6 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     href: "/disciplines/cinema",
     objectPosition: "center 35%",
   },
-  {
-    id: "archive",
-    slug: "archive",
-    number: "06",
-    title: "The Complete Archive",
-    shortTitle: "Archive",
-    count: "500+ Commissions",
-    tagline: "Fourteen years of optical storytelling across South India and abroad.",
-    heroDescription:
-      "A continuous visual lineage established in 2012 by founder Phani Gogireddy, preserving over 500 bespoke commissions.",
-    image: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
-    webpImage: "/images/stories/sirish-and-harshitha/IMG_6346.webp",
-    fallbackImage: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
-    href: "/disciplines/archive",
-    objectPosition: "center 25%",
-  },
 ];
 
 export const COLLECTION_PROJECTS = COLLECTION_DISCIPLINES;
@@ -246,7 +230,7 @@ export default function TheCollection() {
       ref={sectionRef}
       id="collection"
       className={styles.section}
-      aria-label="The Collection — Six Practices of Cinema & Optics"
+      aria-label="The Collection — Five Practices of Cinema & Optics"
     >
       <div id="explore" className={styles.anchorOffset} aria-hidden="true" />
 
@@ -255,7 +239,7 @@ export default function TheCollection() {
         <div ref={headerRef} className={styles.header}>
           <div className={styles.headerMeta}>
             <span className={styles.chapterLabel}>Chapter 03 — The Collection</span>
-            <span className={styles.curatorialBadge}>Six Practices of Optics</span>
+            <span className={styles.curatorialBadge}>Five Practices of Optics</span>
           </div>
           <h2 className={styles.title}>
             The <span className={styles.cursiveAccent}>Collection</span>
@@ -271,7 +255,7 @@ export default function TheCollection() {
           ref={showcaseRef}
           className={styles.showcaseContainer}
           role="region"
-          aria-label="Six-Discipline Horizontal Editorial Showcase"
+          aria-label="Five-Discipline Horizontal Editorial Showcase"
         >
           <div className={styles.accordionTrack}>
             {COLLECTION_DISCIPLINES.map((discipline) => {

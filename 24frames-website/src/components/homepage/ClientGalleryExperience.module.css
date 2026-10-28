@@ -104,25 +104,25 @@
 .cardsShowcaseWrapper {
   background: #FFFFFF;
   border: 1px solid rgba(9, 69, 62, 0.12);
-  border-radius: 24px;
-  padding: clamp(1.25rem, 2vw, 2rem);
-  box-shadow: 0 16px 48px rgba(9, 69, 62, 0.06), 0 2px 10px rgba(0, 0, 0, 0.03);
+  border-radius: 20px;
+  padding: clamp(0.85rem, 1.3vw, 1.35rem);
+  box-shadow: 0 12px 36px rgba(9, 69, 62, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02);
   width: 100%;
 }
 
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: clamp(0.75rem, 1.1vw, 1.15rem);
+  gap: clamp(0.6rem, 0.9vw, 1rem);
   width: 100%;
   align-items: stretch;
 }
 
-/* Individual Feature Card */
+/* Individual Feature Card — Compact Editorial Height */
 .card {
   position: relative;
-  height: clamp(275px, 28vw, 310px);
-  border-radius: 16px;
+  height: clamp(185px, 19vw, 215px);
+  border-radius: 14px;
   overflow: hidden;
   text-decoration: none;
   display: block;
@@ -130,7 +130,7 @@
   outline: none;
   background: #FBF5E9;
   border: 1px solid #D8CEBC;
-  box-shadow: 0 6px 20px rgba(9, 69, 62, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 4px 14px rgba(9, 69, 62, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
   transform: translateY(0);
   transition:
     transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
@@ -140,9 +140,9 @@
 
 .card:hover,
 .cardOpen {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   border-color: #B5985A;
-  box-shadow: 0 14px 30px rgba(9, 69, 62, 0.1), 0 0 16px rgba(181, 152, 90, 0.12);
+  box-shadow: 0 10px 24px rgba(9, 69, 62, 0.09), 0 0 12px rgba(181, 152, 90, 0.1);
 }
 
 .card:focus-visible {
@@ -174,7 +174,7 @@
 .card_obsidian:hover,
 .card_obsidian.cardOpen {
   border-color: #B5985A;
-  box-shadow: 0 14px 30px rgba(9, 69, 62, 0.1), 0 0 16px rgba(181, 152, 90, 0.12);
+  box-shadow: 0 10px 24px rgba(9, 69, 62, 0.09), 0 0 12px rgba(181, 152, 90, 0.1);
 }
 
 /* ── LAYER 1: ARTWORK CANVAS (Upper window behind flap) ── */
@@ -183,7 +183,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 135px;
+  height: 80px;
   overflow: hidden;
   background: #EDE6D8;
 }
@@ -203,7 +203,7 @@
   object-fit: cover;
   object-position: center top;
   display: block;
-  transform: translateY(8px) scale(0.98);
+  transform: translateY(4px) scale(0.98);
   opacity: 0.92;
   transition:
     transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
@@ -219,10 +219,10 @@
 /* ── LAYER 2: SLIDING NOTCH FLAP ── */
 .slidingFlap {
   position: absolute;
-  top: 50px;
+  top: 30px;
   left: 0;
   right: 0;
-  bottom: -80px;
+  bottom: -40px;
   z-index: 2;
   transform: translateY(0);
   transition: transform 0.55s cubic-bezier(0.25, 1, 0.35, 1);
@@ -231,23 +231,23 @@
 
 .card:hover .slidingFlap,
 .cardOpen .slidingFlap {
-  transform: translateY(42px);
+  transform: translateY(22px);
 }
 
 .flapSvg {
   width: 100%;
   height: 100%;
   display: block;
-  filter: drop-shadow(0 -2px 6px rgba(0, 0, 0, 0.08));
+  filter: drop-shadow(0 -2px 5px rgba(0, 0, 0, 0.06));
 }
 
 /* Card Number on High Left Shelf */
 .cardNumber {
   position: absolute;
-  top: 10px;
-  left: 14px;
+  top: 6px;
+  left: 12px;
   font-family: var(--font-inter), sans-serif;
-  font-size: clamp(1.65rem, 2.1vw, 2.1rem);
+  font-size: clamp(1.25rem, 1.55vw, 1.45rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -258,9 +258,9 @@
 /* Card Arrow on Right Shoulder */
 .cardArrow {
   position: absolute;
-  top: 24px;
-  right: 14px;
-  font-size: 0.95rem;
+  top: 15px;
+  right: 12px;
+  font-size: 0.85rem;
   font-weight: 600;
   line-height: 1;
   color: #09453E;
@@ -276,28 +276,28 @@
 /* ── LAYER 3: PINNED BOTTOM TYPOGRAPHY ── */
 .cardBottomText {
   position: absolute;
-  bottom: 14px;
-  left: 14px;
-  right: 14px;
+  bottom: 10px;
+  left: 12px;
+  right: 12px;
   z-index: 3;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.2rem;
 }
 
 .cardTitle {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(0.95rem, 1.15vw, 1.125rem);
+  font-size: clamp(0.82rem, 0.95vw, 0.92rem);
   font-weight: 600;
-  line-height: 1.22;
+  line-height: 1.18;
   color: #09453E;
   margin: 0;
 }
 
 .cardDesc {
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.7rem;
-  line-height: 1.45;
+  font-size: 0.625rem;
+  line-height: 1.38;
   color: #4D5450;
   margin: 0;
   display: -webkit-box;
@@ -311,9 +311,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
+  gap: 1.25rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
   border-top: 1px solid rgba(9, 69, 62, 0.08);
 }
 
@@ -360,6 +360,10 @@
 @media (max-width: 768px) {
   .cardsGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card {
+    height: 195px;
   }
 
   .footnoteRow {
