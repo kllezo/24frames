@@ -11,22 +11,30 @@ interface DisciplineInteractiveMediaProps {
   shortTitle: string;
 }
 
-const CINEMA_EDITORIAL_INTERLUDES = [
+const DISCIPLINE_LOVE_STORY_FRAGMENTS = [
   {
-    quote: "“Every frame holds a world beyond the moment.”",
-    sub: "ANAMORPHIC SCOPE · 2.39:1 CELLULOID GRAIN",
+    chapter: "Chapter I · The Anticipation",
+    note: "Somewhere between the dream and the day, your forever quietly begins.",
   },
   {
-    quote: "“Light becomes memory. Movement becomes story.”",
-    sub: "THEATRICAL DISCIPLINE · VOLUMETRIC ILLUMINATION",
+    chapter: "Chapter II · The Sacred Vow",
+    note: "One glance across the mandap. A thousand unspoken promises.",
   },
   {
-    quote: "“The art of seeing what others feel.”",
-    sub: "ORCHESTRAL SOUND · UNGUARDED TRUTH",
+    chapter: "Chapter III · The Unguarded Moment",
+    note: "The moments you never planned often become the ones you hold closest.",
   },
   {
-    quote: "“A fleeting moment, composed to endure.”",
-    sub: "ARCHIVAL COLOR SCIENCE · MASTER PRINTS",
+    chapter: "Chapter IV · Optical Memory",
+    note: "A day passes in an instant. The way it made you feel deserves to endure.",
+  },
+  {
+    chapter: "Chapter IV · The Seen and Unseen",
+    note: "We look beyond how a moment appears, towards what it means.",
+  },
+  {
+    chapter: "Chapter V · The Legacy",
+    note: "When the day becomes memory, let it still feel genuinely yours.",
   },
 ];
 
@@ -86,6 +94,102 @@ export default function DisciplineInteractiveMedia({
   const featuredVideo = videos && videos.length > 0 ? videos[0] : null;
   const secondaryVideos = videos && videos.length > 1 ? videos.slice(1) : [];
 
+  // Split gallery items for the two staggered editorial columns
+  const leftGallery = gallery
+    .map((item, originalIndex) => ({ item, originalIndex }))
+    .filter((_, idx) => idx % 2 === 0);
+
+  const rightGallery = gallery
+    .map((item, originalIndex) => ({ item, originalIndex }))
+    .filter((_, idx) => idx % 2 !== 0);
+
+  const renderGalleryCard = (item: DisciplineGalleryImage, originalIndex: number) => {
+    const isLandscape = item.aspect === "landscape" || item.aspect === "panoramic";
+
+    return (
+      <article
+        key={item.id}
+        className={styles.galleryCard}
+        onClick={() => setActiveImageIndex(originalIndex)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setActiveImageIndex(originalIndex);
+          }
+        }}
+        aria-label={`View full frame: ${item.title}`}
+      >
+        <div
+          className={`${styles.galleryImgWrap} ${
+            isLandscape ? styles.aspectLandscape : styles.aspectPortrait
+          }`}
+        >
+          <picture>
+            {item.webp && <source srcSet={item.webp} type="image/webp" />}
+            <img
+              src={item.image}
+              alt={item.title}
+              className={styles.galleryImg}
+              loading="lazy"
+            />
+          </picture>
+          <div className={styles.cardGradient} />
+          <span className={styles.framePill}>
+            FRAME {String(originalIndex + 1).padStart(2, "0")}
+          </span>
+          <span className={styles.expandPill} aria-hidden="true">
+            EXPAND ↗
+          </span>
+        </div>
+
+        <div className={styles.cardMeta}>
+          <h3 className={styles.cardTitle}>{item.title}</h3>
+          <p className={styles.cardCaption}>{item.caption}</p>
+
+          <div className={styles.cardFooter}>
+            {item.location && (
+              <span className={styles.cardLocation}>
+                {item.location} {item.year ? `· ${item.year}` : ""}
+              </span>
+            )}
+
+            {item.storySlug && (
+              <Link
+                href={`/stories/${item.storySlug}`}
+                className={styles.storyLink}
+                onClick={(e) => e.stopPropagation()}
+              >
+                Step Inside Story →
+              </Link>
+            )}
+          </div>
+        </div>
+      </article>
+    );
+  };
+
+  const renderNarrativeNote = (
+    fragmentIndex: number,
+    align: "left" | "right" | "center" = "left"
+  ) => {
+    const fragment =
+      DISCIPLINE_LOVE_STORY_FRAGMENTS[
+        fragmentIndex % DISCIPLINE_LOVE_STORY_FRAGMENTS.length
+      ];
+
+    return (
+      <div
+        key={`note-${fragmentIndex}`}
+        className={`${styles.narrativeNote} ${styles[`align_${align}`]}`}
+      >
+        <span className={styles.noteChapter}>{fragment.chapter}</span>
+        <p className={styles.notePoem}>{fragment.note}</p>
+      </div>
+    );
+  };
+
   return (
     <>
       {/* ── FEATURED CINEMATIC MASTERPIECE (WHERE AVAILABLE) ── */}
@@ -139,34 +243,33 @@ export default function DisciplineInteractiveMedia({
                 <div className={styles.featuredDurationBadge}>
                   {featuredVideo.duration} · 2.39:1 ANAMORPHIC
                 </div>
-
-                <div className={styles.featuredTitleOverlay}>
-                  <span className={styles.featuredClientKicker}>
-                    COMMISSION · {featuredVideo.client}
-                  </span>
-                  <h3 className={styles.featuredMovieTitle}>
-                    {featuredVideo.title}
-                  </h3>
-                </div>
               </div>
 
-              {/* Concise Film Information Strip */}
-              <div className={styles.filmInfoStrip}>
-                <div className={styles.infoCell}>
-                  <span className={styles.infoLabel}>DIRECTOR & LEAD CINEMATOGRAPHER</span>
-                  <span className={styles.infoVal}>Phani Gogireddy</span>
+              {/* Master Film Meta Strip */}
+              <div className={styles.featuredInfoStrip}>
+                <div className={styles.featuredMetaCol}>
+                  <span className={styles.featuredKicker}>THEATRICAL COMMISSION</span>
+                  <h3 className={styles.featuredFilmTitle}>{featuredVideo.title}</h3>
+                  <p className={styles.featuredFilmDesc}>{featuredVideo.description}</p>
                 </div>
-                <div className={styles.infoCell}>
-                  <span className={styles.infoLabel}>OPTICS & FORMAT</span>
-                  <span className={styles.infoVal}>Sony FX Cinema Line & Anamorphic Primes</span>
-                </div>
-                <div className={styles.infoCell}>
-                  <span className={styles.infoLabel}>AUDIO RECORDING</span>
-                  <span className={styles.infoVal}>32-Bit Float Multi-Track Orchestral</span>
-                </div>
-                <div className={styles.infoCell}>
-                  <span className={styles.infoLabel}>COLOR SCIENCE</span>
-                  <span className={styles.infoVal}>24F Custom Celluloid Emulsion</span>
+
+                <div className={styles.featuredSpecsCol}>
+                  <div className={styles.specCell}>
+                    <span className={styles.specName}>CLIENT &amp; VENUE</span>
+                    <span className={styles.specVal}>{featuredVideo.client}</span>
+                  </div>
+                  <div className={styles.specCell}>
+                    <span className={styles.specName}>OPTICAL FORMAT</span>
+                    <span className={styles.specVal}>4K DCI · 2.39:1 Scope</span>
+                  </div>
+                  <div className={styles.specCell}>
+                    <span className={styles.specName}>SOUND SYSTEM</span>
+                    <span className={styles.specVal}>32-bit Float Orchestral</span>
+                  </div>
+                  <div className={styles.specCell}>
+                    <span className={styles.specName}>COLOR SCIENCE</span>
+                    <span className={styles.specVal}>24F Archival Celluloid</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -174,21 +277,23 @@ export default function DisciplineInteractiveMedia({
         </section>
       )}
 
-      {/* ── THEATRICAL WEDDING FEATURES (TWO-COLUMN EDITORIAL VIDEO GRID) ── */}
+      {/* ── 2-COLUMN VIDEO GRID (THEATRICAL COMMISSIONS) ── */}
       {secondaryVideos.length > 0 && (
         <section
-          className={styles.videoSection}
-          aria-label="Theatrical Cinema Wedding Features"
+          className={styles.videoGridSection}
+          aria-label="Theatrical Wedding Features Archive"
         >
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
               <div className={styles.sectionMeta}>
-                <span className={styles.sectionChapter}>MOTION PICTURE ARCHIVE</span>
-                <span className={styles.sectionBadge}>2.39:1 WIDESCREEN REEL</span>
+                <span className={styles.sectionChapter}>MOTION ARCHIVE</span>
+                <span className={styles.sectionBadge}>
+                  {secondaryVideos.length} THEATRICAL COMMISSIONS
+                </span>
               </div>
               <h2 className={styles.sectionTitle}>Theatrical Wedding Features</h2>
               <p className={styles.sectionSubtitle}>
-                Every film is documented with dedicated cinema units, capturing unscripted family emotion and sacred Telugu ceremonies.
+                Screened in 4K high-bitrate video with custom color grades and spatial music design.
               </p>
             </div>
 
@@ -248,7 +353,7 @@ export default function DisciplineInteractiveMedia({
         </section>
       )}
 
-      {/* ── CINEMA PHOTOGRAPHIC GALLERY (ALTERNATING 2-COLUMN EDITORIAL) ── */}
+      {/* ── PHOTOGRAPHIC GALLERY (CONTINUOUS STAGGERED EDITORIAL RHYTHM) ── */}
       <section
         className={styles.gallerySection}
         aria-label={`${shortTitle} Photographic Record`}
@@ -263,93 +368,48 @@ export default function DisciplineInteractiveMedia({
               {shortTitle} Photographic Gallery
             </h2>
             <p className={styles.sectionSubtitle}>
-              Curated master stills sequenced in alternating editorial rhythm with natural medium-format proportions.
+              Continuous staggered editorial composition. When one image appears on the left, the next begins beside it on the right with natural medium-format proportions.
             </p>
           </div>
 
-          <div className={styles.alternatingGallery}>
-            {gallery.map((item, index) => {
-              const isLandscape = item.aspect === "landscape" || item.aspect === "panoramic";
-              const isLeft = index % 2 === 0;
-              const shouldShowInterlude = index === 2 || index === 4;
-              const interlude = CINEMA_EDITORIAL_INTERLUDES[index % CINEMA_EDITORIAL_INTERLUDES.length];
-
-              return (
-                <div key={item.id} className={styles.galleryItemWrap}>
-                  {shouldShowInterlude && (
-                    <div className={styles.galleryInterlude}>
-                      <span className={styles.interludeKicker}>{interlude.sub}</span>
-                      <blockquote className={styles.interludeQuote}>
-                        {interlude.quote}
-                      </blockquote>
-                      <span className={styles.interludeLine} aria-hidden="true" />
-                    </div>
-                  )}
-
-                  <article
-                    className={`${styles.alternatingCard} ${
-                      isLeft ? styles.cardLeft : styles.cardRight
-                    }`}
-                    onClick={() => setActiveImageIndex(index)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setActiveImageIndex(index);
-                      }
-                    }}
-                    aria-label={`View full frame: ${item.title}`}
-                  >
-                    <div
-                      className={`${styles.galleryImgWrap} ${
-                        isLandscape ? styles.aspectLandscape : styles.aspectPortrait
-                      }`}
-                    >
-                      <picture>
-                        {item.webp && <source srcSet={item.webp} type="image/webp" />}
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className={styles.galleryImg}
-                          loading="lazy"
-                        />
-                      </picture>
-                      <div className={styles.cardGradient} />
-                      <span className={styles.framePill}>
-                        FRAME {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span className={styles.expandPill} aria-hidden="true">
-                        EXPAND ↗
-                      </span>
-                    </div>
-
-                    <div className={styles.cardMeta}>
-                      <h3 className={styles.cardTitle}>{item.title}</h3>
-                      <p className={styles.cardCaption}>{item.caption}</p>
-
-                      <div className={styles.cardFooter}>
-                        {item.location && (
-                          <span className={styles.cardLocation}>
-                            {item.location} {item.year ? `· ${item.year}` : ""}
-                          </span>
-                        )}
-
-                        {item.storySlug && (
-                          <Link
-                            href={`/stories/${item.storySlug}`}
-                            className={styles.storyLink}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            Read Full Story →
-                          </Link>
-                        )}
-                      </div>
-                    </div>
-                  </article>
+          {/* ── DESKTOP & TABLET: TWO-COLUMN STAGGERED EDITORIAL VIEW ── */}
+          <div className={styles.desktopStaggeredView}>
+            {/* Left Column (Starts at 0) */}
+            <div className={styles.staggerColLeft}>
+              {leftGallery.map(({ item, originalIndex }, idx) => (
+                <div key={item.id} className={styles.itemSlot}>
+                  {renderGalleryCard(item, originalIndex)}
+                  {idx === 0 && renderNarrativeNote(1, "left")}
+                  {idx === 1 && renderNarrativeNote(3, "left")}
                 </div>
-              );
-            })}
+              ))}
+            </div>
+
+            {/* Right Column (Starts at vertical midpoint of Left Column) */}
+            <div className={styles.staggerColRight}>
+              {/* Opening handwritten thought discovered in margin */}
+              {renderNarrativeNote(0, "right")}
+
+              {rightGallery.map(({ item, originalIndex }, idx) => (
+                <div key={item.id} className={styles.itemSlot}>
+                  {renderGalleryCard(item, originalIndex)}
+                  {idx === 0 && renderNarrativeNote(2, "right")}
+                  {idx === 1 && renderNarrativeNote(4, "right")}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── MOBILE: BALANCED SINGLE-COLUMN SEQUENTIAL VIEW ── */}
+          <div className={styles.mobileSequentialView}>
+            {gallery.map((item, index) => (
+              <div key={item.id} className={styles.mobileSlot}>
+                {renderGalleryCard(item, index)}
+                {index === 1 && renderNarrativeNote(1, "center")}
+                {index === 3 && renderNarrativeNote(2, "center")}
+                {index === 5 && renderNarrativeNote(4, "center")}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -361,126 +421,113 @@ export default function DisciplineInteractiveMedia({
           onClick={handleCloseVideo}
           role="dialog"
           aria-modal="true"
-          aria-label={activeVideo.title}
+          aria-label={`Watch ${activeVideo.title}`}
         >
           <div
-            className={styles.modalContainer}
+            className={styles.videoModalContent}
             onClick={(e) => e.stopPropagation()}
           >
             <div className={styles.modalHeader}>
-              <div className={styles.modalHeaderInfo}>
-                <span className={styles.modalBadge}>THEATRICAL WEDDING FEATURE</span>
-                <span className={styles.modalTitleText}>{activeVideo.title}</span>
+              <div className={styles.modalTitleBlock}>
+                <span className={styles.modalBadge}>4K CINEMA MASTER</span>
+                <h3 className={styles.modalVideoTitle}>{activeVideo.title}</h3>
+                <span className={styles.modalVideoClient}>· {activeVideo.client}</span>
               </div>
               <button
                 className={styles.modalCloseBtn}
                 onClick={handleCloseVideo}
-                aria-label="Close video player"
+                aria-label="Close video player (Escape)"
               >
                 ✕
               </button>
             </div>
 
-            <div className={styles.modalVideoPlayerWrap}>
+            <div className={styles.videoPlayerWrap}>
               <iframe
-                src={`${activeVideo.embedUrl}?autoplay=1&rel=0&modestbranding=1`}
+                src={`${activeVideo.embedUrl}?autoplay=1&rel=0&modestbranding=1&color=white`}
                 title={activeVideo.title}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                className={styles.modalIframe}
+                className={styles.videoIframe}
               />
-            </div>
-
-            <div className={styles.modalFooter}>
-              <div className={styles.modalFooterCol}>
-                <span className={styles.modalFooterLabel}>COMMISSION</span>
-                <span className={styles.modalFooterValue}>{activeVideo.client}</span>
-              </div>
-              <div className={styles.modalFooterCol}>
-                <span className={styles.modalFooterLabel}>DURATION</span>
-                <span className={styles.modalFooterValue}>{activeVideo.duration}</span>
-              </div>
-              <p className={styles.modalFooterDesc}>{activeVideo.description}</p>
             </div>
           </div>
         </div>
       )}
 
       {/* ── FULL-SCREEN IMAGE LIGHTBOX MODAL ── */}
-      {activeImageIndex !== null && gallery[activeImageIndex] && (
+      {activeImageIndex !== null && (
         <div
           className={styles.modalBackdrop}
           onClick={handleCloseImage}
           role="dialog"
           aria-modal="true"
-          aria-label={gallery[activeImageIndex].title}
+          aria-label={`View full frame: ${gallery[activeImageIndex].title}`}
         >
           <div
-            className={styles.imageLightboxContainer}
+            className={styles.imageModalContent}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={styles.lightboxTopBar}>
-              <span className={styles.lightboxCounter}>
-                FRAME {activeImageIndex + 1} OF {gallery.length}
-              </span>
+            <div className={styles.modalHeader}>
+              <div className={styles.modalTitleBlock}>
+                <span className={styles.modalBadge}>
+                  FRAME {activeImageIndex + 1} OF {gallery.length}
+                </span>
+                <h3 className={styles.modalVideoTitle}>
+                  {gallery[activeImageIndex].title}
+                </h3>
+              </div>
               <button
                 className={styles.modalCloseBtn}
                 onClick={handleCloseImage}
-                aria-label="Close image lightbox"
+                aria-label="Close image lightbox (Escape)"
               >
                 ✕
               </button>
             </div>
 
-            <div className={styles.lightboxImgArea}>
+            <div className={styles.imageViewerWrap}>
               <img
                 src={gallery[activeImageIndex].image}
                 alt={gallery[activeImageIndex].title}
-                className={styles.lightboxImg}
+                className={styles.modalFullImg}
               />
 
-              {gallery.length > 1 && (
-                <>
-                  <button
-                    className={`${styles.lightboxArrowBtn} ${styles.lightboxArrowLeft}`}
-                    onClick={() =>
-                      setActiveImageIndex((prev) =>
-                        prev !== null && prev > 0 ? prev - 1 : gallery.length - 1
-                      )
-                    }
-                    aria-label="Previous frame"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    className={`${styles.lightboxArrowBtn} ${styles.lightboxArrowRight}`}
-                    onClick={() =>
-                      setActiveImageIndex((prev) =>
-                        prev !== null && prev < gallery.length - 1 ? prev + 1 : 0
-                      )
-                    }
-                    aria-label="Next frame"
-                  >
-                    ›
-                  </button>
-                </>
-              )}
+              <button
+                className={`${styles.imageNavBtn} ${styles.imagePrevBtn}`}
+                onClick={() =>
+                  setActiveImageIndex((prev) =>
+                    prev !== null && prev > 0 ? prev - 1 : gallery.length - 1
+                  )
+                }
+                aria-label="Previous frame (Arrow Left)"
+              >
+                ←
+              </button>
+              <button
+                className={`${styles.imageNavBtn} ${styles.imageNextBtn}`}
+                onClick={() =>
+                  setActiveImageIndex((prev) =>
+                    prev !== null && prev < gallery.length - 1 ? prev + 1 : 0
+                  )
+                }
+                aria-label="Next frame (Arrow Right)"
+              >
+                →
+              </button>
             </div>
 
-            <div className={styles.lightboxCaptionBar}>
-              <h3 className={styles.lightboxTitle}>
-                {gallery[activeImageIndex].title}
-              </h3>
-              <p className={styles.lightboxDesc}>
+            <div className={styles.modalImageFooter}>
+              <p className={styles.modalImageCaption}>
                 {gallery[activeImageIndex].caption}
               </p>
-              {gallery[activeImageIndex].location && (
-                <span className={styles.lightboxMeta}>
-                  {gallery[activeImageIndex].location}{" "}
-                  {gallery[activeImageIndex].year
-                    ? `· ${gallery[activeImageIndex].year}`
-                    : ""}
-                </span>
+              {gallery[activeImageIndex].storySlug && (
+                <Link
+                  href={`/stories/${gallery[activeImageIndex].storySlug}`}
+                  className={styles.modalStoryBtn}
+                >
+                  Step Inside Story →
+                </Link>
               )}
             </div>
           </div>

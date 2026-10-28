@@ -137,7 +137,7 @@ export default function FounderRecognitionSection() {
   const [activeItem, setActiveItem] = useState<VerifiedRecognition | null>(null);
   const triggerRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
-  /* ── Track Carousel Navigation ── */
+  /* ── Track Carousel Navigation & Horizontal Wheel Handler ── */
   const updateScrollState = useCallback(() => {
     if (!carouselTrackRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = carouselTrackRef.current;
@@ -154,9 +154,44 @@ export default function FounderRecognitionSection() {
   useEffect(() => {
     const track = carouselTrackRef.current;
     if (!track) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      // Allow natural trackpad horizontal swiping (dominant deltaX)
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        return;
+      }
+
+      const { scrollLeft, scrollWidth, clientWidth } = track;
+      const maxScroll = scrollWidth - clientWidth;
+      if (maxScroll <= 0) return;
+
+      const isScrollingUp = e.deltaY < 0;
+      const isScrollingDown = e.deltaY > 0;
+
+      // Clean boundary release: when at the very beginning or end,
+      // allow default vertical page scrolling so the user is never trapped
+      if (isScrollingUp && scrollLeft <= 2) {
+        return;
+      }
+      if (isScrollingDown && scrollLeft >= maxScroll - 2) {
+        return;
+      }
+
+      // Convert vertical mouse wheel into horizontal carousel scroll
+      // while preventing the window from scrolling vertically
+      e.preventDefault();
+      track.scrollLeft += e.deltaY;
+      updateScrollState();
+    };
+
+    track.addEventListener("wheel", handleWheel, { passive: false });
     track.addEventListener("scroll", updateScrollState, { passive: true });
     updateScrollState();
-    return () => track.removeEventListener("scroll", updateScrollState);
+
+    return () => {
+      track.removeEventListener("wheel", handleWheel);
+      track.removeEventListener("scroll", updateScrollState);
+    };
   }, [updateScrollState]);
 
   /* ── Interactive Artist Portrait Studio Lighting ── */
@@ -513,7 +548,11 @@ export default function FounderRecognitionSection() {
 
               {/* Recessed Warm Illuminated Carousel Container */}
               <div className={styles.carouselWell}>
-                <div ref={carouselTrackRef} className={styles.carouselTrack}>
+                <div
+                  ref={carouselTrackRef}
+                  className={styles.carouselTrack}
+                  data-lenis-prevent="true"
+                >
                   {VERIFIED_RECOGNITIONS.map((item, idx) => (
                     <div
                       key={item.id}

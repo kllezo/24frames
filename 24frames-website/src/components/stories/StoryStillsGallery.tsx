@@ -9,22 +9,30 @@ interface Props {
   storyTitle: string;
 }
 
-const EDITORIAL_MOMENTS = [
+const LOVE_STORY_FRAGMENTS = [
   {
-    quote: "“Tradition, held gently in the present.”",
-    sub: "SACRED OBSERVATION · TELUGU WEDDING HERITAGE",
+    chapter: "Chapter I · The Anticipation",
+    note: "Somewhere between the dream and the day, your forever quietly begins.",
   },
   {
-    quote: "“The smallest gestures often tell the greatest stories.”",
-    sub: "UNGUARDED EMOTION · ARCHIVAL STILLS",
+    chapter: "Chapter II · The Sacred Vow",
+    note: "One glance across the mandap. A thousand unspoken promises.",
   },
   {
-    quote: "“Framed in light. Kept for a lifetime.”",
-    sub: "OPTICAL CLARITY · 24 FRAMES ARCHIVE",
+    chapter: "Chapter III · The Unguarded Moment",
+    note: "The moments you never planned often become the ones you hold closest.",
   },
   {
-    quote: "“Some moments are remembered. Others become part of us.”",
-    sub: "GENERATIONAL HEIRLOOM · THE VOWS",
+    chapter: "Chapter III · The Feeling Remains",
+    note: "Years from now, you may forget the schedule. Never the way it felt.",
+  },
+  {
+    chapter: "Chapter IV · Optical Memory",
+    note: "A day passes in an instant. The way it made you feel deserves to endure.",
+  },
+  {
+    chapter: "Chapter V · The Legacy",
+    note: "When the day becomes memory, let it still feel genuinely yours.",
   },
 ];
 
@@ -68,192 +76,212 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
     };
   }, [activeImageIndex]);
 
-  // Handle direct hash navigation to #stills on initial load
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hash === "#stills") {
-      setTimeout(() => {
-        const el = document.getElementById("stills");
-        if (el) {
-          const lenis = (window as unknown as { __lenis?: { scrollTo: (t: HTMLElement, opt?: object) => void } }).__lenis;
-          if (lenis) {
-            lenis.scrollTo(el, { offset: -90 });
-          } else {
-            const top = el.getBoundingClientRect().top + window.scrollY - 90;
-            window.scrollTo({ top, behavior: "smooth" });
+  // Split frames for the two staggered editorial columns
+  const leftFrames = frames
+    .map((frame, originalIndex) => ({ frame, originalIndex }))
+    .filter((_, i) => i % 2 === 0);
+
+  const rightFrames = frames
+    .map((frame, originalIndex) => ({ frame, originalIndex }))
+    .filter((_, i) => i % 2 !== 0);
+
+  const renderFrameCard = (frame: StoryFrame, originalIndex: number) => {
+    const isLandscape = frame.aspect === "landscape";
+
+    return (
+      <figure
+        key={frame.id}
+        className={styles.frameFigure}
+        onClick={() => setActiveImageIndex(originalIndex)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setActiveImageIndex(originalIndex);
           }
-        }
-      }, 300);
-    }
-  }, []);
+        }}
+        aria-label={`View full frame ${frame.frameNo}: ${frame.caption}`}
+      >
+        <div
+          className={`${styles.imageFrameWrap} ${
+            isLandscape ? styles.aspectLandscape : styles.aspectPortrait
+          }`}
+        >
+          <picture>
+            <source srcSet={frame.webpUrl} type="image/webp" />
+            <img
+              src={frame.url}
+              alt={frame.caption}
+              className={styles.galleryImg}
+              loading={originalIndex < 2 ? "eager" : "lazy"}
+            />
+          </picture>
+          <div className={styles.imageOverlay} />
+          <span className={styles.frameBadge}>{frame.frameNo}</span>
+          <span className={styles.expandPrompt} aria-hidden="true">
+            EXPAND ↗
+          </span>
+        </div>
+
+        <figcaption className={styles.captionBlock}>
+          <span className={styles.captionText}>{frame.caption}</span>
+        </figcaption>
+      </figure>
+    );
+  };
+
+  const renderNarrativeNote = (
+    fragmentIndex: number,
+    align: "left" | "right" | "center" = "left"
+  ) => {
+    const fragment =
+      LOVE_STORY_FRAGMENTS[fragmentIndex % LOVE_STORY_FRAGMENTS.length];
+
+    return (
+      <div
+        key={`note-${fragmentIndex}`}
+        className={`${styles.narrativeNote} ${styles[`align_${align}`]}`}
+      >
+        <span className={styles.noteChapter}>{fragment.chapter}</span>
+        <p className={styles.notePoem}>{fragment.note}</p>
+      </div>
+    );
+  };
 
   return (
-    <section id="stills" className={styles.section} aria-label="Selected Exhibition Stills">
+    <section
+      id="stills"
+      className={styles.section}
+      aria-label={`${storyTitle} Curated Exhibition Stills`}
+    >
       <div className={styles.container}>
-        {/* Section Header */}
+        {/* Editorial Section Header */}
         <div className={styles.header}>
           <div className={styles.badgeRow}>
             <span className={styles.ruleLine} aria-hidden="true" />
-            <span className={styles.badge}>ARCHIVAL STILLS · TWELVE-INCH REEL</span>
+            <span className={styles.badge}>SELECTED EXHIBITION STILLS</span>
             <span className={styles.ruleLine} aria-hidden="true" />
           </div>
-          <h2 className={styles.title}>Selected Exhibition Stills</h2>
+          <h2 className={styles.title}>The Archival Sequence</h2>
           <p className={styles.subtitle}>
-            Sequenced with deliberate pacing, ample ivory whitespace, and pure optical focus. Every frame preserves authentic light and emotion.
+            Continuous staggered editorial rhythm. Each frame preserves uncompressed optical truth and authentic emotion.
           </p>
         </div>
 
-        {/* Alternating Editorial Flow Grid */}
-        <div className={styles.editorialGrid}>
-          {frames.map((frame, index) => {
-            const isLandscape = frame.aspect === "landscape";
-            // Place an editorial quote interlude after every 2-3 frames
-            const shouldInsertText = index === 2 || index === 4;
-            const textMoment = EDITORIAL_MOMENTS[index % EDITORIAL_MOMENTS.length];
-
-            // Alternating alignment pattern:
-            // Frame 0: Left Column (medium)
-            // Frame 1: Right Column (medium)
-            // Frame 2: Left Column (landscape)
-            // Frame 3: Right Column (portrait)
-            // Frame 4: Left Column (portrait)
-            // Frame 5: Right Column (landscape)
-            const isLeft = index % 2 === 0;
-
-            return (
-              <div key={frame.id} className={styles.frameWrapper}>
-                {shouldInsertText && (
-                  <div className={styles.editorialInterlude}>
-                    <span className={styles.interludeKicker}>{textMoment.sub}</span>
-                    <blockquote className={styles.interludeQuote}>
-                      {textMoment.quote}
-                    </blockquote>
-                    <span className={styles.interludeDivider} aria-hidden="true" />
-                  </div>
-                )}
-
-                <figure
-                  className={`${styles.frameFigure} ${
-                    isLeft ? styles.figureLeft : styles.figureRight
-                  }`}
-                  onClick={() => setActiveImageIndex(index)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setActiveImageIndex(index);
-                    }
-                  }}
-                  aria-label={`View full frame ${frame.frameNo}: ${frame.caption}`}
-                >
-                  <div
-                    className={`${styles.imageFrameWrap} ${
-                      isLandscape ? styles.aspectLandscape : styles.aspectPortrait
-                    }`}
-                  >
-                    <picture>
-                      <source srcSet={frame.webpUrl} type="image/webp" />
-                      <img
-                        src={frame.url}
-                        alt={frame.caption}
-                        className={styles.galleryImg}
-                        loading={index < 2 ? "eager" : "lazy"}
-                        decoding="async"
-                        width={frame.width}
-                        height={frame.height}
-                      />
-                    </picture>
-                    <span className={styles.expandTag} aria-hidden="true">
-                      FRAME {frame.frameNo} ↗
-                    </span>
-                  </div>
-
-                  <figcaption className={styles.captionBar}>
-                    <div className={styles.captionHeaderRow}>
-                      <span className={styles.frameIdentifier}>
-                        FRAME {frame.frameNo} · 24 FRAMES ARCHIVE
-                      </span>
-                      <span className={styles.dimensionBadge}>
-                        {frame.width} × {frame.height}PX
-                      </span>
-                    </div>
-                    <p className={styles.captionText}>{frame.caption}</p>
-                  </figcaption>
-                </figure>
+        {/* ── DESKTOP & TABLET: TWO-COLUMN STAGGERED EDITORIAL VIEW ── */}
+        <div className={styles.desktopStaggeredView}>
+          {/* Left Column (Starts at 0) */}
+          <div className={styles.staggerColLeft}>
+            {leftFrames.map(({ frame, originalIndex }, idx) => (
+              <div key={frame.id} className={styles.itemSlot}>
+                {renderFrameCard(frame, originalIndex)}
+                {/* Organically discovered handwritten thought in margin whitespace */}
+                {idx === 0 && renderNarrativeNote(1, "left")}
+                {idx === 1 && renderNarrativeNote(3, "left")}
               </div>
-            );
-          })}
+            ))}
+          </div>
+
+          {/* Right Column (Starts at vertical midpoint of Left Column) */}
+          <div className={styles.staggerColRight}>
+            {/* Initial opening discovered line resting beside Frame 0 */}
+            {renderNarrativeNote(0, "right")}
+
+            {rightFrames.map(({ frame, originalIndex }, idx) => (
+              <div key={frame.id} className={styles.itemSlot}>
+                {renderFrameCard(frame, originalIndex)}
+                {/* Organically discovered handwritten thought in margin whitespace */}
+                {idx === 0 && renderNarrativeNote(2, "right")}
+                {idx === 1 && renderNarrativeNote(4, "right")}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── MOBILE: BALANCED SINGLE-COLUMN SEQUENTIAL VIEW ── */}
+        <div className={styles.mobileSequentialView}>
+          {frames.map((frame, index) => (
+            <div key={frame.id} className={styles.mobileSlot}>
+              {renderFrameCard(frame, index)}
+              {index === 1 && renderNarrativeNote(1, "center")}
+              {index === 3 && renderNarrativeNote(2, "center")}
+              {index === 5 && renderNarrativeNote(4, "center")}
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Full-Screen Exhibition Frame Lightbox */}
-      {activeImageIndex !== null && frames[activeImageIndex] && (
+      {/* ── FULL-SCREEN IMAGE LIGHTBOX MODAL ── */}
+      {activeImageIndex !== null && (
         <div
-          className={styles.lightboxBackdrop}
+          className={styles.modalBackdrop}
           onClick={handleClose}
           role="dialog"
           aria-modal="true"
-          aria-label={frames[activeImageIndex].caption}
+          aria-label={`Frame exhibition viewer: ${frames[activeImageIndex].caption}`}
         >
           <div
-            className={styles.lightboxContainer}
+            className={styles.modalContent}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={styles.lightboxTopBar}>
-              <span className={styles.lightboxCounter}>
-                FRAME {frames[activeImageIndex].frameNo} OF {frames.length} · {storyTitle}
-              </span>
+            {/* Modal Header */}
+            <div className={styles.modalHeader}>
+              <div className={styles.modalMeta}>
+                <span className={styles.modalBadge}>
+                  {frames[activeImageIndex].frameNo}
+                </span>
+                <span className={styles.modalCount}>
+                  FRAME {activeImageIndex + 1} OF {frames.length}
+                </span>
+              </div>
               <button
-                className={styles.lightboxCloseBtn}
+                className={styles.modalCloseBtn}
                 onClick={handleClose}
-                aria-label="Close lightbox"
+                aria-label="Close exhibition viewer (Escape)"
               >
                 ✕
               </button>
             </div>
 
-            <div className={styles.lightboxImgArea}>
+            {/* Modal Image Viewport */}
+            <div className={styles.modalImageViewport}>
               <img
                 src={frames[activeImageIndex].url}
                 alt={frames[activeImageIndex].caption}
-                className={styles.lightboxImg}
+                className={styles.modalImg}
               />
 
-              {frames.length > 1 && (
-                <>
-                  <button
-                    className={`${styles.lightboxArrowBtn} ${styles.lightboxArrowLeft}`}
-                    onClick={() =>
-                      setActiveImageIndex((prev) =>
-                        prev !== null && prev > 0 ? prev - 1 : frames.length - 1
-                      )
-                    }
-                    aria-label="Previous frame"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    className={`${styles.lightboxArrowBtn} ${styles.lightboxArrowRight}`}
-                    onClick={() =>
-                      setActiveImageIndex((prev) =>
-                        prev !== null && prev < frames.length - 1 ? prev + 1 : 0
-                      )
-                    }
-                    aria-label="Next frame"
-                  >
-                    ›
-                  </button>
-                </>
-              )}
+              {/* Prev / Next Modal Arrows */}
+              <button
+                className={`${styles.modalNavBtn} ${styles.modalPrevBtn}`}
+                onClick={() =>
+                  setActiveImageIndex((prev) =>
+                    prev !== null && prev > 0 ? prev - 1 : frames.length - 1
+                  )
+                }
+                aria-label="Previous frame (Arrow Left)"
+              >
+                ←
+              </button>
+              <button
+                className={`${styles.modalNavBtn} ${styles.modalNextBtn}`}
+                onClick={() =>
+                  setActiveImageIndex((prev) =>
+                    prev !== null && prev < frames.length - 1 ? prev + 1 : 0
+                  )
+                }
+                aria-label="Next frame (Arrow Right)"
+              >
+                →
+              </button>
             </div>
 
-            <div className={styles.lightboxCaptionBar}>
-              <p className={styles.lightboxCaptionText}>
+            {/* Modal Caption */}
+            <div className={styles.modalCaptionWrap}>
+              <p className={styles.modalCaption}>
                 {frames[activeImageIndex].caption}
               </p>
-              <span className={styles.lightboxMetadata}>
-                24 FRAMES MASTER EXHIBITION STILL · {frames[activeImageIndex].width} × {frames[activeImageIndex].height}PX
-              </span>
             </div>
           </div>
         </div>
@@ -261,4 +289,3 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
     </section>
   );
 }
-

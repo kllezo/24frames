@@ -10,33 +10,33 @@ interface PressLogo {
 }
 
 const PRESS_LOGOS: PressLogo[] = [
-  { name: "The Indian Express", src: "/images/press/indian-express.png", alt: "The Indian Express logo" },
-  { name: "Telangana Today", src: "/images/press/telangana-today.png", alt: "Telangana Today logo" },
-  { name: "The Times of India", src: "/images/press/times-of-india.png", alt: "The Times of India logo" },
-  { name: "The Hindu", src: "/images/press/the-hindu.png", alt: "The Hindu publication logo" },
-  { name: "Vogue", src: "/images/press/vogue.png", alt: "Vogue India fashion editorial logo" },
-  { name: "Nikon", src: "/images/press/nikon.png", alt: "Nikon official creator association logo" },
-  { name: "Times Business Awards", src: "/images/press/times-business-awards.png", alt: "Times Business Awards Hyderabad logo" },
-  { name: "ET Excellence", src: "/images/press/et-excellence.png", alt: "Economic Times Excellence Awards logo" },
-  { name: "Inovexia International", src: "/images/press/inovexia.png", alt: "Inovexia International Indian Eminent Awards logo" },
-  { name: "WPPI", src: "/images/press/wppi.png", alt: "WPPI Honors of Excellence Silver Award logo" },
-  { name: "TCEI", src: "/images/press/tcei.png", alt: "Telangana Chamber of Events Industry logo" },
-  { name: "PIC-TIME", src: "/images/press/pic-time.png", alt: "Pic-Time global platform logo" },
+  { name: "The Indian Express", src: "/images/press/indian-express.png", alt: "The Indian Express editorial feature" },
+  { name: "Telangana Today", src: "/images/press/telangana-today.png", alt: "Telangana Today feature coverage" },
+  { name: "The Times of India", src: "/images/press/times-of-india.png", alt: "The Times of India spotlight feature" },
+  { name: "The Hindu", src: "/images/press/the-hindu.png", alt: "The Hindu publication feature" },
+  { name: "Vogue", src: "/images/press/vogue.png", alt: "Vogue India editorial feature" },
+  { name: "Nikon", src: "/images/press/nikon.png", alt: "Nikon creator community & optical imaging partner" },
+  { name: "Times Business Awards", src: "/images/press/times-business-awards.png", alt: "Times Business Awards distinction" },
+  { name: "ET Excellence", src: "/images/press/et-excellence.png", alt: "Economic Times Excellence Awards" },
+  { name: "Inovexia International", src: "/images/press/inovexia.png", alt: "Indian Eminent Awards presented by Inovexia International" },
+  { name: "WPPI", src: "/images/press/wppi.png", alt: "WPPI international wedding & portrait photography association" },
+  { name: "TCEI", src: "/images/press/tcei.png", alt: "Telangana Chamber of Events Industry distinction" },
+  { name: "PIC-TIME", src: "/images/press/pic-time.png", alt: "Pic-Time global client gallery delivery platform" },
 ];
 
 export default function AsSeenInStrip() {
   return (
-    <section className={styles.section} aria-label="Media Publications and Industry Recognition">
+    <section className={styles.section} aria-label="Media Publications, Industry Affiliations and Creative Platforms">
       <div className={styles.container}>
         {/* Editorial Heading */}
         <div className={styles.header}>
           <div className={styles.kickerRow}>
             <span className={styles.ruleLine} aria-hidden="true" />
-            <h2 className={styles.title}>AS SEEN IN</h2>
+            <h2 className={styles.title}>AS SEEN IN &amp; AFFILIATIONS</h2>
             <span className={styles.ruleLine} aria-hidden="true" />
           </div>
           <p className={styles.subtitle}>
-            Recognised by leading publications, industry organisations and creative platforms.
+            Press features, creator community partnerships, juried awards, and archival delivery platforms.
           </p>
         </div>
 

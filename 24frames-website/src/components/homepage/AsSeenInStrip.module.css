@@ -7,8 +7,9 @@
   position: relative;
   width: 100%;
   background-color: #FAF7F0;
-  padding: clamp(4.5rem, 7.5vw, 7rem) 0;
-  border-top: 1px solid rgba(9, 69, 62, 0.08);
+  padding-top: clamp(1rem, 2vw, 2.25rem);
+  padding-bottom: clamp(4rem, 6.5vw, 6rem);
+  border-top: none;
   border-bottom: 1px solid rgba(9, 69, 62, 0.08);
   overflow: hidden;
   z-index: 3;

@@ -132,15 +132,24 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* ── Curatorial Statement Section ──────────────────────── */}
+        {/* ── Curatorial Philosophy (Unboxed Organic Editorial Narrative) ── */}
         <section
           className={styles.curatorialSection}
           aria-label="Curatorial Philosophy"
         >
           <div className={styles.container}>
+            <div className={styles.curatorialNarrativeNote}>
+              <span className={styles.curatorialNoteChapter}>
+                Chapter IV · The Art of Remembering
+              </span>
+              <p className={styles.curatorialNotePoem}>
+                “A day passes in an instant. The way it made you feel deserves to endure.”
+              </p>
+            </div>
+
             <div className={styles.curatorialBox}>
               <div className={styles.curatorialHeader}>
-                <span className={styles.curatorialLabel}>CURATORIAL STATEMENT</span>
+                <span className={styles.curatorialLabel}>CURATORIAL PHILOSOPHY</span>
                 <h2 className={styles.curatorialTitle}>The Philosophy of the Frame</h2>
               </div>
               <div className={styles.curatorialBody}>

@@ -316,27 +316,26 @@
 }
 
 .quoteCard {
-  border-left: 2px solid #164B40;
-  padding-left: clamp(1rem, 2vw, 1.75rem);
-  margin-top: 2.5rem;
+  border: none;
+  padding: clamp(1.25rem, 2.5vw, 2rem) 0;
+  margin-top: 2rem;
 }
 
 .quoteText {
-  font-family: var(--font-editorial);
-  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
-  font-style: italic;
-  line-height: 1.5;
-  color: #20231F;
-  margin-bottom: 0.75rem;
+  font-family: var(--font-cursive, 'Allura', cursive), var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.45rem, 2.1vw, 2rem);
+  line-height: 1.35;
+  color: #09453E;
+  margin-bottom: 0.5rem;
 }
 
 .quoteAuthor {
-  font-family: var(--font-cinema);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #164B40;
+  color: #8C733E;
 }
 
 /* ── Specs Sidebar ────────────────────────────────────────────── */
@@ -440,13 +439,21 @@
 .galleryGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: clamp(16px, 3vw, var(--space-xl));
+  column-gap: clamp(2.5rem, 5vw, 4.5rem);
+  row-gap: clamp(2.5rem, 5vw, 4.5rem);
+  align-items: start;
 }
 
 .galleryItem {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  width: 100%;
+}
+
+/* Stagger even items down on desktop so right column starts around midpoint */
+.galleryItem:nth-child(even) {
+  margin-top: clamp(60px, 10vw, 130px);
 }
 
 .aspect_panoramic {
@@ -594,6 +601,10 @@
 
   .galleryGrid {
     grid-template-columns: 1fr;
+  }
+
+  .galleryItem:nth-child(even) {
+    margin-top: 0;
   }
 
   .aspect_panoramic {

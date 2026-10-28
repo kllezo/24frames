@@ -241,16 +241,42 @@
   line-height: 1.35;
 }
 
-/* ── Curatorial Statement Box ───────────────────────────────────────── */
+/* ── Curatorial Philosophy Section (Unboxed Editorial Flow) ────────── */
 .curatorialSection {
   padding: clamp(2.5rem, 5vh, 4.5rem) 0;
 }
 
+.curatorialNarrativeNote {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  max-width: 680px;
+}
+
+.curatorialNoteChapter {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8C733E;
+}
+
+.curatorialNotePoem {
+  font-family: var(--font-cursive, 'Allura', cursive), var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.45rem, 2vw, 2.05rem);
+  line-height: 1.35;
+  color: #09453E;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
 .curatorialBox {
-  padding: clamp(2.25rem, 4.5vw, 3.5rem);
-  background: #F3EFE6;
-  border-radius: 18px;
-  border: 1px solid rgba(22, 75, 64, 0.12);
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  border: none;
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: clamp(2rem, 4vw, 3.5rem);

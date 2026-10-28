@@ -95,6 +95,14 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: clamp(2.5rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+/* Staggered editorial rhythm: right column starts around midpoint of preceding card */
+@media (min-width: 841px) {
+  .storyCard:nth-child(even) {
+    margin-top: clamp(60px, 9vw, 120px);
+  }
 }
 
 @media (max-width: 840px) {

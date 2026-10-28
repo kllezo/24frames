@@ -183,25 +183,32 @@
 .mediaColumn {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   position: relative;
+  width: 100%;
+  max-width: 580px;
 }
 
 .primaryCanvas {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 11;
-  border-radius: 20px;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 20px 48px rgba(9, 69, 62, 0.08);
+  box-shadow: 0 16px 44px rgba(9, 69, 62, 0.08);
   border: 1px solid rgba(9, 69, 62, 0.1);
-  background: #E8E3D8;
+  background: #FAF8F2;
+  cursor: pointer;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.primaryCanvas:hover {
+  transform: translateY(-3px);
+  border-color: #09453E;
+  box-shadow: 0 22px 50px rgba(9, 69, 62, 0.12);
 }
 
 .primaryImg {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   display: block;
 }
 
@@ -212,7 +219,7 @@
     180deg,
     rgba(9, 69, 62, 0.1) 0%,
     transparent 50%,
-    rgba(9, 69, 62, 0.3) 100%
+    rgba(9, 69, 62, 0.25) 100%
   );
   pointer-events: none;
 }
@@ -233,20 +240,48 @@
   padding: 0.3rem 0.75rem;
   border-radius: 8px;
   border: 1px solid rgba(9, 69, 62, 0.15);
+  z-index: 2;
+}
+
+.expandPill {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #FAF8F2;
+  background: rgba(14, 38, 33, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all 0.25s ease;
+  z-index: 5;
+}
+
+.primaryCanvas:hover .expandPill,
+.secondaryCanvas:hover .expandPill {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .secondaryCanvas {
-  width: 75%;
-  aspect-ratio: 16 / 10;
+  width: clamp(210px, 46%, 300px);
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 12px 32px rgba(9, 69, 62, 0.07);
-  border: 1px solid rgba(9, 69, 62, 0.1);
-  margin-top: -3.5rem;
+  box-shadow: 0 14px 36px rgba(9, 69, 62, 0.12);
+  border: 1px solid rgba(9, 69, 62, 0.12);
+  margin-top: -4rem;
   margin-left: auto;
   position: relative;
-  z-index: 2;
-  background: #E8E3D8;
+  z-index: 3;
+  background: #FAF8F2;
+  cursor: pointer;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .gridMediaRight .secondaryCanvas {
@@ -254,10 +289,14 @@
   margin-right: auto;
 }
 
+.secondaryCanvas:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 18px 42px rgba(9, 69, 62, 0.16);
+}
+
 .secondaryImg {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   display: block;
 }
 
@@ -265,6 +304,31 @@
 .contentColumn {
   display: flex;
   flex-direction: column;
+}
+
+.sectionPoemNote {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.sectionPoemChapter {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #B5985A;
+}
+
+.sectionPoemText {
+  font-family: var(--font-cursive, 'Allura', cursive), var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.4rem, 2vw, 1.95rem);
+  line-height: 1.35;
+  color: #09453E;
+  margin: 0;
+  letter-spacing: 0.01em;
 }
 
 .chapterBadgeLine {
@@ -480,7 +544,128 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   4. RESPONSIVE DESIGN (TABLET & MOBILE)
+   4. FULL-SCREEN LIGHTBOX MODAL
+   ───────────────────────────────────────────────────────────── */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 20, 17, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  animation: fadeIn 0.25s ease;
+}
+
+.modalContent {
+  position: relative;
+  max-width: 1040px;
+  width: 100%;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  background: #14231E;
+  border-radius: 16px;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.modalTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.modalBadge {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #D4AF37;
+  text-transform: uppercase;
+}
+
+.modalHeading {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #FAF8F2;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.modalCloseBtn {
+  background: transparent;
+  border: none;
+  color: #FAF8F2;
+  font-size: 1.25rem;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.modalCloseBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modalImageViewport {
+  position: relative;
+  flex: 1;
+  min-height: 300px;
+  max-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #091310;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.modalImg {
+  max-width: 100%;
+  max-height: 68vh;
+  object-fit: contain;
+  display: block;
+}
+
+.modalFooter {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #111E1A;
+}
+
+.modalCaption {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.875rem;
+  color: #D1DED8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. RESPONSIVE DESIGN (TABLET & MOBILE)
    ───────────────────────────────────────────────────────────── */
 @media (max-width: 980px) {
   .featureGrid {
@@ -492,8 +677,12 @@
     direction: ltr;
   }
 
+  .mediaColumn {
+    max-width: 100%;
+  }
+
   .secondaryCanvas {
-    width: 60%;
+    width: clamp(200px, 45%, 280px);
     margin-top: -2.5rem;
   }
 }
@@ -510,6 +699,8 @@
   }
 
   .secondaryCanvas {
-    display: none;
+    display: block;
+    width: 75%;
+    margin: 1.25rem auto 0;
   }
 }

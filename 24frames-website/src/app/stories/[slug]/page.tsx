@@ -131,6 +131,14 @@ export default async function StoryDetailPage({ params }: PageProps) {
         {/* ── Editorial Narrative & Curatorial Statement ─────────── */}
         <section className={styles.narrativeSection}>
           <div className={styles.container}>
+            {/* Organic Handwritten Transition */}
+            <div className={styles.narrativePoemNote}>
+              <span className={styles.narrativePoemChapter}>Chapter II · The People &amp; The Promise</span>
+              <p className={styles.narrativePoemText}>
+                “The day belongs to two hearts. The memories belong to everyone they love.”
+              </p>
+            </div>
+
             <div className={styles.narrativeGrid}>
               <div className={styles.narrativeHeader}>
                 <span className={styles.sectionBadge}>Chapter / Archive Stills</span>

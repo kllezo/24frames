@@ -1,10 +1,33 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import styles from "./ClientGallery.module.css";
+
+const CLIENT_GALLERY_POEMS = [
+  {
+    chapter: "Chapter I · The Discovery",
+    poem: "Somewhere between the dream and the day, your forever quietly begins.",
+  },
+  {
+    chapter: "Chapter IV · Optical Movement",
+    poem: "Light becomes memory. Movement becomes story.",
+  },
+  {
+    chapter: "Chapter III · The Unguarded Moment",
+    poem: "The moments you never planned often become the ones you hold closest.",
+  },
+  {
+    chapter: "Chapter II · Living Heritage",
+    poem: "Some traditions are not merely observed. They are felt in the pulse of generations.",
+  },
+  {
+    chapter: "Chapter V · Generational Heirlooms",
+    poem: "When the day becomes memory, let it still feel genuinely yours.",
+  },
+];
 
 export interface GallerySuiteSection {
   id: string;
@@ -17,8 +40,12 @@ export interface GallerySuiteSection {
   keyCapabilities: string[];
   primaryImage: string;
   primaryImageAlt: string;
+  primaryAspect: string;
+  primaryFit: "contain" | "cover";
   secondaryImage?: string;
   secondaryImageAlt?: string;
+  secondaryAspect?: string;
+  secondaryFit?: "contain" | "cover";
   layout: "media-left" | "media-right";
 }
 
@@ -28,9 +55,9 @@ const SECTIONS_DATA: GallerySuiteSection[] = [
     chapterNumber: "01",
     kicker: "INTELLIGENT CURATION · MOMENT DISCOVERY",
     title: "The Private Archive",
-    tagline: "Instant facial indexing and private family discovery.",
+    tagline: "Instant facial indexing, guest tagging, and private family vaults.",
     introduction:
-      "A typical royal Telugu or destination Indian wedding produces thousands of irreplaceable exposures. The Private Archive uses non-invasive biometric moment indexing to organize every guest, ritual, and emotion without tedious manual sorting.",
+      "A grand wedding produces thousands of irreplaceable exposures. The Private Archive uses non-invasive moment indexing and facial recognition to organize every guest, ritual, and emotion into beautifully structured family albums.",
     deepDescription: [
       "Guests and immediate family members can effortlessly find their private portraits across multi-day celebrations by indexing their portrait once, eliminating the struggle of searching through raw hard drives or generic gallery links.",
       "Every frame retains its uncompressed optical fidelity, master camera metadata, and natural cinematic color grading, allowing instantaneous high-resolution downloads for personal printing or archival storage.",
@@ -41,10 +68,14 @@ const SECTIONS_DATA: GallerySuiteSection[] = [
       "Instant full-resolution RAW & JPEG downloads",
       "Private pin-protected client access vaults",
     ],
-    primaryImage: "/images/stories/hrithika-abhishek/IMG_6324.jpg",
-    primaryImageAlt: "Sacred fire wedding moment indexed in Private Archive",
-    secondaryImage: "/images/stories/hrithika-abhishek/IMG_6325.jpg",
-    secondaryImageAlt: "Candid emotional wedding moment",
+    primaryImage: "/images/gallery-experience/the-private-archive-primary.png",
+    primaryImageAlt: "The Private Archive interface displaying facial recognition moment discovery and client family albums",
+    primaryAspect: "968 / 1138",
+    primaryFit: "contain",
+    secondaryImage: "/images/gallery-experience/the-private-archive-secondary.png",
+    secondaryImageAlt: "Private archive digital client vault browsing interface with family search",
+    secondaryAspect: "992 / 1552",
+    secondaryFit: "contain",
     layout: "media-left",
   },
   {
@@ -57,16 +88,22 @@ const SECTIONS_DATA: GallerySuiteSection[] = [
       "Captured on optical cinema primes, anamorphic glass, and 12-bit cinema sensors, our wedding films are intended to be experienced as feature motion pictures, not compressed social media clips.",
     deepDescription: [
       "The Cinema Room provides a high-bitrate streaming environment calibrated for OLED televisions, tablets, and desktop displays. Watch your full-length feature film, ceremony highlights, and teaser reels in uncompromised color and dynamic range.",
-      "Chapters allow family members to jump directly to specific ceremonies — from the Mangalasnanam ritual bath to the electric choreography of the concert Sangeet stage.",
+      "Interactive chapter markers allow family members to jump directly to specific ceremonies — from the sacred Mangalasnanam ritual bath to the electric choreography of the concert Sangeet stage.",
     ],
     keyCapabilities: [
       "Uncompressed master 4K high-bitrate streaming playback",
       "Interactive chapter markers for ceremony navigation",
-      "Spatial sound design & original score playback",
+      "Spatial sound design & original orchestral score playback",
       "Dedicated TV casting & offline cinema downloads",
     ],
     primaryImage: "/videos/portfolio/vinitha-vivekananda/poster.jpg",
-    primaryImageAlt: "Vinitha and Vivekananda master wedding film poster",
+    primaryImageAlt: "Vinitha and Vivekananda master 4K theatrical wedding film screening",
+    primaryAspect: "16 / 9",
+    primaryFit: "cover",
+    secondaryImage: "/images/disciplines/cinema/IMG_6471.jpg",
+    secondaryImageAlt: "Anamorphic master cinema frame captured on 2.39:1 scope",
+    secondaryAspect: "16 / 9",
+    secondaryFit: "cover",
     layout: "media-right",
   },
   {
@@ -78,19 +115,23 @@ const SECTIONS_DATA: GallerySuiteSection[] = [
     introduction:
       "While full wedding galleries demand weeks of rigorous color science, couples and families cherish immediate, impeccably finished signature stills to commemorate their union with the world.",
     deepDescription: [
-      "Our editorial team hand-selects and color-grades a premier collection of vertical (9:16) and editorial (4:5) frames within hours of key events. Each portrait is balanced for mobile display color profiles, preserving natural skin tones and rich fabric hues.",
-      "Ready for direct dispatch to high-fashion publications, editorial features, or private social feeds with zero compression degradation.",
+      "Our editorial team hand-selects and color-grades a premier collection of vertical (4:5 and 9:16) frames within hours of key events. Each portrait is balanced for mobile display color profiles, preserving natural skin tones, intricate temple jewellery, and rich silk hues.",
+      "Every frame preserves the complete subject—from head to bridal attire—ready for direct dispatch to high-fashion publications, editorial features, or private social feeds with zero compression degradation.",
     ],
     keyCapabilities: [
       "Fast-turnaround curated social preview selection",
-      "Proportioned 9:16 and 4:5 native portrait aspect ratios",
-      "Skin-tone calibrated color grading for mobile displays",
+      "Proportioned 4:5 and 9:16 native portrait aspect ratios preserving full head & jewellery",
+      "Skin-tone calibrated color grading for mobile OLED displays",
       "Seamless one-tap cloud sharing for wedding guests",
     ],
-    primaryImage: "/images/stories/hrithika-abhishek/IMG_6334.jpg",
-    primaryImageAlt: "Bridal couture signature portrait in crimson Kanjeevaram silk",
-    secondaryImage: "/images/stories/hrithika-abhishek/IMG_6338.jpg",
-    secondaryImageAlt: "Editorial couple portrait ready for social curation",
+    primaryImage: "/images/gallery-experience/instagram-ready-shots-primary.jpg",
+    primaryImageAlt: "Bridal couture signature portrait in crimson Kanjeevaram silk with temple gold jewellery, complete composition",
+    primaryAspect: "1050 / 1415",
+    primaryFit: "contain",
+    secondaryImage: "/images/gallery-experience/instagram-ready-shots-secondary.jpg",
+    secondaryImageAlt: "Intimate royal couple portrait ready for editorial curation, full head and attire preserved",
+    secondaryAspect: "1168 / 1736",
+    secondaryFit: "contain",
     layout: "media-left",
   },
   {
@@ -102,7 +143,7 @@ const SECTIONS_DATA: GallerySuiteSection[] = [
     introduction:
       "Indian weddings are not isolated photo sessions; they are emotional epics that unfold across multiple days, sacred traditions, and monumental environments. Event-Wise Photo Stories arranges each chapter with curatorial care.",
     deepDescription: [
-      "Revisit your Pellikuthuru, Haldi, Mehendi, Sacred Muhurtham, and Grand Reception as dedicated editorial essays. Each celebration features its own curated hero cover, time stamp, and visual rhythm.",
+      "Revisit your Pellikuthuru, Haldi, Mehendi, Sacred Muhurtham, and Grand Reception as dedicated editorial chapters. Each celebration features its own curated hero cover, timestamp, and visual rhythm.",
       "This architecture enables parents, siblings, and extended family to share and enjoy specific celebrations without scrolling through unrelated events.",
     ],
     keyCapabilities: [
@@ -111,10 +152,14 @@ const SECTIONS_DATA: GallerySuiteSection[] = [
       "Shareable sub-gallery links for ceremony-specific guests",
       "Integrated timeline chronology from dawn rituals to midnight reception",
     ],
-    primaryImage: "/images/stories/bellam-srikonda/IMG_6339.jpg",
-    primaryImageAlt: "Celebrity wedding reception story cover",
-    secondaryImage: "/images/stories/bellam-srikonda/IMG_6340.jpg",
-    secondaryImageAlt: "High-octane Sangeet celebration story",
+    primaryImage: "/images/gallery-experience/event-wise-photos-primary.png",
+    primaryImageAlt: "Event-wise photo stories organized chronologically into Pellikuthuru, Mehendi, Sangeet, Muhurtham, and Reception",
+    primaryAspect: "1014 / 1512",
+    primaryFit: "contain",
+    secondaryImage: "/images/gallery-experience/event-wise-photos-secondary.jpg",
+    secondaryImageAlt: "Authentic ceremony moment captured during sacred wedding rituals",
+    secondaryAspect: "1170 / 1747",
+    secondaryFit: "contain",
     layout: "media-right",
   },
   {
@@ -124,29 +169,66 @@ const SECTIONS_DATA: GallerySuiteSection[] = [
     title: "The Heirloom Collection",
     tagline: "Digital longevity and physical hand-bound fine-art preservation.",
     introduction:
-      "A photograph only truly fulfills its destiny when it survives to be held by children and grandchildren. The Heirloom Collection couples redundant cloud preservation with museum-grade physical volumes.",
+      "Beyond digital galleries, true visual legacies belong in physical heirlooms that can be held, cherished, and passed down across generations.",
     deepDescription: [
-      "All master files are preserved across geographically distributed cold-storage archives, safeguarding your family heritage against device failures or format obsolescence.",
-      "Complementing the digital suite, our physical albums are hand-bound in Florence, Italy, using archival pigment inks, heavyweight cotton rag paper, and full-grain Italian leather designed to endure for over a century.",
+      "Handcrafted in Italy and Japan with archival fine-art cotton rag paper, custom debossed leather, and museum-grade pigment inks guaranteed to resist fading for over two centuries.",
+      "Every heirloom book is custom-designed by our senior art directors, balancing monumental double-page spreads with intimate details of your sacred union.",
     ],
     keyCapabilities: [
-      "Dual-region redundant archival cloud storage for master deliverables",
-      "Bespoke Italian leather and Japanese silk hand-bound album design",
-      "Archival 100% cotton rag paper with 100+ year pigment ink certification",
-      "Permanent client access vault with generational transfer options",
+      "Museum-grade cotton rag fine-art papers (200+ year archival guarantee)",
+      "Bespoke hand-bound Italian leather & Japanese silk covers",
+      "Custom velvet presentation boxes with metallic hot-stamped typography",
+      "Lifetime digital vault redundancy across global cloud storage",
     ],
-    primaryImage: "/images/stories/sirish-and-harshitha/IMG_6346.jpg",
-    primaryImageAlt: "Sacred traditional wedding legacy still",
-    secondaryImage: "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
-    secondaryImageAlt: "Royal mandapam architectural heirloom",
+    primaryImage: "/images/gallery-experience/heirloom-collection-primary.png",
+    primaryImageAlt: "Custom velvet presentation box with hand-bound fine-art heirloom wedding album and debossed gold typography",
+    primaryAspect: "900 / 852",
+    primaryFit: "contain",
+    secondaryImage: "/images/gallery-experience/heirloom-collection-secondary.png",
+    secondaryImageAlt: "Fine-art bookbinding and archival photographic spread detail",
+    secondaryAspect: "432 / 670",
+    secondaryFit: "contain",
     layout: "media-left",
   },
 ];
 
+interface LightboxItem {
+  src: string;
+  alt: string;
+  title: string;
+  caption: string;
+}
+
 export default function ClientGalleryPage() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [activeLightbox, setActiveLightbox] = useState<LightboxItem | null>(null);
 
-  // Handle direct hash navigation with smooth scroll accounting for fixed header
+  const handleCloseLightbox = useCallback(() => {
+    setActiveLightbox(null);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        handleCloseLightbox();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleCloseLightbox]);
+
+  useEffect(() => {
+    if (activeLightbox) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [activeLightbox]);
+
+  // Support direct hash jumps from the homepage cards smoothly
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -171,7 +253,9 @@ export default function ClientGalleryPage() {
         <header className={styles.pageHeader}>
           <div className={styles.headerContainer}>
             <div className={styles.breadcrumbRow}>
-              <Link href="/" className={styles.breadcrumbHome}>← 24 FRAMES ARCHIVE</Link>
+              <Link href="/" className={styles.breadcrumbHome}>
+                ← 24 FRAMES ARCHIVE
+              </Link>
               <span className={styles.breadcrumbSlash}>/</span>
               <span className={styles.breadcrumbCurrent}>CLIENT GALLERY EXPERIENCE</span>
             </div>
@@ -216,35 +300,105 @@ export default function ClientGalleryPage() {
                       isMediaLeft ? styles.gridMediaLeft : styles.gridMediaRight
                     }`}
                   >
-                    {/* Media Column */}
+                    {/* Media Column with Adaptive Aspect Ratios */}
                     <div className={styles.mediaColumn}>
-                      <div className={styles.primaryCanvas}>
+                      {/* Primary Canvas */}
+                      <div
+                        className={styles.primaryCanvas}
+                        style={{ aspectRatio: section.primaryAspect }}
+                        onClick={() =>
+                          setActiveLightbox({
+                            src: section.primaryImage,
+                            alt: section.primaryImageAlt,
+                            title: section.title,
+                            caption: section.tagline,
+                          })
+                        }
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            setActiveLightbox({
+                              src: section.primaryImage,
+                              alt: section.primaryImageAlt,
+                              title: section.title,
+                              caption: section.tagline,
+                            });
+                          }
+                        }}
+                        aria-label={`View full frame: ${section.title}`}
+                      >
                         <img
                           src={section.primaryImage}
                           alt={section.primaryImageAlt}
                           className={styles.primaryImg}
+                          style={{ objectFit: section.primaryFit }}
                           loading="lazy"
                         />
                         <div className={styles.imageScrim} />
                         <span className={styles.floatingChapterBadge}>
                           CHAPTER {section.chapterNumber}
                         </span>
+                        <span className={styles.expandPill} aria-hidden="true">
+                          EXPAND ↗
+                        </span>
                       </div>
 
+                      {/* Secondary Canvas */}
                       {section.secondaryImage && (
-                        <div className={styles.secondaryCanvas}>
+                        <div
+                          className={styles.secondaryCanvas}
+                          style={{ aspectRatio: section.secondaryAspect || "3 / 4" }}
+                          onClick={() =>
+                            setActiveLightbox({
+                              src: section.secondaryImage!,
+                              alt: section.secondaryImageAlt || section.title,
+                              title: `${section.title} · Detail View`,
+                              caption: section.tagline,
+                            })
+                          }
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              setActiveLightbox({
+                                src: section.secondaryImage!,
+                                alt: section.secondaryImageAlt || section.title,
+                                title: `${section.title} · Detail View`,
+                                caption: section.tagline,
+                              });
+                            }
+                          }}
+                          aria-label={`View detail frame: ${section.title}`}
+                        >
                           <img
                             src={section.secondaryImage}
                             alt={section.secondaryImageAlt || section.title}
                             className={styles.secondaryImg}
+                            style={{ objectFit: section.secondaryFit || "contain" }}
                             loading="lazy"
                           />
+                          <span className={styles.expandPill} aria-hidden="true">
+                            EXPAND ↗
+                          </span>
                         </div>
                       )}
                     </div>
 
                     {/* Content Column */}
                     <div className={styles.contentColumn}>
+                      {/* Organic Discovered Thought in Whitespace */}
+                      <div className={styles.sectionPoemNote}>
+                        <span className={styles.sectionPoemChapter}>
+                          {CLIENT_GALLERY_POEMS[idx % CLIENT_GALLERY_POEMS.length].chapter}
+                        </span>
+                        <p className={styles.sectionPoemText}>
+                          “{CLIENT_GALLERY_POEMS[idx % CLIENT_GALLERY_POEMS.length].poem}”
+                        </p>
+                      </div>
+
                       <div className={styles.chapterBadgeLine}>
                         <span className={styles.goldLine} />
                         <span className={styles.sectionKicker}>{section.kicker}</span>
@@ -272,7 +426,9 @@ export default function ClientGalleryPage() {
                         <ul className={styles.capabilitiesList}>
                           {section.keyCapabilities.map((cap, i) => (
                             <li key={i} className={styles.capabilityItem}>
-                              <span className={styles.checkIcon} aria-hidden="true">✓</span>
+                              <span className={styles.checkIcon} aria-hidden="true">
+                                ✓
+                              </span>
                               <span>{cap}</span>
                             </li>
                           ))}
@@ -308,6 +464,48 @@ export default function ClientGalleryPage() {
           </div>
         </section>
       </main>
+
+      {/* ── FULL-SCREEN LIGHTBOX MODAL ── */}
+      {activeLightbox && (
+        <div
+          className={styles.modalBackdrop}
+          onClick={handleCloseLightbox}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Exhibition viewer: ${activeLightbox.title}`}
+        >
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHeader}>
+              <div className={styles.modalTitleBlock}>
+                <span className={styles.modalBadge}>ARCHIVE EXHIBITION</span>
+                <h3 className={styles.modalHeading}>{activeLightbox.title}</h3>
+              </div>
+              <button
+                className={styles.modalCloseBtn}
+                onClick={handleCloseLightbox}
+                aria-label="Close exhibition viewer (Escape)"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.modalImageViewport}>
+              <img
+                src={activeLightbox.src}
+                alt={activeLightbox.alt}
+                className={styles.modalImg}
+              />
+            </div>
+
+            <div className={styles.modalFooter}>
+              <p className={styles.modalCaption}>{activeLightbox.caption}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </>

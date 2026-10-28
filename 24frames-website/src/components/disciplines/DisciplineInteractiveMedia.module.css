@@ -431,94 +431,109 @@
   color: #09453E;
 }
 
-/* ── Photographic Gallery (Alternating 2-Column Editorial) ──────────── */
+/* ── Photographic Gallery (Continuous Staggered Editorial Rhythm) ──── */
 .gallerySection {
-  padding: clamp(3.5rem, 7vh, 6rem) 0;
+  padding: clamp(4.5rem, 8vh, 7rem) 0;
   border-top: 1px solid rgba(9, 69, 62, 0.08);
 }
 
-.alternatingGallery {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(3rem, 5vw, 4.5rem);
+/* ── DESKTOP & TABLET: TWO-COLUMN STAGGERED EDITORIAL VIEW ── */
+.desktopStaggeredView {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: start;
   width: 100%;
 }
 
-.galleryItemWrap {
+.staggerColLeft {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-/* Editorial Interlude */
-.galleryInterlude {
+/* Right column starts around the vertical midpoint of the first image on the left */
+.staggerColRight {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  width: 100%;
+  padding-top: clamp(80px, 12vw, 150px);
+}
+
+.itemSlot {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: clamp(3rem, 5.5vw, 5.5rem);
+  width: 100%;
+}
+
+/* ── Organic Handwritten Thoughts in Whitespace (No Boxes) ── */
+.narrativeNote {
+  padding: clamp(1.75rem, 3.5vw, 3rem) clamp(0.75rem, 1.5vw, 1.75rem);
+  margin: clamp(1.5rem, 2.5vw, 2.5rem) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  position: relative;
+}
+
+.align_left {
+  text-align: left;
+  align-items: flex-start;
+  max-width: 480px;
+}
+
+.align_right {
+  text-align: right;
+  align-items: flex-end;
+  margin-left: auto;
+  max-width: 480px;
+}
+
+.align_center {
   text-align: center;
-  padding: clamp(2rem, 3.5vw, 3rem) clamp(1rem, 3vw, 2.5rem);
-  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
-  background: #F4EFE6;
-  border-radius: 16px;
-  border: 1px solid rgba(9, 69, 62, 0.08);
-  gap: 0.65rem;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 520px;
 }
 
-.interludeKicker {
+.noteChapter {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #09453E;
+  color: #8C733E;
 }
 
-.interludeQuote {
-  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(1.4rem, 2.2vw, 2rem);
-  font-style: italic;
-  font-weight: 400;
+.notePoem {
+  font-family: var(--font-cursive, 'Allura', cursive), var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.45rem, 2vw, 2.05rem);
   line-height: 1.35;
-  color: #142821;
-  max-width: 680px;
+  color: #09453E;
   margin: 0;
+  letter-spacing: 0.01em;
 }
 
-.interludeLine {
-  width: 48px;
-  height: 2px;
-  background: #B5985A;
-  margin-top: 0.4rem;
-}
-
-/* Alternating Card */
-.alternatingCard {
+/* Individual Gallery Card */
+.galleryCard {
   background: #FAF8F2;
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
   border: 1px solid #E5DFD3;
-  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.05);
+  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.04);
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
   cursor: pointer;
-  width: clamp(340px, 46%, 540px);
+  width: 100%;
+  max-width: 560px;
 }
 
-.alternatingCard:hover {
+.galleryCard:hover {
   transform: translateY(-4px);
-  border-color: #B5985A;
-  box-shadow: 0 16px 40px rgba(9, 69, 62, 0.12);
-}
-
-.cardLeft {
-  align-self: flex-start;
-  margin-left: 0;
-}
-
-.cardRight {
-  align-self: flex-end;
-  margin-right: 0;
+  border-color: #09453E;
+  box-shadow: 0 16px 36px rgba(9, 69, 62, 0.09);
 }
 
 .galleryImgWrap {
@@ -905,6 +920,16 @@
   color: #D4AF37;
 }
 
+.mobileSequentialView {
+  display: none;
+}
+
+.mobileSlot {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 /* ── Responsive Rules ───────────────────────────────────────────────── */
 @media (max-width: 960px) {
   .videoGrid {
@@ -915,10 +940,22 @@
   .filmInfoStrip {
     grid-template-columns: repeat(2, 1fr);
   }
+}
 
-  .alternatingCard {
+@media (max-width: 768px) {
+  .desktopStaggeredView {
+    display: none;
+  }
+
+  .mobileSequentialView {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
     width: 100%;
-    align-self: center !important;
+  }
+
+  .galleryCard {
+    max-width: 100%;
   }
 }
 
