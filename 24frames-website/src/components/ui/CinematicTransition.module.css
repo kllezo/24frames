@@ -16,12 +16,14 @@
   pointer-events: none;
   visibility: hidden;
   opacity: 0;
+  display: none;
   overflow: hidden;
   background: transparent;
   will-change: opacity;
 }
 
 .overlayRootActive {
+  display: block !important;
   pointer-events: auto;
   visibility: visible;
 }
@@ -37,89 +39,7 @@
   will-change: opacity;
 }
 
-/* ── Virtual Camera Orbit Stage ───────────────────────────────────────── */
-.cameraOrbitStage {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  perspective: 1200px;
-  transform-style: preserve-3d;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0;
-  will-change: transform, opacity;
-}
 
-.cameraOrbitCanvas {
-  position: absolute;
-  inset: -6%;
-  width: 112%;
-  height: 112%;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-.cameraOrbitImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  filter: brightness(0.88) contrast(1.04);
-}
-
-.cameraOrbitBadge {
-  position: absolute;
-  bottom: clamp(28px, 5.5vw, 56px);
-  left: 50%;
-  transform: translateX(-50%);
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 2px;
-  padding: 0.45rem 1.2rem;
-  background: rgba(9, 69, 62, 0.78);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(200, 168, 78, 0.45);
-  border-radius: 999px;
-  color: #FAF8F2;
-  z-index: 4;
-  opacity: 0;
-  will-change: opacity, transform;
-  pointer-events: none;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  max-width: 90vw;
-}
-
-.cameraOrbitTitle {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #FAF8F2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.cameraOrbitSub {
-  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: 0.88rem;
-  font-weight: 500;
-  font-style: italic;
-  color: #E2C988;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 /* ── Accessible Reduced Motion Fallback (WCAG AAA 120ms Quick Fade) ───── */
 .reducedMotionOverlay {
@@ -192,22 +112,30 @@
   border-right: 2px solid;
 }
 
-/* ── Central Autofocus Reticle Ring ──────────────────────────────────── */
+/* ── Thin Gold Precision Autofocus Ring (Travels to Destination) ─── */
 .focusReticleRing {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: clamp(100px, 14vw, 150px);
-  height: clamp(100px, 14vw, 150px);
-  margin-left: calc(-0.5 * clamp(100px, 14vw, 150px));
-  margin-top: calc(-0.5 * clamp(100px, 14vw, 150px));
+  transform: translate(-50%, -50%);
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
-  border: 1px solid rgba(200, 168, 78, 0.65);
-  box-shadow: 0 0 16px rgba(200, 168, 78, 0.35), inset 0 0 16px rgba(200, 168, 78, 0.2);
+  border: 1.5px solid rgba(200, 168, 78, 0.9);
+  box-shadow: 0 0 14px rgba(200, 168, 78, 0.38), inset 0 0 10px rgba(200, 168, 78, 0.15);
   pointer-events: none;
-  z-index: 8;
+  z-index: 12;
   opacity: 0;
-  will-change: transform, opacity;
+  will-change: transform, opacity, width, height;
+}
+
+.focusReticleRing::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px dashed rgba(200, 168, 78, 0.4);
+  pointer-events: none;
 }
 
 /* ── Concentric Shutter Mechanism Guide Rings ────────────────────────── */

@@ -124,6 +124,31 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
 
   const isTouchRef = useRef(false);
+  const touchStartPos = useRef<{ x: number; y: number } | null>(null);
+  const isDraggingRef = useRef(false);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    isTouchRef.current = true;
+    if (e.touches.length > 0) {
+      touchStartPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      isDraggingRef.current = false;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStartPos.current || e.touches.length === 0) return;
+    const dx = Math.abs(e.touches[0].clientX - touchStartPos.current.x);
+    const dy = Math.abs(e.touches[0].clientY - touchStartPos.current.y);
+    if (dx > 10 || dy > 10) {
+      isDraggingRef.current = true;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTimeout(() => {
+      isDraggingRef.current = false;
+    }, 150);
+  };
 
   /* ── Clean Single-Source Card Activation & Persistence ──────── */
   const activateCard = useCallback((id: string) => {
@@ -201,7 +226,7 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
             ease: "power2.out",
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: "top 78%",
+              start: "top 85%",
               once: true,
             },
           }
@@ -212,7 +237,7 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: showcaseRef.current,
-            start: "top 78%",
+            start: "top 85%",
             once: true,
           },
         });
@@ -258,6 +283,7 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
 
   const handleCardClick = useCallback(
     (discipline: CollectionDiscipline, displayImage: string) => {
+      if (isDraggingRef.current) return;
       if (activeId === discipline.id || !isTouchRef.current) {
         navigateWithCameraTransition(discipline.href, {
           image: displayImage,
@@ -283,6 +309,7 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
     (e: React.MouseEvent, discipline: CollectionDiscipline, displayImage: string) => {
       e.stopPropagation();
       e.preventDefault();
+      if (isDraggingRef.current) return;
       navigateWithCameraTransition(discipline.href, {
         image: displayImage,
       });
@@ -329,9 +356,13 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
         >
           <div
             ref={trackRef}
+            data-lenis-prevent
             className={styles.accordionTrack}
             onScroll={handleTrackScroll}
             onPointerLeave={handleTrackPointerLeave}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
             {COLLECTION_DISCIPLINES.map((discipline) => {
               const isSelected = discipline.id === activeId;
@@ -401,6 +432,7 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                         <Link
                           href={discipline.href}
                           className={styles.btnPrimary}
+                          data-custom-nav="true"
                           onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
                           aria-label={`Enter the full ${discipline.title} portfolio`}
                         >
@@ -412,9 +444,11 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                           <Link
                             href="/stories"
                             className={styles.btnSecondary}
+                            data-custom-nav="true"
                             onClick={(e) => {
                               e.stopPropagation();
                               e.preventDefault();
+                              if (isDraggingRef.current) return;
                               navigateWithCameraTransition("/stories", {
                                 image: displayImage,
                               });
@@ -440,6 +474,7 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                       <Link
                         href={discipline.href}
                         className={styles.compactBtn}
+                        data-custom-nav="true"
                         onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
                         aria-label={`View ${discipline.title} gallery`}
                       >

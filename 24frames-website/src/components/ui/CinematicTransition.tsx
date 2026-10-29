@@ -3,14 +3,12 @@
 import {
   useEffect,
   useRef,
-  useState,
   useCallback,
   useSyncExternalStore,
   startTransition,
 } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
-import { resolveRouteVisual, RouteVisualMeta } from "@/lib/transitions";
 import styles from "./CinematicTransition.module.css";
 
 // ── Accessibility Helper: Reduced Motion ────────────────────────────────
@@ -59,16 +57,11 @@ export default function CinematicTransition() {
   const focusRingRef = useRef<HTMLDivElement>(null);
   const guideRingsRef = useRef<SVGSVGElement>(null);
   const bladeActuatorsRef = useRef<SVGGElement[]>([]);
-  const orbitStageRef = useRef<HTMLDivElement>(null);
-  const orbitCanvasRef = useRef<HTMLDivElement>(null);
-  const orbitBadgeRef = useRef<HTMLDivElement>(null);
-
-  // Resolved destination visual subject for the virtual camera orbit
-  const [destinationVisual, setDestinationVisual] = useState<RouteVisualMeta | null>(null);
 
   // Safety & timeline control refs
   const isTransitioningRef = useRef(false);
   const masterTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  const ringTimelineRef = useRef<gsap.core.Tween | null>(null);
   const safetyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Clear safety watchdog timeout
@@ -86,6 +79,10 @@ export default function CinematicTransition() {
       masterTimelineRef.current.kill();
       masterTimelineRef.current = null;
     }
+    if (ringTimelineRef.current) {
+      ringTimelineRef.current.kill();
+      ringTimelineRef.current = null;
+    }
     isTransitioningRef.current = false;
 
     if (overlayRef.current) {
@@ -94,23 +91,35 @@ export default function CinematicTransition() {
         opacity: 0,
         visibility: "hidden",
         pointerEvents: "none",
+        clearProps: "all",
       });
+      overlayRef.current.style.display = "none";
     }
 
     if (backdropRef.current) {
-      gsap.set(backdropRef.current, { opacity: 0 });
+      gsap.set(backdropRef.current, { opacity: 0, clearProps: "all" });
     }
 
-    if (orbitStageRef.current) {
-      gsap.set(orbitStageRef.current, { opacity: 0 });
+    if (vignetteRef.current) {
+      gsap.set(vignetteRef.current, { opacity: 0, clearProps: "all" });
     }
 
-    if (orbitCanvasRef.current) {
-      gsap.set(orbitCanvasRef.current, { transform: "none" });
+    if (cornersRef.current) {
+      gsap.set(cornersRef.current, { opacity: 0, clearProps: "all" });
     }
 
-    if (orbitBadgeRef.current) {
-      gsap.set(orbitBadgeRef.current, { opacity: 0, y: 12 });
+    if (guideRingsRef.current) {
+      gsap.set(guideRingsRef.current, { opacity: 0, clearProps: "all" });
+    }
+
+    if (focusRingRef.current) {
+      gsap.set(focusRingRef.current, {
+        x: 0,
+        y: 0,
+        opacity: 0,
+        scale: 1,
+        clearProps: "all",
+      });
     }
 
     if (bladeActuatorsRef.current.length > 0) {
@@ -121,19 +130,94 @@ export default function CinematicTransition() {
     }
   }, [clearSafetyTimeout]);
 
-  // Execute the animated camera shutter transition with virtual 3D camera orbit
+  // Compute destination target focal point coordinates
+  const computeTargetFocalPoint = useCallback((targetUrl: string, targetHash: string) => {
+    const winW = typeof window !== "undefined" ? window.innerWidth : 1200;
+    const winH = typeof window !== "undefined" ? window.innerHeight : 800;
+    const isMobile = winW <= 820;
+
+    let targetEl: HTMLElement | null = null;
+    const cleanUrl = targetUrl.split("?")[0].replace(/\/$/, "");
+
+    if (targetHash && targetHash.length > 1) {
+      targetEl = document.querySelector(targetHash) as HTMLElement | null;
+    }
+
+    if (!targetEl) {
+      if (cleanUrl === "" || cleanUrl === "/") {
+        targetEl = document.querySelector("#hero img, .heroImage, #hero") as HTMLElement | null;
+      } else if (cleanUrl.includes("vows")) {
+        targetEl = document.querySelector("#vows, #the-vows, [aria-label*='Vows']") as HTMLElement | null;
+      } else if (cleanUrl.includes("collection")) {
+        targetEl = document.querySelector("#collection [data-discipline-id='weddings'], #collection .card:first-child, #collection") as HTMLElement | null;
+      } else if (cleanUrl.includes("artist")) {
+        targetEl = document.querySelector("#artist img, #founder-recognition img, [aria-label*='Artist']") as HTMLElement | null;
+      } else if (cleanUrl.includes("stories") && !cleanUrl.startsWith("/stories/")) {
+        targetEl = document.querySelector("#stories a[href*='sirish-and-harshitha'], #stories article:first-child, #stories") as HTMLElement | null;
+      } else if (cleanUrl.startsWith("/stories/")) {
+        targetEl = document.querySelector("[class*='heroImageFrame'] img, img[class*='heroImage'], [class*='heroSection'] img") as HTMLElement | null;
+      } else if (cleanUrl.startsWith("/disciplines/")) {
+        targetEl = document.querySelector("[class*='heroSection'] img, [class*='heroImage']") as HTMLElement | null;
+      } else if (cleanUrl.includes("inquire")) {
+        targetEl = document.querySelector("#commission-form h1, h1, form") as HTMLElement | null;
+      } else if (cleanUrl.includes("client-gallery")) {
+        targetEl = document.querySelector("#client-gallery, [class*='cardsShowcaseWrapper']") as HTMLElement | null;
+      }
+    }
+
+    if (targetEl) {
+      const rect = targetEl.getBoundingClientRect();
+      if (rect.width > 20 && rect.height > 20) {
+        const focalYRatio = cleanUrl.includes("artist") || cleanUrl.startsWith("/stories/") ? 0.3 : 0.42;
+        const targetScreenX = rect.left + rect.width * 0.5;
+        const targetScreenY = Math.max(80, Math.min(winH - 80, rect.top + rect.height * focalYRatio));
+        const size = Math.max(90, Math.min(170, isMobile ? rect.width * 0.45 : rect.width * 0.35));
+
+        return {
+          x: targetScreenX - winW / 2,
+          y: targetScreenY - winH / 2,
+          width: size,
+          height: size,
+        };
+      }
+    }
+
+    // Calibrated responsive fallback coordinates
+    let defaultXRatio = 0;
+    let defaultYRatio = -0.06;
+
+    if (cleanUrl.includes("artist")) {
+      defaultXRatio = isMobile ? 0 : 0.16;
+      defaultYRatio = -0.14;
+    } else if (cleanUrl.includes("collection")) {
+      defaultXRatio = isMobile ? 0 : -0.25;
+      defaultYRatio = 0.04;
+    } else if (cleanUrl.startsWith("/stories/")) {
+      defaultXRatio = isMobile ? 0 : -0.22;
+      defaultYRatio = -0.08;
+    } else if (cleanUrl.includes("inquire")) {
+      defaultXRatio = 0;
+      defaultYRatio = -0.16;
+    } else if (cleanUrl.includes("vows")) {
+      defaultXRatio = 0;
+      defaultYRatio = -0.08;
+    }
+
+    return {
+      x: defaultXRatio * winW,
+      y: defaultYRatio * winH,
+      width: isMobile ? 110 : 140,
+      height: isMobile ? 110 : 140,
+    };
+  }, []);
+
+  // Execute the camera shutter transition with gold focus ring traveling to destination
   const triggerTransition = useCallback(
-    (targetUrl: string, targetHash: string, customImage?: string) => {
+    (targetUrl: string, targetHash: string, _customImage?: string) => {
+      void _customImage;
       // Prevent duplicate transitions during rapid repeated clicks
       if (isTransitioningRef.current) return;
       isTransitioningRef.current = true;
-
-      // Resolve destination subject & camera orbit configuration
-      const visual = resolveRouteVisual(targetUrl);
-      if (customImage) {
-        visual.image = customImage;
-      }
-      setDestinationVisual(visual);
 
       // Immediately initiate destination prefetch
       try {
@@ -143,14 +227,15 @@ export default function CinematicTransition() {
       }
 
       if (overlayRef.current) {
+        overlayRef.current.style.display = "block";
         overlayRef.current.classList.add(styles.overlayRootActive);
       }
 
-      // Safety watchdog fallback (2.4s limit)
+      // Safety watchdog fallback (2.8s limit)
       clearSafetyTimeout();
       safetyTimeoutRef.current = setTimeout(() => {
         forceReset();
-      }, 2400);
+      }, 2800);
 
       // ── ACCESSIBILITY: REDUCED MOTION FADE ──
       if (isReducedMotion) {
@@ -191,33 +276,32 @@ export default function CinematicTransition() {
         return;
       }
 
-      // ── CONTINUOUS UNIFIED CAMERA SHUTTER & 3D CAMERA ORBIT TIMELINE ──
+      // ── PHASE 1 & 2: SHUTTER CLOSES, SWAPS ROUTE, RE-OPENS TO DESTINATION ──
       if (masterTimelineRef.current) {
         masterTimelineRef.current.kill();
       }
 
       const DURATION_CLOSE = 0.32;
-      const DURATION_OPEN = 0.34;
-      const orbit = visual.cameraOrbit || {
-        startRotateY: -3,
-        startRotateX: 2,
-        startScale: 1.08,
-        startX: 20,
-        startY: -14,
-      };
+      const DURATION_OPEN = 0.32;
 
-      const tl = gsap.timeline({
-        onComplete: () => {
-          forceReset();
-        },
-      });
+      const tl = gsap.timeline();
       masterTimelineRef.current = tl;
 
-      // 1. Initial State Activation (Time 0.00s)
+      // 1. Initial State: Centered Shutter & Centered Gold Focus Ring (Time 0.00s)
       tl.set(overlayRef.current, { opacity: 1, visibility: "visible", pointerEvents: "auto" }, 0.00);
       tl.set(backdropRef.current, { opacity: 0 }, 0.00);
-      tl.set([vignetteRef.current, cornersRef.current, focusRingRef.current, guideRingsRef.current], { opacity: 0 }, 0.00);
-      tl.set(focusRingRef.current, { scale: 1.15 }, 0.00);
+      tl.set([vignetteRef.current, cornersRef.current, guideRingsRef.current], { opacity: 0 }, 0.00);
+
+      if (focusRingRef.current) {
+        tl.set(focusRingRef.current, {
+          x: 0,
+          y: 0,
+          width: 130,
+          height: 130,
+          opacity: 0,
+          scale: 1.15,
+        }, 0.00);
+      }
 
       if (bladeActuatorsRef.current.length > 0) {
         tl.set(bladeActuatorsRef.current, {
@@ -226,42 +310,27 @@ export default function CinematicTransition() {
         }, 0.00);
       }
 
-      // Initialize virtual 3D camera orbit position
-      if (orbitStageRef.current && orbitCanvasRef.current) {
-        tl.set(orbitStageRef.current, { opacity: 0 }, 0.00);
-        tl.set(
-          orbitCanvasRef.current,
-          {
-            transform: `perspective(1200px) rotateY(${orbit.startRotateY}deg) rotateX(${orbit.startRotateX}deg) scale(${orbit.startScale}) translate3d(${orbit.startX}px, ${orbit.startY}px, 0px)`,
-          },
-          0.00
-        );
-      }
-      if (orbitBadgeRef.current) {
-        tl.set(orbitBadgeRef.current, { opacity: 0, y: 12 }, 0.00);
-      }
-
-      // 2. Optical Ambient & HUD Fade (Starts synchronously with shutter close)
+      // 2. Optical Ambient & HUD Fade
       tl.to([vignetteRef.current, cornersRef.current], {
-        opacity: 1,
+        opacity: 0.9,
         duration: 0.14,
         ease: "power1.out",
       }, 0.00);
 
       tl.to(focusRingRef.current, {
-        opacity: 0.9,
+        opacity: 0.95,
         scale: 1,
         duration: 0.16,
         ease: "power2.out",
       }, 0.00);
 
       tl.to(guideRingsRef.current, {
-        opacity: 0.5,
+        opacity: 0.45,
         duration: 0.18,
         ease: "power1.out",
       }, 0.00);
 
-      // 3. ONE CONTINUOUS UNINTERRUPTED SHUTTER CLOSING (0.00s to 0.32s)
+      // 3. Shutter Closes Centered (0.00s – 0.32s)
       if (bladeActuatorsRef.current.length > 0) {
         tl.to(bladeActuatorsRef.current, {
           rotation: 34,
@@ -270,23 +339,13 @@ export default function CinematicTransition() {
         }, 0.00);
       }
 
-      // Backdrop synchronizes seamlessly as blades meet, sealing in absolute blackness
       tl.to(backdropRef.current, {
         opacity: 1,
         duration: DURATION_CLOSE * 0.65,
         ease: "power2.in",
       }, DURATION_CLOSE * 0.35);
 
-      // Fade in the destination orbit stage behind the sealing blades
-      if (orbitStageRef.current) {
-        tl.to(orbitStageRef.current, {
-          opacity: 1,
-          duration: 0.16,
-          ease: "power1.in",
-        }, DURATION_CLOSE * 0.5);
-      }
-
-      // 4. ROUTE SWAP AT FULL SHUTTER SEAL (At exactly 0.32s, zero dead pause)
+      // 4. ROUTE SWAP AT FULL SHUTTER SEAL (At exactly 0.32s, zero pause)
       tl.call(() => {
         startTransition(() => {
           router.push(targetUrl);
@@ -307,35 +366,7 @@ export default function CinematicTransition() {
         }
       }, undefined, DURATION_CLOSE);
 
-      // 5. VIRTUAL 3D CAMERA ORBIT + SHUTTER OPENING (Simultaneous continuous movement)
-      // Virtual camera performs a smooth, controlled arc toward the destination's primary subject
-      if (orbitCanvasRef.current) {
-        tl.to(
-          orbitCanvasRef.current,
-          {
-            transform: "perspective(1200px) rotateY(0deg) rotateX(0deg) scale(1) translate3d(0px, 0px, 0px)",
-            duration: DURATION_OPEN + 0.04,
-            ease: "power2.out",
-          },
-          DURATION_CLOSE
-        );
-      }
-
-      // Editorial badge emerges softly as camera aligns
-      if (orbitBadgeRef.current) {
-        tl.to(
-          orbitBadgeRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.22,
-            ease: "power2.out",
-          },
-          DURATION_CLOSE + 0.06
-        );
-      }
-
-      // All 8 blades rotate smoothly outward with matched continuous angular velocity
+      // 5. SHUTTER OPENS CENTERING ON DESTINATION (0.32s – 0.64s)
       if (bladeActuatorsRef.current.length > 0) {
         tl.to(bladeActuatorsRef.current, {
           rotation: -38,
@@ -344,42 +375,64 @@ export default function CinematicTransition() {
         }, DURATION_CLOSE);
       }
 
-      // Backdrop fades to reveal destination scene cleanly through expanding iris
       tl.to(backdropRef.current, {
         opacity: 0,
-        duration: DURATION_OPEN * 0.7,
+        duration: DURATION_OPEN * 0.65,
         ease: "power2.out",
       }, DURATION_CLOSE);
 
-      // HUD and viewfinder elements fade out in unison as iris reaches full expansion
-      const hudFadeStart = DURATION_CLOSE + DURATION_OPEN * 0.35;
-      tl.to([cornersRef.current, focusRingRef.current, guideRingsRef.current, vignetteRef.current], {
+      // Fade out HUD guide rings and brackets as iris opens
+      tl.to([cornersRef.current, guideRingsRef.current, vignetteRef.current], {
         opacity: 0,
-        duration: DURATION_OPEN * 0.65,
+        duration: DURATION_OPEN * 0.5,
         ease: "power1.out",
-      }, hudFadeStart);
+      }, DURATION_CLOSE + DURATION_OPEN * 0.2);
 
-      // Fade out badge as camera completes its settle
-      if (orbitBadgeRef.current) {
-        tl.to(
-          orbitBadgeRef.current,
-          {
-            opacity: 0,
-            duration: 0.12,
-            ease: "power1.out",
+      // ── PHASE 3 & 4: GOLD FOCUS RING TRAVELS TO DESTINATION & SETTLES ──
+      // Triggers ONLY after shutter has fully re-opened (0.64s), never while shutter is closing or opening
+      tl.call(() => {
+        if (!focusRingRef.current) return;
+        const target = computeTargetFocalPoint(targetUrl, targetHash);
+
+        // Gold ring smoothly moves across the screen directly to the destination focal point
+        ringTimelineRef.current = gsap.to(focusRingRef.current, {
+          x: target.x,
+          y: target.y,
+          width: target.width,
+          height: target.height,
+          duration: 0.50,
+          ease: "power2.inOut",
+          onComplete: () => {
+            // Camera focus settle snap (subtle micro pulse)
+            if (!focusRingRef.current) {
+              forceReset();
+              return;
+            }
+            gsap.to(focusRingRef.current, {
+              scale: 1.06,
+              duration: 0.08,
+              ease: "power1.out",
+              onComplete: () => {
+                if (!focusRingRef.current) {
+                  forceReset();
+                  return;
+                }
+                gsap.to(focusRingRef.current, {
+                  scale: 1.0,
+                  opacity: 0,
+                  duration: 0.14,
+                  ease: "power1.inOut",
+                  onComplete: () => {
+                    forceReset();
+                  },
+                });
+              },
+            });
           },
-          DURATION_CLOSE + DURATION_OPEN * 0.7
-        );
-      }
-
-      // Complete settlement and overlay release seamlessly transferring to live page
-      tl.to(overlayRef.current, {
-        opacity: 0,
-        duration: 0.09,
-        ease: "power1.out",
-      }, DURATION_CLOSE + DURATION_OPEN);
+        });
+      }, undefined, DURATION_CLOSE + DURATION_OPEN);
     },
-    [isReducedMotion, router, clearSafetyTimeout, forceReset]
+    [isReducedMotion, router, clearSafetyTimeout, forceReset, computeTargetFocalPoint]
   );
 
   // Global click interceptor for eligible internal links
@@ -396,10 +449,11 @@ export default function CinematicTransition() {
       const anchor = target?.closest("a") as HTMLAnchorElement | null;
       if (!anchor) return;
 
-      // Exclude external links, downloads, and new tabs
+      // Exclude external links, downloads, and custom-nav elements
       if (anchor.target && anchor.target !== "_self") return;
       if (anchor.hasAttribute("download")) return;
       if (anchor.getAttribute("rel")?.includes("external")) return;
+      if (anchor.hasAttribute("data-no-transition") || anchor.hasAttribute("data-custom-nav")) return;
 
       const href = anchor.getAttribute("href");
       if (!href) return;
@@ -535,32 +589,6 @@ export default function CinematicTransition() {
         <>
           {/* ── Solid Near-Black Optical Shutter Backdrop ── */}
           <div ref={backdropRef} className={styles.shutterBackdrop} />
-
-          {/* ── Virtual 3D Camera Orbit Viewport Stage ── */}
-          <div ref={orbitStageRef} className={styles.cameraOrbitStage} aria-hidden="true">
-            <div ref={orbitCanvasRef} className={styles.cameraOrbitCanvas}>
-              {destinationVisual?.image && (
-                <img
-                  src={destinationVisual.image}
-                  alt=""
-                  className={styles.cameraOrbitImage}
-                  style={{
-                    objectPosition: destinationVisual.focalPoint || "center 25%",
-                  }}
-                />
-              )}
-            </div>
-
-            {/* Subtle Viewfinder Editorial Target Badge */}
-            {destinationVisual?.title && (
-              <div ref={orbitBadgeRef} className={styles.cameraOrbitBadge}>
-                <span className={styles.cameraOrbitTitle}>{destinationVisual.title}</span>
-                {destinationVisual.subtitle && (
-                  <span className={styles.cameraOrbitSub}>{destinationVisual.subtitle}</span>
-                )}
-              </div>
-            )}
-          </div>
 
           {/* ── Radial Optical Vignette ── */}
           <div ref={vignetteRef} className={styles.vignetteOverlay} />

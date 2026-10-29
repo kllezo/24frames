@@ -233,10 +233,14 @@
   display: block;
   width: 24px;
   height: 2px;
-  background: #20231F;
+  background: #FFFFFF;
   transition: transform 0.35s var(--ease-out),
     opacity 0.2s var(--ease-out),
     background 0.3s ease;
+}
+
+.themeDark .burgerLine {
+  background: #FFFFFF;
 }
 
 .themeLight .burgerLine {
@@ -333,6 +337,16 @@
 
 /* --- Responsive Breakpoints --- */
 @media (max-width: 960px) {
+  .header {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 0.85rem);
+    padding-bottom: 0.85rem;
+  }
+
+  .scrolled {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 0.65rem);
+    padding-bottom: 0.65rem;
+  }
+
   .links {
     display: none;
   }

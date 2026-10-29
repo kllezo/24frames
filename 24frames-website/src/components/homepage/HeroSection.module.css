@@ -268,37 +268,39 @@
    ───────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .heroSection {
-    height: 82vh;
-    min-height: 520px;
+    height: 90vh;
+    min-height: 560px;
   }
 
   .heroImage {
-    object-position: center 22%;
+    object-position: center 26%;
   }
 
   .frameTopBar {
-    top: clamp(68px, 10vh, 85px);
+    top: clamp(72px, 10vh, 88px);
   }
 
   .editorialTextOverlay {
-    bottom: clamp(68px, 10vh, 90px);
+    bottom: clamp(80px, 12vh, 105px);
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .heroSection {
-    height: 82vh;
-    min-height: 480px;
+    height: 100svh;
+    height: 100dvh;
+    min-height: 580px;
+    max-height: 920px;
   }
 
   .heroImage {
-    object-position: 48% 20%;
+    object-position: center 26%;
   }
 
   .frameTopBar {
-    top: 65px;
-    left: 1.25rem;
-    right: 1.25rem;
+    top: calc(env(safe-area-inset-top, 0px) + clamp(68px, 9.5vh, 78px));
+    left: clamp(1.25rem, 5vw, 2.25rem);
+    right: clamp(1.25rem, 5vw, 2.25rem);
   }
 
   .frameEdition {
@@ -306,26 +308,41 @@
   }
 
   .editorialTextOverlay {
-    left: 1.25rem;
-    right: 1.25rem;
-    bottom: 60px;
+    left: clamp(1.25rem, 5vw, 2.25rem);
+    right: clamp(1.25rem, 5vw, 2.25rem);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(94px, 15vh, 128px));
     max-width: 100%;
+    gap: 0.5rem;
   }
 
   .headline {
-    font-size: clamp(2rem, 7.5vw, 2.6rem);
+    font-size: clamp(1.95rem, 6.8vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
   }
 
   .supportingCopy {
     font-size: 0.875rem;
     line-height: 1.5;
+    max-width: 92%;
   }
 
   .frameBottomBar {
-    left: 1.25rem;
-    right: 1.25rem;
-    bottom: 14px;
-    gap: 0.75rem;
+    left: clamp(1.25rem, 5vw, 2.25rem);
+    right: clamp(1.25rem, 5vw, 2.25rem);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(16px, 2.8vh, 26px));
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.55rem;
+  }
+
+  .filmMetadata {
+    gap: 0.15rem;
+  }
+
+  .filmStock {
+    font-size: 0.5625rem;
+    letter-spacing: 0.14em;
   }
 
   .filmSubject {
@@ -333,7 +350,33 @@
   }
 
   .scrollDownBtn {
-    padding: 0.45rem 0.9rem;
+    padding: 0.5rem 1rem;
     font-size: 0.625rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (max-height: 700px) and (max-width: 768px) {
+  .heroSection {
+    min-height: 520px;
+  }
+
+  .editorialTextOverlay {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 82px);
+    gap: 0.35rem;
+  }
+
+  .headline {
+    font-size: clamp(1.75rem, 5.5vw, 2.1rem);
+  }
+
+  .supportingCopy {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .frameBottomBar {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+    gap: 0.4rem;
   }
 }

@@ -234,8 +234,8 @@ export default function TheVowSection() {
           ease: "power2.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 78%",
-            toggleActions: "play none none reverse",
+            start: "top 85%",
+            toggleActions: "play none none none",
           },
         }
       );
@@ -250,8 +250,8 @@ export default function TheVowSection() {
           ease: "power3.out",
           scrollTrigger: {
             trigger: stageRef.current,
-            start: "top 82%",
-            toggleActions: "play none none reverse",
+            start: "top 85%",
+            toggleActions: "play none none none",
           },
         }
       );

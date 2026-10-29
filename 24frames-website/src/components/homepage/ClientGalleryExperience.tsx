@@ -147,6 +147,7 @@ export default function ClientGalleryExperience({
   const gridRef = useRef<HTMLDivElement>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const isTouchRef = useRef(false);
+  const wasOpenOnPressRef = useRef(false);
 
   // Close open folder when tapping outside on touch/mobile devices
   useEffect(() => {
@@ -154,6 +155,7 @@ export default function ClientGalleryExperience({
     const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
       if (gridRef.current && !gridRef.current.contains(e.target as Node)) {
         setActiveCardId(null);
+        wasOpenOnPressRef.current = false;
       }
     };
     document.addEventListener("pointerdown", handleOutsideClick);
@@ -161,6 +163,18 @@ export default function ClientGalleryExperience({
       document.removeEventListener("pointerdown", handleOutsideClick);
     };
   }, [activeCardId]);
+
+  // Reset open folders when returning via browser back/forward cache
+  useEffect(() => {
+    const handlePageShow = () => {
+      setActiveCardId(null);
+      wasOpenOnPressRef.current = false;
+    };
+    window.addEventListener("pageshow", handlePageShow);
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+    };
+  }, []);
 
   // Guaranteed immediate reveal watchdog via IntersectionObserver
   useEffect(() => {
@@ -270,6 +284,22 @@ export default function ClientGalleryExperience({
     }
   };
 
+  const handlePointerDown = (id: string, e: React.PointerEvent) => {
+    if (
+      e.pointerType === "touch" ||
+      (typeof window !== "undefined" &&
+        (window.matchMedia("(hover: none)").matches || window.innerWidth <= 820))
+    ) {
+      isTouchRef.current = true;
+      wasOpenOnPressRef.current = activeCardId === id;
+    }
+  };
+
+  const handleTouchStart = (id: string) => {
+    isTouchRef.current = true;
+    wasOpenOnPressRef.current = activeCardId === id;
+  };
+
   // Strict two-tap interaction on mobile; click-to-navigate on desktop
   const handleCardClick = (e: React.MouseEvent, href: string, id: string) => {
     const isTouch =
@@ -281,10 +311,11 @@ export default function ClientGalleryExperience({
       e.preventDefault();
       e.stopPropagation();
 
-      if (activeCardId !== id) {
+      if (!wasOpenOnPressRef.current) {
         // First tap on closed card (folder cover, image area, or arrow):
         // Open folder using 3D animation & spring-pop photograph, do NOT navigate!
         setActiveCardId(id);
+        wasOpenOnPressRef.current = true;
         return;
       }
 
@@ -297,6 +328,17 @@ export default function ClientGalleryExperience({
     // Desktop: Click navigates immediately to destination
     e.preventDefault();
     navigateWithCameraTransition(href);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, href: string, id: string) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (activeCardId !== id) {
+        setActiveCardId(id);
+      } else {
+        navigateWithCameraTransition(href);
+      }
+    }
   };
 
   return (
@@ -344,14 +386,16 @@ export default function ClientGalleryExperience({
                 <Link
                   key={item.id}
                   href={item.href}
+                  data-custom-nav="true"
                   className={`${styles.card} ${themeClass} ${isOpen ? styles.cardOpen : ""}`}
                   aria-label={`${item.number} ${item.title} — Click to view section`}
                   aria-expanded={isOpen}
                   onPointerEnter={(e) => handlePointerEnter(item.id, e)}
                   onPointerLeave={handlePointerLeave}
+                  onPointerDown={(e) => handlePointerDown(item.id, e)}
+                  onTouchStart={() => handleTouchStart(item.id)}
                   onClick={(e) => handleCardClick(e, item.href, item.id)}
-                  onFocus={() => setActiveCardId(item.id)}
-                  onBlur={() => setActiveCardId(null)}
+                  onKeyDown={(e) => handleKeyDown(e, item.href, item.id)}
                 >
                   {/* Layer 1: Back Photographic Canvas (Revealed vertically as cover compresses) */}
                   <div className={styles.cardPhotoArea}>

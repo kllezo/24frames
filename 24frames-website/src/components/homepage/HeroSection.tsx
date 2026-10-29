@@ -28,7 +28,12 @@ export default function HeroSection() {
     }
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+      const tl = gsap.timeline({
+        defaults: { ease: "power2.out" },
+        onComplete: () => {
+          gsap.set([headlineRef.current, metadataRef.current], { clearProps: "transform" });
+        },
+      });
 
       // 1. Aperture Blade Mask Opens Smoothly from f/16 to f/1.2 (revealing hero photo)
       if (apertureHoleRef.current) {

@@ -251,18 +251,18 @@ const APERTURE_STAGE_3: WaveCoords = {
 
 // Stage 4 & 5: Settled / Nearing Completion (Aperture flows completely beyond left border)
 const APERTURE_STAGE_4: WaveCoords = {
-  xTop: -140,
-  c1x: -200,
+  xTop: -220,
+  c1x: -280,
   c1y: 200,
-  c2x: -120,
+  c2x: -200,
   c2y: 320,
-  mx: -90,
+  mx: -180,
   my: 410,
-  c3x: -70,
+  c3x: -160,
   c3y: 530,
-  c4x: -160,
+  c4x: -240,
   c4y: 700,
-  xBot: -130,
+  xBot: -210,
 };
 
 // Secondary Trailing Wave (Phase-offset fluid depth)
@@ -902,11 +902,16 @@ export default function LivingContactSheet() {
             archGlowRef.current.style.transform = `scale(${0.7 + p * 0.5})`;
           }
           if (archedPhotoImgRef.current) {
-            const blur = Math.max(0, (1 - p) * 3);
-            const bright = 0.7 + p * 0.3;
-            const scale = 1.06 - p * 0.06;
-            archedPhotoImgRef.current.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
-            archedPhotoImgRef.current.style.transform = `scale(${scale.toFixed(3)})`;
+            if (p >= 0.98) {
+              archedPhotoImgRef.current.style.filter = "none";
+              archedPhotoImgRef.current.style.transform = "none";
+            } else {
+              const blur = Math.max(0, (1 - p) * 3);
+              const bright = 0.7 + p * 0.3;
+              const scale = 1.06 - p * 0.06;
+              archedPhotoImgRef.current.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
+              archedPhotoImgRef.current.style.transform = `scale(${scale.toFixed(3)})`;
+            }
           }
         };
 
@@ -919,7 +924,7 @@ export default function LivingContactSheet() {
             trigger: openingRef.current,
             start: "top 88%",
             end: "center 50%",
-            scrub: 0.8,
+            scrub: 0.5,
             onUpdate: () => renderArch(archProxy.val),
           },
         });
@@ -988,14 +993,21 @@ export default function LivingContactSheet() {
             vinithaSilkRipplePathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "0.75";
           }
           if (vinithaVeilOverlayRef.current) {
-            vinithaVeilOverlayRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
+            const op = p > 0.85 ? Math.max(0, 1 - (p - 0.85) / 0.15) : 1;
+            vinithaVeilOverlayRef.current.style.opacity = `${op}`;
+            vinithaVeilOverlayRef.current.style.display = op <= 0.005 ? "none" : "block";
           }
           if (vinithaImg) {
-            const blur = Math.max(0, (1 - p) * 6);
-            const bright = 0.65 + p * 0.35;
-            const scale = 1.06 - p * 0.06;
-            vinithaImg.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
-            vinithaImg.style.transform = `scale(${scale.toFixed(3)})`;
+            if (p >= 0.98) {
+              vinithaImg.style.filter = "none";
+              vinithaImg.style.transform = "none";
+            } else {
+              const blur = Math.max(0, (1 - p) * 6);
+              const bright = 0.65 + p * 0.35;
+              const scale = 1.06 - p * 0.06;
+              vinithaImg.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
+              vinithaImg.style.transform = `scale(${scale.toFixed(3)})`;
+            }
           }
           if (narrativeItems.length) {
             const textP = Math.max(0, Math.min(1, (p - 0.48) / 0.45));
@@ -1019,9 +1031,9 @@ export default function LivingContactSheet() {
           ease: "none",
           scrollTrigger: {
             trigger: vinithaStageRef.current,
-            start: "top 85%",
-            end: "center 48%",
-            scrub: 0.8,
+            start: "top 88%",
+            end: "center 50%",
+            scrub: 0.5,
             onUpdate: () => renderVinitha(vinithaProxy.val),
           },
         });
@@ -1044,14 +1056,21 @@ export default function LivingContactSheet() {
             hrithikaDrapeRipplePathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "0.7";
           }
           if (hrithikaDrapeRef.current) {
-            hrithikaDrapeRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
+            const op = p > 0.85 ? Math.max(0, 1 - (p - 0.85) / 0.15) : 1;
+            hrithikaDrapeRef.current.style.opacity = `${op}`;
+            hrithikaDrapeRef.current.style.display = op <= 0.005 ? "none" : "block";
           }
           if (hrithikaPhotoImgRef.current) {
-            const blur = Math.max(0, (1 - p) * 3);
-            const bright = 0.8 + p * 0.2;
-            const scale = 1.06 - p * 0.06;
-            hrithikaPhotoImgRef.current.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
-            hrithikaPhotoImgRef.current.style.transform = `scale(${scale.toFixed(3)})`;
+            if (p >= 0.98) {
+              hrithikaPhotoImgRef.current.style.filter = "none";
+              hrithikaPhotoImgRef.current.style.transform = "none";
+            } else {
+              const blur = Math.max(0, (1 - p) * 3);
+              const bright = 0.8 + p * 0.2;
+              const scale = 1.06 - p * 0.06;
+              hrithikaPhotoImgRef.current.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
+              hrithikaPhotoImgRef.current.style.transform = `scale(${scale.toFixed(3)})`;
+            }
           }
         };
 
@@ -1062,9 +1081,9 @@ export default function LivingContactSheet() {
           ease: "none",
           scrollTrigger: {
             trigger: hrithikaCanvasRef.current,
-            start: "top 86%",
-            end: "center 48%",
-            scrub: 0.8,
+            start: "top 88%",
+            end: "center 50%",
+            scrub: 0.5,
             onUpdate: () => renderHrithika(hrithikaProxy.val),
           },
         });
@@ -1075,22 +1094,24 @@ export default function LivingContactSheet() {
         const karthikTl = gsap.timeline({
           scrollTrigger: {
             trigger: karthikCanvasRef.current,
-            start: "top 84%",
+            start: "top 88%",
             once: true,
+          },
+          onComplete: () => {
+            if (karthikBrushOverlayRef.current) karthikBrushOverlayRef.current.style.display = "none";
+            if (karthikPhotoImgRef.current) {
+              karthikPhotoImgRef.current.style.filter = "none";
+              karthikPhotoImgRef.current.style.transform = "none";
+            }
           },
         });
 
         if (karthikPhotoImgRef.current) {
           karthikTl.fromTo(
             karthikPhotoImgRef.current,
-            { scale: 1.07, filter: "blur(3px) brightness(0.9)" },
-            { scale: 1.02, filter: "blur(0px) brightness(1.0)", duration: 0.85, ease: "power2.out" },
-            0.15
-          );
-          karthikTl.to(
-            karthikPhotoImgRef.current,
-            { scale: 1.0, duration: 0.35, ease: "power1.out" },
-            1.1
+            { scale: 1.05, filter: "blur(2px) brightness(0.95)" },
+            { scale: 1.0, filter: "blur(0px) brightness(1.0)", duration: 0.55, ease: "power2.out" },
+            0.05
           );
         }
 
@@ -1099,23 +1120,23 @@ export default function LivingContactSheet() {
           karthikTl.fromTo(
             karthikBrushOverlayRef.current,
             { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", opacity: 1 },
-            { clipPath: "polygon(0 0, 46% 0, 100% 48%, 100% 100%, 0 100%)", duration: 0.4, ease: "power2.out" },
-            0.05
+            { clipPath: "polygon(0 0, 46% 0, 100% 48%, 100% 100%, 0 100%)", duration: 0.22, ease: "power2.out" },
+            0.02
           );
           karthikTl.to(
             karthikBrushOverlayRef.current,
-            { clipPath: "polygon(0 0, 0% 32%, 58% 85%, 100% 100%, 0 100%)", duration: 0.45, ease: "power2.inOut" },
-            0.42
+            { clipPath: "polygon(0 0, 0% 32%, 58% 85%, 100% 100%, 0 100%)", duration: 0.22, ease: "power2.inOut" },
+            0.20
           );
           karthikTl.to(
             karthikBrushOverlayRef.current,
-            { clipPath: "polygon(0 80%, 20% 100%, 0 100%)", duration: 0.35, ease: "power2.out" },
-            0.85
+            { clipPath: "polygon(0 80%, 20% 100%, 0 100%)", duration: 0.18, ease: "power2.out" },
+            0.40
           );
           karthikTl.to(
             karthikBrushOverlayRef.current,
-            { opacity: 0, duration: 0.3, ease: "power1.out" },
-            1.15
+            { opacity: 0, duration: 0.15, ease: "power1.out" },
+            0.55
           );
         }
       }
@@ -1125,23 +1146,32 @@ export default function LivingContactSheet() {
         const sireeshTl = gsap.timeline({
           scrollTrigger: {
             trigger: sireeshCanvasRef.current,
-            start: "top 84%",
+            start: "top 88%",
             once: true,
+          },
+          onComplete: () => {
+            if (sireeshImgRef.current) {
+              sireeshImgRef.current.style.filter = "none";
+              sireeshImgRef.current.style.transform = "none";
+            }
+            if (sireeshSunlightRef.current) sireeshSunlightRef.current.style.display = "none";
+            if (sireeshVeilRef.current) sireeshVeilRef.current.style.display = "none";
+            if (sireeshPetalsRef.current) sireeshPetalsRef.current.style.display = "none";
           },
         });
 
-        // Stage 01 - 04: Focus pull from soft dreamlike impression (blur 14px) to crisp image
+        // Stage 01 - 04: Focus pull from soft dreamlike impression to crisp image
         if (sireeshImgRef.current) {
           sireeshTl.fromTo(
             sireeshImgRef.current,
-            { filter: "blur(14px) brightness(1.1)", scale: 1.08 },
-            { filter: "blur(5px) brightness(1.05)", scale: 1.03, duration: 0.75, ease: "power2.out" },
-            0.05
+            { filter: "blur(10px) brightness(1.08)", scale: 1.05 },
+            { filter: "blur(3px) brightness(1.03)", scale: 1.02, duration: 0.40, ease: "power2.out" },
+            0.02
           );
           sireeshTl.to(
             sireeshImgRef.current,
-            { filter: "blur(0px) brightness(1.0)", scale: 1.0, duration: 0.55, ease: "power1.out" },
-            0.8
+            { filter: "blur(0px) brightness(1.0)", scale: 1.0, duration: 0.30, ease: "power1.out" },
+            0.42
           );
         }
 
@@ -1150,13 +1180,13 @@ export default function LivingContactSheet() {
           sireeshTl.fromTo(
             sireeshSunlightRef.current,
             { x: "-60%", y: "-50%", opacity: 0 },
-            { x: "-10%", y: "-10%", opacity: 0.85, duration: 0.65, ease: "power2.out" },
-            0.05
+            { x: "-10%", y: "-10%", opacity: 0.85, duration: 0.40, ease: "power2.out" },
+            0.02
           );
           sireeshTl.to(
             sireeshSunlightRef.current,
-            { x: "35%", y: "25%", opacity: 0, duration: 0.65, ease: "power2.in" },
-            0.7
+            { x: "35%", y: "25%", opacity: 0, duration: 0.35, ease: "power2.in" },
+            0.42
           );
         }
 
@@ -1165,13 +1195,13 @@ export default function LivingContactSheet() {
           sireeshTl.fromTo(
             sireeshVeilRef.current,
             { x: "-40%", y: "-35%", opacity: 0 },
-            { x: "15%", y: "15%", opacity: 0.65, duration: 0.7, ease: "power2.inOut" },
-            0.25
+            { x: "15%", y: "15%", opacity: 0.65, duration: 0.40, ease: "power2.inOut" },
+            0.12
           );
           sireeshTl.to(
             sireeshVeilRef.current,
-            { x: "65%", y: "55%", opacity: 0, duration: 0.55, ease: "power2.in" },
-            0.85
+            { x: "65%", y: "55%", opacity: 0, duration: 0.30, ease: "power2.in" },
+            0.48
           );
         }
 
@@ -1182,13 +1212,13 @@ export default function LivingContactSheet() {
             sireeshTl.fromTo(
               petals,
               { opacity: 0, y: -25, x: -18, rotate: -30 },
-              { opacity: 0.85, y: 30, x: 20, rotate: 45, duration: 0.85, stagger: 0.08, ease: "sine.inOut" },
-              0.55
+              { opacity: 0.85, y: 30, x: 20, rotate: 45, duration: 0.45, stagger: 0.04, ease: "sine.inOut" },
+              0.25
             );
             sireeshTl.to(
               petals,
-              { opacity: 0, y: 65, x: 45, rotate: 95, duration: 0.45, stagger: 0.06, ease: "power1.in" },
-              1.15
+              { opacity: 0, y: 65, x: 45, rotate: 95, duration: 0.25, stagger: 0.03, ease: "power1.in" },
+              0.62
             );
           }
         }
@@ -1255,12 +1285,22 @@ export default function LivingContactSheet() {
           }
           if (waveGreenBottomPathRef.current) {
             waveGreenBottomPathRef.current.setAttribute("d", greenPath);
+            waveGreenBottomPathRef.current.style.opacity = p > 0.70 ? `${Math.max(0, 1 - (p - 0.70) / 0.30)}` : "1";
           }
           if (waveGreenBottomStrokeRef.current) {
             waveGreenBottomStrokeRef.current.setAttribute("d", greenStroke);
+            waveGreenBottomStrokeRef.current.style.opacity = p > 0.70 ? `${Math.max(0, 1 - (p - 0.70) / 0.30) * 0.85}` : "0.85";
           }
           if (waveWatermarkRef.current) {
-            waveWatermarkRef.current.style.opacity = `${Math.max(0.04, 0.24 * (1 - p))}`;
+            waveWatermarkRef.current.style.opacity = `${Math.max(0, 0.24 * (1 - p / 0.75))}`;
+          }
+          if (waveSvgRef.current) {
+            if (p >= 0.98) {
+              waveSvgRef.current.style.display = "none";
+            } else {
+              waveSvgRef.current.style.display = "block";
+              waveSvgRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
+            }
           }
           if (nishanthLeftControlRef.current) {
             const ctrlP = Math.max(0, Math.min(1, (p - 0.62) / 0.35));
@@ -1284,9 +1324,9 @@ export default function LivingContactSheet() {
           ease: "none",
           scrollTrigger: {
             trigger: nishanthStageRef.current,
-            start: "top 85%",
-            end: "center 48%",
-            scrub: 0.8,
+            start: "top 88%",
+            end: "center 50%",
+            scrub: 0.5,
             onUpdate: () => renderNishanth(nishanthProxy.val),
           },
         });

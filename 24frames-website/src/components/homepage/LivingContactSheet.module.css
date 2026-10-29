@@ -993,14 +993,26 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .nishanthWaveRevealSvg {
+@media print, (prefers-reduced-motion: reduce) {
+  .nishanthWaveRevealSvg,
+  .fabricDrapeOverlay,
+  .painterlyBrushOverlay,
+  .vinithaVeilOverlay,
+  .svgClipDefs,
+  .memorySunlightBeam,
+  .memoryBreezeVeil,
+  .memoryPetalsGroup {
     display: none !important;
   }
   .nishanthLeftControl,
-  .nishanthRightNarrative {
+  .nishanthRightNarrative,
+  .storyCoverImg,
+  .curvedPosterImg,
+  .archedPhotoImg,
+  .nishanthPosterImg {
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
   }
 }
 
@@ -1140,11 +1152,10 @@
 .fabricDrapeOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #F7F0E6 0%, #E9DEBF 35%, #D5C49C 70%, #BEAC82 100%);
+  background: transparent;
   z-index: 4;
   pointer-events: none;
   will-change: clip-path, opacity;
-  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.08);
 }
 
 .hrithikaDrapeSvg {
@@ -1374,11 +1385,35 @@
   }
 
   .filmOverlaysInnerContainer {
+    position: relative;
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-end;
-    gap: 1.5rem;
-    padding: 2rem 1.25rem;
+    gap: 1.25rem;
+    padding: 1.75rem 1.25rem clamp(3.25rem, 8.5vh, 4.5rem) 1.25rem;
+    box-sizing: border-box;
+    height: 100%;
+  }
+
+  .filmNarrativeSide {
+    max-width: calc(100% - 90px);
+  }
+
+  .filmPlaySide {
+    position: absolute;
+    right: clamp(1.25rem, 4vw, 2.25rem);
+    bottom: clamp(3.5rem, 8.5vh, 4.75rem);
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 6;
+    margin-bottom: 0;
+  }
+
+  .waveWatermarkGroup {
+    display: none !important;
   }
 
   .nishanthOverlaysInnerContainer {
@@ -1405,7 +1440,7 @@
   }
 
   .curvedPanelStage {
-    height: clamp(320px, 48vh, 360px);
+    height: clamp(400px, 56vh, 470px);
   }
 
   .nishanthCurvedStage {
