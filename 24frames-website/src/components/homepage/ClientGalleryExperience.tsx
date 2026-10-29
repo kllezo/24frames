@@ -109,7 +109,7 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     btnBorder: "rgba(255, 255, 255, 0.3)",
     btnColor: "#FAF8F2",
     origin: "62% bottom",
-    objectPosition: "center 22%",
+    objectPosition: "center 15%",
     objectFit: "cover",
   },
   {
@@ -246,6 +246,7 @@ export default function ClientGalleryExperience({
 
           <p className={styles.editorialSubtitle}>
             Every wedding and editorial commission includes access to our private client gallery suite — designed to preserve, organize, and present your memories with archival fidelity.
+            <span className={styles.cursiveSubtitleNote}>for the years still to come</span>
           </p>
         </div>
 

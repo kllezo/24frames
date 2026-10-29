@@ -516,7 +516,7 @@ export default function FounderRecognitionSection() {
                   </span>
                   <h3 className={styles.recognitionMainTitle}>
                     The Verified Archive{" "}
-                    <span className={styles.cursiveTag}>Heritage &amp; Honours</span>
+                    <span className={styles.cursiveTag}>a little of who you are</span>
                   </h3>
                 </div>
 

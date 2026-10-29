@@ -33,7 +33,7 @@ const LOVE_STORY_FRAGMENTS = [
   },
   {
     chapter: "Chapter IV · Optical Memory",
-    note: "A day passes in an instant. The way it made you feel deserves to endure.",
+    note: "some feelings need more than words",
   },
   {
     chapter: "Chapter V · The Legacy",
@@ -49,7 +49,7 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
     setActiveImageIndex(null);
   }, []);
 
-  /* ── Staggered Directional Mask Reveals on Scroll ── */
+  /* ── Smooth In-Place Fade Entrance on Scroll (No directional wipes) ── */
   useEffect(() => {
     const isReduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isReduced) return;
@@ -57,22 +57,17 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
     const ctx = gsap.context(() => {
       const figures = gsap.utils.toArray<HTMLElement>(`.${styles.frameFigure}`);
       figures.forEach((fig) => {
-        const isRightCol = fig.closest(`.${styles.columnRight}`) !== null;
-        const fromClip = isRightCol
-          ? "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)"
-          : "polygon(0 0, 0 0, 0 100%, 0 100%)";
-
         gsap.fromTo(
           fig,
-          { clipPath: fromClip, opacity: 0.8 },
+          { opacity: 0.85, y: 14 },
           {
-            clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
             opacity: 1,
-            duration: 1.05,
-            ease: "power3.out",
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out",
             scrollTrigger: {
               trigger: fig,
-              start: "top 88%",
+              start: "top 90%",
               once: true,
             },
           }

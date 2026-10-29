@@ -72,7 +72,7 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     image: "/images/disciplines/events/IMG_6485.jpg",
     fallbackImage: "/images/disciplines/events/IMG_6487.jpg",
     href: "/disciplines/events",
-    objectPosition: "75% 35%",
+    objectPosition: "55% 20%",
   },
   {
     id: "fashion",
@@ -108,7 +108,11 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
 
 export const COLLECTION_PROJECTS = COLLECTION_DISCIPLINES;
 
-export default function TheCollection() {
+interface TheCollectionProps {
+  isDedicatedRoute?: boolean;
+}
+
+export default function TheCollection({ isDedicatedRoute = false }: TheCollectionProps = {}) {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const showcaseRef = useRef<HTMLDivElement>(null);
@@ -260,7 +264,7 @@ export default function TheCollection() {
     <section
       ref={sectionRef}
       id="collection"
-      className={styles.section}
+      className={`${styles.section} ${isDedicatedRoute ? styles.sectionDedicated : ""}`}
       aria-label="The Collection — Five Practices of Cinema & Optics"
     >
       <div id="explore" className={styles.anchorOffset} aria-hidden="true" />
@@ -272,10 +276,6 @@ export default function TheCollection() {
             <div className={styles.headerMeta}>
               <span className={styles.chapterLabel}>Chapter 03 — The Collection</span>
               <span className={styles.curatorialBadge}>Five Practices of Optics</span>
-            </div>
-            <div className={styles.finalLookBadge} aria-hidden="true">
-              <span className={styles.finalLookLine} />
-              <span className={styles.finalLookText}>FINAL LOOK</span>
             </div>
           </div>
           <h2 className={styles.title}>

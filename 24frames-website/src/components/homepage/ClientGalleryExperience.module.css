@@ -101,6 +101,17 @@
   margin: 0;
 }
 
+.cursiveSubtitleNote {
+  display: block;
+  font-family: var(--font-allura), 'Allura', cursive;
+  font-size: clamp(1.4rem, 1.8vw, 1.9rem);
+  font-weight: 400;
+  color: #507062;
+  margin-top: 0.45rem;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
 /* ─────────────────────────────────────────────────────────────
    2. FIVE STEPPED ARCHIVAL FOLDER CARDS (EXACT REFERENCE COMP)
    ───────────────────────────────────────────────────────────── */
@@ -139,6 +150,8 @@
   background: #FAF8F2;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   z-index: 1;
+  perspective: 1200px;
+  transform-style: preserve-3d;
   transition: box-shadow 0.45s ease;
 }
 
@@ -164,7 +177,7 @@
   overflow: hidden;
   border-radius: 16px;
   z-index: 1;
-  background: #0E1513;
+  background: transparent;
   pointer-events: none;
 }
 
@@ -173,9 +186,9 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  /* Resting state: photo sits lower so top ~10% peeks out above resting cover */
-  transform: translateY(22px) scale(1.0);
-  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+  /* Resting state: photo sits flush at top so top ~10% peeks out above resting cover with zero void */
+  transform: translateY(0) scale(1.0);
+  transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.45s ease;
   will-change: transform;
 }
 
@@ -183,7 +196,7 @@
 .card:hover .cardPhotoImg,
 .card:focus-visible .cardPhotoImg,
 .card.cardOpen .cardPhotoImg {
-  transform: translateY(-16px) scale(1.03);
+  transform: translateY(-44px) scale(1.03);
   filter: contrast(1.04) brightness(1.02);
 }
 
@@ -221,18 +234,22 @@
   overflow: hidden;
   box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
   border-top: 1px solid rgba(255, 255, 255, 0.22);
-  transition: height 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+  transform-origin: center bottom;
+  transform: rotateX(0deg);
+  transition: height 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.65s cubic-bezier(0.22, 1, 0.36, 1),
               border-color 0.4s ease;
-  will-change: height;
+  will-change: height, transform;
   pointer-events: auto;
 }
 
-/* On hover/open: front cover retracts downward to 56px bottom strip */
+/* On hover/open: front cover retracts downward and folds open in 3D */
 .card:hover .folderCover,
 .card:focus-visible .folderCover,
 .card.cardOpen .folderCover {
   height: 56px;
+  transform: rotateX(-36deg) translateY(4px);
   box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.32);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
 }

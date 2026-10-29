@@ -91,6 +91,82 @@ const COMMISSION_CATEGORIES: CommissionCategory[] = [
   },
 ];
 
+export function getTimelineConfig(categoryId: string) {
+  switch (categoryId) {
+    case "fashion":
+      return {
+        stageEyebrow: "STAGE II · EDITORIAL SCHEDULE & LOCATIONS",
+        headline: "Outline your shoot schedule & locations.",
+        subtitle: "Detail your editorial shoots, lookbook sessions, studio spaces, and call dates.",
+        entryTag: "SHOOT / EDITORIAL",
+        defaultName: "Shoot / Lookbook Session",
+        nameLabel: "Shoot / Editorial Name",
+        namePlaceholder: "e.g. Autumn Couture Lookbook, High-Jewelry Campaign",
+        cityLabel: "City / Destination",
+        cityPlaceholder: "e.g. Mumbai, Paris, Hyderabad, Como",
+        dateLabel: "Shoot Date",
+        venueLabel: "Studio / Location (Optional)",
+        venuePlaceholder: "e.g. Famous Studios, Mehboob Studio, Heritage Villa",
+        addBtnLabel: "Add another shoot or lookbook",
+        helperText: "Studio day · Location shoot · Lookbook · Runway",
+      };
+    case "commercial":
+      return {
+        stageEyebrow: "STAGE II · CAMPAIGN PRODUCTION SCHEDULE",
+        headline: "Define your campaign production schedule.",
+        subtitle: "Map the shooting schedule, key production locations, and studio dates for your campaign.",
+        entryTag: "CAMPAIGN PRODUCTION",
+        defaultName: "Campaign Shoot / Production Day",
+        nameLabel: "Campaign / Brand Project",
+        namePlaceholder: "e.g. Flagship Brand Film, Luxury Hospitality Stills",
+        cityLabel: "City / Destination",
+        cityPlaceholder: "e.g. Bengaluru, Goa, Dubai, Hyderabad",
+        dateLabel: "Shoot Date / Range",
+        venueLabel: "Studio / Shoot Location (Optional)",
+        venuePlaceholder: "e.g. Studio 01, Hotel Property, On-location Estate",
+        addBtnLabel: "Add another campaign shoot date",
+        helperText: "Hero commercial · Social vignettes · Print stills · BTS",
+      };
+    case "other":
+      return {
+        stageEyebrow: "STAGE II · COMMISSION TIMELINE & LOCATIONS",
+        headline: "Plan your commission dates & destinations.",
+        subtitle: "Map the milestones, shoot dates, and key settings for your bespoke project.",
+        entryTag: "BESPOKE COMMISSION",
+        defaultName: "Commission Session / Milestone",
+        nameLabel: "Project / Occasion",
+        namePlaceholder: "e.g. Family Heritage Vault, Retrospective Documentary",
+        cityLabel: "City / Destination",
+        cityPlaceholder: "e.g. London, Hyderabad, New Delhi, Chennai",
+        dateLabel: "Event / Project Date",
+        venueLabel: "Venue / Location (Optional)",
+        venuePlaceholder: "e.g. Ancestral Home, Private Estate, Foundation Gallery",
+        addBtnLabel: "Add another session or milestone",
+        helperText: "Heritage portrait · Documentary session · Archival interview",
+      };
+    case "weddings":
+    case "pre-wedding":
+    case "events":
+    default:
+      return {
+        stageEyebrow: "STAGE II · THE OCCASION TIMELINE",
+        headline: "Compose your ritual timeline.",
+        subtitle: "From intimate ceremonies to multi-day celebrations, map the moments you want us to preserve. Dates and venues can remain undecided while plans take shape.",
+        entryTag: "CELEBRATION EVENT",
+        defaultName: "Ritual / Celebration",
+        nameLabel: "Event / Ritual Name",
+        namePlaceholder: "e.g. Sacred Muhurtham, Sangeet Gala, Pellikuthuru, Reception",
+        cityLabel: "City / Destination",
+        cityPlaceholder: "e.g. Hyderabad, Udaipur, Bengaluru, Falaknuma",
+        dateLabel: "Event Date",
+        venueLabel: "Venue (Optional)",
+        venuePlaceholder: "e.g. Taj Falaknuma Palace, ITC Kohenur, Private Estate",
+        addBtnLabel: "Add another event or ritual",
+        helperText: "Wedding day · Pre-wedding event · Reception · Personal shoot",
+      };
+  }
+}
+
 const VISUAL_DIRECTIONS: VisualDirectionItem[] = [
   {
     id: "cinematic",
@@ -236,12 +312,13 @@ export default function InquirePage() {
 
   /* ── Event Composer Actions ── */
   const handleAddEvent = () => {
+    const cfg = getTimelineConfig(selectedCategory);
     const newId = `event-${Date.now()}`;
     setEvents((prev) => [
       ...prev,
       {
         id: newId,
-        name: "Ritual / Celebration",
+        name: cfg.defaultName,
         date: "",
         city: prev[0]?.city || "",
         venue: "",
@@ -343,6 +420,7 @@ export default function InquirePage() {
   const currentCategory =
     COMMISSION_CATEGORIES.find((c) => c.id === selectedCategory) || COMMISSION_CATEGORIES[0];
   const isWeddingLike = currentCategory.isWeddingLike;
+  const timelineConfig = getTimelineConfig(selectedCategory);
 
   const currentInvestment =
     INVESTMENT_RANGES.find((r) => r.id === selectedInvestment) || INVESTMENT_RANGES[1];
@@ -353,8 +431,10 @@ export default function InquirePage() {
     `----------------------------------------\n` +
     `• *Client Name:* ${fullName || "Patron"}\n` +
     `• *Commission Category:* ${currentCategory.title}\n` +
-    (isWeddingLike && events.length > 0
-      ? `• *Occasion Timeline (${events.length} Events):*\n` +
+    (events.length > 0
+      ? `• *${isWeddingLike ? "Occasion Timeline" : "Shoot Schedule & Locations"} (${events.length} ${
+          isWeddingLike ? "Events" : "Sessions"
+        }):*\n` +
         events
           .map(
             (ev, i) =>
@@ -364,9 +444,8 @@ export default function InquirePage() {
           )
           .join("\n") +
         "\n"
-      : projectScope
-      ? `• *Project Scope:* ${projectScope}\n`
       : "") +
+    (projectScope ? `• *Creative Scope / Notes:* ${projectScope}\n` : "") +
     `• *Visual Direction:* ${selectedDirections
       .map((d) => VISUAL_DIRECTIONS.find((vd) => vd.id === d)?.title || d)
       .join(", ")}\n` +
@@ -514,6 +593,21 @@ export default function InquirePage() {
            ════════════════════════════════════════════════════════════ */}
         {stage === 1 && (
           <section className={styles.stageSection} aria-label="Select Your Commission">
+            <div className={styles.stageTopNav}>
+              <div className={styles.stageTopNavLeft}>
+                <button onClick={handleBack} className={styles.backStepQuietBtn} type="button" aria-label="Go to previous step">
+                  <span className={styles.backArrowIcon}>←</span>
+                  <span>Back</span>
+                </button>
+              </div>
+              <div className={styles.stageTopNavRight}>
+                <button onClick={handleNext} className={styles.primaryAtelierBtn} type="button" aria-label="Continue to Timeline">
+                  <span>Continue to Timeline</span>
+                  <span className={styles.btnArrowIcon}>→</span>
+                </button>
+              </div>
+            </div>
+
             <div className={styles.stageHeader}>
               <div className={styles.stageEyebrowRow}>
                 <span className={styles.stageEyebrow}>STAGE I · THE COMMISSION</span>
@@ -534,7 +628,13 @@ export default function InquirePage() {
                   <button
                     key={cat.id}
                     type="button"
-                    onClick={() => setSelectedCategory(cat.id)}
+                    onClick={() => {
+                      setSelectedCategory(cat.id);
+                      if (events.length === 1 && (events[0].name === "Sacred Muhurtham & Wedding Ceremony" || events[0].name === "Ritual / Celebration")) {
+                        const cfg = getTimelineConfig(cat.id);
+                        setEvents([{ ...events[0], name: cfg.defaultName }]);
+                      }
+                    }}
                     className={`${styles.categoryCard} ${isSelected ? styles.categoryCardSelected : ""}`}
                     aria-pressed={isSelected}
                   >
@@ -557,18 +657,6 @@ export default function InquirePage() {
                 );
               })}
             </div>
-
-            <div className={styles.stageFooterNav}>
-              <button onClick={handleBack} className={styles.backStepQuietBtn} type="button">
-                <span className={styles.backArrowIcon}>←</span>
-                <span>Back</span>
-              </button>
-
-              <button onClick={handleNext} className={styles.primaryAtelierBtn} type="button">
-                <span>Continue to Timeline</span>
-                <span className={styles.btnArrowIcon}>→</span>
-              </button>
-            </div>
           </section>
         )}
 
@@ -577,142 +665,144 @@ export default function InquirePage() {
            ════════════════════════════════════════════════════════════ */}
         {stage === 2 && (
           <section className={styles.stageSection} aria-label="Build the Occasion Timeline">
+            <div className={styles.stageTopNav}>
+              <div className={styles.stageTopNavLeft}>
+                <button onClick={handleBack} className={styles.backStepQuietBtn} type="button" aria-label="Go to previous step">
+                  <span className={styles.backArrowIcon}>←</span>
+                  <span>Back</span>
+                </button>
+              </div>
+              <div className={styles.stageTopNavRight}>
+                <button onClick={handleNext} className={styles.primaryAtelierBtn} type="button" aria-label="Continue to Direction and Craft">
+                  <span>Continue to Direction &amp; Craft</span>
+                  <span className={styles.btnArrowIcon}>→</span>
+                </button>
+              </div>
+            </div>
+
             <div className={styles.stageHeader}>
               <div className={styles.stageEyebrowRow}>
-                <span className={styles.stageEyebrow}>STAGE II · THE OCCASION TIMELINE</span>
+                <span className={styles.stageEyebrow}>{timelineConfig.stageEyebrow}</span>
                 <span className={styles.stageStepMarker}>02 / 04</span>
               </div>
-              <h2 className={styles.stageHeadline}>
-                {isWeddingLike ? "Compose your ritual timeline." : "Define your creative project scope."}
-              </h2>
-              <p className={styles.stageSubtitle}>
-                {isWeddingLike
-                  ? "From intimate ceremonies to multi-day celebrations, map the moments you want us to preserve. Dates and venues can remain undecided while plans take shape."
-                  : "Detail your campaign timeline, estimated shoot dates, and key shooting destinations."}
-              </p>
+              <h2 className={styles.stageHeadline}>{timelineConfig.headline}</h2>
+              <p className={styles.stageSubtitle}>{timelineConfig.subtitle}</p>
               <div className={styles.goldDividerRule} aria-hidden="true" />
             </div>
 
-            {isWeddingLike ? (
-              <div className={styles.timelineComposer}>
-                <div className={styles.timelineList}>
-                  {events.map((ev, index) => (
-                    <div key={ev.id} className={styles.timelineEntryCard}>
-                      <div className={styles.entryHeaderRow}>
-                        <div className={styles.entryNumberBadge}>
-                          <span className={styles.romanDigit}>{String(index + 1).padStart(2, "0")}</span>
-                          <span className={styles.entryTag}>CELEBRATION EVENT</span>
-                        </div>
-
-                        {events.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveEvent(ev.id)}
-                            className={styles.removeEventBtn}
-                            aria-label={`Remove event ${index + 1}`}
-                          >
-                            <span>✕ Remove</span>
-                          </button>
-                        )}
+            <div className={styles.timelineComposer}>
+              <div className={styles.timelineList}>
+                {events.map((ev, index) => (
+                  <div key={ev.id} className={styles.timelineEntryCard}>
+                    <div className={styles.entryHeaderRow}>
+                      <div className={styles.entryNumberBadge}>
+                        <span className={styles.romanDigit}>{String(index + 1).padStart(2, "0")}</span>
+                        <span className={styles.entryTag}>{timelineConfig.entryTag}</span>
                       </div>
 
-                      <div className={styles.entryFieldsGrid}>
-                        {/* Left Column: Event Name & Date Calendar */}
-                        <div className={styles.entrySubCol}>
-                          <div className={styles.fieldGroup}>
-                            <label className={styles.fieldLabel}>Event / Ritual Name</label>
-                            <input
-                              type="text"
-                              value={ev.name}
-                              onChange={(e) => handleUpdateEvent(ev.id, "name", e.target.value)}
-                              placeholder="e.g. Sacred Muhurtham, Sangeet Gala, Pellikuthuru, Reception"
-                              className={styles.atelierInput}
-                            />
-                          </div>
+                      {events.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveEvent(ev.id)}
+                          className={styles.removeEventBtn}
+                          aria-label={`Remove event ${index + 1}`}
+                        >
+                          <span>✕ Remove</span>
+                        </button>
+                      )}
+                    </div>
 
-                          <div className={styles.fieldGroup}>
-                            <label className={styles.fieldLabel}>Event Date</label>
-                            <DatePickerPopover
-                              value={ev.date}
-                              startDate={ev.startDate}
-                              endDate={ev.endDate}
-                              isTBD={ev.isTBD}
-                              onChange={(dateSummary, startDate, endDate, isTBD) =>
-                                handleUpdateEventDate(ev.id, dateSummary, startDate, endDate, isTBD)
-                              }
-                            />
-                          </div>
+                    <div className={styles.entryFieldsGrid}>
+                      {/* Left Column: Event Name & Date Calendar */}
+                      <div className={styles.entrySubCol}>
+                        <div className={styles.fieldGroup}>
+                          <label className={styles.fieldLabel}>{timelineConfig.nameLabel}</label>
+                          <input
+                            type="text"
+                            value={ev.name}
+                            onChange={(e) => handleUpdateEvent(ev.id, "name", e.target.value)}
+                            placeholder={timelineConfig.namePlaceholder}
+                            className={styles.atelierInput}
+                          />
                         </div>
 
-                        {/* Right Column: Destination City & Optional Venue */}
-                        <div className={styles.entrySubCol}>
-                          <div className={styles.fieldGroup}>
-                            <label className={styles.fieldLabel}>City / Destination</label>
-                            <input
-                              type="text"
-                              value={ev.city}
-                              onChange={(e) => handleUpdateEvent(ev.id, "city", e.target.value)}
-                              placeholder="e.g. Hyderabad, Udaipur, Bengaluru, Falaknuma"
-                              className={styles.atelierInput}
-                            />
-                          </div>
+                        <div className={styles.fieldGroup}>
+                          <label className={styles.fieldLabel}>{timelineConfig.dateLabel}</label>
+                          <DatePickerPopover
+                            value={ev.date}
+                            startDate={ev.startDate}
+                            endDate={ev.endDate}
+                            isTBD={ev.isTBD}
+                            onChange={(dateSummary, startDate, endDate, isTBD) =>
+                              handleUpdateEventDate(ev.id, dateSummary, startDate, endDate, isTBD)
+                            }
+                          />
+                        </div>
+                      </div>
 
-                          <div className={styles.fieldGroup}>
-                            <label className={styles.fieldLabel}>Venue (Optional)</label>
-                            <input
-                              type="text"
-                              value={ev.venue}
-                              onChange={(e) => handleUpdateEvent(ev.id, "venue", e.target.value)}
-                              placeholder="e.g. Taj Falaknuma Palace, ITC Kohenur, Private Estate"
-                              className={styles.atelierInput}
-                            />
-                          </div>
+                      {/* Right Column: Destination City & Optional Venue */}
+                      <div className={styles.entrySubCol}>
+                        <div className={styles.fieldGroup}>
+                          <label className={styles.fieldLabel}>{timelineConfig.cityLabel}</label>
+                          <input
+                            type="text"
+                            value={ev.city}
+                            onChange={(e) => handleUpdateEvent(ev.id, "city", e.target.value)}
+                            placeholder={timelineConfig.cityPlaceholder}
+                            className={styles.atelierInput}
+                          />
+                        </div>
+
+                        <div className={styles.fieldGroup}>
+                          <label className={styles.fieldLabel}>{timelineConfig.venueLabel}</label>
+                          <input
+                            type="text"
+                            value={ev.venue}
+                            onChange={(e) => handleUpdateEvent(ev.id, "venue", e.target.value)}
+                            placeholder={timelineConfig.venuePlaceholder}
+                            className={styles.atelierInput}
+                          />
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-
-                <div className={styles.addEventRow}>
-                  <button
-                    type="button"
-                    onClick={handleAddEvent}
-                    className={styles.addEventBtn}
-                    aria-label="Add another event or celebration"
-                  >
-                    <span className={styles.plusIcon}>+</span>
-                    <span className={styles.addEventLabel}>Add another event or ritual</span>
-                  </button>
-                  <p className={styles.addEventHelperText}>
-                    Wedding day · Pre-wedding event · Reception · Personal shoot
-                  </p>
-                </div>
+                  </div>
+                ))}
               </div>
-            ) : (
-              <div className={styles.scopeComposer}>
+
+              <div className={styles.addEventRow}>
+                <button
+                  type="button"
+                  onClick={handleAddEvent}
+                  className={styles.addEventBtn}
+                  aria-label={timelineConfig.addBtnLabel}
+                >
+                  <span className={styles.plusIcon}>+</span>
+                  <span className={styles.addEventLabel}>{timelineConfig.addBtnLabel}</span>
+                </button>
+                <p className={styles.addEventHelperText}>{timelineConfig.helperText}</p>
+              </div>
+
+              {/* Optional Creative Scope Notes for all commission types */}
+              <div className={styles.scopeComposer} style={{ marginTop: "2.5rem" }}>
                 <div className={styles.fieldGroup}>
-                  <label className={styles.fieldLabel}>Project Scope &amp; Anticipated Shoot Dates</label>
+                  <label className={styles.fieldLabel}>
+                    {isWeddingLike
+                      ? "Additional Ritual Notes or Vision (Optional)"
+                      : "Creative Scope & Specific Requirements (Optional)"}
+                  </label>
                   <textarea
-                    rows={6}
+                    rows={4}
                     value={projectScope}
                     onChange={(e) => setProjectScope(e.target.value)}
-                    placeholder="Describe your campaign concept, preferred shooting dates, desired locations, and core deliverable requirements..."
+                    placeholder={
+                      isWeddingLike
+                        ? "Describe any special ceremonies, family traditions, or specific filming aspirations..."
+                        : "Describe your concept, desired aesthetic, shot list requirements, or deliverable needs..."
+                    }
                     className={styles.atelierTextarea}
                   />
                 </div>
               </div>
-            )}
-
-            <div className={styles.stageFooterNav}>
-              <button onClick={handleBack} className={styles.backStepQuietBtn} type="button">
-                <span className={styles.backArrowIcon}>←</span>
-                <span>Back</span>
-              </button>
-
-              <button onClick={handleNext} className={styles.primaryAtelierBtn} type="button">
-                <span>Continue to Direction &amp; Craft</span>
-                <span className={styles.btnArrowIcon}>→</span>
-              </button>
             </div>
           </section>
         )}
@@ -722,6 +812,21 @@ export default function InquirePage() {
            ════════════════════════════════════════════════════════════ */}
         {stage === 3 && (
           <section className={styles.stageSection} aria-label="Visual Direction & Craft Services">
+            <div className={styles.stageTopNav}>
+              <div className={styles.stageTopNavLeft}>
+                <button onClick={handleBack} className={styles.backStepQuietBtn} type="button" aria-label="Go to previous step">
+                  <span className={styles.backArrowIcon}>←</span>
+                  <span>Back</span>
+                </button>
+              </div>
+              <div className={styles.stageTopNavRight}>
+                <button onClick={handleNext} className={styles.primaryAtelierBtn} type="button" aria-label="Continue to Living Brief">
+                  <span>Continue to Living Brief</span>
+                  <span className={styles.btnArrowIcon}>→</span>
+                </button>
+              </div>
+            </div>
+
             <div className={styles.stageHeader}>
               <span className={styles.stageEyebrow}>STAGE III · VISUAL DIRECTION &amp; CRAFT</span>
               <h2 className={styles.stageHeadline}>Compose your aesthetic &amp; craft suite.</h2>
@@ -840,18 +945,6 @@ export default function InquirePage() {
                 })}
               </div>
             </div>
-
-            <div className={styles.stageFooterNav}>
-              <button onClick={handleBack} className={styles.backStepQuietBtn} type="button">
-                <span className={styles.backArrowIcon}>←</span>
-                <span>Back</span>
-              </button>
-
-              <button onClick={handleNext} className={styles.primaryAtelierBtn} type="button">
-                <span>Continue to Living Brief</span>
-                <span className={styles.btnArrowIcon}>→</span>
-              </button>
-            </div>
           </section>
         )}
 
@@ -860,6 +953,33 @@ export default function InquirePage() {
            ════════════════════════════════════════════════════════════ */}
         {stage === 4 && (
           <section className={styles.stageSection} aria-label="The Living Brief">
+            <div className={styles.stageTopNav}>
+              <div className={styles.stageTopNavLeft}>
+                <button onClick={handleBack} className={styles.backStepQuietBtn} type="button" aria-label="Go to previous step">
+                  <span className={styles.backArrowIcon}>←</span>
+                  <span>Back</span>
+                </button>
+              </div>
+              <div className={styles.stageTopNavRight}>
+                <button
+                  type="submit"
+                  form="commissionContactForm"
+                  disabled={isSubmitting}
+                  className={styles.presentCommissionBtn}
+                  aria-label="Present my commission to 24 Frames"
+                >
+                  {isSubmitting ? (
+                    <span>TRANSMITTING BRIEF...</span>
+                  ) : (
+                    <>
+                      <span>PRESENT MY COMMISSION</span>
+                      <span className={styles.btnArrowIcon}>→</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
             <div className={styles.stageHeader}>
               <span className={styles.stageEyebrow}>STAGE IV · THE LIVING BRIEF</span>
               <h2 className={styles.stageHeadline}>Your Master Commission Brief.</h2>
@@ -895,18 +1015,18 @@ export default function InquirePage() {
                     <div className={styles.docValueMuted}>{currentCategory.subtitle}</div>
                   </div>
 
-                  {/* Timeline Section */}
+                  {/* Timeline / Production Schedule Section */}
                   <div className={styles.docSection}>
                     <div className={styles.docSectionTitleRow}>
                       <span className={styles.docSectionKicker}>
-                        II. {isWeddingLike ? `RITUAL TIMELINE (${events.length} EVENTS)` : "PROJECT SCOPE"}
+                        II. {isWeddingLike ? `RITUAL TIMELINE (${events.length} EVENTS)` : `PRODUCTION TIMELINE (${events.length} SESSIONS)`}
                       </span>
                       <button onClick={() => handleJumpToStage(2)} className={styles.editSectionBtn}>
                         Edit ↗
                       </button>
                     </div>
 
-                    {isWeddingLike ? (
+                    {events.length > 0 && (
                       <div className={styles.docTimelineList}>
                         {events.map((ev, i) => (
                           <div key={ev.id} className={styles.docTimelineItem}>
@@ -923,9 +1043,10 @@ export default function InquirePage() {
                           </div>
                         ))}
                       </div>
-                    ) : (
-                      <p className={styles.docScopeText}>
-                        {projectScope || "Scope description provided upon consultation."}
+                    )}
+                    {projectScope && (
+                      <p className={styles.docScopeText} style={{ marginTop: events.length > 0 ? "0.75rem" : 0 }}>
+                        {projectScope}
                       </p>
                     )}
                   </div>
@@ -992,7 +1113,7 @@ export default function InquirePage() {
                   </p>
                 </div>
 
-                <form onSubmit={validateAndPresentCommission} className={styles.contactForm}>
+                <form id="commissionContactForm" onSubmit={validateAndPresentCommission} className={styles.contactForm}>
                   <div className={styles.formGroup}>
                     <label htmlFor="fullName" className={styles.inputLabel}>
                       Full Name <span className={styles.reqStar}>*</span>
@@ -1084,13 +1205,6 @@ export default function InquirePage() {
                   <span>Strictly confidential · Your details are shared only with the founding team</span>
                 </div>
               </div>
-            </div>
-
-            <div className={styles.stageFooterNav}>
-              <button onClick={handleBack} className={styles.backStepQuietBtn} type="button">
-                <span className={styles.backArrowIcon}>←</span>
-                <span>Back</span>
-              </button>
             </div>
           </section>
         )}

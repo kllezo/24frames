@@ -1731,9 +1731,9 @@ export default function LivingContactSheet() {
 
               {/* Delicate handwritten accent floating beside */}
               <div className={styles.floatingCursiveAccent} aria-hidden="true">
-                Real people.
+                and somehow,
                 <br />
-                Timeless stories.
+                time stood still
               </div>
             </div>
           </div>

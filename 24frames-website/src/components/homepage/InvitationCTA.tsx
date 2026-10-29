@@ -89,6 +89,8 @@ export default function InvitationCTA() {
               Tell us what you want to remember.
             </h2>
 
+            <p className={styles.cursiveNote}>you’ll remember this feeling</p>
+
             <p className={styles.supportingCopy}>
               Every master commission begins with a quiet dialogue about the rituals, loved ones, and fleeting moments you wish to preserve for generations.
             </p>
