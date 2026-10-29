@@ -14,6 +14,10 @@ interface DisciplineInteractiveMediaProps {
   videos?: DisciplineVideo[];
   gallery: DisciplineGalleryImage[];
   shortTitle: string;
+  midGalleryQuote?: {
+    text: string;
+    align?: "left" | "right" | "center";
+  };
 }
 
 const DISCIPLINE_EDITORIAL_THOUGHTS: Record<string, string[]> = {
@@ -39,6 +43,7 @@ export default function DisciplineInteractiveMedia({
   videos,
   gallery,
   shortTitle,
+  midGalleryQuote,
 }: DisciplineInteractiveMediaProps) {
   // Modal states
   const [activeVideo, setActiveVideo] = useState<DisciplineVideo | null>(null);
@@ -223,13 +228,16 @@ export default function DisciplineInteractiveMedia({
   };
 
   const disciplineKey = shortTitle.toLowerCase();
-  const editorialThoughts = DISCIPLINE_EDITORIAL_THOUGHTS[disciplineKey] || [
-    "A day passes in an instant. The way it made you feel deserves to endure.",
-  ];
+  const customMidQuote = midGalleryQuote?.text;
+  const editorialThoughts = customMidQuote
+    ? [customMidQuote]
+    : (DISCIPLINE_EDITORIAL_THOUGHTS[disciplineKey] || [
+        "Moments made to outlive us, preserved frame by living frame.",
+      ]);
 
   const renderEditorialThought = (
     text: string,
-    align: "left" | "right" | "center" = "left"
+    align: "left" | "right" | "center" = midGalleryQuote?.align || "left"
   ) => (
     <div
       key={`thought-${text.slice(0, 15)}`}

@@ -456,17 +456,11 @@ const sampleGreenBottom = (p: number): GreenBottomCoords => {
 /* 1. Sreenivas Bellamkonda Architectural Arch Reveal (viewBox 0 0 100 140) */
 const buildBellamArchPaths = (p: number) => {
   const yApex = -22 + 172 * Math.pow(p, 1.1);
-  const archHeight = 22 * (1 - p * 0.4);
-  const yLeft = yApex + archHeight;
-  const yRight = yLeft;
+  const cH = 47.9 * (1 - p * 0.2);
+  const yW = yApex + cH;
 
-  const c1x = 28;
-  const c1y = yApex;
-  const c2x = 72;
-  const c2y = yApex;
-
-  const contourD = `M 0 ${yLeft.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, 100 ${yRight.toFixed(1)}`;
-  const veilD = `M 0 ${yLeft.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, 100 ${yRight.toFixed(1)} L 100 144 L 0 144 Z`;
+  const contourD = `M 0 ${yW.toFixed(1)} C 0 ${(yApex + 0.690 * cH).toFixed(1)}, 17.4 ${(yApex + 0.725 * cH).toFixed(1)}, 15.5 ${(yApex + 0.591 * cH).toFixed(1)} C 13.5 ${(yApex + 0.442 * cH).toFixed(1)}, 23.8 ${(yApex + 0.257 * cH).toFixed(1)}, 31.9 ${(yApex + 0.223 * cH).toFixed(1)} C 41.1 ${(yApex + 0.184 * cH).toFixed(1)}, 45.4 ${(yApex + 0.085 * cH).toFixed(1)}, 50 ${yApex.toFixed(1)} C 54.6 ${(yApex + 0.085 * cH).toFixed(1)}, 58.9 ${(yApex + 0.184 * cH).toFixed(1)}, 68.1 ${(yApex + 0.223 * cH).toFixed(1)} C 76.2 ${(yApex + 0.257 * cH).toFixed(1)}, 86.5 ${(yApex + 0.442 * cH).toFixed(1)}, 84.5 ${(yApex + 0.591 * cH).toFixed(1)} C 82.6 ${(yApex + 0.725 * cH).toFixed(1)}, 100 ${(yApex + 0.690 * cH).toFixed(1)}, 100 ${yW.toFixed(1)}`;
+  const veilD = `${contourD} L 100 144 L 0 144 Z`;
   return { contourD, veilD };
 };
 
@@ -1358,10 +1352,10 @@ export default function LivingContactSheet() {
         focusable="false"
       >
         <defs>
-          {/* Refined Bellamkonda & Kavya Silhouette Arch: Smooth organic crown following natural head & shoulder contour */}
+          {/* Traditional Indian Palace Arch Silhouette: Pointed apex, gently curved shoulders, short rounded transitions into near-vertical sides, flat base */}
           <clipPath id="palaceArchClip" clipPathUnits="objectBoundingBox">
             <path
-              d="M 0 1 L 0 0.52 C 0 0.36, 0.06 0.22, 0.16 0.14 C 0.26 0.06, 0.38 0.015, 0.50 0.01 C 0.62 0.015, 0.74 0.06, 0.84 0.14 C 0.94 0.22, 1 0.36, 1 0.52 L 1 1 Z"
+              d="M 0 1 L 0 0.3421 C 0 0.2361, 0.1737 0.2480, 0.1552 0.2021 C 0.1347 0.1512, 0.2379 0.0879, 0.3193 0.0762 C 0.4108 0.0631, 0.4538 0.0291, 0.5 0 C 0.5462 0.0291, 0.5892 0.0631, 0.6807 0.0762 C 0.7621 0.0879, 0.8653 0.1512, 0.8448 0.2021 C 0.8263 0.2480, 1 0.2361, 1 0.3421 L 1 1 Z"
             />
           </clipPath>
           <clipPath id="vinithaMorphClip" clipPathUnits="objectBoundingBox">

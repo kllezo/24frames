@@ -31,6 +31,12 @@ export interface DisciplineMetadata {
   primaryLocations: string[];
 }
 
+export interface DisciplineQuote {
+  text: string;
+  placement: "curatorial" | "mid-gallery" | "pre-related";
+  align?: "left" | "right" | "center";
+}
+
 export interface DisciplineItem {
   id: string;
   slug: string;
@@ -50,6 +56,7 @@ export interface DisciplineItem {
   gallery: DisciplineGalleryImage[];
   videos?: DisciplineVideo[];
   relatedSlugs: string[];
+  quotes?: DisciplineQuote[];
 }
 
 export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
@@ -149,6 +156,23 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         caption: "Monumental arches and regal bridal composure documented under soft dusk illumination.",
         aspect: "portrait"
       }
+    ],
+    quotes: [
+      {
+        text: "The sacred fire dies down, but the way your grandmother held your hands remains.",
+        placement: "curatorial",
+        align: "right",
+      },
+      {
+        text: "Generations from now, they will look back at this day to see how you looked at each other.",
+        placement: "mid-gallery",
+        align: "left",
+      },
+      {
+        text: "Some moments only happen once. We make sure they outlive us all.",
+        placement: "pre-related",
+        align: "center",
+      },
     ],
     relatedSlugs: ["celebrities", "events", "cinema"]
   },
@@ -253,6 +277,23 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         aspect: "portrait"
       }
     ],
+    quotes: [
+      {
+        text: "Beyond the roar of the applause, the quiet dignity of character speaks loudest.",
+        placement: "curatorial",
+        align: "left",
+      },
+      {
+        text: "Not a pose for an audience, but a testament to who you are when the lights go down.",
+        placement: "mid-gallery",
+        align: "right",
+      },
+      {
+        text: "Monuments fade; iconic character studies endure.",
+        placement: "pre-related",
+        align: "center",
+      },
+    ],
     relatedSlugs: ["weddings", "fashion", "cinema"]
   },
 
@@ -356,6 +397,23 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         aspect: "portrait"
       }
     ],
+    quotes: [
+      {
+        text: "A thousand lights ablaze—an electric night destined to dissolve into morning.",
+        placement: "curatorial",
+        align: "right",
+      },
+      {
+        text: "The pulse of the crowd, the joy in the air—felt just as deeply twenty years later.",
+        placement: "mid-gallery",
+        align: "center",
+      },
+      {
+        text: "Grandeur is fleeting; preserving the atmosphere is an art.",
+        placement: "pre-related",
+        align: "right",
+      },
+    ],
     relatedSlugs: ["weddings", "celebrities", "cinema"]
   },
 
@@ -458,6 +516,23 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         caption: "Optical macro clarity capturing uncut emeralds, heritage choker geometry, and fine artisanal setting.",
         aspect: "portrait"
       }
+    ],
+    quotes: [
+      {
+        text: "The quiet poetry of gold thread catching the soft afternoon light.",
+        placement: "curatorial",
+        align: "left",
+      },
+      {
+        text: "Where architectural discipline meets the unscripted grace of silk in motion.",
+        placement: "mid-gallery",
+        align: "right",
+      },
+      {
+        text: "Couture crafted to be remembered long after the season ends.",
+        placement: "pre-related",
+        align: "center",
+      },
     ],
     relatedSlugs: ["celebrities", "weddings", "cinema"]
   },
@@ -583,6 +658,23 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         caption: "Widescreen anamorphic cinema frame demonstrating volumetric key lighting and dimensional contrast.",
         aspect: "landscape"
       }
+    ],
+    quotes: [
+      {
+        text: "Twenty-four living frames per second, holding what memory alone forgets.",
+        placement: "curatorial",
+        align: "right",
+      },
+      {
+        text: "The cinematic truth of two lives choosing each other, scored for eternity.",
+        placement: "mid-gallery",
+        align: "left",
+      },
+      {
+        text: "Not a recap of an event, but a motion picture of your legacy.",
+        placement: "pre-related",
+        align: "center",
+      },
     ],
     relatedSlugs: ["weddings", "celebrities", "events"]
   }

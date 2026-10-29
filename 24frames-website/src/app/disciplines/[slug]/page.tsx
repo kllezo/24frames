@@ -50,6 +50,10 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
     .map((relSlug) => DISCIPLINES_DATA[relSlug])
     .filter(Boolean);
 
+  const curatorialQuote = discipline.quotes?.find((q) => q.placement === "curatorial");
+  const midGalleryQuote = discipline.quotes?.find((q) => q.placement === "mid-gallery");
+  const preRelatedQuote = discipline.quotes?.find((q) => q.placement === "pre-related");
+
   return (
     <>
       <Navigation />
@@ -84,11 +88,9 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
             <p className={styles.heroTagline}>{discipline.tagline}</p>
             <p className={styles.heroLead}>{discipline.fullDescription}</p>
 
-            {/* Monumental Hero Photograph Canvas */}
+            {/* Monumental Hero Photograph Canvas (Bespoke per-discipline editorial aspect & framing) */}
             <div
-              className={`${styles.heroCanvas} ${
-                slug === "celebrities" ? styles.celebritiesHeroCanvas : ""
-              }`}
+              className={`${styles.heroCanvas} ${styles[`${slug}HeroCanvas`] || ""}`}
             >
               {slug === "celebrities" && (
                 <div className={styles.mandalaArtWrap} aria-hidden="true">
@@ -155,9 +157,8 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
                 <img
                   src={discipline.heroImage}
                   alt={discipline.title}
-                  className={`${styles.heroImg} ${
-                    slug === "celebrities" ? styles.celebritiesHeroImg : ""
-                  } ${slug === "events" ? styles.eventsHeroImg : ""}`}
+                  className={`${styles.heroImg} ${styles[`${slug}HeroImg`] || ""}`}
+                  loading="eager"
                 />
               </picture>
               <div className={styles.heroVignette} aria-hidden="true" />
@@ -202,11 +203,17 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
           aria-label="Curatorial Philosophy"
         >
           <div className={styles.container}>
-            <div className={styles.curatorialNarrativeNote}>
-              <p className={styles.curatorialNotePoem}>
-                “A day passes in an instant. The way it made you feel deserves to endure.”
-              </p>
-            </div>
+            {curatorialQuote && (
+              <div
+                className={`${styles.curatorialNarrativeNote} ${
+                  styles[`align_${curatorialQuote.align || "left"}`]
+                }`}
+              >
+                <p className={styles.curatorialNotePoem}>
+                  “{curatorialQuote.text}”
+                </p>
+              </div>
+            )}
 
             <div className={styles.curatorialBox}>
               <div className={styles.curatorialHeader}>
@@ -229,7 +236,24 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
           videos={discipline.videos}
           gallery={discipline.gallery}
           shortTitle={discipline.shortTitle}
+          midGalleryQuote={midGalleryQuote}
         />
+
+        {/* ── Closing Context-Aware Emotional Cursive Quote ── */}
+        {preRelatedQuote && (
+          <div
+            className={`${styles.closingCursiveQuoteWrap} ${
+              styles[`align_${preRelatedQuote.align || "center"}`]
+            }`}
+            aria-hidden="true"
+          >
+            <div className={styles.container}>
+              <p className={styles.closingCursiveQuote}>
+                “{preRelatedQuote.text}”
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* ── Related Editorial Disciplines ───────────────────────── */}
         <section

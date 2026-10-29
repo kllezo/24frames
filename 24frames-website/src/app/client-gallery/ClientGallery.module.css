@@ -323,12 +323,12 @@
 }
 
 .sectionPoemText {
-  font-family: var(--font-cursive, 'Allura', cursive), var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(1.4rem, 2vw, 1.95rem);
-  line-height: 1.35;
+  font-family: var(--font-cursive, 'Allura', cursive);
+  font-size: clamp(1.8rem, 2.7vw, 2.5rem);
+  line-height: 1.3;
   color: #09453E;
   margin: 0;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
 }
 
 .chapterBadgeLine {

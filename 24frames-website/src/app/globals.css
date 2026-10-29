@@ -74,6 +74,9 @@
   --font-cinema: 'Cormorant Garamond', Georgia, serif;
   --font-emphasis: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-cursive: 'Allura', cursive;
+  --font-allura: 'Allura', cursive;
+  --font-script: 'Allura', cursive;
+  --font-cormorant: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Space Mono', 'JetBrains Mono', 'Courier New', monospace;
 

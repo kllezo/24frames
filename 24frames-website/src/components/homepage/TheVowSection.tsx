@@ -20,6 +20,7 @@ export interface CollectionPhoto {
   verticalOffset: number; // organic vertical offset in px
   aspectRatio: string;
   width: string;
+  objectPosition?: string;
 }
 
 export const COLLECTION_ROW_1: CollectionPhoto[] = [
@@ -35,6 +36,7 @@ export const COLLECTION_ROW_1: CollectionPhoto[] = [
     verticalOffset: -16,
     aspectRatio: "16 / 10",
     width: "380px",
+    objectPosition: "center 30%",
   },
   {
     id: 2,
@@ -48,6 +50,7 @@ export const COLLECTION_ROW_1: CollectionPhoto[] = [
     verticalOffset: 20,
     aspectRatio: "4 / 5",
     width: "300px",
+    objectPosition: "center 22%",
   },
   {
     id: 3,
@@ -62,6 +65,7 @@ export const COLLECTION_ROW_1: CollectionPhoto[] = [
     verticalOffset: -10,
     aspectRatio: "16 / 10",
     width: "380px",
+    objectPosition: "center 40%",
   },
   {
     id: 4,
@@ -75,6 +79,7 @@ export const COLLECTION_ROW_1: CollectionPhoto[] = [
     verticalOffset: 24,
     aspectRatio: "3 / 2",
     width: "330px",
+    objectPosition: "center 35%",
   },
   {
     id: 5,
@@ -88,6 +93,7 @@ export const COLLECTION_ROW_1: CollectionPhoto[] = [
     verticalOffset: -18,
     aspectRatio: "4 / 5",
     width: "290px",
+    objectPosition: "center 28%",
   },
   {
     id: 6,
@@ -101,6 +107,7 @@ export const COLLECTION_ROW_1: CollectionPhoto[] = [
     verticalOffset: 14,
     aspectRatio: "4 / 3",
     width: "340px",
+    objectPosition: "center 32%",
   },
 ];
 
@@ -117,6 +124,7 @@ export const COLLECTION_ROW_2: CollectionPhoto[] = [
     verticalOffset: 18,
     aspectRatio: "4 / 5",
     width: "300px",
+    objectPosition: "center 24%",
   },
   {
     id: 8,
@@ -130,6 +138,7 @@ export const COLLECTION_ROW_2: CollectionPhoto[] = [
     verticalOffset: -14,
     aspectRatio: "16 / 10",
     width: "370px",
+    objectPosition: "center 28%",
   },
   {
     id: 9,
@@ -143,6 +152,7 @@ export const COLLECTION_ROW_2: CollectionPhoto[] = [
     verticalOffset: 22,
     aspectRatio: "3 / 2",
     width: "320px",
+    objectPosition: "center 40%",
   },
   {
     id: 10,
@@ -156,6 +166,7 @@ export const COLLECTION_ROW_2: CollectionPhoto[] = [
     verticalOffset: -20,
     aspectRatio: "16 / 10",
     width: "380px",
+    objectPosition: "center 35%",
   },
   {
     id: 11,
@@ -170,6 +181,7 @@ export const COLLECTION_ROW_2: CollectionPhoto[] = [
     verticalOffset: 16,
     aspectRatio: "4 / 5",
     width: "280px",
+    objectPosition: "center 20%",
   },
   {
     id: 12,
@@ -183,6 +195,7 @@ export const COLLECTION_ROW_2: CollectionPhoto[] = [
     verticalOffset: -12,
     aspectRatio: "4 / 3",
     width: "350px",
+    objectPosition: "center 30%",
   },
 ];
 
@@ -346,6 +359,7 @@ export default function TheVowSection() {
                       src={item.image}
                       alt={item.title}
                       className={styles.cardImage}
+                      style={{ objectPosition: item.objectPosition || "center 30%" }}
                       loading="lazy"
                     />
                     <div className={styles.cardVignette} />
@@ -404,6 +418,7 @@ export default function TheVowSection() {
                     src={item.image}
                     alt=""
                     className={styles.cardImage}
+                    style={{ objectPosition: item.objectPosition || "center 30%" }}
                     loading="lazy"
                   />
                   <div className={styles.cardVignette} />
@@ -466,6 +481,7 @@ export default function TheVowSection() {
                       src={item.image}
                       alt={item.title}
                       className={styles.cardImage}
+                      style={{ objectPosition: item.objectPosition || "center 30%" }}
                       loading="lazy"
                     />
                     <div className={styles.cardVignette} />
@@ -524,6 +540,7 @@ export default function TheVowSection() {
                     src={item.image}
                     alt=""
                     className={styles.cardImage}
+                    style={{ objectPosition: item.objectPosition || "center 30%" }}
                     loading="lazy"
                   />
                   <div className={styles.cardVignette} />
