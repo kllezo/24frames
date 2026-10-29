@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ClothParallaxCanvas, { ClothParallaxHandle } from "./ClothParallaxCanvas";
 import styles from "./CameraGlareTransition.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -58,17 +59,12 @@ export default function CameraGlareTransition({
   const champagneWashRef = useRef<HTMLDivElement>(null);
   const logoRevealWrapRef = useRef<HTMLDivElement>(null);
   const logoGlintRef = useRef<HTMLDivElement>(null);
-
-  // Stages E – G: Photorealistic Master Plates (05 – 10)
   const plate05Ref = useRef<HTMLImageElement>(null);
-  const plate06Ref = useRef<HTMLImageElement>(null);
-  const plate07Ref = useRef<HTMLImageElement>(null);
-  const plate08Ref = useRef<HTMLImageElement>(null);
-  const plate09Ref = useRef<HTMLImageElement>(null);
-  const plate10Ref = useRef<HTMLImageElement>(null);
 
-  // Sacred Govinda Namalu devotional symbol & Chapter metadata
-  const govindaNamaluWrapRef = useRef<HTMLDivElement>(null);
+  // Stages E – G: 3D Procedural WebGL Cloth & Mandapam Portal
+  const clothHandleRef = useRef<ClothParallaxHandle>(null);
+
+  // Chapter metadata & Golden portal exit bloom
   const portalChapterMetaRef = useRef<HTMLDivElement>(null);
   const portalExitBloomRef = useRef<HTMLDivElement>(null);
 
@@ -99,25 +95,25 @@ export default function CameraGlareTransition({
           champagneWashRef.current,
           logoRevealWrapRef.current,
           plate05Ref.current,
-          plate06Ref.current,
-          plate07Ref.current,
-          plate08Ref.current,
-          plate09Ref.current,
-          plate10Ref.current,
-          govindaNamaluWrapRef.current,
           portalChapterMetaRef.current,
           portalExitBloomRef.current,
         ],
         { opacity: 0 }
       );
 
+      // Set local blade angle directly on SVG attributes without root-canvas distortion
+      const setShutterBladeAngle = (deg: number) => {
+        const transformStr = `rotate(${deg} ${PIVOT_X} ${PIVOT_Y})`;
+        for (let i = 0; i < bladeActuatorsRef.current.length; i++) {
+          const el = bladeActuatorsRef.current[i];
+          if (el) {
+            el.setAttribute("transform", transformStr);
+          }
+        }
+      };
+
       // Shutter initial state: blades fully open at -38deg
-      if (bladeActuatorsRef.current.length > 0) {
-        gsap.set(bladeActuatorsRef.current, {
-          svgOrigin: `${PIVOT_X} ${PIVOT_Y}`,
-          rotation: -38,
-        });
-      }
+      setShutterBladeAngle(-38);
 
       // Create the single coordinated master timeline scrubbed by ScrollTrigger
       const masterTl = gsap.timeline({
@@ -140,15 +136,19 @@ export default function CameraGlareTransition({
         masterTl.to(shutterLayerRef.current, { opacity: 1, duration: 0.01 }, 0.04);
         masterTl.to(guideRingsRef.current, { opacity: 0.45, duration: 0.03, ease: "power1.out" }, 0.05);
 
-        // Blades close completely to 34deg (meeting at center)
-        if (bladeActuatorsRef.current.length > 0) {
-          masterTl.fromTo(
-            bladeActuatorsRef.current,
-            { rotation: -38 },
-            { rotation: 34, duration: 0.05, ease: "power2.in" },
-            0.05
-          );
-        }
+        // Blades close completely to 36deg (meeting at center)
+        const shutterCloseState = { angle: -38 };
+        masterTl.fromTo(
+          shutterCloseState,
+          { angle: -38 },
+          {
+            angle: 36,
+            duration: 0.05,
+            ease: "power2.in",
+            onUpdate: () => setShutterBladeAngle(shutterCloseState.angle),
+          },
+          0.05
+        );
 
         // Shutter backdrop seals 100% at full close
         if (shutterBackdropRef.current) {
@@ -163,15 +163,19 @@ export default function CameraGlareTransition({
         // Brief cinematic hold at 100% seal (0.10)
         masterTl.to({}, { duration: 0.01 }, 0.10);
 
-        // Blades reopen completely from 34deg to -38deg
-        if (bladeActuatorsRef.current.length > 0) {
-          masterTl.fromTo(
-            bladeActuatorsRef.current,
-            { rotation: 34 },
-            { rotation: -38, duration: 0.05, ease: "power2.out" },
-            0.11
-          );
-        }
+        // Blades reopen completely from 36deg to -38deg
+        const shutterOpenState = { angle: 36 };
+        masterTl.fromTo(
+          shutterOpenState,
+          { angle: 36 },
+          {
+            angle: -38,
+            duration: 0.05,
+            ease: "power2.out",
+            onUpdate: () => setShutterBladeAngle(shutterOpenState.angle),
+          },
+          0.11
+        );
 
         if (shutterBackdropRef.current) {
           masterTl.to(shutterBackdropRef.current, { opacity: 0, duration: 0.03, ease: "power1.out" }, 0.11);
@@ -318,125 +322,55 @@ export default function CameraGlareTransition({
       }
 
       /* ═══════════════════════════════════════════════════════════════════
-         STAGE E (0.62 – 0.86): HIGH-QUALITY SILK TRANSITION (PANELS 06 & 07)
-         Master Plate 06 (Fabric Emerges) billows from top-left.
-         Master Plate 07 (Fabric Flows Forward) flows forward in 3D perspective.
-         Liquid champagne gold ribbon & emerald satin ripples move with depth.
+         STAGE E, F, G (0.58 – 1.00): 3D PROCEDURAL WEBGL CLOTH & MANDAPAM
+         Real-time deforming emerald satin & champagne gold silk surface.
+         Folds, billowing, catenary mandapam drape, stone columns,
+         mogra garlands, sacred Govinda Namalu, and perspective colonnade portal.
          ═══════════════════════════════════════════════════════════════════ */
-      // 1. Plate 06: Fabric Emerges (Causally connected to light from top-left)
-      if (plate06Ref.current) {
-        masterTl.fromTo(
-          plate06Ref.current,
-          { opacity: 0, scale: 1.08, xPercent: -3, yPercent: -2 },
-          { opacity: 1, scale: 1.0, xPercent: 0, yPercent: 0, duration: 0.07, ease: "power2.out" },
-          0.62
-        );
+      const clothState = { progress: 0 };
 
-        // Cosmic backdrop plate 05 dissolves out
-        if (plate05Ref.current) {
-          masterTl.to(plate05Ref.current, { opacity: 0, duration: 0.05 }, 0.63);
-        }
+      // Fade in WebGL canvas as the logo pauses and begins its gentle exit
+      masterTl.call(() => {
+        clothHandleRef.current?.setActive(true);
+      }, undefined, 0.58);
+
+      // Cosmic backdrop plate 05 dissolves out seamlessly as 3D silk emerges
+      if (plate05Ref.current) {
+        masterTl.to(plate05Ref.current, { opacity: 0, duration: 0.08 }, 0.62);
       }
 
-      // 2. Plate 07: Fabric Flows Forward (billowing ripples & gold satin)
-      if (plate07Ref.current) {
-        masterTl.fromTo(
-          plate07Ref.current,
-          { opacity: 0, scale: 0.95, xPercent: 2, yPercent: 2 },
-          { opacity: 1, scale: 1.04, xPercent: -1, yPercent: -1, duration: 0.10, ease: "sine.inOut" },
-          0.74
-        );
+      // Smoothly drive the 3D WebGL cloth simulation from 0.0 to 1.0
+      masterTl.fromTo(
+        clothState,
+        { progress: 0 },
+        {
+          progress: 1.0,
+          duration: 0.40,
+          ease: "none",
+          onUpdate: () => {
+            clothHandleRef.current?.setProgress(clothState.progress);
+          },
+        },
+        0.58
+      );
 
-        // Plate 06 dissolves seamlessly as Plate 07 takes over
-        if (plate06Ref.current) {
-          masterTl.to(plate06Ref.current, { opacity: 0, duration: 0.08, ease: "sine.inOut" }, 0.76);
-        }
-      }
-
-      /* ═══════════════════════════════════════════════════════════════════
-         STAGE F (0.84 – 0.96): SOUTH INDIAN MANDAPAM (PANELS 08 & 09)
-         Plate 08: Fabric drapes into South Indian mandapam arch with
-         carved golden stone pillars and lush white jasmine mogra arrangements.
-         Plate 09: Mandapam arch opens, revealing the sacred Govinda Namalu
-         symbol centered with radiating golden divine aura!
-         ═══════════════════════════════════════════════════════════════════ */
-      // 1. Plate 08: Drapes into Mandapam Arch
-      if (plate08Ref.current) {
-        masterTl.fromTo(
-          plate08Ref.current,
-          { opacity: 0, scale: 0.96, yPercent: 2 },
-          { opacity: 1, scale: 1.0, yPercent: 0, duration: 0.07, ease: "power2.out" },
-          0.84
-        );
-
-        if (plate07Ref.current) {
-          masterTl.to(plate07Ref.current, { opacity: 0, duration: 0.06, ease: "sine.inOut" }, 0.85);
-        }
-      }
-
-      // 2. Plate 09: Mandapam Arch Opens with Govinda Namalu
-      if (plate09Ref.current) {
-        masterTl.fromTo(
-          plate09Ref.current,
-          { opacity: 0, scale: 0.98 },
-          { opacity: 1, scale: 1.0, duration: 0.06, ease: "power2.out" },
-          0.89
-        );
-
-        if (plate08Ref.current) {
-          masterTl.to(plate08Ref.current, { opacity: 0, duration: 0.05, ease: "sine.inOut" }, 0.90);
-        }
-      }
-
-      // Sacred Govinda Namalu Divine Radiance Aura (Centered on arch medallion)
-      if (govindaNamaluWrapRef.current) {
-        masterTl.fromTo(
-          govindaNamaluWrapRef.current,
-          { opacity: 0, scale: 0.85 },
-          { opacity: 0.9, scale: 1.08, duration: 0.04, ease: "power2.out" },
-          0.90
-        );
-        masterTl.to(
-          govindaNamaluWrapRef.current,
-          { opacity: 0, duration: 0.04, ease: "power1.out" },
-          0.95
-        );
-      }
-
-      /* ═══════════════════════════════════════════════════════════════════
-         STAGE G (0.95 – 1.00): ENTER THE FABRIC OF FRAMES (PANEL 10)
-         Perspective colonnade portal corridor reveals horizon light.
-         Chapter typography appears: "The Fabric of Frames · Chapter 02"
-         Section releases directly into LivingContactSheet (The Vows).
-         ═══════════════════════════════════════════════════════════════════ */
-      if (plate10Ref.current) {
-        masterTl.fromTo(
-          plate10Ref.current,
-          { opacity: 0, scale: 0.96 },
-          { opacity: 1, scale: 1.04, duration: 0.06, ease: "power2.out" },
-          0.94
-        );
-
-        if (plate09Ref.current) {
-          masterTl.to(plate09Ref.current, { opacity: 0, duration: 0.04 }, 0.95);
-        }
-      }
-
+      // Chapter metadata typography (Panel 10)
       if (portalChapterMetaRef.current) {
         masterTl.fromTo(
           portalChapterMetaRef.current,
           { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.04, ease: "power2.out" },
-          0.96
+          { opacity: 1, y: 0, duration: 0.05, ease: "power2.out" },
+          0.94
         );
       }
 
+      // Golden horizon dawn bloom at colonnade vanishing point
       if (portalExitBloomRef.current) {
         masterTl.fromTo(
           portalExitBloomRef.current,
           { opacity: 0 },
           { opacity: 0.45, duration: 0.03, ease: "power2.in" },
-          0.97
+          0.96
         );
         masterTl.to(portalExitBloomRef.current, { opacity: 0, duration: 0.02 }, 0.99);
       }
@@ -459,9 +393,16 @@ export default function CameraGlareTransition({
 
           // Fast scroll & reverse scroll boundary safety:
           if (progress <= 0.005) {
+            clothHandleRef.current?.setProgress(0);
+            clothHandleRef.current?.setActive(false);
             if (shutterLayerRef.current) shutterLayerRef.current.style.opacity = "0";
             if (glareRigRef.current) glareRigRef.current.style.opacity = "0";
             if (champagneWashRef.current) champagneWashRef.current.style.opacity = "0";
+            if (logoRevealWrapRef.current) logoRevealWrapRef.current.style.opacity = "0";
+            if (plate05Ref.current) plate05Ref.current.style.opacity = "0";
+            if (portalChapterMetaRef.current) portalChapterMetaRef.current.style.opacity = "0";
+            if (portalExitBloomRef.current) portalExitBloomRef.current.style.opacity = "0";
+
             if (heroImageRef.current) {
               heroImageRef.current.style.opacity = "1";
               heroImageRef.current.style.filter = "none";
@@ -550,6 +491,7 @@ export default function CameraGlareTransition({
                   if (el) bladeActuatorsRef.current[i] = el;
                 }}
                 className={styles.bladeActuator}
+                transform={`rotate(-38 ${PIVOT_X} ${PIVOT_Y})`}
               >
                 <path
                   d={BLADE_PATH}
@@ -617,67 +559,17 @@ export default function CameraGlareTransition({
         </div>
       </div>
 
-      {/* ── PHOTOREALISTIC MASTER PLATES (STAGES 5 – 10) ── */}
-      <div className={styles.plateContainer}>
-        {/* Plate 05: Cosmic Emerald Bokeh Atmosphere */}
-        <img
-          ref={plate05Ref}
-          src="/images/transitions/fabric-parallax/05_logo_reveal.webp"
-          alt=""
-          className={styles.plateLayer}
-          loading="eager"
-        />
+      {/* ── STAGE D: Cosmic Emerald Bokeh Atmosphere Backdrop (Under Logo) ── */}
+      <img
+        ref={plate05Ref}
+        src="/images/transitions/fabric-parallax/05_logo_reveal.webp"
+        alt=""
+        className={styles.plateLayer}
+        loading="eager"
+      />
 
-        {/* Plate 06: Silk Fabric Emergence (Panel 06) */}
-        <img
-          ref={plate06Ref}
-          src="/images/transitions/fabric-parallax/06_fabric_emerge.webp"
-          alt=""
-          className={styles.plateLayer}
-          loading="eager"
-        />
-
-        {/* Plate 07: Fabric Flows Forward (Panel 07) */}
-        <img
-          ref={plate07Ref}
-          src="/images/transitions/fabric-parallax/07_fabric_flow.webp"
-          alt=""
-          className={styles.plateLayer}
-          loading="eager"
-        />
-
-        {/* Plate 08: Drapes into South Indian Mandapam Arch (Panel 08) */}
-        <img
-          ref={plate08Ref}
-          src="/images/transitions/fabric-parallax/08_mandapam_drape.webp"
-          alt=""
-          className={styles.plateLayer}
-          loading="eager"
-        />
-
-        {/* Plate 09: Mandapam Arch Opens with Govinda Namalu (Panel 09) */}
-        <img
-          ref={plate09Ref}
-          src="/images/transitions/fabric-parallax/09_mandapam_open.webp"
-          alt=""
-          className={styles.plateLayer}
-          loading="eager"
-        />
-
-        {/* Plate 10: Perspective Colonnade Portal Corridor (Panel 10) */}
-        <img
-          ref={plate10Ref}
-          src="/images/transitions/fabric-parallax/10_colonnade_portal.webp"
-          alt=""
-          className={styles.plateLayer}
-          loading="eager"
-        />
-      </div>
-
-      {/* ── Sacred Govinda Namalu Divine Radiance Aura (Centered Above Mandapam Arch Medallion) ── */}
-      <div ref={govindaNamaluWrapRef} className={styles.namaluHaloWrap} aria-hidden="true">
-        <div className={styles.namaluHalo} />
-      </div>
+      {/* ── STAGE E, F, G: 3D Procedural WebGL Silk Cloth & Mandapam Portal ── */}
+      <ClothParallaxCanvas ref={clothHandleRef} />
 
       {/* ── STAGE G: Chapter Typography (Panel 10) ── */}
       <div ref={portalChapterMetaRef} className={styles.portalChapterMeta}>

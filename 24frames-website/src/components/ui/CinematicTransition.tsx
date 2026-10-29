@@ -73,6 +73,17 @@ export default function CinematicTransition() {
     }
   }, []);
 
+  // Set local blade angle directly on SVG attributes without root-canvas distortion
+  const setBladeAngle = useCallback((deg: number) => {
+    const transformStr = `rotate(${deg} ${PIVOT_X} ${PIVOT_Y})`;
+    for (let i = 0; i < bladeActuatorsRef.current.length; i++) {
+      const el = bladeActuatorsRef.current[i];
+      if (el) {
+        el.setAttribute("transform", transformStr);
+      }
+    }
+  }, []);
+
   // Force reset transition overlay and restore interaction
   const forceReset = useCallback(() => {
     clearSafetyTimeout();
@@ -130,12 +141,9 @@ export default function CinematicTransition() {
     }
 
     if (bladeActuatorsRef.current.length > 0) {
-      gsap.set(bladeActuatorsRef.current, {
-        svgOrigin: `${PIVOT_X} ${PIVOT_Y}`,
-        rotation: -38,
-      });
+      setBladeAngle(-38);
     }
-  }, [clearSafetyTimeout]);
+  }, [clearSafetyTimeout, setBladeAngle]);
 
   // Resolve the real destination DOM element specified by user
   const resolveTargetElement = useCallback((targetUrl: string, targetHash: string): HTMLElement | null => {
@@ -398,50 +406,55 @@ export default function CinematicTransition() {
       }
 
       if (bladeActuatorsRef.current.length > 0) {
-        gsap.set(bladeActuatorsRef.current, {
-          svgOrigin: `${PIVOT_X} ${PIVOT_Y}`,
-          rotation: -38,
-        });
+        setBladeAngle(-38);
       }
       if (backdropRef.current) gsap.set(backdropRef.current, { opacity: 0 });
       if (cornersRef.current) gsap.set(cornersRef.current, { opacity: 0 });
       if (vignetteRef.current) gsap.set(vignetteRef.current, { opacity: 0 });
       if (guideRingsRef.current) gsap.set(guideRingsRef.current, { opacity: 0 });
 
-      // ── PHASE 1: CAMERA SHUTTER CLOSES COMPLETELY (0.34s) ──
+      // ── PHASE 1: CAMERA SHUTTER CLOSES COMPLETELY (0.36s) ──
       const closeTl = gsap.timeline();
       masterTimelineRef.current = closeTl;
 
       closeTl.to([vignetteRef.current, cornersRef.current], {
         opacity: 0.85,
-        duration: 0.16,
+        duration: 0.18,
         ease: "power1.out",
       }, 0.00);
 
       closeTl.to(guideRingsRef.current, {
         opacity: 0.35,
-        duration: 0.16,
+        duration: 0.18,
         ease: "power1.out",
       }, 0.00);
 
-      if (bladeActuatorsRef.current.length > 0) {
-        closeTl.to(bladeActuatorsRef.current, {
-          rotation: 34,
-          duration: 0.34,
-          ease: "power2.in",
-        }, 0.00);
-      }
+      const closeBladeState = { angle: -38 };
+      closeTl.to(closeBladeState, {
+        angle: 36,
+        duration: 0.36,
+        ease: "power2.in",
+        onUpdate: () => {
+          setBladeAngle(closeBladeState.angle);
+        },
+      }, 0.00);
 
       if (backdropRef.current) {
         closeTl.to(backdropRef.current, {
           opacity: 1,
           duration: 0.20,
           ease: "power2.in",
-        }, 0.14);
+        }, 0.16);
       }
 
       await new Promise<void>((resolve) => {
-        closeTl.eventCallback("onComplete", () => resolve());
+        closeTl.eventCallback("onComplete", () => {
+          setBladeAngle(36);
+          if (typeof window !== "undefined") {
+            (window as unknown as { __shutterClosedAt?: number }).__shutterClosedAt = performance.now();
+          }
+          resolve();
+        });
       });
 
       // ── BRIEF CINEMATIC HOLD (100ms) WHILE FULLY SEALED ──
@@ -450,34 +463,39 @@ export default function CinematicTransition() {
       // ── ROUTE SWAP / SCROLL OCCURS WHILE SEALED ──
       await performRouteSwapOrScroll(targetUrl, targetHash);
 
-      // ── PHASE 2: CAMERA SHUTTER OPENS COMPLETELY (0.34s) ──
+      // ── PHASE 2: CAMERA SHUTTER OPENS COMPLETELY (0.36s) ──
       const openTl = gsap.timeline();
       masterTimelineRef.current = openTl;
 
-      if (bladeActuatorsRef.current.length > 0) {
-        openTl.to(bladeActuatorsRef.current, {
-          rotation: -38,
-          duration: 0.34,
-          ease: "power2.out",
-        }, 0.00);
-      }
+      const openBladeState = { angle: 36 };
+      openTl.to(openBladeState, {
+        angle: -38,
+        duration: 0.36,
+        ease: "power2.out",
+        onUpdate: () => {
+          setBladeAngle(openBladeState.angle);
+        },
+      }, 0.00);
 
       if (backdropRef.current) {
         openTl.to(backdropRef.current, {
           opacity: 0,
-          duration: 0.24,
+          duration: 0.26,
           ease: "power2.out",
         }, 0.00);
       }
 
       openTl.to([cornersRef.current, guideRingsRef.current, vignetteRef.current], {
         opacity: 0,
-        duration: 0.22,
+        duration: 0.24,
         ease: "power1.out",
       }, 0.04);
 
       await new Promise<void>((resolve) => {
-        openTl.eventCallback("onComplete", () => resolve());
+        openTl.eventCallback("onComplete", () => {
+          setBladeAngle(-38);
+          resolve();
+        });
       });
 
       // ── SHUTTER CLEANUP: REMOVE SHUTTER FROM VISIBLE COMPOSITION ──
@@ -793,6 +811,7 @@ export default function CinematicTransition() {
                     if (el) bladeActuatorsRef.current[i] = el;
                   }}
                   className={styles.bladeActuator}
+                  transform={`rotate(-38 ${PIVOT_X} ${PIVOT_Y})`}
                 >
                   <path
                     d={BLADE_PATH}

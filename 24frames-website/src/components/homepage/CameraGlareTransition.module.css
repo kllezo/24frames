@@ -54,7 +54,6 @@
 }
 
 .bladeActuator {
-  transform-origin: 750px 320px;
   will-change: transform;
 }
 
