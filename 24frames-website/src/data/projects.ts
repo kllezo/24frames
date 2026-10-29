@@ -44,9 +44,9 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
     overview:
       "A grand multi-day celebration blending royal Telugu heritage with contemporary cinematic grandeur. Curated coverage documented with theatrical lighting discipline, quiet poise, and prime cinema optics.",
     story: [
-      "Every frame was captured using prime cinema lenses to balance the monumental scale of the setting with intimate, unguarded family moments.",
-      "The reception commanded both monumental public scale and intimate family warmth, documented by 24 Frames with theatrical lighting discipline.",
-      "From Megastar Chiranjeevi to Akkineni Nagarjuna, luminaries of Indian cinema gathered to celebrate alongside the newlyweds."
+      "Prime cinema lenses balanced the monumental ballroom architecture with unguarded family greetings and tender couple embraces.",
+      "The ballroom reception gathered leading luminaries of Indian cinema, documented with quiet observational poise and rich amber color grading.",
+      "From Megastar Chiranjeevi to Akkineni Nagarjuna and Naga Chaitanya, dignitaries joined on stage to celebrate the union of Bellamkonda Sai Sreenivas & Kavya Reddy."
     ],
     filmReel: {
       camera: "Sony FX6 & FX3 Cinema Line",
@@ -101,8 +101,8 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
     overview:
       "A deeply reverent Telugu wedding ceremony anchored in ancient Vedic sanctity and royal palace celebrations, captured with devotional reverence and contemporary cinematic grace.",
     story: [
-      "The couple desired absolute documentary authenticity without posed interference. Our visual strategy focused on natural light, temple stone textures, and sacred geometry.",
-      "Framed before a sanctified idol of Lord Venkateswara, this celebration captures the eternal bond between Sireesh & Harshitha, surrounded by family blessings and traditional iconography."
+      "Documented with absolute documentary reverence before the sanctified idol of Lord Venkateswara, where family elders bestowed Vedic blessings.",
+      "The visual arc moves from quiet morning architectural stone portraits and an autumn meadow walk to the radiant euphoria of an evening stage celebration showered in golden confetti."
     ],
     filmReel: {
       camera: "Nikon Z9 & Z8 Studio Flagships",
@@ -148,8 +148,8 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
     overview:
       "A rich multi-chapter wedding celebration chronicling sacred Telugu rituals, vibrant family galas, and quiet architectural portraits, captured with 24 Frames' signature warmth.",
     story: [
-      "Every element was planned to feel like a visual poem. We utilized vintage optical coatings to soften highlights and emphasize warm skin tones.",
-      "From the timeless sacred Mangalasnanam holy water bath to the electrified energy of the concert Sangeet stage, Hrithika & Abhishek's wedding transitions seamlessly across rituals and moods."
+      "Custom vintage optical coatings preserved warm skin tones during the sacred Mangalasnanam holy water blessing, freezing airborne droplets in crystal clarity.",
+      "The celebration transitioned seamlessly from traditional temple entryway florals to an electrifying concert Sangeet stage beneath hundreds of mirror disco spheres."
     ],
     filmReel: {
       camera: "Sony FX3 & A1 Flagships",
@@ -195,8 +195,8 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
     overview:
       "An enchanting fine-art wedding set in lush botanical grounds, weaving vibrant floral craftsmanship, classical temple attire, and exuberant celebratory dance into a timeless visual poem.",
     story: [
-      "Captured within a sunlit glasshouse pavilion adorned with cascades of pink floral hangings and classical terracotta urns, Karthik & Gayathri's wedding honors timeless South Indian heritage.",
-      "The photographic narrative highlights both the solemn intimacy of sacred promises and spontaneous moments of joyous celebration."
+      "A sunlit botanical glasshouse framed in natural timber pergolas and cascading blush-pink garlands, prioritizing unhurried ease over stiff ceremony.",
+      "From fine-art macro captures of varmala florals against intricate zardozi weaves to an exuberant couple dance before the mandap, every frame celebrates organic emotion."
     ],
     filmReel: {
       camera: "Hasselblad X2D 100C",

@@ -18,8 +18,8 @@ interface DisciplineInteractiveMediaProps {
 
 const DISCIPLINE_EDITORIAL_THOUGHTS: Record<string, string[]> = {
   weddings: [
-    "One glance across the sacred mandap. A thousand unspoken promises.",
-    "When the day becomes memory, let it still feel genuinely yours.",
+    "Observational reverence for sacred rituals, family blessings, and the quiet spaces between.",
+    "Preserving the emotional truth of your wedding without theatrical interference.",
   ],
   celebrities: [
     "Beyond the public spotlight lies the quiet, sculptural dignity of character.",

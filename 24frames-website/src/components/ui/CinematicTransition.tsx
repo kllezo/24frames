@@ -107,6 +107,13 @@ export default function CinematicTransition() {
       if (isTransitioningRef.current) return;
       isTransitioningRef.current = true;
 
+      // Immediately initiate destination prefetch
+      try {
+        router.prefetch(targetUrl);
+      } catch {
+        // prefetch fallback
+      }
+
       if (overlayRef.current) {
         overlayRef.current.classList.add(styles.overlayRootActive);
       }
@@ -156,10 +163,16 @@ export default function CinematicTransition() {
         return;
       }
 
-      // ── FULL MECHANICAL CAMERA SHUTTER (30-FRAME GSAP MASTER TIMELINE) ──
+      // ── CONTINUOUS UNIFIED CAMERA SHUTTER TIMELINE ──
+      // Single continuous normalized progress from 0 (open) to 1 (closed), then 1 to 0 (open)
+      // All 8 blades derive their rotation from the same timeline without independent delays or stepped pauses.
       if (masterTimelineRef.current) {
         masterTimelineRef.current.kill();
       }
+
+      const DURATION_CLOSE = 0.38;
+      const ROUTE_HOLD = 0.06;
+      const DURATION_OPEN = 0.36;
 
       const tl = gsap.timeline({
         onComplete: () => {
@@ -168,15 +181,12 @@ export default function CinematicTransition() {
       });
       masterTimelineRef.current = tl;
 
-      // Pre-set initial states at 0.00s (Frame 01: Activation)
+      // 1. Initial State Activation (Time 0.00s)
       tl.set(overlayRef.current, { opacity: 1, visibility: "visible", pointerEvents: "auto" }, 0.00);
       tl.set(backdropRef.current, { opacity: 0 }, 0.00);
-      tl.set(vignetteRef.current, { opacity: 0 }, 0.00);
-      tl.set(cornersRef.current, { opacity: 0 }, 0.00);
-      tl.set(focusRingRef.current, { opacity: 0, scale: 1.25 }, 0.00);
-      tl.set(guideRingsRef.current, { opacity: 0 }, 0.00);
+      tl.set([vignetteRef.current, cornersRef.current, focusRingRef.current, guideRingsRef.current], { opacity: 0 }, 0.00);
+      tl.set(focusRingRef.current, { scale: 1.15 }, 0.00);
 
-      // Initialize all 8 blades to retracted position (-38 deg)
       if (bladeActuatorsRef.current.length > 0) {
         tl.set(bladeActuatorsRef.current, {
           svgOrigin: `${PIVOT_X} ${PIVOT_Y}`,
@@ -184,62 +194,48 @@ export default function CinematicTransition() {
         }, 0.00);
       }
 
-      // ── ACT I: NAVIGATION AND FOCUS (0.00s - 0.20s) ──
-      // Frame 02 (0.04s): Subtle darkening vignette begins
-      tl.to(vignetteRef.current, {
+      // 2. Optical Ambient & HUD Fade (Starts synchronously with shutter close)
+      tl.to([vignetteRef.current, cornersRef.current], {
         opacity: 1,
-        duration: 0.04,
+        duration: 0.16,
         ease: "power1.out",
-      }, 0.04);
+      }, 0.00);
 
-      // Frame 03 (0.08s): Viewfinder corners fade in
-      tl.to(cornersRef.current, {
-        opacity: 1,
-        duration: 0.04,
-        ease: "power1.out",
-      }, 0.08);
-
-      // Frame 04 (0.12s): Central focus reticle circle appears
       tl.to(focusRingRef.current, {
-        opacity: 1,
+        opacity: 0.9,
         scale: 1,
-        duration: 0.04,
+        duration: 0.18,
         ease: "power2.out",
-      }, 0.12);
+      }, 0.00);
 
-      // Frame 05 (0.16s): Shutter concentric guide rings form around focus circle
       tl.to(guideRingsRef.current, {
-        opacity: 0.65,
-        duration: 0.04,
+        opacity: 0.5,
+        duration: 0.20,
         ease: "power1.out",
-      }, 0.16);
+      }, 0.00);
 
-      // ── ACT II: SHUTTER CLOSING (0.20s - 0.52s) ──
-      // Frames 06 - 14: 8 camera aperture blades rotate inward into full closure
-      // Interpolates through 70% (0.24s), 55% (0.28s), 35% (0.32s), 20% (0.36s), 10% (0.40s), 5% (0.44s), 2% (0.48s), 0% (0.52s)
+      // 3. ONE CONTINUOUS UNINTERRUPTED SHUTTER CLOSING (0.00s to 0.38s)
+      // All 8 blades rotate simultaneously and continuously from -38 to +34 degrees
       if (bladeActuatorsRef.current.length > 0) {
         tl.to(bladeActuatorsRef.current, {
-          rotation: 32,
-          duration: 0.32,
+          rotation: 34,
+          duration: DURATION_CLOSE,
           ease: "power2.inOut",
-        }, 0.20);
+        }, 0.00);
       }
 
-      // Backdrop smoothly transitions to opaque as blades meet, sealing the screen in darkness
+      // Backdrop synchronizes seamlessly as blades meet, sealing in absolute blackness
       tl.to(backdropRef.current, {
         opacity: 1,
-        duration: 0.24,
+        duration: DURATION_CLOSE * 0.65,
         ease: "power2.in",
-      }, 0.28);
+      }, DURATION_CLOSE * 0.35);
 
-      // Frame 14 (0.52s): Complete shutter lock with zero light leak
-
-      // ── ACT III: ROUTE CHANGE IN DARKNESS (0.52s - 0.68s) ──
-      // Frame 15 (0.56s): Commit route swap while screen is completely covered in darkness
+      // 4. ROUTE SWAP AT FULL SHUTTER SEAL (At 0.38s: 100% closed, zero light leak)
+      const closeCompleteTime = DURATION_CLOSE;
       tl.call(() => {
         router.push(targetUrl);
 
-        // Scroll management underneath closed shutter (coordinate with Lenis if active)
         if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
           const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
           if (targetHash && targetHash.length > 1) {
@@ -253,44 +249,41 @@ export default function CinematicTransition() {
         } else {
           window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         }
-      }, undefined, 0.56);
+      }, undefined, closeCompleteTime);
 
-      // Frame 16 (0.60s) & Frame 17 (0.64s): Brief hold at full close
+      // 5. ONE CONTINUOUS UNINTERRUPTED SHUTTER OPENING
+      const openStartTime = closeCompleteTime + ROUTE_HOLD;
 
-      // ── ACT IV: SHUTTER OPENING (0.68s - 1.00s) ──
-      // Frames 18 - 26: Blades rotate outward in reverse, revealing the real destination page
-      // Interpolates through 5% (0.72s), 10% (0.76s), 20% (0.80s), 35% (0.84s), 55% (0.88s), 70% (0.92s), 85% (0.96s), 100% (1.00s)
+      // All 8 blades rotate simultaneously and continuously in reverse back to -38
       if (bladeActuatorsRef.current.length > 0) {
         tl.to(bladeActuatorsRef.current, {
           rotation: -38,
-          duration: 0.32,
+          duration: DURATION_OPEN,
           ease: "power2.inOut",
-        }, 0.68);
+        }, openStartTime);
       }
 
       // Backdrop fades to reveal new page content cleanly through expanding iris
       tl.to(backdropRef.current, {
         opacity: 0,
-        duration: 0.24,
+        duration: DURATION_OPEN * 0.75,
         ease: "power2.out",
-      }, 0.68);
+      }, openStartTime);
 
-      // ── ACT V: SETTLE AND RELEASE (1.00s - 1.20s) ──
-      // Frame 27 (1.04s): HUD marks, focus circle, and guide rings fade out cleanly
+      // HUD and viewfinder elements fade out in unison as iris reaches full expansion
+      const hudFadeStart = openStartTime + DURATION_OPEN * 0.4;
       tl.to([cornersRef.current, focusRingRef.current, guideRingsRef.current, vignetteRef.current], {
         opacity: 0,
-        duration: 0.04,
+        duration: DURATION_OPEN * 0.6,
         ease: "power1.out",
-      }, 1.00);
+      }, hudFadeStart);
 
-      // Frame 28 & 29 (1.08s - 1.14s): Settle and release overlay
+      // Complete settlement and overlay release
       tl.to(overlayRef.current, {
         opacity: 0,
         duration: 0.08,
         ease: "power1.out",
-      }, 1.08);
-
-      // Frame 30 (1.20s): Complete settlement handled by tl.onComplete
+      }, openStartTime + DURATION_OPEN);
     },
     [isReducedMotion, router, clearSafetyTimeout, forceReset]
   );
@@ -361,8 +354,26 @@ export default function CinematicTransition() {
     };
 
     document.addEventListener("click", handleClick, { capture: true });
+
+    // Proactively prefetch destination page on hover/pointer-enter before shutter triggers
+    const handlePointerOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      const anchor = target?.closest("a") as HTMLAnchorElement | null;
+      if (!anchor) return;
+      const href = anchor.getAttribute("href");
+      if (href && href.startsWith("/") && !href.startsWith("//") && !href.includes(":")) {
+        try {
+          router.prefetch(href);
+        } catch {
+          // prefetch graceful fallback
+        }
+      }
+    };
+
+    document.addEventListener("pointerover", handlePointerOver, { passive: true });
     return () => {
       document.removeEventListener("click", handleClick, { capture: true });
+      document.removeEventListener("pointerover", handlePointerOver);
     };
   }, [triggerTransition]);
 
@@ -500,24 +511,9 @@ export default function CinematicTransition() {
                 <stop offset="50%" stopColor="rgba(180, 180, 180, 0.25)" />
                 <stop offset="100%" stopColor="rgba(40, 40, 40, 0.12)" />
               </linearGradient>
-              <filter
-                id="shutter-blade-shadow"
-                x="-30%"
-                y="-30%"
-                width="160%"
-                height="160%"
-              >
-                <feDropShadow
-                  dx="-4"
-                  dy="6"
-                  stdDeviation="7"
-                  floodColor="#000000"
-                  floodOpacity="0.95"
-                />
-              </filter>
             </defs>
 
-            {/* 8 Radially-Symmetric Mechanical Blades */}
+            {/* 8 Radially-Symmetric Mechanical Blades (GPU-accelerated vector transform) */}
             {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
               <g key={i} transform={`rotate(${i * 45} 0 0)`}>
                 <g
@@ -531,7 +527,6 @@ export default function CinematicTransition() {
                     fill="url(#shutter-blade-grad)"
                     stroke="url(#shutter-blade-edge)"
                     strokeWidth="1.8"
-                    filter="url(#shutter-blade-shadow)"
                   />
                 </g>
               </g>

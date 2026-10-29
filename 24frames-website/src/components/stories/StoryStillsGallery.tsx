@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { StoryFrame } from "@/data/stories";
+import { StoryFrame, StoryGalleryEditorial } from "@/data/stories";
 import { useScrollLock } from "@/lib/scrollLock";
 import styles from "./StoryStillsGallery.module.css";
 
@@ -12,36 +12,10 @@ gsap.registerPlugin(ScrollTrigger);
 interface Props {
   frames: StoryFrame[];
   storyTitle: string;
+  editorial?: StoryGalleryEditorial;
 }
 
-const LOVE_STORY_FRAGMENTS = [
-  {
-    chapter: "Chapter I · The Anticipation",
-    note: "Somewhere between the dream and the day, your forever quietly begins.",
-  },
-  {
-    chapter: "Chapter II · The Sacred Vow",
-    note: "One glance across the mandap. A thousand unspoken promises.",
-  },
-  {
-    chapter: "Chapter III · The Unguarded Moment",
-    note: "The moments you never planned often become the ones you hold closest.",
-  },
-  {
-    chapter: "Chapter III · The Feeling Remains",
-    note: "Years from now, you may forget the schedule. Never the way it felt.",
-  },
-  {
-    chapter: "Chapter IV · Optical Memory",
-    note: "some feelings need more than words",
-  },
-  {
-    chapter: "Chapter V · The Legacy",
-    note: "When the day becomes memory, let it still feel genuinely yours.",
-  },
-];
-
-export default function StoryStillsGallery({ frames, storyTitle }: Props) {
+export default function StoryStillsGallery({ frames, storyTitle, editorial }: Props) {
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
   const galleryRef = useRef<HTMLElement>(null);
 
@@ -111,6 +85,16 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
     .map((frame, originalIndex) => ({ frame, originalIndex }))
     .filter((_, i) => i % 2 !== 0);
 
+  const fragments = editorial?.narrativeFragments && editorial.narrativeFragments.length > 0
+    ? editorial.narrativeFragments
+    : [
+        {
+          chapter: "Curatorial Record",
+          note: "Preserved in uncompressed medium-format truth.",
+          position: "right" as const,
+        },
+      ];
+
   const renderFrameCard = (frame: StoryFrame, originalIndex: number) => {
     const isLandscape = frame.aspect === "landscape";
 
@@ -159,14 +143,14 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
 
   const renderNarrativeNote = (
     fragmentIndex: number,
-    align: "left" | "right" | "center" = "left"
+    fallbackAlign: "left" | "right" | "center" = "left"
   ) => {
-    const fragment =
-      LOVE_STORY_FRAGMENTS[fragmentIndex % LOVE_STORY_FRAGMENTS.length];
+    const fragment = fragments[fragmentIndex % fragments.length];
+    const align = fragment.position || fallbackAlign;
 
     return (
       <div
-        key={`note-${fragmentIndex}`}
+        key={`note-${fragmentIndex}-${fragment.chapter}`}
         className={`${styles.narrativeNote} ${styles[`align_${align}`]}`}
       >
         <span className={styles.noteChapter}>{fragment.chapter}</span>
@@ -174,6 +158,12 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
       </div>
     );
   };
+
+  const badgeText = editorial?.badge || "SELECTED EXHIBITION STILLS";
+  const titleText = editorial?.title || "The Archival Sequence";
+  const subtitleText =
+    editorial?.subtitle ||
+    "Continuous staggered editorial rhythm. Each frame preserves uncompressed optical truth and authentic emotion.";
 
   return (
     <section
@@ -187,13 +177,11 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
         <div className={styles.header}>
           <div className={styles.badgeRow}>
             <span className={styles.ruleLine} aria-hidden="true" />
-            <span className={styles.badge}>SELECTED EXHIBITION STILLS</span>
+            <span className={styles.badge}>{badgeText}</span>
             <span className={styles.ruleLine} aria-hidden="true" />
           </div>
-          <h2 className={styles.title}>The Archival Sequence</h2>
-          <p className={styles.subtitle}>
-            Continuous staggered editorial rhythm. Each frame preserves uncompressed optical truth and authentic emotion.
-          </p>
+          <h2 className={styles.title}>{titleText}</h2>
+          <p className={styles.subtitle}>{subtitleText}</p>
         </div>
 
         {/* ── DESKTOP & TABLET: TWO-COLUMN STAGGERED EDITORIAL VIEW ── */}
@@ -203,7 +191,7 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
             {leftFrames.map(({ frame, originalIndex }, idx) => (
               <div key={frame.id} className={styles.itemSlot}>
                 {renderFrameCard(frame, originalIndex)}
-                {/* Organically discovered handwritten thought in margin whitespace */}
+                {/* Organically discovered handwritten thoughts in margin whitespace */}
                 {idx === 0 && renderNarrativeNote(1, "left")}
                 {idx === 1 && renderNarrativeNote(3, "left")}
               </div>
@@ -212,13 +200,13 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
 
           {/* Right Column (Starts at vertical midpoint of Left Column) */}
           <div className={styles.staggerColRight}>
-            {/* Initial opening discovered line resting beside Frame 0 */}
+            {/* Opening discovered thought resting beside Frame 0 */}
             {renderNarrativeNote(0, "right")}
 
             {rightFrames.map(({ frame, originalIndex }, idx) => (
               <div key={frame.id} className={styles.itemSlot}>
                 {renderFrameCard(frame, originalIndex)}
-                {/* Organically discovered handwritten thought in margin whitespace */}
+                {/* Subsequent discovered thoughts */}
                 {idx === 0 && renderNarrativeNote(2, "right")}
                 {idx === 1 && renderNarrativeNote(4, "right")}
               </div>
@@ -271,45 +259,53 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
               </button>
             </div>
 
-            {/* Modal Image Viewport */}
-            <div className={styles.modalImageViewport}>
-              <img
-                src={frames[activeImageIndex].url}
-                alt={frames[activeImageIndex].caption}
-                className={styles.modalImg}
-              />
-
-              {/* Prev / Next Modal Arrows */}
-              <button
-                className={`${styles.modalNavBtn} ${styles.modalPrevBtn}`}
-                onClick={() =>
-                  setActiveImageIndex((prev) =>
-                    prev !== null && prev > 0 ? prev - 1 : frames.length - 1
-                  )
-                }
-                aria-label="Previous frame (Arrow Left)"
-              >
-                ←
-              </button>
-              <button
-                className={`${styles.modalNavBtn} ${styles.modalNextBtn}`}
-                onClick={() =>
-                  setActiveImageIndex((prev) =>
-                    prev !== null && prev < frames.length - 1 ? prev + 1 : 0
-                  )
-                }
-                aria-label="Next frame (Arrow Right)"
-              >
-                →
-              </button>
+            {/* Modal Image */}
+            <div className={styles.modalImageWrap}>
+              <picture>
+                <source
+                  srcSet={frames[activeImageIndex].webpUrl}
+                  type="image/webp"
+                />
+                <img
+                  src={frames[activeImageIndex].url}
+                  alt={frames[activeImageIndex].caption}
+                  className={styles.modalImg}
+                />
+              </picture>
             </div>
 
             {/* Modal Caption */}
-            <div className={styles.modalCaptionWrap}>
-              <p className={styles.modalCaption}>
+            <div className={styles.modalCaptionBlock}>
+              <p className={styles.modalCaptionText}>
                 {frames[activeImageIndex].caption}
               </p>
             </div>
+
+            {/* Modal Navigation Arrows */}
+            <button
+              className={`${styles.modalNavBtn} ${styles.prevBtn}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveImageIndex((prev) =>
+                  prev !== null && prev > 0 ? prev - 1 : frames.length - 1
+                );
+              }}
+              aria-label="Previous frame"
+            >
+              ←
+            </button>
+            <button
+              className={`${styles.modalNavBtn} ${styles.nextBtn}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveImageIndex((prev) =>
+                  prev !== null && prev < frames.length - 1 ? prev + 1 : 0
+                );
+              }}
+              aria-label="Next frame"
+            >
+              →
+            </button>
           </div>
         </div>
       )}

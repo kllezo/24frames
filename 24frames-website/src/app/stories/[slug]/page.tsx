@@ -64,7 +64,7 @@ export default async function StoryDetailPage({ params }: PageProps) {
                 <span>←</span> Back to All Stories
               </Link>
               <div className={styles.heroNavBadges}>
-                <span className={styles.chapterKicker}>CHAPTER 03 — ARCHIVE STORY</span>
+                <span className={styles.chapterKicker}>{story.chapterKicker}</span>
                 <span className={styles.categoryBadge}>{story.category}</span>
               </div>
             </div>
@@ -133,32 +133,46 @@ export default async function StoryDetailPage({ params }: PageProps) {
           <div className={styles.container}>
             {/* Organic Handwritten Transition */}
             <div className={styles.narrativePoemNote}>
-              <span className={styles.narrativePoemChapter}>Chapter II · The People &amp; The Promise</span>
+              <span className={styles.narrativePoemChapter}>
+                {story.editorialSection.handwrittenQuote.kicker}
+              </span>
               <p className={styles.narrativePoemText}>
-                “The day belongs to two hearts. The memories belong to everyone they love.”
+                {story.editorialSection.handwrittenQuote.text}
               </p>
             </div>
 
             <div className={styles.narrativeGrid}>
               <div className={styles.narrativeHeader}>
-                <span className={styles.sectionBadge}>Chapter / Archive Stills</span>
-                <h2 className={styles.narrativeHeading}>Moments Held in Permanence</h2>
+                <span className={styles.sectionBadge}>
+                  {story.editorialSection.chapterBadge}
+                </span>
+                <h2 className={styles.narrativeHeading}>
+                  {story.editorialSection.chapterTitle}
+                </h2>
                 <div className={styles.archiveStatsBox}>
                   <div>
-                    <span className={styles.archiveStatLabel}>Provenance</span>
-                    <div className={styles.archiveStatValue}>Handpicked Client Archive</div>
+                    <span className={styles.archiveStatLabel}>
+                      {story.editorialSection.provenance.label}
+                    </span>
+                    <div className={styles.archiveStatValue}>
+                      {story.editorialSection.provenance.value}
+                    </div>
                   </div>
                   <div>
-                    <span className={styles.archiveStatLabel}>Exhibition</span>
-                    <div className={styles.archiveStatValue}>24 Frames Master Selection</div>
+                    <span className={styles.archiveStatLabel}>
+                      {story.editorialSection.exhibitionFocus.label}
+                    </span>
+                    <div className={styles.archiveStatValue}>
+                      {story.editorialSection.exhibitionFocus.value}
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div>
-                <p className={styles.narrativeLead}>{story.narrativeOverview}</p>
+                <p className={styles.narrativeLead}>{story.editorialSection.narrativeLead}</p>
                 <div className={styles.narrativeParagraphs}>
-                  {story.curatorialStatement.map((paragraph, idx) => (
+                  {story.editorialSection.curatorialStatement.map((paragraph, idx) => (
                     <p key={idx} className={styles.narrativeBody}>
                       {paragraph}
                     </p>
@@ -170,7 +184,11 @@ export default async function StoryDetailPage({ params }: PageProps) {
         </section>
 
         {/* ── Curated Exhibition Stills Gallery (Alternating Editorial Composition) ── */}
-        <StoryStillsGallery frames={story.frames} storyTitle={story.title} />
+        <StoryStillsGallery
+          frames={story.frames}
+          storyTitle={story.title}
+          editorial={story.galleryEditorial}
+        />
 
         {/* ── Story Navigation (Prev / Next) ───────────────────── */}
         <section className={styles.storyNavSection}>
@@ -203,21 +221,19 @@ export default async function StoryDetailPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* ── Restrained Inquiry CTA ───────────────────────────── */}
-        <section className={styles.ctaSection} aria-label="Commission Inquiry">
+        {/* ── Subtle Storytelling Inquiry CTA ────────────────────── */}
+        <section id="inquire" className={styles.ctaSection} aria-label="Commission Inquiry">
           <div className={styles.container}>
             <div className={styles.ctaBox}>
-              <span className={styles.ctaTag}>Commission 24 Frames</span>
-              <h2 className={styles.ctaHeading}>Begin Your Visual Legacy</h2>
-              <p className={styles.ctaBody}>
-                We accept a limited number of bespoke wedding commissions worldwide each calendar year, dedicating deep observational care to every union.
-              </p>
+              <span className={styles.ctaTag}>{story.inquiryCta.tag}</span>
+              <h2 className={styles.ctaHeading}>{story.inquiryCta.heading}</h2>
+              <p className={styles.ctaBody}>{story.inquiryCta.body}</p>
               <div className={styles.ctaActions}>
                 <Link href="/inquire" className={styles.primaryCtaBtn}>
-                  Request Commission Consultation →
+                  {story.inquiryCta.primaryButtonText}
                 </Link>
                 <Link href="/stories" className={styles.secondaryCtaBtn}>
-                  Explore All Stories
+                  {story.inquiryCta.secondaryButtonText}
                 </Link>
               </div>
             </div>

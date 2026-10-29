@@ -57,7 +57,7 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     image: "/images/disciplines/celebrities/IMG_6476.jpg",
     fallbackImage: "/images/disciplines/celebrities/IMG_6472.jpg",
     href: "/disciplines/celebrities",
-    objectPosition: "center 8%",
+    objectPosition: "center 18%",
   },
   {
     id: "events",
@@ -72,7 +72,7 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     image: "/images/disciplines/events/IMG_6485.jpg",
     fallbackImage: "/images/disciplines/events/IMG_6487.jpg",
     href: "/disciplines/events",
-    objectPosition: "55% 20%",
+    objectPosition: "48% 45%",
   },
   {
     id: "fashion",
@@ -87,7 +87,7 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     image: "/images/disciplines/fashion/IMG_6280.jpg",
     fallbackImage: "/images/disciplines/fashion/IMG_6288.jpg",
     href: "/disciplines/fashion",
-    objectPosition: "center 20%",
+    objectPosition: "center 18%",
   },
   {
     id: "cinema",
@@ -116,9 +116,11 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const showcaseRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   // Default active discipline on initial load is Cinema & Feature Films (as featured card)
   const [activeId, setActiveId] = useState<string>("cinema");
+  const [activeMobileIndex, setActiveMobileIndex] = useState<number>(0);
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
 
   const isTouchRef = useRef(false);
@@ -127,6 +129,8 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
   // The most recently activated card remains expanded; pointer leaving does not reset it.
   const activateCard = useCallback((id: string) => {
     setActiveId(id);
+    const idx = COLLECTION_DISCIPLINES.findIndex((d) => d.id === id);
+    if (idx !== -1) setActiveMobileIndex(idx);
   }, []);
 
   const handleCardPointerEnter = useCallback(
@@ -141,10 +145,44 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
     [activateCard]
   );
 
+  /* ── Mobile Scroll & Pagination Synchronization ──────────────── */
+  const handleTrackScroll = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const firstCard = track.firstElementChild as HTMLElement | null;
+    if (!firstCard) return;
+    const cardWidthWithGap = firstCard.offsetWidth + 12;
+    if (cardWidthWithGap <= 0) return;
+
+    const nextIndex = Math.round(track.scrollLeft / cardWidthWithGap);
+    const clampedIndex = Math.max(0, Math.min(COLLECTION_DISCIPLINES.length - 1, nextIndex));
+    setActiveMobileIndex(clampedIndex);
+
+    if (typeof window !== "undefined" && window.innerWidth <= 820) {
+      setActiveId(COLLECTION_DISCIPLINES[clampedIndex].id);
+    }
+  }, []);
+
+  const scrollToMobileCard = useCallback((index: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const cards = track.querySelectorAll(`.${styles.card}`);
+    const targetCard = cards[index] as HTMLElement | null;
+    if (targetCard) {
+      targetCard.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+    } else {
+      const cardWidthWithGap = (track.firstElementChild as HTMLElement)?.offsetWidth + 12 || 320;
+      track.scrollTo({ left: index * cardWidthWithGap, behavior: "smooth" });
+    }
+    setActiveMobileIndex(index);
+    setActiveId(COLLECTION_DISCIPLINES[index].id);
+  }, []);
+
   /* ── GSAP Scroll-Triggered Left-to-Right Sequential Reveal ──── */
   useEffect(() => {
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isReduced) return;
+    const isMobile = window.innerWidth <= 820;
+    if (isReduced || isMobile) return;
 
     const ctx = gsap.context(() => {
       if (headerRef.current) {
@@ -285,6 +323,9 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
             From intimate Vedic rituals to high-fashion spreads and cinematic master films.
             Select any discipline to enter its dedicated portfolio.
           </p>
+          <p className={styles.headerCursiveQuote}>
+            “Every fleeting ritual holds a lifetime of meaning.”
+          </p>
         </div>
 
         {/* ── Outer Showcase Frame ──────────────────────────────── */}
@@ -294,7 +335,11 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
           role="region"
           aria-label="Five-Discipline Horizontal Editorial Showcase"
         >
-          <div className={styles.accordionTrack}>
+          <div
+            ref={trackRef}
+            className={styles.accordionTrack}
+            onScroll={handleTrackScroll}
+          >
             {COLLECTION_DISCIPLINES.map((discipline) => {
               const isSelected = discipline.id === activeId;
               const hasError = imgErrors[discipline.id];
@@ -419,6 +464,34 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
               );
             })}
           </div>
+        </div>
+
+        {/* ── Mobile Touch Pagination Dots (Forest Green Active, Muted Grey Inactive) ── */}
+        <div
+          className={styles.mobilePagination}
+          role="tablist"
+          aria-label="Collection categories navigation"
+        >
+          {COLLECTION_DISCIPLINES.map((discipline, idx) => (
+            <button
+              key={discipline.id}
+              type="button"
+              role="tab"
+              aria-selected={activeMobileIndex === idx}
+              aria-label={`Jump to ${discipline.title}`}
+              className={`${styles.paginationDot} ${
+                activeMobileIndex === idx ? styles.paginationDotActive : ""
+              }`}
+              onClick={() => scrollToMobileCard(idx)}
+            />
+          ))}
+        </div>
+
+        {/* ── Subtle Mid-Page Cursive Editorial Note ── */}
+        <div className={styles.bottomCursiveQuoteRow} aria-hidden="true">
+          <p className={styles.bottomCursiveQuote}>
+            “Five disciplines of optics, devoted to moments that never come again.”
+          </p>
         </div>
 
         {/* ── Discreet Standalone Archive Link with Deliberate Whitespace ── */}

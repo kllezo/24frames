@@ -60,7 +60,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 <span className={styles.backArrow}>←</span> Back to Portfolio
               </Link>
               <div className={styles.heroNavBadges}>
-                <span className={styles.chapterKicker}>CHAPTER 03 — MASTER PORTFOLIO</span>
+                <span className={styles.chapterKicker}>MASTER PORTFOLIO ARCHIVE</span>
                 <span className={styles.categoryBadge}>{project.category}</span>
               </div>
             </div>

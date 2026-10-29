@@ -58,7 +58,7 @@ export const ITEM_PROJECT_01: GalleryProjectItem = {
   storyUrl: "/stories/bellam-srikonda",
   objectPosition: "center 18%",
   narrative:
-    "The quiet and overwhelming union of two people, set against the grandeur of celebration, personal moments, and everything in between. A wedding captured with honesty, cinematic depth and timeless transitions.",
+    "Monumental ballroom scale meets quiet, unhurried poise. Documented with large-format cinema glass across a grand gathering of Indian cinema.",
 };
 
 /* Item 2: Master Cinema Feature — Vinitha & Vivekananda */
@@ -94,7 +94,7 @@ export const ITEM_PROJECT_02: GalleryProjectItem = {
   storyUrl: "/stories/sirish-and-harshitha",
   objectPosition: "center center",
   narrative:
-    "Rooted in legacy, celebrated with emotion, and alive with timeless traditions.",
+    "Sacred temple vows before Lord Venkateswara transitioning into sunlit meadow strolls and an electric midnight confetti celebration.",
 };
 
 /* Supporting Still: Mandapam Architecture — Sireesh & Harshitha */
@@ -130,7 +130,7 @@ export const ITEM_PROJECT_03: GalleryProjectItem = {
   storyUrl: "/stories/hrithika-abhishek",
   objectPosition: "center 24%",
   narrative:
-    "Modern love in a classic setting — real moments, effortlessly beautiful.",
+    "From frozen droplets of morning Mangalasnanam water blessings to an arena Sangeet stage under a ceiling of mirrored spheres.",
 };
 
 /* Item 5: Fine-Art Heritage Embrace — Karthik & Gayathri */
@@ -149,7 +149,7 @@ export const ITEM_PROJECT_04: GalleryProjectItem = {
   storyUrl: "/stories/karthik-and-gayathri",
   objectPosition: "center 14%",
   narrative:
-    "A story of new beginnings, captured in the most honest, cinematic way.",
+    "Sun-drenched botanical glasshouse sceneries, breezy columned verandas, and spontaneous dance before cascading blush florals.",
 };
 
 /* Item 6: Couple Shoot Signature Film — Nishanth X Sanzena */
