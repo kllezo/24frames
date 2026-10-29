@@ -56,6 +56,7 @@ export default function CinematicTransition() {
   const cornersRef = useRef<HTMLDivElement>(null);
   const focusRingRef = useRef<HTMLDivElement>(null);
   const guideRingsRef = useRef<SVGSVGElement>(null);
+  const shutterSvgRef = useRef<SVGSVGElement>(null);
   const bladeActuatorsRef = useRef<SVGGElement[]>([]);
 
   // Safety & timeline control refs
@@ -87,28 +88,32 @@ export default function CinematicTransition() {
 
     if (overlayRef.current) {
       overlayRef.current.classList.remove(styles.overlayRootActive);
+      overlayRef.current.style.display = "none";
       gsap.set(overlayRef.current, {
         opacity: 0,
         visibility: "hidden",
         pointerEvents: "none",
         clearProps: "all",
       });
-      overlayRef.current.style.display = "none";
     }
 
+    if (shutterSvgRef.current) {
+      shutterSvgRef.current.style.display = "";
+    }
     if (backdropRef.current) {
+      backdropRef.current.style.display = "";
       gsap.set(backdropRef.current, { opacity: 0, clearProps: "all" });
     }
-
     if (vignetteRef.current) {
+      vignetteRef.current.style.display = "";
       gsap.set(vignetteRef.current, { opacity: 0, clearProps: "all" });
     }
-
     if (cornersRef.current) {
+      cornersRef.current.style.display = "";
       gsap.set(cornersRef.current, { opacity: 0, clearProps: "all" });
     }
-
     if (guideRingsRef.current) {
+      guideRingsRef.current.style.display = "";
       gsap.set(guideRingsRef.current, { opacity: 0, clearProps: "all" });
     }
 
@@ -132,274 +137,222 @@ export default function CinematicTransition() {
     }
   }, [clearSafetyTimeout]);
 
-  // Compute destination target focal point coordinates
-  const computeTargetFocalPoint = useCallback((targetUrl: string, targetHash: string) => {
+  // Resolve the real destination DOM element specified by user
+  const resolveTargetElement = useCallback((targetUrl: string, targetHash: string): HTMLElement | null => {
+    const cleanUrl = targetUrl.split("?")[0].replace(/\/$/, "");
+
+    // 1. Explicit hash targeting
+    if (targetHash && targetHash.length > 1) {
+      if (targetHash.includes("artist")) {
+        const el = document.querySelector("#artist img.portraitImg, #artist img[src*='founder-portrait'], #artist img, .portraitImg") as HTMLElement | null;
+        if (el) return el;
+      }
+      if (targetHash.includes("vows")) {
+        const el = document.querySelector("#vows [class*='photoCard']:first-child img, #vows img, #vows") as HTMLElement | null;
+        if (el) return el;
+      }
+      if (targetHash.includes("collection")) {
+        const el = document.querySelector("#collection [data-discipline-id='weddings'], [data-discipline-id='weddings'], #collection .card:first-child") as HTMLElement | null;
+        if (el) return el;
+      }
+      if (targetHash.includes("hero")) {
+        const el = document.querySelector("#hero img, #hero [class*='heroImage'], #hero") as HTMLElement | null;
+        if (el) return el;
+      }
+      const el = document.querySelector(targetHash) as HTMLElement | null;
+      if (el) return el;
+    }
+
+    // 2. Exact user-specified destinations
+    if (cleanUrl === "" || cleanUrl === "/") {
+      // Home: the existing homepage hero
+      return document.querySelector("#hero img, #hero [class*='heroImage'], #hero") as HTMLElement | null;
+    }
+    if (cleanUrl.includes("artist")) {
+      // Artist: Phani Gogireddy's portrait
+      return document.querySelector("#artist img.portraitImg, #artist img[src*='founder-portrait'], #artist img, .portraitImg, #artist") as HTMLElement | null;
+    }
+    if (cleanUrl.includes("vows")) {
+      // The Vows: the Bellamkonda Sai Sreenivas & Kavya Reddy wedding hero
+      return document.querySelector("#vows [class*='photoCard']:first-child img, #vows img, #vows") as HTMLElement | null;
+    }
+    if (cleanUrl.includes("collection")) {
+      // Collection: the first Weddings & Celebrations card
+      return document.querySelector("#collection [data-discipline-id='weddings'], [data-discipline-id='weddings'], #collection [class*='card']:first-child, #collection") as HTMLElement | null;
+    }
+    if (cleanUrl.includes("stories") && !cleanUrl.startsWith("/stories/")) {
+      // Stories: the primary Sireesh & Harshitha wedding image
+      return document.querySelector("a[href*='sirish-and-harshitha'] img, a[href*='sireesh'] img, [class*='storiesGrid'] a:first-child img, .storyCard:first-child img") as HTMLElement | null;
+    }
+    if (cleanUrl.startsWith("/stories/")) {
+      // Individual story pages: that story's own hero photograph
+      return document.querySelector("[class*='heroImageFrame'] img, img[class*='heroImage'], [class*='heroSection'] img") as HTMLElement | null;
+    }
+    if (cleanUrl.startsWith("/disciplines/")) {
+      // Category pages: the first featured photograph
+      return document.querySelector("[class*='heroImg'], [class*='heroSection'] img") as HTMLElement | null;
+    }
+    if (cleanUrl.includes("inquire")) {
+      // Inquire: the commission form heading
+      return document.querySelector("h1, [class*='invitationTitle'], #commissionContactForm h1, #commission-form h1") as HTMLElement | null;
+    }
+    if (cleanUrl.includes("client-gallery")) {
+      return document.querySelector("#client-gallery a[class*='card']:first-child, #client-gallery") as HTMLElement | null;
+    }
+
+    return null;
+  }, []);
+
+  // Compute on-screen focal coordinates from real DOM element
+  const computeTargetCoordinates = useCallback((targetEl: HTMLElement, cleanUrl: string) => {
+    const rect = targetEl.getBoundingClientRect();
     const winW = typeof window !== "undefined" ? window.innerWidth : 1200;
     const winH = typeof window !== "undefined" ? window.innerHeight : 800;
     const isMobile = winW <= 820;
 
-    let targetEl: HTMLElement | null = null;
-    const cleanUrl = targetUrl.split("?")[0].replace(/\/$/, "");
+    const isPortrait = cleanUrl.includes("artist") || cleanUrl.startsWith("/stories/");
+    const focalYRatio = isPortrait ? 0.35 : 0.50;
 
-    if (targetHash && targetHash.length > 1) {
-      targetEl = document.querySelector(targetHash) as HTMLElement | null;
-    }
+    const targetScreenX = rect.left + rect.width * 0.5;
+    const targetScreenY = Math.max(70, Math.min(winH - 70, rect.top + rect.height * focalYRatio));
 
-    if (!targetEl) {
-      if (cleanUrl === "" || cleanUrl === "/") {
-        targetEl = document.querySelector("#hero img, .heroImage, #hero") as HTMLElement | null;
-      } else if (cleanUrl.includes("vows")) {
-        targetEl = document.querySelector("#vows, #the-vows, [aria-label*='Vows']") as HTMLElement | null;
-      } else if (cleanUrl.includes("collection")) {
-        targetEl = document.querySelector("#collection [data-discipline-id='weddings'], #collection .card:first-child, #collection") as HTMLElement | null;
-      } else if (cleanUrl.includes("artist")) {
-        targetEl = document.querySelector("#artist img, .portraitImg, #founder-recognition img, [aria-label*='Artist']") as HTMLElement | null;
-      } else if (cleanUrl.includes("stories") && !cleanUrl.startsWith("/stories/")) {
-        targetEl = document.querySelector("#stories a[href*='sirish-and-harshitha'], .storyCard img, #stories article:first-child, #stories") as HTMLElement | null;
-      } else if (cleanUrl.startsWith("/stories/")) {
-        targetEl = document.querySelector("[class*='heroImageFrame'] img, img[class*='heroImage'], [class*='heroSection'] img") as HTMLElement | null;
-      } else if (cleanUrl.startsWith("/disciplines/")) {
-        targetEl = document.querySelector("[class*='heroSection'] img, [class*='heroImage']") as HTMLElement | null;
-      } else if (cleanUrl.includes("inquire")) {
-        targetEl = document.querySelector("#commission-form h1, h1, form") as HTMLElement | null;
-      } else if (cleanUrl.includes("client-gallery")) {
-        targetEl = document.querySelector("#client-gallery, [class*='cardsShowcaseWrapper']") as HTMLElement | null;
-      }
-    }
-
-    if (targetEl) {
-      const rect = targetEl.getBoundingClientRect();
-      if (rect.width > 20 && rect.height > 20) {
-        const focalYRatio = cleanUrl.includes("artist") || cleanUrl.startsWith("/stories/") ? 0.3 : 0.42;
-        const targetScreenX = rect.left + rect.width * 0.5;
-        const targetScreenY = Math.max(80, Math.min(winH - 80, rect.top + rect.height * focalYRatio));
-        const size = Math.max(90, Math.min(170, isMobile ? rect.width * 0.45 : rect.width * 0.35));
-
-        return {
-          x: targetScreenX - winW / 2,
-          y: targetScreenY - winH / 2,
-          width: size,
-          height: size,
-        };
-      }
-    }
-
-    // Calibrated responsive fallback coordinates
-    let defaultXRatio = 0;
-    let defaultYRatio = -0.06;
-
-    if (cleanUrl.includes("artist")) {
-      defaultXRatio = isMobile ? 0 : 0.16;
-      defaultYRatio = -0.14;
-    } else if (cleanUrl.includes("collection")) {
-      defaultXRatio = isMobile ? 0 : -0.25;
-      defaultYRatio = 0.04;
-    } else if (cleanUrl.startsWith("/stories/")) {
-      defaultXRatio = isMobile ? 0 : -0.22;
-      defaultYRatio = -0.08;
-    } else if (cleanUrl.includes("inquire")) {
-      defaultXRatio = 0;
-      defaultYRatio = -0.16;
-    } else if (cleanUrl.includes("vows")) {
-      defaultXRatio = 0;
-      defaultYRatio = -0.08;
-    }
+    const size = Math.max(
+      90,
+      Math.min(180, isMobile ? rect.width * 0.48 : Math.min(rect.width, rect.height) * 0.50)
+    );
 
     return {
-      x: defaultXRatio * winW,
-      y: defaultYRatio * winH,
-      width: isMobile ? 110 : 140,
-      height: isMobile ? 110 : 140,
+      x: targetScreenX - winW * 0.5,
+      y: targetScreenY - winH * 0.5,
+      width: size,
+      height: size,
     };
   }, []);
 
-  // Execute the camera shutter transition with gold focus ring traveling to destination
+  // Perform route swap or scroll while sealed
+  const performRouteSwapOrScroll = useCallback(async (targetUrl: string, targetHash: string) => {
+    let destUrl: URL;
+    try {
+      destUrl = new URL(targetUrl, window.location.href);
+    } catch {
+      return;
+    }
+
+    const currentUrl = new URL(window.location.href);
+    const isSamePath = destUrl.pathname === currentUrl.pathname;
+
+    if (isSamePath) {
+      if (destUrl.hash && destUrl.hash.length > 1) {
+        if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
+          const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
+          l.scrollTo(destUrl.hash, { offset: -80, immediate: true });
+        } else {
+          const el = document.querySelector(destUrl.hash);
+          if (el) el.scrollIntoView({ behavior: "instant", block: "start" });
+        }
+        try {
+          window.history.pushState(null, "", targetUrl);
+        } catch {
+          // fallback
+        }
+      } else {
+        if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
+          const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
+          l.scrollTo(0, { immediate: true });
+        } else {
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        }
+        try {
+          window.history.pushState(null, "", targetUrl);
+        } catch {
+          // fallback
+        }
+      }
+      await new Promise((r) => setTimeout(r, 60));
+    } else {
+      startTransition(() => {
+        router.push(targetUrl);
+      });
+
+      if (destUrl.hash && destUrl.hash.length > 1) {
+        if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
+          const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
+          l.scrollTo(destUrl.hash, { offset: -80, immediate: true });
+        }
+      } else {
+        if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
+          const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
+          l.scrollTo(0, { immediate: true });
+        } else {
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        }
+      }
+
+      // Await DOM readiness of the destination route while still sealed (poll up to 350ms)
+      const startPoll = Date.now();
+      while (Date.now() - startPoll < 350) {
+        if (window.location.pathname === destUrl.pathname) {
+          const found = resolveTargetElement(targetUrl, targetHash);
+          if (found) break;
+        }
+        await new Promise((r) => setTimeout(r, 40));
+      }
+    }
+  }, [router, resolveTargetElement]);
+
+  // Execute the exact 4-phase sequence requested:
+  // SHUTTER CLOSES 100% -> BRIEF HOLD -> SHUTTER OPENS 100% -> SHUTTER CLEANUP -> RING TRAVELS TO REAL TARGET -> BRIEF FOCUS -> RING CLEANUP -> CONTINUE
   const triggerTransition = useCallback(
-    (targetUrl: string, targetHash: string, _customImage?: string) => {
+    async (targetUrl: string, targetHash: string, _customImage?: string) => {
       void _customImage;
-      // Prevent duplicate transitions during rapid repeated clicks
       if (isTransitioningRef.current) return;
       isTransitioningRef.current = true;
 
-      // Immediately initiate destination prefetch
       try {
         router.prefetch(targetUrl);
       } catch {
         // prefetch fallback
       }
 
-      if (overlayRef.current) {
-        overlayRef.current.style.display = "block";
-        overlayRef.current.classList.add(styles.overlayRootActive);
-      }
-
-      // Safety watchdog fallback (2.8s limit)
       clearSafetyTimeout();
       safetyTimeoutRef.current = setTimeout(() => {
         forceReset();
-      }, 2800);
+      }, 3200);
 
-      // ── ACCESSIBILITY: REDUCED MOTION FADE ──
+      // Reduced motion accessibility fallback
       if (isReducedMotion) {
-        const reducedTl = gsap.timeline({
-          onComplete: () => {
-            forceReset();
-          },
-        });
-        masterTimelineRef.current = reducedTl;
-
-        reducedTl.set(overlayRef.current, { visibility: "visible", pointerEvents: "auto" });
-        reducedTl.to(overlayRef.current, {
-          opacity: 1,
-          duration: 0.12,
-          ease: "power1.inOut",
-        });
-        reducedTl.call(() => {
-          router.push(targetUrl);
-          if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
-            const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
-            if (targetHash && targetHash.length > 1) {
-              l.scrollTo(targetHash, { offset: -80, immediate: true });
-            } else {
-              l.scrollTo(0, { immediate: true });
-            }
-          } else if (targetHash && targetHash.length > 1) {
-            const el = document.querySelector(targetHash);
-            if (el) el.scrollIntoView({ behavior: "smooth" });
-          } else {
-            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        if (overlayRef.current) {
+          overlayRef.current.style.display = "block";
+          overlayRef.current.classList.add(styles.overlayRootActive);
+        }
+        gsap.fromTo(overlayRef.current, { opacity: 0 }, {
+          opacity: 1, duration: 0.12, ease: "power1.inOut",
+          onComplete: async () => {
+            await performRouteSwapOrScroll(targetUrl, targetHash);
+            gsap.to(overlayRef.current, {
+              opacity: 0, duration: 0.12, ease: "power1.inOut",
+              onComplete: forceReset,
+            });
           }
-        }, undefined, 0.12);
-        reducedTl.to(overlayRef.current, {
-          opacity: 0,
-          duration: 0.12,
-          ease: "power1.inOut",
-        }, 0.16);
+        });
         return;
       }
 
-      // ── PHASE 1 TO 4: STRICT 4-PHASE SEQUENCE ──
-      // Phase 1 (0.00s–0.34s): Shutter closes to zero; ring stays hidden (NOT on top of blades)
-      // Phase 2 (0.34s–0.78s): Clean hold 0.10s with route swap sealed, then reopen completely
-      // Phase 3 (0.78s–1.28s): ONLY after shutter completely reopens, gold ring travels from (0,0) to destination
-      // Phase 4 (1.28s–1.50s): Ring settles with micro focus snap pulse, clears temporary overlays
-      if (masterTimelineRef.current) {
-        masterTimelineRef.current.kill();
+      if (overlayRef.current) {
+        overlayRef.current.style.display = "block";
+        overlayRef.current.classList.add(styles.overlayRootActive);
+        gsap.set(overlayRef.current, { opacity: 1, visibility: "visible", pointerEvents: "auto" });
       }
 
-      const DURATION_CLOSE = 0.34;
-      const DURATION_HOLD = 0.10;
-      const DURATION_OPEN = 0.34;
-      const TIME_SEALED = DURATION_CLOSE; // 0.34s
-      const TIME_REOPEN = DURATION_CLOSE + DURATION_HOLD; // 0.44s
-      const TIME_FULLY_OPEN = TIME_REOPEN + DURATION_OPEN; // 0.78s
+      // Reset shutter elements to visible for Phase 1
+      if (shutterSvgRef.current) shutterSvgRef.current.style.display = "";
+      if (backdropRef.current) backdropRef.current.style.display = "";
+      if (cornersRef.current) cornersRef.current.style.display = "";
+      if (vignetteRef.current) vignetteRef.current.style.display = "";
+      if (guideRingsRef.current) guideRingsRef.current.style.display = "";
 
-      const tl = gsap.timeline();
-      masterTimelineRef.current = tl;
-
-      // ── PHASE 1: SHUTTER CLOSES TO ZERO (0.00s – 0.34s) ──
-      // Initial Setup: Shutter retracted (-38), Gold Ring HIDDEN (opacity 0)
-      tl.set(overlayRef.current, { opacity: 1, visibility: "visible", pointerEvents: "auto" }, 0.00);
-      tl.set(backdropRef.current, { opacity: 0 }, 0.00);
-      tl.set([vignetteRef.current, cornersRef.current, guideRingsRef.current], { opacity: 0 }, 0.00);
-
+      // Gold ring MUST NOT sit on top of closing blades
       if (focusRingRef.current) {
-        tl.set(focusRingRef.current, {
-          xPercent: -50,
-          yPercent: -50,
-          x: 0,
-          y: 0,
-          width: 130,
-          height: 130,
-          opacity: 0, // MUST NOT sit on top of closing blades
-          scale: 1,
-        }, 0.00);
-      }
-
-      if (bladeActuatorsRef.current.length > 0) {
-        tl.set(bladeActuatorsRef.current, {
-          svgOrigin: `${PIVOT_X} ${PIVOT_Y}`,
-          rotation: -38,
-        }, 0.00);
-      }
-
-      // Optical Ambient & HUD Viewfinder Brackets Fade in during close
-      tl.to([vignetteRef.current, cornersRef.current], {
-        opacity: 0.85,
-        duration: 0.16,
-        ease: "power1.out",
-      }, 0.00);
-
-      tl.to(guideRingsRef.current, {
-        opacity: 0.35,
-        duration: 0.16,
-        ease: "power1.out",
-      }, 0.00);
-
-      // 8 Blades close inward until every wing meets at exact center (0% opening)
-      if (bladeActuatorsRef.current.length > 0) {
-        tl.to(bladeActuatorsRef.current, {
-          rotation: 34,
-          duration: DURATION_CLOSE,
-          ease: "power2.in",
-        }, 0.00);
-      }
-
-      tl.to(backdropRef.current, {
-        opacity: 1,
-        duration: 0.20,
-        ease: "power2.in",
-      }, 0.14);
-
-      // ── PHASE 2A: HOLD FULLY CLOSED & ROUTE SWAP WHILE SEALED (0.34s – 0.44s) ──
-      tl.call(() => {
-        startTransition(() => {
-          router.push(targetUrl);
-        });
-
-        if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
-          const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
-          if (targetHash && targetHash.length > 1) {
-            l.scrollTo(targetHash, { offset: -80, immediate: true });
-          } else {
-            l.scrollTo(0, { immediate: true });
-          }
-        } else if (targetHash && targetHash.length > 1) {
-          const el = document.querySelector(targetHash);
-          if (el) el.scrollIntoView({ behavior: "smooth" });
-        } else {
-          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-        }
-      }, undefined, TIME_SEALED);
-
-      // ── PHASE 2B: REVERSE MOTION — SHUTTER COMPLETELY REOPENS (0.44s – 0.78s) ──
-      if (bladeActuatorsRef.current.length > 0) {
-        tl.to(bladeActuatorsRef.current, {
-          rotation: -38,
-          duration: DURATION_OPEN,
-          ease: "power2.out",
-        }, TIME_REOPEN);
-      }
-
-      tl.to(backdropRef.current, {
-        opacity: 0,
-        duration: 0.24,
-        ease: "power2.out",
-      }, TIME_REOPEN);
-
-      tl.to([cornersRef.current, guideRingsRef.current, vignetteRef.current], {
-        opacity: 0,
-        duration: 0.22,
-        ease: "power1.out",
-      }, TIME_REOPEN + 0.04);
-
-      // ── PHASE 3: EXISTING GOLD TRACKING RING TRAVELS TO DESTINATION (0.78s – 1.28s) ──
-      // ONLY triggers after shutter has completely re-opened at 0.78s
-      tl.call(() => {
-        if (!focusRingRef.current) return;
-        const target = computeTargetFocalPoint(targetUrl, targetHash);
-
-        // Ring appears cleanly at screen center (0, 0)
         gsap.set(focusRingRef.current, {
           xPercent: -50,
           yPercent: -50,
@@ -407,51 +360,174 @@ export default function CinematicTransition() {
           y: 0,
           width: 130,
           height: 130,
+          opacity: 0,
           scale: 1,
-          opacity: 1,
         });
+      }
 
-        // Ring physically travels across the live screen to the destination element
+      if (bladeActuatorsRef.current.length > 0) {
+        gsap.set(bladeActuatorsRef.current, {
+          svgOrigin: `${PIVOT_X} ${PIVOT_Y}`,
+          rotation: -38,
+        });
+      }
+      if (backdropRef.current) gsap.set(backdropRef.current, { opacity: 0 });
+      if (cornersRef.current) gsap.set(cornersRef.current, { opacity: 0 });
+      if (vignetteRef.current) gsap.set(vignetteRef.current, { opacity: 0 });
+      if (guideRingsRef.current) gsap.set(guideRingsRef.current, { opacity: 0 });
+
+      // ── PHASE 1: CAMERA SHUTTER CLOSES COMPLETELY (0.34s) ──
+      const closeTl = gsap.timeline();
+      masterTimelineRef.current = closeTl;
+
+      closeTl.to([vignetteRef.current, cornersRef.current], {
+        opacity: 0.85,
+        duration: 0.16,
+        ease: "power1.out",
+      }, 0.00);
+
+      closeTl.to(guideRingsRef.current, {
+        opacity: 0.35,
+        duration: 0.16,
+        ease: "power1.out",
+      }, 0.00);
+
+      if (bladeActuatorsRef.current.length > 0) {
+        closeTl.to(bladeActuatorsRef.current, {
+          rotation: 34,
+          duration: 0.34,
+          ease: "power2.in",
+        }, 0.00);
+      }
+
+      if (backdropRef.current) {
+        closeTl.to(backdropRef.current, {
+          opacity: 1,
+          duration: 0.20,
+          ease: "power2.in",
+        }, 0.14);
+      }
+
+      await new Promise<void>((resolve) => {
+        closeTl.eventCallback("onComplete", () => resolve());
+      });
+
+      // ── BRIEF CINEMATIC HOLD (100ms) WHILE FULLY SEALED ──
+      await new Promise((r) => setTimeout(r, 100));
+
+      // ── ROUTE SWAP / SCROLL OCCURS WHILE SEALED ──
+      await performRouteSwapOrScroll(targetUrl, targetHash);
+
+      // ── PHASE 2: CAMERA SHUTTER OPENS COMPLETELY (0.34s) ──
+      const openTl = gsap.timeline();
+      masterTimelineRef.current = openTl;
+
+      if (bladeActuatorsRef.current.length > 0) {
+        openTl.to(bladeActuatorsRef.current, {
+          rotation: -38,
+          duration: 0.34,
+          ease: "power2.out",
+        }, 0.00);
+      }
+
+      if (backdropRef.current) {
+        openTl.to(backdropRef.current, {
+          opacity: 0,
+          duration: 0.24,
+          ease: "power2.out",
+        }, 0.00);
+      }
+
+      openTl.to([cornersRef.current, guideRingsRef.current, vignetteRef.current], {
+        opacity: 0,
+        duration: 0.22,
+        ease: "power1.out",
+      }, 0.04);
+
+      await new Promise<void>((resolve) => {
+        openTl.eventCallback("onComplete", () => resolve());
+      });
+
+      // ── SHUTTER CLEANUP: REMOVE SHUTTER FROM VISIBLE COMPOSITION ──
+      if (shutterSvgRef.current) shutterSvgRef.current.style.display = "none";
+      if (backdropRef.current) backdropRef.current.style.display = "none";
+      if (cornersRef.current) cornersRef.current.style.display = "none";
+      if (vignetteRef.current) vignetteRef.current.style.display = "none";
+      if (guideRingsRef.current) guideRingsRef.current.style.display = "none";
+
+      // ── PHASE 3: THE EXISTING GOLD FOCUS RING TRAVELS TO THE DESTINATION ──
+      if (!focusRingRef.current) {
+        forceReset();
+        return;
+      }
+
+      const cleanUrl = targetUrl.split("?")[0].replace(/\/$/, "");
+      const targetEl = resolveTargetElement(targetUrl, targetHash);
+
+      if (!targetEl) {
+        // "If the target is unavailable, fail gracefully rather than tracking toward an invented position."
+        forceReset();
+        return;
+      }
+
+      const targetCoords = computeTargetCoordinates(targetEl, cleanUrl);
+
+      // Make ring visible at center (0, 0)
+      gsap.set(focusRingRef.current, {
+        xPercent: -50,
+        yPercent: -50,
+        x: 0,
+        y: 0,
+        width: 130,
+        height: 130,
+        scale: 1,
+        opacity: 1,
+      });
+
+      // Ring physically travels across screen to target element
+      await new Promise<void>((resolve) => {
         ringTimelineRef.current = gsap.to(focusRingRef.current, {
           xPercent: -50,
           yPercent: -50,
-          x: target.x,
-          y: target.y,
-          width: target.width,
-          height: target.height,
-          duration: 0.50,
+          x: targetCoords.x,
+          y: targetCoords.y,
+          width: targetCoords.width,
+          height: targetCoords.height,
+          duration: 0.52,
           ease: "power2.inOut",
+          onComplete: () => resolve(),
+        });
+      });
+
+      // ── PHASE 4: BRIEF FOCUS SNAP & CLEANUP ──
+      await new Promise<void>((resolve) => {
+        if (!focusRingRef.current) {
+          resolve();
+          return;
+        }
+        gsap.to(focusRingRef.current, {
+          scale: 1.08,
+          duration: 0.08,
+          ease: "power1.out",
           onComplete: () => {
-            // ── PHASE 4: FOCUS SETTLE SNAP & RESTORE INTERACTION (1.28s – 1.50s) ──
             if (!focusRingRef.current) {
-              forceReset();
+              resolve();
               return;
             }
             gsap.to(focusRingRef.current, {
-              scale: 1.08,
-              duration: 0.08,
-              ease: "power1.out",
-              onComplete: () => {
-                if (!focusRingRef.current) {
-                  forceReset();
-                  return;
-                }
-                gsap.to(focusRingRef.current, {
-                  scale: 1.0,
-                  opacity: 0,
-                  duration: 0.14,
-                  ease: "power1.inOut",
-                  onComplete: () => {
-                    forceReset();
-                  },
-                });
-              },
+              scale: 1.0,
+              opacity: 0,
+              duration: 0.16,
+              ease: "power1.inOut",
+              onComplete: () => resolve(),
             });
           },
         });
-      }, undefined, TIME_FULLY_OPEN);
+      });
+
+      forceReset();
     },
-    [isReducedMotion, router, clearSafetyTimeout, forceReset, computeTargetFocalPoint]
+    [isReducedMotion, router, clearSafetyTimeout, forceReset, resolveTargetElement, computeTargetCoordinates, performRouteSwapOrScroll]
   );
 
   // Global click interceptor for eligible internal links
@@ -494,17 +570,8 @@ export default function CinematicTransition() {
       // Exclude different origins
       if (url.origin !== window.location.origin) return;
 
-      // In-page scroll on the same page (e.g. clicking /#vows while already at /)
+      // Identical path and hash: do not re-trigger transition
       const currentUrl = new URL(window.location.href);
-      if (
-        url.pathname === currentUrl.pathname &&
-        url.search === currentUrl.search &&
-        url.hash
-      ) {
-        return;
-      }
-
-      // Identical path and hash
       if (
         url.pathname === currentUrl.pathname &&
         url.search === currentUrl.search &&
@@ -660,6 +727,7 @@ export default function CinematicTransition() {
 
           {/* ── 8-Blade Mechanical Camera Aperture Shutter Diaphragm ── */}
           <svg
+            ref={shutterSvgRef}
             className={styles.shutterSvg}
             viewBox="-1000 -1000 2000 2000"
             preserveAspectRatio="xMidYMid slice"

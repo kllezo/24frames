@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import CameraGlareTransition from "./CameraGlareTransition";
 import styles from "./HeroSection.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -16,6 +17,7 @@ export default function HeroSection() {
   const apertureRingsRef = useRef<SVGGElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
   const metadataRef = useRef<HTMLDivElement>(null);
+  const topBarRef = useRef<HTMLDivElement>(null);
 
   /* ── Act I — The First Frame: Aperture Opening & Editorial Reveal ── */
   useEffect(() => {
@@ -93,22 +95,6 @@ export default function HeroSection() {
           0.85
         );
       }
-
-      // 7. Scroll-driven scrub: user scrolling immediately opens the aperture and releases into The Vows
-      if (sectionRef.current && apertureHoleRef.current) {
-        ScrollTrigger.create({
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom 30%",
-          scrub: 1.0,
-          onUpdate: (self) => {
-            if (self.progress > 0.02 && apertureContainerRef.current) {
-              const dynamicR = Math.max(210, 210 + self.progress * 820);
-              apertureHoleRef.current?.setAttribute("r", `${dynamicR}`);
-            }
-          },
-        });
-      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -176,7 +162,7 @@ export default function HeroSection() {
         <div className={styles.headerUnderlay} aria-hidden="true" />
 
         {/* Top Eyebrow Tag Row (Positioned below transparent header) */}
-        <div className={styles.frameTopBar}>
+        <div ref={topBarRef} className={styles.frameTopBar}>
           <div className={styles.kickerBadge}>
             <span className={styles.kickerDot} />
             <span>ACT I · THE FIRST FRAME</span>
@@ -210,6 +196,16 @@ export default function HeroSection() {
             <span className={styles.arrowIcon}>↓</span>
           </button>
         </div>
+
+        {/* ── Camera Glare → The Fabric of Frames Cinematic Transition ── */}
+        <CameraGlareTransition
+          heroSectionRef={sectionRef}
+          heroImageRef={heroImgRef}
+          headlineRef={headlineRef}
+          metadataRef={metadataRef}
+          topBarRef={topBarRef}
+          apertureRef={apertureContainerRef}
+        />
       </div>
     </section>
   );
