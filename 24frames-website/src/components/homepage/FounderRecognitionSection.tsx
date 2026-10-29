@@ -623,7 +623,7 @@ export default function FounderRecognitionSection() {
             {/* 2. Wide Cream Biography Panel */}
             <div ref={bioRef} className={styles.bioPanel}>
               <p className={styles.bioText}>
-                Established in 2016 from a modest setup of two computers, 24 Frames was founded on an unyielding dedication to heartfelt visual storytelling. Bringing cinematic framing, lighting nuance, and deep emotional sensitivity from Telugu cinema to real weddings, Phani Gogireddy has shaped South India's premier luxury wedding film aesthetic. Today, backed by a 6,000 sq. ft. studio and an award-winning creative team, the company has documented over 1,000 celebrated unions across India and abroad.
+                Established in 2016 from a modest setup of two computers, 24 Frames was founded on an unyielding dedication to heartfelt visual storytelling. Bringing cinematic framing, lighting nuance, and deep emotional sensitivity from Telugu cinema to real weddings, Phani Gogireddy has shaped South India&apos;s premier luxury wedding film aesthetic. Today, backed by a 6,000 sq. ft. studio and an award-winning creative team, the company has documented over 1,000 celebrated unions across India and abroad.
               </p>
             </div>
 
@@ -696,7 +696,7 @@ export default function FounderRecognitionSection() {
                 <p className={styles.modalConferring}>{activeItem.conferringBody}</p>
 
                 <blockquote className={styles.modalCitation}>
-                  "{activeItem.citation}"
+                  &ldquo;{activeItem.citation}&rdquo;
                 </blockquote>
 
                 <p className={styles.modalSummary}>{activeItem.summary}</p>
