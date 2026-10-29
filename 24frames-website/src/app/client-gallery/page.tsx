@@ -382,15 +382,17 @@ export default function ClientGalleryPage() {
 
                     {/* Content Column */}
                     <div className={styles.contentColumn}>
-                      {/* Organic Discovered Thought in Whitespace */}
-                      <div className={styles.sectionPoemNote}>
-                        <span className={styles.sectionPoemChapter}>
-                          {CLIENT_GALLERY_POEMS[idx % CLIENT_GALLERY_POEMS.length].chapter}
-                        </span>
-                        <p className={styles.sectionPoemText}>
-                          “{CLIENT_GALLERY_POEMS[idx % CLIENT_GALLERY_POEMS.length].poem}”
-                        </p>
-                      </div>
+                      {/* Organic Discovered Thought in Whitespace — Section 0 only */}
+                      {idx === 0 && (
+                        <div className={styles.sectionPoemNote}>
+                          <span className={styles.sectionPoemChapter}>
+                            {CLIENT_GALLERY_POEMS[0].chapter}
+                          </span>
+                          <p className={styles.sectionPoemText}>
+                            “{CLIENT_GALLERY_POEMS[0].poem}”
+                          </p>
+                        </div>
+                      )}
 
                       <div className={styles.chapterBadgeLine}>
                         <span className={styles.goldLine} />
@@ -412,6 +414,18 @@ export default function ClientGalleryPage() {
                           </p>
                         ))}
                       </div>
+
+                      {/* Varied Natural Quote Placement — Section 3 after deep description */}
+                      {idx === 3 && (
+                        <div className={styles.sectionPoemNote} style={{ marginTop: '1.25rem', marginBottom: '1.5rem' }}>
+                          <span className={styles.sectionPoemChapter}>
+                            {CLIENT_GALLERY_POEMS[3 % CLIENT_GALLERY_POEMS.length].chapter}
+                          </span>
+                          <p className={styles.sectionPoemText}>
+                            “{CLIENT_GALLERY_POEMS[3 % CLIENT_GALLERY_POEMS.length].poem}”
+                          </p>
+                        </div>
+                      )}
 
                       {/* Key Capabilities Checklist */}
                       <div className={styles.capabilitiesCard}>

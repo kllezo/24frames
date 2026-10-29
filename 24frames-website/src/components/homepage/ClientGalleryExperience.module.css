@@ -120,8 +120,8 @@
   border: 1px solid rgba(9, 69, 62, 0.12);
   border-radius: 24px;
   padding: clamp(1.2rem, 1.8vw, 2rem);
-  /* Top padding accommodates the dramatic floating pop-out without clipping */
-  padding-top: clamp(2.5rem, 3.5vw, 3.75rem);
+  /* Generous top headroom accommodates the dramatic physical upward pop-out */
+  padding-top: clamp(5.5rem, 7.5vw, 7.5rem);
   box-shadow: 0 12px 40px rgba(9, 69, 62, 0.05), 0 2px 6px rgba(0, 0, 0, 0.02);
   width: 100%;
   position: relative;
@@ -141,8 +141,8 @@
   position: relative;
   height: clamp(340px, 28vw, 385px);
   border-radius: 16px;
-  /* Fixed boundaries — clipped strictly to 16px rounded corners */
-  overflow: hidden;
+  /* overflow: visible allows photograph to pop up proudly above the card sleeve */
+  overflow: visible;
   text-decoration: none;
   display: block;
   cursor: pointer;
@@ -159,6 +159,7 @@
 .card:focus-visible,
 .card.cardOpen {
   box-shadow: 0 16px 36px rgba(9, 69, 62, 0.16);
+  z-index: 20;
 }
 
 .card:focus-visible {
@@ -176,9 +177,12 @@
   height: 100%;
   overflow: hidden;
   border-radius: 16px;
-  z-index: 1;
+  z-index: 2;
   background: transparent;
   pointer-events: none;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
 .cardPhotoImg {
@@ -186,17 +190,24 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  /* Resting state: photo sits flush at top so top ~10% peeks out above resting cover with zero void */
+  /* Resting state: photo sits flush at top so top ~10% peeks out above resting cover */
   transform: translateY(0) scale(1.0);
-  transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.45s ease;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s ease;
   will-change: transform;
 }
 
-/* On hover/open: photo slips smoothly upward from behind the cover */
+/* On hover/open: photo slips smoothly upward from behind the cover into top headroom */
+.card:hover .cardPhotoArea,
+.card:focus-visible .cardPhotoArea,
+.card.cardOpen .cardPhotoArea {
+  transform: translateY(-92px) scale(1.02);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.32);
+  z-index: 4;
+}
+
 .card:hover .cardPhotoImg,
 .card:focus-visible .cardPhotoImg,
 .card.cardOpen .cardPhotoImg {
-  transform: translateY(-24px) scale(1.03);
   filter: contrast(1.04) brightness(1.02);
 }
 
@@ -205,8 +216,8 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.08) 0%,
-    rgba(0, 0, 0, 0.32) 100%
+    rgba(0, 0, 0, 0.06) 0%,
+    rgba(0, 0, 0, 0.28) 100%
   );
   pointer-events: none;
   opacity: 0.5;
@@ -216,11 +227,11 @@
 .card:hover .photoVignette,
 .card:focus-visible .photoVignette,
 .card.cardOpen .photoVignette {
-  opacity: 0.2;
+  opacity: 0.15;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   4. FRONT ARCHIVAL FOLDER COVER (ANCHORED TO BOTTOM, RETRACTS DOWN)
+   4. FRONT ARCHIVAL FOLDER COVER (ANCHORED TO BOTTOM, TILTS FORWARD IN 3D)
    ───────────────────────────────────────────────────────────── */
 .folderCover {
   position: absolute;
@@ -229,43 +240,44 @@
   right: 0;
   /* Resting state: covers bottom ~90%, exposing top ~10% photo peek */
   height: calc(100% - clamp(34px, 2.8vw, 42px));
-  z-index: 5;
-  border-radius: 12px 12px 16px 16px;
+  z-index: 10;
+  border-radius: 14px 14px 16px 16px;
   overflow: hidden;
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.04);
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  /* Hinge anchored strictly at bottom edge — zero protrusion below card */
   transform-origin: center bottom;
   transform: rotateX(0deg);
-  transition: height 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+  transition: height 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.6s cubic-bezier(0.22, 1, 0.36, 1),
               border-color 0.4s ease;
   will-change: height, transform;
   pointer-events: auto;
 }
 
-/* On hover/open: front cover retracts downward and folds open in 3D */
+/* On hover/open: front cover retracts to 132px and tilts forward in true 3D perspective */
 .card:hover .folderCover,
 .card:focus-visible .folderCover,
 .card.cardOpen .folderCover {
-  height: 116px;
-  transform: rotateX(-32deg) translateY(4px);
-  box-shadow: 0 -12px 30px rgba(0, 0, 0, 0.32);
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  height: 132px;
+  transform: perspective(900px) rotateX(-26deg);
+  box-shadow: 0 -14px 32px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.45);
 }
 
-/* Stepped Tab Header (Moves with cover, remains visible on folded strip) */
+/* Stepped Tab Header (Moves with cover, remains crisp on folded strip) */
 .folderTabHeader {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 52px;
+  height: 48px;
   padding: 0 clamp(12px, 1.2vw, 18px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10;
+  z-index: 12;
   box-sizing: border-box;
 }
 
@@ -306,13 +318,13 @@
   transform: translate(2px, -2px);
 }
 
-/* Folder Body Content: Number remains visible on flap; title, desc, and button fade out */
+/* Folder Body Content: Number remains visible on flap; secondary content fades out */
 .folderBody {
   position: absolute;
-  top: 52px;
+  top: 48px;
   left: clamp(12px, 1.2vw, 18px);
   right: clamp(12px, 1.2vw, 18px);
-  bottom: clamp(12px, 1.2vw, 18px);
+  bottom: clamp(10px, 1vw, 14px);
   display: flex;
   flex-direction: column;
   z-index: 8;
@@ -324,14 +336,14 @@
   font-size: clamp(2rem, 2.3vw, 2.6rem);
   font-weight: 400;
   line-height: 1;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
   transition: transform 0.4s ease;
 }
 
 .card:hover .folderNumber,
 .card:focus-visible .folderNumber,
 .card.cardOpen .folderNumber {
-  transform: translateY(-4px) scale(0.92);
+  transform: translateY(-2px) scale(0.95);
 }
 
 .folderTitle {
@@ -400,10 +412,6 @@
 .folderCircleIcon {
   width: 14px;
   height: 14px;
-}
-
-.card:hover .folderCircleBtn {
-  transform: scale(1.08);
 }
 
 /* ─────────────────────────────────────────────────────────────

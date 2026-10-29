@@ -152,6 +152,84 @@
   letter-spacing: 0.02em;
 }
 
+/* ── 2X HERO EXHIBITION CENTERPIECE SPREAD (FRAME 07) ── */
+.centerpieceSpread {
+  width: 100%;
+  margin: clamp(3.5rem, 6.5vw, 6rem) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.centerpieceFigure {
+  max-width: 1180px !important;
+  width: 100%;
+  border-radius: 18px !important;
+  border: 1px solid #DFD7C7 !important;
+  box-shadow: 0 16px 48px rgba(9, 69, 62, 0.08) !important;
+  margin: 0 auto;
+}
+
+.centerpieceFigure:hover {
+  transform: translateY(-6px);
+  border-color: #09453E !important;
+  box-shadow: 0 24px 60px rgba(9, 69, 62, 0.14) !important;
+}
+
+.centerpieceFrameWrap {
+  border-radius: 18px 18px 0 0;
+}
+
+.aspectCenterpieceLandscape {
+  aspect-ratio: 16 / 9;
+  max-height: 720px;
+}
+
+.aspectCenterpiecePortrait {
+  aspect-ratio: 4 / 5;
+  max-height: 850px;
+  max-width: 740px;
+  margin: 0 auto;
+}
+
+.centerpieceBadge {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #FAF8F2;
+  background: rgba(9, 69, 62, 0.88);
+  backdrop-filter: blur(8px);
+  padding: 0.45rem 0.95rem;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 3;
+}
+
+.centerpieceCaptionBlock {
+  padding: 1.25rem clamp(1.25rem, 2.5vw, 2.25rem);
+  background: #FAF8F2;
+}
+
+.centerpieceCaptionMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.centerpieceBadgeTag {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8C733E;
+}
+
 /* Individual Figure Card */
 .frameFigure {
   margin: 0;

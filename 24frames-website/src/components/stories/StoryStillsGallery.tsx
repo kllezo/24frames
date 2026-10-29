@@ -76,14 +76,29 @@ export default function StoryStillsGallery({ frames, storyTitle, editorial }: Pr
   // Centralized scroll lock (including Lenis) on lightbox open
   useScrollLock(activeImageIndex !== null);
 
-  // Split frames for the two staggered editorial columns
-  const leftFrames = frames
-    .map((frame, originalIndex) => ({ frame, originalIndex }))
-    .filter((_, i) => i % 2 === 0);
+  // Identify Frame 07 (or 7th image at index 6) for 2X Centerpiece Spread
+  const centerpieceIndex = frames.findIndex((f) => f.frameNo === "07");
+  const actualCenterpieceIdx = centerpieceIndex !== -1 ? centerpieceIndex : 6;
 
-  const rightFrames = frames
+  const upperFrames = frames
     .map((frame, originalIndex) => ({ frame, originalIndex }))
-    .filter((_, i) => i % 2 !== 0);
+    .filter((_, i) => i < actualCenterpieceIdx);
+
+  const centerpieceItem = frames[actualCenterpieceIdx]
+    ? { frame: frames[actualCenterpieceIdx], originalIndex: actualCenterpieceIdx }
+    : null;
+
+  const lowerFrames = frames
+    .map((frame, originalIndex) => ({ frame, originalIndex }))
+    .filter((_, i) => i > actualCenterpieceIdx);
+
+  // Split upper frames into two staggered editorial columns
+  const upperLeft = upperFrames.filter((_, i) => i % 2 === 0);
+  const upperRight = upperFrames.filter((_, i) => i % 2 !== 0);
+
+  // Split lower frames into two staggered editorial columns
+  const lowerLeft = lowerFrames.filter((_, i) => i % 2 === 0);
+  const lowerRight = lowerFrames.filter((_, i) => i % 2 !== 0);
 
   const fragments = editorial?.narrativeFragments && editorial.narrativeFragments.length > 0
     ? editorial.narrativeFragments
@@ -141,12 +156,64 @@ export default function StoryStillsGallery({ frames, storyTitle, editorial }: Pr
     );
   };
 
+  const renderCenterpieceCard = (frame: StoryFrame, originalIndex: number) => {
+    const isLandscape = frame.aspect === "landscape";
+
+    return (
+      <figure
+        key={frame.id}
+        className={`${styles.frameFigure} ${styles.centerpieceFigure}`}
+        onClick={() => setActiveImageIndex(originalIndex)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setActiveImageIndex(originalIndex);
+          }
+        }}
+        aria-label={`View full centerpiece frame ${frame.frameNo}: ${frame.caption}`}
+      >
+        <div
+          className={`${styles.imageFrameWrap} ${styles.centerpieceFrameWrap} ${
+            isLandscape ? styles.aspectCenterpieceLandscape : styles.aspectCenterpiecePortrait
+          }`}
+        >
+          <picture>
+            <source srcSet={frame.webpUrl} type="image/webp" />
+            <img
+              src={frame.url}
+              alt={frame.caption}
+              className={styles.galleryImg}
+              loading="lazy"
+            />
+          </picture>
+          <div className={styles.imageOverlay} />
+          <span className={styles.centerpieceBadge}>
+            FRAME {frame.frameNo} · EXHIBITION CENTERPIECE
+          </span>
+          <span className={styles.expandPrompt} aria-hidden="true">
+            EXPAND ↗
+          </span>
+        </div>
+
+        <figcaption className={`${styles.captionBlock} ${styles.centerpieceCaptionBlock}`}>
+          <div className={styles.centerpieceCaptionMeta}>
+            <span className={styles.centerpieceBadgeTag}>MASTER 35MM CINEMA STILL</span>
+            <span className={styles.captionText}>{frame.caption}</span>
+          </div>
+        </figcaption>
+      </figure>
+    );
+  };
+
   const renderNarrativeNote = (
     fragmentIndex: number,
-    fallbackAlign: "left" | "right" | "center" = "left"
+    fallbackAlign: "left" | "right" | "center" = "left",
+    forceAlign: boolean = false
   ) => {
     const fragment = fragments[fragmentIndex % fragments.length];
-    const align = fragment.position || fallbackAlign;
+    const align = forceAlign ? fallbackAlign : (fragment.position || fallbackAlign);
 
     return (
       <div
@@ -186,42 +253,65 @@ export default function StoryStillsGallery({ frames, storyTitle, editorial }: Pr
 
         {/* ── DESKTOP & TABLET: TWO-COLUMN STAGGERED EDITORIAL VIEW ── */}
         <div className={styles.desktopStaggeredView}>
-          {/* Left Column (Starts at 0) */}
+          {/* Upper Left Column (Frames 01, 03, 05) */}
           <div className={styles.staggerColLeft}>
-            {leftFrames.map(({ frame, originalIndex }, idx) => (
+            {upperLeft.map(({ frame, originalIndex }) => (
               <div key={frame.id} className={styles.itemSlot}>
                 {renderFrameCard(frame, originalIndex)}
-                {/* Organically discovered handwritten thoughts in margin whitespace */}
-                {idx === 0 && renderNarrativeNote(1, "left")}
-                {idx === 1 && renderNarrativeNote(3, "left")}
               </div>
             ))}
           </div>
 
-          {/* Right Column (Starts at vertical midpoint of Left Column) */}
+          {/* Upper Right Column (Frames 02, 04, 06) */}
           <div className={styles.staggerColRight}>
-            {/* Opening discovered thought resting beside Frame 0 */}
-            {renderNarrativeNote(0, "right")}
-
-            {rightFrames.map(({ frame, originalIndex }, idx) => (
+            {upperRight.map(({ frame, originalIndex }) => (
               <div key={frame.id} className={styles.itemSlot}>
                 {renderFrameCard(frame, originalIndex)}
-                {/* Subsequent discovered thoughts */}
-                {idx === 0 && renderNarrativeNote(2, "right")}
-                {idx === 1 && renderNarrativeNote(4, "right")}
               </div>
             ))}
           </div>
         </div>
 
+        {/* ── 2X HERO EXHIBITION CENTERPIECE SPREAD (FRAME 07) ── */}
+        {centerpieceItem && (
+          <div className={styles.centerpieceSpread}>
+            {/* Exactly 1 Curated Handwritten Quote in Natural Whitespace above Centerpiece */}
+            {renderNarrativeNote(0, "center", true)}
+            {renderCenterpieceCard(centerpieceItem.frame, centerpieceItem.originalIndex)}
+          </div>
+        )}
+
+        {/* ── LOWER STAGGERED SEQUENCE (FRAMES 08+) ── */}
+        {lowerFrames.length > 0 && (
+          <div className={styles.desktopStaggeredView}>
+            {/* Lower Left Column */}
+            <div className={styles.staggerColLeft}>
+              {lowerLeft.map(({ frame, originalIndex }) => (
+                <div key={frame.id} className={styles.itemSlot}>
+                  {renderFrameCard(frame, originalIndex)}
+                </div>
+              ))}
+            </div>
+
+            {/* Lower Right Column */}
+            <div className={styles.staggerColRight}>
+              {lowerRight.map(({ frame, originalIndex }) => (
+                <div key={frame.id} className={styles.itemSlot}>
+                  {renderFrameCard(frame, originalIndex)}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* ── MOBILE: BALANCED SINGLE-COLUMN SEQUENTIAL VIEW ── */}
         <div className={styles.mobileSequentialView}>
           {frames.map((frame, index) => (
             <div key={frame.id} className={styles.mobileSlot}>
-              {renderFrameCard(frame, index)}
-              {index === 1 && renderNarrativeNote(1, "center")}
-              {index === 3 && renderNarrativeNote(2, "center")}
-              {index === 5 && renderNarrativeNote(4, "center")}
+              {index === actualCenterpieceIdx - 1 && renderNarrativeNote(0, "center")}
+              {index === actualCenterpieceIdx
+                ? renderCenterpieceCard(frame, index)
+                : renderFrameCard(frame, index)}
             </div>
           ))}
         </div>
