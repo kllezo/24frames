@@ -241,19 +241,6 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
             );
           }
         });
-
-        // Content elements reveal cleanly as cards settle
-        const contentElements = showcaseRef.current.querySelectorAll(
-          `.${styles.compactContent}, .${styles.activeContent}`
-        );
-        if (contentElements.length) {
-          tl.fromTo(
-            contentElements,
-            { opacity: 0 },
-            { opacity: 1, duration: 0.45, stagger: 0.06, ease: "power2.out" },
-            0.62
-          );
-        }
       }
     }, sectionRef);
 

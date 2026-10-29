@@ -247,7 +247,7 @@
   opacity: 0.85;
 }
 
-/* ── Active Card Content (Clean synchronized group fade, 0 horizontal stretch) ── */
+/* ── Active Card Content (Stationary text fade-in, zero slide/flicker) ── */
 .activeContent {
   position: absolute;
   inset: 0;
@@ -262,28 +262,24 @@
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(5px);
   min-width: 0;
   overflow: hidden;
-  transition: opacity 0.25s ease-out, transform 0.25s ease-out, visibility 0.25s ease-out;
+  transition: opacity 180ms ease-out, visibility 180ms ease-out;
 }
 
 .cardActive .activeContent {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
   pointer-events: auto;
-  transition: opacity 380ms cubic-bezier(0.16, 1, 0.3, 1) 280ms,
-              transform 380ms cubic-bezier(0.16, 1, 0.3, 1) 280ms,
-              visibility 380ms cubic-bezier(0.16, 1, 0.3, 1) 280ms;
+  transition: opacity 280ms cubic-bezier(0.25, 1, 0.5, 1) 70ms,
+              visibility 280ms cubic-bezier(0.25, 1, 0.5, 1) 70ms;
 }
 
 .cardInactive .activeContent {
   opacity: 0;
   visibility: hidden;
-  transform: translateY(4px);
-  transition: opacity 200ms ease-out, transform 200ms ease-out, visibility 200ms ease-out;
   pointer-events: none;
+  transition: opacity 180ms ease-out 0s, visibility 180ms ease-out 0s;
 }
 
 .activeTopRow {
@@ -448,7 +444,7 @@
   pointer-events: auto;
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.28s ease, visibility 0.28s ease;
+  transition: opacity 220ms ease-out 60ms, visibility 220ms ease-out 60ms;
   min-width: 0;
   overflow: hidden;
 }
@@ -457,6 +453,14 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  transition: opacity 150ms ease-out 0s, visibility 150ms ease-out 0s;
+}
+
+.cardInactive .compactContent {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 220ms ease-out 60ms, visibility 220ms ease-out 60ms;
 }
 
 .compactBottomBlock {
@@ -542,11 +546,6 @@
 
 .compactArrow {
   font-size: 0.9em;
-  transition: transform 0.2s ease;
-}
-
-.cardInactive:hover .compactArrow {
-  transform: translateX(3px);
 }
 
 .headerCursiveQuote {
