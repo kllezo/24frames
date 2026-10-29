@@ -86,8 +86,8 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
               >
                 hello@24framesphotography.com
               </a>
-              <a href="tel:+919959664567" className={styles.contactPhone}>
-                +91 99596 64567
+              <a href="tel:+919014433074" className={styles.contactPhone}>
+                +91 90144 33074
               </a>
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
               <ul className={styles.socialList}>
                 <li>
                   <a
-                    href="https://www.instagram.com/24framesphotography_"
+                    href="https://www.instagram.com/24framesphotography_official/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.socialLink}
@@ -164,7 +164,7 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
                 </li>
                 <li>
                   <a
-                    href="https://www.youtube.com/@24framesweddingfilms"
+                    href="https://youtube.com/@24framesphotography"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.socialLink}
@@ -190,7 +190,7 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
                 </li>
                 <li>
                   <a
-                    href="https://wa.me/919959664567"
+                    href="https://wa.me/919014433074"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.socialLink}

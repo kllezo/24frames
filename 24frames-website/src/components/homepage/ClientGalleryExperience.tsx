@@ -430,7 +430,7 @@ export default function ClientGalleryExperience({
 
               <div className={styles.subFooterSocials}>
                 <a
-                  href="https://instagram.com/24framesphotography"
+                  href="https://www.instagram.com/24framesphotography_official/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.socialIconBtn}
@@ -443,7 +443,7 @@ export default function ClientGalleryExperience({
                   </svg>
                 </a>
                 <a
-                  href="https://youtube.com/@24framesweddingfilms"
+                  href="https://youtube.com/@24framesphotography"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.socialIconBtn}
@@ -455,7 +455,7 @@ export default function ClientGalleryExperience({
                   </svg>
                 </a>
                 <a
-                  href="https://wa.me/919959664567"
+                  href="https://wa.me/919014433074"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.socialIconBtn}

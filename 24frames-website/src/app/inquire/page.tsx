@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import DatePickerPopover from "./DatePickerPopover";
 import Footer from "@/components/layout/Footer";
+import { STUDIO_SOCIAL_LINKS } from "@/lib/constants";
 import styles from "./Inquire.module.css";
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -22,6 +23,7 @@ export interface EventTimelineEntry {
   city: string;
   venue: string;
   coverage: string;
+  scope?: string;
 }
 
 export interface CommissionCategory {
@@ -99,16 +101,18 @@ export function getTimelineConfig(categoryId: string) {
         headline: "Outline your shoot schedule & locations.",
         subtitle: "Detail your editorial shoots, lookbook sessions, studio spaces, and call dates.",
         entryTag: "SHOOT / EDITORIAL",
-        defaultName: "Shoot / Lookbook Session",
+        defaultName: "Editorial Shoot / Lookbook Session",
         nameLabel: "Shoot / Editorial Name",
-        namePlaceholder: "e.g. Autumn Couture Lookbook, High-Jewelry Campaign",
+        namePlaceholder: "e.g. Editorial shoot, designer lookbook, campaign film, model portfolio",
         cityLabel: "City / Destination",
         cityPlaceholder: "e.g. Mumbai, Paris, Hyderabad, Como",
         dateLabel: "Shoot Date",
         venueLabel: "Studio / Location (Optional)",
         venuePlaceholder: "e.g. Famous Studios, Mehboob Studio, Heritage Villa",
+        scopeLabel: "Creative Scope & Specific Requirements (Optional)",
+        scopePlaceholder: "Detail your designer collection, styling theme, and editorial deliverables...",
         addBtnLabel: "Add another shoot or lookbook",
-        helperText: "Studio day · Location shoot · Lookbook · Runway",
+        helperText: "Editorial shoot · Designer lookbook · Campaign film · Model portfolio",
       };
     case "commercial":
       return {
@@ -116,16 +120,18 @@ export function getTimelineConfig(categoryId: string) {
         headline: "Define your campaign production schedule.",
         subtitle: "Map the shooting schedule, key production locations, and studio dates for your campaign.",
         entryTag: "CAMPAIGN PRODUCTION",
-        defaultName: "Campaign Shoot / Production Day",
-        nameLabel: "Campaign / Brand Project",
-        namePlaceholder: "e.g. Flagship Brand Film, Luxury Hospitality Stills",
+        defaultName: "Brand Campaign Shoot",
+        nameLabel: "Campaign / Project Name",
+        namePlaceholder: "e.g. Brand campaign, product launch, advertising film, product shoot",
         cityLabel: "City / Destination",
-        cityPlaceholder: "e.g. Bengaluru, Goa, Dubai, Hyderabad",
-        dateLabel: "Shoot Date / Range",
+        cityPlaceholder: "e.g. Bengaluru, Mumbai, Hyderabad, Dubai",
+        dateLabel: "Shoot Date",
         venueLabel: "Studio / Shoot Location (Optional)",
         venuePlaceholder: "e.g. Studio 01, Hotel Property, On-location Estate",
+        scopeLabel: "Creative Scope & Specific Requirements (Optional)",
+        scopePlaceholder: "Describe campaign objectives, advertising deliverables, and format requirements...",
         addBtnLabel: "Add another campaign shoot date",
-        helperText: "Hero commercial · Social vignettes · Print stills · BTS",
+        helperText: "Brand campaign · Product launch · Advertising film · Commercial stills",
       };
     case "other":
       return {
@@ -133,16 +139,18 @@ export function getTimelineConfig(categoryId: string) {
         headline: "Plan your commission dates & destinations.",
         subtitle: "Map the milestones, shoot dates, and key settings for your bespoke project.",
         entryTag: "BESPOKE COMMISSION",
-        defaultName: "Commission Session / Milestone",
-        nameLabel: "Project / Occasion",
-        namePlaceholder: "e.g. Family Heritage Vault, Retrospective Documentary",
+        defaultName: "Bespoke Project Session",
+        nameLabel: "Project / Occasion Name",
+        namePlaceholder: "e.g. Project brief, desired deliverables, preferred dates, shoot locations",
         cityLabel: "City / Destination",
         cityPlaceholder: "e.g. London, Hyderabad, New Delhi, Chennai",
-        dateLabel: "Event / Project Date",
+        dateLabel: "Shoot Date",
         venueLabel: "Venue / Location (Optional)",
-        venuePlaceholder: "e.g. Ancestral Home, Private Estate, Foundation Gallery",
+        venuePlaceholder: "e.g. Private Estate, Heritage Property, Family Vault",
+        scopeLabel: "Creative Scope & Specific Requirements (Optional)",
+        scopePlaceholder: "Detail your custom requirements, desired preservation deliverables, and shoot parameters...",
         addBtnLabel: "Add another session or milestone",
-        helperText: "Heritage portrait · Documentary session · Archival interview",
+        helperText: "Heritage vault · Retrospective documentary · Fine art · Bespoke commission",
       };
     case "weddings":
     case "pre-wedding":
@@ -153,7 +161,7 @@ export function getTimelineConfig(categoryId: string) {
         headline: "Compose your ritual timeline.",
         subtitle: "From intimate ceremonies to multi-day celebrations, map the moments you want us to preserve. Dates and venues can remain undecided while plans take shape.",
         entryTag: "CELEBRATION EVENT",
-        defaultName: "Ritual / Celebration",
+        defaultName: "Sacred Ceremony / Ritual",
         nameLabel: "Event / Ritual Name",
         namePlaceholder: "e.g. Sacred Muhurtham, Sangeet Gala, Pellikuthuru, Reception",
         cityLabel: "City / Destination",
@@ -161,6 +169,8 @@ export function getTimelineConfig(categoryId: string) {
         dateLabel: "Event Date",
         venueLabel: "Venue (Optional)",
         venuePlaceholder: "e.g. Taj Falaknuma Palace, ITC Kohenur, Private Estate",
+        scopeLabel: "Additional Ritual Notes or Vision (Optional)",
+        scopePlaceholder: "Describe any special ceremonies, family traditions, or specific filming aspirations...",
         addBtnLabel: "Add another event or ritual",
         helperText: "Wedding day · Pre-wedding event · Reception · Personal shoot",
       };
@@ -306,9 +316,11 @@ export default function InquirePage() {
   const [phone, setPhone] = useState<string>("");
   const [memoriesToRemember, setMemoriesToRemember] = useState<string>("");
 
-  // Validation
+  // Validation & Clipboard
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isCopied, setIsCopied] = useState<boolean>(false);
+  const navigatingRef = useRef<boolean>(false);
 
   /* ── Event Composer Actions ── */
   const handleAddEvent = () => {
@@ -323,6 +335,7 @@ export default function InquirePage() {
         city: prev[0]?.city || "",
         venue: "",
         coverage: "Full Photography & Cinema",
+        scope: "",
       },
     ]);
   };
@@ -360,6 +373,73 @@ export default function InquirePage() {
     setEvents((prev) => prev.filter((item) => item.id !== id));
   };
 
+  /* ── Category Selection & Immediate Advance ── */
+  const handleSelectCategoryAndAdvance = (catId: string) => {
+    setSelectedCategory(catId);
+    const targetCat = COMMISSION_CATEGORIES.find((c) => c.id === catId);
+    const cfg = getTimelineConfig(catId);
+
+    // If switching between wedding-like and commercial/fashion/bespoke, initialize clean defaults
+    setEvents((prev) => {
+      if (!targetCat?.isWeddingLike) {
+        if (
+          prev.length > 1 ||
+          prev[0]?.name.includes("Muhurtham") ||
+          prev[0]?.name.includes("Ritual")
+        ) {
+          return [
+            {
+              id: `event-${Date.now()}`,
+              name: cfg.defaultName,
+              date: "",
+              city: "",
+              venue: "",
+              coverage: "Full Photography & Cinema",
+              scope: "",
+            },
+          ];
+        }
+      } else {
+        if (
+          prev.length === 1 &&
+          (prev[0]?.name.includes("Shoot") ||
+            prev[0]?.name.includes("Campaign") ||
+            prev[0]?.name.includes("Bespoke"))
+        ) {
+          return [
+            {
+              id: `event-${Date.now()}-1`,
+              name: "Sacred Muhurtham & Wedding Ceremony",
+              date: "",
+              city: "Hyderabad",
+              venue: "Grand Palace / Heritage Venue",
+              coverage: "Master Photography & Theatrical Cinema",
+            },
+            {
+              id: `event-${Date.now()}-2`,
+              name: "Sangeet Gala & Celebrations",
+              date: "",
+              city: "Hyderabad",
+              venue: "",
+              coverage: "Evening Celebration Coverage",
+            },
+          ];
+        }
+      }
+      return prev;
+    });
+
+    // Advance immediately with safe lock to prevent double-navigation
+    if (!navigatingRef.current) {
+      navigatingRef.current = true;
+      setTimeout(() => {
+        setStage(2);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        navigatingRef.current = false;
+      }, 160);
+    }
+  };
+
   /* ── Visual Direction & Service Toggles ── */
   const toggleDirection = (id: string) => {
     setSelectedDirections((prev) =>
@@ -389,6 +469,75 @@ export default function InquirePage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  /* ── Current Category Metadata ── */
+  const currentCategory =
+    COMMISSION_CATEGORIES.find((c) => c.id === selectedCategory) || COMMISSION_CATEGORIES[0];
+  const isWeddingLike = currentCategory.isWeddingLike;
+  const timelineConfig = getTimelineConfig(selectedCategory);
+
+  const currentInvestment =
+    INVESTMENT_RANGES.find((r) => r.id === selectedInvestment) || INVESTMENT_RANGES[1];
+
+  /* ── Formatted WhatsApp Dispatch Brief ── */
+  const formattedBriefText =
+    `*COMMISSION BRIEF — 24 FRAMES PHOTOGRAPHY*\n` +
+    `----------------------------------------\n` +
+    `• *Client Name:* ${fullName || "Patron"}\n` +
+    `• *Commission Category:* ${currentCategory.title}\n` +
+    (events.length > 0
+      ? `• *${isWeddingLike ? "Occasion Timeline" : "Shoot Schedule & Locations"} (${events.length} ${
+          isWeddingLike ? "Events" : "Sessions"
+        }):*\n` +
+        events
+          .map(
+            (ev, i) =>
+              `  ${i + 1}. ${ev.name} | ${ev.date || "Date TBD"} | ${ev.city || "City TBD"}${
+                ev.venue ? ` (${ev.venue})` : ""
+              }${ev.scope ? `\n     • Scope: ${ev.scope}` : ""}`
+          )
+          .join("\n") +
+        "\n"
+      : "") +
+    (projectScope && isWeddingLike ? `• *Ritual Notes / Vision:* ${projectScope}\n` : "") +
+    `• *Visual Direction:* ${selectedDirections
+      .map((d) => VISUAL_DIRECTIONS.find((vd) => vd.id === d)?.title || d)
+      .join(", ")}\n` +
+    `• *Requested Craft Services:* ${selectedServices
+      .map((s) => SERVICE_OPTIONS.find((so) => so.id === s)?.name || s)
+      .join(", ")}\n` +
+    `• *Investment Scope:* ${currentInvestment.label}\n` +
+    `• *Contact:* ${email} | ${phone}\n` +
+    (memoriesToRemember ? `• *Memories to Remember:* "${memoriesToRemember}"\n` : "") +
+    (inspirationNote ? `• *Creative Inspo / Notes:* ${inspirationNote}\n` : "") +
+    `----------------------------------------\n` +
+    `Assembled via 24 Frames Commission Atelier.`;
+
+  const whatsappHref = `https://wa.me/919014433074?text=${encodeURIComponent(formattedBriefText)}`;
+
+  const handleCopyBrief = async () => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(formattedBriefText);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = formattedBriefText;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand("copy");
+        textArea.remove();
+      }
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 3000);
+    } catch (err) {
+      console.error("Clipboard copy error:", err);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 3000);
+    }
+  };
+
   const validateAndPresentCommission = (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
@@ -409,57 +558,19 @@ export default function InquirePage() {
     setErrors({});
     setIsSubmitting(true);
 
+    // Dispatch WhatsApp directly with pre-compiled brief
+    try {
+      window.open(whatsappHref, "_blank", "noopener,noreferrer");
+    } catch (err) {
+      console.error("WhatsApp dispatch trigger error:", err);
+    }
+
     setTimeout(() => {
       setIsSubmitting(false);
       setStage(5);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 600);
+    }, 450);
   };
-
-  /* ── Current Category Metadata ── */
-  const currentCategory =
-    COMMISSION_CATEGORIES.find((c) => c.id === selectedCategory) || COMMISSION_CATEGORIES[0];
-  const isWeddingLike = currentCategory.isWeddingLike;
-  const timelineConfig = getTimelineConfig(selectedCategory);
-
-  const currentInvestment =
-    INVESTMENT_RANGES.find((r) => r.id === selectedInvestment) || INVESTMENT_RANGES[1];
-
-  /* ── Formatted WhatsApp Dispatch Brief ── */
-  const formattedBriefText =
-    `*ROYAL COMMISSION BRIEF — 24 FRAMES PHOTOGRAPHY*\n` +
-    `----------------------------------------\n` +
-    `• *Client Name:* ${fullName || "Patron"}\n` +
-    `• *Commission Category:* ${currentCategory.title}\n` +
-    (events.length > 0
-      ? `• *${isWeddingLike ? "Occasion Timeline" : "Shoot Schedule & Locations"} (${events.length} ${
-          isWeddingLike ? "Events" : "Sessions"
-        }):*\n` +
-        events
-          .map(
-            (ev, i) =>
-              `  ${i + 1}. ${ev.name} | ${ev.date || "Date TBD"} | ${ev.city || "City TBD"}${
-                ev.venue ? ` (${ev.venue})` : ""
-              }`
-          )
-          .join("\n") +
-        "\n"
-      : "") +
-    (projectScope ? `• *Creative Scope / Notes:* ${projectScope}\n` : "") +
-    `• *Visual Direction:* ${selectedDirections
-      .map((d) => VISUAL_DIRECTIONS.find((vd) => vd.id === d)?.title || d)
-      .join(", ")}\n` +
-    `• *Requested Craft Services:* ${selectedServices
-      .map((s) => SERVICE_OPTIONS.find((so) => so.id === s)?.name || s)
-      .join(", ")}\n` +
-    `• *Investment Scope:* ${currentInvestment.label}\n` +
-    `• *Contact:* ${email} | ${phone}\n` +
-    (memoriesToRemember ? `• *Memories to Remember:* "${memoriesToRemember}"\n` : "") +
-    (inspirationNote ? `• *Creative Notes:* ${inspirationNote}\n` : "") +
-    `----------------------------------------\n` +
-    `Presented via 24 Frames Commission Atelier.`;
-
-  const whatsappHref = `https://wa.me/919959664567?text=${encodeURIComponent(formattedBriefText)}`;
 
   return (
     <div className={styles.atelierPage}>
@@ -628,11 +739,11 @@ export default function InquirePage() {
                   <button
                     key={cat.id}
                     type="button"
-                    onClick={() => {
-                      setSelectedCategory(cat.id);
-                      if (events.length === 1 && (events[0].name === "Sacred Muhurtham & Wedding Ceremony" || events[0].name === "Ritual / Celebration")) {
-                        const cfg = getTimelineConfig(cat.id);
-                        setEvents([{ ...events[0], name: cfg.defaultName }]);
+                    onClick={() => handleSelectCategoryAndAdvance(cat.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleSelectCategoryAndAdvance(cat.id);
                       }
                     }}
                     className={`${styles.categoryCard} ${isSelected ? styles.categoryCardSelected : ""}`}
@@ -765,6 +876,22 @@ export default function InquirePage() {
                         </div>
                       </div>
                     </div>
+
+                    {/* For Commercial, Fashion, and Custom commissions: in-card Creative Scope */}
+                    {!isWeddingLike && (
+                      <div className={styles.entryScopeField}>
+                        <label className={styles.fieldLabel}>
+                          {timelineConfig.scopeLabel || "Creative Scope & Specific Requirements (Optional)"}
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={ev.scope || ""}
+                          onChange={(e) => handleUpdateEvent(ev.id, "scope", e.target.value)}
+                          placeholder={timelineConfig.scopePlaceholder}
+                          className={styles.atelierTextarea}
+                        />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -782,27 +909,23 @@ export default function InquirePage() {
                 <p className={styles.addEventHelperText}>{timelineConfig.helperText}</p>
               </div>
 
-              {/* Optional Creative Scope Notes for all commission types */}
-              <div className={styles.scopeComposer} style={{ marginTop: "2.5rem" }}>
-                <div className={styles.fieldGroup}>
-                  <label className={styles.fieldLabel}>
-                    {isWeddingLike
-                      ? "Additional Ritual Notes or Vision (Optional)"
-                      : "Creative Scope & Specific Requirements (Optional)"}
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={projectScope}
-                    onChange={(e) => setProjectScope(e.target.value)}
-                    placeholder={
-                      isWeddingLike
-                        ? "Describe any special ceremonies, family traditions, or specific filming aspirations..."
-                        : "Describe your concept, desired aesthetic, shot list requirements, or deliverable needs..."
-                    }
-                    className={styles.atelierTextarea}
-                  />
+              {/* Ritual notes specifically for weddings, pre-weddings & events */}
+              {isWeddingLike && (
+                <div className={styles.scopeComposer} style={{ marginTop: "1.75rem" }}>
+                  <div className={styles.fieldGroup}>
+                    <label className={styles.fieldLabel}>
+                      Additional Ritual Notes or Vision (Optional)
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={projectScope}
+                      onChange={(e) => setProjectScope(e.target.value)}
+                      placeholder="Describe any special ceremonies, family traditions, or specific filming aspirations..."
+                      className={styles.atelierTextarea}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </section>
         )}
@@ -1039,12 +1162,17 @@ export default function InquirePage() {
                                 <span>{ev.city || "City Pending"}</span>
                                 {ev.venue ? <span> ({ev.venue})</span> : null}
                               </div>
+                              {ev.scope ? (
+                                <div className={styles.docItemMeta} style={{ color: "#383E3A", marginTop: "0.2rem" }}>
+                                  Scope: {ev.scope}
+                                </div>
+                              ) : null}
                             </div>
                           </div>
                         ))}
                       </div>
                     )}
-                    {projectScope && (
+                    {projectScope && isWeddingLike && (
                       <p className={styles.docScopeText} style={{ marginTop: events.length > 0 ? "0.75rem" : 0 }}>
                         {projectScope}
                       </p>
@@ -1213,22 +1341,22 @@ export default function InquirePage() {
            STAGE 5: PERSONALIZED CONFIRMATION FOLIO
            ════════════════════════════════════════════════════════════ */}
         {stage === 5 && (
-          <section className={styles.confirmationSection} aria-label="Commission Formatted & Presented">
+          <section className={styles.confirmationSection} aria-label="Commission Brief Ready For Dispatch">
             <div className={styles.confirmationCard}>
               <div className={styles.confirmationHeader}>
                 <div className={styles.sealIconWrap}>
                   <span className={styles.sealCheckMark}>✓</span>
                 </div>
 
-                <span className={styles.confirmationEyebrow}>COMMISSION BRIEF REGISTERED</span>
+                <span className={styles.confirmationEyebrow}>COMMISSION BRIEF READY FOR DISPATCH</span>
 
                 <h1 className={styles.confirmationTitle}>
                   Thank you, {fullName || "Distinguished Patron"}.
                 </h1>
 
                 <p className={styles.confirmationSubtitle}>
-                  Your bespoke brief for <strong>{currentCategory.title}</strong> has been formatted
-                  and presented to Phani Gogireddy and the 24 Frames executive studio team.
+                  Your commission brief for <strong>{currentCategory.title}</strong> has been assembled and formatted.
+                  To present it directly to Phani Gogireddy and our executive studio team, dispatch your brief via WhatsApp below.
                 </p>
               </div>
 
@@ -1246,12 +1374,14 @@ export default function InquirePage() {
                   <span className={styles.summaryLabel}>Client Contact:</span>
                   <span className={styles.summaryValue}>{email} · {phone}</span>
                 </div>
-                {isWeddingLike && (
-                  <div className={styles.summaryRow}>
-                    <span className={styles.summaryLabel}>Ritual Count:</span>
-                    <span className={styles.summaryValue}>{events.length} celebrations scheduled</span>
-                  </div>
-                )}
+                <div className={styles.summaryRow}>
+                  <span className={styles.summaryLabel}>
+                    {isWeddingLike ? "Celebration Count:" : "Scheduled Shoots:"}
+                  </span>
+                  <span className={styles.summaryValue}>
+                    {events.length} {isWeddingLike ? "rituals mapped" : "sessions scheduled"}
+                  </span>
+                </div>
               </div>
 
               <div className={styles.confirmationActions}>
@@ -1263,19 +1393,46 @@ export default function InquirePage() {
                   className={styles.whatsAppDispatchBtn}
                   aria-label="Dispatch commission brief directly via WhatsApp"
                 >
-                  <span>DISPATCH COMMISSION VIA WHATSAPP</span>
+                  <span>DISPATCH BRIEF VIA WHATSAPP (+91 90144 33074)</span>
                   <span className={styles.btnArrowIcon}>↗</span>
                 </a>
+
+                {/* Copy to Clipboard fallback */}
+                <button
+                  type="button"
+                  onClick={handleCopyBrief}
+                  className={styles.copyBriefBtn}
+                  aria-label="Copy formatted brief to clipboard"
+                >
+                  <span>{isCopied ? "✓ BRIEF COPIED" : "COPY BRIEF TO CLIPBOARD"}</span>
+                </button>
 
                 <Link href="/" className={styles.returnHomeBtn}>
                   <span>RETURN TO 24 FRAMES HOME</span>
                 </Link>
               </div>
 
+              {isCopied && (
+                <div className={styles.copyFeedback}>
+                  <span>✓ Brief copied to clipboard. You can paste it into WhatsApp, iMessage, or email.</span>
+                </div>
+              )}
+
+              {/* Direct Studio Contacts Fallback */}
+              <div className={styles.confirmationDirectContact}>
+                <a href={STUDIO_SOCIAL_LINKS.phoneTel} className={styles.directContactLink}>
+                  <span>Call Studio: {STUDIO_SOCIAL_LINKS.phoneDisplay}</span>
+                </a>
+                <span>·</span>
+                <a href={`mailto:${STUDIO_SOCIAL_LINKS.email}`} className={styles.directContactLink}>
+                  <span>Email Studio: {STUDIO_SOCIAL_LINKS.email}</span>
+                </a>
+              </div>
+
               <p className={styles.confirmationClosing}>
                 “From reel to real, every dream pursued with heart becomes a timeless shot.”
                 <br />
-                <strong>— Phani Gogireddy, Managing Director</strong>
+                <strong>— Phani Gogireddy, Founder &amp; Director</strong>
               </p>
             </div>
           </section>

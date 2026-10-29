@@ -196,7 +196,7 @@
 .card:hover .cardPhotoImg,
 .card:focus-visible .cardPhotoImg,
 .card.cardOpen .cardPhotoImg {
-  transform: translateY(-44px) scale(1.03);
+  transform: translateY(-24px) scale(1.03);
   filter: contrast(1.04) brightness(1.02);
 }
 
@@ -248,19 +248,19 @@
 .card:hover .folderCover,
 .card:focus-visible .folderCover,
 .card.cardOpen .folderCover {
-  height: 56px;
-  transform: rotateX(-36deg) translateY(4px);
-  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.32);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  height: 116px;
+  transform: rotateX(-32deg) translateY(4px);
+  box-shadow: 0 -12px 30px rgba(0, 0, 0, 0.32);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Stepped Tab Header (Moves with cover, remains visible on 56px bottom strip) */
+/* Stepped Tab Header (Moves with cover, remains visible on folded strip) */
 .folderTabHeader {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 56px;
+  height: 52px;
   padding: 0 clamp(12px, 1.2vw, 18px);
   display: flex;
   justify-content: space-between;
@@ -297,39 +297,26 @@
   font-size: 0.88rem;
   font-weight: 600;
   line-height: 1;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: transform 0.25s ease;
 }
 
 .card:hover .folderDiagonalArrow,
 .card:focus-visible .folderDiagonalArrow,
 .card.cardOpen .folderDiagonalArrow {
-  opacity: 0;
-  transform: translate(3px, -3px);
-  pointer-events: none;
+  transform: translate(2px, -2px);
 }
 
-/* Folder Body Content (Fades out cleanly during downward compression) */
+/* Folder Body Content: Number remains visible on flap; title, desc, and button fade out */
 .folderBody {
   position: absolute;
-  top: 60px;
+  top: 52px;
   left: clamp(12px, 1.2vw, 18px);
   right: clamp(12px, 1.2vw, 18px);
   bottom: clamp(12px, 1.2vw, 18px);
   display: flex;
   flex-direction: column;
   z-index: 8;
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.28s ease, transform 0.28s ease;
   pointer-events: auto;
-}
-
-.card:hover .folderBody,
-.card:focus-visible .folderBody,
-.card.cardOpen .folderBody {
-  opacity: 0;
-  transform: translateY(12px);
-  pointer-events: none;
 }
 
 .folderNumber {
@@ -337,7 +324,14 @@
   font-size: clamp(2rem, 2.3vw, 2.6rem);
   font-weight: 400;
   line-height: 1;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .folderNumber,
+.card:focus-visible .folderNumber,
+.card.cardOpen .folderNumber {
+  transform: translateY(-4px) scale(0.92);
 }
 
 .folderTitle {
@@ -346,6 +340,15 @@
   font-weight: 600;
   line-height: 1.22;
   margin: 0 0 0.5rem 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover .folderTitle,
+.card:focus-visible .folderTitle,
+.card.cardOpen .folderTitle {
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
 }
 
 .folderDesc {
@@ -359,6 +362,15 @@
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover .folderDesc,
+.card:focus-visible .folderDesc,
+.card.cardOpen .folderDesc {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
 }
 
 /* Circular Action Arrow Bottom-Right */
@@ -374,7 +386,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover .folderCircleBtn,
+.card:focus-visible .folderCircleBtn,
+.card.cardOpen .folderCircleBtn {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
 }
 
 .folderCircleIcon {
