@@ -30,13 +30,6 @@ export default function HomePage() {
     return Boolean(isDirect || isInternalNav);
   });
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && (window.location.search.includes("direct") || (window as unknown as { __24FRAMES_INITIAL_LOAD_DONE__?: boolean }).__24FRAMES_INITIAL_LOAD_DONE__)) {
-      setShowPreloader(false);
-      setSiteReady(true);
-    }
-  }, []);
-
   const handlePreloaderComplete = () => {
     if (typeof window !== "undefined") {
       (window as unknown as { __24FRAMES_INITIAL_LOAD_DONE__?: boolean }).__24FRAMES_INITIAL_LOAD_DONE__ = true;

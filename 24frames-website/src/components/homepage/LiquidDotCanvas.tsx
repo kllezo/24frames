@@ -54,7 +54,7 @@ export default function LiquidDotCanvas({
     let pointerY = -9999;
     let isPointerInside = false;
     let isAnimating = false;
-    let startTime = performance.now();
+    const startTime = performance.now();
 
     const buildGrid = (w: number, h: number) => {
       dots = [];
