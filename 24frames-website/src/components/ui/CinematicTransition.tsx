@@ -114,6 +114,8 @@ export default function CinematicTransition() {
 
     if (focusRingRef.current) {
       gsap.set(focusRingRef.current, {
+        xPercent: -50,
+        yPercent: -50,
         x: 0,
         y: 0,
         opacity: 0,
@@ -151,9 +153,9 @@ export default function CinematicTransition() {
       } else if (cleanUrl.includes("collection")) {
         targetEl = document.querySelector("#collection [data-discipline-id='weddings'], #collection .card:first-child, #collection") as HTMLElement | null;
       } else if (cleanUrl.includes("artist")) {
-        targetEl = document.querySelector("#artist img, #founder-recognition img, [aria-label*='Artist']") as HTMLElement | null;
+        targetEl = document.querySelector("#artist img, .portraitImg, #founder-recognition img, [aria-label*='Artist']") as HTMLElement | null;
       } else if (cleanUrl.includes("stories") && !cleanUrl.startsWith("/stories/")) {
-        targetEl = document.querySelector("#stories a[href*='sirish-and-harshitha'], #stories article:first-child, #stories") as HTMLElement | null;
+        targetEl = document.querySelector("#stories a[href*='sirish-and-harshitha'], .storyCard img, #stories article:first-child, #stories") as HTMLElement | null;
       } else if (cleanUrl.startsWith("/stories/")) {
         targetEl = document.querySelector("[class*='heroImageFrame'] img, img[class*='heroImage'], [class*='heroSection'] img") as HTMLElement | null;
       } else if (cleanUrl.startsWith("/disciplines/")) {
@@ -276,30 +278,41 @@ export default function CinematicTransition() {
         return;
       }
 
-      // ── PHASE 1 & 2: SHUTTER CLOSES, SWAPS ROUTE, RE-OPENS TO DESTINATION ──
+      // ── PHASE 1 TO 4: STRICT 4-PHASE SEQUENCE ──
+      // Phase 1 (0.00s–0.34s): Shutter closes to zero; ring stays hidden (NOT on top of blades)
+      // Phase 2 (0.34s–0.78s): Clean hold 0.10s with route swap sealed, then reopen completely
+      // Phase 3 (0.78s–1.28s): ONLY after shutter completely reopens, gold ring travels from (0,0) to destination
+      // Phase 4 (1.28s–1.50s): Ring settles with micro focus snap pulse, clears temporary overlays
       if (masterTimelineRef.current) {
         masterTimelineRef.current.kill();
       }
 
-      const DURATION_CLOSE = 0.32;
-      const DURATION_OPEN = 0.32;
+      const DURATION_CLOSE = 0.34;
+      const DURATION_HOLD = 0.10;
+      const DURATION_OPEN = 0.34;
+      const TIME_SEALED = DURATION_CLOSE; // 0.34s
+      const TIME_REOPEN = DURATION_CLOSE + DURATION_HOLD; // 0.44s
+      const TIME_FULLY_OPEN = TIME_REOPEN + DURATION_OPEN; // 0.78s
 
       const tl = gsap.timeline();
       masterTimelineRef.current = tl;
 
-      // 1. Initial State: Centered Shutter & Centered Gold Focus Ring (Time 0.00s)
+      // ── PHASE 1: SHUTTER CLOSES TO ZERO (0.00s – 0.34s) ──
+      // Initial Setup: Shutter retracted (-38), Gold Ring HIDDEN (opacity 0)
       tl.set(overlayRef.current, { opacity: 1, visibility: "visible", pointerEvents: "auto" }, 0.00);
       tl.set(backdropRef.current, { opacity: 0 }, 0.00);
       tl.set([vignetteRef.current, cornersRef.current, guideRingsRef.current], { opacity: 0 }, 0.00);
 
       if (focusRingRef.current) {
         tl.set(focusRingRef.current, {
+          xPercent: -50,
+          yPercent: -50,
           x: 0,
           y: 0,
           width: 130,
           height: 130,
-          opacity: 0,
-          scale: 1.15,
+          opacity: 0, // MUST NOT sit on top of closing blades
+          scale: 1,
         }, 0.00);
       }
 
@@ -310,27 +323,20 @@ export default function CinematicTransition() {
         }, 0.00);
       }
 
-      // 2. Optical Ambient & HUD Fade
+      // Optical Ambient & HUD Viewfinder Brackets Fade in during close
       tl.to([vignetteRef.current, cornersRef.current], {
-        opacity: 0.9,
-        duration: 0.14,
-        ease: "power1.out",
-      }, 0.00);
-
-      tl.to(focusRingRef.current, {
-        opacity: 0.95,
-        scale: 1,
+        opacity: 0.85,
         duration: 0.16,
-        ease: "power2.out",
+        ease: "power1.out",
       }, 0.00);
 
       tl.to(guideRingsRef.current, {
-        opacity: 0.45,
-        duration: 0.18,
+        opacity: 0.35,
+        duration: 0.16,
         ease: "power1.out",
       }, 0.00);
 
-      // 3. Shutter Closes Centered (0.00s – 0.32s)
+      // 8 Blades close inward until every wing meets at exact center (0% opening)
       if (bladeActuatorsRef.current.length > 0) {
         tl.to(bladeActuatorsRef.current, {
           rotation: 34,
@@ -341,11 +347,11 @@ export default function CinematicTransition() {
 
       tl.to(backdropRef.current, {
         opacity: 1,
-        duration: DURATION_CLOSE * 0.65,
+        duration: 0.20,
         ease: "power2.in",
-      }, DURATION_CLOSE * 0.35);
+      }, 0.14);
 
-      // 4. ROUTE SWAP AT FULL SHUTTER SEAL (At exactly 0.32s, zero pause)
+      // ── PHASE 2A: HOLD FULLY CLOSED & ROUTE SWAP WHILE SEALED (0.34s – 0.44s) ──
       tl.call(() => {
         startTransition(() => {
           router.push(targetUrl);
@@ -364,38 +370,51 @@ export default function CinematicTransition() {
         } else {
           window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         }
-      }, undefined, DURATION_CLOSE);
+      }, undefined, TIME_SEALED);
 
-      // 5. SHUTTER OPENS CENTERING ON DESTINATION (0.32s – 0.64s)
+      // ── PHASE 2B: REVERSE MOTION — SHUTTER COMPLETELY REOPENS (0.44s – 0.78s) ──
       if (bladeActuatorsRef.current.length > 0) {
         tl.to(bladeActuatorsRef.current, {
           rotation: -38,
           duration: DURATION_OPEN,
           ease: "power2.out",
-        }, DURATION_CLOSE);
+        }, TIME_REOPEN);
       }
 
       tl.to(backdropRef.current, {
         opacity: 0,
-        duration: DURATION_OPEN * 0.65,
+        duration: 0.24,
         ease: "power2.out",
-      }, DURATION_CLOSE);
+      }, TIME_REOPEN);
 
-      // Fade out HUD guide rings and brackets as iris opens
       tl.to([cornersRef.current, guideRingsRef.current, vignetteRef.current], {
         opacity: 0,
-        duration: DURATION_OPEN * 0.5,
+        duration: 0.22,
         ease: "power1.out",
-      }, DURATION_CLOSE + DURATION_OPEN * 0.2);
+      }, TIME_REOPEN + 0.04);
 
-      // ── PHASE 3 & 4: GOLD FOCUS RING TRAVELS TO DESTINATION & SETTLES ──
-      // Triggers ONLY after shutter has fully re-opened (0.64s), never while shutter is closing or opening
+      // ── PHASE 3: EXISTING GOLD TRACKING RING TRAVELS TO DESTINATION (0.78s – 1.28s) ──
+      // ONLY triggers after shutter has completely re-opened at 0.78s
       tl.call(() => {
         if (!focusRingRef.current) return;
         const target = computeTargetFocalPoint(targetUrl, targetHash);
 
-        // Gold ring smoothly moves across the screen directly to the destination focal point
+        // Ring appears cleanly at screen center (0, 0)
+        gsap.set(focusRingRef.current, {
+          xPercent: -50,
+          yPercent: -50,
+          x: 0,
+          y: 0,
+          width: 130,
+          height: 130,
+          scale: 1,
+          opacity: 1,
+        });
+
+        // Ring physically travels across the live screen to the destination element
         ringTimelineRef.current = gsap.to(focusRingRef.current, {
+          xPercent: -50,
+          yPercent: -50,
           x: target.x,
           y: target.y,
           width: target.width,
@@ -403,13 +422,13 @@ export default function CinematicTransition() {
           duration: 0.50,
           ease: "power2.inOut",
           onComplete: () => {
-            // Camera focus settle snap (subtle micro pulse)
+            // ── PHASE 4: FOCUS SETTLE SNAP & RESTORE INTERACTION (1.28s – 1.50s) ──
             if (!focusRingRef.current) {
               forceReset();
               return;
             }
             gsap.to(focusRingRef.current, {
-              scale: 1.06,
+              scale: 1.08,
               duration: 0.08,
               ease: "power1.out",
               onComplete: () => {
@@ -430,7 +449,7 @@ export default function CinematicTransition() {
             });
           },
         });
-      }, undefined, DURATION_CLOSE + DURATION_OPEN);
+      }, undefined, TIME_FULLY_OPEN);
     },
     [isReducedMotion, router, clearSafetyTimeout, forceReset, computeTargetFocalPoint]
   );

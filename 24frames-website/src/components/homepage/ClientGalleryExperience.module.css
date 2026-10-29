@@ -587,26 +587,152 @@
 
 @media (max-width: 768px) {
   .section {
-    padding-top: clamp(5.5rem, 9vw, 7.5rem);
-    padding-bottom: clamp(4rem, 6vw, 5.5rem);
+    padding-top: clamp(4.5rem, 8vw, 6rem);
+    padding-bottom: clamp(3.5rem, 6vw, 4.5rem);
     scroll-margin-top: 100px;
   }
 
   .editorialHeader {
-    margin-bottom: clamp(2rem, 3.5vw, 2.75rem);
+    margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
   }
 
+  /* Compact wrapper padding without artificial 6rem desktop pop-out headroom */
   .cardsShowcaseWrapper {
-    padding-top: clamp(4.5rem, 12vw, 6rem);
+    padding: clamp(1rem, 3.5vw, 1.5rem);
+    padding-top: 1.5rem;
+    border-radius: 20px;
   }
 
+  /* Single clean vertical stack of archival folders */
   .cardsGrid {
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: clamp(4.5rem, 10vw, 5.5rem);
+    grid-template-columns: 1fr;
+    row-gap: 1.25rem;
   }
 
+  /* Closed folder card: compact, proportioned, crisp tab peek */
   .card {
-    height: 340px;
+    height: 220px;
+    border-radius: 14px;
+    background: transparent;
+    overflow: visible;
+    position: relative;
+    z-index: 1;
+    transition: height 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease;
+  }
+
+  /* Open folder card: expands in normal document flow, pushing subsequent cards down cleanly */
+  .card.cardOpen {
+    height: 380px;
+    z-index: 20;
+    box-shadow: 0 16px 36px rgba(9, 69, 62, 0.16);
+  }
+
+  /* Resting photo area on mobile */
+  .cardPhotoArea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    border-radius: 14px;
+    transform: translateY(0);
+    z-index: 2;
+    transition: height 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Open photo area: fills top 300px proudly, appears above folder flap and background */
+  .card.cardOpen .cardPhotoArea {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 300px;
+    transform: translateY(0) scale(1.0);
+    border-radius: 14px;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.25);
+    z-index: 12;
+  }
+
+  /* Resting folder cover on mobile: covers bottom, leaving top 34px photo peek */
+  .folderCover {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(100% - 34px);
+    border-radius: 12px 12px 14px 14px;
+    transform-origin: center bottom;
+    transform: rotateX(0deg);
+    z-index: 10;
+    transition: height 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Open folder cover: compresses to 96px flap at bottom, tilts forward in 3D */
+  .card.cardOpen .folderCover {
+    height: 96px;
+    transform: perspective(700px) rotateX(-22deg);
+    box-shadow: 0 -8px 22px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.08);
+    border-top: 1.5px solid rgba(255, 255, 255, 0.45);
+    z-index: 10;
+  }
+
+  /* Prevent unintended hover transitions on mobile touch devices when card is closed */
+  .card:not(.cardOpen):hover,
+  .card:not(.cardOpen):focus-visible {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    z-index: 1;
+  }
+
+  .card:not(.cardOpen):hover .cardPhotoArea,
+  .card:not(.cardOpen):focus-visible .cardPhotoArea {
+    transform: translateY(0) scale(1.0);
+    box-shadow: none;
+    z-index: 2;
+  }
+
+  .card:not(.cardOpen):hover .folderCover,
+  .card:not(.cardOpen):focus-visible .folderCover {
+    height: calc(100% - 34px);
+    transform: rotateX(0deg);
+  }
+
+  .card:not(.cardOpen):hover .folderTitle,
+  .card:not(.cardOpen):focus-visible .folderTitle {
+    opacity: 1;
+    transform: none;
+  }
+
+  .card:not(.cardOpen):hover .folderDesc,
+  .card:not(.cardOpen):focus-visible .folderDesc {
+    opacity: 1;
+    transform: none;
+  }
+
+  .card:not(.cardOpen):hover .folderCircleBtn,
+  .card:not(.cardOpen):focus-visible .folderCircleBtn {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Mobile text sizing and clamp */
+  .folderNumber {
+    font-size: 1.85rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .folderTitle {
+    font-size: 1.15rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .folderDesc {
+    font-size: 0.78rem;
+    line-height: 1.45;
+    -webkit-line-clamp: 2;
+    padding-right: 32px;
   }
 
   .footnoteRow {
@@ -626,11 +752,7 @@
 @media (max-width: 520px) {
   .cardsGrid {
     grid-template-columns: 1fr;
-    row-gap: clamp(4rem, 12vw, 5rem);
-  }
-
-  .card {
-    height: 330px;
+    row-gap: 1.25rem;
   }
 }
 
