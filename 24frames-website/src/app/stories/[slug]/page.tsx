@@ -80,6 +80,7 @@ export default async function StoryDetailPage({ params }: PageProps) {
                       src={story.coverImage}
                       alt={story.coverCaption || story.title}
                       className={styles.heroImage}
+                      style={{ objectPosition: story.coverPosition || "center 25%" }}
                       loading="eager"
                     />
                   </picture>
