@@ -391,6 +391,145 @@ const buildGreenBottomStroke = (g: GreenBottomCoords) => {
   return `M 0 ${g.yLeft.toFixed(1)} C ${g.cp1x.toFixed(1)} ${g.cp1y.toFixed(1)}, ${g.cp2x.toFixed(1)} ${g.cp2y.toFixed(1)}, ${g.mx.toFixed(1)} ${g.my.toFixed(1)} C ${g.cp3x.toFixed(1)} ${g.cp3y.toFixed(1)}, ${g.cp4x.toFixed(1)} ${g.cp4y.toFixed(1)}, ${g.endX.toFixed(1)} ${g.endY.toFixed(1)}`;
 };
 
+/* ── Continuous Interpolation & Mathematical Deformation Engine ── */
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+const lerpWave = (w1: WaveCoords, w2: WaveCoords, t: number): WaveCoords => ({
+  xTop: lerp(w1.xTop, w2.xTop, t),
+  c1x: lerp(w1.c1x, w2.c1x, t),
+  c1y: lerp(w1.c1y, w2.c1y, t),
+  c2x: lerp(w1.c2x, w2.c2x, t),
+  c2y: lerp(w1.c2y, w2.c2y, t),
+  mx: lerp(w1.mx, w2.mx, t),
+  my: lerp(w1.my, w2.my, t),
+  c3x: lerp(w1.c3x, w2.c3x, t),
+  c3y: lerp(w1.c3y, w2.c3y, t),
+  c4x: lerp(w1.c4x, w2.c4x, t),
+  c4y: lerp(w1.c4y, w2.c4y, t),
+  xBot: lerp(w1.xBot, w2.xBot, t),
+});
+
+const lerpGreenBottom = (g1: GreenBottomCoords, g2: GreenBottomCoords, t: number): GreenBottomCoords => ({
+  yLeft: lerp(g1.yLeft, g2.yLeft, t),
+  cp1x: lerp(g1.cp1x, g2.cp1x, t),
+  cp1y: lerp(g1.cp1y, g2.cp1y, t),
+  cp2x: lerp(g1.cp2x, g2.cp2x, t),
+  cp2y: lerp(g1.cp2y, g2.cp2y, t),
+  mx: lerp(g1.mx, g2.mx, t),
+  my: lerp(g1.my, g2.my, t),
+  cp3x: lerp(g1.cp3x, g2.cp3x, t),
+  cp3y: lerp(g1.cp3y, g2.cp3y, t),
+  cp4x: lerp(g1.cp4x, g2.cp4x, t),
+  cp4y: lerp(g1.cp4y, g2.cp4y, t),
+  endX: lerp(g1.endX, g2.endX, t),
+  endY: lerp(g1.endY, g2.endY, t),
+});
+
+const sampleAperture = (p: number): WaveCoords => {
+  if (p <= 0.35) {
+    return lerpWave(APERTURE_STAGE_1, APERTURE_STAGE_2, p / 0.35);
+  } else if (p <= 0.70) {
+    return lerpWave(APERTURE_STAGE_2, APERTURE_STAGE_3, (p - 0.35) / 0.35);
+  } else {
+    return lerpWave(APERTURE_STAGE_3, APERTURE_STAGE_4, Math.min(1, (p - 0.70) / 0.30));
+  }
+};
+
+const sampleSecondary = (p: number): WaveCoords => {
+  if (p <= 0.35) {
+    return lerpWave(SEC_STAGE_1, SEC_STAGE_2, p / 0.35);
+  } else if (p <= 0.70) {
+    return lerpWave(SEC_STAGE_2, SEC_STAGE_3, (p - 0.35) / 0.35);
+  } else {
+    return lerpWave(SEC_STAGE_3, SEC_STAGE_4, Math.min(1, (p - 0.70) / 0.30));
+  }
+};
+
+const sampleGreenBottom = (p: number): GreenBottomCoords => {
+  if (p <= 0.5) {
+    return lerpGreenBottom(GREEN_BOT_STAGE_1, GREEN_BOT_STAGE_2, p / 0.5);
+  } else {
+    return lerpGreenBottom(GREEN_BOT_STAGE_2, GREEN_BOT_STAGE_FINAL, (p - 0.5) / 0.5);
+  }
+};
+
+/* 1. Sreenivas Bellamkonda Architectural Arch Reveal (viewBox 0 0 100 140) */
+const buildBellamArchPaths = (p: number) => {
+  const yApex = -22 + 172 * Math.pow(p, 1.1);
+  const archHeight = 22 * (1 - p * 0.4);
+  const yLeft = yApex + archHeight;
+  const yRight = yLeft;
+
+  const c1x = 28;
+  const c1y = yApex;
+  const c2x = 72;
+  const c2y = yApex;
+
+  const contourD = `M 0 ${yLeft.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, 100 ${yRight.toFixed(1)}`;
+  const veilD = `M 0 ${yLeft.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, 100 ${yRight.toFixed(1)} L 100 144 L 0 144 Z`;
+  return { contourD, veilD };
+};
+
+/* 2. Vinitha & Vivekananda Fluid Silk Veil (viewBox 0 0 1600 900) */
+const buildVinithaSilkPaths = (p: number) => {
+  const sweep = -600 + 2800 * Math.pow(p, 0.95);
+  const wave1 = Math.sin(p * Math.PI) * 55;
+  const wave2 = Math.sin(p * Math.PI * 1.5) * 40;
+
+  const p0 = { x: sweep - 450, y: -80 };
+  const p1 = { x: sweep - 120 + wave1, y: 260 };
+  const p2 = { x: sweep + 180 - wave2, y: 580 };
+  const p3 = { x: sweep + 520, y: 980 };
+
+  const edgeD = `M ${p0.x.toFixed(1)} ${p0.y.toFixed(1)} C ${p1.x.toFixed(1)} ${p1.y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}, ${p3.x.toFixed(1)} ${p3.y.toFixed(1)}`;
+  const fillD = `${edgeD} L 2400 980 L 2400 -80 Z`;
+
+  const rSweep = sweep - 140;
+  const rp0 = { x: rSweep - 450, y: -60 };
+  const rp1 = { x: rSweep - 100 + wave1 * 0.8, y: 280 };
+  const rp2 = { x: rSweep + 210 - wave2 * 0.8, y: 600 };
+  const rp3 = { x: rSweep + 550, y: 980 };
+  const rippleD = `M ${rp0.x.toFixed(1)} ${rp0.y.toFixed(1)} C ${rp1.x.toFixed(1)} ${rp1.y.toFixed(1)}, ${rp2.x.toFixed(1)} ${rp2.y.toFixed(1)}, ${rp3.x.toFixed(1)} ${rp3.y.toFixed(1)}`;
+
+  return { edgeD, fillD, rippleD };
+};
+
+/* 3. Hrithika & Abhishek Diagonal Fabric Drape (viewBox 0 0 1000 1333) */
+const buildHrithikaDrapePaths = (p: number) => {
+  const t = Math.pow(p, 1.05);
+  const pStart = {
+    x: 1350 - t * 1600,
+    y: -80,
+  };
+  const pEnd = {
+    x: 1150 - t * 1400,
+    y: 1450,
+  };
+
+  const wave = Math.sin(p * Math.PI) * 75;
+  const c1 = {
+    x: pStart.x * 0.7 + pEnd.x * 0.3 + wave,
+    y: 420,
+  };
+  const c2 = {
+    x: pStart.x * 0.3 + pEnd.x * 0.7 - wave * 0.6,
+    y: 920,
+  };
+
+  const trimD = `M ${pStart.x.toFixed(1)} ${pStart.y.toFixed(1)} C ${c1.x.toFixed(1)} ${c1.y.toFixed(1)}, ${c2.x.toFixed(1)} ${c2.y.toFixed(1)}, ${pEnd.x.toFixed(1)} ${pEnd.y.toFixed(1)}`;
+  const fillD = `M -60 1450 L ${pEnd.x.toFixed(1)} ${pEnd.y.toFixed(1)} C ${c2.x.toFixed(1)} ${c2.y.toFixed(1)}, ${c1.x.toFixed(1)} ${c1.y.toFixed(1)}, ${pStart.x.toFixed(1)} ${pStart.y.toFixed(1)} L -60 -80 Z`;
+
+  const rt = Math.max(0, t - 0.08);
+  const rpStart = { x: 1350 - rt * 1600, y: -80 };
+  const rpEnd = { x: 1150 - rt * 1400, y: 1450 };
+  const rwave = Math.sin(p * Math.PI + 0.3) * 55;
+  const rc1 = { x: rpStart.x * 0.7 + rpEnd.x * 0.3 + rwave, y: 440 };
+  const rc2 = { x: rpStart.x * 0.3 + rpEnd.x * 0.7 - rwave * 0.6, y: 940 };
+  const rippleD = `M ${rpStart.x.toFixed(1)} ${rpStart.y.toFixed(1)} C ${rc1.x.toFixed(1)} ${rc1.y.toFixed(1)}, ${rc2.x.toFixed(1)} ${rc2.y.toFixed(1)}, ${rpEnd.x.toFixed(1)} ${rpEnd.y.toFixed(1)}`;
+
+  return { trimD, fillD, rippleD };
+};
+
 export default function LivingContactSheet() {
   const sectionRef = useRef<HTMLElement>(null);
   const openingRef = useRef<HTMLDivElement>(null);
@@ -400,16 +539,22 @@ export default function LivingContactSheet() {
   const sireeshCanvasRef = useRef<HTMLDivElement>(null);
 
   /* Belamkonda Arch Reveal References */
-  const archOverlayRef = useRef<HTMLDivElement>(null);
-  const archGoldContourRef = useRef<SVGSVGElement>(null);
+  const archMaskPathRef = useRef<SVGPathElement>(null);
+  const archContourPathRef = useRef<SVGPathElement>(null);
   const archGlowRef = useRef<HTMLDivElement>(null);
   const archedPhotoImgRef = useRef<HTMLImageElement>(null);
 
   /* Vinitha Liquid Silk Veil References */
+  const vinithaSilkFillPathRef = useRef<SVGPathElement>(null);
+  const vinithaSilkEdgePathRef = useRef<SVGPathElement>(null);
+  const vinithaSilkRipplePathRef = useRef<SVGPathElement>(null);
   const vinithaVeilOverlayRef = useRef<HTMLDivElement>(null);
   const vinithaVeilSvgRef = useRef<SVGSVGElement>(null);
 
   /* Hrithika Diagonal Drape References */
+  const hrithikaDrapeFillPathRef = useRef<SVGPathElement>(null);
+  const hrithikaDrapeTrimPathRef = useRef<SVGPathElement>(null);
+  const hrithikaDrapeRipplePathRef = useRef<SVGPathElement>(null);
   const hrithikaDrapeRef = useRef<HTMLDivElement>(null);
   const hrithikaPhotoImgRef = useRef<HTMLImageElement>(null);
 
@@ -745,89 +890,63 @@ export default function LivingContactSheet() {
     if (isReduced) return;
 
     const ctx = gsap.context(() => {
-      // 1. Chapter 02 — The Vows: Belamkonda Arch Reveal (6 Storyboard Stages)
+      // 1. Chapter 02 — The Vows: Belamkonda Arch Reveal (Continuous Viewport-Scrubbed)
       if (openingRef.current) {
-        const openingTl = gsap.timeline({
+        const archProxy = { val: 0 };
+        const renderArch = (p: number) => {
+          const { contourD, veilD } = buildBellamArchPaths(p);
+          if (archMaskPathRef.current) {
+            archMaskPathRef.current.setAttribute("d", veilD);
+          }
+          if (archContourPathRef.current) {
+            archContourPathRef.current.setAttribute("d", contourD);
+            archContourPathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
+          }
+          if (archGlowRef.current) {
+            const glowOp = p < 0.35 ? (p / 0.35) * 0.85 : Math.max(0, 0.85 * (1 - (p - 0.35) / 0.65));
+            archGlowRef.current.style.opacity = `${glowOp}`;
+            archGlowRef.current.style.transform = `scale(${0.7 + p * 0.5})`;
+          }
+          if (archedPhotoImgRef.current) {
+            const blur = Math.max(0, (1 - p) * 3);
+            const bright = 0.7 + p * 0.3;
+            const scale = 1.06 - p * 0.06;
+            archedPhotoImgRef.current.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
+            archedPhotoImgRef.current.style.transform = `scale(${scale.toFixed(3)})`;
+          }
+        };
+
+        renderArch(0);
+
+        gsap.to(archProxy, {
+          val: 1,
+          ease: "none",
           scrollTrigger: {
             trigger: openingRef.current,
-            start: "top 82%",
-            once: true,
+            start: "top 88%",
+            end: "center 50%",
+            scrub: 0.8,
+            onUpdate: () => renderArch(archProxy.val),
           },
         });
 
-        // Stage 01 & 02: Initial dark overlay & arch silhouette with apex golden light wash
-        if (archGlowRef.current) {
-          openingTl.fromTo(
-            archGlowRef.current,
-            { opacity: 0, scale: 0.4, y: -20 },
-            { opacity: 0.85, scale: 1.15, y: 0, duration: 0.5, ease: "power2.out" },
-            0.05
-          );
-        }
-
-        if (archedPhotoImgRef.current) {
-          openingTl.fromTo(
-            archedPhotoImgRef.current,
-            { scale: 1.1, filter: "brightness(0.65) blur(3px)" },
-            { scale: 1.03, filter: "brightness(0.9) blur(0px)", duration: 0.9, ease: "power2.out" },
-            0.1
-          );
-        }
-
-        // Stage 03 & 04: Scalloped arch expands downwards following Indian palace contour
-        if (archOverlayRef.current) {
-          openingTl.fromTo(
-            archOverlayRef.current,
-            { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" },
-            { clipPath: "polygon(0% 48%, 50% 28%, 100% 48%, 100% 100%, 0% 100%)", duration: 0.55, ease: "power2.inOut" },
-            0.15
-          );
-          openingTl.to(
-            archOverlayRef.current,
-            { clipPath: "polygon(0% 92%, 50% 84%, 100% 92%, 100% 100%, 0% 100%)", duration: 0.5, ease: "power2.out" },
-            0.7
-          );
-        }
-
-        // Stage 05: Full reveal — mask edges dissolve elegantly into the image
-        if (archOverlayRef.current) {
-          openingTl.to(
-            archOverlayRef.current,
-            { opacity: 0, duration: 0.45, ease: "power2.out" },
-            1.15
-          );
-        }
-        if (archGoldContourRef.current) {
-          openingTl.to(
-            archGoldContourRef.current,
-            { opacity: 0, duration: 0.45, ease: "power2.out" },
-            1.15
-          );
-        }
-        if (archGlowRef.current) {
-          openingTl.to(
-            archGlowRef.current,
-            { opacity: 0, duration: 0.45, ease: "power2.out" },
-            1.15
-          );
-        }
-
-        // Stage 06: Settled state — photograph completely visible, typography staggers in
-        if (archedPhotoImgRef.current) {
-          openingTl.to(
-            archedPhotoImgRef.current,
-            { scale: 1.0, filter: "brightness(1.0) blur(0px)", duration: 0.35, ease: "power1.out" },
-            1.3
-          );
-        }
-
         const leftElements = openingRef.current.querySelectorAll(`.${styles.chapterBadgeRow}, .${styles.monumentalHeading}`);
         if (leftElements.length) {
-          openingTl.fromTo(
+          gsap.fromTo(
             leftElements,
             { opacity: 0, y: 22 },
-            { opacity: 1, y: 0, duration: 0.9, stagger: 0.12, ease: "power2.out" },
-            0.3
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.85,
+              stagger: 0.12,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: openingRef.current,
+                start: "top 82%",
+                once: true,
+              },
+            }
           );
         }
 
@@ -835,109 +954,126 @@ export default function LivingContactSheet() {
           `.${styles.openingNarrative}, .${styles.exploreActionBtn}, .${styles.openingRightCol} > *`
         );
         if (supportingElements.length) {
-          openingTl.fromTo(
+          gsap.fromTo(
             supportingElements,
             { opacity: 0, y: 16 },
-            { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: "power2.out" },
-            0.6
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.75,
+              stagger: 0.06,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: openingRef.current,
+                start: "top 78%",
+                once: true,
+              },
+            }
           );
         }
       }
 
-      // 2. Cinema Passage 01 — Vinitha & Vivekananda: Liquid Silk Veil Reveal (5 Stages)
+      // 2. Cinema Passage 01 — Vinitha & Vivekananda: Fluid Champagne Silk Veil (Continuous Viewport-Scrubbed)
       if (vinithaStageRef.current) {
-        const vinithaTl = gsap.timeline({
+        const vinithaProxy = { val: 0 };
+        const vinithaImg = vinithaStageRef.current.querySelector<HTMLImageElement>(`.${styles.curvedPosterImg}`);
+        const narrativeItems = vinithaStageRef.current.querySelectorAll<HTMLElement>(`.${styles.filmNarrativeSide} > *`);
+        const playBeacon = vinithaStageRef.current.querySelector<HTMLElement>(`.${styles.filmPlaySide}`);
+
+        const renderVinitha = (p: number) => {
+          const { edgeD, fillD, rippleD } = buildVinithaSilkPaths(p);
+          if (vinithaSilkFillPathRef.current) {
+            vinithaSilkFillPathRef.current.setAttribute("d", fillD);
+          }
+          if (vinithaSilkEdgePathRef.current) {
+            vinithaSilkEdgePathRef.current.setAttribute("d", edgeD);
+            vinithaSilkEdgePathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
+          }
+          if (vinithaSilkRipplePathRef.current) {
+            vinithaSilkRipplePathRef.current.setAttribute("d", rippleD);
+            vinithaSilkRipplePathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "0.75";
+          }
+          if (vinithaVeilOverlayRef.current) {
+            vinithaVeilOverlayRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
+          }
+          if (vinithaImg) {
+            const blur = Math.max(0, (1 - p) * 6);
+            const bright = 0.65 + p * 0.35;
+            const scale = 1.06 - p * 0.06;
+            vinithaImg.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
+            vinithaImg.style.transform = `scale(${scale.toFixed(3)})`;
+          }
+          if (narrativeItems.length) {
+            const textP = Math.max(0, Math.min(1, (p - 0.48) / 0.45));
+            narrativeItems.forEach((item, idx) => {
+              const itemP = Math.max(0, Math.min(1, (textP - idx * 0.08) / 0.7));
+              item.style.opacity = `${itemP}`;
+              item.style.transform = `translateY(${(14 * (1 - itemP)).toFixed(1)}px)`;
+            });
+          }
+          if (playBeacon) {
+            const playP = Math.max(0, Math.min(1, (p - 0.58) / 0.35));
+            playBeacon.style.opacity = `${playP}`;
+            playBeacon.style.transform = `scale(${0.85 + playP * 0.15})`;
+          }
+        };
+
+        renderVinitha(0);
+
+        gsap.to(vinithaProxy, {
+          val: 1,
+          ease: "none",
           scrollTrigger: {
             trigger: vinithaStageRef.current,
-            start: "top 82%",
-            once: true,
+            start: "top 85%",
+            end: "center 48%",
+            scrub: 0.8,
+            onUpdate: () => renderVinitha(vinithaProxy.val),
           },
         });
-
-        const vinithaImg = vinithaStageRef.current.querySelector(`.${styles.curvedPosterImg}`);
-        if (vinithaImg) {
-          vinithaTl.fromTo(
-            vinithaImg,
-            { scale: 1.08, filter: "blur(6px) brightness(0.65)" },
-            { scale: 1.02, filter: "blur(2px) brightness(0.9)", duration: 0.9, ease: "power2.out" },
-            0.1
-          );
-          vinithaTl.to(
-            vinithaImg,
-            { scale: 1.0, filter: "blur(0px) brightness(1.0)", duration: 0.5, ease: "power1.out" },
-            1.0
-          );
-        }
-
-        // Stage 02 - 04: Liquid silk ribbon sweeps across bride's jewellery & portrait
-        if (vinithaVeilSvgRef.current) {
-          vinithaTl.fromTo(
-            vinithaVeilSvgRef.current,
-            { x: "-25%", y: "-22%", rotate: -6 },
-            { x: "12%", y: "8%", rotate: 0, duration: 0.65, ease: "power2.out" },
-            0
-          );
-          vinithaTl.to(
-            vinithaVeilSvgRef.current,
-            { x: "62%", y: "42%", rotate: 3, duration: 0.65, ease: "power2.inOut" },
-            0.6
-          );
-          vinithaTl.to(
-            vinithaVeilSvgRef.current,
-            { x: "115%", y: "90%", rotate: 6, duration: 0.55, ease: "power3.in" },
-            1.1
-          );
-        }
-
-        // Stage 05: Settled — veil dissolves cleanly into subtle highlights
-        if (vinithaVeilOverlayRef.current) {
-          vinithaTl.to(
-            vinithaVeilOverlayRef.current,
-            { opacity: 0, duration: 0.45, ease: "power1.out" },
-            1.4
-          );
-        }
       }
 
-      // 3. Featured Story 03 — Hrithika & Abhishek: Magician's Silk Drape Reveal (Top-Right -> Bottom-Left)
+      // 3. Featured Story 03 — Hrithika & Abhishek: Continuous Flowing Diagonal Silk Drape
       if (hrithikaCanvasRef.current) {
-        const hrithikaTl = gsap.timeline({
+        const hrithikaProxy = { val: 0 };
+        const renderHrithika = (p: number) => {
+          const { trimD, fillD, rippleD } = buildHrithikaDrapePaths(p);
+          if (hrithikaDrapeFillPathRef.current) {
+            hrithikaDrapeFillPathRef.current.setAttribute("d", fillD);
+          }
+          if (hrithikaDrapeTrimPathRef.current) {
+            hrithikaDrapeTrimPathRef.current.setAttribute("d", trimD);
+            hrithikaDrapeTrimPathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
+          }
+          if (hrithikaDrapeRipplePathRef.current) {
+            hrithikaDrapeRipplePathRef.current.setAttribute("d", rippleD);
+            hrithikaDrapeRipplePathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "0.7";
+          }
+          if (hrithikaDrapeRef.current) {
+            hrithikaDrapeRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
+          }
+          if (hrithikaPhotoImgRef.current) {
+            const blur = Math.max(0, (1 - p) * 3);
+            const bright = 0.8 + p * 0.2;
+            const scale = 1.06 - p * 0.06;
+            hrithikaPhotoImgRef.current.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
+            hrithikaPhotoImgRef.current.style.transform = `scale(${scale.toFixed(3)})`;
+          }
+        };
+
+        renderHrithika(0);
+
+        gsap.to(hrithikaProxy, {
+          val: 1,
+          ease: "none",
           scrollTrigger: {
             trigger: hrithikaCanvasRef.current,
-            start: "top 84%",
-            once: true,
+            start: "top 86%",
+            end: "center 48%",
+            scrub: 0.8,
+            onUpdate: () => renderHrithika(hrithikaProxy.val),
           },
         });
-
-        // Underneath photo easing
-        if (hrithikaPhotoImgRef.current) {
-          hrithikaTl.fromTo(
-            hrithikaPhotoImgRef.current,
-            { scale: 1.07, x: -12, filter: "blur(3px) brightness(0.85)" },
-            { scale: 1.02, x: 0, filter: "blur(0px) brightness(1.0)", duration: 0.9, ease: "power2.out" },
-            0.1
-          );
-          hrithikaTl.to(
-            hrithikaPhotoImgRef.current,
-            { scale: 1.0, duration: 0.4, ease: "power1.out" },
-            1.15
-          );
-        }
-
-        // Continuous, silky diagonal fabric drape reveal from top-right to bottom-left
-        if (hrithikaDrapeRef.current) {
-          hrithikaTl.fromTo(
-            hrithikaDrapeRef.current,
-            { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", opacity: 1 },
-            { clipPath: "polygon(0 100%, 0 100%, 0 100%, 0 100%)", duration: 1.15, ease: "power2.inOut" },
-            0.05
-          );
-          hrithikaTl.to(
-            hrithikaDrapeRef.current,
-            { opacity: 0, duration: 0.35, ease: "power1.out" },
-            0.85
-          );
-        }
       }
 
       // 4. Featured Story 04 — Karthik & Gayathri: Painterly Brush Reveal (Top-Right towards Center)
@@ -1085,240 +1221,81 @@ export default function LivingContactSheet() {
       });
 
       // ══════════════════════════════════════════════════════════════════════
-      // NISHANTH & SANZENA: CINEMATIC LIQUID WAVE REVEAL (STAGES 1 - 5)
+      // NISHANTH & SANZENA: CINEMATIC LIQUID WAVE REVEAL (Continuous Viewport-Scrubbed)
       // ══════════════════════════════════════════════════════════════════════
       if (nishanthStageRef.current) {
-        const apertureProxy = { ...APERTURE_STAGE_1 };
-        const secProxy = { ...SEC_STAGE_1 };
-        const greenBotProxy = { ...GREEN_BOT_STAGE_1 };
+        const nishanthProxy = { val: 0 };
+        const narrativeItems = nishanthStageRef.current.querySelectorAll<HTMLElement>(
+          `.${styles.nishanthRightNarrative} > *`
+        );
 
-        const updateWavePaths = () => {
+        const renderNishanth = (p: number) => {
+          const ap = sampleAperture(p);
+          const sec = sampleSecondary(p);
+          const greenBot = sampleGreenBottom(p);
+
+          const apPath = buildAperturePath(ap);
+          const apStroke = buildWaveStroke(ap);
+          const secPath = buildAperturePath(sec);
+          const secStroke = buildWaveStroke(sec);
+          const greenPath = buildGreenBottomPath(greenBot);
+          const greenStroke = buildGreenBottomStroke(greenBot);
+
           if (waveCutoutMaskRef.current) {
-            waveCutoutMaskRef.current.setAttribute("d", buildAperturePath(apertureProxy));
+            waveCutoutMaskRef.current.setAttribute("d", apPath);
           }
           if (wavePrimaryStrokeRef.current) {
-            wavePrimaryStrokeRef.current.setAttribute("d", buildWaveStroke(apertureProxy));
+            wavePrimaryStrokeRef.current.setAttribute("d", apStroke);
+            wavePrimaryStrokeRef.current.style.opacity = p > 0.75 ? `${Math.max(0, 1 - (p - 0.75) / 0.25)}` : "1";
           }
           if (wavePrimaryGlowRef.current) {
-            wavePrimaryGlowRef.current.setAttribute("d", buildWaveStroke(apertureProxy));
+            wavePrimaryGlowRef.current.setAttribute("d", apStroke);
+            wavePrimaryGlowRef.current.style.opacity = p > 0.75 ? `${Math.max(0, 1 - (p - 0.75) / 0.25) * 0.85}` : "0.85";
           }
           if (waveSecondaryPathRef.current) {
-            waveSecondaryPathRef.current.setAttribute("d", buildAperturePath(secProxy));
+            waveSecondaryPathRef.current.setAttribute("d", secPath);
           }
           if (waveSecondaryStrokeRef.current) {
-            waveSecondaryStrokeRef.current.setAttribute("d", buildWaveStroke(secProxy));
+            waveSecondaryStrokeRef.current.setAttribute("d", secStroke);
+            waveSecondaryStrokeRef.current.style.opacity = p > 0.75 ? `${Math.max(0, 1 - (p - 0.75) / 0.25) * 0.7}` : "0.7";
           }
           if (waveGreenBottomPathRef.current) {
-            waveGreenBottomPathRef.current.setAttribute("d", buildGreenBottomPath(greenBotProxy));
+            waveGreenBottomPathRef.current.setAttribute("d", greenPath);
           }
           if (waveGreenBottomStrokeRef.current) {
-            waveGreenBottomStrokeRef.current.setAttribute("d", buildGreenBottomStroke(greenBotProxy));
+            waveGreenBottomStrokeRef.current.setAttribute("d", greenStroke);
+          }
+          if (waveWatermarkRef.current) {
+            waveWatermarkRef.current.style.opacity = `${Math.max(0.04, 0.24 * (1 - p))}`;
+          }
+          if (nishanthLeftControlRef.current) {
+            const ctrlP = Math.max(0, Math.min(1, (p - 0.62) / 0.35));
+            nishanthLeftControlRef.current.style.opacity = `${ctrlP}`;
+            nishanthLeftControlRef.current.style.transform = `translateY(${(18 * (1 - ctrlP)).toFixed(1)}px)`;
+          }
+          if (narrativeItems.length) {
+            const textP = Math.max(0, Math.min(1, (p - 0.65) / 0.32));
+            narrativeItems.forEach((item, idx) => {
+              const itemP = Math.max(0, Math.min(1, (textP - idx * 0.08) / 0.7));
+              item.style.opacity = `${itemP}`;
+              item.style.transform = `translateY(${(18 * (1 - itemP)).toFixed(1)}px)`;
+            });
           }
         };
 
-        // Initialize SVG shapes to Stage 1
-        updateWavePaths();
+        renderNishanth(0);
 
-        // Initial state for text overlays (concealed before reveal reaches Stage 4/5)
-        if (nishanthLeftControlRef.current) {
-          gsap.set(nishanthLeftControlRef.current, { opacity: 0, y: 18 });
-        }
-        const initialTextElements = gsap.utils.toArray<HTMLElement>(
-          `.${styles.nishanthRightNarrative} > *`
-        );
-        if (initialTextElements.length) {
-          gsap.set(initialTextElements, { opacity: 0, y: 18 });
-        }
-
-        const waveTl = gsap.timeline({
+        gsap.to(nishanthProxy, {
+          val: 1,
+          ease: "none",
           scrollTrigger: {
             trigger: nishanthStageRef.current,
-            start: "top 78%",
-            once: true,
+            start: "top 85%",
+            end: "center 48%",
+            scrub: 0.8,
+            onUpdate: () => renderNishanth(nishanthProxy.val),
           },
         });
-
-        // STAGE 1 -> STAGE 2: FIRST REVEAL (0.0s - 1.05s)
-        // A broad, softly illuminated wave moves from left to right, uncovering couple's faces/heads
-        waveTl.to(
-          apertureProxy,
-          {
-            ...APERTURE_STAGE_2,
-            duration: 1.05,
-            ease: "power2.inOut",
-            onUpdate: updateWavePaths,
-          },
-          0
-        );
-
-        // Secondary wave trails behind to create fluid layer depth
-        waveTl.to(
-          secProxy,
-          {
-            ...SEC_STAGE_2,
-            duration: 1.15,
-            ease: "power2.inOut",
-            onUpdate: updateWavePaths,
-          },
-          0.12
-        );
-
-        // Green bottom wave undulates smoothly
-        waveTl.to(
-          greenBotProxy,
-          {
-            ...GREEN_BOT_STAGE_2,
-            duration: 1.05,
-            ease: "sine.inOut",
-            onUpdate: updateWavePaths,
-          },
-          0
-        );
-
-        // Faint watermark text on ivory wave layer gently eases
-        if (waveWatermarkRef.current) {
-          waveTl.fromTo(
-            waveWatermarkRef.current,
-            { opacity: 0.24 },
-            { opacity: 0.15, duration: 1.05, ease: "sine.out" },
-            0
-          );
-        }
-
-        // STAGE 2 -> STAGE 3: BUILDING DEPTH (1.05s - 2.0s)
-        // Aperture expands further across frame, revealing couple's embrace and mountain scenery
-        waveTl.to(
-          apertureProxy,
-          {
-            ...APERTURE_STAGE_3,
-            duration: 0.95,
-            ease: "sine.inOut",
-            onUpdate: updateWavePaths,
-          },
-          1.05
-        );
-
-        waveTl.to(
-          secProxy,
-          {
-            ...SEC_STAGE_3,
-            duration: 0.95,
-            ease: "sine.inOut",
-            onUpdate: updateWavePaths,
-          },
-          1.15
-        );
-
-        // Green bottom wave transitions smoothly toward resting settled frame
-        waveTl.to(
-          greenBotProxy,
-          {
-            ...GREEN_BOT_STAGE_FINAL,
-            duration: 1.1,
-            ease: "power2.inOut",
-            onUpdate: updateWavePaths,
-          },
-          1.05
-        );
-
-        if (waveWatermarkRef.current) {
-          waveTl.to(
-            waveWatermarkRef.current,
-            { opacity: 0.08, duration: 0.95, ease: "sine.out" },
-            1.05
-          );
-        }
-
-        // STAGE 3 -> STAGE 4: NEARING COMPLETION (2.0s - 2.8s)
-        // Wave layers flow completely beyond boundaries, photograph is fully uncovered
-        waveTl.to(
-          apertureProxy,
-          {
-            ...APERTURE_STAGE_4,
-            duration: 0.85,
-            ease: "power2.out",
-            onUpdate: updateWavePaths,
-          },
-          2.0
-        );
-
-        waveTl.to(
-          secProxy,
-          {
-            ...SEC_STAGE_4,
-            duration: 0.85,
-            ease: "power2.out",
-            onUpdate: updateWavePaths,
-          },
-          2.1
-        );
-
-        // Leading edge contour strokes & soft atmospheric glow fade as wave clears
-        if (wavePrimaryStrokeRef.current) {
-          waveTl.to(
-            wavePrimaryStrokeRef.current,
-            { opacity: 0, duration: 0.6, ease: "power2.out" },
-            2.2
-          );
-        }
-        if (wavePrimaryGlowRef.current) {
-          waveTl.to(
-            wavePrimaryGlowRef.current,
-            { opacity: 0, duration: 0.6, ease: "power2.out" },
-            2.2
-          );
-        }
-        if (waveSecondaryStrokeRef.current) {
-          waveTl.to(
-            waveSecondaryStrokeRef.current,
-            { opacity: 0, duration: 0.6, ease: "power2.out" },
-            2.2
-          );
-        }
-
-        // STAGE 5: FINAL COMPOSITION (2.4s - 3.2s)
-        // The photograph is crisp and stationary; text, play button, and CTA fade into original positions with subtle stagger
-        if (nishanthLeftControlRef.current) {
-          waveTl.to(
-            nishanthLeftControlRef.current,
-            { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-            2.4
-          );
-        }
-
-        const narrativeItems = gsap.utils.toArray<HTMLElement>(
-          `.${styles.nishanthRightNarrative} > *`
-        );
-        if (narrativeItems.length) {
-          waveTl.to(
-            narrativeItems,
-            { opacity: 1, y: 0, duration: 0.8, stagger: 0.12, ease: "power2.out" },
-            2.5
-          );
-        }
-      }
-
-      // Slow, elegant opacity fade-in for Vinitha video text blocks (title -> description -> CTA)
-      const vinithaTextElements = gsap.utils.toArray<HTMLElement>(
-        `.${styles.filmNarrativeSide} > *`
-      );
-      if (vinithaTextElements.length && vinithaStageRef.current) {
-        gsap.fromTo(
-          vinithaTextElements,
-          { opacity: 0, y: 8 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.0,
-            stagger: 0.12,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: vinithaStageRef.current,
-              start: "top 80%",
-              once: true,
-            },
-          }
-        );
       }
 
 
@@ -1458,17 +1435,26 @@ export default function LivingContactSheet() {
                 </picture>
                 <div className={styles.photoSheenOverlay} />
 
-                {/* 6-Stage Indian Heritage Palace Arch Reveal Storyboard Layers */}
-                <div ref={archOverlayRef} className={styles.archRevealOverlay} />
+                {/* Architectural Indian Palace Arch Reveal SVG */}
                 <svg
-                  ref={archGoldContourRef}
-                  className={styles.archGoldContour}
+                  className={styles.archRevealSvg}
                   viewBox="0 0 100 140"
                   preserveAspectRatio="none"
                   aria-hidden="true"
                 >
+                  <defs>
+                    <radialGradient id="archPalaceVeilGrad" cx="50%" cy="18%" r="80%">
+                      <stop offset="0%" stopColor="#092a23" />
+                      <stop offset="75%" stopColor="#061812" />
+                      <stop offset="100%" stopColor="#04100c" />
+                    </radialGradient>
+                  </defs>
                   <path
-                    d="M 1 140 L 1 72.8 C 1 50.4, 7 30.8, 16 19.6 C 26 8.4, 38 2.1, 50 1.4 C 62 2.1, 74 8.4, 84 19.6 C 93 30.8, 99 50.4, 99 72.8 L 99 140"
+                    ref={archMaskPathRef}
+                    fill="url(#archPalaceVeilGrad)"
+                  />
+                  <path
+                    ref={archContourPathRef}
                     fill="none"
                     stroke="#D4AF37"
                     strokeWidth="1.6"
@@ -1566,34 +1552,35 @@ export default function LivingContactSheet() {
             >
               <defs>
                 <linearGradient id="champagneSilkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#F5ECE1" stopOpacity="0.45" />
-                  <stop offset="35%" stopColor="#DFC89A" stopOpacity="0.32" />
-                  <stop offset="70%" stopColor="#B39356" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="#EAD8B5" stopOpacity="0.4" />
+                  <stop offset="0%" stopColor="#F5ECE1" stopOpacity="0.88" />
+                  <stop offset="35%" stopColor="#DFC89A" stopOpacity="0.82" />
+                  <stop offset="70%" stopColor="#B39356" stopOpacity="0.75" />
+                  <stop offset="100%" stopColor="#EAD8B5" stopOpacity="0.9" />
                 </linearGradient>
                 <linearGradient id="silkEdgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.8" />
-                  <stop offset="50%" stopColor="#FFF2D6" stopOpacity="0.95" />
-                  <stop offset="100%" stopColor="#D4AF37" stopOpacity="0.75" />
+                  <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.9" />
+                  <stop offset="50%" stopColor="#FFF2D6" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#D4AF37" stopOpacity="0.85" />
                 </linearGradient>
               </defs>
-              {/* Primary Silk Ribbon with Flowing S-Curves */}
+              {/* Primary Silk Veil Fill */}
               <path
-                d="M -120 -60 C 220 180, 520 -40, 850 260 C 1180 560, 1420 220, 1750 480 L 1750 980 L -120 980 Z"
+                ref={vinithaSilkFillPathRef}
                 fill="url(#champagneSilkGrad)"
               />
+              {/* Primary Silk Gold Hem */}
               <path
-                d="M -120 -60 C 220 180, 520 -40, 850 260 C 1180 560, 1420 220, 1750 480"
+                ref={vinithaSilkEdgePathRef}
                 fill="none"
                 stroke="url(#silkEdgeGrad)"
-                strokeWidth="2.5"
+                strokeWidth="2.8"
                 filter="drop-shadow(0 4px 14px rgba(212, 175, 55, 0.4))"
               />
-              {/* Secondary Flowing Ribbon following the bride's jewellery */}
+              {/* Secondary Flowing Ripple */}
               <path
-                d="M -60 120 C 310 340, 640 160, 960 420 C 1280 680, 1500 390, 1780 620"
+                ref={vinithaSilkRipplePathRef}
                 fill="none"
-                stroke="rgba(255, 245, 220, 0.6)"
+                stroke="rgba(255, 245, 220, 0.75)"
                 strokeWidth="1.8"
               />
             </svg>
@@ -1686,21 +1673,42 @@ export default function LivingContactSheet() {
                   </picture>
                   <div className={styles.imageHoverShimmer} />
 
-                  {/* Magician's Silk Drape Reveal (Top-Right to Bottom-Left) */}
+                  {/* Continuous Diagonal Silk Drape Reveal (Top-Right to Bottom-Left) */}
                   <div ref={hrithikaDrapeRef} className={styles.fabricDrapeOverlay}>
-                    <div className={styles.fabricFoldTexture} />
                     <svg
-                      className={styles.fabricGoldTrim}
-                      viewBox="0 0 100 100"
+                      className={styles.hrithikaDrapeSvg}
+                      viewBox="0 0 1000 1333"
                       preserveAspectRatio="none"
                       aria-hidden="true"
                     >
+                      <defs>
+                        <linearGradient id="hrithikaDrapeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#F7F0E6" />
+                          <stop offset="35%" stopColor="#E9DEBF" />
+                          <stop offset="70%" stopColor="#D5C49C" />
+                          <stop offset="100%" stopColor="#BEAC82" />
+                        </linearGradient>
+                        <linearGradient id="hrithikaTrimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#FFF2D6" />
+                          <stop offset="50%" stopColor="#D4AF37" />
+                          <stop offset="100%" stopColor="#AA8222" />
+                        </linearGradient>
+                      </defs>
                       <path
-                        d="M 100 0 C 80 25, 45 45, 0 100"
+                        ref={hrithikaDrapeFillPathRef}
+                        fill="url(#hrithikaDrapeGrad)"
+                      />
+                      <path
+                        ref={hrithikaDrapeTrimPathRef}
                         fill="none"
-                        stroke="#D4AF37"
-                        strokeWidth="2.2"
-                        strokeOpacity="0.85"
+                        stroke="url(#hrithikaTrimGrad)"
+                        strokeWidth="3.2"
+                      />
+                      <path
+                        ref={hrithikaDrapeRipplePathRef}
+                        fill="none"
+                        stroke="rgba(255, 255, 255, 0.55)"
+                        strokeWidth="1.8"
                       />
                     </svg>
                   </div>
