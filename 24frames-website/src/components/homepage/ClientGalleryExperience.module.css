@@ -154,7 +154,7 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   3. BACK PHOTOGRAPH LAYER — REVEALED TOP-DOWN BEHIND COVER
+   3. BACK PHOTOGRAPH LAYER (SLIPS UPWARD FROM BEHIND COVER)
    ───────────────────────────────────────────────────────────── */
 .cardPhotoArea {
   position: absolute;
@@ -173,14 +173,17 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transform: scale(1.0);
+  /* Resting state: photo sits lower so top ~10% peeks out above resting cover */
+  transform: translateY(22px) scale(1.0);
   transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+  will-change: transform;
 }
 
+/* On hover/open: photo slips smoothly upward from behind the cover */
 .card:hover .cardPhotoImg,
 .card:focus-visible .cardPhotoImg,
 .card.cardOpen .cardPhotoImg {
-  transform: scale(1.05);
+  transform: translateY(-16px) scale(1.03);
   filter: contrast(1.04) brightness(1.02);
 }
 
@@ -189,34 +192,35 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.12) 0%,
-    rgba(0, 0, 0, 0.38) 100%
+    rgba(0, 0, 0, 0.08) 0%,
+    rgba(0, 0, 0, 0.32) 100%
   );
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.5;
   transition: opacity 0.5s ease;
 }
 
 .card:hover .photoVignette,
 .card:focus-visible .photoVignette,
 .card.cardOpen .photoVignette {
-  opacity: 0.25;
+  opacity: 0.2;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   4. FRONT ARCHIVAL FOLDER COVER (COMPRESSES VERTICALLY UPWARD)
+   4. FRONT ARCHIVAL FOLDER COVER (ANCHORED TO BOTTOM, RETRACTS DOWN)
    ───────────────────────────────────────────────────────────── */
 .folderCover {
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
-  height: 100%;
+  /* Resting state: covers bottom ~90%, exposing top ~10% photo peek */
+  height: calc(100% - clamp(34px, 2.8vw, 42px));
   z-index: 5;
-  border-radius: 16px;
+  border-radius: 12px 12px 16px 16px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(9, 69, 62, 0.1);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
   transition: height 0.75s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.75s cubic-bezier(0.22, 1, 0.36, 1),
               border-color 0.4s ease;
@@ -224,34 +228,28 @@
   pointer-events: auto;
 }
 
+/* On hover/open: front cover retracts downward to 56px bottom strip */
 .card:hover .folderCover,
 .card:focus-visible .folderCover,
 .card.cardOpen .folderCover {
-  /* Compresses vertically upwards to approx 16-18% of folder height */
-  height: 60px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  height: 56px;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.32);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Stepped Tab Header (Anchored cleanly in the remaining 60px strip) */
+/* Stepped Tab Header (Moves with cover, remains visible on 56px bottom strip) */
 .folderTabHeader {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 56px;
   padding: 0 clamp(12px, 1.2vw, 18px);
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 10;
   box-sizing: border-box;
-  transition: border-color 0.4s ease;
-}
-
-.card:hover .folderTabHeader,
-.card:focus-visible .folderTabHeader,
-.card.cardOpen .folderTabHeader {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .folderBrandBlock {
@@ -282,7 +280,7 @@
   font-size: 0.88rem;
   font-weight: 600;
   line-height: 1;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .card:hover .folderDiagonalArrow,
@@ -293,10 +291,10 @@
   pointer-events: none;
 }
 
-/* Folder Body Content (Fades out cleanly during vertical compression) */
+/* Folder Body Content (Fades out cleanly during downward compression) */
 .folderBody {
   position: absolute;
-  top: 68px;
+  top: 60px;
   left: clamp(12px, 1.2vw, 18px);
   right: clamp(12px, 1.2vw, 18px);
   bottom: clamp(12px, 1.2vw, 18px);
@@ -305,7 +303,7 @@
   z-index: 8;
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.32s ease, transform 0.32s ease;
+  transition: opacity 0.28s ease, transform 0.28s ease;
   pointer-events: auto;
 }
 
@@ -313,7 +311,7 @@
 .card:focus-visible .folderBody,
 .card.cardOpen .folderBody {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(12px);
   pointer-events: none;
 }
 
