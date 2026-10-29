@@ -54,10 +54,10 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     tagline: "High-fashion bridal couture, Tollywood actors, and private family patriarchs.",
     heroDescription:
       "Medium-format optical portraits lit with master cinema fixtures. Preserving quiet dignity, sculptural elegance, and commanding presence.",
-    image: "/images/disciplines/celebrities/IMG_6472.jpg",
-    fallbackImage: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
+    image: "/images/disciplines/celebrities/IMG_6476.jpg",
+    fallbackImage: "/images/disciplines/celebrities/IMG_6472.jpg",
     href: "/disciplines/celebrities",
-    objectPosition: "center 20%",
+    objectPosition: "center 8%",
   },
   {
     id: "events",
@@ -69,10 +69,10 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     tagline: "High-octane Sangeet stages, milestone anniversaries, and national events.",
     heroDescription:
       "Capturing the electric choreography, live orchestral music, and grand architectural ambiance of premier celebration venues.",
-    image: "/images/disciplines/events/IMG_6487.jpg",
-    fallbackImage: "/images/disciplines/events/IMG_6491.jpg",
+    image: "/images/disciplines/events/IMG_6485.jpg",
+    fallbackImage: "/images/disciplines/events/IMG_6487.jpg",
     href: "/disciplines/events",
-    objectPosition: "center 30%",
+    objectPosition: "center 50%",
   },
   {
     id: "fashion",
@@ -84,8 +84,8 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     tagline: "Bespoke designer lookbooks and high-jewelry editorial campaigns.",
     heroDescription:
       "Crafted for prestigious publications and couture designers, combining experimental art direction with sharp optical discipline.",
-    image: "/images/disciplines/fashion/IMG_6288.jpg",
-    fallbackImage: "/images/disciplines/fashion/IMG_6285.jpg",
+    image: "/images/disciplines/fashion/IMG_6280.jpg",
+    fallbackImage: "/images/disciplines/fashion/IMG_6288.jpg",
     href: "/disciplines/fashion",
     objectPosition: "center 20%",
   },
@@ -99,10 +99,10 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     tagline: "2.39:1 Anamorphic motion pictures paired with orchestral audio scores.",
     heroDescription:
       "Shot with dedicated cinema crews on ARRI and Sony FX cinema lines. Edited as theatrical-grade wedding features.",
-    image: "/images/disciplines/cinema/IMG_6471.jpg",
+    image: "/images/disciplines/cinema/IMG_6319.jpg",
     fallbackImage: "/images/disciplines/cinema/IMG_6467.jpg",
     href: "/disciplines/cinema",
-    objectPosition: "center 35%",
+    objectPosition: "center 25%",
   },
 ];
 
@@ -170,15 +170,14 @@ export default function TheCollection() {
           },
         });
 
-        // Alternating directional wipes on collection discipline cards
+        // Sequential left-to-right reveal with deliberate timing overlaps
         const cards = gsap.utils.toArray<HTMLElement>(`.${styles.card}`);
         cards.forEach((card, idx) => {
-          const fromClip = idx % 2 === 0 ? "inset(100% 0 0 0)" : "inset(0 0 100% 0)";
           tl.fromTo(
             card,
-            { clipPath: fromClip, y: idx % 2 === 0 ? 25 : -25, opacity: 0.8 },
-            { clipPath: "inset(0% 0 0 0)", y: 0, opacity: 1, duration: 1.05, ease: "power3.out" },
-            idx * 0.12
+            { clipPath: "inset(0 100% 0 0)", x: -28, opacity: 0.75 },
+            { clipPath: "inset(0 0% 0 0)", x: 0, opacity: 1, duration: 1.15, ease: "power3.out" },
+            idx * 0.14
           );
 
           // Inner image settles with subtle zoom deceleration
@@ -186,9 +185,9 @@ export default function TheCollection() {
           if (img) {
             tl.fromTo(
               img,
-              { scale: 1.08 },
-              { scale: 1.0, duration: 1.25, ease: "power2.out" },
-              idx * 0.12
+              { scale: 1.09, x: 15 },
+              { scale: 1.0, x: 0, duration: 1.3, ease: "power2.out" },
+              idx * 0.14
             );
           }
         });

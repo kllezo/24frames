@@ -1,7 +1,7 @@
 /* ============================================================
    24 FRAMES — THE CLIENT GALLERY EXPERIENCE
    Ivory & Forest Green Luxury Design System
-   5 Equal Cards in One Horizontal Row · Fluid Desktop Composition
+   5 Stepped Archival Folder Cards Matching Exact Visual Reference
    ============================================================ */
 
 .section {
@@ -10,7 +10,7 @@
   background-color: #FAF7F0;
   color: #20231F;
   overflow: hidden;
-  padding: clamp(7rem, 11vw, 10.75rem) 0;
+  padding: clamp(5rem, 8vw, 8rem) 0;
   scroll-margin-top: 100px;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -28,7 +28,7 @@
 
 .container {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1440px;
   margin: 0 auto;
   padding-left: clamp(1.25rem, 3.5vw, 2.75rem);
   padding-right: clamp(1.25rem, 3.5vw, 2.75rem);
@@ -63,7 +63,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(197, 168, 104, 0.45) 50%,
+    rgba(9, 69, 62, 0.25) 50%,
     transparent 100%
   );
 }
@@ -80,9 +80,9 @@
 
 .editorialTitle {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(1.85rem, 3.2vw, 2.75rem);
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-weight: 500;
+  letter-spacing: 0.03em;
   color: #09453E;
   margin: 0;
   line-height: 1.15;
@@ -99,50 +99,43 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   2. FIVE CARDS HORIZONTAL SHOWCASE (SCULPTED SILHOUETTES)
+   2. FIVE STEPPED ARCHIVAL FOLDER CARDS (EXACT REFERENCE COMP)
    ───────────────────────────────────────────────────────────── */
 .cardsShowcaseWrapper {
   background: #FFFFFF;
   border: 1px solid rgba(9, 69, 62, 0.12);
-  border-radius: 20px;
-  padding: clamp(0.85rem, 1.3vw, 1.35rem);
-  box-shadow: 0 12px 36px rgba(9, 69, 62, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02);
+  border-radius: 24px;
+  padding: clamp(1rem, 1.6vw, 1.8rem);
+  box-shadow: 0 12px 40px rgba(9, 69, 62, 0.05), 0 2px 6px rgba(0, 0, 0, 0.02);
   width: 100%;
 }
 
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: clamp(0.6rem, 0.9vw, 1rem);
+  gap: clamp(0.75rem, 1.1vw, 1.25rem);
   width: 100%;
   align-items: stretch;
 }
 
-/* Individual Feature Card — Sculpted Editorial Folder */
+/* Individual Feature Card — Stepped Archival Folder */
 .card {
   position: relative;
-  height: clamp(230px, 24vw, 270px);
+  height: clamp(340px, 28vw, 385px);
   border-radius: 16px;
   overflow: hidden;
   text-decoration: none;
   display: block;
   cursor: pointer;
   outline: none;
-  background: #FBF5E9;
-  border: 1px solid #D8CEBC;
-  box-shadow: 0 4px 14px rgba(9, 69, 62, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-  transform: translateY(0);
-  transition:
-    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.45s ease;
+  background: #FAF8F2;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
 }
 
-.card:hover,
-.cardOpen {
+.card:hover {
   transform: translateY(-4px);
-  border-color: #B5985A;
-  box-shadow: 0 16px 36px rgba(9, 69, 62, 0.14), 0 0 16px rgba(181, 152, 90, 0.15);
+  box-shadow: 0 14px 32px rgba(9, 69, 62, 0.12);
 }
 
 .card:focus-visible {
@@ -150,272 +143,336 @@
   outline-offset: 3px;
 }
 
-/* Cohesive Warm Palette Across All Cards */
-.card_warm,
-.card_indigo,
-.card_light,
-.card_emerald,
-.card_parchment,
-.card_obsidian {
-  background: #FBF5E9;
-  border: 1px solid #D8CEBC;
-}
-
-.card_warm:hover,
-.card_warm.cardOpen,
-.card_indigo:hover,
-.card_indigo.cardOpen,
-.card_light:hover,
-.card_light.cardOpen,
-.card_emerald:hover,
-.card_emerald.cardOpen,
-.card_parchment:hover,
-.card_parchment.cardOpen,
-.card_obsidian:hover,
-.card_obsidian.cardOpen {
-  border-color: #B5985A;
-  box-shadow: 0 16px 36px rgba(9, 69, 62, 0.14), 0 0 16px rgba(181, 152, 90, 0.15);
-}
-
-/* ── LAYER 1: ARTWORK CANVAS (Expands on hover to dominate ~95% of card) ── */
-.artCanvas {
+/* Top Background Photograph Area (Revealed above stepped tab) */
+.cardPhotoArea {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 100%;
+  height: 110px;
   overflow: hidden;
-  background: #EDE6D8;
+  border-radius: 16px 16px 0 0;
   z-index: 1;
-  clip-path: inset(0 0 62% 0);
-  transition: clip-path 0.62s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: clip-path;
+  background: #EAE4D7;
 }
 
-.card:hover .artCanvas,
-.cardOpen .artCanvas {
-  clip-path: inset(0 0 0 0);
-  z-index: 2;
-}
-
-.cardWarmCanvas,
-.card1Gradient,
-.card2Gradient,
-.cardEmeraldGradient,
-.cardParchmentGradient,
-.card3Gradient {
-  background: linear-gradient(180deg, rgba(240, 234, 222, 0.75) 0%, rgba(228, 219, 203, 0.95) 100%);
-}
-
-.artImage {
+.cardPhotoImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center top;
   display: block;
-  transform: scale(1);
-  opacity: 0.94;
-  transition:
-    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.4s ease;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.card:hover .artImage,
-.cardOpen .artImage {
-  transform: scale(1.05);
-  opacity: 1;
+.card:hover .cardPhotoImg {
+  transform: scale(1.06);
 }
 
-/* Subtle Dark Gradient Overlay on Expanded Hover State */
-.hoverOverlayGradient {
+.photoVignette {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(8, 24, 20, 0.35) 0%,
-    rgba(8, 24, 20, 0.25) 30%,
-    rgba(6, 18, 15, 0.88) 80%,
-    rgba(5, 14, 12, 0.96) 100%
+    rgba(0, 0, 0, 0.08) 0%,
+    rgba(0, 0, 0, 0.28) 100%
   );
-  opacity: 0;
   pointer-events: none;
-  transition: opacity 0.5s ease;
-  z-index: 2;
 }
 
-.card:hover .hoverOverlayGradient,
-.cardOpen .hoverOverlayGradient {
-  opacity: 1;
-}
-
-/* ── LAYER 2: SLIDING NOTCH FLAP ── */
-.slidingFlap {
+/* Stepped Physical Folder Cover */
+.folderCover {
   position: absolute;
-  top: 32px;
-  left: 0;
-  right: 0;
-  bottom: -40px;
-  z-index: 3;
-  transform: translateY(0);
-  opacity: 1;
-  transition:
-    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.45s ease;
-  will-change: transform, opacity;
-}
-
-.card:hover .slidingFlap,
-.cardOpen .slidingFlap {
-  transform: translateY(115%);
-  opacity: 0;
+  inset: 0;
+  z-index: 2;
   pointer-events: none;
 }
 
-.flapSvg {
+.folderShapeSvg {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  display: block;
-  filter: drop-shadow(0 -2px 5px rgba(0, 0, 0, 0.06));
+  filter: drop-shadow(0 -3px 8px rgba(0, 0, 0, 0.06));
 }
 
-/* Card Number on High Left Shelf */
-.cardNumber {
+/* Stepped Tab Header Content */
+.folderTabHeader {
   position: absolute;
-  top: 8px;
-  left: 12px;
-  font-family: var(--font-inter), sans-serif;
-  font-size: clamp(1.25rem, 1.55vw, 1.45rem);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: #09453E;
-  user-select: none;
-  transition: color 0.4s ease, text-shadow 0.4s ease;
-}
-
-.card:hover .cardNumber,
-.cardOpen .cardNumber {
-  color: #FAF8F2 !important;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
-}
-
-/* Card Arrow on Right Shoulder */
-.cardArrow {
-  position: absolute;
-  top: 15px;
-  right: 12px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1;
-  color: #09453E;
-  transition: transform 0.3s ease, color 0.4s ease, text-shadow 0.4s ease;
-  user-select: none;
-}
-
-.card:hover .cardArrow,
-.cardOpen .cardArrow {
-  transform: translate(3px, -3px);
-  color: #FAF8F2 !important;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
-}
-
-/* ── LAYER 3: PINNED BOTTOM TYPOGRAPHY ── */
-.cardBottomText {
-  position: absolute;
-  bottom: 14px;
+  top: 48px;
   left: 14px;
   right: 14px;
-  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.folderBrandBlock {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  gap: 2px;
 }
 
-.card:hover .cardBottomText,
-.cardOpen .cardBottomText {
-  transform: translateY(-4px);
-}
-
-.cardTitle {
-  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(0.95rem, 1.1vw, 1.08rem);
-  font-weight: 600;
-  line-height: 1.2;
-  color: #09453E;
-  margin: 0;
-  transition: color 0.4s ease, text-shadow 0.4s ease;
-}
-
-.card:hover .cardTitle,
-.cardOpen .cardTitle {
-  color: #FAF8F2 !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
-}
-
-.cardDesc {
+.folderFounderName {
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.6875rem;
-  line-height: 1.45;
-  color: #4D5450;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.folderBrandName {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+
+.folderDiagonalArrow {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1;
+  margin-top: 32px;
+  transition: transform 0.25s ease;
+}
+
+.card:hover .folderDiagonalArrow {
+  transform: translate(2px, -2px);
+}
+
+/* Folder Body Content */
+.folderBody {
+  position: absolute;
+  top: 106px;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.folderNumber {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 2.3vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.folderTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.05rem, 1.2vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.22;
+  margin: 0 0 0.5rem 0;
+}
+
+.folderDesc {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.72rem, 0.82vw, 0.8rem);
+  line-height: 1.48;
+  font-weight: 400;
   margin: 0;
+  padding-right: 28px;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  transition: color 0.4s ease, text-shadow 0.4s ease;
 }
 
-.card:hover .cardDesc,
-.cardOpen .cardDesc {
-  color: #D6DDD9 !important;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
+/* Circular Action Arrow Bottom-Right */
+.folderCircleBtn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border-width: 1px;
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
 }
 
-/* Footnote Row */
+.folderCircleIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.card:hover .folderCircleBtn {
+  transform: scale(1.08);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. FOOTNOTE EDITORIAL BAR
+   ───────────────────────────────────────────────────────────── */
 .footnoteRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.25rem;
-  margin-top: 1rem;
-  padding-top: 0.85rem;
+  gap: 1.5rem;
+  margin-top: 1.35rem;
+  padding-top: 1.15rem;
   border-top: 1px solid rgba(9, 69, 62, 0.08);
 }
 
 .footnoteText {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.72rem;
-  color: #727F78;
+  color: #5F6D65;
   letter-spacing: 0.02em;
+  line-height: 1.5;
 }
 
 .suiteExploreLink {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.65rem;
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #09453E;
   text-decoration: none;
-  transition: color 0.2s ease, transform 0.2s ease;
   white-space: nowrap;
+  transition: transform 0.25s ease;
 }
 
 .suiteExploreLink:hover {
-  color: #B5985A;
   transform: translateX(3px);
 }
 
-.linkArrow {
-  font-size: 0.85rem;
+.suiteCircleBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #09453E;
+  color: #FAF8F2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.suiteCircleBtn svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   3. RESPONSIVE DESIGN (TABLET & MOBILE)
+   4. REFINED BRAND CREST DIVIDER & SUB-FOOTER BAR
+   ───────────────────────────────────────────────────────────── */
+.brandCrestDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: clamp(3rem, 5vw, 4.5rem);
+  margin-bottom: 1.75rem;
+  width: 100%;
+}
+
+.crestLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(9, 69, 62, 0.15);
+}
+
+.crestCenter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.compassStar {
+  font-size: 1rem;
+  color: #09453E;
+  line-height: 1;
+}
+
+.crestText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #09453E;
+}
+
+.subFooterBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  color: #5F6D65;
+}
+
+.subFooterCopyright {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #5F6D65;
+}
+
+.subFooterNav {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.subFooterLink {
+  color: #2D3E35;
+  text-decoration: none;
+  font-size: 0.75rem;
+  transition: color 0.2s ease;
+}
+
+.subFooterLink:hover {
+  color: #09453E;
+}
+
+.subFooterDot {
+  color: rgba(9, 69, 62, 0.3);
+}
+
+.subFooterSocials {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.socialIconBtn {
+  color: #2D3E35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.socialIconBtn:hover {
+  color: #09453E;
+  transform: translateY(-2px);
+}
+
+.socialSvg {
+  width: 17px;
+  height: 17px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. RESPONSIVE DESIGN (TABLET & MOBILE)
    ───────────────────────────────────────────────────────────── */
 @media (max-width: 1100px) {
   .cardsGrid {
@@ -429,13 +486,20 @@
   }
 
   .card {
-    height: clamp(220px, 35vw, 260px);
+    height: 340px;
   }
 
   .footnoteRow {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
+    gap: 0.85rem;
+  }
+
+  .subFooterBar {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
   }
 }
 
@@ -443,13 +507,17 @@
   .cardsGrid {
     grid-template-columns: 1fr;
   }
+
+  .card {
+    height: 330px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .card,
-  .artImage,
-  .slidingFlap,
-  .cardArrow,
+  .cardPhotoImg,
+  .folderDiagonalArrow,
+  .folderCircleBtn,
   .suiteExploreLink {
     transition: none !important;
     transform: none !important;

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
+import { useScrollLock } from "@/lib/scrollLock";
 import styles from "./ClientGallery.module.css";
 
 const CLIENT_GALLERY_POEMS = [
@@ -217,16 +218,8 @@ export default function ClientGalleryPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleCloseLightbox]);
 
-  useEffect(() => {
-    if (activeLightbox) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [activeLightbox]);
+  // Lock body & Lenis scrolling when lightbox modal is open
+  useScrollLock(activeLightbox !== null);
 
   // Support direct hash jumps from the homepage cards smoothly
   useEffect(() => {

@@ -481,14 +481,23 @@ export default function LivingContactSheet() {
           },
         });
 
-        // Stage A: Arched Roman Portrait emerges through vertical wipe mask
+        // Stage A: Monumental Indian Palace Arch Silhouette reveal (Bellamkonda & Kavya)
         if (archedFrameRef.current) {
           openingTl.fromTo(
             archedFrameRef.current,
-            { clipPath: "inset(100% 0 0 0)", y: 30, scale: 1.04 },
-            { clipPath: "inset(0% 0 0 0)", y: 0, scale: 1.0, duration: 1.2, ease: "power3.out" },
+            { clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)", y: 45, scale: 1.06 },
+            { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)", y: 0, scale: 1.0, duration: 1.35, ease: "power3.out" },
             0
           );
+          const photoImg = archedFrameRef.current.querySelector("img");
+          if (photoImg) {
+            openingTl.fromTo(
+              photoImg,
+              { scale: 1.12, y: 25 },
+              { scale: 1.0, y: 0, duration: 1.45, ease: "power3.out" },
+              0
+            );
+          }
         }
 
         // Stage B: The Vows monumental headline and chapter badge emerge coordinated
@@ -516,7 +525,7 @@ export default function LivingContactSheet() {
         }
       }
 
-      // 2. Cinema Passage 01 — Vinitha & Vivekananda: Wide horizontal curtain reveal
+      // 2. Cinema Passage 01 — Vinitha & Vivekananda: Flowing, wavy organic SVG mask reveal
       if (vinithaStageRef.current) {
         const vinithaTl = gsap.timeline({
           scrollTrigger: {
@@ -528,8 +537,8 @@ export default function LivingContactSheet() {
 
         vinithaTl.fromTo(
           vinithaStageRef.current,
-          { clipPath: "inset(0 22% 0 22%)", opacity: 0.85 },
-          { clipPath: "inset(0 0% 0 0%)", opacity: 1, duration: 1.25, ease: "power3.inOut" },
+          { clipPath: "inset(0 20% 0 20% round 32px)", opacity: 0.8 },
+          { clipPath: "inset(0 0% 0 0% round 0px)", opacity: 1, duration: 1.35, ease: "power3.inOut" },
           0
         );
 
@@ -537,14 +546,14 @@ export default function LivingContactSheet() {
         if (vinithaImg) {
           vinithaTl.fromTo(
             vinithaImg,
-            { scale: 1.07, filter: "blur(4px)" },
-            { scale: 1.0, filter: "blur(0px)", duration: 1.35, ease: "power2.out" },
+            { scale: 1.08, filter: "blur(4px)" },
+            { scale: 1.0, filter: "blur(0px)", duration: 1.45, ease: "power2.out" },
             0.1
           );
         }
       }
 
-      // 3. Featured Story 03 — Hrithika & Abhishek: Image enters from left
+      // 3. Featured Story 03 — Hrithika & Abhishek: Magician's drape reveal (diagonal from upper-right to lower-left)
       if (hrithikaCanvasRef.current) {
         const hrithikaTl = gsap.timeline({
           scrollTrigger: {
@@ -556,8 +565,8 @@ export default function LivingContactSheet() {
 
         hrithikaTl.fromTo(
           hrithikaCanvasRef.current,
-          { clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)", x: -24 },
-          { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", x: 0, duration: 1.15, ease: "power3.out" },
+          { clipPath: "polygon(100% 0, 100% 0, 100% 0, 100% 0)", x: 20 },
+          { clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)", x: 0, duration: 1.25, ease: "power2.inOut" },
           0
         );
 
@@ -565,14 +574,14 @@ export default function LivingContactSheet() {
         if (img) {
           hrithikaTl.fromTo(
             img,
-            { scale: 1.06 },
-            { scale: 1.0, duration: 1.25, ease: "power2.out" },
+            { scale: 1.08, x: -15 },
+            { scale: 1.0, x: 0, duration: 1.35, ease: "power2.out" },
             0
           );
         }
       }
 
-      // 4. Featured Story 04 — Karthik & Gayatri: Image enters from right
+      // 4. Featured Story 04 — Karthik & Gayatri: Artistic brush reveal (expressive interconnected strokes)
       if (karthikCanvasRef.current) {
         const karthikTl = gsap.timeline({
           scrollTrigger: {
@@ -584,8 +593,18 @@ export default function LivingContactSheet() {
 
         karthikTl.fromTo(
           karthikCanvasRef.current,
-          { clipPath: "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)", x: 24 },
-          { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", x: 0, duration: 1.15, ease: "power3.out" },
+          {
+            clipPath:
+              "polygon(100% 0, 100% 14%, 100% 28%, 100% 45%, 100% 60%, 100% 75%, 100% 88%, 100% 100%, 100% 100%)",
+            x: 24,
+          },
+          {
+            clipPath:
+              "polygon(0 0, 0 10%, 3% 25%, 0 42%, 4% 58%, 0 74%, 2% 88%, 0 100%, 100% 100%, 100% 0)",
+            x: 0,
+            duration: 1.25,
+            ease: "power3.out",
+          },
           0
         );
 
@@ -593,14 +612,14 @@ export default function LivingContactSheet() {
         if (img) {
           karthikTl.fromTo(
             img,
-            { scale: 1.06 },
-            { scale: 1.0, duration: 1.25, ease: "power2.out" },
+            { scale: 1.07 },
+            { scale: 1.0, duration: 1.3, ease: "power2.out" },
             0
           );
         }
       }
 
-      // 5. Featured Story 05 — Sireesh & Harshitha: Tall portrait reveals via diagonal wipe
+      // 5. Featured Story 05 — Sireesh & Harshitha: Layered cinematic reveal with leading edge and depth shift
       if (sireeshCanvasRef.current) {
         const sireeshTl = gsap.timeline({
           scrollTrigger: {
@@ -612,8 +631,8 @@ export default function LivingContactSheet() {
 
         sireeshTl.fromTo(
           sireeshCanvasRef.current,
-          { clipPath: "polygon(0 12%, 100% 0%, 100% 88%, 0 100%)", y: 25 },
-          { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)", y: 0, duration: 1.2, ease: "power3.out" },
+          { clipPath: "inset(0 0 100% 0)", y: 30 },
+          { clipPath: "inset(0 0 0% 0)", y: 0, duration: 1.2, ease: "power3.out" },
           0
         );
 
@@ -621,8 +640,8 @@ export default function LivingContactSheet() {
         if (img) {
           sireeshTl.fromTo(
             img,
-            { scale: 1.05 },
-            { scale: 1.0, duration: 1.3, ease: "power2.out" },
+            { scale: 1.09, y: -20 },
+            { scale: 1.0, y: 0, duration: 1.35, ease: "power2.out" },
             0
           );
         }
@@ -660,6 +679,14 @@ export default function LivingContactSheet() {
             invalidateOnRefresh: true,
           },
         });
+
+        // Liquid cinematic reveal: fluid expanding rounded mask
+        scaleTl.fromTo(
+          nishanthStageRef.current,
+          { clipPath: "inset(14% 18% 14% 18% round 44px)", opacity: 0.8 },
+          { clipPath: "inset(0% 0% 0% 0% round 0px)", opacity: 1, duration: 0.35, ease: "power3.out" },
+          0
+        );
 
         // 0% - 15%: Smoothly increase in scale
         scaleTl.fromTo(
@@ -788,6 +815,12 @@ export default function LivingContactSheet() {
         focusable="false"
       >
         <defs>
+          {/* Monumental Indian Palace Arch Silhouette: Straight vertical side, broad curved outer shoulder, upward-pointing central tip */}
+          <clipPath id="palaceArchClip" clipPathUnits="objectBoundingBox">
+            <path
+              d="M 0 1 L 0 0.38 C 0 0.20, 0.16 0.10, 0.36 0.07 C 0.44 0.05, 0.48 0.02, 0.5 0 C 0.52 0.02, 0.56 0.05, 0.64 0.07 C 0.84 0.10, 1 0.20, 1 0.38 L 1 1 Z"
+            />
+          </clipPath>
           <clipPath id="vinithaMorphClip" clipPathUnits="objectBoundingBox">
             <path
               ref={vinithaPathRef}

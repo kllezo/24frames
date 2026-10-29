@@ -5,6 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import LiquidDotCanvas from "./LiquidDotCanvas";
+import { useScrollLock } from "@/lib/scrollLock";
 import styles from "./FounderRecognitionSection.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -117,6 +118,7 @@ export default function FounderRecognitionSection() {
   const portraitImgRef = useRef<HTMLImageElement>(null);
   const darkroomOverlayRef = useRef<HTMLDivElement>(null);
   const viewfinderHudRef = useRef<HTMLDivElement>(null);
+  const lightBandRef = useRef<HTMLDivElement>(null);
   const namePanelRef = useRef<HTMLDivElement>(null);
   const interactiveGlareRef = useRef<HTMLDivElement>(null);
 
@@ -135,6 +137,7 @@ export default function FounderRecognitionSection() {
 
   /* Evidence Modal State */
   const [activeItem, setActiveItem] = useState<VerifiedRecognition | null>(null);
+  useScrollLock(activeItem !== null);
   const triggerRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   /* ── Track Carousel Navigation & Horizontal Wheel Handler ── */
@@ -155,41 +158,12 @@ export default function FounderRecognitionSection() {
     const track = carouselTrackRef.current;
     if (!track) return;
 
-    const handleWheel = (e: WheelEvent) => {
-      // Allow natural trackpad horizontal swiping (dominant deltaX)
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        return;
-      }
-
-      const { scrollLeft, scrollWidth, clientWidth } = track;
-      const maxScroll = scrollWidth - clientWidth;
-      if (maxScroll <= 0) return;
-
-      const isScrollingUp = e.deltaY < 0;
-      const isScrollingDown = e.deltaY > 0;
-
-      // Clean boundary release: when at the very beginning or end,
-      // allow default vertical page scrolling so the user is never trapped
-      if (isScrollingUp && scrollLeft <= 2) {
-        return;
-      }
-      if (isScrollingDown && scrollLeft >= maxScroll - 2) {
-        return;
-      }
-
-      // Convert vertical mouse wheel into horizontal carousel scroll
-      // while preventing the window from scrolling vertically
-      e.preventDefault();
-      track.scrollLeft += e.deltaY;
-      updateScrollState();
-    };
-
-    track.addEventListener("wheel", handleWheel, { passive: false });
+    // Normal vertical scrolling moves the entire page up/down naturally.
+    // Horizontal navigation is handled via the circular arrow buttons and natural horizontal swipe/drag.
     track.addEventListener("scroll", updateScrollState, { passive: true });
     updateScrollState();
 
     return () => {
-      track.removeEventListener("wheel", handleWheel);
       track.removeEventListener("scroll", updateScrollState);
     };
   }, [updateScrollState]);
@@ -244,56 +218,66 @@ export default function FounderRecognitionSection() {
           },
         });
 
-        // Stage 0: Refined diagonal mask reveal of the artist portrait
+        // Stage 0: Portrait frame emerges with subtle elevation
         portraitTl.fromTo(
           portraitWrapRef.current,
-          { clipPath: "polygon(0 12%, 100% 0%, 100% 88%, 0 100%)", opacity: 0.9 },
-          { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)", opacity: 1, duration: 1.15, ease: "power3.out" },
+          { clipPath: "polygon(0 8%, 100% 0%, 100% 92%, 0 100%)", opacity: 0.85, y: 20 },
+          { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)", opacity: 1, y: 0, duration: 1.1, ease: "power3.out" },
           0
         );
 
-        // Stage 1: Frame Recognition (0.0s - 0.3s)
+        // Stage 1: Viewfinder 4 corners converge toward focus center (0.0s - 0.45s)
         if (viewfinderHudRef.current) {
           portraitTl.fromTo(
             viewfinderHudRef.current,
-            { opacity: 0, scale: 1.05 },
-            { opacity: 1, scale: 1.0, duration: 0.3, ease: "power2.out" },
-            0
+            { opacity: 0, scale: 1.22 },
+            { opacity: 1, scale: 1.0, duration: 0.5, ease: "power3.out" },
+            0.1
           );
         }
 
-        // Stage 2: Reveal & Settle (0.3s - 1.2s)
-        if (darkroomOverlayRef.current) {
-          portraitTl.to(
-            darkroomOverlayRef.current,
-            { opacity: 0, duration: 0.85, ease: "power2.out" },
+        // Stage 2: Vertical light band sweeps through portrait (0.35s - 1.15s)
+        if (lightBandRef.current) {
+          portraitTl.fromTo(
+            lightBandRef.current,
+            { left: "-20%", opacity: 0.85 },
+            { left: "120%", opacity: 0, duration: 0.85, ease: "power2.inOut" },
             0.35
           );
         }
 
-        // Stage 3: Focus Settles (1.2s - 1.8s)
-        portraitTl.fromTo(
-          portraitImgRef.current,
-          { scale: 1.03, filter: "blur(4px)" },
-          { scale: 1.0, filter: "blur(0px)", duration: 0.6, ease: "power2.out" },
-          1.2
-        );
-
-        if (viewfinderHudRef.current) {
+        // Stage 3: Darkroom shadow fades as portrait focus settles into crisp clarity
+        if (darkroomOverlayRef.current) {
           portraitTl.to(
-            viewfinderHudRef.current,
-            { opacity: 0, duration: 0.4, ease: "power2.in" },
-            1.35
+            darkroomOverlayRef.current,
+            { opacity: 0, duration: 0.75, ease: "power2.out" },
+            0.35
           );
         }
 
-        // Stage 5: The Signature (2.0s - 2.3s)
+        portraitTl.fromTo(
+          portraitImgRef.current,
+          { scale: 1.05, filter: "blur(6px)" },
+          { scale: 1.0, filter: "blur(0px)", duration: 0.75, ease: "power2.out" },
+          0.45
+        );
+
+        // Stage 4: Viewfinder corners retreat as shot is acquired
+        if (viewfinderHudRef.current) {
+          portraitTl.to(
+            viewfinderHudRef.current,
+            { opacity: 0, scale: 1.1, duration: 0.45, ease: "power2.in" },
+            1.2
+          );
+        }
+
+        // Stage 5: The Signature name panel appears
         if (namePanelRef.current) {
           portraitTl.fromTo(
             namePanelRef.current,
             { opacity: 0, y: 14 },
-            { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
-            2.0
+            { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+            1.45
           );
         }
       }
@@ -439,6 +423,13 @@ export default function FounderRecognitionSection() {
                 aria-hidden="true"
               />
 
+              {/* Vertical Light Band for Viewfinder Focus Sweep */}
+              <div
+                ref={lightBandRef}
+                className={styles.verticalLightBand}
+                aria-hidden="true"
+              />
+
               {/* Viewfinder Corners HUD */}
               <div
                 ref={viewfinderHudRef}
@@ -559,7 +550,6 @@ export default function FounderRecognitionSection() {
                 <div
                   ref={carouselTrackRef}
                   className={styles.carouselTrack}
-                  data-lenis-prevent="true"
                 >
                   {VERIFIED_RECOGNITIONS.map((item, idx) => (
                     <div
@@ -604,8 +594,8 @@ export default function FounderRecognitionSection() {
                           aria-hidden="true"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="7" y1="17" x2="17" y2="7" />
-                            <polyline points="7 7 17 7 17 17" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
                           </svg>
                         </div>
                       </div>

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { StoryFrame } from "@/data/stories";
+import { useScrollLock } from "@/lib/scrollLock";
 import styles from "./StoryStillsGallery.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -103,17 +104,8 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeImageIndex, frames.length, handleClose]);
 
-  // Lock body scroll on lightbox open
-  useEffect(() => {
-    if (activeImageIndex !== null) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [activeImageIndex]);
+  // Centralized scroll lock (including Lenis) on lightbox open
+  useScrollLock(activeImageIndex !== null);
 
   // Split frames for the two staggered editorial columns
   const leftFrames = frames

@@ -149,11 +149,56 @@
   background-color: #0C3028;
 }
 
+.celebritiesHeroCanvas {
+  aspect-ratio: 16 / 9;
+  min-height: 460px;
+  max-height: 620px;
+  background: radial-gradient(circle at 80% 50%, rgba(22, 75, 64, 0.35), #081713);
+}
+
 .heroImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 25%;
+  display: block;
+}
+
+.celebritiesHeroImg {
+  object-position: center 8%;
+}
+
+.eventsHeroImg {
+  object-position: center 50%;
+  object-fit: cover;
+}
+
+.mandalaArtWrap {
+  position: absolute;
+  top: 50%;
+  right: clamp(1.5rem, 5vw, 4.5rem);
+  transform: translateY(-50%);
+  width: clamp(150px, 20vw, 280px);
+  height: clamp(150px, 20vw, 280px);
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.65;
+  filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.25));
+  animation: slowMandalaSpin 120s linear infinite;
+}
+
+@keyframes slowMandalaSpin {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+.mandalaSvg {
+  width: 100%;
+  height: 100%;
   display: block;
 }
 

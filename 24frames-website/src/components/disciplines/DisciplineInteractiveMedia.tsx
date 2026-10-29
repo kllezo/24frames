@@ -5,6 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DisciplineVideo, DisciplineGalleryImage } from "@/data/disciplines";
+import { useScrollLock } from "@/lib/scrollLock";
 import styles from "./DisciplineInteractiveMedia.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -15,32 +16,24 @@ interface DisciplineInteractiveMediaProps {
   shortTitle: string;
 }
 
-const DISCIPLINE_LOVE_STORY_FRAGMENTS = [
-  {
-    chapter: "Chapter I · The Anticipation",
-    note: "Somewhere between the dream and the day, your forever quietly begins.",
-  },
-  {
-    chapter: "Chapter II · The Sacred Vow",
-    note: "One glance across the mandap. A thousand unspoken promises.",
-  },
-  {
-    chapter: "Chapter III · The Unguarded Moment",
-    note: "The moments you never planned often become the ones you hold closest.",
-  },
-  {
-    chapter: "Chapter IV · Optical Memory",
-    note: "A day passes in an instant. The way it made you feel deserves to endure.",
-  },
-  {
-    chapter: "Chapter IV · The Seen and Unseen",
-    note: "We look beyond how a moment appears, towards what it means.",
-  },
-  {
-    chapter: "Chapter V · The Legacy",
-    note: "When the day becomes memory, let it still feel genuinely yours.",
-  },
-];
+const DISCIPLINE_EDITORIAL_THOUGHTS: Record<string, string[]> = {
+  weddings: [
+    "One glance across the sacred mandap. A thousand unspoken promises.",
+    "When the day becomes memory, let it still feel genuinely yours.",
+  ],
+  celebrities: [
+    "Beyond the public spotlight lies the quiet, sculptural dignity of character.",
+  ],
+  events: [
+    "The electric symphony of thousands gathered under celebratory skies.",
+  ],
+  fashion: [
+    "The tactile poetry of handwoven silk and sculptural silhouetting.",
+  ],
+  cinema: [
+    "Stories made to outlive time, captured frame by living frame.",
+  ],
+};
 
 export default function DisciplineInteractiveMedia({
   videos,
@@ -50,6 +43,9 @@ export default function DisciplineInteractiveMedia({
   // Modal states
   const [activeVideo, setActiveVideo] = useState<DisciplineVideo | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
+
+  // Lock background scrolling completely (including Lenis) when either modal is active
+  useScrollLock(activeVideo !== null || activeImageIndex !== null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const featuredScreenRef = useRef<HTMLDivElement>(null);
@@ -231,28 +227,83 @@ export default function DisciplineInteractiveMedia({
     );
   };
 
-  const renderNarrativeNote = (
-    fragmentIndex: number,
-    align: "left" | "right" | "center" = "left"
-  ) => {
-    const fragment =
-      DISCIPLINE_LOVE_STORY_FRAGMENTS[
-        fragmentIndex % DISCIPLINE_LOVE_STORY_FRAGMENTS.length
-      ];
+  const disciplineKey = shortTitle.toLowerCase();
+  const editorialThoughts = DISCIPLINE_EDITORIAL_THOUGHTS[disciplineKey] || [
+    "A day passes in an instant. The way it made you feel deserves to endure.",
+  ];
 
-    return (
-      <div
-        key={`note-${fragmentIndex}`}
-        className={`${styles.narrativeNote} ${styles[`align_${align}`]}`}
-      >
-        <span className={styles.noteChapter}>{fragment.chapter}</span>
-        <p className={styles.notePoem}>{fragment.note}</p>
-      </div>
-    );
-  };
+  const renderEditorialThought = (
+    text: string,
+    align: "left" | "right" | "center" = "left"
+  ) => (
+    <div
+      key={`thought-${text.slice(0, 15)}`}
+      className={`${styles.narrativeNote} ${styles[`align_${align}`]}`}
+    >
+      <p className={styles.notePoem}>“{text}”</p>
+    </div>
+  );
 
   return (
     <>
+      {/* ── PHOTOGRAPHIC GALLERY (CONTINUOUS STAGGERED EDITORIAL RHYTHM) ── */}
+      <section
+        ref={containerRef}
+        className={styles.gallerySection}
+        aria-label={`${shortTitle} Photographic Record`}
+      >
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <div className={styles.sectionMeta}>
+              <span className={styles.sectionChapter}>PHOTOGRAPHIC RECORD</span>
+              <span className={styles.sectionBadge}>VERIFIED MASTER FRAMES</span>
+            </div>
+            <h2 className={styles.sectionTitle}>
+              {shortTitle} Photographic Gallery
+            </h2>
+            <p className={styles.sectionSubtitle}>
+              Continuous staggered editorial composition. When one image appears on the left, the next begins beside it on the right with natural medium-format proportions.
+            </p>
+          </div>
+
+          {/* ── DESKTOP & TABLET: TWO-COLUMN STAGGERED EDITORIAL VIEW ── */}
+          <div className={styles.desktopStaggeredView}>
+            {/* Left Column (Starts at 0) */}
+            <div className={styles.staggerColLeft}>
+              {leftGallery.map(({ item, originalIndex }, idx) => (
+                <div key={item.id} className={styles.itemSlot}>
+                  {renderGalleryCard(item, originalIndex)}
+                  {/* Subtle second thought midway if available */}
+                  {idx === 1 && editorialThoughts[1] && renderEditorialThought(editorialThoughts[1], "left")}
+                </div>
+              ))}
+            </div>
+
+            {/* Right Column (Starts at vertical midpoint of Left Column) */}
+            <div className={styles.staggerColRight}>
+              {/* Single opening handwritten thought in whitespace margin */}
+              {editorialThoughts[0] && renderEditorialThought(editorialThoughts[0], "right")}
+
+              {rightGallery.map(({ item, originalIndex }) => (
+                <div key={item.id} className={styles.itemSlot}>
+                  {renderGalleryCard(item, originalIndex)}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── MOBILE: BALANCED SINGLE-COLUMN SEQUENTIAL VIEW ── */}
+          <div className={styles.mobileSequentialView}>
+            {gallery.map((item, index) => (
+              <div key={item.id} className={styles.mobileSlot}>
+                {renderGalleryCard(item, index)}
+                {index === 1 && editorialThoughts[0] && renderEditorialThought(editorialThoughts[0], "center")}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── FEATURED CINEMATIC MASTERPIECE (WHERE AVAILABLE) ── */}
       {featuredVideo && (
         <section
@@ -414,68 +465,6 @@ export default function DisciplineInteractiveMedia({
           </div>
         </section>
       )}
-
-      {/* ── PHOTOGRAPHIC GALLERY (CONTINUOUS STAGGERED EDITORIAL RHYTHM) ── */}
-      <section
-        ref={containerRef}
-        className={styles.gallerySection}
-        aria-label={`${shortTitle} Photographic Record`}
-      >
-        <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <div className={styles.sectionMeta}>
-              <span className={styles.sectionChapter}>PHOTOGRAPHIC RECORD</span>
-              <span className={styles.sectionBadge}>VERIFIED MASTER FRAMES</span>
-            </div>
-            <h2 className={styles.sectionTitle}>
-              {shortTitle} Photographic Gallery
-            </h2>
-            <p className={styles.sectionSubtitle}>
-              Continuous staggered editorial composition. When one image appears on the left, the next begins beside it on the right with natural medium-format proportions.
-            </p>
-          </div>
-
-          {/* ── DESKTOP & TABLET: TWO-COLUMN STAGGERED EDITORIAL VIEW ── */}
-          <div className={styles.desktopStaggeredView}>
-            {/* Left Column (Starts at 0) */}
-            <div className={styles.staggerColLeft}>
-              {leftGallery.map(({ item, originalIndex }, idx) => (
-                <div key={item.id} className={styles.itemSlot}>
-                  {renderGalleryCard(item, originalIndex)}
-                  {idx === 0 && renderNarrativeNote(1, "left")}
-                  {idx === 1 && renderNarrativeNote(3, "left")}
-                </div>
-              ))}
-            </div>
-
-            {/* Right Column (Starts at vertical midpoint of Left Column) */}
-            <div className={styles.staggerColRight}>
-              {/* Opening handwritten thought discovered in margin */}
-              {renderNarrativeNote(0, "right")}
-
-              {rightGallery.map(({ item, originalIndex }, idx) => (
-                <div key={item.id} className={styles.itemSlot}>
-                  {renderGalleryCard(item, originalIndex)}
-                  {idx === 0 && renderNarrativeNote(2, "right")}
-                  {idx === 1 && renderNarrativeNote(4, "right")}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* ── MOBILE: BALANCED SINGLE-COLUMN SEQUENTIAL VIEW ── */}
-          <div className={styles.mobileSequentialView}>
-            {gallery.map((item, index) => (
-              <div key={item.id} className={styles.mobileSlot}>
-                {renderGalleryCard(item, index)}
-                {index === 1 && renderNarrativeNote(1, "center")}
-                {index === 3 && renderNarrativeNote(2, "center")}
-                {index === 5 && renderNarrativeNote(4, "center")}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ── 16:9 CINEMA LIGHTBOX MODAL ── */}
       {activeVideo && (

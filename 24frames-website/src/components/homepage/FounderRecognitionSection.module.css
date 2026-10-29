@@ -181,6 +181,26 @@
   z-index: 5;
 }
 
+.verticalLightBand {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 90px;
+  left: -120px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.45) 30%,
+    rgba(212, 175, 55, 0.6) 50%,
+    rgba(255, 255, 255, 0.45) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 6;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
 .vfCorner {
   position: absolute;
   width: 18px;

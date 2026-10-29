@@ -687,32 +687,45 @@
   to { opacity: 1; }
 }
 
-.modalContainer {
-  background: #141A17;
+.videoModalContent {
+  background: #0E1411;
   border: 1px solid rgba(212, 175, 55, 0.25);
-  border-radius: 20px;
-  max-width: 1040px;
-  width: 100%;
+  border-radius: 18px;
+  width: min(88vw, 1100px);
+  max-width: 1100px;
   overflow: hidden;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.85);
   display: flex;
   flex-direction: column;
+  animation: modalScaleIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .modalHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.15rem 1.75rem;
+  padding: 0.85rem 1.4rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: #0E1411;
+  background: #090e0b;
   gap: 1rem;
 }
 
-.modalHeaderInfo {
+.modalTitleBlock {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
   min-width: 0;
 }
 
@@ -723,26 +736,39 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #D4AF37;
+  padding: 0.2rem 0.55rem;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 9999px;
+  flex-shrink: 0;
 }
 
-.modalTitleText {
+.modalVideoTitle {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: #FAF8F2;
+  margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.modalVideoClient {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8rem;
+  color: #8A9690;
+  white-space: nowrap;
+}
+
 .modalCloseBtn {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   color: #FAF8F2;
-  font-size: 1.1rem;
+  font-size: 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -755,123 +781,73 @@
   background: #09453E;
   border-color: #D4AF37;
   color: #FAF8F2;
-  transform: scale(1.06);
+  transform: scale(1.08);
 }
 
-.modalVideoPlayerWrap {
+.videoPlayerWrap {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   background: #000000;
+  overflow: hidden;
 }
 
-.modalIframe {
+.videoIframe {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border: 0;
-}
-
-.modalFooter {
-  padding: 1.35rem 1.75rem;
-  background: #0E1411;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.modalFooterCol {
-  display: flex;
-  align-items: baseline;
-  gap: 0.65rem;
-}
-
-.modalFooterLabel {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #8A948E;
-}
-
-.modalFooterValue {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #FAF8F2;
-}
-
-.modalFooterDesc {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.8125rem;
-  line-height: 1.55;
-  color: #ADB6AF;
-  margin: 0;
+  display: block;
 }
 
 /* ── Full-Screen Image Lightbox ─────────────────────────────────────── */
-.imageLightboxContainer {
-  max-width: 1200px;
-  width: 100%;
-  max-height: 94vh;
+.imageModalContent {
+  background: #0E1411;
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 18px;
+  width: min(92vw, 1180px);
+  max-width: 1180px;
+  max-height: 92vh;
+  overflow: hidden;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.85);
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  animation: modalScaleIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.lightboxTopBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 0 0.5rem;
-}
-
-.lightboxCounter {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #D4AF37;
-  font-weight: 700;
-}
-
-.lightboxImgArea {
+.imageViewerWrap {
   position: relative;
   width: 100%;
   max-height: 72vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 16px;
+  background: #060907;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.lightboxImg {
+.modalFullImg {
   max-width: 100%;
   max-height: 72vh;
+  width: auto;
+  height: auto;
   object-fit: contain;
   display: block;
 }
 
-.lightboxArrowBtn {
+.imageNavBtn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: rgba(14, 24, 20, 0.75);
+  background: rgba(14, 24, 20, 0.8);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   color: #FAF8F2;
-  font-size: 1.8rem;
-  line-height: 1;
+  font-size: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -880,45 +856,64 @@
   z-index: 10;
 }
 
-.lightboxArrowBtn:hover {
+.imageNavBtn:hover {
   background: #09453E;
   border-color: #D4AF37;
-  color: #FFFFFF;
-}
-
-.lightboxArrowLeft { left: 16px; }
-.lightboxArrowRight { right: 16px; }
-
-.lightboxCaptionBar {
-  background: #0E1411;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 1.15rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.lightboxTitle {
-  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: 1.25rem;
-  font-weight: 600;
   color: #FAF8F2;
-  margin: 0;
+  transform: translateY(-50%) scale(1.08);
 }
 
-.lightboxDesc {
+.imagePrevBtn {
+  left: 1rem;
+}
+
+.imageNextBtn {
+  right: 1rem;
+}
+
+.modalImageFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.4rem;
+  background: #090e0b;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.modalImageCaption {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.8125rem;
   color: #B5BFB7;
   margin: 0;
   line-height: 1.5;
+  flex: 1;
+  min-width: 220px;
 }
 
-.lightboxMeta {
+.modalStoryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: #09453E;
+  color: #FAF8F2;
+  border-radius: 9999px;
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.6875rem;
-  color: #D4AF37;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.modalStoryBtn:hover {
+  background: #0C5B52;
+  border-color: #D4AF37;
+  transform: translateY(-1px);
 }
 
 .mobileSequentialView {

@@ -170,7 +170,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Verified historical commissions include the grand reception coverage of Indian cinema star Bellamkonda Sai Sreenivas & Kavya Reddy, longstanding mentorship associations with Tollywood actor Manchu Manoj, and official collaborations honored by industry stalwarts such as Dia Mirza and veteran cinematographer K.K. Senthil Kumar (ISC).",
       "Every portrait is captured using Hasselblad medium format and custom-calibrated cinema lenses to render nuanced skin tones and authentic textile textures."
     ],
-    heroImage: "/images/disciplines/celebrities/IMG_6472.jpg",
+    heroImage: "/images/disciplines/celebrities/IMG_6476.jpg",
     heroAspect: "cinematic",
     href: "/disciplines/celebrities",
     metadata: {
@@ -273,7 +273,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "From high-octane Sangeet choreographies to prestigious institutional galas—such as the ET Excellence Awards and Sree Vidyanikethan Annual Day celebrations—we document the electric energy of cultural gatherings.",
       "Our proprietary low-light colour science ensures that stage lighting, laser arrays, and floral projections are rendered with cinematic fidelity without blown highlights."
     ],
-    heroImage: "/images/disciplines/events/IMG_6487.jpg",
+    heroImage: "/images/disciplines/events/IMG_6485.jpg",
     heroAspect: "cinematic",
     href: "/disciplines/events",
     metadata: {
@@ -327,12 +327,12 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       },
       {
         id: "e-05",
-        title: "Widescreen Panoramic Ballroom Perspective",
-        client: "Grand Gala Scenography",
-        location: "GMR Grand Ballroom",
+        title: "Fashion Gala Runway Walk & Stage Presence",
+        client: "Fashion & Cultural Gala Feature · Anusha",
+        location: "Gala Stage Runway",
         year: "2024",
         image: "/images/disciplines/events/IMG_6485.jpg",
-        caption: "Expansive 2.39:1 scope revealing the full architectural grandeur of thousands of guests gathered in celebration.",
+        caption: "High-fashion cultural gala runway walk documented with full-length poise under master stage illumination.",
         aspect: "landscape"
       },
       {
@@ -376,7 +376,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Working closely with renowned stylists and designers across Hyderabad, Mumbai, and Chennai, our creative direction fuses classical Indian motifs with stark, modern compositional geometry.",
       "Every frame is retouched with restraint: honoring authentic skin textures and natural fabric movement while maintaining magazine-cover polish."
     ],
-    heroImage: "/images/disciplines/fashion/IMG_6288.jpg",
+    heroImage: "/images/disciplines/fashion/IMG_6280.jpg",
     heroAspect: "cinematic",
     href: "/disciplines/fashion",
     metadata: {
@@ -479,7 +479,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Audio is recorded on 32-bit float wireless systems, ensuring sacred Vedic mantras, emotional parental toasts, and delicate acoustic performances are preserved with pristine clarity.",
       "Color grading is performed in DaVinci Resolve using our proprietary custom 24F film emulsion look, honoring organic skin tones while lending timeless celluloid warmth."
     ],
-    heroImage: "/images/disciplines/cinema/IMG_6471.jpg",
+    heroImage: "/images/disciplines/cinema/IMG_6319.jpg",
     heroAspect: "cinematic",
     href: "/disciplines/cinema",
     metadata: {
@@ -534,13 +534,33 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     ],
     gallery: [
       {
-        id: "film-still-01",
-        title: "Theatrical Cinema Scenography & Volumetric Contrast",
-        client: "Feature Cinema Unit",
-        location: "Hyderabad Studio Stage",
+        id: "film-still-05",
+        title: "Chiaroscuro Studio Character Lighting",
+        client: "Tollywood Character Study",
+        location: "24 Frames Studio",
         year: "2024",
-        image: "/images/disciplines/cinema/IMG_6471.jpg",
-        caption: "Widescreen anamorphic cinema frame demonstrating volumetric key lighting and dimensional contrast.",
+        image: "/images/disciplines/cinema/IMG_6319.jpg",
+        caption: "Sculptural portrait lighting highlighting emotional poise and deep textured shadows.",
+        aspect: "portrait"
+      },
+      {
+        id: "film-still-04",
+        title: "Architectural Silhouette Through Triple Arches",
+        client: "Widescreen Feature Commission",
+        location: "Palace Courtyard",
+        year: "2024",
+        image: "/images/disciplines/cinema/IMG_6289.jpg",
+        caption: "Dramatic sunset silhouette portrait composed through heritage palace arches.",
+        aspect: "portrait"
+      },
+      {
+        id: "film-still-03",
+        title: "Dynamic Camera Movement & Cinematic Focus",
+        client: "Production Unit",
+        location: "Heritage Pavilion",
+        year: "2024",
+        image: "/images/disciplines/cinema/IMG_6469.jpg",
+        caption: "Precision camera dolly track capturing emotional human expressions with organic lens flares.",
         aspect: "landscape"
       },
       {
@@ -554,34 +574,14 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         aspect: "landscape"
       },
       {
-        id: "film-still-03",
-        title: "Dynamic Camera Movement & Cinematic Focus",
-        client: "Production Unit",
-        location: "Heritage Pavilion",
+        id: "film-still-01",
+        title: "Theatrical Cinema Scenography & Volumetric Contrast",
+        client: "Feature Cinema Unit",
+        location: "Hyderabad Studio Stage",
         year: "2024",
-        image: "/images/disciplines/cinema/IMG_6469.jpg",
-        caption: "Precision camera dolly track capturing emotional human expressions with organic lens flares.",
+        image: "/images/disciplines/cinema/IMG_6471.jpg",
+        caption: "Widescreen anamorphic cinema frame demonstrating volumetric key lighting and dimensional contrast.",
         aspect: "landscape"
-      },
-      {
-        id: "film-still-04",
-        title: "Architectural Silhouette Through Triple Arches",
-        client: "Widescreen Feature Commission",
-        location: "Palace Courtyard",
-        year: "2024",
-        image: "/images/disciplines/cinema/IMG_6289.jpg",
-        caption: "Dramatic sunset silhouette portrait composed through heritage palace arches.",
-        aspect: "portrait"
-      },
-      {
-        id: "film-still-05",
-        title: "Chiaroscuro Studio Character Lighting",
-        client: "Tollywood Character Study",
-        location: "24 Frames Studio",
-        year: "2024",
-        image: "/images/disciplines/cinema/IMG_6319.jpg",
-        caption: "Sculptural portrait lighting highlighting emotional poise and deep textured shadows.",
-        aspect: "portrait"
       }
     ],
     relatedSlugs: ["weddings", "celebrities", "events"]

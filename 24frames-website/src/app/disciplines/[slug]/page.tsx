@@ -85,7 +85,69 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
             <p className={styles.heroLead}>{discipline.fullDescription}</p>
 
             {/* Monumental Hero Photograph Canvas */}
-            <div className={styles.heroCanvas}>
+            <div
+              className={`${styles.heroCanvas} ${
+                slug === "celebrities" ? styles.celebritiesHeroCanvas : ""
+              }`}
+            >
+              {slug === "celebrities" && (
+                <div className={styles.mandalaArtWrap} aria-hidden="true">
+                  <svg
+                    viewBox="0 0 400 400"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={styles.mandalaSvg}
+                  >
+                    {/* Concentric rings */}
+                    <circle cx="200" cy="200" r="190" stroke="#D4AF37" strokeWidth="0.75" strokeDasharray="3 4" opacity="0.5" />
+                    <circle cx="200" cy="200" r="176" stroke="#8EA89D" strokeWidth="0.8" opacity="0.4" />
+                    <circle cx="200" cy="200" r="150" stroke="#D4AF37" strokeWidth="0.75" opacity="0.6" />
+                    <circle cx="200" cy="200" r="120" stroke="#8EA89D" strokeWidth="0.75" strokeDasharray="2 3" opacity="0.5" />
+                    <circle cx="200" cy="200" r="80" stroke="#D4AF37" strokeWidth="0.75" opacity="0.6" />
+                    <circle cx="200" cy="200" r="45" stroke="#8EA89D" strokeWidth="0.8" opacity="0.5" />
+                    <circle cx="200" cy="200" r="16" stroke="#D4AF37" strokeWidth="1" opacity="0.8" />
+                    <circle cx="200" cy="200" r="4" fill="#D4AF37" opacity="0.9" />
+
+                    {/* 12 Radial Rays & Star Accents */}
+                    {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
+                      <g key={deg} transform={`rotate(${deg} 200 200)`}>
+                        <line x1="200" y1="200" x2="200" y2="10" stroke="#D4AF37" strokeWidth="0.6" opacity="0.45" />
+                        <circle cx="200" cy="24" r="2.5" fill="#D4AF37" opacity="0.7" />
+                        <circle cx="200" cy="50" r="1.5" fill="#8EA89D" opacity="0.6" />
+                        {/* Elegant Petal Arcs */}
+                        <path
+                          d="M 200 80 C 185 115 185 140 200 150 C 215 140 215 115 200 80 Z"
+                          stroke="#D4AF37"
+                          strokeWidth="0.75"
+                          opacity="0.5"
+                          fill="none"
+                        />
+                        <path
+                          d="M 200 120 C 175 145 175 170 200 180 C 225 170 225 145 200 120 Z"
+                          stroke="#8EA89D"
+                          strokeWidth="0.6"
+                          opacity="0.4"
+                          fill="none"
+                        />
+                      </g>
+                    ))}
+
+                    {/* Interlocking 8-Point Sacred Octagram */}
+                    <polygon
+                      points="200,60 299,101 340,200 299,299 200,340 101,299 60,200 101,101"
+                      stroke="#D4AF37"
+                      strokeWidth="0.6"
+                      opacity="0.35"
+                    />
+                    <polygon
+                      points="200,80 285,115 320,200 285,285 200,320 115,285 80,200 115,115"
+                      stroke="#8EA89D"
+                      strokeWidth="0.6"
+                      opacity="0.3"
+                    />
+                  </svg>
+                </div>
+              )}
               <picture>
                 {discipline.heroWebp && (
                   <source srcSet={discipline.heroWebp} type="image/webp" />
@@ -93,7 +155,9 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
                 <img
                   src={discipline.heroImage}
                   alt={discipline.title}
-                  className={styles.heroImg}
+                  className={`${styles.heroImg} ${
+                    slug === "celebrities" ? styles.celebritiesHeroImg : ""
+                  } ${slug === "events" ? styles.eventsHeroImg : ""}`}
                 />
               </picture>
               <div className={styles.heroVignette} aria-hidden="true" />
@@ -139,9 +203,6 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
         >
           <div className={styles.container}>
             <div className={styles.curatorialNarrativeNote}>
-              <span className={styles.curatorialNoteChapter}>
-                Chapter IV · The Art of Remembering
-              </span>
               <p className={styles.curatorialNotePoem}>
                 “A day passes in an instant. The way it made you feel deserves to endure.”
               </p>
