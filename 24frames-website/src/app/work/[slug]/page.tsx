@@ -73,6 +73,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                     src={project.coverImage}
                     alt={project.title}
                     className={styles.heroImage}
+                    style={{ objectPosition: project.coverPosition || "center 25%" }}
                     loading="eager"
                   />
                 </div>

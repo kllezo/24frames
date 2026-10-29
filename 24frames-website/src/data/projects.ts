@@ -8,6 +8,7 @@ export interface ProjectDetail {
   venue: string;
   year: string;
   coverImage: string;
+  coverPosition?: string;
   heroAspect: "wide" | "tall" | "cinematic";
   overview: string;
   story: string[];
@@ -191,6 +192,7 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
     venue: "Botanical Pavilion & Glasshouse",
     year: "2025",
     coverImage: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
+    coverPosition: "62% top",
     heroAspect: "tall",
     overview:
       "An enchanting fine-art wedding set in lush botanical grounds, weaving vibrant floral craftsmanship, classical temple attire, and exuberant celebratory dance into a timeless visual poem.",
