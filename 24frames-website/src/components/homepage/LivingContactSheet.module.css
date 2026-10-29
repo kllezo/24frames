@@ -960,6 +960,51 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
+   NISHANTH & SANZENA: LIQUID WAVE REVEAL ANIMATION (STORYBOARD RECREATION)
+   ══════════════════════════════════════════════════════════════════════════ */
+.nishanthWaveRevealSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.waveWatermarkGroup {
+  pointer-events: none;
+  user-select: none;
+}
+
+.waveWatermarkText {
+  font-family: var(--font-headline, "Cormorant Garamond", serif);
+  font-size: 110px;
+  font-weight: 300;
+  letter-spacing: 0.16em;
+  fill: #1A2721;
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .waveWatermarkText {
+    font-size: 70px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nishanthWaveRevealSvg {
+    display: none !important;
+  }
+  .nishanthLeftControl,
+  .nishanthRightNarrative {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
    07 — SECTION ENDING / BRAND FOOTER BAR
    ══════════════════════════════════════════════════════════════════════════ */
 .sectionEndingBar {
@@ -1021,6 +1066,216 @@
 
 .endingExploreLink:hover .linkArrow {
   transform: translateX(3px);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   STORYBOARD REVEAL EXPERIENCES (5 BESPOKE COUPLES)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. Belamkonda Indian Palace Arch Reveal */
+.archRevealOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 18%, #092a23 0%, #061812 75%, #04100c 100%);
+  z-index: 3;
+  pointer-events: none;
+  will-change: clip-path, opacity;
+}
+
+.archGoldContour {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.archApexGlow {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 235, 185, 0.6) 0%, rgba(212, 175, 55, 0.3) 45%, transparent 75%);
+  filter: blur(16px);
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* 2. Vinitha & Vivekananda Liquid Silk Veil */
+.vinithaVeilOverlay {
+  position: absolute;
+  inset: -15%;
+  width: 130%;
+  height: 130%;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+.vinithaVeilSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 3. Hrithika & Abhishek Diagonal Fabric Drape Reveal */
+.fabricDrapeOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #F7F0E6 0%, #E9DEBF 35%, #D5C49C 70%, #BEAC82 100%);
+  z-index: 4;
+  pointer-events: none;
+  will-change: clip-path, opacity;
+  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.08);
+}
+
+.fabricFoldTexture {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 28px,
+    rgba(255, 255, 255, 0.24) 30px,
+    rgba(212, 175, 55, 0.16) 34px,
+    transparent 38px
+  );
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.fabricGoldTrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: drop-shadow(-8px 12px 18px rgba(9, 69, 62, 0.35));
+}
+
+/* 4. Karthik & Gayathri Living Painterly Brush Reveal */
+.painterlyBrushOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: #FAF8F5;
+  z-index: 4;
+  pointer-events: none;
+  will-change: clip-path, opacity;
+}
+
+.painterlyBrushSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* 5. Sireesh & Harshitha Soft-Focus Memory Reveal */
+.memorySunlightBeam {
+  position: absolute;
+  inset: -35%;
+  background: linear-gradient(
+    135deg,
+    transparent 15%,
+    rgba(255, 245, 220, 0.52) 42%,
+    rgba(255, 225, 165, 0.35) 54%,
+    transparent 78%
+  );
+  transform: rotate(-14deg);
+  filter: blur(18px);
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.memoryBreezeVeil {
+  position: absolute;
+  inset: -25%;
+  background: linear-gradient(
+    125deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.4) 48%,
+    rgba(255, 238, 215, 0.26) 62%,
+    transparent 82%
+  );
+  filter: blur(22px);
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.memoryPetalsGroup {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.petal {
+  position: absolute;
+  border-radius: 65% 15% 65% 15%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 195, 205, 0.95), rgba(220, 110, 135, 0.85) 75%);
+  box-shadow: 0 4px 10px rgba(180, 50, 80, 0.25);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.petal1 {
+  width: 15px;
+  height: 19px;
+  top: 18%;
+  left: 20%;
+}
+
+.petal2 {
+  width: 12px;
+  height: 16px;
+  top: 35%;
+  left: 45%;
+}
+
+.petal3 {
+  width: 17px;
+  height: 22px;
+  top: 25%;
+  left: 65%;
+}
+
+.petal4 {
+  width: 13px;
+  height: 17px;
+  top: 55%;
+  left: 30%;
+}
+
+.petal5 {
+  width: 14px;
+  height: 18px;
+  top: 48%;
+  left: 75%;
+}
+
+/* 6. Nishanth X Sanzena Wavy Memory Reveal */
+.nishanthWaveOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(circle at 20% 50%, rgba(255, 240, 215, 0.3) 0%, transparent 60%);
+  will-change: transform, opacity;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

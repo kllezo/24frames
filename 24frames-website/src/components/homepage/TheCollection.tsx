@@ -32,9 +32,9 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     id: "weddings",
     slug: "weddings",
     number: "01",
-    title: "Weddings & Royal Unions",
+    title: "Weddings & Celebrations",
     shortTitle: "Weddings",
-    count: "40+ Master Stories",
+    count: "40+",
     tagline: "Sacred Telugu traditions, royal muhurthams & emotional generational tears.",
     heroDescription:
       "Multi-day coverage spanning Mangalasnanam, Sangeet galas, and dawn ceremonies. Documented without invasive lighting or forced poses.",
@@ -50,7 +50,7 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     number: "02",
     title: "Celebrities & Portraits",
     shortTitle: "Celebrities",
-    count: "15+ Character Studies",
+    count: "15+",
     tagline: "High-fashion bridal couture, Tollywood actors, and private family patriarchs.",
     heroDescription:
       "Medium-format optical portraits lit with master cinema fixtures. Preserving quiet dignity, sculptural elegance, and commanding presence.",
@@ -65,14 +65,14 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     number: "03",
     title: "Events & Cultural Galas",
     shortTitle: "Events",
-    count: "20+ Grand Celebrations",
+    count: "20+",
     tagline: "High-octane Sangeet stages, milestone anniversaries, and national events.",
     heroDescription:
       "Capturing the electric choreography, live orchestral music, and grand architectural ambiance of premier celebration venues.",
     image: "/images/disciplines/events/IMG_6485.jpg",
     fallbackImage: "/images/disciplines/events/IMG_6487.jpg",
     href: "/disciplines/events",
-    objectPosition: "center 50%",
+    objectPosition: "75% 35%",
   },
   {
     id: "fashion",
@@ -80,7 +80,7 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     number: "04",
     title: "Fashion & Editorial",
     shortTitle: "Fashion",
-    count: "10+ Editorial Spreads",
+    count: "10+",
     tagline: "Bespoke designer lookbooks and high-jewelry editorial campaigns.",
     heroDescription:
       "Crafted for prestigious publications and couture designers, combining experimental art direction with sharp optical discipline.",
@@ -95,7 +95,7 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     number: "05",
     title: "Cinema & Feature Films",
     shortTitle: "Cinema",
-    count: "50+ Anamorphic Films",
+    count: "50+ ANAMORPHIC FILMS",
     tagline: "2.39:1 Anamorphic motion pictures paired with orchestral audio scores.",
     heroDescription:
       "Shot with dedicated cinema crews on ARRI and Sony FX cinema lines. Edited as theatrical-grade wedding features.",
@@ -113,8 +113,8 @@ export default function TheCollection() {
   const headerRef = useRef<HTMLDivElement>(null);
   const showcaseRef = useRef<HTMLDivElement>(null);
 
-  // Default active discipline on initial load is 01 (Weddings & Royal Unions)
-  const [activeId, setActiveId] = useState<string>("weddings");
+  // Default active discipline on initial load is Cinema & Feature Films (as featured card)
+  const [activeId, setActiveId] = useState<string>("cinema");
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
 
   const isTouchRef = useRef(false);
@@ -137,7 +137,7 @@ export default function TheCollection() {
     [activateCard]
   );
 
-  /* ── GSAP Scroll-Triggered Entrance ─────────────────────────── */
+  /* ── GSAP Scroll-Triggered Left-to-Right Sequential Reveal ──── */
   useEffect(() => {
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isReduced) return;
@@ -146,7 +146,7 @@ export default function TheCollection() {
       if (headerRef.current) {
         gsap.fromTo(
           headerRef.current,
-          { opacity: 0, y: 30 },
+          { opacity: 0, y: 24 },
           {
             opacity: 1,
             y: 0,
@@ -155,7 +155,7 @@ export default function TheCollection() {
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 78%",
-              toggleActions: "play none none reverse",
+              once: true,
             },
           }
         );
@@ -165,43 +165,51 @@ export default function TheCollection() {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: showcaseRef.current,
-            start: "top 80%",
+            start: "top 78%",
             once: true,
           },
         });
 
-        // Sequential left-to-right reveal with deliberate timing overlaps
+        // Frame fades in smoothly with clean canvas
+        tl.fromTo(
+          showcaseRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.35, ease: "power2.out" }
+        );
+
+        // Five-stage horizontal reveal: Weddings -> Celebrities -> Events -> Fashion -> Cinema
         const cards = gsap.utils.toArray<HTMLElement>(`.${styles.card}`);
         cards.forEach((card, idx) => {
+          const startTime = 0.08 + idx * 0.18; // 180ms stagger
           tl.fromTo(
             card,
-            { clipPath: "inset(0 100% 0 0)", x: -28, opacity: 0.75 },
-            { clipPath: "inset(0 0% 0 0)", x: 0, opacity: 1, duration: 1.15, ease: "power3.out" },
-            idx * 0.14
+            { clipPath: "inset(0 100% 0 0)", opacity: 0, x: -20 },
+            { clipPath: "inset(0 0% 0 0)", opacity: 1, x: 0, duration: 0.65, ease: "power3.out" },
+            startTime
           );
 
-          // Inner image settles with subtle zoom deceleration
+          // Inner image settles smoothly with subtle optical deceleration
           const img = card.querySelector(`.${styles.cardImage}`);
           if (img) {
             tl.fromTo(
               img,
-              { scale: 1.09, x: 15 },
-              { scale: 1.0, x: 0, duration: 1.3, ease: "power2.out" },
-              idx * 0.14
+              { scale: 1.08 },
+              { scale: 1.0, duration: 0.75, ease: "power2.out" },
+              startTime
             );
           }
         });
 
-        // Labels, numbers & titles appear as cards settle
-        const labels = showcaseRef.current.querySelectorAll(
-          `.${styles.collapsedNumber}, .${styles.collapsedTitle}, .${styles.activeContent}`
+        // Content elements reveal cleanly as cards settle
+        const contentElements = showcaseRef.current.querySelectorAll(
+          `.${styles.compactContent}, .${styles.activeContent}`
         );
-        if (labels.length) {
+        if (contentElements.length) {
           tl.fromTo(
-            labels,
-            { opacity: 0, y: 12 },
-            { opacity: 1, y: 0, duration: 0.65, stagger: 0.05, ease: "power2.out" },
-            0.5
+            contentElements,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.45, stagger: 0.06, ease: "power2.out" },
+            0.62
           );
         }
       }
@@ -260,9 +268,15 @@ export default function TheCollection() {
       <div className={styles.container}>
         {/* ── Section Header ────────────────────────────────────── */}
         <div ref={headerRef} className={styles.header}>
-          <div className={styles.headerMeta}>
-            <span className={styles.chapterLabel}>Chapter 03 — The Collection</span>
-            <span className={styles.curatorialBadge}>Five Practices of Optics</span>
+          <div className={styles.headerTop}>
+            <div className={styles.headerMeta}>
+              <span className={styles.chapterLabel}>Chapter 03 — The Collection</span>
+              <span className={styles.curatorialBadge}>Five Practices of Optics</span>
+            </div>
+            <div className={styles.finalLookBadge} aria-hidden="true">
+              <span className={styles.finalLookLine} />
+              <span className={styles.finalLookText}>FINAL LOOK</span>
+            </div>
           </div>
           <h2 className={styles.title}>
             The <span className={styles.cursiveAccent}>Collection</span>
@@ -300,7 +314,7 @@ export default function TheCollection() {
                   tabIndex={0}
                   role="button"
                   aria-expanded={isSelected}
-                  aria-label={`${discipline.number} — ${discipline.title}`}
+                  aria-label={`${discipline.title} portfolio`}
                 >
                   {/* Background Photographic Canvas */}
                   <div className={styles.imageCanvas}>
@@ -324,18 +338,20 @@ export default function TheCollection() {
                     />
                   </div>
 
-                  {/* ── Active Featured Panel Content (Complete Synchronized Fade Reveal) ── */}
+                  {/* ── Active Featured Panel Content (Fully Responsive Editorial Layout) ── */}
                   <div
                     className={styles.activeContent}
                     aria-hidden={!isSelected}
                   >
                     <div className={styles.activeTopRow}>
                       <div className={styles.activeMetaTag}>
-                        <span className={styles.activeNumber}>DISCIPLINE {discipline.number}</span>
-                        <span className={styles.activeDivider}>/</span>
                         <span className={styles.activeCategory}>{discipline.shortTitle}</span>
                       </div>
-                      <span className={styles.activeStatusPill}>{discipline.count}</span>
+                      <span className={styles.activeStatusPill}>
+                        {discipline.count.includes("ANAMORPHIC")
+                          ? discipline.count
+                          : `${discipline.count} Master Films`}
+                      </span>
                     </div>
 
                     <div className={styles.activeBottomBlock}>
@@ -350,7 +366,7 @@ export default function TheCollection() {
                           onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
                           aria-label={`Enter the full ${discipline.title} portfolio`}
                         >
-                          <span>{discipline.id === "weddings" ? "VIEW WEDDING GALLERY" : "VIEW GALLERY"}</span>
+                          <span>VIEW GALLERY</span>
                           <span className={styles.btnArrow}>→</span>
                         </Link>
 
@@ -375,22 +391,27 @@ export default function TheCollection() {
                     </div>
                   </div>
 
-                  {/* ── Inactive Collapsed Card Content ─────────────────── */}
+                  {/* ── Inactive Collapsed Card Content (Refined, Zero-Overflow Typography) ── */}
                   <div
-                    className={styles.collapsedContent}
+                    className={styles.compactContent}
                     aria-hidden={isSelected}
                   >
-                    <div className={styles.collapsedTop}>
-                      <span className={styles.collapsedNumber}>{discipline.number}</span>
-                    </div>
+                    <div className={styles.compactBottomBlock}>
+                      <h4 className={styles.compactTitle}>{discipline.title}</h4>
 
-                    <div className={styles.collapsedBottom}>
-                      <div className={styles.collapsedMeta}>
-                        <h4 className={styles.collapsedTitle}>{discipline.shortTitle}</h4>
-                        <div className={styles.collapsedCountRow}>
-                          <span className={styles.collapsedCount}>{discipline.count.split(" ")[0]}</span>
-                          <span className={styles.collapsedArrow}>→</span>
-                        </div>
+                      <Link
+                        href={discipline.href}
+                        className={styles.compactBtn}
+                        onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
+                        aria-label={`View ${discipline.title} gallery`}
+                      >
+                        <span>VIEW GALLERY</span>
+                        <span className={styles.compactBtnArrow}>→</span>
+                      </Link>
+
+                      <div className={styles.compactCountRow}>
+                        <span className={styles.compactCount}>{discipline.count.split(" ")[0]}</span>
+                        <span className={styles.compactArrow}>→</span>
                       </div>
                     </div>
                   </div>

@@ -4,7 +4,6 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { navigateWithCameraTransition } from "@/lib/transitions";
 import styles from "./LivingContactSheet.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -170,6 +169,228 @@ export const ITEM_VIDEO_02: GalleryFilmItem = {
     "A story of finding home in the most unexpected places — where love felt inevitable, every frame a new chapter, and real emotions took center stage.",
 };
 
+/* ── Nishanth Liquid Wave Reveal Geometry & Types ───────────────────────── */
+interface WaveCoords {
+  xTop: number;
+  c1x: number;
+  c1y: number;
+  c2x: number;
+  c2y: number;
+  mx: number;
+  my: number;
+  c3x: number;
+  c3y: number;
+  c4x: number;
+  c4y: number;
+  xBot: number;
+}
+
+interface GreenBottomCoords {
+  yLeft: number;
+  cp1x: number;
+  cp1y: number;
+  cp2x: number;
+  cp2y: number;
+  mx: number;
+  my: number;
+  cp3x: number;
+  cp3y: number;
+  cp4x: number;
+  cp4y: number;
+  endX: number;
+  endY: number;
+}
+
+// Stage 1: Off-screen right (Concealed behind opaque flowing wave cover)
+const APERTURE_STAGE_1: WaveCoords = {
+  xTop: 1520,
+  c1x: 1480,
+  c1y: 190,
+  c2x: 1560,
+  c2y: 310,
+  mx: 1500,
+  my: 400,
+  c3x: 1560,
+  c3y: 520,
+  c4x: 1490,
+  c4y: 690,
+  xBot: 1520,
+};
+
+// Stage 2: First Reveal (Organic aperture uncovers couple's faces in center-right)
+const APERTURE_STAGE_2: WaveCoords = {
+  xTop: 660,
+  c1x: 540,
+  c1y: 180,
+  c2x: 710,
+  c2y: 300,
+  mx: 780,
+  my: 390,
+  c3x: 850,
+  c3y: 510,
+  c4x: 670,
+  c4y: 680,
+  xBot: 710,
+};
+
+// Stage 3: Building Depth (Aperture sweeps wider across frame, revealing embrace & landscape)
+const APERTURE_STAGE_3: WaveCoords = {
+  xTop: 280,
+  c1x: 180,
+  c1y: 200,
+  c2x: 340,
+  c2y: 320,
+  mx: 400,
+  my: 410,
+  c3x: 480,
+  c3y: 530,
+  c4x: 240,
+  c4y: 700,
+  xBot: 260,
+};
+
+// Stage 4 & 5: Settled / Nearing Completion (Aperture flows completely beyond left border)
+const APERTURE_STAGE_4: WaveCoords = {
+  xTop: -140,
+  c1x: -200,
+  c1y: 200,
+  c2x: -120,
+  c2y: 320,
+  mx: -90,
+  my: 410,
+  c3x: -70,
+  c3y: 530,
+  c4x: -160,
+  c4y: 700,
+  xBot: -130,
+};
+
+// Secondary Trailing Wave (Phase-offset fluid depth)
+const SEC_STAGE_1: WaveCoords = {
+  xTop: 1680,
+  c1x: 1620,
+  c1y: 200,
+  c2x: 1720,
+  c2y: 330,
+  mx: 1660,
+  my: 410,
+  c3x: 1740,
+  c3y: 540,
+  c4x: 1640,
+  c4y: 690,
+  xBot: 1680,
+};
+
+const SEC_STAGE_2: WaveCoords = {
+  xTop: 820,
+  c1x: 700,
+  c1y: 190,
+  c2x: 870,
+  c2y: 310,
+  mx: 940,
+  my: 400,
+  c3x: 1020,
+  c3y: 520,
+  c4x: 830,
+  c4y: 690,
+  xBot: 870,
+};
+
+const SEC_STAGE_3: WaveCoords = {
+  xTop: 440,
+  c1x: 320,
+  c1y: 210,
+  c2x: 500,
+  c2y: 330,
+  mx: 560,
+  my: 420,
+  c3x: 640,
+  c3y: 540,
+  c4x: 390,
+  c4y: 700,
+  xBot: 420,
+};
+
+const SEC_STAGE_4: WaveCoords = {
+  xTop: -100,
+  c1x: -160,
+  c1y: 210,
+  c2x: -80,
+  c2y: 330,
+  mx: -50,
+  my: 420,
+  c3x: -30,
+  c3y: 540,
+  c4x: -120,
+  c4y: 700,
+  xBot: -90,
+};
+
+// Bottom Forest-Green Wave
+const GREEN_BOT_STAGE_1: GreenBottomCoords = {
+  yLeft: 600,
+  cp1x: 280,
+  cp1y: 540,
+  cp2x: 560,
+  cp2y: 680,
+  mx: 860,
+  my: 650,
+  cp3x: 1100,
+  cp3y: 620,
+  cp4x: 1320,
+  cp4y: 720,
+  endX: 1440,
+  endY: 710,
+};
+
+const GREEN_BOT_STAGE_2: GreenBottomCoords = {
+  yLeft: 580,
+  cp1x: 240,
+  cp1y: 520,
+  cp2x: 480,
+  cp2y: 640,
+  mx: 740,
+  my: 690,
+  cp3x: 960,
+  cp3y: 740,
+  cp4x: 1180,
+  cp4y: 780,
+  endX: 1440,
+  endY: 770,
+};
+
+const GREEN_BOT_STAGE_FINAL: GreenBottomCoords = {
+  yLeft: 560,
+  cp1x: 180,
+  cp1y: 500,
+  cp2x: 380,
+  cp2y: 610,
+  mx: 600,
+  my: 720,
+  cp3x: 720,
+  cp3y: 780,
+  cp4x: 820,
+  cp4y: 800,
+  endX: 880,
+  endY: 800,
+};
+
+const buildAperturePath = (w: WaveCoords, width = 1440, height = 800) => {
+  return `M ${w.xTop.toFixed(1)} 0 C ${w.c1x.toFixed(1)} ${w.c1y.toFixed(1)}, ${w.c2x.toFixed(1)} ${w.c2y.toFixed(1)}, ${w.mx.toFixed(1)} ${w.my.toFixed(1)} C ${w.c3x.toFixed(1)} ${w.c3y.toFixed(1)}, ${w.c4x.toFixed(1)} ${w.c4y.toFixed(1)}, ${w.xBot.toFixed(1)} ${height} L ${width} ${height} L ${width} 0 Z`;
+};
+
+const buildWaveStroke = (w: WaveCoords, height = 800) => {
+  return `M ${w.xTop.toFixed(1)} 0 C ${w.c1x.toFixed(1)} ${w.c1y.toFixed(1)}, ${w.c2x.toFixed(1)} ${w.c2y.toFixed(1)}, ${w.mx.toFixed(1)} ${w.my.toFixed(1)} C ${w.c3x.toFixed(1)} ${w.c3y.toFixed(1)}, ${w.c4x.toFixed(1)} ${w.c4y.toFixed(1)}, ${w.xBot.toFixed(1)} ${height}`;
+};
+
+const buildGreenBottomPath = (g: GreenBottomCoords, height = 800) => {
+  return `M 0 ${height} L 0 ${g.yLeft.toFixed(1)} C ${g.cp1x.toFixed(1)} ${g.cp1y.toFixed(1)}, ${g.cp2x.toFixed(1)} ${g.cp2y.toFixed(1)}, ${g.mx.toFixed(1)} ${g.my.toFixed(1)} C ${g.cp3x.toFixed(1)} ${g.cp3y.toFixed(1)}, ${g.cp4x.toFixed(1)} ${g.cp4y.toFixed(1)}, ${g.endX.toFixed(1)} ${g.endY.toFixed(1)} L ${g.endX.toFixed(1)} ${height} Z`;
+};
+
+const buildGreenBottomStroke = (g: GreenBottomCoords) => {
+  return `M 0 ${g.yLeft.toFixed(1)} C ${g.cp1x.toFixed(1)} ${g.cp1y.toFixed(1)}, ${g.cp2x.toFixed(1)} ${g.cp2y.toFixed(1)}, ${g.mx.toFixed(1)} ${g.my.toFixed(1)} C ${g.cp3x.toFixed(1)} ${g.cp3y.toFixed(1)}, ${g.cp4x.toFixed(1)} ${g.cp4y.toFixed(1)}, ${g.endX.toFixed(1)} ${g.endY.toFixed(1)}`;
+};
+
 export default function LivingContactSheet() {
   const sectionRef = useRef<HTMLElement>(null);
   const openingRef = useRef<HTMLDivElement>(null);
@@ -177,6 +398,43 @@ export default function LivingContactSheet() {
   const hrithikaCanvasRef = useRef<HTMLDivElement>(null);
   const karthikCanvasRef = useRef<HTMLDivElement>(null);
   const sireeshCanvasRef = useRef<HTMLDivElement>(null);
+
+  /* Belamkonda Arch Reveal References */
+  const archOverlayRef = useRef<HTMLDivElement>(null);
+  const archGoldContourRef = useRef<SVGSVGElement>(null);
+  const archGlowRef = useRef<HTMLDivElement>(null);
+  const archedPhotoImgRef = useRef<HTMLImageElement>(null);
+
+  /* Vinitha Liquid Silk Veil References */
+  const vinithaVeilOverlayRef = useRef<HTMLDivElement>(null);
+  const vinithaVeilSvgRef = useRef<SVGSVGElement>(null);
+
+  /* Hrithika Diagonal Drape References */
+  const hrithikaDrapeRef = useRef<HTMLDivElement>(null);
+  const hrithikaPhotoImgRef = useRef<HTMLImageElement>(null);
+
+  /* Karthik Painterly Brush References */
+  const karthikBrushOverlayRef = useRef<HTMLDivElement>(null);
+  const karthikPhotoImgRef = useRef<HTMLImageElement>(null);
+
+  /* Sireesh Memory Reveal References */
+  const sireeshImgRef = useRef<HTMLImageElement>(null);
+  const sireeshSunlightRef = useRef<HTMLDivElement>(null);
+  const sireeshVeilRef = useRef<HTMLDivElement>(null);
+  const sireeshPetalsRef = useRef<HTMLDivElement>(null);
+
+  /* Nishanth Liquid Wave Reveal References */
+  const waveSvgRef = useRef<SVGSVGElement>(null);
+  const waveCutoutMaskRef = useRef<SVGPathElement>(null);
+  const wavePrimaryStrokeRef = useRef<SVGPathElement>(null);
+  const wavePrimaryGlowRef = useRef<SVGPathElement>(null);
+  const waveSecondaryPathRef = useRef<SVGPathElement>(null);
+  const waveSecondaryStrokeRef = useRef<SVGPathElement>(null);
+  const waveGreenBottomPathRef = useRef<SVGPathElement>(null);
+  const waveGreenBottomStrokeRef = useRef<SVGPathElement>(null);
+  const waveWatermarkRef = useRef<SVGTextElement>(null);
+  const nishanthLeftControlRef = useRef<HTMLDivElement>(null);
+  const nishanthRightNarrativeRef = useRef<HTMLDivElement>(null);
   
   /* Vinitha SVG Morph References */
   const vinithaPathRef = useRef<SVGPathElement>(null);
@@ -367,6 +625,7 @@ export default function LivingContactSheet() {
     const path = nishanthPathRef.current;
     const stage = nishanthStageRef.current;
     const overlays = nishanthOverlaysRef.current;
+    const waveSvg = waveSvgRef.current;
     if (!path || !stage) {
       setNishanthVideoActive(true);
       nishanthMorphingRef.current = false;
@@ -385,6 +644,13 @@ export default function LivingContactSheet() {
     // 1. Fade out text overlays & play beacon gracefully
     if (overlays) {
       tl.to(overlays, {
+        opacity: 0,
+        duration: 0.45,
+        ease: "power2.out",
+      }, 0);
+    }
+    if (waveSvg) {
+      tl.to(waveSvg, {
         opacity: 0,
         duration: 0.45,
         ease: "power2.out",
@@ -422,6 +688,7 @@ export default function LivingContactSheet() {
     const path = nishanthPathRef.current;
     const stage = nishanthStageRef.current;
     const overlays = nishanthOverlaysRef.current;
+    const waveSvg = waveSvgRef.current;
     if (!path || !stage) {
       nishanthMorphingRef.current = false;
       return;
@@ -463,6 +730,13 @@ export default function LivingContactSheet() {
         ease: "power2.in",
       }, 0.45);
     }
+    if (waveSvg) {
+      tl.to(waveSvg, {
+        opacity: 1,
+        duration: 0.55,
+        ease: "power2.in",
+      }, 0.45);
+    }
   }, []);
 
   /* GSAP scroll-triggered entrance animations */
@@ -471,7 +745,7 @@ export default function LivingContactSheet() {
     if (isReduced) return;
 
     const ctx = gsap.context(() => {
-      // 1. Chapter 02 — The Vows: Coordinated stages (Portrait reveals, then typography)
+      // 1. Chapter 02 — The Vows: Belamkonda Arch Reveal (6 Storyboard Stages)
       if (openingRef.current) {
         const openingTl = gsap.timeline({
           scrollTrigger: {
@@ -481,37 +755,82 @@ export default function LivingContactSheet() {
           },
         });
 
-        // Stage A: Monumental Indian Palace Arch Silhouette reveal (Bellamkonda & Kavya)
-        if (archedFrameRef.current) {
+        // Stage 01 & 02: Initial dark overlay & arch silhouette with apex golden light wash
+        if (archGlowRef.current) {
           openingTl.fromTo(
-            archedFrameRef.current,
-            { clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)", y: 45, scale: 1.06 },
-            { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)", y: 0, scale: 1.0, duration: 1.35, ease: "power3.out" },
-            0
+            archGlowRef.current,
+            { opacity: 0, scale: 0.4, y: -20 },
+            { opacity: 0.85, scale: 1.15, y: 0, duration: 0.5, ease: "power2.out" },
+            0.05
           );
-          const photoImg = archedFrameRef.current.querySelector("img");
-          if (photoImg) {
-            openingTl.fromTo(
-              photoImg,
-              { scale: 1.12, y: 25 },
-              { scale: 1.0, y: 0, duration: 1.45, ease: "power3.out" },
-              0
-            );
-          }
         }
 
-        // Stage B: The Vows monumental headline and chapter badge emerge coordinated
+        if (archedPhotoImgRef.current) {
+          openingTl.fromTo(
+            archedPhotoImgRef.current,
+            { scale: 1.1, filter: "brightness(0.65) blur(3px)" },
+            { scale: 1.03, filter: "brightness(0.9) blur(0px)", duration: 0.9, ease: "power2.out" },
+            0.1
+          );
+        }
+
+        // Stage 03 & 04: Scalloped arch expands downwards following Indian palace contour
+        if (archOverlayRef.current) {
+          openingTl.fromTo(
+            archOverlayRef.current,
+            { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" },
+            { clipPath: "polygon(0% 48%, 50% 28%, 100% 48%, 100% 100%, 0% 100%)", duration: 0.55, ease: "power2.inOut" },
+            0.15
+          );
+          openingTl.to(
+            archOverlayRef.current,
+            { clipPath: "polygon(0% 92%, 50% 84%, 100% 92%, 100% 100%, 0% 100%)", duration: 0.5, ease: "power2.out" },
+            0.7
+          );
+        }
+
+        // Stage 05: Full reveal — mask edges dissolve elegantly into the image
+        if (archOverlayRef.current) {
+          openingTl.to(
+            archOverlayRef.current,
+            { opacity: 0, duration: 0.45, ease: "power2.out" },
+            1.15
+          );
+        }
+        if (archGoldContourRef.current) {
+          openingTl.to(
+            archGoldContourRef.current,
+            { opacity: 0, duration: 0.45, ease: "power2.out" },
+            1.15
+          );
+        }
+        if (archGlowRef.current) {
+          openingTl.to(
+            archGlowRef.current,
+            { opacity: 0, duration: 0.45, ease: "power2.out" },
+            1.15
+          );
+        }
+
+        // Stage 06: Settled state — photograph completely visible, typography staggers in
+        if (archedPhotoImgRef.current) {
+          openingTl.to(
+            archedPhotoImgRef.current,
+            { scale: 1.0, filter: "brightness(1.0) blur(0px)", duration: 0.35, ease: "power1.out" },
+            1.3
+          );
+        }
+
         const leftElements = openingRef.current.querySelectorAll(`.${styles.chapterBadgeRow}, .${styles.monumentalHeading}`);
         if (leftElements.length) {
           openingTl.fromTo(
             leftElements,
             { opacity: 0, y: 22 },
             { opacity: 1, y: 0, duration: 0.9, stagger: 0.12, ease: "power2.out" },
-            0.15
+            0.3
           );
         }
 
-        // Stage C: Supporting copy & metadata appear after photograph begins revealing
         const supportingElements = openingRef.current.querySelectorAll(
           `.${styles.openingNarrative}, .${styles.exploreActionBtn}, .${styles.openingRightCol} > *`
         );
@@ -520,12 +839,12 @@ export default function LivingContactSheet() {
             supportingElements,
             { opacity: 0, y: 16 },
             { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: "power2.out" },
-            0.45
+            0.6
           );
         }
       }
 
-      // 2. Cinema Passage 01 — Vinitha & Vivekananda: Flowing, wavy organic SVG mask reveal
+      // 2. Cinema Passage 01 — Vinitha & Vivekananda: Liquid Silk Veil Reveal (5 Stages)
       if (vinithaStageRef.current) {
         const vinithaTl = gsap.timeline({
           scrollTrigger: {
@@ -535,25 +854,52 @@ export default function LivingContactSheet() {
           },
         });
 
-        vinithaTl.fromTo(
-          vinithaStageRef.current,
-          { clipPath: "inset(0 20% 0 20% round 32px)", opacity: 0.8 },
-          { clipPath: "inset(0 0% 0 0% round 0px)", opacity: 1, duration: 1.35, ease: "power3.inOut" },
-          0
-        );
-
         const vinithaImg = vinithaStageRef.current.querySelector(`.${styles.curvedPosterImg}`);
         if (vinithaImg) {
           vinithaTl.fromTo(
             vinithaImg,
-            { scale: 1.08, filter: "blur(4px)" },
-            { scale: 1.0, filter: "blur(0px)", duration: 1.45, ease: "power2.out" },
+            { scale: 1.08, filter: "blur(6px) brightness(0.65)" },
+            { scale: 1.02, filter: "blur(2px) brightness(0.9)", duration: 0.9, ease: "power2.out" },
             0.1
+          );
+          vinithaTl.to(
+            vinithaImg,
+            { scale: 1.0, filter: "blur(0px) brightness(1.0)", duration: 0.5, ease: "power1.out" },
+            1.0
+          );
+        }
+
+        // Stage 02 - 04: Liquid silk ribbon sweeps across bride's jewellery & portrait
+        if (vinithaVeilSvgRef.current) {
+          vinithaTl.fromTo(
+            vinithaVeilSvgRef.current,
+            { x: "-25%", y: "-22%", rotate: -6 },
+            { x: "12%", y: "8%", rotate: 0, duration: 0.65, ease: "power2.out" },
+            0
+          );
+          vinithaTl.to(
+            vinithaVeilSvgRef.current,
+            { x: "62%", y: "42%", rotate: 3, duration: 0.65, ease: "power2.inOut" },
+            0.6
+          );
+          vinithaTl.to(
+            vinithaVeilSvgRef.current,
+            { x: "115%", y: "90%", rotate: 6, duration: 0.55, ease: "power3.in" },
+            1.1
+          );
+        }
+
+        // Stage 05: Settled — veil dissolves cleanly into subtle highlights
+        if (vinithaVeilOverlayRef.current) {
+          vinithaTl.to(
+            vinithaVeilOverlayRef.current,
+            { opacity: 0, duration: 0.45, ease: "power1.out" },
+            1.4
           );
         }
       }
 
-      // 3. Featured Story 03 — Hrithika & Abhishek: Magician's drape reveal (diagonal from upper-right to lower-left)
+      // 3. Featured Story 03 — Hrithika & Abhishek: Magician's Silk Drape Reveal (Top-Right -> Bottom-Left)
       if (hrithikaCanvasRef.current) {
         const hrithikaTl = gsap.timeline({
           scrollTrigger: {
@@ -563,25 +909,49 @@ export default function LivingContactSheet() {
           },
         });
 
-        hrithikaTl.fromTo(
-          hrithikaCanvasRef.current,
-          { clipPath: "polygon(100% 0, 100% 0, 100% 0, 100% 0)", x: 20 },
-          { clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)", x: 0, duration: 1.25, ease: "power2.inOut" },
-          0
-        );
-
-        const img = hrithikaCanvasRef.current.querySelector("img");
-        if (img) {
+        // Underneath photo easing
+        if (hrithikaPhotoImgRef.current) {
           hrithikaTl.fromTo(
-            img,
-            { scale: 1.08, x: -15 },
-            { scale: 1.0, x: 0, duration: 1.35, ease: "power2.out" },
-            0
+            hrithikaPhotoImgRef.current,
+            { scale: 1.07, x: -12, filter: "blur(3px) brightness(0.85)" },
+            { scale: 1.02, x: 0, filter: "blur(0px) brightness(1.0)", duration: 0.9, ease: "power2.out" },
+            0.1
+          );
+          hrithikaTl.to(
+            hrithikaPhotoImgRef.current,
+            { scale: 1.0, duration: 0.4, ease: "power1.out" },
+            1.15
+          );
+        }
+
+        // Stage 02 - 04: Drape peels from top-right towards bottom-left
+        if (hrithikaDrapeRef.current) {
+          hrithikaTl.fromTo(
+            hrithikaDrapeRef.current,
+            { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", opacity: 1 },
+            { clipPath: "polygon(0 0, 42% 0, 100% 54%, 100% 100%, 0 100%)", duration: 0.45, ease: "power2.inOut" },
+            0.05
+          );
+          hrithikaTl.to(
+            hrithikaDrapeRef.current,
+            { clipPath: "polygon(0 0, 0% 36%, 62% 88%, 100% 100%, 0 100%)", duration: 0.5, ease: "power2.inOut" },
+            0.48
+          );
+          hrithikaTl.to(
+            hrithikaDrapeRef.current,
+            { clipPath: "polygon(0 76%, 22% 100%, 0 100%)", duration: 0.4, ease: "power2.out" },
+            0.95
+          );
+          // Stage 05: Drape exits/dissolves cleanly
+          hrithikaTl.to(
+            hrithikaDrapeRef.current,
+            { opacity: 0, duration: 0.3, ease: "power1.out" },
+            1.3
           );
         }
       }
 
-      // 4. Featured Story 04 — Karthik & Gayatri: Artistic brush reveal (expressive interconnected strokes)
+      // 4. Featured Story 04 — Karthik & Gayathri: Painterly Brush Reveal (Top-Right towards Center)
       if (karthikCanvasRef.current) {
         const karthikTl = gsap.timeline({
           scrollTrigger: {
@@ -591,35 +961,47 @@ export default function LivingContactSheet() {
           },
         });
 
-        karthikTl.fromTo(
-          karthikCanvasRef.current,
-          {
-            clipPath:
-              "polygon(100% 0, 100% 14%, 100% 28%, 100% 45%, 100% 60%, 100% 75%, 100% 88%, 100% 100%, 100% 100%)",
-            x: 24,
-          },
-          {
-            clipPath:
-              "polygon(0 0, 0 10%, 3% 25%, 0 42%, 4% 58%, 0 74%, 2% 88%, 0 100%, 100% 100%, 100% 0)",
-            x: 0,
-            duration: 1.25,
-            ease: "power3.out",
-          },
-          0
-        );
-
-        const img = karthikCanvasRef.current.querySelector("img");
-        if (img) {
+        if (karthikPhotoImgRef.current) {
           karthikTl.fromTo(
-            img,
-            { scale: 1.07 },
-            { scale: 1.0, duration: 1.3, ease: "power2.out" },
-            0
+            karthikPhotoImgRef.current,
+            { scale: 1.07, filter: "blur(3px) brightness(0.9)" },
+            { scale: 1.02, filter: "blur(0px) brightness(1.0)", duration: 0.85, ease: "power2.out" },
+            0.15
+          );
+          karthikTl.to(
+            karthikPhotoImgRef.current,
+            { scale: 1.0, duration: 0.35, ease: "power1.out" },
+            1.1
+          );
+        }
+
+        // Diagonal brush strokes sweep from top-right towards center
+        if (karthikBrushOverlayRef.current) {
+          karthikTl.fromTo(
+            karthikBrushOverlayRef.current,
+            { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", opacity: 1 },
+            { clipPath: "polygon(0 0, 46% 0, 100% 48%, 100% 100%, 0 100%)", duration: 0.4, ease: "power2.out" },
+            0.05
+          );
+          karthikTl.to(
+            karthikBrushOverlayRef.current,
+            { clipPath: "polygon(0 0, 0% 32%, 58% 85%, 100% 100%, 0 100%)", duration: 0.45, ease: "power2.inOut" },
+            0.42
+          );
+          karthikTl.to(
+            karthikBrushOverlayRef.current,
+            { clipPath: "polygon(0 80%, 20% 100%, 0 100%)", duration: 0.35, ease: "power2.out" },
+            0.85
+          );
+          karthikTl.to(
+            karthikBrushOverlayRef.current,
+            { opacity: 0, duration: 0.3, ease: "power1.out" },
+            1.15
           );
         }
       }
 
-      // 5. Featured Story 05 — Sireesh & Harshitha: Layered cinematic reveal with leading edge and depth shift
+      // 5. Featured Story 05 — Sireesh & Harshitha: Soft-Focus Memory Reveal (6 Stages)
       if (sireeshCanvasRef.current) {
         const sireeshTl = gsap.timeline({
           scrollTrigger: {
@@ -629,21 +1011,67 @@ export default function LivingContactSheet() {
           },
         });
 
-        sireeshTl.fromTo(
-          sireeshCanvasRef.current,
-          { clipPath: "inset(0 0 100% 0)", y: 30 },
-          { clipPath: "inset(0 0 0% 0)", y: 0, duration: 1.2, ease: "power3.out" },
-          0
-        );
-
-        const img = sireeshCanvasRef.current.querySelector("img");
-        if (img) {
+        // Stage 01 - 04: Focus pull from soft dreamlike impression (blur 14px) to crisp image
+        if (sireeshImgRef.current) {
           sireeshTl.fromTo(
-            img,
-            { scale: 1.09, y: -20 },
-            { scale: 1.0, y: 0, duration: 1.35, ease: "power2.out" },
-            0
+            sireeshImgRef.current,
+            { filter: "blur(14px) brightness(1.1)", scale: 1.08 },
+            { filter: "blur(5px) brightness(1.05)", scale: 1.03, duration: 0.75, ease: "power2.out" },
+            0.05
           );
+          sireeshTl.to(
+            sireeshImgRef.current,
+            { filter: "blur(0px) brightness(1.0)", scale: 1.0, duration: 0.55, ease: "power1.out" },
+            0.8
+          );
+        }
+
+        // Stage 02: Ribbon of golden sunlight sweeps across from top-left
+        if (sireeshSunlightRef.current) {
+          sireeshTl.fromTo(
+            sireeshSunlightRef.current,
+            { x: "-60%", y: "-50%", opacity: 0 },
+            { x: "-10%", y: "-10%", opacity: 0.85, duration: 0.65, ease: "power2.out" },
+            0.05
+          );
+          sireeshTl.to(
+            sireeshSunlightRef.current,
+            { x: "35%", y: "25%", opacity: 0, duration: 0.65, ease: "power2.in" },
+            0.7
+          );
+        }
+
+        // Stage 03 - 04: Breeze veil flows diagonally across
+        if (sireeshVeilRef.current) {
+          sireeshTl.fromTo(
+            sireeshVeilRef.current,
+            { x: "-40%", y: "-35%", opacity: 0 },
+            { x: "15%", y: "15%", opacity: 0.65, duration: 0.7, ease: "power2.inOut" },
+            0.25
+          );
+          sireeshTl.to(
+            sireeshVeilRef.current,
+            { x: "65%", y: "55%", opacity: 0, duration: 0.55, ease: "power2.in" },
+            0.85
+          );
+        }
+
+        // Stage 05: Subtle drifting rose/bougainvillea petals
+        if (sireeshPetalsRef.current) {
+          const petals = sireeshPetalsRef.current.querySelectorAll(`.${styles.petal}`);
+          if (petals.length) {
+            sireeshTl.fromTo(
+              petals,
+              { opacity: 0, y: -25, x: -18, rotate: -30 },
+              { opacity: 0.85, y: 30, x: 20, rotate: 45, duration: 0.85, stagger: 0.08, ease: "sine.inOut" },
+              0.55
+            );
+            sireeshTl.to(
+              petals,
+              { opacity: 0, y: 65, x: 45, rotate: 95, duration: 0.45, stagger: 0.06, ease: "power1.in" },
+              1.15
+            );
+          }
         }
       }
 
@@ -667,48 +1095,218 @@ export default function LivingContactSheet() {
         );
       });
 
-      // Coordinated controlled image scaling for Nishanth X Sanzena matching Image 2
-      if (nishanthStageRef.current && nishanthPosterRef.current) {
-        const nishanthImg = nishanthPosterRef.current;
-        const scaleTl = gsap.timeline({
+      // ══════════════════════════════════════════════════════════════════════
+      // NISHANTH & SANZENA: CINEMATIC LIQUID WAVE REVEAL (STAGES 1 - 5)
+      // ══════════════════════════════════════════════════════════════════════
+      if (nishanthStageRef.current) {
+        const apertureProxy = { ...APERTURE_STAGE_1 };
+        const secProxy = { ...SEC_STAGE_1 };
+        const greenBotProxy = { ...GREEN_BOT_STAGE_1 };
+
+        const updateWavePaths = () => {
+          if (waveCutoutMaskRef.current) {
+            waveCutoutMaskRef.current.setAttribute("d", buildAperturePath(apertureProxy));
+          }
+          if (wavePrimaryStrokeRef.current) {
+            wavePrimaryStrokeRef.current.setAttribute("d", buildWaveStroke(apertureProxy));
+          }
+          if (wavePrimaryGlowRef.current) {
+            wavePrimaryGlowRef.current.setAttribute("d", buildWaveStroke(apertureProxy));
+          }
+          if (waveSecondaryPathRef.current) {
+            waveSecondaryPathRef.current.setAttribute("d", buildAperturePath(secProxy));
+          }
+          if (waveSecondaryStrokeRef.current) {
+            waveSecondaryStrokeRef.current.setAttribute("d", buildWaveStroke(secProxy));
+          }
+          if (waveGreenBottomPathRef.current) {
+            waveGreenBottomPathRef.current.setAttribute("d", buildGreenBottomPath(greenBotProxy));
+          }
+          if (waveGreenBottomStrokeRef.current) {
+            waveGreenBottomStrokeRef.current.setAttribute("d", buildGreenBottomStroke(greenBotProxy));
+          }
+        };
+
+        // Initialize SVG shapes to Stage 1
+        updateWavePaths();
+
+        // Initial state for text overlays (concealed before reveal reaches Stage 4/5)
+        if (nishanthLeftControlRef.current) {
+          gsap.set(nishanthLeftControlRef.current, { opacity: 0, y: 18 });
+        }
+        const initialTextElements = gsap.utils.toArray<HTMLElement>(
+          `.${styles.nishanthRightNarrative} > *`
+        );
+        if (initialTextElements.length) {
+          gsap.set(initialTextElements, { opacity: 0, y: 18 });
+        }
+
+        const waveTl = gsap.timeline({
           scrollTrigger: {
             trigger: nishanthStageRef.current,
-            start: "top 95%",
-            end: "top 15%",
-            scrub: 1.2,
-            invalidateOnRefresh: true,
+            start: "top 78%",
+            once: true,
           },
         });
 
-        // Liquid cinematic reveal: fluid expanding rounded mask
-        scaleTl.fromTo(
-          nishanthStageRef.current,
-          { clipPath: "inset(14% 18% 14% 18% round 44px)", opacity: 0.8 },
-          { clipPath: "inset(0% 0% 0% 0% round 0px)", opacity: 1, duration: 0.35, ease: "power3.out" },
+        // STAGE 1 -> STAGE 2: FIRST REVEAL (0.0s - 1.05s)
+        // A broad, softly illuminated wave moves from left to right, uncovering couple's faces/heads
+        waveTl.to(
+          apertureProxy,
+          {
+            ...APERTURE_STAGE_2,
+            duration: 1.05,
+            ease: "power2.inOut",
+            onUpdate: updateWavePaths,
+          },
           0
         );
 
-        // 0% - 15%: Smoothly increase in scale
-        scaleTl.fromTo(
-          nishanthImg,
-          { scale: 1.0, transformOrigin: "center center" },
-          { scale: 1.12, duration: 0.15, ease: "sine.inOut" },
+        // Secondary wave trails behind to create fluid layer depth
+        waveTl.to(
+          secProxy,
+          {
+            ...SEC_STAGE_2,
+            duration: 1.15,
+            ease: "power2.inOut",
+            onUpdate: updateWavePaths,
+          },
+          0.12
+        );
+
+        // Green bottom wave undulates smoothly
+        waveTl.to(
+          greenBotProxy,
+          {
+            ...GREEN_BOT_STAGE_2,
+            duration: 1.05,
+            ease: "sine.inOut",
+            onUpdate: updateWavePaths,
+          },
           0
         );
 
-        // 15% - 30%: Smoothly reverse direction and decrease to intended final scale
-        scaleTl.to(
-          nishanthImg,
-          { scale: 1.02, duration: 0.15, ease: "sine.inOut", transformOrigin: "center center" },
-          0.15
+        // Faint watermark text on ivory wave layer gently eases
+        if (waveWatermarkRef.current) {
+          waveTl.fromTo(
+            waveWatermarkRef.current,
+            { opacity: 0.24 },
+            { opacity: 0.15, duration: 1.05, ease: "sine.out" },
+            0
+          );
+        }
+
+        // STAGE 2 -> STAGE 3: BUILDING DEPTH (1.05s - 2.0s)
+        // Aperture expands further across frame, revealing couple's embrace and mountain scenery
+        waveTl.to(
+          apertureProxy,
+          {
+            ...APERTURE_STAGE_3,
+            duration: 0.95,
+            ease: "sine.inOut",
+            onUpdate: updateWavePaths,
+          },
+          1.05
         );
 
-        // 30% - 100%: Hold scale constant while remaining reveal animation finishes
-        scaleTl.to(
-          nishanthImg,
-          { scale: 1.02, duration: 0.70, ease: "none", transformOrigin: "center center" },
-          0.30
+        waveTl.to(
+          secProxy,
+          {
+            ...SEC_STAGE_3,
+            duration: 0.95,
+            ease: "sine.inOut",
+            onUpdate: updateWavePaths,
+          },
+          1.15
         );
+
+        // Green bottom wave transitions smoothly toward resting settled frame
+        waveTl.to(
+          greenBotProxy,
+          {
+            ...GREEN_BOT_STAGE_FINAL,
+            duration: 1.1,
+            ease: "power2.inOut",
+            onUpdate: updateWavePaths,
+          },
+          1.05
+        );
+
+        if (waveWatermarkRef.current) {
+          waveTl.to(
+            waveWatermarkRef.current,
+            { opacity: 0.08, duration: 0.95, ease: "sine.out" },
+            1.05
+          );
+        }
+
+        // STAGE 3 -> STAGE 4: NEARING COMPLETION (2.0s - 2.8s)
+        // Wave layers flow completely beyond boundaries, photograph is fully uncovered
+        waveTl.to(
+          apertureProxy,
+          {
+            ...APERTURE_STAGE_4,
+            duration: 0.85,
+            ease: "power2.out",
+            onUpdate: updateWavePaths,
+          },
+          2.0
+        );
+
+        waveTl.to(
+          secProxy,
+          {
+            ...SEC_STAGE_4,
+            duration: 0.85,
+            ease: "power2.out",
+            onUpdate: updateWavePaths,
+          },
+          2.1
+        );
+
+        // Leading edge contour strokes & soft atmospheric glow fade as wave clears
+        if (wavePrimaryStrokeRef.current) {
+          waveTl.to(
+            wavePrimaryStrokeRef.current,
+            { opacity: 0, duration: 0.6, ease: "power2.out" },
+            2.2
+          );
+        }
+        if (wavePrimaryGlowRef.current) {
+          waveTl.to(
+            wavePrimaryGlowRef.current,
+            { opacity: 0, duration: 0.6, ease: "power2.out" },
+            2.2
+          );
+        }
+        if (waveSecondaryStrokeRef.current) {
+          waveTl.to(
+            waveSecondaryStrokeRef.current,
+            { opacity: 0, duration: 0.6, ease: "power2.out" },
+            2.2
+          );
+        }
+
+        // STAGE 5: FINAL COMPOSITION (2.4s - 3.2s)
+        // The photograph is crisp and stationary; text, play button, and CTA fade into original positions with subtle stagger
+        if (nishanthLeftControlRef.current) {
+          waveTl.to(
+            nishanthLeftControlRef.current,
+            { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+            2.4
+          );
+        }
+
+        const narrativeItems = gsap.utils.toArray<HTMLElement>(
+          `.${styles.nishanthRightNarrative} > *`
+        );
+        if (narrativeItems.length) {
+          waveTl.to(
+            narrativeItems,
+            { opacity: 1, y: 0, duration: 0.8, stagger: 0.12, ease: "power2.out" },
+            2.5
+          );
+        }
       }
 
       // Slow, elegant opacity fade-in for Vinitha video text blocks (title -> description -> CTA)
@@ -734,28 +1332,7 @@ export default function LivingContactSheet() {
         );
       }
 
-      // Slow, elegant opacity fade-in for Nishanth video text blocks
-      const nishanthTextElements = gsap.utils.toArray<HTMLElement>(
-        `.${styles.nishanthRightNarrative} > *`
-      );
-      if (nishanthTextElements.length && nishanthStageRef.current) {
-        gsap.fromTo(
-          nishanthTextElements,
-          { opacity: 0, y: 8 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.0,
-            stagger: 0.12,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: nishanthStageRef.current,
-              start: "top 80%",
-              once: true,
-            },
-          }
-        );
-      }
+
     }, sectionRef);
 
     return () => ctx.revert();
@@ -815,10 +1392,10 @@ export default function LivingContactSheet() {
         focusable="false"
       >
         <defs>
-          {/* Monumental Indian Palace Arch Silhouette: Straight vertical side, broad curved outer shoulder, upward-pointing central tip */}
+          {/* Monumental Indian Heritage Palace Arch Silhouette: Multi-scalloped cusps with tall pointed crest */}
           <clipPath id="palaceArchClip" clipPathUnits="objectBoundingBox">
             <path
-              d="M 0 1 L 0 0.38 C 0 0.20, 0.16 0.10, 0.36 0.07 C 0.44 0.05, 0.48 0.02, 0.5 0 C 0.52 0.02, 0.56 0.05, 0.64 0.07 C 0.84 0.10, 1 0.20, 1 0.38 L 1 1 Z"
+              d="M 0 1 L 0 0.48 C 0 0.42, 0.08 0.38, 0.12 0.34 C 0.12 0.28, 0.22 0.24, 0.26 0.18 C 0.27 0.14, 0.38 0.10, 0.42 0.06 C 0.45 0.03, 0.49 0.01, 0.50 0 C 0.51 0.01, 0.55 0.03, 0.58 0.06 C 0.62 0.10, 0.73 0.14, 0.74 0.18 C 0.78 0.24, 0.88 0.28, 0.88 0.34 C 0.92 0.38, 1 0.42, 1 0.48 L 1 1 Z"
             />
           </clipPath>
           <clipPath id="vinithaMorphClip" clipPathUnits="objectBoundingBox">
@@ -882,6 +1459,7 @@ export default function LivingContactSheet() {
                 <picture>
                   <source srcSet={ITEM_PROJECT_01.webpImage} type="image/webp" />
                   <img
+                    ref={archedPhotoImgRef}
                     src={ITEM_PROJECT_01.image}
                     alt={ITEM_PROJECT_01.clientNames}
                     className={styles.archedPhotoImg}
@@ -890,6 +1468,25 @@ export default function LivingContactSheet() {
                   />
                 </picture>
                 <div className={styles.photoSheenOverlay} />
+
+                {/* 6-Stage Indian Heritage Palace Arch Reveal Storyboard Layers */}
+                <div ref={archOverlayRef} className={styles.archRevealOverlay} />
+                <svg
+                  ref={archGoldContourRef}
+                  className={styles.archGoldContour}
+                  viewBox="0 0 100 140"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M 1 140 L 1 67.2 C 1 58.8, 8 53.2, 12 47.6 C 12 39.2, 22 33.6, 26 25.2 C 27 19.6, 38 14.0, 42 8.4 C 45 4.2, 49 1.4, 50 0 C 51 1.4, 55 4.2, 58 8.4 C 62 14.0, 73 19.6, 74 25.2 C 78 33.6, 88 39.2, 88 47.6 C 92 53.2, 99 58.8, 99 67.2 L 99 140"
+                    fill="none"
+                    stroke="#D4AF37"
+                    strokeWidth="1.6"
+                    strokeOpacity="0.85"
+                  />
+                </svg>
+                <div ref={archGlowRef} className={styles.archApexGlow} />
               </div>
             </Link>
           </div>
@@ -970,6 +1567,49 @@ export default function LivingContactSheet() {
           {/* Gradient Scrim for Film Typography Legibility */}
           <div className={styles.filmGradientScrim} />
 
+          {/* Liquid Silk Veil Overlay Layer */}
+          <div ref={vinithaVeilOverlayRef} className={styles.vinithaVeilOverlay} aria-hidden="true">
+            <svg
+              ref={vinithaVeilSvgRef}
+              className={styles.vinithaVeilSvg}
+              viewBox="0 0 1600 900"
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <linearGradient id="champagneSilkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#F5ECE1" stopOpacity="0.45" />
+                  <stop offset="35%" stopColor="#DFC89A" stopOpacity="0.32" />
+                  <stop offset="70%" stopColor="#B39356" stopOpacity="0.25" />
+                  <stop offset="100%" stopColor="#EAD8B5" stopOpacity="0.4" />
+                </linearGradient>
+                <linearGradient id="silkEdgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.8" />
+                  <stop offset="50%" stopColor="#FFF2D6" stopOpacity="0.95" />
+                  <stop offset="100%" stopColor="#D4AF37" stopOpacity="0.75" />
+                </linearGradient>
+              </defs>
+              {/* Primary Silk Ribbon with Flowing S-Curves */}
+              <path
+                d="M -120 -60 C 220 180, 520 -40, 850 260 C 1180 560, 1420 220, 1750 480 L 1750 980 L -120 980 Z"
+                fill="url(#champagneSilkGrad)"
+              />
+              <path
+                d="M -120 -60 C 220 180, 520 -40, 850 260 C 1180 560, 1420 220, 1750 480"
+                fill="none"
+                stroke="url(#silkEdgeGrad)"
+                strokeWidth="2.5"
+                filter="drop-shadow(0 4px 14px rgba(212, 175, 55, 0.4))"
+              />
+              {/* Secondary Flowing Ribbon following the bride's jewellery */}
+              <path
+                d="M -60 120 C 310 340, 640 160, 960 420 C 1280 680, 1500 390, 1780 620"
+                fill="none"
+                stroke="rgba(255, 245, 220, 0.6)"
+                strokeWidth="1.8"
+              />
+            </svg>
+          </div>
+
           {/* Overlay Elements (Fade out when morphing to video) */}
           <div ref={vinithaOverlaysRef} className={styles.filmOverlaysLayer}>
             <div className={styles.filmOverlaysInnerContainer}>
@@ -1047,6 +1687,7 @@ export default function LivingContactSheet() {
                   <picture>
                     <source srcSet={ITEM_PROJECT_03.webpImage} type="image/webp" />
                     <img
+                      ref={hrithikaPhotoImgRef}
                       src={ITEM_PROJECT_03.image}
                       alt={ITEM_PROJECT_03.clientNames}
                       className={styles.storyCoverImg}
@@ -1055,6 +1696,25 @@ export default function LivingContactSheet() {
                     />
                   </picture>
                   <div className={styles.imageHoverShimmer} />
+
+                  {/* Magician's Silk Drape Reveal (Top-Right to Bottom-Left) */}
+                  <div ref={hrithikaDrapeRef} className={styles.fabricDrapeOverlay}>
+                    <div className={styles.fabricFoldTexture} />
+                    <svg
+                      className={styles.fabricGoldTrim}
+                      viewBox="0 0 100 100"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M 100 0 C 80 25, 45 45, 0 100"
+                        fill="none"
+                        stroke="#D4AF37"
+                        strokeWidth="2.2"
+                        strokeOpacity="0.85"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </Link>
             </div>
@@ -1119,6 +1779,7 @@ export default function LivingContactSheet() {
                   <picture>
                     <source srcSet={ITEM_PROJECT_04.webpImage} type="image/webp" />
                     <img
+                      ref={karthikPhotoImgRef}
                       src={ITEM_PROJECT_04.image}
                       alt={ITEM_PROJECT_04.clientNames}
                       className={styles.storyCoverImg}
@@ -1127,6 +1788,39 @@ export default function LivingContactSheet() {
                     />
                   </picture>
                   <div className={styles.imageHoverShimmer} />
+
+                  {/* Living Painterly Brush Reveal (Top-Right towards Center) */}
+                  <div ref={karthikBrushOverlayRef} className={styles.painterlyBrushOverlay}>
+                    <svg
+                      className={styles.painterlyBrushSvg}
+                      viewBox="0 0 1000 625"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                    >
+                      <defs>
+                        <linearGradient id="brushIvoryGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stopColor="#FAF8F5" />
+                          <stop offset="60%" stopColor="#EAE5DC" />
+                          <stop offset="100%" stopColor="#09453E" stopOpacity="0.15" />
+                        </linearGradient>
+                      </defs>
+                      {/* Painterly brush strokes sweeping diagonally from top-right towards center */}
+                      <path
+                        d="M 1050 -60 Q 750 180, 360 480 Q 280 540, 180 580"
+                        fill="none"
+                        stroke="url(#brushIvoryGrad)"
+                        strokeWidth="260"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M 1120 120 Q 820 320, 480 560"
+                        fill="none"
+                        stroke="#FAF8F5"
+                        strokeWidth="220"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </Link>
             </div>
@@ -1152,6 +1846,7 @@ export default function LivingContactSheet() {
                   <picture>
                     <source srcSet={ITEM_PROJECT_02.webpImage} type="image/webp" />
                     <img
+                      ref={sireeshImgRef}
                       src={ITEM_PROJECT_02.image}
                       alt={ITEM_PROJECT_02.clientNames}
                       className={styles.storyCoverImg}
@@ -1160,6 +1855,17 @@ export default function LivingContactSheet() {
                     />
                   </picture>
                   <div className={styles.imageHoverShimmer} />
+
+                  {/* Soft-Focus Memory Reveal Layers */}
+                  <div ref={sireeshSunlightRef} className={styles.memorySunlightBeam} />
+                  <div ref={sireeshVeilRef} className={styles.memoryBreezeVeil} />
+                  <div ref={sireeshPetalsRef} className={styles.memoryPetalsGroup}>
+                    <span className={`${styles.petal} ${styles.petal1}`} />
+                    <span className={`${styles.petal} ${styles.petal2}`} />
+                    <span className={`${styles.petal} ${styles.petal3}`} />
+                    <span className={`${styles.petal} ${styles.petal4}`} />
+                    <span className={`${styles.petal} ${styles.petal5}`} />
+                  </div>
                 </div>
               </Link>
             </div>
@@ -1206,11 +1912,136 @@ export default function LivingContactSheet() {
           {/* Gradient Scrim */}
           <div className={styles.nishanthGradientScrim} />
 
+          {/* Nishanth & Sanzena: Cinematic Liquid Wave Reveal SVG Layer */}
+          <svg
+            ref={waveSvgRef}
+            className={styles.nishanthWaveRevealSvg}
+            viewBox="0 0 1440 800"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <defs>
+              <linearGradient id="champagneGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#E5D192" stopOpacity="0.95" />
+                <stop offset="50%" stopColor="#C8A84E" stopOpacity="1" />
+                <stop offset="100%" stopColor="#9E7E32" stopOpacity="0.9" />
+              </linearGradient>
+
+              <linearGradient id="champagneAuraGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#F5EFE0" stopOpacity="0" />
+                <stop offset="40%" stopColor="#DFC882" stopOpacity="0.3" />
+                <stop offset="70%" stopColor="#C8A84E" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+              </linearGradient>
+
+              <linearGradient id="ivorySilkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#F9F7F1" />
+                <stop offset="50%" stopColor="#F4EFE6" />
+                <stop offset="100%" stopColor="#E9E2D2" />
+              </linearGradient>
+
+              <linearGradient id="deepGreenWaveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#0B1511" stopOpacity="0.98" />
+                <stop offset="60%" stopColor="#0E1B15" stopOpacity="0.95" />
+                <stop offset="100%" stopColor="#07100D" stopOpacity="1" />
+              </linearGradient>
+
+              <filter id="champagneGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="8" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+
+              <mask id="nishanthWaveCoverMask">
+                <rect x="0" y="0" width="1440" height="800" fill="#FFFFFF" />
+                <path
+                  ref={waveCutoutMaskRef}
+                  d={buildAperturePath(APERTURE_STAGE_1)}
+                  fill="#000000"
+                />
+              </mask>
+            </defs>
+
+            {/* Wave Cover Group (Masked by waveCutoutMask) */}
+            <g mask="url(#nishanthWaveCoverMask)">
+              <rect x="0" y="0" width="1440" height="800" fill="url(#ivorySilkGrad)" />
+
+              {/* Watermark Typography visible on ivory layer in Stage 1 and settling gracefully */}
+              <g className={styles.waveWatermarkGroup}>
+                <text
+                  ref={waveWatermarkRef}
+                  x="80"
+                  y="290"
+                  className={styles.waveWatermarkText}
+                >
+                  <tspan x="80" dy="0">NISHANTH</tspan>
+                  <tspan x="80" dy="130">SANZENA</tspan>
+                </text>
+              </g>
+
+              {/* Upper flowing dark green wave */}
+              <path
+                d="M 0 0 L 1440 0 L 1440 180 C 1100 110, 780 230, 480 150 C 240 80, 90 140, 0 110 Z"
+                fill="url(#deepGreenWaveGrad)"
+                opacity="0.88"
+              />
+
+              {/* Secondary trailing wave */}
+              <path
+                ref={waveSecondaryPathRef}
+                d={buildAperturePath(SEC_STAGE_1)}
+                fill="#EDE6D8"
+                opacity="0.65"
+              />
+              <path
+                ref={waveSecondaryStrokeRef}
+                d={buildWaveStroke(SEC_STAGE_1)}
+                stroke="#DFCA86"
+                strokeWidth="1.5"
+                fill="none"
+                opacity="0.7"
+              />
+            </g>
+
+            {/* Atmosphere & Leading Contour Highlights */}
+            <path
+              ref={wavePrimaryGlowRef}
+              d={buildWaveStroke(APERTURE_STAGE_1)}
+              stroke="url(#champagneAuraGrad)"
+              strokeWidth="26"
+              fill="none"
+              filter="url(#champagneGlowFilter)"
+              opacity="0.85"
+            />
+            <path
+              ref={wavePrimaryStrokeRef}
+              d={buildWaveStroke(APERTURE_STAGE_1)}
+              stroke="url(#champagneGoldGrad)"
+              strokeWidth="2.5"
+              fill="none"
+              strokeLinecap="round"
+            />
+
+            {/* Settled Deep Forest Green Framing Wave at Bottom-Left */}
+            <path
+              ref={waveGreenBottomPathRef}
+              d={buildGreenBottomPath(GREEN_BOT_STAGE_1)}
+              fill="url(#deepGreenWaveGrad)"
+            />
+            <path
+              ref={waveGreenBottomStrokeRef}
+              d={buildGreenBottomStroke(GREEN_BOT_STAGE_1)}
+              stroke="#C8A84E"
+              strokeWidth="1.5"
+              fill="none"
+              opacity="0.85"
+            />
+          </svg>
+
           {/* Overlays Layer (Smoothly fades out during GSAP morph) */}
           <div ref={nishanthOverlaysRef} className={styles.nishanthOverlaysLayer}>
             <div className={styles.nishanthOverlaysInnerContainer}>
               {/* Left Play Control */}
-              <div className={styles.nishanthLeftControl}>
+              <div ref={nishanthLeftControlRef} className={styles.nishanthLeftControl}>
                 <button
                   type="button"
                   className={styles.circularPlayBeacon}
@@ -1228,7 +2059,7 @@ export default function LivingContactSheet() {
               </div>
 
               {/* Right Narrative Overlay */}
-              <div className={styles.nishanthRightNarrative}>
+              <div ref={nishanthRightNarrativeRef} className={styles.nishanthRightNarrative}>
                 <span className={styles.nishanthTag}>05 —— SIGNATURE FILM</span>
                 <h3 className={styles.nishanthTitle}>{ITEM_VIDEO_02.filmTitle}</h3>
                 <p className={styles.nishanthExcerpt}>{ITEM_VIDEO_02.description}</p>

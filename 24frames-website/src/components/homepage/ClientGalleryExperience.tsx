@@ -145,6 +145,7 @@ export default function ClientGalleryExperience({
   const headerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
+  const isTouchRef = useRef(false);
 
   /* ── GSAP Entrance Animation ── */
   useEffect(() => {
@@ -192,6 +193,32 @@ export default function ClientGalleryExperience({
     return () => ctx.revert();
   }, []);
 
+  const handlePointerEnter = (id: string, e: React.PointerEvent) => {
+    if (e.pointerType === "touch") {
+      isTouchRef.current = true;
+      return;
+    }
+    isTouchRef.current = false;
+    setActiveCardId(id);
+  };
+
+  const handlePointerLeave = () => {
+    if (!isTouchRef.current) {
+      setActiveCardId(null);
+    }
+  };
+
+  const handleCardClick = (e: React.MouseEvent, href: string, id: string) => {
+    if (isTouchRef.current) {
+      if (activeCardId !== id) {
+        e.preventDefault();
+        setActiveCardId(id);
+        return;
+      }
+    }
+    // Proceed with navigation to href
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -230,19 +257,23 @@ export default function ClientGalleryExperience({
           >
             {CLIENT_GALLERY_FEATURES.map((item) => {
               const themeClass = styles[`card_${item.theme}`] || "";
+              const isOpen = activeCardId === item.id;
 
               return (
                 <Link
                   key={item.id}
                   href={item.href}
-                  className={`${styles.card} ${themeClass}`}
+                  className={`${styles.card} ${themeClass} ${isOpen ? styles.cardOpen : ""}`}
                   role="listitem"
                   aria-label={`${item.number} ${item.title} — Click to view section`}
-                  style={{
-                    ["--popout-origin" as string]: item.origin || "center bottom",
-                  }}
+                  aria-expanded={isOpen}
+                  onPointerEnter={(e) => handlePointerEnter(item.id, e)}
+                  onPointerLeave={handlePointerLeave}
+                  onClick={(e) => handleCardClick(e, item.href, item.id)}
+                  onFocus={() => setActiveCardId(item.id)}
+                  onBlur={() => setActiveCardId(null)}
                 >
-                  {/* Layer 1: Background Photograph along Top (Pops out dramatically on hover) */}
+                  {/* Layer 1: Back Photographic Canvas (Revealed vertically as cover compresses) */}
                   <div className={styles.cardPhotoArea}>
                     <img
                       src={item.artImage}
@@ -257,22 +288,14 @@ export default function ClientGalleryExperience({
                     <div className={styles.photoVignette} aria-hidden="true" />
                   </div>
 
-                  {/* Layer 2: Stepped Physical Folder Cover */}
-                  <div className={styles.folderCover}>
-                    {/* Stepped Tab SVG Path Contour */}
-                    <svg
-                      className={styles.folderShapeSvg}
-                      viewBox="0 0 240 380"
-                      preserveAspectRatio="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M 0 380 L 0 54 C 0 46, 6 42, 14 42 L 126 42 C 136 42, 142 48, 148 58 C 154 68, 160 76, 172 76 L 226 76 C 234 76, 240 82, 240 90 L 240 380 Z"
-                        fill={item.fillColor}
-                      />
-                    </svg>
-
-                    {/* Stepped Tab Header */}
+                  {/* Layer 2: Front Stepped Archival Folder Cover (Compresses vertically upward to 15-20%) */}
+                  <div
+                    className={styles.folderCover}
+                    style={{
+                      backgroundColor: item.fillColor,
+                    }}
+                  >
+                    {/* Stepped Tab Header (Remains visible as the top 15-20% strip) */}
                     <div className={styles.folderTabHeader}>
                       <div className={styles.folderBrandBlock}>
                         <span
@@ -297,7 +320,7 @@ export default function ClientGalleryExperience({
                       </span>
                     </div>
 
-                    {/* Folder Body Content */}
+                    {/* Folder Body Content (Smoothly fades out during vertical compression) */}
                     <div className={styles.folderBody}>
                       <div
                         className={styles.folderNumber}
