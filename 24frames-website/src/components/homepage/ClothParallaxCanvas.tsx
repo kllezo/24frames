@@ -99,9 +99,7 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
       }
 
       if (gl) {
-        // ═════════════════════════════════════════════════════════════
-        // PATH A: HIGH-FIDELITY REAL-TIME 3D THREE.JS WEBGL ENGINE
-        // ═════════════════════════════════════════════════════════════
+        console.log("--> WebGL context found, starting Three.js setup");
         try {
           stateRef.current.mode = "webgl";
           fallbackCanvas.style.display = "none";
@@ -829,9 +827,10 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
             renderer.dispose();
             geometriesToDispose.forEach((g) => g.dispose());
             materialsToDispose.forEach((m) => m.dispose());
+            console.log("--> WebGL setup COMPLETED SUCCESSFULLY!");
           };
         } catch (e) {
-          console.warn("WebGL initialization failed, falling back to 2D Canvas engine:", e);
+          console.error("--> WebGL initialization failed:", e);
         }
       }
 
