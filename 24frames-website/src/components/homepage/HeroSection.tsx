@@ -33,7 +33,7 @@ export default function HeroSection() {
       const tl = gsap.timeline({
         defaults: { ease: "power2.out" },
         onComplete: () => {
-          gsap.set([headlineRef.current, metadataRef.current], { clearProps: "transform" });
+          gsap.set([heroImgRef.current, headlineRef.current, metadataRef.current], { clearProps: "transform" });
         },
       });
 

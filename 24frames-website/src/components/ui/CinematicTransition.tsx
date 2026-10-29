@@ -144,60 +144,88 @@ export default function CinematicTransition() {
     // 1. Explicit hash targeting
     if (targetHash && targetHash.length > 1) {
       if (targetHash.includes("artist")) {
-        const el = document.querySelector("#artist img.portraitImg, #artist img[src*='founder-portrait'], #artist img, .portraitImg") as HTMLElement | null;
+        const el = document.querySelector(
+          "#artist img.portraitImg, #artist img[src*='founder-portrait'], #artist [class*='portraitWrap'] img, #artist img, .portraitImg"
+        ) as HTMLElement | null;
         if (el) return el;
       }
       if (targetHash.includes("vows")) {
-        const el = document.querySelector("#vows [class*='photoCard']:first-child img, #vows img, #vows") as HTMLElement | null;
+        const el = document.querySelector(
+          "#vows img[alt*='Bellamkonda'], #vows [class*='archedPhotoImg'], #vows [class*='archedFrame'] img, #vows picture img, #the-vow [class*='photoCard']:first-child img, #vows [class*='photoCard']:first-child img, #vows img"
+        ) as HTMLElement | null;
         if (el) return el;
       }
       if (targetHash.includes("collection")) {
-        const el = document.querySelector("#collection [data-discipline-id='weddings'], [data-discipline-id='weddings'], #collection .card:first-child") as HTMLElement | null;
+        const el = document.querySelector(
+          "#collection [data-discipline-id='weddings'] img, [data-discipline-id='weddings'] img, #collection [data-discipline-id='weddings'], [data-discipline-id='weddings'], #collection [class*='card']:first-child"
+        ) as HTMLElement | null;
         if (el) return el;
       }
       if (targetHash.includes("hero")) {
-        const el = document.querySelector("#hero img, #hero [class*='heroImage'], #hero") as HTMLElement | null;
+        const el = document.querySelector(
+          "#hero img[class*='heroImage'], #hero .cinematicCanvas img, #hero img"
+        ) as HTMLElement | null;
         if (el) return el;
       }
-      const el = document.querySelector(targetHash) as HTMLElement | null;
+      const el = document.querySelector(
+        `${targetHash} img, ${targetHash} [class*='photo'], ${targetHash} [class*='card'], ${targetHash} [class*='image']`
+      ) as HTMLElement | null;
       if (el) return el;
     }
 
     // 2. Exact user-specified destinations
     if (cleanUrl === "" || cleanUrl === "/") {
       // Home: the existing homepage hero
-      return document.querySelector("#hero img, #hero [class*='heroImage'], #hero") as HTMLElement | null;
+      return document.querySelector(
+        "#hero img[class*='heroImage'], #hero .cinematicCanvas img, #hero img"
+      ) as HTMLElement | null;
     }
     if (cleanUrl.includes("artist")) {
       // Artist: Phani Gogireddy's portrait
-      return document.querySelector("#artist img.portraitImg, #artist img[src*='founder-portrait'], #artist img, .portraitImg, #artist") as HTMLElement | null;
+      return document.querySelector(
+        "#artist img.portraitImg, #artist img[src*='founder-portrait'], #artist [class*='portraitWrap'] img, #artist img, .portraitImg"
+      ) as HTMLElement | null;
     }
     if (cleanUrl.includes("vows")) {
       // The Vows: the Bellamkonda Sai Sreenivas & Kavya Reddy wedding hero
-      return document.querySelector("#vows [class*='photoCard']:first-child img, #vows img, #vows") as HTMLElement | null;
+      return document.querySelector(
+        "#vows img[alt*='Bellamkonda'], #vows [class*='archedPhotoImg'], #vows [class*='archedFrame'] img, #vows picture img, #the-vow [class*='photoCard']:first-child img, #vows [class*='photoCard']:first-child img, #vows img"
+      ) as HTMLElement | null;
     }
     if (cleanUrl.includes("collection")) {
       // Collection: the first Weddings & Celebrations card
-      return document.querySelector("#collection [data-discipline-id='weddings'], [data-discipline-id='weddings'], #collection [class*='card']:first-child, #collection") as HTMLElement | null;
+      return document.querySelector(
+        "#collection [data-discipline-id='weddings'] img, [data-discipline-id='weddings'] img, #collection [data-discipline-id='weddings'], [data-discipline-id='weddings'], #collection [class*='card']:first-child"
+      ) as HTMLElement | null;
     }
     if (cleanUrl.includes("stories") && !cleanUrl.startsWith("/stories/")) {
       // Stories: the primary Sireesh & Harshitha wedding image
-      return document.querySelector("a[href*='sirish-and-harshitha'] img, a[href*='sireesh'] img, [class*='storiesGrid'] a:first-child img, .storyCard:first-child img") as HTMLElement | null;
+      return document.querySelector(
+        "a[href*='sirish-and-harshitha'] img, a[href*='sireesh'] img, [class*='storiesGrid'] a:first-child img, [class*='storyCard']:first-child img"
+      ) as HTMLElement | null;
     }
     if (cleanUrl.startsWith("/stories/")) {
       // Individual story pages: that story's own hero photograph
-      return document.querySelector("[class*='heroImageFrame'] img, img[class*='heroImage'], [class*='heroSection'] img") as HTMLElement | null;
+      return document.querySelector(
+        "[class*='heroImageFrame'] img, img[class*='heroImage'], [class*='heroVisualCol'] img, [class*='heroSection'] img"
+      ) as HTMLElement | null;
     }
     if (cleanUrl.startsWith("/disciplines/")) {
       // Category pages: the first featured photograph
-      return document.querySelector("[class*='heroImg'], [class*='heroSection'] img") as HTMLElement | null;
+      return document.querySelector(
+        "[class*='heroCanvas'] img, [class*='heroImg'], [class*='heroSection'] img"
+      ) as HTMLElement | null;
     }
     if (cleanUrl.includes("inquire")) {
       // Inquire: the commission form heading
-      return document.querySelector("h1, [class*='invitationTitle'], #commissionContactForm h1, #commission-form h1") as HTMLElement | null;
+      return document.querySelector(
+        "h1[class*='invitationTitle'], [class*='invitationTitle'], #commissionContactForm h1, #commission-form h1, h1"
+      ) as HTMLElement | null;
     }
     if (cleanUrl.includes("client-gallery")) {
-      return document.querySelector("#client-gallery a[class*='card']:first-child, #client-gallery") as HTMLElement | null;
+      return document.querySelector(
+        "#client-gallery a[class*='card']:first-child, [class*='cardsGrid'] [class*='card']:first-child"
+      ) as HTMLElement | null;
     }
 
     return null;
@@ -211,7 +239,8 @@ export default function CinematicTransition() {
     const isMobile = winW <= 820;
 
     const isPortrait = cleanUrl.includes("artist") || cleanUrl.startsWith("/stories/");
-    const focalYRatio = isPortrait ? 0.35 : 0.50;
+    const isHero = cleanUrl === "" || cleanUrl === "/";
+    const focalYRatio = isPortrait ? 0.35 : isHero ? 0.38 : 0.50;
 
     const targetScreenX = rect.left + rect.width * 0.5;
     const targetScreenY = Math.max(70, Math.min(winH - 70, rect.top + rect.height * focalYRatio));
@@ -288,14 +317,17 @@ export default function CinematicTransition() {
         }
       }
 
-      // Await DOM readiness of the destination route while still sealed (poll up to 350ms)
+      // Await DOM readiness of the destination route while still sealed (poll up to 800ms)
       const startPoll = Date.now();
-      while (Date.now() - startPoll < 350) {
+      while (Date.now() - startPoll < 800) {
         if (window.location.pathname === destUrl.pathname) {
           const found = resolveTargetElement(targetUrl, targetHash);
-          if (found) break;
+          if (found) {
+            const rect = found.getBoundingClientRect();
+            if (rect.width > 0 && rect.height > 0) break;
+          }
         }
-        await new Promise((r) => setTimeout(r, 40));
+        await new Promise((r) => setTimeout(r, 25));
       }
     }
   }, [router, resolveTargetElement]);
