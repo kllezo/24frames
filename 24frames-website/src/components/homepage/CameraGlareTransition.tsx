@@ -47,6 +47,17 @@ export default function CameraGlareTransition({
   const portalChapterMetaRef = useRef<HTMLDivElement>(null);
   const portalExitBloomRef = useRef<HTMLDivElement>(null);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 820);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     // Accessibility check: Reduced motion
     const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -571,7 +582,7 @@ export default function CameraGlareTransition({
       <div ref={mandapamStageRef} className={styles.mandapamStage}>
         <svg
           className={styles.mandapamSvg}
-          viewBox="0 0 1440 900"
+          viewBox={isMobile ? "0 0 430 932" : "0 0 1440 900"}
           preserveAspectRatio="xMidYMid slice"
         >
           <defs>
@@ -643,131 +654,107 @@ export default function CameraGlareTransition({
           </defs>
 
           <g ref={mandapamGroupRef}>
-            {/* ── Receding Colonnade Perspective Portal (Panel 10 Architecture) ── */}
-            <g ref={colonnadePerspectiveRef}>
-              {/* Vanishing Point Divine Golden Horizon Light */}
-              <circle cx="720" cy="480" r="160" fill="url(#portalHorizonLight)" />
+            {isMobile ? (
+              /* ── Mobile Mandapam Composition (430x932 Geometry) ── */
+              <>
+                <g ref={colonnadePerspectiveRef}>
+                  <circle cx="215" cy="460" r="100" fill="url(#portalHorizonLight)" />
+                  <line x1="50" y1="780" x2="200" y2="460" stroke="rgba(240, 215, 145, 0.28)" strokeWidth="1.5" />
+                  <line x1="380" y1="780" x2="230" y2="460" stroke="rgba(240, 215, 145, 0.28)" strokeWidth="1.5" />
+                  <line x1="120" y1="780" x2="208" y2="460" stroke="rgba(255, 240, 180, 0.20)" strokeWidth="1" />
+                  <line x1="310" y1="780" x2="222" y2="460" stroke="rgba(255, 240, 180, 0.20)" strokeWidth="1" />
 
-              {/* Converging Floor Reflection Lines */}
-              <line x1="270" y1="715" x2="680" y2="480" stroke="rgba(240, 215, 145, 0.28)" strokeWidth="1.5" />
-              <line x1="1170" y1="715" x2="760" y2="480" stroke="rgba(240, 215, 145, 0.28)" strokeWidth="1.5" />
-              <line x1="450" y1="715" x2="700" y2="480" stroke="rgba(255, 240, 180, 0.20)" strokeWidth="1" />
-              <line x1="990" y1="715" x2="740" y2="480" stroke="rgba(255, 240, 180, 0.20)" strokeWidth="1" />
-              <line x1="610" y1="715" x2="715" y2="480" stroke="rgba(255, 250, 210, 0.18)" strokeWidth="0.8" />
-              <line x1="830" y1="715" x2="725" y2="480" stroke="rgba(255, 250, 210, 0.18)" strokeWidth="0.8" />
+                  <path d="M 140 780 L 140 380 C 140 310, 175 280, 215 280 C 255 280, 290 310, 290 380 L 290 780" fill="none" stroke="url(#portalArchGrad)" strokeWidth="2" />
+                  <path d="M 105 780 L 105 340 C 105 260, 155 220, 215 220 C 275 220, 325 260, 325 340 L 325 780" fill="none" stroke="url(#portalArchGrad)" strokeWidth="2.5" />
+                  <path d="M 75 780 L 75 300 C 75 200, 135 160, 215 160 C 295 160, 355 200, 355 300 L 355 780" fill="none" stroke="url(#portalArchGrad)" strokeWidth="3" />
+                </g>
 
-              {/* Receding Perspective Arch 3 */}
-              <path
-                d="M 520 715 L 520 410 C 520 330, 600 295, 720 295 C 840 295, 920 330, 920 410 L 920 715"
-                fill="none"
-                stroke="url(#portalArchGrad)"
-                strokeWidth="2"
-              />
-              {/* Receding Perspective Arch 2 */}
-              <path
-                d="M 430 715 L 430 365 C 430 275, 545 235, 720 235 C 895 235, 1010 275, 1010 365 L 1010 715"
-                fill="none"
-                stroke="url(#portalArchGrad)"
-                strokeWidth="2.5"
-              />
-              {/* Receding Perspective Arch 1 */}
-              <path
-                d="M 350 715 L 350 335 C 350 230, 495 185, 720 185 C 945 185, 1090 230, 1090 335 L 1090 715"
-                fill="none"
-                stroke="url(#portalArchGrad)"
-                strokeWidth="3"
-              />
-            </g>
+                {/* Left Pillar */}
+                <rect x="15" y="780" width="56" height="30" rx="3" fill="url(#goldPillarGrad)" />
+                <rect x="18" y="760" width="50" height="20" rx="2" fill="url(#goldPillarGrad)" />
+                <rect x="25" y="160" width="36" height="600" fill="url(#goldPillarGrad)" />
+                <line x1="33" y1="160" x2="33" y2="760" stroke="rgba(255, 248, 220, 0.6)" strokeWidth="1.5" />
+                <line x1="43" y1="160" x2="43" y2="760" stroke="rgba(100, 75, 15, 0.55)" strokeWidth="2" />
+                <line x1="53" y1="160" x2="53" y2="760" stroke="rgba(255, 248, 220, 0.45)" strokeWidth="1.5" />
+                <path d="M 16 160 L 70 160 L 64 135 L 22 135 Z" fill="url(#goldPillarGrad)" />
 
-            {/* ── Left Pillar Base & Shaft (South Indian Dravidian Temple Stambha) ── */}
-            {/* Plinth / Upapitha */}
-            <rect x="170" y="740" width="130" height="45" rx="3" fill="url(#goldPillarGrad)" />
-            <rect x="180" y="715" width="110" height="25" rx="2" fill="url(#goldPillarGrad)" />
-            {/* Fluted Vertical Shaft */}
-            <rect x="200" y="190" width="70" height="525" fill="url(#goldPillarGrad)" />
-            <line x1="215" y1="190" x2="215" y2="715" stroke="rgba(255, 248, 220, 0.6)" strokeWidth="2" />
-            <line x1="235" y1="190" x2="235" y2="715" stroke="rgba(100, 75, 15, 0.55)" strokeWidth="2.5" />
-            <line x1="255" y1="190" x2="255" y2="715" stroke="rgba(255, 248, 220, 0.45)" strokeWidth="2" />
-            {/* Lotus Bracket Capital (Potika) */}
-            <path d="M 175 190 L 295 190 L 280 155 L 190 155 Z" fill="url(#goldPillarGrad)" />
-            <path d="M 160 155 L 310 155 L 290 125 L 180 125 Z" fill="url(#goldPillarGrad)" />
+                {/* Right Pillar */}
+                <rect x="359" y="780" width="56" height="30" rx="3" fill="url(#goldPillarGrad)" />
+                <rect x="362" y="760" width="50" height="20" rx="2" fill="url(#goldPillarGrad)" />
+                <rect x="369" y="160" width="36" height="600" fill="url(#goldPillarGrad)" />
+                <line x1="377" y1="160" x2="377" y2="760" stroke="rgba(255, 248, 220, 0.6)" strokeWidth="1.5" />
+                <line x1="387" y1="160" x2="387" y2="760" stroke="rgba(100, 75, 15, 0.55)" strokeWidth="2" />
+                <line x1="397" y1="160" x2="397" y2="760" stroke="rgba(255, 248, 220, 0.45)" strokeWidth="1.5" />
+                <path d="M 360 160 L 414 160 L 408 135 L 366 135 Z" fill="url(#goldPillarGrad)" />
 
-            {/* ── Right Pillar Base & Shaft ── */}
-            {/* Plinth */}
-            <rect x="1140" y="740" width="130" height="45" rx="3" fill="url(#goldPillarGrad)" />
-            <rect x="1150" y="715" width="110" height="25" rx="2" fill="url(#goldPillarGrad)" />
-            {/* Shaft */}
-            <rect x="1170" y="190" width="70" height="525" fill="url(#goldPillarGrad)" />
-            <line x1="1185" y1="190" x2="1185" y2="715" stroke="rgba(255, 248, 220, 0.6)" strokeWidth="2" />
-            <line x1="1205" y1="190" x2="1205" y2="715" stroke="rgba(100, 75, 15, 0.55)" strokeWidth="2.5" />
-            <line x1="1225" y1="190" x2="1225" y2="715" stroke="rgba(255, 248, 220, 0.45)" strokeWidth="2" />
-            {/* Capital */}
-            <path d="M 1145 190 L 1265 190 L 1250 155 L 1160 155 Z" fill="url(#goldPillarGrad)" />
-            <path d="M 1130 155 L 1280 155 L 1260 125 L 1150 125 Z" fill="url(#goldPillarGrad)" />
+                {/* Lintel Beam */}
+                <rect x="10" y="90" width="410" height="24" rx="3" fill="url(#goldPillarGrad)" />
+                <line x1="10" y1="102" x2="420" y2="102" stroke="rgba(255, 250, 230, 0.7)" strokeWidth="1.5" />
 
-            {/* ── Main Arch Lintel Beam (Uttiram) ── */}
-            <rect x="150" y="95" width="1140" height="32" rx="3" fill="url(#goldPillarGrad)" />
-            <line x1="150" y1="111" x2="1290" y2="111" stroke="rgba(255, 250, 230, 0.7)" strokeWidth="1.5" />
+                {/* Toranam Valances */}
+                <path d="M 20 114 C 75 180, 145 180, 190 115 C 170 145, 140 170, 105 170 C 70 170, 38 145, 20 114 Z" fill="url(#toranamSilkGrad)" stroke="url(#champagneRibbonGrad)" strokeWidth="2" />
+                <path d="M 240 115 C 285 180, 355 180, 410 114 C 392 145, 360 170, 325 170 C 290 170, 260 145, 240 115 Z" fill="url(#toranamSilkGrad)" stroke="url(#champagneRibbonGrad)" strokeWidth="2" />
+                <path d="M 55 780 L 55 280 C 55 160, 130 120, 215 120 C 300 120, 375 160, 375 280 L 375 780" fill="none" stroke="url(#goldPillarGrad)" strokeWidth="3.5" />
 
-            {/* ── Draped Emerald Silk & Champagne Toranam Valance ── */}
-            {/* Left Scalloped Valance Swag */}
-            <path
-              d="M 170 127 C 320 230, 480 230, 620 130 C 580 180, 520 220, 395 220 C 270 220, 210 180, 170 127 Z"
-              fill="url(#toranamSilkGrad)"
-              stroke="url(#champagneRibbonGrad)"
-              strokeWidth="2"
-            />
-            {/* Right Scalloped Valance Swag */}
-            <path
-              d="M 820 130 C 960 230, 1120 230, 1270 127 C 1230 180, 1170 220, 1045 220 C 920 220, 860 180, 820 130 Z"
-              fill="url(#toranamSilkGrad)"
-              stroke="url(#champagneRibbonGrad)"
-              strokeWidth="2"
-            />
-            {/* Central Majestic Ceremonial Archway Frame */}
-            <path
-              d="M 270 715 L 270 310 C 270 190, 470 145, 720 145 C 970 145, 1170 190, 1170 310 L 1170 715"
-              fill="none"
-              stroke="url(#goldPillarGrad)"
-              strokeWidth="5"
-            />
+                {/* Jasmine Garlands */}
+                <path d="M 24 125 Q 45 250 28 380 Q 47 510 30 640 Q 48 760 32 780" fill="none" stroke="url(#jasmineGarlandGrad)" strokeWidth="10" strokeDasharray="3 2" strokeLinecap="round" />
+                <path d="M 24 125 Q 45 250 28 380 Q 47 510 30 640 Q 48 760 32 780" fill="none" stroke="url(#marigoldGrad)" strokeWidth="4" strokeDasharray="2 8" strokeLinecap="round" />
+                <path d="M 406 125 Q 385 250 402 380 Q 383 510 400 640 Q 382 760 398 780" fill="none" stroke="url(#jasmineGarlandGrad)" strokeWidth="10" strokeDasharray="3 2" strokeLinecap="round" />
+                <path d="M 406 125 Q 385 250 402 380 Q 383 510 400 640 Q 382 760 398 780" fill="none" stroke="url(#marigoldGrad)" strokeWidth="4" strokeDasharray="2 8" strokeLinecap="round" />
+              </>
+            ) : (
+              /* ── Desktop Mandapam Composition (1440x900 Proportions) ── */
+              <>
+                <g ref={colonnadePerspectiveRef}>
+                  <circle cx="720" cy="480" r="160" fill="url(#portalHorizonLight)" />
+                  <line x1="270" y1="715" x2="680" y2="480" stroke="rgba(240, 215, 145, 0.28)" strokeWidth="1.5" />
+                  <line x1="1170" y1="715" x2="760" y2="480" stroke="rgba(240, 215, 145, 0.28)" strokeWidth="1.5" />
+                  <line x1="450" y1="715" x2="700" y2="480" stroke="rgba(255, 240, 180, 0.20)" strokeWidth="1" />
+                  <line x1="990" y1="715" x2="740" y2="480" stroke="rgba(255, 240, 180, 0.20)" strokeWidth="1" />
+                  <line x1="610" y1="715" x2="715" y2="480" stroke="rgba(255, 250, 210, 0.18)" strokeWidth="0.8" />
+                  <line x1="830" y1="715" x2="725" y2="480" stroke="rgba(255, 250, 210, 0.18)" strokeWidth="0.8" />
 
-            {/* ── Jasmine & Marigold Floral Poo Malai (Garlands) ── */}
-            {/* Left Pillar Cascading Jasmine Garland */}
-            <path
-              d="M 190 135 Q 235 240 200 340 Q 240 440 205 540 Q 240 640 210 715"
-              fill="none"
-              stroke="url(#jasmineGarlandGrad)"
-              strokeWidth="16"
-              strokeDasharray="4 2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M 190 135 Q 235 240 200 340 Q 240 440 205 540 Q 240 640 210 715"
-              fill="none"
-              stroke="url(#marigoldGrad)"
-              strokeWidth="7"
-              strokeDasharray="2 12"
-              strokeLinecap="round"
-            />
+                  <path d="M 520 715 L 520 410 C 520 330, 600 295, 720 295 C 840 295, 920 330, 920 410 L 920 715" fill="none" stroke="url(#portalArchGrad)" strokeWidth="2" />
+                  <path d="M 430 715 L 430 365 C 430 275, 545 235, 720 235 C 895 235, 1010 275, 1010 365 L 1010 715" fill="none" stroke="url(#portalArchGrad)" strokeWidth="2.5" />
+                  <path d="M 350 715 L 350 335 C 350 230, 495 185, 720 185 C 945 185, 1090 230, 1090 335 L 1090 715" fill="none" stroke="url(#portalArchGrad)" strokeWidth="3" />
+                </g>
 
-            {/* Right Pillar Cascading Jasmine Garland */}
-            <path
-              d="M 1250 135 Q 1205 240 1240 340 Q 1200 440 1235 540 Q 1200 640 1230 715"
-              fill="none"
-              stroke="url(#jasmineGarlandGrad)"
-              strokeWidth="16"
-              strokeDasharray="4 2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M 1250 135 Q 1205 240 1240 340 Q 1200 440 1235 540 Q 1200 640 1230 715"
-              fill="none"
-              stroke="url(#marigoldGrad)"
-              strokeWidth="7"
-              strokeDasharray="2 12"
-              strokeLinecap="round"
-            />
+                {/* Left Pillar */}
+                <rect x="170" y="740" width="130" height="45" rx="3" fill="url(#goldPillarGrad)" />
+                <rect x="180" y="715" width="110" height="25" rx="2" fill="url(#goldPillarGrad)" />
+                <rect x="200" y="190" width="70" height="525" fill="url(#goldPillarGrad)" />
+                <line x1="215" y1="190" x2="215" y2="715" stroke="rgba(255, 248, 220, 0.6)" strokeWidth="2" />
+                <line x1="235" y1="190" x2="235" y2="715" stroke="rgba(100, 75, 15, 0.55)" strokeWidth="2.5" />
+                <line x1="255" y1="190" x2="255" y2="715" stroke="rgba(255, 248, 220, 0.45)" strokeWidth="2" />
+                <path d="M 175 190 L 295 190 L 280 155 L 190 155 Z" fill="url(#goldPillarGrad)" />
+                <path d="M 160 155 L 310 155 L 290 125 L 180 125 Z" fill="url(#goldPillarGrad)" />
+
+                {/* Right Pillar */}
+                <rect x="1140" y="740" width="130" height="45" rx="3" fill="url(#goldPillarGrad)" />
+                <rect x="1150" y="715" width="110" height="25" rx="2" fill="url(#goldPillarGrad)" />
+                <rect x="1170" y="190" width="70" height="525" fill="url(#goldPillarGrad)" />
+                <line x1="1185" y1="190" x2="1185" y2="715" stroke="rgba(255, 248, 220, 0.6)" strokeWidth="2" />
+                <line x1="1205" y1="190" x2="1205" y2="715" stroke="rgba(100, 75, 15, 0.55)" strokeWidth="2.5" />
+                <line x1="1225" y1="190" x2="1225" y2="715" stroke="rgba(255, 248, 220, 0.45)" strokeWidth="2" />
+                <path d="M 1145 190 L 1265 190 L 1250 155 L 1160 155 Z" fill="url(#goldPillarGrad)" />
+                <path d="M 1130 155 L 1280 155 L 1260 125 L 1150 125 Z" fill="url(#goldPillarGrad)" />
+
+                {/* Lintel Beam */}
+                <rect x="150" y="95" width="1140" height="32" rx="3" fill="url(#goldPillarGrad)" />
+                <line x1="150" y1="111" x2="1290" y2="111" stroke="rgba(255, 250, 230, 0.7)" strokeWidth="1.5" />
+
+                {/* Toranam Valances */}
+                <path d="M 170 127 C 320 230, 480 230, 620 130 C 580 180, 520 220, 395 220 C 270 220, 210 180, 170 127 Z" fill="url(#toranamSilkGrad)" stroke="url(#champagneRibbonGrad)" strokeWidth="2" />
+                <path d="M 820 130 C 960 230, 1120 230, 1270 127 C 1230 180, 1170 220, 1045 220 C 920 220, 860 180, 820 130 Z" fill="url(#toranamSilkGrad)" stroke="url(#champagneRibbonGrad)" strokeWidth="2" />
+                <path d="M 270 715 L 270 310 C 270 190, 470 145, 720 145 C 970 145, 1170 190, 1170 310 L 1170 715" fill="none" stroke="url(#goldPillarGrad)" strokeWidth="5" />
+
+                {/* Jasmine Garlands */}
+                <path d="M 190 135 Q 235 240 200 340 Q 240 440 205 540 Q 240 640 210 715" fill="none" stroke="url(#jasmineGarlandGrad)" strokeWidth="16" strokeDasharray="4 2" strokeLinecap="round" />
+                <path d="M 190 135 Q 235 240 200 340 Q 240 440 205 540 Q 240 640 210 715" fill="none" stroke="url(#marigoldGrad)" strokeWidth="7" strokeDasharray="2 12" strokeLinecap="round" />
+                <path d="M 1250 135 Q 1205 240 1240 340 Q 1200 440 1235 540 Q 1200 640 1230 715" fill="none" stroke="url(#jasmineGarlandGrad)" strokeWidth="16" strokeDasharray="4 2" strokeLinecap="round" />
+                <path d="M 1250 135 Q 1205 240 1240 340 Q 1200 440 1235 540 Q 1200 640 1230 715" fill="none" stroke="url(#marigoldGrad)" strokeWidth="7" strokeDasharray="2 12" strokeLinecap="round" />
+              </>
+            )}
           </g>
         </svg>
 
