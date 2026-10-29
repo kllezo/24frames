@@ -244,6 +244,14 @@ export default function FounderRecognitionSection() {
           },
         });
 
+        // Stage 0: Refined diagonal mask reveal of the artist portrait
+        portraitTl.fromTo(
+          portraitWrapRef.current,
+          { clipPath: "polygon(0 12%, 100% 0%, 100% 88%, 0 100%)", opacity: 0.9 },
+          { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)", opacity: 1, duration: 1.15, ease: "power3.out" },
+          0
+        );
+
         // Stage 1: Frame Recognition (0.0s - 0.3s)
         if (viewfinderHudRef.current) {
           portraitTl.fromTo(
@@ -596,8 +604,8 @@ export default function FounderRecognitionSection() {
                           aria-hidden="true"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                            <polyline points="12 5 19 12 12 19" />
+                            <line x1="7" y1="17" x2="17" y2="7" />
+                            <polyline points="7 7 17 7 17 17" />
                           </svg>
                         </div>
                       </div>

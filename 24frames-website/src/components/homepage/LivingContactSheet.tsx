@@ -173,6 +173,10 @@ export const ITEM_VIDEO_02: GalleryFilmItem = {
 export default function LivingContactSheet() {
   const sectionRef = useRef<HTMLElement>(null);
   const openingRef = useRef<HTMLDivElement>(null);
+  const archedFrameRef = useRef<HTMLDivElement>(null);
+  const hrithikaCanvasRef = useRef<HTMLDivElement>(null);
+  const karthikCanvasRef = useRef<HTMLDivElement>(null);
+  const sireeshCanvasRef = useRef<HTMLDivElement>(null);
   
   /* Vinitha SVG Morph References */
   const vinithaPathRef = useRef<SVGPathElement>(null);
@@ -467,40 +471,178 @@ export default function LivingContactSheet() {
     if (isReduced) return;
 
     const ctx = gsap.context(() => {
-      // Animate opening section elements smoothly into view
+      // 1. Chapter 02 — The Vows: Coordinated stages (Portrait reveals, then typography)
       if (openingRef.current) {
-        gsap.fromTo(
-          openingRef.current,
-          { opacity: 0, y: 36 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.0,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: openingRef.current,
-              start: "top 86%",
-              toggleActions: "play none none none",
-            },
-          }
+        const openingTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: openingRef.current,
+            start: "top 82%",
+            once: true,
+          },
+        });
+
+        // Stage A: Arched Roman Portrait emerges through vertical wipe mask
+        if (archedFrameRef.current) {
+          openingTl.fromTo(
+            archedFrameRef.current,
+            { clipPath: "inset(100% 0 0 0)", y: 30, scale: 1.04 },
+            { clipPath: "inset(0% 0 0 0)", y: 0, scale: 1.0, duration: 1.2, ease: "power3.out" },
+            0
+          );
+        }
+
+        // Stage B: The Vows monumental headline and chapter badge emerge coordinated
+        const leftElements = openingRef.current.querySelectorAll(`.${styles.chapterBadgeRow}, .${styles.monumentalHeading}`);
+        if (leftElements.length) {
+          openingTl.fromTo(
+            leftElements,
+            { opacity: 0, y: 22 },
+            { opacity: 1, y: 0, duration: 0.9, stagger: 0.12, ease: "power2.out" },
+            0.15
+          );
+        }
+
+        // Stage C: Supporting copy & metadata appear after photograph begins revealing
+        const supportingElements = openingRef.current.querySelectorAll(
+          `.${styles.openingNarrative}, .${styles.exploreActionBtn}, .${styles.openingRightCol} > *`
         );
+        if (supportingElements.length) {
+          openingTl.fromTo(
+            supportingElements,
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: "power2.out" },
+            0.45
+          );
+        }
       }
 
-      // Animate editorial rhythm blocks
-      const blocks = gsap.utils.toArray<HTMLElement>(`.${styles.editorialBlock}`);
-      blocks.forEach((block) => {
+      // 2. Cinema Passage 01 — Vinitha & Vivekananda: Wide horizontal curtain reveal
+      if (vinithaStageRef.current) {
+        const vinithaTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: vinithaStageRef.current,
+            start: "top 82%",
+            once: true,
+          },
+        });
+
+        vinithaTl.fromTo(
+          vinithaStageRef.current,
+          { clipPath: "inset(0 22% 0 22%)", opacity: 0.85 },
+          { clipPath: "inset(0 0% 0 0%)", opacity: 1, duration: 1.25, ease: "power3.inOut" },
+          0
+        );
+
+        const vinithaImg = vinithaStageRef.current.querySelector(`.${styles.curvedPosterImg}`);
+        if (vinithaImg) {
+          vinithaTl.fromTo(
+            vinithaImg,
+            { scale: 1.07, filter: "blur(4px)" },
+            { scale: 1.0, filter: "blur(0px)", duration: 1.35, ease: "power2.out" },
+            0.1
+          );
+        }
+      }
+
+      // 3. Featured Story 03 — Hrithika & Abhishek: Image enters from left
+      if (hrithikaCanvasRef.current) {
+        const hrithikaTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: hrithikaCanvasRef.current,
+            start: "top 84%",
+            once: true,
+          },
+        });
+
+        hrithikaTl.fromTo(
+          hrithikaCanvasRef.current,
+          { clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)", x: -24 },
+          { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", x: 0, duration: 1.15, ease: "power3.out" },
+          0
+        );
+
+        const img = hrithikaCanvasRef.current.querySelector("img");
+        if (img) {
+          hrithikaTl.fromTo(
+            img,
+            { scale: 1.06 },
+            { scale: 1.0, duration: 1.25, ease: "power2.out" },
+            0
+          );
+        }
+      }
+
+      // 4. Featured Story 04 — Karthik & Gayatri: Image enters from right
+      if (karthikCanvasRef.current) {
+        const karthikTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: karthikCanvasRef.current,
+            start: "top 84%",
+            once: true,
+          },
+        });
+
+        karthikTl.fromTo(
+          karthikCanvasRef.current,
+          { clipPath: "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)", x: 24 },
+          { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", x: 0, duration: 1.15, ease: "power3.out" },
+          0
+        );
+
+        const img = karthikCanvasRef.current.querySelector("img");
+        if (img) {
+          karthikTl.fromTo(
+            img,
+            { scale: 1.06 },
+            { scale: 1.0, duration: 1.25, ease: "power2.out" },
+            0
+          );
+        }
+      }
+
+      // 5. Featured Story 05 — Sireesh & Harshitha: Tall portrait reveals via diagonal wipe
+      if (sireeshCanvasRef.current) {
+        const sireeshTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sireeshCanvasRef.current,
+            start: "top 84%",
+            once: true,
+          },
+        });
+
+        sireeshTl.fromTo(
+          sireeshCanvasRef.current,
+          { clipPath: "polygon(0 12%, 100% 0%, 100% 88%, 0 100%)", y: 25 },
+          { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)", y: 0, duration: 1.2, ease: "power3.out" },
+          0
+        );
+
+        const img = sireeshCanvasRef.current.querySelector("img");
+        if (img) {
+          sireeshTl.fromTo(
+            img,
+            { scale: 1.05 },
+            { scale: 1.0, duration: 1.3, ease: "power2.out" },
+            0
+          );
+        }
+      }
+
+      // 6. Animate general narrative text blocks
+      const textBlocks = gsap.utils.toArray<HTMLElement>(`.${styles.duoContentSide}, .${styles.sireeshContentCol}`);
+      textBlocks.forEach((block) => {
         gsap.fromTo(
           block,
-          { opacity: 0, y: 40 },
+          { opacity: 0, y: 24 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.95,
+            duration: 0.85,
             ease: "power2.out",
             scrollTrigger: {
               trigger: block,
               start: "top 88%",
-              toggleActions: "play none none none",
+              once: true,
             },
           }
         );
@@ -703,7 +845,7 @@ export default function LivingContactSheet() {
               className={styles.archedPhotoLink}
               aria-label={`Open featured commission: ${ITEM_PROJECT_01.clientNames}`}
             >
-              <div className={styles.archedFrame}>
+              <div ref={archedFrameRef} className={styles.archedFrame}>
                 <picture>
                   <source srcSet={ITEM_PROJECT_01.webpImage} type="image/webp" />
                   <img
@@ -865,6 +1007,7 @@ export default function LivingContactSheet() {
                 aria-label={`Open story: ${ITEM_PROJECT_03.clientNames}`}
               >
                 <div
+                  ref={hrithikaCanvasRef}
                   className={styles.roundedImageCanvas}
                   style={{ aspectRatio: ITEM_PROJECT_03.aspectRatio }}
                 >
@@ -906,6 +1049,11 @@ export default function LivingContactSheet() {
           </div>
         </div>
 
+        {/* Narrative Cursive Bridge Line */}
+        <div className={styles.cursiveBridge} aria-hidden="true">
+          Where two journeys became one unbroken legacy.
+        </div>
+
         {/* 04 — KARTHIK & GAYATRI (TEXT ON LEFT, PHOTO ON RIGHT) */}
         <div className={`${styles.editorialBlock} ${styles.duoSpreadBlock}`}>
           <div className={styles.duoGridKarthik}>
@@ -931,6 +1079,7 @@ export default function LivingContactSheet() {
                 aria-label={`Open story: ${ITEM_PROJECT_04.clientNames}`}
               >
                 <div
+                  ref={karthikCanvasRef}
                   className={styles.roundedImageCanvas}
                   style={{ aspectRatio: ITEM_PROJECT_04.aspectRatio }}
                 >
@@ -951,17 +1100,22 @@ export default function LivingContactSheet() {
           </div>
         </div>
 
+        {/* Narrative Cursive Bridge Line */}
+        <div className={styles.cursiveBridge} aria-hidden="true">
+          In the sacred flame, promises made to outlive generations.
+        </div>
+
         {/* 05 — SIREESH & HARSHITHA (ASYMMETRIC EDITORIAL STILLS COMPOSITION) */}
         <div className={`${styles.editorialBlock} ${styles.layeredSireeshBlock}`}>
           <div className={styles.layeredGrid}>
-            {/* Left: Sacred Wedding Couple Walking on Tree-Lined Pathway (Swapped from right, prominent tall portrait) */}
+            {/* Left: Sacred Wedding Couple Walking on Tree-Lined Pathway */}
             <div className={styles.layeredPortraitCol}>
               <Link
                 href={ITEM_PROJECT_02.storyUrl}
                 className={styles.cardImageLink}
                 aria-label={`Open traditional wedding: ${ITEM_PROJECT_02.clientNames}`}
               >
-                <div className={styles.tallPortraitCanvas}>
+                <div ref={sireeshCanvasRef} className={styles.tallPortraitCanvas}>
                   <picture>
                     <source srcSet={ITEM_PROJECT_02.webpImage} type="image/webp" />
                     <img

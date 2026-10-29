@@ -1,9 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DisciplineVideo, DisciplineGalleryImage } from "@/data/disciplines";
 import styles from "./DisciplineInteractiveMedia.module.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface DisciplineInteractiveMediaProps {
   videos?: DisciplineVideo[];
@@ -47,6 +51,9 @@ export default function DisciplineInteractiveMedia({
   const [activeVideo, setActiveVideo] = useState<DisciplineVideo | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const featuredScreenRef = useRef<HTMLDivElement>(null);
+
   // Close handlers
   const handleCloseVideo = useCallback(() => {
     setActiveVideo(null);
@@ -55,6 +62,60 @@ export default function DisciplineInteractiveMedia({
   const handleCloseImage = useCallback(() => {
     setActiveImageIndex(null);
   }, []);
+
+  /* ── Cinema Passage & Staggered Image Reveals ── */
+  useEffect(() => {
+    const isReduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isReduced) return;
+
+    const ctx = gsap.context(() => {
+      // 1. Cinema Passage: Featured screen horizontal curtain wipe
+      if (featuredScreenRef.current) {
+        gsap.fromTo(
+          featuredScreenRef.current,
+          { clipPath: "inset(0 24% 0 24%)", opacity: 0.88 },
+          {
+            clipPath: "inset(0 0% 0 0%)",
+            opacity: 1,
+            duration: 1.25,
+            ease: "power3.inOut",
+            scrollTrigger: {
+              trigger: featuredScreenRef.current,
+              start: "top 82%",
+              once: true,
+            },
+          }
+        );
+      }
+
+      // 2. Editorial Gallery Cards: Directional reveals
+      const cards = gsap.utils.toArray<HTMLElement>(`.${styles.galleryCard}`);
+      cards.forEach((card) => {
+        const isRightCol = card.closest(`.${styles.staggerColRight}`) !== null;
+        const fromClip = isRightCol
+          ? "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)"
+          : "polygon(0 0, 0 0, 0 100%, 0 100%)";
+
+        gsap.fromTo(
+          card,
+          { clipPath: fromClip, opacity: 0.8 },
+          {
+            clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+            opacity: 1,
+            duration: 1.05,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 88%",
+              once: true,
+            },
+          }
+        );
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [gallery]);
 
   // Keyboard navigation for modals (Escape, Left, Right)
   useEffect(() => {
@@ -212,6 +273,7 @@ export default function DisciplineInteractiveMedia({
 
             {/* Featured 16:9 Screen */}
             <div
+              ref={featuredScreenRef}
               className={styles.featuredPlayerCard}
               onClick={() => setActiveVideo(featuredVideo)}
               role="button"
@@ -355,6 +417,7 @@ export default function DisciplineInteractiveMedia({
 
       {/* ── PHOTOGRAPHIC GALLERY (CONTINUOUS STAGGERED EDITORIAL RHYTHM) ── */}
       <section
+        ref={containerRef}
         className={styles.gallerySection}
         aria-label={`${shortTitle} Photographic Record`}
       >

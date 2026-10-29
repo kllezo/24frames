@@ -1,8 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { StoryFrame } from "@/data/stories";
 import styles from "./StoryStillsGallery.module.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Props {
   frames: StoryFrame[];
@@ -38,10 +42,45 @@ const LOVE_STORY_FRAGMENTS = [
 
 export default function StoryStillsGallery({ frames, storyTitle }: Props) {
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
+  const galleryRef = useRef<HTMLElement>(null);
 
   const handleClose = useCallback(() => {
     setActiveImageIndex(null);
   }, []);
+
+  /* ── Staggered Directional Mask Reveals on Scroll ── */
+  useEffect(() => {
+    const isReduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isReduced) return;
+
+    const ctx = gsap.context(() => {
+      const figures = gsap.utils.toArray<HTMLElement>(`.${styles.frameFigure}`);
+      figures.forEach((fig) => {
+        const isRightCol = fig.closest(`.${styles.columnRight}`) !== null;
+        const fromClip = isRightCol
+          ? "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)"
+          : "polygon(0 0, 0 0, 0 100%, 0 100%)";
+
+        gsap.fromTo(
+          fig,
+          { clipPath: fromClip, opacity: 0.8 },
+          {
+            clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+            opacity: 1,
+            duration: 1.05,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: fig,
+              start: "top 88%",
+              once: true,
+            },
+          }
+        );
+      });
+    }, galleryRef);
+
+    return () => ctx.revert();
+  }, [frames]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -151,6 +190,7 @@ export default function StoryStillsGallery({ frames, storyTitle }: Props) {
 
   return (
     <section
+      ref={galleryRef}
       id="stills"
       className={styles.section}
       aria-label={`${storyTitle} Curated Exhibition Stills`}

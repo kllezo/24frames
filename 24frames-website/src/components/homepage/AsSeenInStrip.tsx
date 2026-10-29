@@ -1,6 +1,11 @@
 "use client";
 
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./AsSeenInStrip.module.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface PressLogo {
   name: string;
@@ -25,11 +30,57 @@ const PRESS_LOGOS: PressLogo[] = [
 ];
 
 export default function AsSeenInStrip() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const marqueeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const isReduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isReduced) return;
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          once: true,
+        },
+      });
+
+      // 1. Header kicker and title emerge cleanly
+      if (headerRef.current) {
+        tl.fromTo(
+          headerRef.current,
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.85, ease: "power2.out" }
+        );
+      }
+
+      // 2. Publication logos reveal from softened mask into sharp focus
+      if (marqueeRef.current) {
+        tl.fromTo(
+          marqueeRef.current,
+          { clipPath: "inset(0 15% 0 15%)", filter: "blur(3px)", opacity: 0.35 },
+          {
+            clipPath: "inset(0 0% 0 0%)",
+            filter: "blur(0px)",
+            opacity: 1,
+            duration: 1.25,
+            ease: "power3.out",
+          },
+          0.2
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className={styles.section} aria-label="Media Publications, Industry Affiliations and Creative Platforms">
+    <section ref={sectionRef} className={styles.section} aria-label="Media Publications, Industry Affiliations and Creative Platforms">
       <div className={styles.container}>
         {/* Editorial Heading */}
-        <div className={styles.header}>
+        <div ref={headerRef} className={styles.header}>
           <div className={styles.kickerRow}>
             <span className={styles.ruleLine} aria-hidden="true" />
             <h2 className={styles.title}>AS SEEN IN &amp; AFFILIATIONS</h2>
@@ -41,7 +92,7 @@ export default function AsSeenInStrip() {
         </div>
 
         {/* Seamless Continuous Marquee Strip */}
-        <div className={styles.marqueeWrapper}>
+        <div ref={marqueeRef} className={styles.marqueeWrapper}>
           <div className={styles.marqueeTrack} aria-hidden="true">
             {/* Set 1 */}
             {PRESS_LOGOS.map((logo, idx) => (

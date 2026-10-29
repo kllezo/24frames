@@ -528,6 +528,7 @@
   cursor: pointer;
   width: 100%;
   max-width: 560px;
+  will-change: clip-path, transform;
 }
 
 .galleryCard:hover {

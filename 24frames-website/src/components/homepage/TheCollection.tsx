@@ -162,21 +162,49 @@ export default function TheCollection() {
       }
 
       if (showcaseRef.current) {
-        gsap.fromTo(
-          showcaseRef.current,
-          { opacity: 0, y: 35 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.95,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: showcaseRef.current,
-              start: "top 82%",
-              toggleActions: "play none none reverse",
-            },
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: showcaseRef.current,
+            start: "top 80%",
+            once: true,
+          },
+        });
+
+        // Alternating directional wipes on collection discipline cards
+        const cards = gsap.utils.toArray<HTMLElement>(`.${styles.card}`);
+        cards.forEach((card, idx) => {
+          const fromClip = idx % 2 === 0 ? "inset(100% 0 0 0)" : "inset(0 0 100% 0)";
+          tl.fromTo(
+            card,
+            { clipPath: fromClip, y: idx % 2 === 0 ? 25 : -25, opacity: 0.8 },
+            { clipPath: "inset(0% 0 0 0)", y: 0, opacity: 1, duration: 1.05, ease: "power3.out" },
+            idx * 0.12
+          );
+
+          // Inner image settles with subtle zoom deceleration
+          const img = card.querySelector(`.${styles.cardImage}`);
+          if (img) {
+            tl.fromTo(
+              img,
+              { scale: 1.08 },
+              { scale: 1.0, duration: 1.25, ease: "power2.out" },
+              idx * 0.12
+            );
           }
+        });
+
+        // Labels, numbers & titles appear as cards settle
+        const labels = showcaseRef.current.querySelectorAll(
+          `.${styles.collapsedNumber}, .${styles.collapsedTitle}, .${styles.activeContent}`
         );
+        if (labels.length) {
+          tl.fromTo(
+            labels,
+            { opacity: 0, y: 12 },
+            { opacity: 1, y: 0, duration: 0.65, stagger: 0.05, ease: "power2.out" },
+            0.5
+          );
+        }
       }
     }, sectionRef);
 

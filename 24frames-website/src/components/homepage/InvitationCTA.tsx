@@ -27,20 +27,23 @@ export default function InvitationCTA() {
         },
       });
 
+      // 1. Reveal CTA background photo through refined diagonal mask
       if (photoFrameRef.current) {
         tl.fromTo(
           photoFrameRef.current,
-          { opacity: 0, scale: 0.98 },
-          { opacity: 1, scale: 1, duration: 1.1, ease: "power2.out" }
+          { clipPath: "polygon(0 14%, 100% 0%, 100% 86%, 0 100%)", scale: 1.06, opacity: 0.8 },
+          { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)", scale: 1.0, opacity: 1, duration: 1.35, ease: "power3.out" },
+          0
         );
       }
 
+      // 2. Headline, supporting copy, and inquiry button emerge in deliberate sequence
       if (textContentRef.current) {
         tl.fromTo(
-          textContentRef.current,
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" },
-          0.3
+          textContentRef.current.children,
+          { opacity: 0, y: 22 },
+          { opacity: 1, y: 0, duration: 0.85, stagger: 0.12, ease: "power2.out" },
+          0.35
         );
       }
     }, sectionRef);
