@@ -28,11 +28,6 @@ const STATIC_ROUTE_MAP: Record<string, RouteVisualMeta> = {
     title: "Editorial Disciplines",
     subtitle: "Five Practices of Cinema & Optics",
   },
-  "/identity": {
-    image: "/images/founder-portrait.jpg",
-    title: "The Atelier & Identity",
-    subtitle: "Phani Gogireddy · 24 Frames",
-  },
 };
 
 /**

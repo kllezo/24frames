@@ -58,8 +58,8 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     number: "02",
     title: "The Cinema Room",
     description: "Private cinematic streaming theater presenting master films, ceremony edits, and more.",
-    artImage: "/videos/portfolio/vinitha-vivekananda/poster.jpg",
-    artAlt: "Private cinema room streaming suite for 4K master wedding films",
+    artImage: "/images/gallery-experience/cinema-room-primary.jpg",
+    artAlt: "Dramatic sunset silhouette portrait of wedding couple embracing through palace triple arches",
     href: "/client-gallery#cinema-room",
     theme: "green",
     fillColor: "#09453E",
@@ -69,7 +69,7 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     btnBorder: "rgba(255, 255, 255, 0.3)",
     btnColor: "#FAF8F2",
     origin: "38% bottom",
-    objectPosition: "center 30%",
+    objectPosition: "center 38%",
     objectFit: "cover",
   },
   {
@@ -147,6 +147,20 @@ export default function ClientGalleryExperience({
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const isTouchRef = useRef(false);
 
+  // Close open folder when tapping outside on touch/mobile devices
+  useEffect(() => {
+    if (!activeCardId) return;
+    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
+      if (gridRef.current && !gridRef.current.contains(e.target as Node)) {
+        setActiveCardId(null);
+      }
+    };
+    document.addEventListener("pointerdown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("pointerdown", handleOutsideClick);
+    };
+  }, [activeCardId]);
+
   /* ── GSAP Entrance Animation ── */
   useEffect(() => {
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -209,14 +223,22 @@ export default function ClientGalleryExperience({
   };
 
   const handleCardClick = (e: React.MouseEvent, href: string, id: string) => {
-    if (isTouchRef.current) {
+    const isTouch =
+      isTouchRef.current ||
+      (typeof window !== "undefined" && window.innerWidth <= 820);
+
+    if (isTouch) {
       if (activeCardId !== id) {
+        // First tap anywhere on a folder card: smoothly open folder and pop photograph outward
         e.preventDefault();
+        e.stopPropagation();
         setActiveCardId(id);
         return;
       }
+      // Second tap on the open card/photograph/arrow: navigate to destination
+      return;
     }
-    // Proceed with navigation to href
+    // Desktop: normal click-to-navigate
   };
 
   return (
@@ -265,7 +287,6 @@ export default function ClientGalleryExperience({
                   key={item.id}
                   href={item.href}
                   className={`${styles.card} ${themeClass} ${isOpen ? styles.cardOpen : ""}`}
-                  role="listitem"
                   aria-label={`${item.number} ${item.title} — Click to view section`}
                   aria-expanded={isOpen}
                   onPointerEnter={(e) => handlePointerEnter(item.id, e)}
@@ -287,6 +308,43 @@ export default function ClientGalleryExperience({
                       loading="lazy"
                     />
                     <div className={styles.photoVignette} aria-hidden="true" />
+
+                    {/* Elegant close (×) button on revealed photograph for mobile touch */}
+                    {isOpen && (
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Close ${item.title} folder`}
+                        className={styles.closeFolderBtn}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setActiveCardId(null);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setActiveCardId(null);
+                          }
+                        }}
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="14"
+                          height="14"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <line x1="18" y1="6" x2="6" y2="18" />
+                          <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                      </span>
+                    )}
                   </div>
 
                   {/* Layer 2: Front Stepped Archival Folder Cover (Compresses vertically upward to 15-20%) */}
@@ -415,10 +473,6 @@ export default function ClientGalleryExperience({
               </p>
 
               <div className={styles.subFooterNav}>
-                <Link href="/identity" className={styles.subFooterLink}>
-                  The Heritage
-                </Link>
-                <span className={styles.subFooterDot}>·</span>
                 <Link href="/client-gallery" className={styles.subFooterLink}>
                   Client Archive
                 </Link>

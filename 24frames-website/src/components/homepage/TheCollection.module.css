@@ -144,10 +144,10 @@
   flex: 1 1 0%;
   min-width: 0;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: flex 1100ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.6s ease,
-              border-color 0.6s ease;
-  will-change: flex, clip-path, transform;
+  transition: flex 560ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.45s ease,
+              border-color 0.45s ease;
+  will-change: flex;
 }
 
 .card:focus-visible {
@@ -159,9 +159,9 @@
   flex: 1 1 0%;
   min-width: 0;
   border-color: rgba(255, 255, 255, 0.1);
-  transition: flex 1100ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.5s ease,
-              border-color 0.5s ease;
+  transition: flex 560ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.45s ease,
+              border-color 0.45s ease;
 }
 
 .cardInactive:hover {
@@ -174,9 +174,9 @@
   flex: 3.5 1 0% !important;
   border-color: rgba(200, 168, 78, 0.55);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
-  transition: flex 1100ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.6s ease,
-              border-color 0.6s ease;
+  transition: flex 560ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.45s ease,
+              border-color 0.45s ease;
 }
 
 /* ── Photographic Image Canvas ───────────────────────────────────────── */
@@ -264,22 +264,24 @@
   visibility: hidden;
   min-width: 0;
   overflow: hidden;
-  transition: opacity 180ms ease-out, visibility 180ms ease-out;
+  transition: opacity 160ms ease-out, visibility 160ms ease-out;
 }
 
+/* 1. Expand first (560ms). 2. Only after card finishes expanding, fade text in smoothly (480ms delay, 260ms duration) */
 .cardActive .activeContent {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transition: opacity 280ms cubic-bezier(0.25, 1, 0.5, 1) 70ms,
-              visibility 280ms cubic-bezier(0.25, 1, 0.5, 1) 70ms;
+  transition: opacity 260ms cubic-bezier(0.25, 1, 0.5, 1) 480ms,
+              visibility 260ms cubic-bezier(0.25, 1, 0.5, 1) 480ms;
 }
 
+/* On mouse leave: fade text out immediately with 0s delay before card collapses */
 .cardInactive .activeContent {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 180ms ease-out 0s, visibility 180ms ease-out 0s;
+  transition: opacity 160ms ease-out 0s, visibility 160ms ease-out 0s;
 }
 
 .activeTopRow {
@@ -444,7 +446,7 @@
   pointer-events: auto;
   opacity: 1;
   visibility: visible;
-  transition: opacity 220ms ease-out 60ms, visibility 220ms ease-out 60ms;
+  transition: opacity 220ms ease-out 380ms, visibility 220ms ease-out 380ms;
   min-width: 0;
   overflow: hidden;
 }
@@ -453,14 +455,14 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 150ms ease-out 0s, visibility 150ms ease-out 0s;
+  transition: opacity 120ms ease-out 0s, visibility 120ms ease-out 0s;
 }
 
 .cardInactive .compactContent {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transition: opacity 220ms ease-out 60ms, visibility 220ms ease-out 60ms;
+  transition: opacity 240ms ease-out 380ms, visibility 240ms ease-out 380ms;
 }
 
 .compactBottomBlock {
@@ -699,6 +701,10 @@
 
   .activeContent {
     padding: 1.15rem;
+  }
+
+  .cardActive .activeContent {
+    transition: opacity 220ms ease-out 0s, visibility 220ms ease-out 0s;
   }
 
   .activeTitle {

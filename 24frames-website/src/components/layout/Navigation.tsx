@@ -9,7 +9,6 @@ const NAV_LINKS = [
   { label: "The Collection", href: "/collection" },
   { label: "Stories", href: "/stories" },
   { label: "The Artist", href: "/#artist" },
-  { label: "24 Frames", href: "/identity" },
 ];
 
 export default function Navigation() {

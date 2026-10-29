@@ -147,7 +147,7 @@ export const ITEM_PROJECT_04: GalleryProjectItem = {
   webpImage: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
   aspectRatio: "16 / 10",
   storyUrl: "/stories/karthik-and-gayathri",
-  objectPosition: "center 14%",
+  objectPosition: "62% top",
   narrative:
     "Sun-drenched botanical glasshouse sceneries, breezy columned verandas, and spontaneous dance before cascading blush florals.",
 };

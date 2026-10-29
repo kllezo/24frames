@@ -5,6 +5,7 @@ import {
   useRef,
   useCallback,
   useSyncExternalStore,
+  startTransition,
 } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
@@ -170,9 +171,8 @@ export default function CinematicTransition() {
         masterTimelineRef.current.kill();
       }
 
-      const DURATION_CLOSE = 0.38;
-      const ROUTE_HOLD = 0.06;
-      const DURATION_OPEN = 0.36;
+      const DURATION_CLOSE = 0.32;
+      const DURATION_OPEN = 0.32;
 
       const tl = gsap.timeline({
         onComplete: () => {
@@ -197,30 +197,30 @@ export default function CinematicTransition() {
       // 2. Optical Ambient & HUD Fade (Starts synchronously with shutter close)
       tl.to([vignetteRef.current, cornersRef.current], {
         opacity: 1,
-        duration: 0.16,
+        duration: 0.14,
         ease: "power1.out",
       }, 0.00);
 
       tl.to(focusRingRef.current, {
         opacity: 0.9,
         scale: 1,
-        duration: 0.18,
+        duration: 0.16,
         ease: "power2.out",
       }, 0.00);
 
       tl.to(guideRingsRef.current, {
         opacity: 0.5,
-        duration: 0.20,
+        duration: 0.18,
         ease: "power1.out",
       }, 0.00);
 
-      // 3. ONE CONTINUOUS UNINTERRUPTED SHUTTER CLOSING (0.00s to 0.38s)
-      // All 8 blades rotate simultaneously and continuously from -38 to +34 degrees
+      // 3. ONE CONTINUOUS UNINTERRUPTED SHUTTER CLOSING (0.00s to 0.32s)
+      // All 8 blades rotate continuously inwards accelerating smoothly to the seal point
       if (bladeActuatorsRef.current.length > 0) {
         tl.to(bladeActuatorsRef.current, {
           rotation: 34,
           duration: DURATION_CLOSE,
-          ease: "power2.inOut",
+          ease: "power2.in",
         }, 0.00);
       }
 
@@ -231,10 +231,11 @@ export default function CinematicTransition() {
         ease: "power2.in",
       }, DURATION_CLOSE * 0.35);
 
-      // 4. ROUTE SWAP AT FULL SHUTTER SEAL (At 0.38s: 100% closed, zero light leak)
-      const closeCompleteTime = DURATION_CLOSE;
+      // 4. ROUTE SWAP AT FULL SHUTTER SEAL (At exactly 0.32s, zero dead pause)
       tl.call(() => {
-        router.push(targetUrl);
+        startTransition(() => {
+          router.push(targetUrl);
+        });
 
         if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
           const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
@@ -249,18 +250,16 @@ export default function CinematicTransition() {
         } else {
           window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         }
-      }, undefined, closeCompleteTime);
+      }, undefined, DURATION_CLOSE);
 
-      // 5. ONE CONTINUOUS UNINTERRUPTED SHUTTER OPENING
-      const openStartTime = closeCompleteTime + ROUTE_HOLD;
-
-      // All 8 blades rotate simultaneously and continuously in reverse back to -38
+      // 5. ONE CONTINUOUS UNINTERRUPTED SHUTTER OPENING (Zero ROUTE_HOLD, instant continuous rebound)
+      // All 8 blades rotate smoothly outward with matched continuous angular velocity
       if (bladeActuatorsRef.current.length > 0) {
         tl.to(bladeActuatorsRef.current, {
           rotation: -38,
           duration: DURATION_OPEN,
-          ease: "power2.inOut",
-        }, openStartTime);
+          ease: "power2.out",
+        }, DURATION_CLOSE);
       }
 
       // Backdrop fades to reveal new page content cleanly through expanding iris
@@ -268,10 +267,10 @@ export default function CinematicTransition() {
         opacity: 0,
         duration: DURATION_OPEN * 0.75,
         ease: "power2.out",
-      }, openStartTime);
+      }, DURATION_CLOSE);
 
       // HUD and viewfinder elements fade out in unison as iris reaches full expansion
-      const hudFadeStart = openStartTime + DURATION_OPEN * 0.4;
+      const hudFadeStart = DURATION_CLOSE + DURATION_OPEN * 0.4;
       tl.to([cornersRef.current, focusRingRef.current, guideRingsRef.current, vignetteRef.current], {
         opacity: 0,
         duration: DURATION_OPEN * 0.6,
@@ -283,7 +282,7 @@ export default function CinematicTransition() {
         opacity: 0,
         duration: 0.08,
         ease: "power1.out",
-      }, openStartTime + DURATION_OPEN);
+      }, DURATION_CLOSE + DURATION_OPEN);
     },
     [isReducedMotion, router, clearSafetyTimeout, forceReset]
   );
@@ -375,7 +374,7 @@ export default function CinematicTransition() {
       document.removeEventListener("click", handleClick, { capture: true });
       document.removeEventListener("pointerover", handlePointerOver);
     };
-  }, [triggerTransition]);
+  }, [triggerTransition, router]);
 
   // Handle programmatic navigation custom events (24f-navigate)
   useEffect(() => {
@@ -395,7 +394,7 @@ export default function CinematicTransition() {
 
     window.addEventListener("24f-navigate", handleCustomNav);
     return () => window.removeEventListener("24f-navigate", handleCustomNav);
-  }, [triggerTransition]);
+  }, [triggerTransition, router]);
 
   // Support browser Back and Forward navigation cleanly
   useEffect(() => {

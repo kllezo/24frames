@@ -148,9 +148,13 @@
   height: 100%;
   pointer-events: none;
   z-index: 10;
+  transform: translateZ(0);
+  backface-visibility: hidden;
   /* Optimized: Removed expensive per-frame SVG composite drop-shadow filter */
 }
 
 .bladeActuator {
   will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }

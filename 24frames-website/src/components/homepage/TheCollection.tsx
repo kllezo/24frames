@@ -119,14 +119,13 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
   const trackRef = useRef<HTMLDivElement>(null);
 
   // Default active discipline on initial load is Cinema & Feature Films (as featured card)
-  const [activeId, setActiveId] = useState<string>("cinema");
+  const [activeId, setActiveId] = useState<string | null>("cinema");
   const [activeMobileIndex, setActiveMobileIndex] = useState<number>(0);
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
 
   const isTouchRef = useRef(false);
 
   /* ── Clean Single-Source Card Activation & Persistence ──────── */
-  // The most recently activated card remains expanded; pointer leaving does not reset it.
   const activateCard = useCallback((id: string) => {
     setActiveId(id);
     const idx = COLLECTION_DISCIPLINES.findIndex((d) => d.id === id);
@@ -140,10 +139,16 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
         return;
       }
       isTouchRef.current = false;
+      if (activeId === id) return;
       activateCard(id);
     },
-    [activateCard]
+    [activeId, activateCard]
   );
+
+  const handleTrackPointerLeave = useCallback(() => {
+    if (isTouchRef.current) return;
+    setActiveId(null);
+  }, []);
 
   /* ── Mobile Scroll & Pagination Synchronization ──────────────── */
   const handleTrackScroll = useCallback(() => {
@@ -326,6 +331,7 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
             ref={trackRef}
             className={styles.accordionTrack}
             onScroll={handleTrackScroll}
+            onPointerLeave={handleTrackPointerLeave}
           >
             {COLLECTION_DISCIPLINES.map((discipline) => {
               const isSelected = discipline.id === activeId;

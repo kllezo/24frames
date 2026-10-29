@@ -9,7 +9,6 @@ const EXPLORE_LINKS = [
   { label: "Stories", href: "/stories" },
   { label: "The Artist", href: "/#artist" },
   { label: "Client Gallery", href: "/client-gallery" },
-  { label: "Identity & Heritage", href: "/identity" },
 ];
 
 interface FooterProps {
@@ -272,10 +271,6 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
 
           <div className={styles.bottomRightGroup}>
             <div className={styles.bottomLinks}>
-              <Link href="/identity" className={styles.bottomLink}>
-                The Heritage
-              </Link>
-              <span className={styles.bottomDot}>·</span>
               <Link href="/client-gallery" className={styles.bottomLink}>
                 Client Archive
               </Link>
