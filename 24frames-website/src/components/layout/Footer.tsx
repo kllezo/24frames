@@ -118,8 +118,32 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
             </div>
             <address className={styles.colContent}>
               <p className={styles.studioName}>24 Frames Creative Studio</p>
-              <p className={styles.studioLine}>Jubilee Hills, Hyderabad</p>
-              <p className={styles.studioLine}>Telangana 500033, India</p>
+              <a
+                href="https://maps.app.goo.gl/ttz9jqZsHW9cSJdt9"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.studioAddressLink}
+                aria-label="View 24 Frames Studio Atelier on Google Maps"
+              >
+                <span className={styles.studioLine}>Jubilee Hills, Hyderabad</span>
+                <span className={styles.studioLine}>Telangana 500033, India</span>
+                <span className={styles.studioMapBadge}>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={styles.mapPinSvg}
+                    aria-hidden="true"
+                  >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span>VIEW ON MAP ↗</span>
+                </span>
+              </a>
               <div className={styles.studioSeparator} aria-hidden="true" />
               <p className={styles.studioConsult}>
                 Private consultations

@@ -237,10 +237,52 @@
   font-size: 0.82rem;
 }
 
+.studioAddressLink {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 0.2rem;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.studioAddressLink:hover {
+  transform: translateX(2px);
+}
+
+.studioAddressLink:hover .studioLine {
+  color: #09453E;
+}
+
+.studioAddressLink:hover .studioMapBadge {
+  color: #09453E;
+}
+
 .studioLine {
   color: #55625B;
   margin: 0;
   font-size: 0.8rem;
+  transition: color 0.2s ease;
+}
+
+.studioMapBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #8C7335;
+  margin-top: 0.35rem;
+  transition: color 0.2s ease;
+}
+
+.mapPinSvg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
 }
 
 .studioSeparator {
