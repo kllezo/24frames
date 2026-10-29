@@ -924,29 +924,18 @@ export default function LivingContactSheet() {
           );
         }
 
-        // Stage 02 - 04: Drape peels from top-right towards bottom-left
+        // Continuous, silky diagonal fabric drape reveal from top-right to bottom-left
         if (hrithikaDrapeRef.current) {
           hrithikaTl.fromTo(
             hrithikaDrapeRef.current,
             { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", opacity: 1 },
-            { clipPath: "polygon(0 0, 42% 0, 100% 54%, 100% 100%, 0 100%)", duration: 0.45, ease: "power2.inOut" },
+            { clipPath: "polygon(0 100%, 0 100%, 0 100%, 0 100%)", duration: 1.15, ease: "power2.inOut" },
             0.05
           );
           hrithikaTl.to(
             hrithikaDrapeRef.current,
-            { clipPath: "polygon(0 0, 0% 36%, 62% 88%, 100% 100%, 0 100%)", duration: 0.5, ease: "power2.inOut" },
-            0.48
-          );
-          hrithikaTl.to(
-            hrithikaDrapeRef.current,
-            { clipPath: "polygon(0 76%, 22% 100%, 0 100%)", duration: 0.4, ease: "power2.out" },
-            0.95
-          );
-          // Stage 05: Drape exits/dissolves cleanly
-          hrithikaTl.to(
-            hrithikaDrapeRef.current,
-            { opacity: 0, duration: 0.3, ease: "power1.out" },
-            1.3
+            { opacity: 0, duration: 0.35, ease: "power1.out" },
+            0.85
           );
         }
       }
@@ -1392,10 +1381,10 @@ export default function LivingContactSheet() {
         focusable="false"
       >
         <defs>
-          {/* Monumental Indian Heritage Palace Arch Silhouette: Multi-scalloped cusps with tall pointed crest */}
+          {/* Refined Bellamkonda & Kavya Silhouette Arch: Smooth organic crown following natural head & shoulder contour */}
           <clipPath id="palaceArchClip" clipPathUnits="objectBoundingBox">
             <path
-              d="M 0 1 L 0 0.48 C 0 0.42, 0.08 0.38, 0.12 0.34 C 0.12 0.28, 0.22 0.24, 0.26 0.18 C 0.27 0.14, 0.38 0.10, 0.42 0.06 C 0.45 0.03, 0.49 0.01, 0.50 0 C 0.51 0.01, 0.55 0.03, 0.58 0.06 C 0.62 0.10, 0.73 0.14, 0.74 0.18 C 0.78 0.24, 0.88 0.28, 0.88 0.34 C 0.92 0.38, 1 0.42, 1 0.48 L 1 1 Z"
+              d="M 0 1 L 0 0.52 C 0 0.36, 0.06 0.22, 0.16 0.14 C 0.26 0.06, 0.38 0.015, 0.50 0.01 C 0.62 0.015, 0.74 0.06, 0.84 0.14 C 0.94 0.22, 1 0.36, 1 0.52 L 1 1 Z"
             />
           </clipPath>
           <clipPath id="vinithaMorphClip" clipPathUnits="objectBoundingBox">
@@ -1479,7 +1468,7 @@ export default function LivingContactSheet() {
                   aria-hidden="true"
                 >
                   <path
-                    d="M 1 140 L 1 67.2 C 1 58.8, 8 53.2, 12 47.6 C 12 39.2, 22 33.6, 26 25.2 C 27 19.6, 38 14.0, 42 8.4 C 45 4.2, 49 1.4, 50 0 C 51 1.4, 55 4.2, 58 8.4 C 62 14.0, 73 19.6, 74 25.2 C 78 33.6, 88 39.2, 88 47.6 C 92 53.2, 99 58.8, 99 67.2 L 99 140"
+                    d="M 1 140 L 1 72.8 C 1 50.4, 7 30.8, 16 19.6 C 26 8.4, 38 2.1, 50 1.4 C 62 2.1, 74 8.4, 84 19.6 C 93 30.8, 99 50.4, 99 72.8 L 99 140"
                     fill="none"
                     stroke="#D4AF37"
                     strokeWidth="1.6"

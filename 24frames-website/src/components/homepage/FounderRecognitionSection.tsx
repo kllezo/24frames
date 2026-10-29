@@ -615,6 +615,9 @@ export default function FounderRecognitionSection() {
                   <span className={styles.linkArrow}>→</span>
                 </button>
               </div>
+
+              {/* Fine Editorial Divider separating recognition from narrative biography */}
+              <div className={styles.editorialDivider} aria-hidden="true" />
             </div>
 
             {/* 2. Wide Cream Biography Panel */}
