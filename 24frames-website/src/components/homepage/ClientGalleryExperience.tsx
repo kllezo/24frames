@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { navigateWithCameraTransition } from "@/lib/transitions";
 import styles from "./ClientGalleryExperience.module.css";
 
 import LiquidDotCanvas from "./LiquidDotCanvas";
@@ -161,25 +162,67 @@ export default function ClientGalleryExperience({
     };
   }, [activeCardId]);
 
-  /* ── GSAP Entrance Animation ── */
+  // Guaranteed immediate reveal watchdog via IntersectionObserver
   useEffect(() => {
-    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isReduced) return;
+    if (!sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (gridRef.current) {
+              gridRef.current.style.opacity = "1";
+              gridRef.current.style.transform = "none";
+            }
+            if (headerRef.current) {
+              headerRef.current.style.opacity = "1";
+              headerRef.current.style.transform = "none";
+            }
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: "300px 0px" }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
+  /* ── GSAP Entrance Animation (Desktop only; immediate on mobile) ── */
+  useEffect(() => {
+    const isReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile =
+      typeof window !== "undefined" && window.innerWidth <= 820;
+
+    // On mobile or reduced motion: ensure cards are visible IMMEDIATELY with zero delay
+    if (isMobile || isReduced) {
+      if (headerRef.current) {
+        headerRef.current.style.opacity = "1";
+        headerRef.current.style.transform = "none";
+      }
+      if (gridRef.current) {
+        gridRef.current.style.opacity = "1";
+        gridRef.current.style.transform = "none";
+      }
+      return;
+    }
+
+    // On desktop: smooth 0.5s entrance that does NOT reverse or re-hide
     const ctx = gsap.context(() => {
       if (headerRef.current) {
         gsap.fromTo(
           headerRef.current,
-          { opacity: 0, y: 24 },
+          { opacity: 0, y: 20 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.85,
+            duration: 0.5,
             ease: "power2.out",
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: "top 80%",
-              toggleActions: "play none none reverse",
+              start: "top 85%",
+              once: true,
             },
           }
         );
@@ -188,16 +231,16 @@ export default function ClientGalleryExperience({
       if (gridRef.current) {
         gsap.fromTo(
           gridRef.current,
-          { opacity: 0, y: 30 },
+          { opacity: 0, y: 24 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.9,
+            duration: 0.5,
             ease: "power2.out",
             scrollTrigger: {
               trigger: gridRef.current,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
+              start: "top 90%",
+              once: true,
             },
           }
         );
@@ -208,7 +251,12 @@ export default function ClientGalleryExperience({
   }, []);
 
   const handlePointerEnter = (id: string, e: React.PointerEvent) => {
-    if (e.pointerType === "touch") {
+    // On touch devices or mobile viewports, NEVER open on hover/pointer-enter
+    if (
+      e.pointerType === "touch" ||
+      (typeof window !== "undefined" &&
+        (window.matchMedia("(hover: none)").matches || window.innerWidth <= 820))
+    ) {
       isTouchRef.current = true;
       return;
     }
@@ -222,23 +270,33 @@ export default function ClientGalleryExperience({
     }
   };
 
+  // Strict two-tap interaction on mobile; click-to-navigate on desktop
   const handleCardClick = (e: React.MouseEvent, href: string, id: string) => {
     const isTouch =
       isTouchRef.current ||
-      (typeof window !== "undefined" && window.innerWidth <= 820);
+      (typeof window !== "undefined" &&
+        (window.matchMedia("(hover: none)").matches || window.innerWidth <= 820));
 
     if (isTouch) {
+      e.preventDefault();
+      e.stopPropagation();
+
       if (activeCardId !== id) {
-        // First tap anywhere on a folder card: smoothly open folder and pop photograph outward
-        e.preventDefault();
-        e.stopPropagation();
+        // First tap on closed card (folder cover, image area, or arrow):
+        // Open folder using 3D animation & spring-pop photograph, do NOT navigate!
         setActiveCardId(id);
         return;
       }
-      // Second tap on the open card/photograph/arrow: navigate to destination
+
+      // Second tap on the already-open card, photograph, or arrow:
+      // Navigate to that card's existing, correct destination!
+      navigateWithCameraTransition(href);
       return;
     }
-    // Desktop: normal click-to-navigate
+
+    // Desktop: Click navigates immediately to destination
+    e.preventDefault();
+    navigateWithCameraTransition(href);
   };
 
   return (
@@ -308,43 +366,6 @@ export default function ClientGalleryExperience({
                       loading="lazy"
                     />
                     <div className={styles.photoVignette} aria-hidden="true" />
-
-                    {/* Elegant close (×) button on revealed photograph for mobile touch */}
-                    {isOpen && (
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`Close ${item.title} folder`}
-                        className={styles.closeFolderBtn}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setActiveCardId(null);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setActiveCardId(null);
-                          }
-                        }}
-                      >
-                        <svg
-                          viewBox="0 0 24 24"
-                          width="14"
-                          height="14"
-                          stroke="currentColor"
-                          strokeWidth="2.2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <line x1="18" y1="6" x2="6" y2="18" />
-                          <line x1="6" y1="6" x2="18" y2="18" />
-                        </svg>
-                      </span>
-                    )}
                   </div>
 
                   {/* Layer 2: Front Stepped Archival Folder Cover (Compresses vertically upward to 15-20%) */}

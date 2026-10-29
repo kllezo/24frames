@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./HeroSection.module.css";

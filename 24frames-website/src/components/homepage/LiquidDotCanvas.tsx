@@ -40,9 +40,12 @@ export default function LiquidDotCanvas({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Check accessibility & device support
+    // Check accessibility & device support (skip animation on mobile / touch / low-power devices)
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isTouchOnly = "ontouchstart" in window && !window.matchMedia("(hover: hover)").matches;
+    const isTouchOnly =
+      ("ontouchstart" in window && !window.matchMedia("(hover: hover)").matches) ||
+      window.matchMedia("(hover: none)").matches ||
+      window.innerWidth <= 820;
 
     let width = 0;
     let height = 0;

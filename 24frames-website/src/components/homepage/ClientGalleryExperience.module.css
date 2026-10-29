@@ -126,6 +126,7 @@
   width: 100%;
   position: relative;
   z-index: 5;
+  opacity: 1; /* Guaranteed immediately visible on mobile */
 }
 
 .cardsGrid {
@@ -179,7 +180,7 @@
   border-radius: 16px;
   z-index: 2;
   background: transparent;
-  pointer-events: none;
+  pointer-events: auto;
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
@@ -230,45 +231,7 @@
   opacity: 0.15;
 }
 
-/* Small, elegant close (×) button on revealed photograph for mobile touch */
-.closeFolderBtn {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(9, 69, 62, 0.88);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #FAF8F2;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 30;
-  pointer-events: auto;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-  transition: transform 0.2s ease, background 0.2s ease;
-  animation: fadeInCloseBtn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
 
-.closeFolderBtn:hover {
-  background: #09453E;
-  transform: scale(1.08);
-}
-
-@keyframes fadeInCloseBtn {
-  from {
-    opacity: 0;
-    transform: scale(0.7);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
 
 /* ─────────────────────────────────────────────────────────────
    4. FRONT ARCHIVAL FOLDER COVER (ANCHORED TO BOTTOM, TILTS FORWARD IN 3D)

@@ -3,12 +3,14 @@
 import {
   useEffect,
   useRef,
+  useState,
   useCallback,
   useSyncExternalStore,
   startTransition,
 } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
+import { resolveRouteVisual, RouteVisualMeta } from "@/lib/transitions";
 import styles from "./CinematicTransition.module.css";
 
 // ── Accessibility Helper: Reduced Motion ────────────────────────────────
@@ -57,6 +59,12 @@ export default function CinematicTransition() {
   const focusRingRef = useRef<HTMLDivElement>(null);
   const guideRingsRef = useRef<SVGSVGElement>(null);
   const bladeActuatorsRef = useRef<SVGGElement[]>([]);
+  const orbitStageRef = useRef<HTMLDivElement>(null);
+  const orbitCanvasRef = useRef<HTMLDivElement>(null);
+  const orbitBadgeRef = useRef<HTMLDivElement>(null);
+
+  // Resolved destination visual subject for the virtual camera orbit
+  const [destinationVisual, setDestinationVisual] = useState<RouteVisualMeta | null>(null);
 
   // Safety & timeline control refs
   const isTransitioningRef = useRef(false);
@@ -93,6 +101,18 @@ export default function CinematicTransition() {
       gsap.set(backdropRef.current, { opacity: 0 });
     }
 
+    if (orbitStageRef.current) {
+      gsap.set(orbitStageRef.current, { opacity: 0 });
+    }
+
+    if (orbitCanvasRef.current) {
+      gsap.set(orbitCanvasRef.current, { transform: "none" });
+    }
+
+    if (orbitBadgeRef.current) {
+      gsap.set(orbitBadgeRef.current, { opacity: 0, y: 12 });
+    }
+
     if (bladeActuatorsRef.current.length > 0) {
       gsap.set(bladeActuatorsRef.current, {
         svgOrigin: `${PIVOT_X} ${PIVOT_Y}`,
@@ -101,12 +121,19 @@ export default function CinematicTransition() {
     }
   }, [clearSafetyTimeout]);
 
-  // Execute the animated camera shutter transition
+  // Execute the animated camera shutter transition with virtual 3D camera orbit
   const triggerTransition = useCallback(
-    (targetUrl: string, targetHash: string) => {
+    (targetUrl: string, targetHash: string, customImage?: string) => {
       // Prevent duplicate transitions during rapid repeated clicks
       if (isTransitioningRef.current) return;
       isTransitioningRef.current = true;
+
+      // Resolve destination subject & camera orbit configuration
+      const visual = resolveRouteVisual(targetUrl);
+      if (customImage) {
+        visual.image = customImage;
+      }
+      setDestinationVisual(visual);
 
       // Immediately initiate destination prefetch
       try {
@@ -164,15 +191,20 @@ export default function CinematicTransition() {
         return;
       }
 
-      // ── CONTINUOUS UNIFIED CAMERA SHUTTER TIMELINE ──
-      // Single continuous normalized progress from 0 (open) to 1 (closed), then 1 to 0 (open)
-      // All 8 blades derive their rotation from the same timeline without independent delays or stepped pauses.
+      // ── CONTINUOUS UNIFIED CAMERA SHUTTER & 3D CAMERA ORBIT TIMELINE ──
       if (masterTimelineRef.current) {
         masterTimelineRef.current.kill();
       }
 
       const DURATION_CLOSE = 0.32;
-      const DURATION_OPEN = 0.32;
+      const DURATION_OPEN = 0.34;
+      const orbit = visual.cameraOrbit || {
+        startRotateY: -3,
+        startRotateX: 2,
+        startScale: 1.08,
+        startX: 20,
+        startY: -14,
+      };
 
       const tl = gsap.timeline({
         onComplete: () => {
@@ -192,6 +224,21 @@ export default function CinematicTransition() {
           svgOrigin: `${PIVOT_X} ${PIVOT_Y}`,
           rotation: -38,
         }, 0.00);
+      }
+
+      // Initialize virtual 3D camera orbit position
+      if (orbitStageRef.current && orbitCanvasRef.current) {
+        tl.set(orbitStageRef.current, { opacity: 0 }, 0.00);
+        tl.set(
+          orbitCanvasRef.current,
+          {
+            transform: `perspective(1200px) rotateY(${orbit.startRotateY}deg) rotateX(${orbit.startRotateX}deg) scale(${orbit.startScale}) translate3d(${orbit.startX}px, ${orbit.startY}px, 0px)`,
+          },
+          0.00
+        );
+      }
+      if (orbitBadgeRef.current) {
+        tl.set(orbitBadgeRef.current, { opacity: 0, y: 12 }, 0.00);
       }
 
       // 2. Optical Ambient & HUD Fade (Starts synchronously with shutter close)
@@ -215,7 +262,6 @@ export default function CinematicTransition() {
       }, 0.00);
 
       // 3. ONE CONTINUOUS UNINTERRUPTED SHUTTER CLOSING (0.00s to 0.32s)
-      // All 8 blades rotate continuously inwards accelerating smoothly to the seal point
       if (bladeActuatorsRef.current.length > 0) {
         tl.to(bladeActuatorsRef.current, {
           rotation: 34,
@@ -230,6 +276,15 @@ export default function CinematicTransition() {
         duration: DURATION_CLOSE * 0.65,
         ease: "power2.in",
       }, DURATION_CLOSE * 0.35);
+
+      // Fade in the destination orbit stage behind the sealing blades
+      if (orbitStageRef.current) {
+        tl.to(orbitStageRef.current, {
+          opacity: 1,
+          duration: 0.16,
+          ease: "power1.in",
+        }, DURATION_CLOSE * 0.5);
+      }
 
       // 4. ROUTE SWAP AT FULL SHUTTER SEAL (At exactly 0.32s, zero dead pause)
       tl.call(() => {
@@ -252,7 +307,34 @@ export default function CinematicTransition() {
         }
       }, undefined, DURATION_CLOSE);
 
-      // 5. ONE CONTINUOUS UNINTERRUPTED SHUTTER OPENING (Zero ROUTE_HOLD, instant continuous rebound)
+      // 5. VIRTUAL 3D CAMERA ORBIT + SHUTTER OPENING (Simultaneous continuous movement)
+      // Virtual camera performs a smooth, controlled arc toward the destination's primary subject
+      if (orbitCanvasRef.current) {
+        tl.to(
+          orbitCanvasRef.current,
+          {
+            transform: "perspective(1200px) rotateY(0deg) rotateX(0deg) scale(1) translate3d(0px, 0px, 0px)",
+            duration: DURATION_OPEN + 0.04,
+            ease: "power2.out",
+          },
+          DURATION_CLOSE
+        );
+      }
+
+      // Editorial badge emerges softly as camera aligns
+      if (orbitBadgeRef.current) {
+        tl.to(
+          orbitBadgeRef.current,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.22,
+            ease: "power2.out",
+          },
+          DURATION_CLOSE + 0.06
+        );
+      }
+
       // All 8 blades rotate smoothly outward with matched continuous angular velocity
       if (bladeActuatorsRef.current.length > 0) {
         tl.to(bladeActuatorsRef.current, {
@@ -262,25 +344,38 @@ export default function CinematicTransition() {
         }, DURATION_CLOSE);
       }
 
-      // Backdrop fades to reveal new page content cleanly through expanding iris
+      // Backdrop fades to reveal destination scene cleanly through expanding iris
       tl.to(backdropRef.current, {
         opacity: 0,
-        duration: DURATION_OPEN * 0.75,
+        duration: DURATION_OPEN * 0.7,
         ease: "power2.out",
       }, DURATION_CLOSE);
 
       // HUD and viewfinder elements fade out in unison as iris reaches full expansion
-      const hudFadeStart = DURATION_CLOSE + DURATION_OPEN * 0.4;
+      const hudFadeStart = DURATION_CLOSE + DURATION_OPEN * 0.35;
       tl.to([cornersRef.current, focusRingRef.current, guideRingsRef.current, vignetteRef.current], {
         opacity: 0,
-        duration: DURATION_OPEN * 0.6,
+        duration: DURATION_OPEN * 0.65,
         ease: "power1.out",
       }, hudFadeStart);
 
-      // Complete settlement and overlay release
+      // Fade out badge as camera completes its settle
+      if (orbitBadgeRef.current) {
+        tl.to(
+          orbitBadgeRef.current,
+          {
+            opacity: 0,
+            duration: 0.12,
+            ease: "power1.out",
+          },
+          DURATION_CLOSE + DURATION_OPEN * 0.7
+        );
+      }
+
+      // Complete settlement and overlay release seamlessly transferring to live page
       tl.to(overlayRef.current, {
         opacity: 0,
-        duration: 0.08,
+        duration: 0.09,
         ease: "power1.out",
       }, DURATION_CLOSE + DURATION_OPEN);
     },
@@ -383,11 +478,16 @@ export default function CinematicTransition() {
     const handleCustomNav = (e: Event) => {
       const customEvent = e as CustomEvent<{
         url: string;
+        image?: string;
+        effect?: string;
       }>;
       if (customEvent.detail?.url) {
+        const urlStr = customEvent.detail.url;
+        const hash = urlStr.includes("#") ? "#" + urlStr.split("#")[1] : "";
         triggerTransition(
-          customEvent.detail.url,
-          ""
+          urlStr,
+          hash,
+          customEvent.detail.image
         );
       }
     };
@@ -435,6 +535,32 @@ export default function CinematicTransition() {
         <>
           {/* ── Solid Near-Black Optical Shutter Backdrop ── */}
           <div ref={backdropRef} className={styles.shutterBackdrop} />
+
+          {/* ── Virtual 3D Camera Orbit Viewport Stage ── */}
+          <div ref={orbitStageRef} className={styles.cameraOrbitStage} aria-hidden="true">
+            <div ref={orbitCanvasRef} className={styles.cameraOrbitCanvas}>
+              {destinationVisual?.image && (
+                <img
+                  src={destinationVisual.image}
+                  alt=""
+                  className={styles.cameraOrbitImage}
+                  style={{
+                    objectPosition: destinationVisual.focalPoint || "center 25%",
+                  }}
+                />
+              )}
+            </div>
+
+            {/* Subtle Viewfinder Editorial Target Badge */}
+            {destinationVisual?.title && (
+              <div ref={orbitBadgeRef} className={styles.cameraOrbitBadge}>
+                <span className={styles.cameraOrbitTitle}>{destinationVisual.title}</span>
+                {destinationVisual.subtitle && (
+                  <span className={styles.cameraOrbitSub}>{destinationVisual.subtitle}</span>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* ── Radial Optical Vignette ── */}
           <div ref={vignetteRef} className={styles.vignetteOverlay} />
