@@ -26,6 +26,9 @@ export interface GalleryCardItem {
   borderColor: string;
   btnBorder: string;
   btnColor: string;
+  origin?: string;
+  objectPosition?: string;
+  objectFit?: "cover" | "contain";
 }
 
 export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
@@ -45,6 +48,9 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     borderColor: "rgba(9, 69, 62, 0.12)",
     btnBorder: "rgba(9, 69, 62, 0.25)",
     btnColor: "#09453E",
+    origin: "20% bottom",
+    objectPosition: "center 20%",
+    objectFit: "cover",
   },
   {
     id: "cinema-room",
@@ -62,6 +68,9 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     borderColor: "rgba(255, 255, 255, 0.12)",
     btnBorder: "rgba(255, 255, 255, 0.3)",
     btnColor: "#FAF8F2",
+    origin: "38% bottom",
+    objectPosition: "center 30%",
+    objectFit: "cover",
   },
   {
     id: "signature-shots",
@@ -79,6 +88,9 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     borderColor: "rgba(9, 69, 62, 0.12)",
     btnBorder: "rgba(9, 69, 62, 0.25)",
     btnColor: "#09453E",
+    origin: "50% bottom",
+    objectPosition: "center 12%",
+    objectFit: "cover",
   },
   {
     id: "event-stories",
@@ -96,6 +108,9 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     borderColor: "rgba(255, 255, 255, 0.12)",
     btnBorder: "rgba(255, 255, 255, 0.3)",
     btnColor: "#FAF8F2",
+    origin: "62% bottom",
+    objectPosition: "center 22%",
+    objectFit: "cover",
   },
   {
     id: "heirloom-collection",
@@ -113,6 +128,9 @@ export const CLIENT_GALLERY_FEATURES: GalleryCardItem[] = [
     borderColor: "rgba(9, 69, 62, 0.12)",
     btnBorder: "rgba(9, 69, 62, 0.25)",
     btnColor: "#09453E",
+    origin: "80% bottom",
+    objectPosition: "center 35%",
+    objectFit: "cover",
   },
 ];
 
@@ -220,13 +238,20 @@ export default function ClientGalleryExperience({
                   className={`${styles.card} ${themeClass}`}
                   role="listitem"
                   aria-label={`${item.number} ${item.title} — Click to view section`}
+                  style={{
+                    ["--popout-origin" as string]: item.origin || "center bottom",
+                  }}
                 >
-                  {/* Layer 1: Background Photograph along Top */}
+                  {/* Layer 1: Background Photograph along Top (Pops out dramatically on hover) */}
                   <div className={styles.cardPhotoArea}>
                     <img
                       src={item.artImage}
                       alt={item.artAlt}
                       className={styles.cardPhotoImg}
+                      style={{
+                        objectPosition: item.objectPosition,
+                        objectFit: item.objectFit || "cover",
+                      }}
                       loading="lazy"
                     />
                     <div className={styles.photoVignette} aria-hidden="true" />
