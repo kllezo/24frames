@@ -110,7 +110,13 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
   },
 ];
 
-export default function FounderRecognitionSection() {
+interface FounderRecognitionSectionProps {
+  isDedicatedRoute?: boolean;
+}
+
+export default function FounderRecognitionSection({
+  isDedicatedRoute = false,
+}: FounderRecognitionSectionProps = {}) {
   const sectionRef = useRef<HTMLElement>(null);
 
   /* Living Portrait References */
@@ -213,7 +219,7 @@ export default function FounderRecognitionSection() {
         const portraitTl = gsap.timeline({
           scrollTrigger: {
             trigger: portraitWrapRef.current,
-            start: "top 78%",
+            start: isDedicatedRoute ? "top 95%" : "top 78%",
             once: true,
           },
         });
@@ -286,7 +292,7 @@ export default function FounderRecognitionSection() {
       const panelsTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 72%",
+          start: isDedicatedRoute ? "top 95%" : "top 72%",
           once: true,
         },
       });

@@ -1,4 +1,5 @@
-.webglContainer {
+.webglContainer,
+.canvasContainer {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -9,7 +10,8 @@
   overflow: hidden;
 }
 
-.webglCanvas {
+.webglCanvas,
+.fallbackCanvas {
   position: absolute;
   inset: 0;
   width: 100% !important;

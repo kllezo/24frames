@@ -55,8 +55,7 @@ export default function CinematicTransition() {
   const vignetteRef = useRef<HTMLDivElement>(null);
   const cornersRef = useRef<HTMLDivElement>(null);
   const focusRingRef = useRef<HTMLDivElement>(null);
-  const reticleOuterGroupRef = useRef<SVGGElement>(null);
-  const reticleInnerGroupRef = useRef<SVGGElement>(null);
+  const reticleAssemblyRef = useRef<SVGGElement>(null);
   const guideRingsRef = useRef<SVGSVGElement>(null);
   const shutterSvgRef = useRef<SVGSVGElement>(null);
   const bladeActuatorsRef = useRef<SVGGElement[]>([]);
@@ -142,11 +141,8 @@ export default function CinematicTransition() {
       });
     }
 
-    if (reticleOuterGroupRef.current) {
-      gsap.set(reticleOuterGroupRef.current, { rotation: 0, clearProps: "rotation" });
-    }
-    if (reticleInnerGroupRef.current) {
-      gsap.set(reticleInnerGroupRef.current, { rotation: 0, clearProps: "rotation" });
+    if (reticleAssemblyRef.current) {
+      gsap.set(reticleAssemblyRef.current, { rotation: 0, clearProps: "rotation" });
     }
 
     if (bladeActuatorsRef.current.length > 0) {
@@ -544,25 +540,15 @@ export default function CinematicTransition() {
         opacity: 1,
       });
 
-      if (reticleOuterGroupRef.current) {
-        gsap.set(reticleOuterGroupRef.current, { rotation: 0, transformOrigin: "400px 400px" });
-      }
-      if (reticleInnerGroupRef.current) {
-        gsap.set(reticleInnerGroupRef.current, { rotation: 0, transformOrigin: "400px 400px" });
+      if (reticleAssemblyRef.current) {
+        gsap.set(reticleAssemblyRef.current, { rotation: 0, transformOrigin: "400px 400px" });
       }
 
-      // Ring physically travels across screen to target element with counter-rotating rings
+      // Unified concentric reticle moves as one single physical optical unit
       await new Promise<void>((resolve) => {
-        if (reticleOuterGroupRef.current) {
-          gsap.to(reticleOuterGroupRef.current, {
-            rotation: 180,
-            duration: 0.52,
-            ease: "power2.inOut",
-          });
-        }
-        if (reticleInnerGroupRef.current) {
-          gsap.to(reticleInnerGroupRef.current, {
-            rotation: -180,
+        if (reticleAssemblyRef.current) {
+          gsap.to(reticleAssemblyRef.current, {
+            rotation: 28,
             duration: 0.52,
             ease: "power2.inOut",
           });
@@ -776,8 +762,8 @@ export default function CinematicTransition() {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              {/* Outer Counter-Rotating Group: Layer 1 (Dotted Circle) + Layer 3 (Radial Tracking Ticks) */}
-              <g ref={reticleOuterGroupRef} className={styles.reticleOuterGroup}>
+              {/* Unified Concentric Autofocus Reticle Assembly */}
+              <g ref={reticleAssemblyRef} className={styles.reticleAssembly}>
                 {/* Layer 1: Outer dotted circle (evenly spaced fine gold dashes) */}
                 <circle
                   cx="400"
@@ -788,7 +774,7 @@ export default function CinematicTransition() {
                   strokeDasharray="6 8"
                 />
 
-                {/* Layer 3: Radial camera tracking lines extending outward from circumference */}
+                {/* Layer 2: Radial camera tracking lines extending outward from circumference */}
                 {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
                   <line
                     key={`major-${deg}`}
@@ -813,27 +799,24 @@ export default function CinematicTransition() {
                     transform={`rotate(${deg} 400 400)`}
                   />
                 ))}
-              </g>
 
-              {/* Inner Counter-Rotating Group: Layer 2 (Continuous Solid Circle + Viewfinder Quadrants) */}
-              <g ref={reticleInnerGroupRef} className={styles.reticleInnerGroup}>
-                {/* Layer 2: Inner solid circle (continuous thin circular gold outline) */}
+                {/* Layer 3: Inner solid circle (continuous circular gold outline with consistent 50px radial gap) */}
                 <circle
                   cx="400"
                   cy="400"
-                  r="320"
+                  r="310"
                   stroke="rgba(200, 168, 78, 0.95)"
                   strokeWidth="1.8"
                 />
 
-                {/* Inward precision quadrant ticks */}
+                {/* Layer 4: Inward precision quadrant ticks */}
                 {[0, 90, 180, 270].map((deg) => (
                   <line
                     key={`inward-${deg}`}
                     x1="400"
-                    y1="80"
+                    y1="90"
                     x2="400"
-                    y2="98"
+                    y2="108"
                     stroke="rgba(200, 168, 78, 0.75)"
                     strokeWidth="1.5"
                     transform={`rotate(${deg} 400 400)`}

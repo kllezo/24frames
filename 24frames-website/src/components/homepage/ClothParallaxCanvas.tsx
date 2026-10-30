@@ -35,6 +35,10 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const fallbackCanvasRef = useRef<HTMLCanvasElement>(null);
 
+    const startLoopRef = useRef<() => void>(() => {});
+    const stopLoopRef = useRef<() => void>(() => {});
+    const renderSceneRef = useRef<(time: number) => void>(() => {});
+
     const stateRef = useRef<{
       mode: "webgl" | "canvas2d";
       progress: number;
@@ -72,12 +76,20 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
         stateRef.current.progress = clamped;
         if (stateRef.current.webgl) {
           stateRef.current.webgl.uniforms.uProgress.value = clamped;
+          if (!stateRef.current.isActive) {
+            renderSceneRef.current(performance.now());
+          }
         }
       },
       setActive: (active: boolean) => {
         stateRef.current.isActive = active;
         if (containerRef.current) {
           containerRef.current.style.opacity = active ? "1" : "0";
+        }
+        if (active) {
+          startLoopRef.current();
+        } else {
+          stopLoopRef.current();
         }
       },
     }));
@@ -553,6 +565,71 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
           archMesh.position.set(0, 1.85, 0.05);
           mandapamGroup.add(archMesh);
 
+          // 4b. Bellamkonda Sai Sreenivas & Kavya Reddy Wedding Photograph (Framed in Mandapam Arch)
+          const archShape = new THREE.Shape();
+          const archHalfW = 1.72;
+          const archBottom = -2.1;
+          const archSpring = 1.35;
+          const archApex = 3.25;
+
+          archShape.moveTo(-archHalfW, archBottom);
+          archShape.lineTo(archHalfW, archBottom);
+          archShape.lineTo(archHalfW, archSpring);
+          archShape.bezierCurveTo(archHalfW, archSpring + 0.8, 0.45, archApex - 0.25, 0.0, archApex);
+          archShape.bezierCurveTo(-0.45, archApex - 0.25, -archHalfW, archSpring + 0.8, -archHalfW, archSpring);
+          archShape.closePath();
+
+          const archPhotoGeo = new THREE.ShapeGeometry(archShape, 32);
+          geometriesToDispose.push(archPhotoGeo);
+
+          const texLoader = new THREE.TextureLoader();
+          const bellamTexture = texLoader.load("/images/stories/bellam-srikonda/IMG_6339.webp");
+          bellamTexture.colorSpace = THREE.SRGBColorSpace;
+          bellamTexture.generateMipmaps = true;
+          bellamTexture.minFilter = THREE.LinearMipmapLinearFilter;
+
+          const archPhotoUniforms = {
+            uPhoto: { value: bellamTexture },
+            uOpacity: { value: 0 },
+          };
+
+          const archPhotoMat = new THREE.ShaderMaterial({
+            uniforms: archPhotoUniforms,
+            vertexShader: `
+              varying vec2 vUv;
+              void main() {
+                float normX = (position.x + 1.72) / 3.44;
+                float normY = (position.y - (-2.1)) / 5.35;
+                vUv = vec2(normX, normY);
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+              }
+            `,
+            fragmentShader: `
+              uniform sampler2D uPhoto;
+              uniform float uOpacity;
+              varying vec2 vUv;
+              void main() {
+                vec2 uv = vUv;
+                uv.y = uv.y * 0.94 + 0.04;
+                vec4 tex = texture2D(uPhoto, uv);
+                vec3 col = tex.rgb;
+
+                float dist = length(vec2(vUv.x - 0.5, vUv.y - 0.5));
+                col *= (1.0 - smoothstep(0.40, 0.68, dist) * 0.28);
+
+                gl_FragColor = vec4(col, tex.a * uOpacity);
+              }
+            `,
+            transparent: true,
+            depthWrite: false,
+            side: THREE.DoubleSide,
+          });
+          materialsToDispose.push(archPhotoMat);
+
+          const archPhotoMesh = new THREE.Mesh(archPhotoGeo, archPhotoMat);
+          archPhotoMesh.position.set(0, 0, -0.05);
+          mandapamGroup.add(archPhotoMesh);
+
           // 5. Cascading Jasmine (Mogra) & Marigold Garlands (Mallige Male)
           const mograGeo = new THREE.SphereGeometry(0.08, 8, 8);
           geometriesToDispose.push(mograGeo);
@@ -809,11 +886,12 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
             geometries: geometriesToDispose,
           };
 
-          // ── High-Performance Continuous 60 FPS WebGL Render Loop ──
+          // ── High-Performance Visibility-Aware WebGL Render Loop ──
+          let renderLoopRunning = false;
           let lastTime = performance.now();
-          const renderWebGL = (time: number) => {
-            stateRef.current.rafId = requestAnimationFrame(renderWebGL);
-            const dt = (time - lastTime) * 0.001;
+
+          const renderScene = (time: number) => {
+            const dt = Math.min((time - lastTime) * 0.001, 0.1);
             lastTime = time;
 
             uniforms.uTime.value += dt;
@@ -851,6 +929,11 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
 
               const dawnLightOpacity = THREE.MathUtils.smoothstep(p, 0.76, 0.98);
               sanctumLightMat.uniforms.uOpacity.value = dawnLightOpacity * 0.88;
+
+              // Framed Bellamkonda & Kavya wedding photograph reveal through arch
+              const photoReveal = THREE.MathUtils.smoothstep(p, 0.60, 0.85);
+              const photoExit = 1.0 - THREE.MathUtils.smoothstep(p, 0.97, 1.0);
+              archPhotoUniforms.uOpacity.value = photoReveal * photoExit;
             }
 
             // Smooth Perspective Camera Dolly into Colonnade Hall (Stages 10 to 13)
@@ -864,9 +947,41 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
             }
 
             renderer.render(scene, camera);
+
+            if (stateRef.current.isActive) {
+              stateRef.current.rafId = requestAnimationFrame(renderScene);
+            } else {
+              renderLoopRunning = false;
+              stateRef.current.rafId = 0;
+            }
           };
 
-          stateRef.current.rafId = requestAnimationFrame(renderWebGL);
+          renderSceneRef.current = renderScene;
+
+          const startLoop = () => {
+            if (!renderLoopRunning) {
+              renderLoopRunning = true;
+              lastTime = performance.now();
+              stateRef.current.rafId = requestAnimationFrame(renderScene);
+            }
+          };
+
+          const stopLoop = () => {
+            if (stateRef.current.rafId) {
+              cancelAnimationFrame(stateRef.current.rafId);
+              stateRef.current.rafId = 0;
+            }
+            renderLoopRunning = false;
+          };
+
+          startLoopRef.current = startLoop;
+          stopLoopRef.current = stopLoop;
+
+          if (stateRef.current.isActive) {
+            startLoop();
+          } else {
+            renderScene(performance.now());
+          }
 
           const handleResize = () => {
             if (!container) return;
@@ -880,10 +995,30 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
           };
           window.addEventListener("resize", handleResize);
 
+          // Performance guard: automatically pause when container is scrolled out of viewport
+          let observer: IntersectionObserver | null = null;
+          if (typeof IntersectionObserver !== "undefined") {
+            observer = new IntersectionObserver(
+              (entries) => {
+                const entry = entries[0];
+                if (!entry) return;
+                if (!entry.isIntersecting) {
+                  stopLoop();
+                } else if (stateRef.current.isActive) {
+                  startLoop();
+                }
+              },
+              { rootMargin: "100px" }
+            );
+            observer.observe(container);
+          }
+
           return () => {
             window.removeEventListener("resize", handleResize);
-            cancelAnimationFrame(stateRef.current.rafId);
+            observer?.disconnect();
+            stopLoop();
             renderer.dispose();
+            bellamTexture.dispose();
             geometriesToDispose.forEach((g) => g.dispose());
             materialsToDispose.forEach((m) => m.dispose());
           };
@@ -912,9 +1047,9 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
 
         stateRef.current.canvas2d = { ctx, width, height, time: 0 };
 
+        let renderLoopRunning2d = false;
         let lastTime2d = performance.now();
         const render2D = (time: number) => {
-          stateRef.current.rafId = requestAnimationFrame(render2D);
           const dt = (time - lastTime2d) * 0.001;
           lastTime2d = time;
 
@@ -990,9 +1125,39 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
           }
 
           ctx.restore();
+
+          if (stateRef.current.isActive) {
+            stateRef.current.rafId = requestAnimationFrame(render2D);
+          } else {
+            renderLoopRunning2d = false;
+            stateRef.current.rafId = 0;
+          }
         };
 
-        stateRef.current.rafId = requestAnimationFrame(render2D);
+        renderSceneRef.current = (t: number) => render2D(t);
+        const startLoop2D = () => {
+          if (!renderLoopRunning2d) {
+            renderLoopRunning2d = true;
+            lastTime2d = performance.now();
+            stateRef.current.rafId = requestAnimationFrame(render2D);
+          }
+        };
+        const stopLoop2D = () => {
+          if (stateRef.current.rafId) {
+            cancelAnimationFrame(stateRef.current.rafId);
+            stateRef.current.rafId = 0;
+          }
+          renderLoopRunning2d = false;
+        };
+
+        startLoopRef.current = startLoop2D;
+        stopLoopRef.current = stopLoop2D;
+
+        if (stateRef.current.isActive) {
+          startLoop2D();
+        } else {
+          render2D(performance.now());
+        }
 
         const handleResize2D = () => {
           if (!container) return;
@@ -1010,7 +1175,7 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
 
         return () => {
           window.removeEventListener("resize", handleResize2D);
-          cancelAnimationFrame(stateRef.current.rafId);
+          stopLoop2D();
         };
       } catch (e2d) {
         console.error("--> 2D Canvas fallback initialization failed:", e2d);
@@ -1018,7 +1183,7 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
     }, [initialProgress]);
 
     return (
-      <div ref={containerRef} className={styles.canvasContainer} aria-hidden="true">
+      <div ref={containerRef} className={styles.webglContainer} aria-hidden="true">
         <canvas ref={canvasRef} className={styles.webglCanvas} />
         <canvas ref={fallbackCanvasRef} className={styles.fallbackCanvas} />
       </div>

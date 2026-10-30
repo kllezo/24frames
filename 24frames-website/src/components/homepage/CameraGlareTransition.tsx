@@ -42,7 +42,6 @@ export default function CameraGlareTransition({
   // Stage B: Camera Shutter refs
   const shutterLayerRef = useRef<HTMLDivElement>(null);
   const shutterBackdropRef = useRef<HTMLDivElement>(null);
-  const guideRingsRef = useRef<SVGSVGElement>(null);
   const bladeActuatorsRef = useRef<SVGGElement[]>([]);
 
   // Stage C: Optical Glare refs
@@ -132,7 +131,6 @@ export default function CameraGlareTransition({
          ═══════════════════════════════════════════════════════════════════ */
       if (shutterLayerRef.current) {
         masterTl.to(shutterLayerRef.current, { opacity: 1, duration: 0.01 }, 0.04);
-        masterTl.to(guideRingsRef.current, { opacity: 0.45, duration: 0.03, ease: "power1.out" }, 0.05);
 
         // Blades close completely to 36deg (meeting at center)
         const shutterCloseState = { angle: -38 };
@@ -178,7 +176,6 @@ export default function CameraGlareTransition({
         if (shutterBackdropRef.current) {
           masterTl.to(shutterBackdropRef.current, { opacity: 0, duration: 0.03, ease: "power1.out" }, 0.11);
         }
-        masterTl.to(guideRingsRef.current, { opacity: 0, duration: 0.03, ease: "power1.out" }, 0.13);
         masterTl.to(shutterLayerRef.current, { opacity: 0, duration: 0.01 }, 0.16);
       }
 
@@ -297,9 +294,14 @@ export default function CameraGlareTransition({
         if (logoGlintRef.current) {
           masterTl.fromTo(
             logoGlintRef.current,
-            { opacity: 0, scaleX: 0.6 },
-            { opacity: 0.9, scaleX: 1.15, duration: 0.05, ease: "power2.out" },
+            { opacity: 0, x: -75, y: -46, scaleX: 0.7 },
+            { opacity: 0.95, x: 0, y: 0, scaleX: 1.35, duration: 0.04, ease: "power2.out" },
             0.51
+          );
+          masterTl.to(
+            logoGlintRef.current,
+            { opacity: 0, x: 75, y: 46, scaleX: 0.9, duration: 0.04, ease: "power1.in" },
+            0.56
           );
         }
 
@@ -439,18 +441,6 @@ export default function CameraGlareTransition({
       <div ref={shutterLayerRef} className={styles.shutterLayer}>
         <div ref={shutterBackdropRef} className={styles.shutterBackdrop} />
 
-        {/* Concentric Guide Rings */}
-        <svg
-          ref={guideRingsRef}
-          className={styles.guideRingsSvg}
-          viewBox="0 0 800 800"
-          fill="none"
-        >
-          <circle cx="400" cy="400" r="160" stroke="rgba(200, 168, 78, 0.4)" strokeDasharray="4 6" />
-          <circle cx="400" cy="400" r="260" stroke="rgba(250, 248, 242, 0.25)" strokeWidth="1" />
-          <circle cx="400" cy="400" r="360" stroke="rgba(200, 168, 78, 0.25)" strokeWidth="1" />
-        </svg>
-
         {/* 8 Radially-Symmetric Mechanical Blades */}
         <svg
           className={styles.shutterSvg}
@@ -549,10 +539,11 @@ export default function CameraGlareTransition({
       {/* ── STAGE E, F, G: 3D Procedural WebGL Silk Cloth & Mandapam Portal ── */}
       <ClothParallaxCanvas ref={clothHandleRef} />
 
-      {/* ── STAGE G: Typography (Panel 10) ── */}
+      {/* ── STAGE G: The Vows Typography Emergence (Resolving into Chapter 02) ── */}
       <div ref={portalChapterMetaRef} className={styles.portalChapterMeta}>
-        <h2 className={styles.portalTitle}>The Fabric of Frames</h2>
-        <p className={styles.portalSubtitle}>The Sacred Canopy & Living Heritage</p>
+        <span className={styles.portalChapterKicker}>CHAPTER 02 · ARCHIVAL ANTHOLOGY</span>
+        <h2 className={styles.portalTitle}>The Vows</h2>
+        <p className={styles.portalSubtitle}>Curated Exhibition & Wedding Stories Archive</p>
       </div>
 
       {/* Exit Golden Bloom into The Vows */}
