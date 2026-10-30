@@ -25,29 +25,6 @@
   overflow: hidden;
 }
 
-/* ── Multi-Blade Camera Aperture Mask Overlay ── */
-.apertureMaskLayer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 3;
-  overflow: hidden;
-  transition: opacity 0.5s ease;
-}
-
-.apertureSvg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.apertureGuides {
-  transform-origin: 500px 480px;
-  will-change: transform, opacity;
-}
-
 /* Real Landscape Photograph: Hrithika & Abhishek Cover */
 .heroImage {
   position: absolute;
