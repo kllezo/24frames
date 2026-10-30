@@ -38,7 +38,7 @@ const STATIC_ROUTE_MAP: Record<string, RouteVisualMeta> = {
   "/#vows": {
     image: "/images/stories/bellam-srikonda/IMG_6339.jpg",
     webp: "/images/stories/bellam-srikonda/IMG_6339.webp",
-    title: "FOLIO I · THE VOWS",
+    title: "THE VOWS",
     subtitle: "Bellamkonda Sai Sreenivas & Kavya Reddy",
     focalPoint: "center 24%",
     cameraOrbit: {
@@ -52,7 +52,7 @@ const STATIC_ROUTE_MAP: Record<string, RouteVisualMeta> = {
   "/collection": {
     image: "/images/portfolio/sireesh-harshitha/cover.jpg",
     webp: "/images/portfolio/sireesh-harshitha/cover.webp",
-    title: "CHAPTER 03 · THE COLLECTION",
+    title: "THE COLLECTION",
     subtitle: "Weddings & Celebrations · Five Practices of Optics",
     focalPoint: "center 22%",
     cameraOrbit: {
@@ -66,7 +66,7 @@ const STATIC_ROUTE_MAP: Record<string, RouteVisualMeta> = {
   "/#collection": {
     image: "/images/portfolio/sireesh-harshitha/cover.jpg",
     webp: "/images/portfolio/sireesh-harshitha/cover.webp",
-    title: "CHAPTER 03 · THE COLLECTION",
+    title: "THE COLLECTION",
     subtitle: "Weddings & Celebrations · Five Practices of Optics",
     focalPoint: "center 22%",
     cameraOrbit: {
@@ -79,7 +79,7 @@ const STATIC_ROUTE_MAP: Record<string, RouteVisualMeta> = {
   },
   "/#artist": {
     image: "/images/founder-portrait.jpg",
-    title: "CHAPTER 04 · THE ARTIST & VISIONARY",
+    title: "THE ARTIST & VISIONARY",
     subtitle: "Phani Gogireddy · Managing Director",
     focalPoint: "center 20%",
     cameraOrbit: {
@@ -93,7 +93,7 @@ const STATIC_ROUTE_MAP: Record<string, RouteVisualMeta> = {
   "/stories": {
     image: "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
     webp: "/images/stories/sirish-and-harshitha/IMG_6353.webp",
-    title: "FOLIO II · SACRED WEDDING STORIES",
+    title: "SACRED WEDDING STORIES",
     subtitle: "Sireesh & Harshitha · Heritage Palace Grounds",
     focalPoint: "center 58%",
     cameraOrbit: {
@@ -107,7 +107,7 @@ const STATIC_ROUTE_MAP: Record<string, RouteVisualMeta> = {
   "/inquire": {
     image: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
     webp: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
-    title: "ACT V · THE COMMISSION ATELIER",
+    title: "THE COMMISSION ATELIER",
     subtitle: "Tell Us What You Want To Remember",
     focalPoint: "62% top",
     cameraOrbit: {
@@ -194,7 +194,7 @@ export function resolveRouteVisual(pathname: string): RouteVisualMeta {
       return {
         image: story.coverWebp || story.coverImage,
         webp: story.coverWebp,
-        title: story.chapterKicker || story.title,
+        title: story.title,
         subtitle: story.subtitle,
         focalPoint: story.coverPosition || "center 25%",
         cameraOrbit: {

@@ -217,12 +217,12 @@ export default function AchievementBookshelf() {
       ref={sectionRef}
       id="recognition"
       className={styles.section}
-      aria-label="Chapter 05 — Achievement Bookshelf"
+      aria-label="Proven Legacy — Achievement Bookshelf"
     >
       <div className={styles.container}>
         <div ref={headerRef} className={styles.header}>
           <div className={styles.headerMeta}>
-            <span className={styles.label}>Chapter 05 — Proven Legacy</span>
+            <span className={styles.label}>Proven Legacy</span>
             <span className={styles.citationBadge}>Verified Portfolio Citations</span>
           </div>
           <h2 className={styles.title}>Earned, Not Claimed</h2>

@@ -59,7 +59,6 @@ export default function CameraGlareTransition({
   const champagneWashRef = useRef<HTMLDivElement>(null);
   const logoRevealWrapRef = useRef<HTMLDivElement>(null);
   const logoGlintRef = useRef<HTMLDivElement>(null);
-  const plate05Ref = useRef<HTMLImageElement>(null);
 
   // Stages E – G: 3D Procedural WebGL Cloth & Mandapam Portal
   const clothHandleRef = useRef<ClothParallaxHandle>(null);
@@ -94,7 +93,6 @@ export default function CameraGlareTransition({
           glareRigRef.current,
           champagneWashRef.current,
           logoRevealWrapRef.current,
-          plate05Ref.current,
           portalChapterMetaRef.current,
           portalExitBloomRef.current,
         ],
@@ -278,11 +276,6 @@ export default function CameraGlareTransition({
           masterTl.to(heroImageRef.current, { opacity: 0, duration: 0.04, ease: "power1.out" }, 0.42);
         }
 
-        // Cosmic backdrop plate 05 fades in under wash
-        if (plate05Ref.current) {
-          masterTl.to(plate05Ref.current, { opacity: 1, duration: 0.06 }, 0.43);
-        }
-
         // Glare rig fades into bloom
         if (glareRigRef.current) {
           masterTl.to(glareRigRef.current, { opacity: 0, duration: 0.04 }, 0.44);
@@ -333,11 +326,6 @@ export default function CameraGlareTransition({
       masterTl.call(() => {
         clothHandleRef.current?.setActive(true);
       }, undefined, 0.58);
-
-      // Cosmic backdrop plate 05 dissolves out seamlessly as 3D silk emerges
-      if (plate05Ref.current) {
-        masterTl.to(plate05Ref.current, { opacity: 0, duration: 0.08 }, 0.62);
-      }
 
       // Smoothly drive the 3D WebGL cloth simulation from 0.0 to 1.0
       masterTl.fromTo(
@@ -399,7 +387,6 @@ export default function CameraGlareTransition({
             if (glareRigRef.current) glareRigRef.current.style.opacity = "0";
             if (champagneWashRef.current) champagneWashRef.current.style.opacity = "0";
             if (logoRevealWrapRef.current) logoRevealWrapRef.current.style.opacity = "0";
-            if (plate05Ref.current) plate05Ref.current.style.opacity = "0";
             if (portalChapterMetaRef.current) portalChapterMetaRef.current.style.opacity = "0";
             if (portalExitBloomRef.current) portalExitBloomRef.current.style.opacity = "0";
 
@@ -559,22 +546,13 @@ export default function CameraGlareTransition({
         </div>
       </div>
 
-      {/* ── STAGE D: Cosmic Emerald Bokeh Atmosphere Backdrop (Under Logo) ── */}
-      <img
-        ref={plate05Ref}
-        src="/images/transitions/fabric-parallax/05_logo_reveal.webp"
-        alt=""
-        className={styles.plateLayer}
-        loading="eager"
-      />
-
       {/* ── STAGE E, F, G: 3D Procedural WebGL Silk Cloth & Mandapam Portal ── */}
       <ClothParallaxCanvas ref={clothHandleRef} />
 
-      {/* ── STAGE G: Chapter Typography (Panel 10) ── */}
+      {/* ── STAGE G: Typography (Panel 10) ── */}
       <div ref={portalChapterMetaRef} className={styles.portalChapterMeta}>
         <h2 className={styles.portalTitle}>The Fabric of Frames</h2>
-        <p className={styles.portalSubtitle}>Chapter 02 · Five-Frame Parallax Archive</p>
+        <p className={styles.portalSubtitle}>The Sacred Canopy & Living Heritage</p>
       </div>
 
       {/* Exit Golden Bloom into The Vows */}

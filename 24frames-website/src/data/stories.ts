@@ -87,7 +87,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
     location: "Shamshabad, Hyderabad",
     venue: "GMR Arena & Shamshabad Grounds",
     year: "2025",
-    chapterKicker: "ARCHIVE FOLIO I · THE MONUMENTAL RECEPTION",
+    chapterKicker: "THE MONUMENTAL RECEPTION",
     coverImage: "/images/stories/bellam-srikonda/IMG_6339.jpg",
     coverWebp: "/images/stories/bellam-srikonda/IMG_6339.webp",
     coverPosition: "center 24%",
@@ -100,7 +100,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
       "From the soaring ballerina installation and cascading white florals at the ballroom entrance to the resonant notes of a live concert grand piano, every still holds the kinetic heartbeat of a night where public spectacle met profound family warmth."
     ],
     editorialSection: {
-      chapterBadge: "FOLIO I · PUBLIC SPLENDOR, PRIVATE POISE",
+      chapterBadge: "PUBLIC SPLENDOR, PRIVATE POISE",
       chapterTitle: "The Grace of Quiet Grounding",
       handwrittenQuote: {
         kicker: "A whisper against the symphony",
@@ -129,22 +129,22 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
         "Curated medium-format stills capturing the equilibrium between monumental public scale and unguarded personal affection.",
       narrativeFragments: [
         {
-          chapter: "Movement I · The Threshold",
+          chapter: "The Threshold",
           note: "Under cascading florals and crystal light, every step felt like walking into history.",
           position: "right"
         },
         {
-          chapter: "Movement II · Shared Poise",
+          chapter: "Shared Poise",
           note: "Surrounded by a sea of well-wishers, their eyes never lost each other.",
           position: "left"
         },
         {
-          chapter: "Movement III · The Resonant Chord",
+          chapter: "The Resonant Chord",
           note: "The grand piano played softly through the hall, turning grandeur into poetry.",
           position: "left"
         },
         {
-          chapter: "Movement IV · Unhurried Devotion",
+          chapter: "Unhurried Devotion",
           note: "A gentle touch on the shoulder. More powerful than any theatrical spotlight.",
           position: "right"
         }
@@ -251,7 +251,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
     location: "Hyderabad, Telangana",
     venue: "Heritage Palace Grounds & Sacred Pavilion",
     year: "2025",
-    chapterKicker: "ARCHIVE FOLIO II · THE SACRED & THE CELEBRATORY",
+    chapterKicker: "THE SACRED & THE CELEBRATORY",
     coverImage: "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
     coverWebp: "/images/stories/sirish-and-harshitha/IMG_6353.webp",
     coverPosition: "center 58%",
@@ -264,7 +264,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
       "As dusk transitioned into night at the heritage palace grounds, the atmosphere erupted into unrestrained joy under wisteria floral ceilings and purple neon corridors, culminating in golden confetti falling over a couple dancing without reservation."
     ],
     editorialSection: {
-      chapterBadge: "FOLIO II · THE VEDIC PLEDGE & PALACE NIGHT",
+      chapterBadge: "THE VEDIC PLEDGE & PALACE NIGHT",
       chapterTitle: "The Sanctity of Divine Accord",
       handwrittenQuote: {
         kicker: "దైవ సంకల్పం · Sacred Destiny",
@@ -293,22 +293,22 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
         "An editorial progression from solemn temple vows and quiet tree-lined strolls to the vivid exuberance of midnight revelry.",
       narrativeFragments: [
         {
-          chapter: "Verse I · The Heirloom Adornment",
+          chapter: "The Heirloom Adornment",
           note: "Gold passed through caring maternal hands, carrying decades of whispered blessings.",
           position: "right"
         },
         {
-          chapter: "Verse II · The Quiet Promenade",
+          chapter: "The Quiet Promenade",
           note: "Golden trees, autumn air, and footsteps that knew they were walking home.",
           position: "left"
         },
         {
-          chapter: "Verse III · The Temple Blessing",
+          chapter: "The Temple Blessing",
           note: "Before the sacred deity, two lives dissolved their separate pasts.",
           position: "left"
         },
         {
-          chapter: "Verse IV · The Golden Shower",
+          chapter: "The Golden Shower",
           note: "Confetti in the air, music in the chest, and pure uncontainable joy.",
           position: "right"
         }
@@ -415,7 +415,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
     location: "Hyderabad, Telangana",
     venue: "Hyderabad Celebration Estate",
     year: "2025",
-    chapterKicker: "ARCHIVE FOLIO III · RITUALS, REVELRY & RUNWAY",
+    chapterKicker: "RITUALS, REVELRY & RUNWAY",
     coverImage: "/images/stories/hrithika-abhishek/IMG_6333.jpg",
     coverWebp: "/images/stories/hrithika-abhishek/IMG_6333.webp",
     coverPosition: "center 38%",
@@ -428,7 +428,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
       "By nightfall, the tempo surged into arena-scale grandeur. Beneath a surreal ceiling installation of hundreds of suspended mirror disco spheres, the Sangeet stage ignited with illuminated monogram initials and vibrant dance choreography, culminating in soft couture portraits in harmonized pastel tones."
     ],
     editorialSection: {
-      chapterBadge: "FOLIO III · DUAL SPECTRUMS OF CELEBRATION",
+      chapterBadge: "DUAL SPECTRUMS OF CELEBRATION",
       chapterTitle: "Where Water Blessings Meet Starlit Stages",
       handwrittenQuote: {
         kicker: "Echoes of joy",
@@ -457,22 +457,22 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
         "Tracing the emotional continuum between devotional water blessings, regal silk portraiture, and high-energy festival nights.",
       narrativeFragments: [
         {
-          chapter: "Chapter I · The Auspicious Welcome",
+          chapter: "The Auspicious Welcome",
           note: "Carved teak doors, yellow marigolds, and the fragrant welcome of home.",
           position: "right"
         },
         {
-          chapter: "Chapter II · The Water Blessing",
+          chapter: "The Water Blessing",
           note: "Droplets suspended in time like frozen wishes falling from the sky.",
           position: "left"
         },
         {
-          chapter: "Chapter III · The Crimson Silk",
+          chapter: "The Crimson Silk",
           note: "Kanjeevaram silk draped with quiet poise beside the sacred floral tapestry.",
           position: "left"
         },
         {
-          chapter: "Chapter IV · Under Mirrored Skies",
+          chapter: "Under Mirrored Skies",
           note: "Hundreds of crystal globes turning midnight into an endless starlit dance.",
           position: "right"
         }
@@ -590,7 +590,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
     location: "Hyderabad, Telangana",
     venue: "Botanical Glasshouse & Pavilion",
     year: "2025",
-    chapterKicker: "ARCHIVE FOLIO IV · BOTANICAL HARMONY & UNREHEARSED JOY",
+    chapterKicker: "BOTANICAL HARMONY & UNREHEARSED JOY",
     coverImage: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
     coverWebp: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
     coverPosition: "62% top",
@@ -603,7 +603,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
       "Rather than stiffly orchestrated poses, the defining moments were purely spontaneous—an exuberant, joyous dance before the mandap, a vintage field camera standing guard on the lawn, and a tender forehead-to-forehead embrace where time simply paused."
     ],
     editorialSection: {
-      chapterBadge: "FOLIO IV · ORGANIC SCENOGRAPHY & LAUGHTER",
+      chapterBadge: "ORGANIC SCENOGRAPHY & LAUGHTER",
       chapterTitle: "The Poetry of Botanical Light",
       handwrittenQuote: {
         kicker: "Light among the leaves",
@@ -632,22 +632,22 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
         "A fine-art sequence celebrating organic light, textural floral craft, and the infectious joy of shared laughter.",
       narrativeFragments: [
         {
-          chapter: "Stanza I · The Living Pavilion",
+          chapter: "The Living Pavilion",
           note: "Terracotta, pearl spheres, and green vines climbing toward the morning light.",
           position: "right"
         },
         {
-          chapter: "Stanza II · The Veranda Walk",
+          chapter: "The Veranda Walk",
           note: "Blush silk floating effortlessly with every breeze along the open corridor.",
           position: "left"
         },
         {
-          chapter: "Stanza III · The Unplanned Dance",
+          chapter: "The Unplanned Dance",
           note: "Two people forgetting the cameras entirely, caught up in pure celebration.",
           position: "left"
         },
         {
-          chapter: "Stanza IV · The Quiet Forehead Touch",
+          chapter: "The Quiet Forehead Touch",
           note: "Holding hands in the garden shade. The whole world suddenly completely quiet.",
           position: "right"
         }

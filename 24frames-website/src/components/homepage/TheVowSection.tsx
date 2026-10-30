@@ -297,7 +297,7 @@ export default function TheVowSection() {
         {/* Section Header */}
         <div ref={headerRef} className={styles.header}>
           <div className={styles.headerMeta}>
-            <span className={styles.label}>Chapter 02.b — Photographic Installation</span>
+            <span className={styles.label}>Photographic Installation</span>
             <span className={styles.badge}>FLOATING GALLERY</span>
           </div>
           <h2 className={styles.title}>The Vow</h2>

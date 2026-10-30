@@ -1380,7 +1380,7 @@ export default function LivingContactSheet() {
       ref={sectionRef}
       id="vows"
       className={styles.section}
-      aria-label="Chapter 02 — The Vows"
+      aria-label="The Vows"
     >
       {/* ── Hidden SVG Definition for Smooth Mathematical Path Morphing ── */}
       <svg
@@ -1421,10 +1421,10 @@ export default function LivingContactSheet() {
             01 — FEATURED EDITORIAL OPENING (EXACT 3-COLUMN COMPOSITION)
         ══════════════════════════════════════════════════════════════════════ */}
         <div ref={openingRef} className={styles.openingComposition}>
-          {/* Left Column: Chapter Title & Editorial Anthology Thesis */}
+          {/* Left Column: Title & Editorial Anthology Thesis */}
           <div className={styles.openingLeftCol}>
             <div className={styles.chapterBadgeRow}>
-              <span className={styles.chapterLabel}>CHAPTER 02</span>
+              <span className={styles.chapterLabel}>THE VOWS</span>
               <span className={styles.labelDividerLine} />
             </div>
 

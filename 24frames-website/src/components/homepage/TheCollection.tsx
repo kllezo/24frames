@@ -331,7 +331,7 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
         <div ref={headerRef} className={styles.header}>
           <div className={styles.headerTop}>
             <div className={styles.headerMeta}>
-              <span className={styles.chapterLabel}>Chapter 03 — The Collection</span>
+              <span className={styles.chapterLabel}>The Collection</span>
               <span className={styles.curatorialBadge}>Five Practices of Optics</span>
             </div>
           </div>

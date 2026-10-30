@@ -28,7 +28,7 @@ export default function StoriesPage() {
               <span className={styles.label}>ARCHIVAL WEDDING ANTHOLOGY · CURATED COMMISSIONS</span>
               <h1 className={styles.title}>CLIENT WEDDING STORIES</h1>
               <p className={styles.subtitle}>
-                Each wedding is an unrepeatable tapestry of sacred rituals, quiet intimate glances, and monumental family celebrations. Explore each commissioned chapter below.
+                Each wedding is an unrepeatable tapestry of sacred rituals, quiet intimate glances, and monumental family celebrations. Explore each commissioned story below.
               </p>
             </div>
           </div>

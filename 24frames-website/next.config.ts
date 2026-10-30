@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/artist",
+        destination: "/#artist",
+        permanent: true,
+      },
+      {
         source: "/work/bellamkonda-kavya-reception",
         destination: "/stories/bellam-srikonda",
         permanent: true,

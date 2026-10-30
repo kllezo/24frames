@@ -377,7 +377,7 @@ export default function FounderRecognitionSection() {
       ref={sectionRef}
       id="artist"
       className={styles.section}
-      aria-label="Chapter 04 — The Artist & Visionary, Phani Gogireddy"
+      aria-label="The Artist & Visionary, Phani Gogireddy"
     >
       {/* Anchor alias to support legacy #founder links smoothly */}
       <div id="founder" className={styles.anchorOffset} aria-hidden="true" />
@@ -393,7 +393,7 @@ export default function FounderRecognitionSection() {
             {/* 1. Founder Name Panel */}
             <div ref={namePanelRef} className={styles.founderNamePanel}>
               <span className={styles.namePanelKicker}>
-                CHAPTER 04 — THE ARTIST &amp; VISIONARY
+                THE ARTIST &amp; VISIONARY
               </span>
               <h2 className={styles.founderNameHeading}>PHANI GOGIREDDY</h2>
               <span className={styles.founderDesignation}>MANAGING DIRECTOR</span>

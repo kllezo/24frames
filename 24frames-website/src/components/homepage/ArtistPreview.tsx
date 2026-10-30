@@ -119,7 +119,7 @@ export default function ArtistPreview() {
           {/* Editorial Content Column */}
           <div ref={contentRef} className={styles.content}>
             <div className={styles.metaRow}>
-              <span className={styles.label}>Chapter 06 — The Visionary</span>
+              <span className={styles.label}>The Visionary</span>
               <span className={styles.locationTag}>Hyderabad · Worldwide</span>
             </div>
 

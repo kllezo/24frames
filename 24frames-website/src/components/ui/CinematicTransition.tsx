@@ -55,6 +55,8 @@ export default function CinematicTransition() {
   const vignetteRef = useRef<HTMLDivElement>(null);
   const cornersRef = useRef<HTMLDivElement>(null);
   const focusRingRef = useRef<HTMLDivElement>(null);
+  const reticleOuterGroupRef = useRef<SVGGElement>(null);
+  const reticleInnerGroupRef = useRef<SVGGElement>(null);
   const guideRingsRef = useRef<SVGSVGElement>(null);
   const shutterSvgRef = useRef<SVGSVGElement>(null);
   const bladeActuatorsRef = useRef<SVGGElement[]>([]);
@@ -138,6 +140,13 @@ export default function CinematicTransition() {
         scale: 1,
         clearProps: "all",
       });
+    }
+
+    if (reticleOuterGroupRef.current) {
+      gsap.set(reticleOuterGroupRef.current, { rotation: 0, clearProps: "rotation" });
+    }
+    if (reticleInnerGroupRef.current) {
+      gsap.set(reticleInnerGroupRef.current, { rotation: 0, clearProps: "rotation" });
     }
 
     if (bladeActuatorsRef.current.length > 0) {
@@ -253,10 +262,10 @@ export default function CinematicTransition() {
     const targetScreenX = rect.left + rect.width * 0.5;
     const targetScreenY = Math.max(70, Math.min(winH - 70, rect.top + rect.height * focalYRatio));
 
-    const size = Math.max(
-      90,
-      Math.min(180, isMobile ? rect.width * 0.48 : Math.min(rect.width, rect.height) * 0.50)
-    );
+    const desktopSize = Math.round(winH * 0.85);
+    const size = isMobile
+      ? Math.max(90, Math.min(180, rect.width * 0.48))
+      : desktopSize;
 
     return {
       x: targetScreenX - winW * 0.5,
@@ -521,21 +530,43 @@ export default function CinematicTransition() {
       }
 
       const targetCoords = computeTargetCoordinates(targetEl, cleanUrl);
+      const initialSize = targetCoords.width;
 
-      // Make ring visible at center (0, 0)
+      // Make reticle visible at center (0, 0)
       gsap.set(focusRingRef.current, {
         xPercent: -50,
         yPercent: -50,
         x: 0,
         y: 0,
-        width: 130,
-        height: 130,
+        width: initialSize,
+        height: initialSize,
         scale: 1,
         opacity: 1,
       });
 
-      // Ring physically travels across screen to target element
+      if (reticleOuterGroupRef.current) {
+        gsap.set(reticleOuterGroupRef.current, { rotation: 0, transformOrigin: "400px 400px" });
+      }
+      if (reticleInnerGroupRef.current) {
+        gsap.set(reticleInnerGroupRef.current, { rotation: 0, transformOrigin: "400px 400px" });
+      }
+
+      // Ring physically travels across screen to target element with counter-rotating rings
       await new Promise<void>((resolve) => {
+        if (reticleOuterGroupRef.current) {
+          gsap.to(reticleOuterGroupRef.current, {
+            rotation: 180,
+            duration: 0.52,
+            ease: "power2.inOut",
+          });
+        }
+        if (reticleInnerGroupRef.current) {
+          gsap.to(reticleInnerGroupRef.current, {
+            rotation: -180,
+            duration: 0.52,
+            ease: "power2.inOut",
+          });
+        }
         ringTimelineRef.current = gsap.to(focusRingRef.current, {
           xPercent: -50,
           yPercent: -50,
@@ -737,8 +768,83 @@ export default function CinematicTransition() {
             <div className={`${styles.cornerBracket} ${styles.cornerBR}`} />
           </div>
 
-          {/* ── Central Autofocus Reticle Ring ── */}
-          <div ref={focusRingRef} className={styles.focusReticleRing} aria-hidden="true" />
+          {/* ── Central Autofocus Reticle with 3-Layer Counter-Rotating Optics ── */}
+          <div ref={focusRingRef} className={styles.focusReticleRing} aria-hidden="true">
+            <svg
+              className={styles.reticleSvg}
+              viewBox="0 0 800 800"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Outer Counter-Rotating Group: Layer 1 (Dotted Circle) + Layer 3 (Radial Tracking Ticks) */}
+              <g ref={reticleOuterGroupRef} className={styles.reticleOuterGroup}>
+                {/* Layer 1: Outer dotted circle (evenly spaced fine gold dashes) */}
+                <circle
+                  cx="400"
+                  cy="400"
+                  r="360"
+                  stroke="rgba(200, 168, 78, 0.92)"
+                  strokeWidth="1.8"
+                  strokeDasharray="6 8"
+                />
+
+                {/* Layer 3: Radial camera tracking lines extending outward from circumference */}
+                {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
+                  <line
+                    key={`major-${deg}`}
+                    x1="400"
+                    y1="40"
+                    x2="400"
+                    y2="15"
+                    stroke="rgba(200, 168, 78, 0.88)"
+                    strokeWidth="1.8"
+                    transform={`rotate(${deg} 400 400)`}
+                  />
+                ))}
+                {[15, 30, 60, 75, 105, 120, 150, 165, 195, 210, 240, 255, 285, 300, 330, 345].map((deg) => (
+                  <line
+                    key={`minor-${deg}`}
+                    x1="400"
+                    y1="40"
+                    x2="400"
+                    y2="25"
+                    stroke="rgba(200, 168, 78, 0.55)"
+                    strokeWidth="1"
+                    transform={`rotate(${deg} 400 400)`}
+                  />
+                ))}
+              </g>
+
+              {/* Inner Counter-Rotating Group: Layer 2 (Continuous Solid Circle + Viewfinder Quadrants) */}
+              <g ref={reticleInnerGroupRef} className={styles.reticleInnerGroup}>
+                {/* Layer 2: Inner solid circle (continuous thin circular gold outline) */}
+                <circle
+                  cx="400"
+                  cy="400"
+                  r="320"
+                  stroke="rgba(200, 168, 78, 0.95)"
+                  strokeWidth="1.8"
+                />
+
+                {/* Inward precision quadrant ticks */}
+                {[0, 90, 180, 270].map((deg) => (
+                  <line
+                    key={`inward-${deg}`}
+                    x1="400"
+                    y1="80"
+                    x2="400"
+                    y2="98"
+                    stroke="rgba(200, 168, 78, 0.75)"
+                    strokeWidth="1.5"
+                    transform={`rotate(${deg} 400 400)`}
+                  />
+                ))}
+
+                {/* Center target crosshair micro-mark */}
+                <circle cx="400" cy="400" r="3" fill="rgba(200, 168, 78, 0.9)" />
+              </g>
+            </svg>
+          </div>
 
           {/* ── Concentric Shutter Mechanism Guide Rings ── */}
           <svg

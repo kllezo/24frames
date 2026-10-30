@@ -43,7 +43,7 @@ export default function SmoothScroll() {
       lenis.raf(time * 1000);
     };
     gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(500, 33);
 
     // 4. Handle Anchor Navigation with Fixed Luxury Header Offset (-80px)
     const handleAnchorClick = (e: MouseEvent) => {

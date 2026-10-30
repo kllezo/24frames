@@ -9,23 +9,23 @@ import styles from "./ClientGallery.module.css";
 
 const CLIENT_GALLERY_POEMS = [
   {
-    chapter: "Chapter I · The Discovery",
+    chapter: "The Discovery",
     poem: "Opening your private vault is like stepping back into the exact warmth of that morning.",
   },
   {
-    chapter: "Chapter II · Living Heritage",
+    chapter: "Living Heritage",
     poem: "Some traditions are not merely observed. They are felt in the pulse of generations.",
   },
   {
-    chapter: "Chapter III · The Unguarded Moment",
+    chapter: "The Unguarded Moment",
     poem: "The laughter between planned portraits is the frame your grandchildren will treasure most.",
   },
   {
-    chapter: "Chapter IV · Optical Movement",
+    chapter: "Optical Movement",
     poem: "Light becomes memory. Movement becomes legacy.",
   },
   {
-    chapter: "Chapter V · Generational Vault",
+    chapter: "Generational Vault",
     poem: "Preserved in uncompressed cinema fidelity, held safely for lifetimes to come.",
   },
 ];
@@ -331,7 +331,7 @@ export default function ClientGalleryPage() {
                         />
                         <div className={styles.imageScrim} />
                         <span className={styles.floatingChapterBadge}>
-                          CHAPTER {section.chapterNumber}
+                          {section.title}
                         </span>
                         <span className={styles.expandPill} aria-hidden="true">
                           EXPAND ↗

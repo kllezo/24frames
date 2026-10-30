@@ -117,7 +117,7 @@ export default function ExploreTheWorld() {
         {/* Section Header */}
         <div ref={headerRef} className={styles.header}>
           <div className={styles.headerMeta}>
-            <span className={styles.label}>Chapter 04 — Editorial Disciplines</span>
+            <span className={styles.label}>Editorial Disciplines</span>
             <span className={styles.disciplineBadge}>SIX PRACTICES OF CINEMA & OPTICS</span>
           </div>
           <h2 className={styles.title}>
