@@ -131,7 +131,7 @@
   left: 50%;
   width: 180vw;
   height: 4px;
-  transform: translate(-50%, -50%) rotate(-32deg);
+  transform: translate(-50%, -50%) rotate(-32deg) scaleX(var(--glare-spread, 1));
   background: linear-gradient(
     90deg,
     transparent 0%,
@@ -150,7 +150,7 @@
   left: 50%;
   width: 180vw;
   height: 24px;
-  transform: translate(-50%, -50%) rotate(-32deg);
+  transform: translate(-50%, -50%) rotate(-32deg) scaleX(var(--glare-spread, 1));
   background: linear-gradient(
     90deg,
     transparent 0%,

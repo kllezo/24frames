@@ -217,8 +217,8 @@
   width: 100%;
   max-width: 440px;
   aspect-ratio: 3.2 / 4.6;
-  clip-path: url(#palaceArchClip);
-  -webkit-clip-path: url(#palaceArchClip);
+  clip-path: url(#mandapamArchClip);
+  -webkit-clip-path: url(#mandapamArchClip);
   overflow: hidden;
   position: relative;
   background-color: #E6E1D7;

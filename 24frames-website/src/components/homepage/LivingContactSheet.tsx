@@ -453,13 +453,14 @@ const sampleGreenBottom = (p: number): GreenBottomCoords => {
   }
 };
 
-/* 1. Sreenivas Bellamkonda Architectural Arch Reveal (viewBox 0 0 100 140) */
+/* 1. Sreenivas Bellamkonda Architectural Mandapam Arch Reveal (viewBox 0 0 100 140) */
 const buildBellamArchPaths = (p: number) => {
-  const yApex = -22 + 172 * Math.pow(p, 1.1);
-  const cH = 47.9 * (1 - p * 0.2);
+  const yApex = -20 + 170 * Math.pow(p, 1.1);
+  const cH = 44.8 * (1 - p * 0.2);
   const yW = yApex + cH;
 
-  const contourD = `M 0 ${yW.toFixed(1)} C 0 ${(yApex + 0.690 * cH).toFixed(1)}, 17.4 ${(yApex + 0.725 * cH).toFixed(1)}, 15.5 ${(yApex + 0.591 * cH).toFixed(1)} C 13.5 ${(yApex + 0.442 * cH).toFixed(1)}, 23.8 ${(yApex + 0.257 * cH).toFixed(1)}, 31.9 ${(yApex + 0.223 * cH).toFixed(1)} C 41.1 ${(yApex + 0.184 * cH).toFixed(1)}, 45.4 ${(yApex + 0.085 * cH).toFixed(1)}, 50 ${yApex.toFixed(1)} C 54.6 ${(yApex + 0.085 * cH).toFixed(1)}, 58.9 ${(yApex + 0.184 * cH).toFixed(1)}, 68.1 ${(yApex + 0.223 * cH).toFixed(1)} C 76.2 ${(yApex + 0.257 * cH).toFixed(1)}, 86.5 ${(yApex + 0.442 * cH).toFixed(1)}, 84.5 ${(yApex + 0.591 * cH).toFixed(1)} C 82.6 ${(yApex + 0.725 * cH).toFixed(1)}, 100 ${(yApex + 0.690 * cH).toFixed(1)}, 100 ${yW.toFixed(1)}`;
+  // Authentic Cusped Torana Arch Silhouette derived from mandapp.png
+  const contourD = `M 0 ${yW.toFixed(1)} L 0 ${(yApex + 0.72 * cH).toFixed(1)} C 0 ${(yApex + 0.54 * cH).toFixed(1)}, 8 ${(yApex + 0.54 * cH).toFixed(1)}, 14 ${(yApex + 0.45 * cH).toFixed(1)} C 18 ${(yApex + 0.38 * cH).toFixed(1)}, 24 ${(yApex + 0.40 * cH).toFixed(1)}, 28 ${(yApex + 0.31 * cH).toFixed(1)} C 33 ${(yApex + 0.20 * cH).toFixed(1)}, 40 ${(yApex + 0.18 * cH).toFixed(1)}, 46 ${(yApex + 0.07 * cH).toFixed(1)} C 48 ${(yApex + 0.02 * cH).toFixed(1)}, 49 ${yApex.toFixed(1)}, 50 ${yApex.toFixed(1)} C 51 ${yApex.toFixed(1)}, 52 ${(yApex + 0.02 * cH).toFixed(1)}, 54 ${(yApex + 0.07 * cH).toFixed(1)} C 60 ${(yApex + 0.18 * cH).toFixed(1)}, 67 ${(yApex + 0.20 * cH).toFixed(1)}, 72 ${(yApex + 0.31 * cH).toFixed(1)} C 76 ${(yApex + 0.40 * cH).toFixed(1)}, 82 ${(yApex + 0.38 * cH).toFixed(1)}, 86 ${(yApex + 0.45 * cH).toFixed(1)} C 92 ${(yApex + 0.54 * cH).toFixed(1)}, 100 ${(yApex + 0.54 * cH).toFixed(1)}, 100 ${(yApex + 0.72 * cH).toFixed(1)} L 100 ${yW.toFixed(1)}`;
   const veilD = `${contourD} L 100 144 L 0 144 Z`;
   return { contourD, veilD };
 };
@@ -886,7 +887,18 @@ export default function LivingContactSheet() {
     const ctx = gsap.context(() => {
       // 1. Chapter 02 — The Vows: Belamkonda Arch Reveal (Continuous Viewport-Scrubbed)
       if (openingRef.current) {
+        const leftElements = openingRef.current.querySelectorAll(`.${styles.chapterBadgeRow}, .${styles.monumentalHeading}`);
+        const supportingElements = openingRef.current.querySelectorAll(
+          `.${styles.openingNarrative}, .${styles.exploreActionBtn}, .${styles.openingRightCol} > *`
+        );
+
+        // Initially hide typography until photo reaches full alignment and settles
+        gsap.set(leftElements, { opacity: 0, y: 22 });
+        gsap.set(supportingElements, { opacity: 0, y: 16 });
+
+        let typographyRevealed = false;
         const archProxy = { val: 0 };
+
         const renderArch = (p: number) => {
           const { contourD, veilD } = buildBellamArchPaths(p);
           if (archMaskPathRef.current) {
@@ -913,6 +925,49 @@ export default function LivingContactSheet() {
               archedPhotoImgRef.current.style.transform = `scale(${scale.toFixed(3)})`;
             }
           }
+
+          // The Vows Typography Reveal: Left-side title & editorial text and right-side commission details
+          // must reveal ONLY AFTER the photograph reaches final alignment and settles!
+          if (p >= 0.92 && !typographyRevealed) {
+            typographyRevealed = true;
+            if (leftElements.length) {
+              gsap.to(leftElements, {
+                opacity: 1,
+                y: 0,
+                duration: 0.85,
+                stagger: 0.12,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+            if (supportingElements.length) {
+              gsap.to(supportingElements, {
+                opacity: 1,
+                y: 0,
+                duration: 0.75,
+                stagger: 0.06,
+                delay: 0.12,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+          } else if (p < 0.50 && typographyRevealed) {
+            typographyRevealed = false;
+            gsap.to(leftElements, {
+              opacity: 0,
+              y: 22,
+              duration: 0.35,
+              ease: "power1.in",
+              overwrite: "auto",
+            });
+            gsap.to(supportingElements, {
+              opacity: 0,
+              y: 16,
+              duration: 0.35,
+              ease: "power1.in",
+              overwrite: "auto",
+            });
+          }
         };
 
         renderArch(0);
@@ -928,48 +983,6 @@ export default function LivingContactSheet() {
             onUpdate: () => renderArch(archProxy.val),
           },
         });
-
-        const leftElements = openingRef.current.querySelectorAll(`.${styles.chapterBadgeRow}, .${styles.monumentalHeading}`);
-        if (leftElements.length) {
-          gsap.fromTo(
-            leftElements,
-            { opacity: 0, y: 22 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.85,
-              stagger: 0.12,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: openingRef.current,
-                start: "top 82%",
-                once: true,
-              },
-            }
-          );
-        }
-
-        const supportingElements = openingRef.current.querySelectorAll(
-          `.${styles.openingNarrative}, .${styles.exploreActionBtn}, .${styles.openingRightCol} > *`
-        );
-        if (supportingElements.length) {
-          gsap.fromTo(
-            supportingElements,
-            { opacity: 0, y: 16 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.75,
-              stagger: 0.06,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: openingRef.current,
-                start: "top 78%",
-                once: true,
-              },
-            }
-          );
-        }
       }
 
       // 2. Cinema Passage 01 — Vinitha & Vivekananda: Fluid Champagne Silk Veil (Continuous Viewport-Scrubbed)
@@ -1392,10 +1405,16 @@ export default function LivingContactSheet() {
         focusable="false"
       >
         <defs>
-          {/* Traditional Indian Palace Arch Silhouette: Pointed apex, gently curved shoulders, short rounded transitions into near-vertical sides, flat base */}
+          {/* Authentic South Indian Mandapam Cusped Torana Arch Silhouette: Derived directly from mandapp.png */}
+          <clipPath id="mandapamArchClip" clipPathUnits="objectBoundingBox">
+            <path
+              d="M 0 1 L 0 0.32 C 0 0.24, 0.08 0.24, 0.14 0.20 C 0.18 0.17, 0.24 0.18, 0.28 0.14 C 0.33 0.09, 0.40 0.08, 0.46 0.03 C 0.48 0.01, 0.49 0.00, 0.50 0.00 C 0.51 0.00, 0.52 0.01, 0.54 0.03 C 0.60 0.08, 0.67 0.09, 0.72 0.14 C 0.76 0.18, 0.82 0.17, 0.86 0.20 C 0.92 0.24, 1.00 0.24, 1.00 0.32 L 1 1 Z"
+            />
+          </clipPath>
+          {/* Backward-compatible alias */}
           <clipPath id="palaceArchClip" clipPathUnits="objectBoundingBox">
             <path
-              d="M 0 1 L 0 0.3421 C 0 0.2361, 0.1737 0.2480, 0.1552 0.2021 C 0.1347 0.1512, 0.2379 0.0879, 0.3193 0.0762 C 0.4108 0.0631, 0.4538 0.0291, 0.5 0 C 0.5462 0.0291, 0.5892 0.0631, 0.6807 0.0762 C 0.7621 0.0879, 0.8653 0.1512, 0.8448 0.2021 C 0.8263 0.2480, 1 0.2361, 1 0.3421 L 1 1 Z"
+              d="M 0 1 L 0 0.32 C 0 0.24, 0.08 0.24, 0.14 0.20 C 0.18 0.17, 0.24 0.18, 0.28 0.14 C 0.33 0.09, 0.40 0.08, 0.46 0.03 C 0.48 0.01, 0.49 0.00, 0.50 0.00 C 0.51 0.00, 0.52 0.01, 0.54 0.03 C 0.60 0.08, 0.67 0.09, 0.72 0.14 C 0.76 0.18, 0.82 0.17, 0.86 0.20 C 0.92 0.24, 1.00 0.24, 1.00 0.32 L 1 1 Z"
             />
           </clipPath>
           <clipPath id="vinithaMorphClip" clipPathUnits="objectBoundingBox">

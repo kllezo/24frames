@@ -14,20 +14,66 @@ interface ClothParallaxCanvasProps {
 }
 
 /**
+ * Creates the authentic South Indian Mandapam Cusped Torana Arch Shape
+ * matching mandapp.png and mandapamArchClip.
+ */
+function createMandapamArchShape(width: number, height: number): THREE.Shape {
+  const shape = new THREE.Shape();
+  const toX = (xNorm: number) => (xNorm - 0.5) * width;
+  const toY = (yNorm: number) => (0.5 - yNorm) * height;
+
+  shape.moveTo(toX(0), toY(1));
+  shape.lineTo(toX(0), toY(0.32));
+  // Carved shoulder spring point
+  shape.bezierCurveTo(toX(0), toY(0.24), toX(0.08), toY(0.24), toX(0.14), toY(0.20));
+  // First cusped torana arch lobe
+  shape.bezierCurveTo(toX(0.18), toY(0.17), toX(0.24), toY(0.18), toX(0.28), toY(0.14));
+  // Second cusped lobe rising toward center
+  shape.bezierCurveTo(toX(0.33), toY(0.09), toX(0.40), toY(0.08), toX(0.46), toY(0.03));
+  // Sacred pinnacle apex at exact center top
+  shape.bezierCurveTo(toX(0.48), toY(0.01), toX(0.49), toY(0.00), toX(0.50), toY(0.00));
+  // Mirror down right side
+  shape.bezierCurveTo(toX(0.51), toY(0.00), toX(0.52), toY(0.01), toX(0.54), toY(0.03));
+  shape.bezierCurveTo(toX(0.60), toY(0.08), toX(0.67), toY(0.09), toX(0.72), toY(0.14));
+  shape.bezierCurveTo(toX(0.76), toY(0.18), toX(0.82), toY(0.17), toX(0.86), toY(0.20));
+  shape.bezierCurveTo(toX(0.92), toY(0.24), toX(1.00), toY(0.24), toX(1.00), toY(0.32));
+  shape.lineTo(toX(1), toY(1));
+  shape.closePath();
+
+  return shape;
+}
+
+/**
  * ClothParallaxCanvas
  *
- * Real-time 100% Procedural 3D WebGL Cloth & Mandapam Simulation (ZERO STILL IMAGES):
- * 1. 3D Emerald Silk Mantle: High-subdivision plane deformed with 4-octave Gerstner waves,
- *    analytical normals, Kajiya-Kay anisotropic silk sheen, procedural micro-weave grain,
- *    woven gold zari border, and catenary drape opening.
- * 2. 3D Twisting Champagne Silk Sash: 3D parametric ribbon with continuous 360° Frenet twist,
- *    champagne gold satin luster, double-sided lighting, and true 3D spatial occlusion.
- * 3. South Indian Mandapam Architecture: Multi-tiered ceremonial stone platform, fluted pillars
- *    with carved lotus capitals, cross beams, sculpted torana arch, and cascading jasmine & marigold garlands.
- * 4. Sacred Govinda Namalu Devotional Crest: Pristine white Tiruman uprights, crimson Kasturi Tilak,
- *    and golden Sudarshana sunburst medallion at the arch apex (Frame 09, zero text).
- * 5. Colonnade Corridor & Horizon Dawn Light: Receding perspective portal with camera dolly into The Vows.
- * 6. Dual-Engine Architecture: High-fidelity Three.js WebGL with resilient 2D Canvas fallback.
+ * Real-Time 3D WebGL Four-Direction Luxury Silk Fabric & Authentic Mandapam Parallax:
+ *
+ * 1. Rich Full-Screen Silk Initial Composition (p = 0.0 - 0.18):
+ *    Four overlapping high-subdivision silk panels (Imperial Emerald Silk & Champagne Gold Satin)
+ *    blanketing the entire viewport with multi-octave Gerstner wave folds, woven micro-weave textile
+ *    grain, soft rounded creases, and Kajiya-Kay strand anisotropic sheen. (NO twisted ribbons, flags, or flat strips).
+ *
+ * 2. Four-Direction Silk Reveal of mandapp.webp (p = 0.18 - 0.70):
+ *    The luxury fabric physically pulls away from the center in 4 distinct directions:
+ *    - Top panel moves UPWARD with gathered pleats and woven gold zari hem.
+ *    - Bottom panel moves DOWNWARD with gathered pleats and woven gold zari hem.
+ *    - Left panel moves LEFTWARD with vertical pleats and woven gold zari hem.
+ *    - Right panel moves RIGHTWARD with vertical pleats and woven gold zari hem.
+ *    Inner parting edges modulate with harmonic wave oscillations for organic fluid separation,
+ *    uncovering the authentic South Indian temple mandapam (mandapp.webp) with carved wooden pillars,
+ *    jasmine garlands, brass lamps, and sacred Govinda Namalu crest.
+ *
+ * 3. Mandapam Composition Hold (p = 0.70 - 0.76):
+ *    Silk panels held gathered at viewport edges; mandapp composition held in crisp, clear, unobstructed view.
+ *
+ * 4. Mandapam Forward Parallax & Bellamkonda Photograph Emergence (p = 0.76 - 0.96):
+ *    Camera dollies forward into the central opening; outer wooden pillars move outward towards viewport
+ *    edges in perspective. The authentic Bellamkonda Sai Sreenivas & Kavya Reddy wedding photograph
+ *    (IMG_6339.webp) emerges from deep within the opening, framed inside the authentic Mandapam Arch Silhouette,
+ *    and scales precisely into alignment.
+ *
+ * 5. Dual-Engine Architecture:
+ *    High-performance Three.js WebGL with resilient 2D Canvas fallback.
  */
 const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasProps>(
   ({ initialProgress = 0 }, ref) => {
@@ -60,6 +106,8 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
         width: number;
         height: number;
         time: number;
+        mandappImg: HTMLImageElement;
+        bellamImg: HTMLImageElement;
       };
       rafId: number;
     }>({
@@ -69,7 +117,6 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
       rafId: 0,
     });
 
-    // Expose zero-overhead imperative handle for GSAP ScrollTrigger
     useImperativeHandle(ref, () => ({
       setProgress: (p: number) => {
         const clamped = Math.max(0, Math.min(1, p));
@@ -114,7 +161,6 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
       if (gl) {
         // ═════════════════════════════════════════════════════════════
         // PATH A: HIGH-FIDELITY REAL-TIME 3D THREE.JS WEBGL ENGINE
-        // 100% Procedural Graphics — Zero Image Textures Loaded
         // ═════════════════════════════════════════════════════════════
         try {
           stateRef.current.mode = "webgl";
@@ -141,6 +187,7 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
 
           const materialsToDispose: THREE.Material[] = [];
           const geometriesToDispose: THREE.BufferGeometry[] = [];
+          const texturesToDispose: THREE.Texture[] = [];
 
           const uniforms = {
             uProgress: { value: initialProgress },
@@ -148,11 +195,136 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
             uAspect: { value: width / height },
           };
 
-          // ── GLSL Vertex Shader: 3D Multi-Octave Gerstner Cloth Physics ──
+          // ── Texture Loader for Mandapam & Bellamkonda Photograph ─────
+          const texLoader = new THREE.TextureLoader();
+
+          const mandappTexture = texLoader.load("/images/mandapp.webp");
+          mandappTexture.colorSpace = THREE.SRGBColorSpace;
+          mandappTexture.generateMipmaps = true;
+          mandappTexture.minFilter = THREE.LinearMipmapLinearFilter;
+          texturesToDispose.push(mandappTexture);
+
+          const bellamTexture = texLoader.load("/images/stories/bellam-srikonda/IMG_6339.webp");
+          bellamTexture.colorSpace = THREE.SRGBColorSpace;
+          bellamTexture.generateMipmaps = true;
+          bellamTexture.minFilter = THREE.LinearMipmapLinearFilter;
+          texturesToDispose.push(bellamTexture);
+
+          // ── 1. Authentic South Indian Mandapam Mesh (mandapp.webp) ───
+          const mandappGeo = new THREE.PlaneGeometry(12.2, 9.4, 32, 32);
+          geometriesToDispose.push(mandappGeo);
+
+          const mandappUniforms = {
+            uTexture: { value: mandappTexture },
+            uOpacity: { value: 0 },
+            uDolly: { value: 0 },
+            uTime: { value: 0 },
+          };
+
+          const mandappMat = new THREE.ShaderMaterial({
+            uniforms: mandappUniforms,
+            vertexShader: `
+              varying vec2 vUv;
+              void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+              }
+            `,
+            fragmentShader: `
+              uniform sampler2D uTexture;
+              uniform float uOpacity;
+              uniform float uDolly;
+              uniform float uTime;
+              varying vec2 vUv;
+
+              void main() {
+                vec4 tex = texture2D(uTexture, vUv);
+                vec3 col = tex.rgb;
+
+                // Subtle warm golden temple ambient grading
+                col = mix(col, col * vec3(1.06, 1.01, 0.94), 0.45);
+
+                // Central sanctum glow
+                float sanctumDist = length(vUv - vec2(0.5, 0.52));
+                float glow = (1.0 - smoothstep(0.0, 0.45, sanctumDist)) * (0.08 + 0.04 * sin(uTime * 1.5));
+                col += vec3(0.96, 0.82, 0.42) * glow;
+
+                gl_FragColor = vec4(col, tex.a * uOpacity);
+              }
+            `,
+            transparent: true,
+            depthWrite: false,
+          });
+          materialsToDispose.push(mandappMat);
+
+          const mandappMesh = new THREE.Mesh(mandappGeo, mandappMat);
+          mandappMesh.position.set(0, 0, -1.2);
+          scene.add(mandappMesh);
+
+          // ── 2. Bellamkonda & Kavya Wedding Photograph in Mandapam Arch ──
+          const archShape = createMandapamArchShape(3.55, 4.95);
+          const archPhotoGeo = new THREE.ShapeGeometry(archShape, 32);
+          geometriesToDispose.push(archPhotoGeo);
+
+          const archPhotoUniforms = {
+            uPhoto: { value: bellamTexture },
+            uOpacity: { value: 0 },
+          };
+
+          const archPhotoMat = new THREE.ShaderMaterial({
+            uniforms: archPhotoUniforms,
+            vertexShader: `
+              varying vec2 vUv;
+              void main() {
+                // Map local coordinates [-1.775, +1.775] and [-2.475, +2.475] to [0, 1]
+                float normX = (position.x + 1.775) / 3.55;
+                float normY = (position.y + 2.475) / 4.95;
+                vUv = vec2(normX, normY);
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+              }
+            `,
+            fragmentShader: `
+              uniform sampler2D uPhoto;
+              uniform float uOpacity;
+              varying vec2 vUv;
+
+              void main() {
+                // Focus slightly higher for facial poise under arch
+                vec2 uv = vec2(vUv.x, vUv.y * 0.94 + 0.05);
+                vec4 tex = texture2D(uPhoto, uv);
+                vec3 col = tex.rgb;
+
+                // Warm cinematic grading
+                col = mix(col, col * vec3(1.05, 1.0, 0.94), 0.4);
+
+                // Polished gold rim contour along the cusped arch boundary
+                float edgeX = min(vUv.x, 1.0 - vUv.x);
+                float edgeY = min(vUv.y, 1.0 - vUv.y);
+                float rim = smoothstep(0.04, 0.0, min(edgeX, edgeY));
+                vec3 goldRim = vec3(0.96, 0.82, 0.42);
+                col = mix(col, goldRim, rim * 0.72);
+
+                gl_FragColor = vec4(col, tex.a * uOpacity);
+              }
+            `,
+            transparent: true,
+            depthWrite: false,
+            side: THREE.DoubleSide,
+          });
+          materialsToDispose.push(archPhotoMat);
+
+          const archPhotoMesh = new THREE.Mesh(archPhotoGeo, archPhotoMat);
+          archPhotoMesh.position.set(0, 0, 0.05);
+          archPhotoMesh.visible = false;
+          scene.add(archPhotoMesh);
+
+          // ── 3. Four-Direction Luxury Silk Fabric System ───────────────
+          // High-subdivision meshes with Kajiya-Kay anisotropic sheen,
+          // multi-octave Gerstner waves, micro-weave grain, and gold zari hem.
           const clothVertexShader = `
             uniform float uProgress;
             uniform float uTime;
-            uniform float uAspect;
+            uniform vec2 uDirection; // (0, 1) top, (0, -1) bottom, (-1, 0) left, (1, 0) right
             varying vec2 vUv;
             varying vec3 vNormal;
             varying vec3 vViewPosition;
@@ -163,7 +335,7 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
               float k = 6.283185 / wavelength;
               float c = sqrt(9.8 / k);
               vec2 d = normalize(dir);
-              float f = k * (dot(d, uv * vec2(14.0, 9.5)) - c * speed * time + p * 4.0);
+              float f = k * (dot(d, uv * vec2(12.0, 8.5)) - c * speed * time + p * 3.5);
               float a = steepness / k;
 
               return vec3(
@@ -173,45 +345,40 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
               );
             }
 
-            vec3 computeCloth(vec2 uv, float p, float time) {
-              float entry = smoothstep(0.0, 0.22, p);
-              float flow  = smoothstep(0.16, 0.62, p);
-              float drape = smoothstep(0.52, 0.90, p);
+            float getInnerEdgeDist(vec2 uv, vec2 d) {
+              if (d.y > 0.5) return uv.y;
+              if (d.y < -0.5) return 1.0 - uv.y;
+              if (d.x < -0.5) return 1.0 - uv.x;
+              return uv.x;
+            }
 
-              float x = (uv.x - 0.5) * 16.0;
-              float y = (uv.y - 0.5) * 10.2;
-              vec3 pos = vec3(x, y, 0.0);
+            vec3 computeSilk(vec2 uv, vec3 origPos, vec2 dir, float p, float time) {
+              vec3 pos = origPos;
+              float pull = smoothstep(0.18, 0.70, p);
 
-              vec3 g1 = gerstnerFold(uv, vec2(0.82, 0.58), 0.52, 6.2, 0.85, time, p);
-              vec3 g2 = gerstnerFold(uv, vec2(-0.62, 0.78), 0.38, 3.6, 1.15, time, p);
-              vec3 g3 = gerstnerFold(uv, vec2(0.35, -0.92), 0.22, 1.9, 1.45, time, p);
-              vec3 g4 = gerstnerFold(uv, vec2(0.95, 0.15), 0.12, 0.75, 2.1, time, p);
+              // 1. Multi-octave natural Gerstner fabric folds
+              vec3 g1 = gerstnerFold(uv, vec2(0.70, 0.71), 0.42, 5.2, 0.85, time, p);
+              vec3 g2 = gerstnerFold(uv, vec2(-0.71, 0.70), 0.32, 3.2, 1.15, time, p);
+              vec3 g3 = gerstnerFold(uv, vec2(0.35, -0.93), 0.18, 1.8, 1.45, time, p);
 
-              float foldAmp = mix(0.35, 1.25, flow);
+              float foldAmp = mix(0.40, 1.15, smoothstep(0.08, 0.45, p));
               pos.x -= (g1.x + g2.x * 0.5) * foldAmp;
               pos.y -= (g1.y + g2.y * 0.5) * foldAmp;
-              pos.z += (g1.z + g2.z + g3.z + g4.z) * foldAmp;
+              pos.z += (g1.z + g2.z + g3.z) * foldAmp;
 
-              float diag = (uv.x + (1.0 - uv.y)) * 0.5;
-              pos.z += sin(diag * 4.0 - time * 0.85 + p * 3.4) * 0.85 * flow;
+              // 2. Physical Four-Direction Pull
+              float pullDistance = (abs(dir.x) > 0.5) ? 9.2 : 6.8;
+              pos.xy += dir * pullDistance * pull;
 
-              // Swag Curtain Drape Morph (reveals temple mandapam arch)
-              float archDist = abs(uv.x - 0.5) * 2.0;
-              float catenaryArch = pow(archDist, 1.8);
-              float swagY = mix(2.8, -3.4, catenaryArch);
-              float flutedPleats = sin(uv.x * 40.0) * 0.25 * smoothstep(0.30, 1.0, archDist);
+              // 3. Fluid harmonic wave modulation along inner parting edge
+              float edgeDist = getInnerEdgeDist(uv, dir);
+              vec2 perp = vec2(dir.y, -dir.x);
+              float edgeWave = sin(dot(origPos.xy, perp) * 1.6 + time * 0.9) * 0.42 * (1.0 - pull * 0.7);
+              pos.xy += dir * edgeWave * (1.0 - smoothstep(0.0, 0.28, edgeDist));
 
-              vec3 drapedPos = vec3(
-                mix(pos.x, (uv.x - 0.5) * 10.5 + (uv.x < 0.5 ? -1.8 : 1.8), drape * 0.82),
-                mix(pos.y, swagY, drape),
-                mix(pos.z * 0.4, flutedPleats - 0.35, drape)
-              );
-
-              pos = mix(pos, drapedPos, drape);
-
-              pos.x += (1.0 - entry) * -11.0;
-              pos.y += (1.0 - entry) * 7.0;
-              pos.z += (1.0 - entry) * -3.5;
+              // 4. Gathering compression pleats as fabric gathers at viewport boundaries
+              float gatherFactor = smoothstep(0.3, 1.0, 1.0 - edgeDist);
+              pos.z += sin(dot(origPos.xy, perp) * 5.2) * pull * 0.48 * gatherFactor;
 
               return pos;
             }
@@ -223,11 +390,11 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
 
             void main() {
               vUv = uv;
-              vec3 pos = computeCloth(uv, uProgress, uTime);
+              vec3 pos = computeSilk(uv, position, uDirection, uProgress, uTime);
 
               float delta = 0.012;
-              vec3 posX = computeCloth(uv + vec2(delta, 0.0), uProgress, uTime);
-              vec3 posY = computeCloth(uv + vec2(0.0, delta), uProgress, uTime);
+              vec3 posX = computeSilk(uv + vec2(delta, 0.0), position + vec3(delta, 0.0, 0.0), uDirection, uProgress, uTime);
+              vec3 posY = computeSilk(uv + vec2(0.0, delta), position + vec3(0.0, delta, 0.0), uDirection, uProgress, uTime);
               vec3 tangentX = safeNormalize(posX - pos, vec3(1.0, 0.0, 0.0));
               vec3 tangentY = safeNormalize(posY - pos, vec3(0.0, 1.0, 0.0));
               vec3 n = safeNormalize(cross(tangentX, tangentY), vec3(0.0, 0.0, 1.0));
@@ -243,11 +410,11 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
             }
           `;
 
-          // ── GLSL Fragment Shader: Pure Procedural Anisotropic Silk + Woven Gold Zari ──
-          const emeraldSilkFragmentShader = `
+          const clothFragmentShader = `
             uniform float uProgress;
             uniform float uTime;
-
+            uniform vec2 uDirection;
+            uniform float uColorType; // 0.0 = Imperial Emerald Silk, 1.0 = Champagne Gold Satin
             varying vec2 vUv;
             varying vec3 vNormal;
             varying vec3 vViewPosition;
@@ -259,6 +426,13 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
               return len > 0.0001 ? v / len : fallback;
             }
 
+            float getInnerEdgeDist(vec2 uv, vec2 d) {
+              if (d.y > 0.5) return uv.y;
+              if (d.y < -0.5) return 1.0 - uv.y;
+              if (d.x < -0.5) return 1.0 - uv.x;
+              return uv.x;
+            }
+
             void main() {
               vec3 N = safeNormalize(vNormal, vec3(0.0, 0.0, 1.0));
               if (!gl_FrontFacing) {
@@ -266,510 +440,149 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
               }
               vec3 V = safeNormalize(vViewPosition, vec3(0.0, 0.0, 1.0));
 
-              // Procedural Silk Color Palette
-              vec3 deepForest = vec3(0.012, 0.095, 0.055);
-              vec3 richEmerald = vec3(0.038, 0.28, 0.17);
-              vec3 vividEmerald = vec3(0.075, 0.48, 0.30);
-              vec3 goldZari = vec3(0.96, 0.82, 0.42);
-
-              // Lighting vectors
-              vec3 L1 = normalize(vec3(-0.62, 0.78, 0.7));
+              // Lighting vectors: Warm golden temple sun
+              vec3 L1 = normalize(vec3(-0.62, 0.78, 0.72));
               vec3 H1 = normalize(L1 + V);
               float NdotL1 = max(dot(N, L1), 0.0);
 
-              // Analytical Anisotropic Silk Sheen (Kajiya-Kay Strand Model)
+              // Kajiya-Kay Strand Anisotropic Silk Sheen
               vec3 guide = abs(N.y) > 0.9 ? vec3(1.0, 0.0, 0.0) : vec3(0.0, 1.0, 0.0);
               vec3 T = safeNormalize(cross(N, guide), vec3(1.0, 0.0, 0.0));
               float TdotH = clamp(dot(T, H1), -1.0, 1.0);
               float sinTH = sqrt(max(0.0, 1.0 - TdotH * TdotH));
-              float anisoSharp = pow(sinTH, 36.0) * 1.15;
-              float anisoBroad = pow(sinTH, 7.0) * 0.42;
+              float anisoSharp = pow(sinTH, 34.0) * 1.25;
+              float anisoBroad = pow(sinTH, 6.5) * 0.45;
+              float fresnel = pow(1.0 - max(dot(N, V), 0.0), 2.6);
 
-              float fresnel = pow(1.0 - max(dot(N, V), 0.0), 2.8);
+              // Procedural micro-weave textile grain
+              float weave = sin(vUv.x * 220.0) * sin(vUv.y * 220.0) * 0.04;
 
-              // Procedural micro-weave texture
-              float weave = sin(vUv.x * 240.0) * sin(vUv.y * 240.0) * 0.05;
+              vec3 litColor;
+              vec3 goldZari = vec3(0.96, 0.82, 0.42);
 
-              // Shading base
-              vec3 baseColor = mix(deepForest, richEmerald, NdotL1);
-              baseColor = mix(baseColor, vividEmerald, pow(NdotL1, 2.0));
-              baseColor += vec3(weave);
+              if (uColorType < 0.5) {
+                // ── Imperial Emerald Silk Palette ──
+                vec3 deepForest = vec3(0.012, 0.095, 0.055);
+                vec3 richEmerald = vec3(0.038, 0.28, 0.17);
+                vec3 vividEmerald = vec3(0.075, 0.48, 0.30);
 
-              // Combine anisotropic highlights + fresnel rim
-              vec3 litColor = baseColor;
-              litColor += goldZari * (anisoSharp + anisoBroad) * 0.55;
-              litColor += goldZari * fresnel * 0.38;
+                vec3 baseColor = mix(deepForest, richEmerald, NdotL1);
+                baseColor = mix(baseColor, vividEmerald, pow(NdotL1, 2.0));
+                baseColor += vec3(weave);
 
-              // Procedural Woven Gold Zari Border along hem
-              float edgeDist = min(vUv.y, 1.0 - vUv.y);
-              float zariBorder = smoothstep(0.065, 0.0, edgeDist) + smoothstep(0.935, 1.0, vUv.y);
-              float zariBraid = sin(vUv.x * 90.0) * 0.15;
-              vec3 wovenGold = goldZari * (0.85 + zariBraid) + vec3(anisoSharp * 0.8);
-              litColor = mix(litColor, wovenGold, zariBorder * 0.88);
+                litColor = baseColor;
+                litColor += goldZari * (anisoSharp + anisoBroad) * 0.55;
+                litColor += goldZari * fresnel * 0.36;
+              } else {
+                // ── Champagne Gold Satin Silk Palette ──
+                vec3 goldShadow = vec3(0.40, 0.30, 0.14);
+                vec3 goldMid    = vec3(0.90, 0.78, 0.48);
+                vec3 goldPeak   = vec3(1.0, 0.98, 0.90);
 
-              float alpha = smoothstep(0.0, 0.06, uProgress) * (1.0 - smoothstep(0.88, 0.98, uProgress));
+                vec3 baseColor = mix(goldShadow, goldMid, NdotL1);
+                baseColor += vec3(weave);
+
+                litColor = baseColor;
+                litColor += goldPeak * (anisoSharp * 1.2 + anisoBroad * 0.55);
+                litColor += goldPeak * fresnel * 0.55;
+              }
+
+              // Woven Gold Zari Border along inner parting seam
+              float edgeDist = getInnerEdgeDist(vUv, uDirection);
+              float zariBorder = smoothstep(0.065, 0.0, edgeDist);
+              vec2 perp = vec2(uDirection.y, -uDirection.x);
+              float zariBraid = sin(dot(vWorldPosition.xy, perp) * 8.5) * 0.14;
+              vec3 wovenGold = goldZari * (0.85 + zariBraid) + vec3(anisoSharp * 0.75);
+              litColor = mix(litColor, wovenGold, zariBorder * 0.90);
+
+              // Overall Alpha: Fades in during logo dissolved exit, holds, fades out when camera enters opening
+              float alpha = smoothstep(0.0, 0.06, uProgress) * (1.0 - smoothstep(0.82, 0.94, uProgress));
               gl_FragColor = vec4(litColor, alpha);
             }
           `;
 
-          const emeraldGeo = new THREE.PlaneGeometry(1, 1, 150, 150);
-          geometriesToDispose.push(emeraldGeo);
-
-          const emeraldMat = new THREE.ShaderMaterial({
+          // Top Panel (Emerald Silk with bottom hem gold zari)
+          const topGeo = new THREE.PlaneGeometry(16.5, 6.2, 110, 50);
+          geometriesToDispose.push(topGeo);
+          const topMat = new THREE.ShaderMaterial({
             vertexShader: clothVertexShader,
-            fragmentShader: emeraldSilkFragmentShader,
-            uniforms,
+            fragmentShader: clothFragmentShader,
+            uniforms: {
+              ...uniforms,
+              uDirection: { value: new THREE.Vector2(0, 1) },
+              uColorType: { value: 0.0 }, // Emerald
+            },
             transparent: true,
             side: THREE.DoubleSide,
             depthWrite: false,
           });
-          materialsToDispose.push(emeraldMat);
+          materialsToDispose.push(topMat);
+          const topMesh = new THREE.Mesh(topGeo, topMat);
+          topMesh.position.set(0, 2.4, 0.0);
+          scene.add(topMesh);
 
-          const emeraldMesh = new THREE.Mesh(emeraldGeo, emeraldMat);
-          scene.add(emeraldMesh);
-
-          // ── Component 2: 3D Twisting Champagne Silk Ribbon ────────────
-          const ribbonVertexShader = `
-            uniform float uProgress;
-            uniform float uTime;
-            uniform float uAspect;
-            varying vec2 vUv;
-            varying vec3 vNormal;
-            varying vec3 vViewPosition;
-
-            vec3 ribbonPath(float t, float p, float time) {
-              vec3 p0 = vec3(-7.2, 4.5, -0.8);
-              vec3 p1 = vec3(-2.4, 2.0, 1.1);
-              vec3 p2 = vec3(1.4, -0.5, 1.6);
-              vec3 p3 = vec3(6.5, -3.2, 0.0);
-
-              float u = 1.0 - t;
-              vec3 pt = u*u*u*p0 + 3.0*u*u*t*p1 + 3.0*u*t*t*p2 + t*t*t*p3;
-
-              float wave = sin(t * 7.0 - time * 1.1 + p * 4.6) * 0.45;
-              pt.y += wave;
-              pt.z += cos(t * 5.5 - time * 0.95 + p * 4.0) * 0.55;
-
-              return pt;
-            }
-
-            void main() {
-              vUv = uv;
-              float t = uv.x;
-              float ribbonWidth = 0.85;
-
-              vec3 pos = ribbonPath(t, uProgress, uTime);
-              vec3 posNext = ribbonPath(min(1.0, t + 0.01), uProgress, uTime);
-              vec3 tangent = normalize(posNext - pos);
-
-              float twist = t * 3.14159 * 2.4 - uTime * 0.5 + uProgress * 3.8;
-              vec3 up = vec3(sin(twist), cos(twist), sin(twist * 0.5));
-              vec3 normal = normalize(cross(tangent, up));
-              vec3 binormal = cross(tangent, normal);
-
-              float widthOffset = (uv.y - 0.5) * ribbonWidth;
-              vec3 finalPos = pos + binormal * widthOffset;
-
-              float entry = smoothstep(0.04, 0.25, uProgress);
-              finalPos.x += (1.0 - entry) * -8.5;
-              finalPos.y += (1.0 - entry) * 5.2;
-
-              vNormal = normalMatrix * (uv.y > 0.5 ? normal : -normal);
-
-              vec4 mvPos = modelViewMatrix * vec4(finalPos, 1.0);
-              vViewPosition = -mvPos.xyz;
-
-              gl_Position = projectionMatrix * mvPos;
-            }
-          `;
-
-          const ribbonFragmentShader = `
-            uniform float uProgress;
-            uniform float uTime;
-            varying vec2 vUv;
-            varying vec3 vNormal;
-            varying vec3 vViewPosition;
-
-            vec3 safeNormalize(vec3 v, vec3 fallback) {
-              float len = length(v);
-              return len > 0.0001 ? v / len : fallback;
-            }
-
-            void main() {
-              vec3 N = safeNormalize(vNormal, vec3(0.0, 0.0, 1.0));
-              if (!gl_FrontFacing) {
-                N = -N;
-              }
-              vec3 V = safeNormalize(vViewPosition, vec3(0.0, 0.0, 1.0));
-
-              vec3 L = normalize(vec3(-0.6, 0.85, 0.7));
-              vec3 H = normalize(L + V);
-
-              float NdotL = max(dot(N, L), 0.0);
-              float specSharp = pow(max(dot(N, H), 0.0), 42.0) * 1.6;
-              float specBroad = pow(max(dot(N, H), 0.0), 9.0) * 0.65;
-              float fresnel = pow(1.0 - max(dot(N, V), 0.0), 2.2);
-
-              vec3 goldShadow = vec3(0.42, 0.30, 0.12);
-              vec3 goldMid    = vec3(0.92, 0.80, 0.48);
-              vec3 goldPeak   = vec3(1.0, 0.98, 0.90);
-
-              vec3 color = mix(goldShadow, goldMid, NdotL);
-              color += goldPeak * (specSharp + specBroad);
-              color += goldPeak * fresnel * 0.75;
-
-              float hem = smoothstep(0.12, 0.0, vUv.y) + smoothstep(0.88, 1.0, vUv.y);
-              vec3 bullion = vec3(1.0, 0.88, 0.45);
-              color = mix(color, bullion, hem * 0.82);
-
-              float glint = sin(vUv.x * 65.0 + uTime * 3.2) * 0.08;
-              color += vec3(glint);
-
-              float alpha = smoothstep(0.04, 0.15, uProgress) * (1.0 - smoothstep(0.70, 0.88, uProgress));
-              gl_FragColor = vec4(color, alpha);
-            }
-          `;
-
-          const ribbonGeo = new THREE.PlaneGeometry(1, 1, 130, 24);
-          geometriesToDispose.push(ribbonGeo);
-
-          const ribbonMat = new THREE.ShaderMaterial({
-            vertexShader: ribbonVertexShader,
-            fragmentShader: ribbonFragmentShader,
-            uniforms,
+          // Bottom Panel (Champagne Gold Satin with top hem gold zari)
+          const bottomGeo = new THREE.PlaneGeometry(16.5, 6.2, 110, 50);
+          geometriesToDispose.push(bottomGeo);
+          const bottomMat = new THREE.ShaderMaterial({
+            vertexShader: clothVertexShader,
+            fragmentShader: clothFragmentShader,
+            uniforms: {
+              ...uniforms,
+              uDirection: { value: new THREE.Vector2(0, -1) },
+              uColorType: { value: 1.0 }, // Champagne
+            },
             transparent: true,
             side: THREE.DoubleSide,
             depthWrite: false,
           });
-          materialsToDispose.push(ribbonMat);
+          materialsToDispose.push(bottomMat);
+          const bottomMesh = new THREE.Mesh(bottomGeo, bottomMat);
+          bottomMesh.position.set(0, -2.4, 0.0);
+          scene.add(bottomMesh);
 
-          const ribbonMesh = new THREE.Mesh(ribbonGeo, ribbonMat);
-          ribbonMesh.position.z = 0.25;
-          scene.add(ribbonMesh);
-
-          // ── Component 3: South Indian Temple Mandapam Architecture ────
-          const mandapamGroup = new THREE.Group();
-          mandapamGroup.visible = false;
-          scene.add(mandapamGroup);
-
-          // Shared Materials
-          const stoneMat = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(0x352e28), // Carved antique granite
-            roughness: 0.68,
-            metalness: 0.12,
+          // Left Panel (Emerald Silk with right hem gold zari, layered forward)
+          const leftGeo = new THREE.PlaneGeometry(9.2, 11.0, 60, 80);
+          geometriesToDispose.push(leftGeo);
+          const leftMat = new THREE.ShaderMaterial({
+            vertexShader: clothVertexShader,
+            fragmentShader: clothFragmentShader,
+            uniforms: {
+              ...uniforms,
+              uDirection: { value: new THREE.Vector2(-1, 0) },
+              uColorType: { value: 0.0 }, // Emerald
+            },
             transparent: true,
-            depthWrite: false,
-            opacity: 0,
-          });
-          materialsToDispose.push(stoneMat);
-
-          const goldTrimMat = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(0xf5c85d), // Polished temple gold
-            roughness: 0.22,
-            metalness: 0.72,
-            transparent: true,
-            depthWrite: false,
-            opacity: 0,
-          });
-          materialsToDispose.push(goldTrimMat);
-
-          // 1. Ceremonial Raised Stone Platform (Adhisthana)
-          const plinthLowerGeo = new THREE.BoxGeometry(9.5, 0.35, 6.0);
-          geometriesToDispose.push(plinthLowerGeo);
-          const plinthLower = new THREE.Mesh(plinthLowerGeo, stoneMat);
-          plinthLower.position.set(0, -2.4, -1.5);
-          mandapamGroup.add(plinthLower);
-
-          const plinthUpperGeo = new THREE.BoxGeometry(8.6, 0.25, 5.2);
-          geometriesToDispose.push(plinthUpperGeo);
-          const plinthUpper = new THREE.Mesh(plinthUpperGeo, stoneMat);
-          plinthUpper.position.set(0, -2.1, -1.5);
-          mandapamGroup.add(plinthUpper);
-
-          // 2. Pillars (Stambhas) with bases, fluted shafts & carved capitals
-          const pillarBaseGeo = new THREE.BoxGeometry(0.52, 0.42, 0.52);
-          geometriesToDispose.push(pillarBaseGeo);
-
-          const pillarShaftGeo = new THREE.CylinderGeometry(0.20, 0.22, 3.4, 16);
-          geometriesToDispose.push(pillarShaftGeo);
-
-          const pillarCapitalGeo = new THREE.CylinderGeometry(0.34, 0.18, 0.32, 16);
-          geometriesToDispose.push(pillarCapitalGeo);
-
-          const pillarBracketGeo = new THREE.BoxGeometry(0.68, 0.16, 0.68);
-          geometriesToDispose.push(pillarBracketGeo);
-
-          const createPillar = (x: number, z: number) => {
-            const pillar = new THREE.Group();
-            pillar.position.set(x, 0, z);
-
-            // Base plinth
-            const base = new THREE.Mesh(pillarBaseGeo, stoneMat);
-            base.position.y = -1.78;
-            pillar.add(base);
-
-            // Fluted shaft
-            const shaft = new THREE.Mesh(pillarShaftGeo, stoneMat);
-            shaft.position.y = 0.12;
-            pillar.add(shaft);
-
-            // Carved capital (bodika)
-            const cap = new THREE.Mesh(pillarCapitalGeo, goldTrimMat);
-            cap.position.y = 1.95;
-            pillar.add(cap);
-
-            const bracket = new THREE.Mesh(pillarBracketGeo, stoneMat);
-            bracket.position.y = 2.15;
-            pillar.add(bracket);
-
-            return pillar;
-          };
-
-          // Front Entrance Pillars
-          mandapamGroup.add(createPillar(-3.6, 0.0));
-          mandapamGroup.add(createPillar(-1.8, 0.0));
-          mandapamGroup.add(createPillar(1.8, 0.0));
-          mandapamGroup.add(createPillar(3.6, 0.0));
-
-          // Receding Colonnade Hall Pillars (Depth & Perspective)
-          mandapamGroup.add(createPillar(-1.8, -2.2));
-          mandapamGroup.add(createPillar(1.8, -2.2));
-          mandapamGroup.add(createPillar(-1.8, -4.4));
-          mandapamGroup.add(createPillar(1.8, -4.4));
-          mandapamGroup.add(createPillar(-1.8, -6.6));
-          mandapamGroup.add(createPillar(1.8, -6.6));
-
-          // 3. Horizontal Architrave & Carved Cross Beams (Uttira)
-          const frontBeamGeo = new THREE.BoxGeometry(8.8, 0.34, 0.55);
-          geometriesToDispose.push(frontBeamGeo);
-          const frontBeam = new THREE.Mesh(frontBeamGeo, stoneMat);
-          frontBeam.position.set(0, 2.38, 0.0);
-          mandapamGroup.add(frontBeam);
-
-          // Longitudinal side beams spanning into the colonnade
-          const sideBeamGeo = new THREE.BoxGeometry(0.42, 0.32, 7.2);
-          geometriesToDispose.push(sideBeamGeo);
-
-          const leftSideBeam = new THREE.Mesh(sideBeamGeo, stoneMat);
-          leftSideBeam.position.set(-1.8, 2.38, -3.3);
-          mandapamGroup.add(leftSideBeam);
-
-          const rightSideBeam = new THREE.Mesh(sideBeamGeo, stoneMat);
-          rightSideBeam.position.set(1.8, 2.38, -3.3);
-          mandapamGroup.add(rightSideBeam);
-
-          // 4. Sculpted Torana Arch (Frames 08 & 09)
-          const archGeo = new THREE.TorusGeometry(1.85, 0.15, 16, 48, Math.PI);
-          geometriesToDispose.push(archGeo);
-          const archMesh = new THREE.Mesh(archGeo, goldTrimMat);
-          archMesh.position.set(0, 1.85, 0.05);
-          mandapamGroup.add(archMesh);
-
-          // 4b. Bellamkonda Sai Sreenivas & Kavya Reddy Wedding Photograph (Framed in Mandapam Arch)
-          const archShape = new THREE.Shape();
-          const archHalfW = 1.72;
-          const archBottom = -2.1;
-          const archSpring = 1.35;
-          const archApex = 3.25;
-
-          archShape.moveTo(-archHalfW, archBottom);
-          archShape.lineTo(archHalfW, archBottom);
-          archShape.lineTo(archHalfW, archSpring);
-          archShape.bezierCurveTo(archHalfW, archSpring + 0.8, 0.45, archApex - 0.25, 0.0, archApex);
-          archShape.bezierCurveTo(-0.45, archApex - 0.25, -archHalfW, archSpring + 0.8, -archHalfW, archSpring);
-          archShape.closePath();
-
-          const archPhotoGeo = new THREE.ShapeGeometry(archShape, 32);
-          geometriesToDispose.push(archPhotoGeo);
-
-          const texLoader = new THREE.TextureLoader();
-          const bellamTexture = texLoader.load("/images/stories/bellam-srikonda/IMG_6339.webp");
-          bellamTexture.colorSpace = THREE.SRGBColorSpace;
-          bellamTexture.generateMipmaps = true;
-          bellamTexture.minFilter = THREE.LinearMipmapLinearFilter;
-
-          const archPhotoUniforms = {
-            uPhoto: { value: bellamTexture },
-            uOpacity: { value: 0 },
-          };
-
-          const archPhotoMat = new THREE.ShaderMaterial({
-            uniforms: archPhotoUniforms,
-            vertexShader: `
-              varying vec2 vUv;
-              void main() {
-                float normX = (position.x + 1.72) / 3.44;
-                float normY = (position.y - (-2.1)) / 5.35;
-                vUv = vec2(normX, normY);
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-              }
-            `,
-            fragmentShader: `
-              uniform sampler2D uPhoto;
-              uniform float uOpacity;
-              varying vec2 vUv;
-              void main() {
-                vec2 uv = vUv;
-                uv.y = uv.y * 0.94 + 0.04;
-                vec4 tex = texture2D(uPhoto, uv);
-                vec3 col = tex.rgb;
-
-                float dist = length(vec2(vUv.x - 0.5, vUv.y - 0.5));
-                col *= (1.0 - smoothstep(0.40, 0.68, dist) * 0.28);
-
-                gl_FragColor = vec4(col, tex.a * uOpacity);
-              }
-            `,
-            transparent: true,
-            depthWrite: false,
             side: THREE.DoubleSide,
-          });
-          materialsToDispose.push(archPhotoMat);
-
-          const archPhotoMesh = new THREE.Mesh(archPhotoGeo, archPhotoMat);
-          archPhotoMesh.position.set(0, 0, -0.05);
-          mandapamGroup.add(archPhotoMesh);
-
-          // 5. Cascading Jasmine (Mogra) & Marigold Garlands (Mallige Male)
-          const mograGeo = new THREE.SphereGeometry(0.08, 8, 8);
-          geometriesToDispose.push(mograGeo);
-
-          const mograMat = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(0xfffdf2), // Ivory jasmine buds
-            roughness: 0.85,
-            metalness: 0.05,
-            transparent: true,
             depthWrite: false,
-            opacity: 0,
           });
-          materialsToDispose.push(mograMat);
+          materialsToDispose.push(leftMat);
+          const leftMesh = new THREE.Mesh(leftGeo, leftMat);
+          leftMesh.position.set(-4.1, 0, 0.02);
+          scene.add(leftMesh);
 
-          const marigoldGeo = new THREE.SphereGeometry(0.09, 8, 8);
-          geometriesToDispose.push(marigoldGeo);
-
-          const marigoldMat = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(0xf59e0b), // Golden marigold blossoms
-            roughness: 0.78,
-            metalness: 0.08,
+          // Right Panel (Champagne Gold Satin with left hem gold zari, layered forward)
+          const rightGeo = new THREE.PlaneGeometry(9.2, 11.0, 60, 80);
+          geometriesToDispose.push(rightGeo);
+          const rightMat = new THREE.ShaderMaterial({
+            vertexShader: clothVertexShader,
+            fragmentShader: clothFragmentShader,
+            uniforms: {
+              ...uniforms,
+              uDirection: { value: new THREE.Vector2(1, 0) },
+              uColorType: { value: 1.0 }, // Champagne
+            },
             transparent: true,
+            side: THREE.DoubleSide,
             depthWrite: false,
-            opacity: 0,
           });
-          materialsToDispose.push(marigoldMat);
+          materialsToDispose.push(rightMat);
+          const rightMesh = new THREE.Mesh(rightGeo, rightMat);
+          rightMesh.position.set(4.1, 0, 0.02);
+          scene.add(rightMesh);
 
-          const garlandCount = 120;
-          const garlandInstances = new THREE.InstancedMesh(mograGeo, mograMat, garlandCount);
-          const garlandMarigoldInstances = new THREE.InstancedMesh(marigoldGeo, marigoldMat, garlandCount);
-          const dummy = new THREE.Object3D();
-
-          for (let i = 0; i < 60; i++) {
-            const t = i / 60.0;
-            const angleL = t * 14.0;
-            const rL = 0.38 + Math.sin(t * 12.0) * 0.05;
-
-            // Left pillar garland
-            dummy.position.set(-1.8 + Math.cos(angleL) * rL, 1.9 - t * 3.8, 0.05 + Math.sin(angleL) * rL);
-            dummy.scale.setScalar(0.75 + Math.sin(t * 9.0) * 0.3);
-            dummy.updateMatrix();
-            garlandInstances.setMatrixAt(i, dummy.matrix);
-
-            // Alternate marigolds
-            dummy.position.set(-1.8 + Math.cos(angleL + 1.2) * (rL * 0.9), 1.85 - t * 3.8, 0.05 + Math.sin(angleL + 1.2) * (rL * 0.9));
-            dummy.scale.setScalar(0.85);
-            dummy.updateMatrix();
-            garlandMarigoldInstances.setMatrixAt(i, dummy.matrix);
-
-            // Right pillar garland
-            const angleR = t * 14.0 + Math.PI;
-            const rR = 0.38 + Math.sin(t * 12.0) * 0.05;
-            dummy.position.set(1.8 + Math.cos(angleR) * rR, 1.9 - t * 3.8, 0.05 + Math.sin(angleR) * rR);
-            dummy.scale.setScalar(0.75 + Math.sin(t * 9.0) * 0.3);
-            dummy.updateMatrix();
-            garlandInstances.setMatrixAt(i + 60, dummy.matrix);
-
-            dummy.position.set(1.8 + Math.cos(angleR + 1.2) * (rR * 0.9), 1.85 - t * 3.8, 0.05 + Math.sin(angleR + 1.2) * (rR * 0.9));
-            dummy.scale.setScalar(0.85);
-            dummy.updateMatrix();
-            garlandMarigoldInstances.setMatrixAt(i + 60, dummy.matrix);
-          }
-          garlandInstances.instanceMatrix.needsUpdate = true;
-          garlandMarigoldInstances.instanceMatrix.needsUpdate = true;
-          mandapamGroup.add(garlandInstances);
-          mandapamGroup.add(garlandMarigoldInstances);
-
-          // ── Component 4: Sacred Govinda Namalu Devotional Crest (Frame 09) ──
-          // Located at the center apex of the Torana Arch (y = 2.45) — NO TEXT
-          const namaluGroup = new THREE.Group();
-          namaluGroup.position.set(0, 2.45, 0.22);
-          mandapamGroup.add(namaluGroup);
-
-          const tirumanMat = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(0xffffff),
-            roughness: 0.18,
-            metalness: 0.15,
-            emissive: new THREE.Color(0x444444),
-            transparent: true,
-            depthWrite: false,
-            opacity: 0,
-          });
-          materialsToDispose.push(tirumanMat);
-
-          const tirumanGeo = new THREE.CylinderGeometry(0.08, 0.055, 1.05, 16);
-          geometriesToDispose.push(tirumanGeo);
-
-          const leftTiruman = new THREE.Mesh(tirumanGeo, tirumanMat);
-          leftTiruman.position.set(-0.28, 0.36, 0);
-          leftTiruman.rotation.z = -0.15;
-          namaluGroup.add(leftTiruman);
-
-          const rightTiruman = new THREE.Mesh(tirumanGeo, tirumanMat);
-          rightTiruman.position.set(0.28, 0.36, 0);
-          rightTiruman.rotation.z = 0.15;
-          namaluGroup.add(rightTiruman);
-
-          const tirumanBaseGeo = new THREE.TorusGeometry(0.28, 0.065, 12, 24, Math.PI);
-          geometriesToDispose.push(tirumanBaseGeo);
-          const tirumanBase = new THREE.Mesh(tirumanBaseGeo, tirumanMat);
-          tirumanBase.rotation.z = Math.PI;
-          tirumanBase.position.set(0, -0.04, 0);
-          namaluGroup.add(tirumanBase);
-
-          const tilakMat = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(0xd61827),
-            roughness: 0.28,
-            metalness: 0.18,
-            emissive: new THREE.Color(0x660810),
-            transparent: true,
-            depthWrite: false,
-            opacity: 0,
-          });
-          materialsToDispose.push(tilakMat);
-
-          const tilakGeo = new THREE.CylinderGeometry(0.048, 0.032, 0.88, 16);
-          geometriesToDispose.push(tilakGeo);
-          const tilakMesh = new THREE.Mesh(tilakGeo, tilakMat);
-          tilakMesh.position.set(0, 0.35, 0.02);
-          namaluGroup.add(tilakMesh);
-
-          const medallionGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.05, 32);
-          geometriesToDispose.push(medallionGeo);
-          const medallionMat = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(0xffd700),
-            roughness: 0.20,
-            metalness: 0.82,
-            emissive: new THREE.Color(0x4a3200),
-            transparent: true,
-            depthWrite: false,
-            opacity: 0,
-          });
-          materialsToDispose.push(medallionMat);
-
-          const medallionMesh = new THREE.Mesh(medallionGeo, medallionMat);
-          medallionMesh.rotation.x = Math.PI / 2;
-          medallionMesh.position.set(0, -0.18, 0);
-          namaluGroup.add(medallionMesh);
-
-          const haloGeo = new THREE.PlaneGeometry(3.0, 3.0);
+          // ── 4. Sacred Devotional Halo Glow at Apex ────────────────────
+          const haloGeo = new THREE.PlaneGeometry(3.2, 3.2);
           geometriesToDispose.push(haloGeo);
           const haloMat = new THREE.ShaderMaterial({
             uniforms: {
@@ -801,49 +614,14 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
             depthWrite: false,
           });
           materialsToDispose.push(haloMat);
-
           const haloMesh = new THREE.Mesh(haloGeo, haloMat);
-          haloMesh.position.set(0, 0.26, -0.06);
-          namaluGroup.add(haloMesh);
+          haloMesh.position.set(0, 1.85, -0.9);
+          scene.add(haloMesh);
 
-          // ── Component 5: Horizon Dawn Light at Colonnade Terminus (Stage 10 to 13) ──
-          const sanctumLightGeo = new THREE.PlaneGeometry(8.0, 8.0);
-          geometriesToDispose.push(sanctumLightGeo);
-          const sanctumLightMat = new THREE.ShaderMaterial({
-            uniforms: {
-              uOpacity: { value: 0 },
-            },
-            vertexShader: `
-              varying vec2 vUv;
-              void main() {
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-              }
-            `,
-            fragmentShader: `
-              uniform float uOpacity;
-              varying vec2 vUv;
-              void main() {
-                float dist = length(vUv - vec2(0.5));
-                float glow = smoothstep(0.5, 0.0, dist);
-                vec3 dawnColor = vec3(1.0, 0.92, 0.72);
-                gl_FragColor = vec4(dawnColor, glow * uOpacity);
-              }
-            `,
-            transparent: true,
-            depthWrite: false,
-          });
-          materialsToDispose.push(sanctumLightMat);
-
-          const sanctumLightMesh = new THREE.Mesh(sanctumLightGeo, sanctumLightMat);
-          sanctumLightMesh.position.set(0, 0.4, -7.8);
-          mandapamGroup.add(sanctumLightMesh);
-
-          // ── Component 6: Cinematic 3D Floating Bokeh Dust Particles ──
+          // ── 5. Cinematic Floating Golden Bokeh Dust Particles ─────────
           const bokehCount = 70;
           const bokehGeo = new THREE.BufferGeometry();
           geometriesToDispose.push(bokehGeo);
-
           const bokehPos = new Float32Array(bokehCount * 3);
           for (let i = 0; i < bokehCount; i++) {
             bokehPos[i * 3 + 0] = (Math.random() - 0.5) * 14.0;
@@ -861,21 +639,16 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
             depthWrite: false,
           });
           materialsToDispose.push(bokehMat);
-
           const bokehPoints = new THREE.Points(bokehGeo, bokehMat);
           scene.add(bokehPoints);
 
-          // Scene Lighting: Warm Directional Golden Sun + Temple Interior Fill
-          const ambientLight = new THREE.AmbientLight(0xfff6e5, 0.88);
+          // Scene Lighting: Warm Directional Golden Sun + Temple Fill
+          const ambientLight = new THREE.AmbientLight(0xfff6e5, 0.90);
           scene.add(ambientLight);
 
-          const sunLight = new THREE.DirectionalLight(0xfff0c2, 1.35);
+          const sunLight = new THREE.DirectionalLight(0xfff0c2, 1.4);
           sunLight.position.set(-6, 7, 5);
           scene.add(sunLight);
-
-          const templeGlow = new THREE.PointLight(0xffb84d, 1.4, 18);
-          templeGlow.position.set(0, 1.2, -2.0);
-          scene.add(templeGlow);
 
           stateRef.current.webgl = {
             renderer,
@@ -886,7 +659,7 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
             geometries: geometriesToDispose,
           };
 
-          // ── High-Performance Visibility-Aware WebGL Render Loop ──
+          // ── Render Loop ─────────────────────────────────────────────
           let renderLoopRunning = false;
           let lastTime = performance.now();
 
@@ -895,6 +668,7 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
             lastTime = time;
 
             uniforms.uTime.value += dt;
+            mandappUniforms.uTime.value += dt;
             haloMat.uniforms.uTime.value += dt;
 
             // Slowly drift bokeh particles in 3D space
@@ -907,40 +681,47 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
 
             const p = uniforms.uProgress.value;
 
-            // Mandapam visibility gate: Renders when fabric starts to drape (p > 0.48)
-            mandapamGroup.visible = p > 0.48;
+            // 1. Mandapam Reveal & Parallax
+            // Unveiled as silk pulls away (0.18 -> 0.55)
+            const mandappAlpha = THREE.MathUtils.smoothstep(p, 0.18, 0.55);
+            const mandappExit = 1.0 - THREE.MathUtils.smoothstep(p, 0.97, 1.0);
+            mandappUniforms.uOpacity.value = mandappAlpha * mandappExit;
 
-            if (mandapamGroup.visible) {
-              const mandapamOpacity = THREE.MathUtils.smoothstep(p, 0.52, 0.78);
-              const mandapamExit = 1.0 - THREE.MathUtils.smoothstep(p, 0.97, 1.0);
-              const currentArchAlpha = mandapamOpacity * mandapamExit;
-
-              stoneMat.opacity = currentArchAlpha * 0.98;
-              goldTrimMat.opacity = currentArchAlpha * 0.98;
-              mograMat.opacity = currentArchAlpha * 0.95;
-              marigoldMat.opacity = currentArchAlpha * 0.95;
-
-              const namaluOpacity =
-                THREE.MathUtils.smoothstep(p, 0.68, 0.82) * (1.0 - THREE.MathUtils.smoothstep(p, 0.96, 1.0));
-              tirumanMat.opacity = namaluOpacity * 0.98;
-              tilakMat.opacity = namaluOpacity * 0.98;
-              medallionMat.opacity = namaluOpacity * 0.95;
-              haloMat.uniforms.uOpacity.value = namaluOpacity * 0.85;
-
-              const dawnLightOpacity = THREE.MathUtils.smoothstep(p, 0.76, 0.98);
-              sanctumLightMat.uniforms.uOpacity.value = dawnLightOpacity * 0.88;
-
-              // Framed Bellamkonda & Kavya wedding photograph reveal through arch
-              const photoReveal = THREE.MathUtils.smoothstep(p, 0.60, 0.85);
-              const photoExit = 1.0 - THREE.MathUtils.smoothstep(p, 0.97, 1.0);
-              archPhotoUniforms.uOpacity.value = photoReveal * photoExit;
+            // Forward camera parallax dolly into central opening (0.76 -> 0.96)
+            if (p > 0.76) {
+              const dolly = THREE.MathUtils.smoothstep(p, 0.76, 0.96);
+              mandappUniforms.uDolly.value = dolly;
+              // Outer pillars slide outward towards viewport edges in perspective
+              mandappMesh.scale.set(1.0 + dolly * 0.60, 1.0 + dolly * 0.60, 1.0);
+              mandappMesh.position.z = -1.2 + dolly * 0.8;
+              mandappMesh.position.y = -dolly * 0.35;
+            } else {
+              mandappUniforms.uDolly.value = 0;
+              mandappMesh.scale.set(1.0, 1.0, 1.0);
+              mandappMesh.position.set(0, 0, -1.2);
             }
 
-            // Smooth Perspective Camera Dolly into Colonnade Hall (Stages 10 to 13)
+            // 2. Bellamkonda & Kavya Wedding Photograph Emergence
+            // Emerges from deep inside central architectural opening (0.76 -> 0.96)
+            archPhotoMesh.visible = p > 0.74;
+            if (archPhotoMesh.visible) {
+              const photoDolly = THREE.MathUtils.smoothstep(p, 0.76, 0.94);
+              const photoExit = 1.0 - THREE.MathUtils.smoothstep(p, 0.98, 1.0);
+              archPhotoUniforms.uOpacity.value = photoDolly * photoExit;
+              archPhotoMesh.scale.set(0.78 + photoDolly * 0.22, 0.78 + photoDolly * 0.22, 1.0);
+              archPhotoMesh.position.z = -1.6 + photoDolly * 1.65;
+            }
+
+            // 3. Sacred Govinda Namalu Devotional Halo
+            const haloOpacity =
+              THREE.MathUtils.smoothstep(p, 0.60, 0.76) * (1.0 - THREE.MathUtils.smoothstep(p, 0.90, 0.98));
+            haloMat.uniforms.uOpacity.value = haloOpacity * 0.75;
+
+            // 4. Camera Position
             if (p > 0.82) {
-              const dolly = THREE.MathUtils.smoothstep(p, 0.82, 1.0);
-              camera.position.z = 7.5 - dolly * 3.6;
-              camera.position.y = dolly * 0.35;
+              const camDolly = THREE.MathUtils.smoothstep(p, 0.82, 0.98);
+              camera.position.z = 7.5 - camDolly * 2.2;
+              camera.position.y = camDolly * 0.25;
             } else {
               camera.position.z = 7.5;
               camera.position.y = 0;
@@ -995,7 +776,6 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
           };
           window.addEventListener("resize", handleResize);
 
-          // Performance guard: automatically pause when container is scrolled out of viewport
           let observer: IntersectionObserver | null = null;
           if (typeof IntersectionObserver !== "undefined") {
             observer = new IntersectionObserver(
@@ -1018,7 +798,7 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
             observer?.disconnect();
             stopLoop();
             renderer.dispose();
-            bellamTexture.dispose();
+            texturesToDispose.forEach((t) => t.dispose());
             geometriesToDispose.forEach((g) => g.dispose());
             materialsToDispose.forEach((m) => m.dispose());
           };
@@ -1029,9 +809,6 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
 
       // ═════════════════════════════════════════════════════════════
       // PATH B: PROCEDURAL 2D CANVAS CLOTH ENGINE (RESILIENT FALLBACK)
-      // Preserves 100% continuous mathematical silk deformation,
-      // billowing ribbon motion, and South Indian mandapam formation
-      // even in environments where WebGL is disabled or unsupported.
       // ═════════════════════════════════════════════════════════════
       try {
         stateRef.current.mode = "canvas2d";
@@ -1045,10 +822,17 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
         fallbackCanvas.height = height * Math.min(window.devicePixelRatio, 2);
         ctx.scale(Math.min(window.devicePixelRatio, 2), Math.min(window.devicePixelRatio, 2));
 
-        stateRef.current.canvas2d = { ctx, width, height, time: 0 };
+        const mandappImg = new Image();
+        mandappImg.src = "/images/mandapp.webp";
+
+        const bellamImg = new Image();
+        bellamImg.src = "/images/stories/bellam-srikonda/IMG_6339.webp";
+
+        stateRef.current.canvas2d = { ctx, width, height, time: 0, mandappImg, bellamImg };
 
         let renderLoopRunning2d = false;
         let lastTime2d = performance.now();
+
         const render2D = (time: number) => {
           const dt = (time - lastTime2d) * 0.001;
           lastTime2d = time;
@@ -1058,70 +842,131 @@ const ClothParallaxCanvas = forwardRef<ClothParallaxHandle, ClothParallaxCanvasP
 
           if (p <= 0.01) return;
 
-          const entry = Math.min(1, Math.max(0, (p - 0.0) / 0.28));
-          const drape = Math.min(1, Math.max(0, (p - 0.52) / 0.38));
+          const entry = Math.min(1, Math.max(0, (p - 0.0) / 0.18));
+          const pull = Math.min(1, Math.max(0, (p - 0.18) / 0.52));
           const exit = 1.0 - Math.min(1, Math.max(0, (p - 0.95) / 0.05));
 
           ctx.save();
           ctx.globalAlpha = entry * exit;
 
-          const grad = ctx.createLinearGradient(0, 0, width, height);
-          grad.addColorStop(0, "#011209");
-          grad.addColorStop(0.4, "#063824");
-          grad.addColorStop(0.8, "#0d5c3b");
-          grad.addColorStop(1, "#021c10");
-
-          ctx.fillStyle = grad;
-          ctx.beginPath();
-
-          const wave1 = Math.sin(time * 0.0012 + p * 3.5) * (height * 0.12);
-          const wave2 = Math.cos(time * 0.0016 + p * 2.8) * (height * 0.08);
-
-          const archPull = drape * width * 0.35;
-          const leftX = width * 0.1 - archPull;
-          const rightX = width * 0.9 + archPull;
-
-          ctx.moveTo(0, 0);
-          ctx.lineTo(width, 0);
-          ctx.bezierCurveTo(
-            rightX, height * 0.35 + wave2,
-            width * 0.5, height * 0.5 + wave1 - drape * (height * 0.3),
-            leftX, height * 0.8 + wave2
-          );
-          ctx.lineTo(0, height);
-          ctx.closePath();
-          ctx.fill();
-
-          // Ribbon Overlay
-          if (p > 0.08 && p < 0.85) {
-            const ribbonAlpha = Math.min(1, (p - 0.08) / 0.15) * Math.min(1, (0.85 - p) / 0.15);
-            ctx.strokeStyle = `rgba(245, 200, 93, ${0.75 * ribbonAlpha})`;
-            ctx.lineWidth = Math.max(3, width * 0.012);
-            ctx.beginPath();
-            ctx.moveTo(width * 0.05, height * 0.85);
-            ctx.bezierCurveTo(
-              width * 0.35, height * 0.45 + Math.sin(time * 0.002) * 30,
-              width * 0.65, height * 0.75 + Math.cos(time * 0.002) * 30,
-              width * 0.95, height * 0.25
-            );
-            ctx.stroke();
+          // 1. Draw Mandapam Image
+          if (mandappImg.complete && p > 0.15) {
+            const mAlpha = Math.min(1, (p - 0.15) / 0.40);
+            ctx.save();
+            ctx.globalAlpha = mAlpha * exit;
+            const dollyScale = p > 0.76 ? 1.0 + Math.min(1, (p - 0.76) / 0.20) * 0.45 : 1.0;
+            const drawW = width * dollyScale;
+            const drawH = (width * 1100 / 1430) * dollyScale;
+            const drawX = (width - drawW) * 0.5;
+            const drawY = (height - drawH) * 0.5;
+            ctx.drawImage(mandappImg, drawX, drawY, drawW, drawH);
+            ctx.restore();
           }
 
-          // Mandapam Arch & Govinda Namalu in Fallback Canvas
-          if (drape > 0.1) {
-            ctx.strokeStyle = `rgba(245, 200, 93, ${drape * 0.9})`;
-            ctx.lineWidth = Math.max(2, width * 0.006);
-            ctx.beginPath();
-            ctx.arc(width * 0.5, height * 0.48, width * 0.18, Math.PI, 0, false);
-            ctx.stroke();
+          // 2. Draw Bellamkonda Photograph Framed in Mandapam Arch
+          if (bellamImg.complete && p > 0.75) {
+            const bAlpha = Math.min(1, (p - 0.75) / 0.18);
+            ctx.save();
+            ctx.globalAlpha = bAlpha * exit;
+            const photoW = Math.min(width * 0.38, 380);
+            const photoH = photoW * 1.42;
+            const photoX = (width - photoW) * 0.5;
+            const photoY = (height - photoH) * 0.5;
 
-            // Devotional Crest (No text)
-            const crestY = height * 0.48 - width * 0.18;
-            ctx.fillStyle = `rgba(255, 255, 255, ${drape * 0.95})`;
-            ctx.fillRect(width * 0.5 - 12, crestY - 24, 6, 28);
-            ctx.fillRect(width * 0.5 + 6, crestY - 24, 6, 28);
-            ctx.fillStyle = `rgba(214, 24, 39, ${drape * 0.95})`;
-            ctx.fillRect(width * 0.5 - 2, crestY - 22, 4, 26);
+            // Clip to cusped arch
+            ctx.beginPath();
+            ctx.moveTo(photoX, photoY + photoH);
+            ctx.lineTo(photoX, photoY + photoH * 0.32);
+            ctx.bezierCurveTo(photoX, photoY + photoH * 0.24, photoX + photoW * 0.08, photoY + photoH * 0.24, photoX + photoW * 0.14, photoY + photoH * 0.20);
+            ctx.bezierCurveTo(photoX + photoW * 0.18, photoY + photoH * 0.17, photoX + photoW * 0.24, photoY + photoH * 0.18, photoX + photoW * 0.28, photoY + photoH * 0.14);
+            ctx.bezierCurveTo(photoX + photoW * 0.33, photoY + photoH * 0.09, photoX + photoW * 0.40, photoY + photoH * 0.08, photoX + photoW * 0.46, photoY + photoH * 0.03);
+            ctx.bezierCurveTo(photoX + photoW * 0.48, photoY + photoH * 0.01, photoX + photoW * 0.49, photoY, photoX + photoW * 0.50, photoY);
+            ctx.bezierCurveTo(photoX + photoW * 0.51, photoY, photoX + photoW * 0.52, photoY + photoH * 0.01, photoX + photoW * 0.54, photoY + photoH * 0.03);
+            ctx.bezierCurveTo(photoX + photoW * 0.60, photoY + photoH * 0.08, photoX + photoW * 0.67, photoY + photoH * 0.09, photoX + photoW * 0.72, photoY + photoH * 0.14);
+            ctx.bezierCurveTo(photoX + photoW * 0.76, photoY + photoH * 0.18, photoX + photoW * 0.82, photoY + photoH * 0.17, photoX + photoW * 0.86, photoY + photoH * 0.20);
+            ctx.bezierCurveTo(photoX + photoW * 0.92, photoY + photoH * 0.24, photoX + photoW, photoY + photoH * 0.24, photoX + photoW, photoY + photoH * 0.32);
+            ctx.lineTo(photoX + photoW, photoY + photoH);
+            ctx.closePath();
+            ctx.clip();
+
+            ctx.drawImage(bellamImg, photoX, photoY, photoW, photoH);
+            ctx.strokeStyle = "#f5c85d";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          // 3. Four-Direction Silk Flaps (Covering until pulled away)
+          if (p < 0.90) {
+            const silkAlpha = Math.min(1, (0.90 - p) / 0.12);
+            ctx.globalAlpha = entry * silkAlpha;
+
+            const pullDistY = pull * (height * 0.65);
+            const pullDistX = pull * (width * 0.65);
+
+            // Top Flap (Emerald)
+            const topGrad = ctx.createLinearGradient(0, 0, 0, height * 0.5 - pullDistY);
+            topGrad.addColorStop(0, "#01150c");
+            topGrad.addColorStop(0.7, "#063e26");
+            topGrad.addColorStop(1, "#0d5c3b");
+            ctx.fillStyle = topGrad;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(width, 0);
+            ctx.lineTo(width, height * 0.52 - pullDistY);
+            ctx.bezierCurveTo(
+              width * 0.65, height * 0.52 - pullDistY + Math.sin(time * 0.002) * 20,
+              width * 0.35, height * 0.52 - pullDistY - Math.sin(time * 0.002) * 20,
+              0, height * 0.52 - pullDistY
+            );
+            ctx.closePath();
+            ctx.fill();
+
+            // Bottom Flap (Champagne Gold)
+            const botGrad = ctx.createLinearGradient(0, height * 0.48 + pullDistY, 0, height);
+            botGrad.addColorStop(0, "#e8c374");
+            botGrad.addColorStop(0.5, "#a67832");
+            botGrad.addColorStop(1, "#3b260e");
+            ctx.fillStyle = botGrad;
+            ctx.beginPath();
+            ctx.moveTo(0, height);
+            ctx.lineTo(width, height);
+            ctx.lineTo(width, height * 0.48 + pullDistY);
+            ctx.bezierCurveTo(
+              width * 0.65, height * 0.48 + pullDistY - Math.sin(time * 0.002) * 20,
+              width * 0.35, height * 0.48 + pullDistY + Math.sin(time * 0.002) * 20,
+              0, height * 0.48 + pullDistY
+            );
+            ctx.closePath();
+            ctx.fill();
+
+            // Left Flap (Emerald)
+            ctx.fillStyle = topGrad;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(width * 0.52 - pullDistX, 0);
+            ctx.bezierCurveTo(
+              width * 0.52 - pullDistX + Math.cos(time * 0.002) * 15, height * 0.5,
+              width * 0.52 - pullDistX - Math.cos(time * 0.002) * 15, height * 0.7,
+              width * 0.52 - pullDistX, height
+            );
+            ctx.lineTo(0, height);
+            ctx.closePath();
+            ctx.fill();
+
+            // Right Flap (Champagne)
+            ctx.fillStyle = botGrad;
+            ctx.beginPath();
+            ctx.moveTo(width, 0);
+            ctx.lineTo(width * 0.48 + pullDistX, 0);
+            ctx.bezierCurveTo(
+              width * 0.48 + pullDistX - Math.cos(time * 0.002) * 15, height * 0.5,
+              width * 0.48 + pullDistX + Math.cos(time * 0.002) * 15, height * 0.7,
+              width * 0.48 + pullDistX, height
+            );
+            ctx.lineTo(width, height);
+            ctx.closePath();
+            ctx.fill();
           }
 
           ctx.restore();

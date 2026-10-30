@@ -54,10 +54,8 @@ export default function CameraGlareTransition({
   const ghost3Ref = useRef<HTMLDivElement>(null);
   const ghost4Ref = useRef<HTMLDivElement>(null);
 
-  // Stage D: Champagne wash & Logo reveal refs
-  const champagneWashRef = useRef<HTMLDivElement>(null);
+  // Stage D: Logo reveal refs
   const logoRevealWrapRef = useRef<HTMLDivElement>(null);
-  const logoGlintRef = useRef<HTMLDivElement>(null);
 
   // Stages E – G: 3D Procedural WebGL Cloth & Mandapam Portal
   const clothHandleRef = useRef<ClothParallaxHandle>(null);
@@ -77,12 +75,13 @@ export default function CameraGlareTransition({
     if (!heroSectionRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Glare animation state tracker
+      // Authoritative Glare animation state tracker (Single continuous timeline)
       const glareState = {
         x: 18, // vw percentage
-        y: 18, // vh percentage
+        y: 20, // vh percentage
         scale: 0.85,
         rotation: 0,
+        spread: 1.0,
       };
 
       // Set initial element states
@@ -90,7 +89,6 @@ export default function CameraGlareTransition({
         [
           shutterLayerRef.current,
           glareRigRef.current,
-          champagneWashRef.current,
           logoRevealWrapRef.current,
           portalChapterMetaRef.current,
           portalExitBloomRef.current,
@@ -180,12 +178,14 @@ export default function CameraGlareTransition({
       }
 
       /* ═══════════════════════════════════════════════════════════════════
-         STAGE C (0.16 – 0.42): CAMERA GLARE APPEARS & TRAVELS ACROSS
-         Natural optical lens flare catches upper-left of hero photo,
-         then physically traverses diagonally to center-right.
-         Hero photo remains intact beneath. Headline dissolves gently.
+         STAGE C & D (0.16 – 0.65): CONTINUOUS CAMERA GLARE → 24 FRAMES LOGO
+         Single authoritative glare state. Continuous interpolation.
+         Zero restarts, zero independent logo glints, pure physical continuity.
          ═══════════════════════════════════════════════════════════════════ */
       if (glareRigRef.current && glareHotspotRef.current) {
+        // 1. Initial Glare Approach (0.16 – 0.44):
+        // Starts at left (18%, 20%), glides smoothly toward center (50%, 50%).
+        // Horizontal spread tightens (1.0 -> 0.35), scale concentrates (0.85 -> 0.48).
         masterTl.fromTo(
           glareRigRef.current,
           { opacity: 0 },
@@ -195,38 +195,40 @@ export default function CameraGlareTransition({
 
         masterTl.fromTo(
           glareState,
-          { x: 18, y: 18, scale: 0.85, rotation: 0 },
+          { x: 18, y: 20, scale: 0.85, rotation: 0, spread: 1.0 },
           {
-            x: 52,
-            y: 35,
-            scale: 1.45,
-            rotation: 45,
-            duration: 0.24,
+            x: 50,
+            y: 50,
+            scale: 0.48,
+            rotation: 24,
+            spread: 0.35,
+            duration: 0.28,
             ease: "power1.inOut",
             onUpdate: () => {
               if (glareHotspotRef.current) {
                 glareHotspotRef.current.style.left = `${glareState.x}%`;
                 glareHotspotRef.current.style.top = `${glareState.y}%`;
                 glareHotspotRef.current.style.transform = `translate(-50%, -50%) scale(${glareState.scale})`;
+                glareHotspotRef.current.style.setProperty("--glare-spread", glareState.spread.toString());
               }
               if (starburstRef.current) {
                 starburstRef.current.style.transform = `translate(-50%, -50%) rotate(${glareState.rotation}deg)`;
               }
               if (ghost1Ref.current) {
-                ghost1Ref.current.style.left = `${Math.min(92, glareState.x * 1.4)}%`;
-                ghost1Ref.current.style.top = `${Math.min(88, glareState.y * 1.45)}%`;
+                ghost1Ref.current.style.left = `${Math.min(92, glareState.x * 1.35)}%`;
+                ghost1Ref.current.style.top = `${Math.min(88, glareState.y * 1.35)}%`;
               }
               if (ghost2Ref.current) {
-                ghost2Ref.current.style.left = `${Math.min(95, glareState.x * 1.7)}%`;
-                ghost2Ref.current.style.top = `${Math.min(92, glareState.y * 1.75)}%`;
+                ghost2Ref.current.style.left = `${Math.min(95, glareState.x * 1.6)}%`;
+                ghost2Ref.current.style.top = `${Math.min(92, glareState.y * 1.6)}%`;
               }
               if (ghost3Ref.current) {
-                ghost3Ref.current.style.left = `${Math.min(97, glareState.x * 1.9)}%`;
-                ghost3Ref.current.style.top = `${Math.min(95, glareState.y * 1.95)}%`;
+                ghost3Ref.current.style.left = `${Math.min(97, glareState.x * 1.8)}%`;
+                ghost3Ref.current.style.top = `${Math.min(95, glareState.y * 1.8)}%`;
               }
               if (ghost4Ref.current) {
-                ghost4Ref.current.style.left = `${Math.min(99, glareState.x * 2.1)}%`;
-                ghost4Ref.current.style.top = `${Math.min(97, glareState.y * 2.15)}%`;
+                ghost4Ref.current.style.left = `${Math.min(99, glareState.x * 1.95)}%`;
+                ghost4Ref.current.style.top = `${Math.min(97, glareState.y * 1.95)}%`;
               }
             },
           },
@@ -236,83 +238,83 @@ export default function CameraGlareTransition({
 
       // Hero typography dissolves softly during light transit
       if (headlineRef.current) {
-        masterTl.to(headlineRef.current, { opacity: 0, y: -14, duration: 0.08, ease: "power2.out" }, 0.25);
+        masterTl.to(headlineRef.current, { opacity: 0, y: -14, duration: 0.08, ease: "power2.out" }, 0.24);
       }
       if (metadataRef.current) {
-        masterTl.to(metadataRef.current, { opacity: 0, y: 12, duration: 0.08, ease: "power2.out" }, 0.25);
+        masterTl.to(metadataRef.current, { opacity: 0, y: 12, duration: 0.08, ease: "power2.out" }, 0.24);
       }
       if (topBarRef.current) {
-        masterTl.to(topBarRef.current, { opacity: 0, duration: 0.08, ease: "power2.out" }, 0.27);
+        masterTl.to(topBarRef.current, { opacity: 0, duration: 0.08, ease: "power2.out" }, 0.26);
       }
 
-      // Optical depth-of-field soft focus on photograph as glare sweeps across (Panel 03)
+      // Optical depth-of-field soft focus & dissolve on hero photograph beneath the light
       if (heroImageRef.current) {
         masterTl.to(
           heroImageRef.current,
-          { filter: "blur(5px)", duration: 0.12, ease: "power1.inOut" },
-          0.30
+          { filter: "blur(6px)", duration: 0.10, ease: "power1.inOut" },
+          0.28
+        );
+        masterTl.to(
+          heroImageRef.current,
+          { opacity: 0, duration: 0.08, ease: "power1.out" },
+          0.36
         );
       }
 
-      /* ═══════════════════════════════════════════════════════════════════
-         STAGE D (0.40 – 0.64): CHAMPAGNE WASH & 24 FRAMES LOGO REVEAL
-         Glare blooms into controlled champagne-white wash.
-         Underneath, hero photo dissolves into cosmic bokeh plate (05).
-         Wash clears 100%. Authentic 24 FRAMES logo revealed with glint.
-         ═══════════════════════════════════════════════════════════════════ */
-      if (champagneWashRef.current) {
-        masterTl.fromTo(
-          champagneWashRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.05, ease: "power2.in" },
-          0.40
-        );
-
-        // Photo dissolves under wash
-        if (heroImageRef.current) {
-          masterTl.to(heroImageRef.current, { opacity: 0, duration: 0.04, ease: "power1.out" }, 0.42);
-        }
-
-        // Glare rig fades into bloom
-        if (glareRigRef.current) {
-          masterTl.to(glareRigRef.current, { opacity: 0, duration: 0.04 }, 0.44);
-        }
-
-        // Champagne wash clears completely
-        masterTl.to(champagneWashRef.current, { opacity: 0, duration: 0.06, ease: "power2.out" }, 0.46);
-      }
-
-      // Authentic 24 FRAMES logo emerges
+      // 2. Glare reaches center (0.44): Authentic 24 FRAMES logo reveals directly through the light
       if (logoRevealWrapRef.current) {
         masterTl.fromTo(
           logoRevealWrapRef.current,
-          { opacity: 0, scale: 0.94 },
-          { opacity: 1, scale: 1.0, duration: 0.05, ease: "power2.out" },
-          0.49
+          { opacity: 0, scale: 0.95 },
+          { opacity: 1, scale: 1.0, duration: 0.08, ease: "power2.out" },
+          0.44
+        );
+      }
+
+      // 3. The SAME glare continues moving across the logo, expanding and softening (0.44 – 0.58)
+      if (glareRigRef.current && glareHotspotRef.current) {
+        masterTl.to(
+          glareState,
+          {
+            x: 53,
+            y: 50,
+            scale: 1.35,
+            spread: 1.45,
+            rotation: 45,
+            duration: 0.12,
+            ease: "power1.out",
+            onUpdate: () => {
+              if (glareHotspotRef.current) {
+                glareHotspotRef.current.style.left = `${glareState.x}%`;
+                glareHotspotRef.current.style.top = `${glareState.y}%`;
+                glareHotspotRef.current.style.transform = `translate(-50%, -50%) scale(${glareState.scale})`;
+                glareHotspotRef.current.style.setProperty("--glare-spread", glareState.spread.toString());
+              }
+              if (starburstRef.current) {
+                starburstRef.current.style.transform = `translate(-50%, -50%) rotate(${glareState.rotation}deg)`;
+              }
+            },
+          },
+          0.44
         );
 
-        if (logoGlintRef.current) {
-          masterTl.fromTo(
-            logoGlintRef.current,
-            { opacity: 0, x: -75, y: -46, scaleX: 0.7 },
-            { opacity: 0.95, x: 0, y: 0, scaleX: 1.35, duration: 0.04, ease: "power2.out" },
-            0.51
-          );
-          masterTl.to(
-            logoGlintRef.current,
-            { opacity: 0, x: 75, y: 46, scaleX: 0.9, duration: 0.04, ease: "power1.in" },
-            0.56
-          );
-        }
+        // Glare softens and fades out naturally as the logo settles (0.54 – 0.60)
+        masterTl.to(
+          glareRigRef.current,
+          { opacity: 0, duration: 0.06, ease: "power1.in" },
+          0.54
+        );
+      }
 
-        // Visual pause for perception
-        masterTl.to({}, { duration: 0.05 }, 0.55);
+      // 4. Authentic 24 FRAMES logo holds for a clear cinematic beat (0.56 – 0.63)
+      masterTl.to({}, { duration: 0.07 }, 0.56);
 
-        // Logo dissolves gracefully before silk emergence
+      // 5. Logo dissolves gracefully as silk fabric emerges (0.63 – 0.67)
+      if (logoRevealWrapRef.current) {
         masterTl.to(
           logoRevealWrapRef.current,
           { opacity: 0, scale: 1.02, duration: 0.04, ease: "power2.in" },
-          0.60
+          0.63
         );
       }
 
@@ -387,7 +389,6 @@ export default function CameraGlareTransition({
             clothHandleRef.current?.setActive(false);
             if (shutterLayerRef.current) shutterLayerRef.current.style.opacity = "0";
             if (glareRigRef.current) glareRigRef.current.style.opacity = "0";
-            if (champagneWashRef.current) champagneWashRef.current.style.opacity = "0";
             if (logoRevealWrapRef.current) logoRevealWrapRef.current.style.opacity = "0";
             if (portalChapterMetaRef.current) portalChapterMetaRef.current.style.opacity = "0";
             if (portalExitBloomRef.current) portalExitBloomRef.current.style.opacity = "0";
@@ -517,10 +518,7 @@ export default function CameraGlareTransition({
         </div>
       </div>
 
-      {/* ── STAGE D: Controlled Champagne-White Optical Bloom Wash ── */}
-      <div ref={champagneWashRef} className={styles.champagneWash} />
-
-      {/* ── STAGE E: Authentic 24 FRAMES Logo Reveal ── */}
+      {/* ── STAGE D: Authentic 24 FRAMES Logo Reveal (Illuminated by Continuous Glare) ── */}
       <div ref={logoRevealWrapRef} className={styles.logoRevealWrap}>
         <picture>
           <source srcSet="/images/logo-light-header.webp" type="image/webp" />
@@ -531,9 +529,6 @@ export default function CameraGlareTransition({
             loading="eager"
           />
         </picture>
-        <div ref={logoGlintRef} className={styles.logoGlint}>
-          <div className={styles.logoStreak} />
-        </div>
       </div>
 
       {/* ── STAGE E, F, G: 3D Procedural WebGL Silk Cloth & Mandapam Portal ── */}
