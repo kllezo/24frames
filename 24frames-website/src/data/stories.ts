@@ -90,7 +90,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
     chapterKicker: "THE MONUMENTAL RECEPTION",
     coverImage: "/images/stories/bellam-srikonda/IMG_6339.jpg",
     coverWebp: "/images/stories/bellam-srikonda/IMG_6339.webp",
-    coverPosition: "center 24%",
+    coverPosition: "center 18%",
     coverCaption: "An intimate whisper amidst the grand celebration — Kavya Reddy & Bellamkonda Sai Sreenivas",
     narrativeOverview:
       "When the scale of celebration reaches thousands and luminaries of cinema gather under cathedral chandeliers, the rarest art is discovering the quiet, unscripted glance where two people remain entirely alone together.",
@@ -254,7 +254,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
     chapterKicker: "THE SACRED & THE CELEBRATORY",
     coverImage: "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
     coverWebp: "/images/stories/sirish-and-harshitha/IMG_6353.webp",
-    coverPosition: "center 58%",
+    coverPosition: "center 22%",
     coverCaption: "Sacred wedding portrait before Lord Venkateswara: దైవ సంకల్పంతో కలిసిన బంధం",
     narrativeOverview:
       "Anchored in the timeless sanctity of ancient Telugu Vedic customs and crowned by jubilant royal festivities, Sireesh and Harshitha's wedding moved from reverent temple devotion to an exhilarating confetti-lit celebration.",
@@ -418,7 +418,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
     chapterKicker: "RITUALS, REVELRY & RUNWAY",
     coverImage: "/images/stories/hrithika-abhishek/IMG_6333.jpg",
     coverWebp: "/images/stories/hrithika-abhishek/IMG_6333.webp",
-    coverPosition: "center 38%",
+    coverPosition: "center 18%",
     coverCaption: "Editorial harmony: Hrithika & Abhishek in bespoke lavender evening couture",
     narrativeOverview:
       "A luminous multi-chapter wedding capturing the contrast between ancient ceremonial grace and modern festival exuberance—from the sacred purifying droplets of Mangalasnanam to an electrified celestial Sangeet.",
@@ -593,7 +593,7 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
     chapterKicker: "BOTANICAL HARMONY & UNREHEARSED JOY",
     coverImage: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
     coverWebp: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
-    coverPosition: "62% top",
+    coverPosition: "60% 16%",
     coverCaption: "Intimate forehead embrace: Gayathri in emerald silk & Karthik in ceremonial ivory",
     narrativeOverview:
       "Set against a sun-drenched conservatory of cascading blush blooms, terracotta urns, and open verandas, Karthik and Gayathri's wedding unfolded with breezy elegance, spontaneous dance, and quiet, soulful intimacy.",

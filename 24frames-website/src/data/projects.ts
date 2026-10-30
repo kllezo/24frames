@@ -41,6 +41,7 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
     venue: "GMR Arena / Shamshabad Estate",
     year: "2025",
     coverImage: "/images/stories/bellam-srikonda/IMG_6339.jpg",
+    coverPosition: "center 18%",
     heroAspect: "cinematic",
     overview:
       "A grand multi-day celebration blending royal Telugu heritage with contemporary cinematic grandeur. Curated coverage documented with theatrical lighting discipline, quiet poise, and prime cinema optics.",
@@ -98,6 +99,7 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
     venue: "Palace Grounds & Heritage Pavilion",
     year: "2025",
     coverImage: "/images/stories/sirish-and-harshitha/IMG_6353.jpg",
+    coverPosition: "center 22%",
     heroAspect: "tall",
     overview:
       "A deeply reverent Telugu wedding ceremony anchored in ancient Vedic sanctity and royal palace celebrations, captured with devotional reverence and contemporary cinematic grace.",
@@ -145,6 +147,7 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
     venue: "Hyderabad Celebration Estate",
     year: "2025",
     coverImage: "/images/stories/hrithika-abhishek/IMG_6333.jpg",
+    coverPosition: "center 18%",
     heroAspect: "wide",
     overview:
       "A rich multi-chapter wedding celebration chronicling sacred Telugu rituals, vibrant family galas, and quiet architectural portraits, captured with 24 Frames' signature warmth.",
@@ -192,7 +195,7 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
     venue: "Botanical Pavilion & Glasshouse",
     year: "2025",
     coverImage: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
-    coverPosition: "62% top",
+    coverPosition: "60% 16%",
     heroAspect: "tall",
     overview:
       "An enchanting fine-art wedding set in lush botanical grounds, weaving vibrant floral craftsmanship, classical temple attire, and exuberant celebratory dance into a timeless visual poem.",

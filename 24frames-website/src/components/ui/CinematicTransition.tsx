@@ -290,7 +290,10 @@ export default function CinematicTransition() {
           l.scrollTo(destUrl.hash, { offset: -80, immediate: true });
         } else {
           const el = document.querySelector(destUrl.hash);
-          if (el) el.scrollIntoView({ behavior: "instant", block: "start" });
+          if (el) {
+            const top = el.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({ top, behavior: "smooth" });
+          }
         }
         try {
           window.history.pushState(null, "", targetUrl);

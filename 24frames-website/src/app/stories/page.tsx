@@ -52,6 +52,7 @@ export default function StoriesPage() {
                         src={story.coverImage}
                         alt={story.title}
                         className={styles.storyImg}
+                        style={{ objectPosition: story.coverPosition || "center 20%" }}
                         loading="lazy"
                       />
                     </picture>

@@ -92,7 +92,7 @@ export const ITEM_PROJECT_02: GalleryProjectItem = {
   webpImage: "/images/stories/sirish-and-harshitha/IMG_6347.webp",
   aspectRatio: "3 / 4",
   storyUrl: "/stories/sirish-and-harshitha",
-  objectPosition: "center center",
+  objectPosition: "center 22%",
   narrative:
     "Sacred temple vows before Lord Venkateswara transitioning into sunlit meadow strolls and an electric midnight confetti celebration.",
 };
@@ -111,7 +111,7 @@ export const ITEM_PROJECT_02_MANDAP: GalleryProjectItem = {
   webpImage: "/images/stories/sirish-and-harshitha/IMG_6353.webp",
   aspectRatio: "16 / 9",
   storyUrl: "/stories/sirish-and-harshitha",
-  objectPosition: "center 40%",
+  objectPosition: "center 24%",
 };
 
 /* Item 4: Royal Couture Portrait — Hrithika & Abhishek */
@@ -128,7 +128,7 @@ export const ITEM_PROJECT_03: GalleryProjectItem = {
   webpImage: "/images/stories/hrithika-abhishek/IMG_6333_cropped.webp",
   aspectRatio: "4 / 5",
   storyUrl: "/stories/hrithika-abhishek",
-  objectPosition: "center 24%",
+  objectPosition: "center 18%",
   narrative:
     "From frozen droplets of morning Mangalasnanam water blessings to an arena Sangeet stage under a ceiling of mirrored spheres.",
 };
@@ -147,7 +147,7 @@ export const ITEM_PROJECT_04: GalleryProjectItem = {
   webpImage: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
   aspectRatio: "16 / 10",
   storyUrl: "/stories/karthik-and-gayathri",
-  objectPosition: "62% top",
+  objectPosition: "60% 16%",
   narrative:
     "Sun-drenched botanical glasshouse sceneries, breezy columned verandas, and spontaneous dance before cascading blush florals.",
 };

@@ -18,34 +18,68 @@ export default function SmoothScroll() {
       return;
     }
 
-    // 2. Initialize Single Reusable Lenis Controller with Restrained, Natural Easing
-    const lenis = new Lenis({
-      duration: 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Clean exponential deceleration
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.0,
-      infinite: false,
-    });
+    // 2. Strict Platform Separation:
+    // Mobile (< 820px) is STRICTLY LOCKED to existing Lenis behavior.
+    // Desktop (>= 820px) uses pure native browser vertical scrolling without Lenis interference.
+    const isMobile = () => window.innerWidth < 820;
 
-    lenisRef.current = lenis;
-    (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+    let lenis: Lenis | null = null;
+    let tickerCallback: ((time: number) => void) | null = null;
+    let updateScrollTrigger: (() => void) | null = null;
 
-    // 3. Official GSAP ScrollTrigger Synchronization
-    const updateScrollTrigger = () => {
-      ScrollTrigger.update();
+    const initLenisMobile = () => {
+      if (lenisRef.current) return;
+      lenis = new Lenis({
+        duration: 1.15,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Clean exponential deceleration
+        orientation: "vertical",
+        gestureOrientation: "vertical",
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.0,
+        infinite: false,
+      });
+
+      lenisRef.current = lenis;
+      (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+
+      updateScrollTrigger = () => {
+        ScrollTrigger.update();
+      };
+      lenis.on("scroll", updateScrollTrigger);
+
+      tickerCallback = (time: number) => {
+        lenis?.raf(time * 1000);
+      };
+      gsap.ticker.add(tickerCallback);
+      gsap.ticker.lagSmoothing(500, 33);
     };
-    lenis.on("scroll", updateScrollTrigger);
 
-    const tickerCallback = (time: number) => {
-      lenis.raf(time * 1000);
+    const destroyLenis = () => {
+      if (updateScrollTrigger && lenisRef.current) {
+        lenisRef.current.off("scroll", updateScrollTrigger);
+      }
+      if (tickerCallback) {
+        gsap.ticker.remove(tickerCallback);
+        tickerCallback = null;
+      }
+      if (lenisRef.current) {
+        lenisRef.current.destroy();
+        lenisRef.current = null;
+      }
+      lenis = null;
+      (window as unknown as { __lenis?: Lenis }).__lenis = undefined;
     };
-    gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(500, 33);
 
-    // 4. Handle Anchor Navigation with Fixed Luxury Header Offset (-80px)
+    if (isMobile()) {
+      initLenisMobile();
+    } else {
+      // Desktop: Pure native browser vertical scrolling.
+      destroyLenis();
+      ScrollTrigger.refresh();
+    }
+
+    // 3. Universal Anchor Navigation with Fixed Luxury Header Offset (-80px)
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       const anchor = target?.closest("a") as HTMLAnchorElement | null;
@@ -58,24 +92,45 @@ export default function SmoothScroll() {
         const targetElement = document.querySelector(href);
         if (targetElement) {
           e.preventDefault();
-          lenis.scrollTo(targetElement as HTMLElement, {
-            offset: -80,
-            duration: 1.2,
-          });
+          if (lenisRef.current) {
+            lenisRef.current.scrollTo(targetElement as HTMLElement, {
+              offset: -80,
+              duration: 1.2,
+            });
+          } else {
+            const top = targetElement.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({
+              top,
+              behavior: "smooth",
+            });
+          }
         }
       }
     };
 
     document.addEventListener("click", handleAnchorClick, { capture: true });
 
-    // 5. Cleanup on Unmount
+    // Handle responsive breakpoint changes
+    const handleResize = () => {
+      if (isMobile()) {
+        if (!lenisRef.current) {
+          initLenisMobile();
+        }
+      } else {
+        if (lenisRef.current) {
+          destroyLenis();
+          ScrollTrigger.refresh();
+        }
+      }
+    };
+
+    window.addEventListener("resize", handleResize, { passive: true });
+
+    // 4. Cleanup on Unmount
     return () => {
+      window.removeEventListener("resize", handleResize);
       document.removeEventListener("click", handleAnchorClick, { capture: true });
-      lenis.off("scroll", updateScrollTrigger);
-      gsap.ticker.remove(tickerCallback);
-      lenis.destroy();
-      lenisRef.current = null;
-      (window as unknown as { __lenis?: Lenis }).__lenis = undefined;
+      destroyLenis();
     };
   }, []);
 
