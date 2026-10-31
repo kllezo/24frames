@@ -88,9 +88,14 @@
   justify-content: center;
   padding: clamp(1rem, 2.8vw, 2.5rem);
   z-index: 14;
-  pointer-events: auto;
+  pointer-events: none;
   opacity: 0;
   will-change: opacity;
+}
+
+.vowsStageWrap a,
+.vowsStageWrap button {
+  pointer-events: auto;
 }
 
 .vowsComposition {

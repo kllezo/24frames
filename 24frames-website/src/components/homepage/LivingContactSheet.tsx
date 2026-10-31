@@ -145,9 +145,9 @@ export const ITEM_PROJECT_04: GalleryProjectItem = {
   location: "Botanical Glasshouse · Hyderabad",
   image: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
   webpImage: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
-  aspectRatio: "16 / 10",
+  aspectRatio: "4 / 5",
   storyUrl: "/stories/karthik-and-gayathri",
-  objectPosition: "center 20%",
+  objectPosition: "center 10%",
   narrative:
     "Sun-drenched botanical glasshouse sceneries, breezy columned verandas, and spontaneous dance before cascading blush florals.",
 };

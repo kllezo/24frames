@@ -26,6 +26,7 @@ const PRESS_LOGOS: PressLogo[] = [
   { name: "Inovexia International", src: "/images/press/inovexia.png", alt: "Indian Eminent Awards presented by Inovexia International" },
   { name: "WPPI", src: "/images/press/wppi.png", alt: "WPPI international wedding & portrait photography association" },
   { name: "TCEI", src: "/images/press/tcei.png", alt: "Telangana Chamber of Events Industry distinction" },
+  { name: "WedMeGood", src: "/images/press/wedmegood.png", alt: "WedMeGood partner platform" },
   { name: "PIC-TIME", src: "/images/press/pic-time.png", alt: "Pic-Time global client gallery delivery platform" },
 ];
 

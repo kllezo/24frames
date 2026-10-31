@@ -71,13 +71,15 @@ export default function SmoothScroll() {
       (window as unknown as { __lenis?: Lenis }).__lenis = undefined;
     };
 
-    if (isMobile()) {
-      initLenisMobile();
-    } else {
-      // Desktop: Pure native browser vertical scrolling.
-      destroyLenis();
-      ScrollTrigger.refresh();
+    // 2. Pure Native Browser Scrolling Architecture across both Desktop and Mobile:
+    // Guarantees zero touch interception, zero scroll lock, 60fps native GPU compositor scrolling,
+    // and instant tactile responsiveness without competing RAF loops.
+    if (lenisRef.current) {
+      lenisRef.current.destroy();
+      lenisRef.current = null;
     }
+    (window as unknown as { __lenis?: Lenis }).__lenis = undefined;
+    ScrollTrigger.refresh();
 
     // 3. Universal Anchor Navigation with Fixed Luxury Header Offset (-80px)
     const handleAnchorClick = (e: MouseEvent) => {
@@ -112,16 +114,7 @@ export default function SmoothScroll() {
 
     // Handle responsive breakpoint changes
     const handleResize = () => {
-      if (isMobile()) {
-        if (!lenisRef.current) {
-          initLenisMobile();
-        }
-      } else {
-        if (lenisRef.current) {
-          destroyLenis();
-          ScrollTrigger.refresh();
-        }
-      }
+      ScrollTrigger.refresh();
     };
 
     window.addEventListener("resize", handleResize, { passive: true });
