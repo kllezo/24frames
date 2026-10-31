@@ -230,9 +230,9 @@ export default function CinematicTransition() {
       ) as HTMLElement | null;
     }
     if (cleanUrl.includes("inquire")) {
-      // Inquire: the commission form heading
+      // Inquire: target the primary CTA "BEGIN YOUR COMMISSION"
       return document.querySelector(
-        "h1[class*='invitationTitle'], [class*='invitationTitle'], #commissionContactForm h1, #commission-form h1, h1"
+        "button[aria-label*='Begin your bespoke commission'], button[class*='primaryAtelierBtn'], #inquire button, button"
       ) as HTMLElement | null;
     }
     if (cleanUrl.includes("client-gallery")) {
@@ -251,6 +251,22 @@ export default function CinematicTransition() {
     const winH = typeof window !== "undefined" ? window.innerHeight : 800;
     const isMobile = winW <= 820;
 
+    if (cleanUrl.includes("inquire")) {
+      // Precision geometric center of the BEGIN YOUR COMMISSION button
+      const targetScreenX = rect.left + rect.width * 0.5;
+      const targetScreenY = rect.top + rect.height * 0.5;
+      // Refined final optical focus size: fits subtly around the CTA button center
+      const finalSize = Math.max(54, Math.min(84, rect.height * 1.35));
+      const startSize = Math.min(winW, winH) * 0.44;
+      return {
+        x: targetScreenX - winW * 0.5,
+        y: targetScreenY - winH * 0.5,
+        width: finalSize,
+        height: finalSize,
+        startSize,
+      };
+    }
+
     const isPortrait = cleanUrl.includes("artist") || cleanUrl.startsWith("/stories/");
     const isHero = cleanUrl === "" || cleanUrl === "/";
     const focalYRatio = isPortrait ? 0.35 : isHero ? 0.38 : 0.50;
@@ -268,6 +284,7 @@ export default function CinematicTransition() {
       y: targetScreenY - winH * 0.5,
       width: size,
       height: size,
+      startSize: size,
     };
   }, []);
 
@@ -529,16 +546,16 @@ export default function CinematicTransition() {
       }
 
       const targetCoords = computeTargetCoordinates(targetEl, cleanUrl);
-      const initialSize = targetCoords.width;
+      const startSize = targetCoords.startSize || targetCoords.width;
 
-      // Make reticle visible at center (0, 0)
+      // Make reticle visible at center (0, 0) with relatively large scale at start
       gsap.set(focusRingRef.current, {
         xPercent: -50,
         yPercent: -50,
         x: 0,
         y: 0,
-        width: initialSize,
-        height: initialSize,
+        width: startSize,
+        height: startSize,
         scale: 1,
         opacity: 1,
       });
@@ -547,13 +564,13 @@ export default function CinematicTransition() {
         gsap.set(reticleAssemblyRef.current, { rotation: 0, transformOrigin: "400px 400px" });
       }
 
-      // Unified concentric reticle moves as one single physical optical unit
+      // Optical focus element travels towards target while progressively reducing scale with smooth deceleration
       await new Promise<void>((resolve) => {
         if (reticleAssemblyRef.current) {
           gsap.to(reticleAssemblyRef.current, {
-            rotation: 28,
-            duration: 0.52,
-            ease: "power2.inOut",
+            rotation: 22,
+            duration: 0.62,
+            ease: "power2.out",
           });
         }
         ringTimelineRef.current = gsap.to(focusRingRef.current, {
@@ -563,8 +580,8 @@ export default function CinematicTransition() {
           y: targetCoords.y,
           width: targetCoords.width,
           height: targetCoords.height,
-          duration: 0.52,
-          ease: "power2.inOut",
+          duration: 0.62,
+          ease: "power2.out",
           onComplete: () => resolve(),
         });
       });

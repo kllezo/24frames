@@ -419,75 +419,113 @@ export default function ClientGalleryExperience({
                       backgroundColor: item.fillColor,
                     }}
                   >
-                    {/* Stepped Tab Header (Remains visible as the top 15-20% strip) */}
-                    <div className={styles.folderTabHeader}>
-                      <div className={styles.folderBrandBlock}>
+                    {/* ── STATE A: Resting Folder Face (Branding, Sequence Number & Preview) ── */}
+                    <div className={styles.restingFolderFace}>
+                      {/* Stepped Tab Header */}
+                      <div className={styles.folderTabHeader}>
+                        <div className={styles.folderBrandBlock}>
+                          <span
+                            className={styles.folderFounderName}
+                            style={{ color: item.textColor }}
+                          >
+                            PHANI GOGIREDDY
+                          </span>
+                          <span
+                            className={styles.folderBrandName}
+                            style={{ color: item.textColor }}
+                          >
+                            24 FRAMES
+                          </span>
+                        </div>
                         <span
-                          className={styles.folderFounderName}
+                          className={styles.folderDiagonalArrow}
                           style={{ color: item.textColor }}
+                          aria-hidden="true"
                         >
-                          PHANI GOGIREDDY
-                        </span>
-                        <span
-                          className={styles.folderBrandName}
-                          style={{ color: item.textColor }}
-                        >
-                          24 FRAMES
+                          ↗
                         </span>
                       </div>
-                      <span
-                        className={styles.folderDiagonalArrow}
-                        style={{ color: item.textColor }}
-                        aria-hidden="true"
-                      >
-                        ↗
-                      </span>
+
+                      {/* Folder Body Content */}
+                      <div className={styles.folderBody}>
+                        <div
+                          className={styles.folderNumber}
+                          style={{ color: item.textColor }}
+                        >
+                          {item.number}
+                        </div>
+
+                        <h3
+                          className={styles.folderTitle}
+                          style={{ color: item.textColor }}
+                        >
+                          {item.title}
+                        </h3>
+
+                        <p
+                          className={styles.folderDesc}
+                          style={{ color: item.descColor }}
+                        >
+                          {item.description}
+                        </p>
+
+                        {/* Circular Action Arrow Bottom-Right */}
+                        <div
+                          className={styles.folderCircleBtn}
+                          style={{
+                            borderColor: item.btnBorder,
+                            color: item.btnColor,
+                          }}
+                          aria-hidden="true"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className={styles.folderCircleIcon}
+                          >
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                          </svg>
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Folder Body Content (Smoothly fades out during vertical compression) */}
-                    <div className={styles.folderBody}>
-                      <div
-                        className={styles.folderNumber}
-                        style={{ color: item.textColor }}
-                      >
-                        {item.number}
+                    {/* ── STATE B: Compressed Foreground Information Panel (Title, Description & Action) ──
+                         Active when folder opens: Branding and large number are removed; full service info is displayed */}
+                    <div className={styles.compressedInfoPanel}>
+                      <div className={styles.infoPanelHeader}>
+                        <h3
+                          className={styles.infoPanelTitle}
+                          style={{ color: item.textColor }}
+                        >
+                          {item.title}
+                        </h3>
+                        <span
+                          className={styles.infoPanelArrow}
+                          style={{ color: item.textColor }}
+                          aria-hidden="true"
+                        >
+                          ↗
+                        </span>
                       </div>
 
-                      <h3
-                        className={styles.folderTitle}
-                        style={{ color: item.textColor }}
-                      >
-                        {item.title}
-                      </h3>
-
                       <p
-                        className={styles.folderDesc}
+                        className={styles.infoPanelDesc}
                         style={{ color: item.descColor }}
                       >
                         {item.description}
                       </p>
 
-                      {/* Circular Action Arrow Bottom-Right */}
                       <div
-                        className={styles.folderCircleBtn}
-                        style={{
-                          borderColor: item.btnBorder,
-                          color: item.btnColor,
-                        }}
-                        aria-hidden="true"
+                        className={styles.infoPanelActionPrompt}
+                        style={{ color: item.textColor }}
                       >
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className={styles.folderCircleIcon}
-                        >
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                          <polyline points="12 5 19 12 12 19" />
-                        </svg>
+                        <span>EXPLORE CAPABILITY</span>
+                        <span className={styles.infoPromptArrow}>→</span>
                       </div>
                     </div>
                   </div>

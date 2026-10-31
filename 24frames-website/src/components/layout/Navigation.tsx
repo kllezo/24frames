@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import styles from "./Navigation.module.css";
 
@@ -13,38 +13,72 @@ const NAV_LINKS = [
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [isLightSection, setIsLightSection] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const scrolledRef = useRef(false);
+  const isLightRef = useRef(false);
+  const rafIdRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const updateNavigation = () => {
       const scrollY = window.scrollY;
-      setScrolled(scrollY > 50);
+      const isNowScrolled = scrollY > 50;
 
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalHeight > 0) {
-        setScrollProgress(Math.min(1, Math.max(0, scrollY / totalHeight)));
+      if (scrolledRef.current !== isNowScrolled) {
+        scrolledRef.current = isNowScrolled;
+        setScrolled(isNowScrolled);
+      }
+
+      // Fast direct DOM update for scroll progress bar (zero React re-renders during active scroll)
+      if (progressBarRef.current) {
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = totalHeight > 0 ? Math.min(1, Math.max(0, scrollY / totalHeight)) : 0;
+        progressBarRef.current.style.transform = `scaleX(${progress})`;
       }
 
       // Check current section under navigation header (~70px from top)
       const explicitTheme = document.documentElement.dataset.heroHeaderTheme;
+      let nextIsLight = isLightRef.current;
+
       if (explicitTheme === "dark") {
-        setIsLightSection(false);
+        nextIsLight = false;
       } else if (explicitTheme === "light") {
-        setIsLightSection(true);
+        nextIsLight = true;
       } else {
-        const navTarget = document.elementFromPoint(window.innerWidth / 2, 70);
-        if (navTarget) {
-          const darkAncestor = navTarget.closest('#hero, [data-theme="dark"], [data-theme="obsidian"]');
-          setIsLightSection(!darkAncestor);
+        const heroEl = document.getElementById("hero");
+        if (heroEl) {
+          const heroRect = heroEl.getBoundingClientRect();
+          // Hero (dark) extends to heroRect.bottom; below it is light ivory
+          nextIsLight = heroRect.bottom <= 70;
+        } else {
+          nextIsLight = true;
         }
+      }
+
+      if (isLightRef.current !== nextIsLight) {
+        isLightRef.current = nextIsLight;
+        setIsLightSection(nextIsLight);
       }
     };
 
+    const handleScroll = () => {
+      if (rafIdRef.current !== null) return;
+      rafIdRef.current = requestAnimationFrame(() => {
+        rafIdRef.current = null;
+        updateNavigation();
+      });
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    updateNavigation();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -68,8 +102,9 @@ export default function Navigation() {
       >
         {/* Scroll Progress Bar */}
         <div
+          ref={progressBarRef}
           className={styles.progressBar}
-          style={{ transform: `scaleX(${scrollProgress})` }}
+          style={{ transform: "scaleX(0)" }}
           aria-hidden="true"
         />
 

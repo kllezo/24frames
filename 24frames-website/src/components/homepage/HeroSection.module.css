@@ -1,5 +1,5 @@
 /* ============================================================
-   24 FRAMES — ACT I: THE FIRST FRAME (HOMEPAGE HERO)
+   24 FRAMES — HOMEPAGE HERO
    Full-Bleed Viewport Photograph (85vh) · Transparent Header Overlay
    Natural Cinematic Lighting · Glare & Flash Free · Refined Typography
    ============================================================ */
@@ -81,37 +81,10 @@
   right: clamp(1.5rem, 4vw, 4.5rem);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 1rem;
   z-index: 4;
   pointer-events: none;
-}
-
-.kickerBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(14, 22, 18, 0.65);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  padding: 0.38rem 0.85rem;
-  border-radius: 9999px;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #FFFFFF;
-}
-
-.kickerDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #C8A84E;
-  display: inline-block;
-  box-shadow: 0 0 6px rgba(200, 168, 78, 0.8);
 }
 
 .frameEdition {

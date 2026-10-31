@@ -60,7 +60,7 @@ export default function HeroSection() {
       ref={sectionRef}
       id="hero"
       className={styles.heroSection}
-      aria-label="The First Frame"
+      aria-label="Homepage Hero"
     >
       {/* ── FULL-BLEED CINEMATIC PHOTOGRAPH (Edge-to-edge) ── */}
       <div ref={frameRef} className={styles.cinematicCanvas}>
@@ -90,12 +90,8 @@ export default function HeroSection() {
         {/* Top Header Transition Overlay — Ensures navigation legibility */}
         <div className={styles.headerUnderlay} aria-hidden="true" />
 
-        {/* Top Eyebrow Tag Row */}
+        {/* Top Eyebrow Tag Row (Metadata Edition Only — First Frame Pill Removed) */}
         <div ref={topBarRef} className={styles.frameTopBar}>
-          <div className={styles.kickerBadge}>
-            <span className={styles.kickerDot} />
-            <span>THE FIRST FRAME</span>
-          </div>
           <span className={styles.frameEdition}>HYDERABAD · PALACE COMMISSION</span>
         </div>
 

@@ -16,13 +16,19 @@ interface HeroLogoTransitionProps {
   topBarRef: React.RefObject<HTMLDivElement | null>;
 }
 
-/* Authentic Cusped Torana Arch Silhouette derivation */
+/* Authentic Traditional South Indian Hindu Mandapam Torana Architecture
+   Stepped Corbel Brackets (Bodikai), Cusped Multi-foil Arch, and Sacred Stepped Temple Kalasa Crown */
 const buildBellamArchPaths = (p: number) => {
-  const yApex = -20 + 170 * Math.pow(Math.min(1, Math.max(0, p)), 1.1);
-  const cH = 44.8 * (1 - p * 0.2);
+  const normP = Math.min(1, Math.max(0, p));
+  if (normP >= 1) {
+    return { contourD: "", veilD: "" };
+  }
+  const yApex = -20 + 172 * Math.pow(normP, 1.12);
+  const cH = 44.8 * (1 - normP * 0.18);
   const yW = yApex + cH;
 
-  const contourD = `M 0 ${yW.toFixed(1)} L 0 ${(yApex + 0.72 * cH).toFixed(1)} C 0 ${(yApex + 0.54 * cH).toFixed(1)}, 8 ${(yApex + 0.54 * cH).toFixed(1)}, 14 ${(yApex + 0.45 * cH).toFixed(1)} C 18 ${(yApex + 0.38 * cH).toFixed(1)}, 24 ${(yApex + 0.40 * cH).toFixed(1)}, 28 ${(yApex + 0.31 * cH).toFixed(1)} C 33 ${(yApex + 0.20 * cH).toFixed(1)}, 40 ${(yApex + 0.18 * cH).toFixed(1)}, 46 ${(yApex + 0.07 * cH).toFixed(1)} C 48 ${(yApex + 0.02 * cH).toFixed(1)}, 49 ${yApex.toFixed(1)}, 50 ${yApex.toFixed(1)} C 51 ${yApex.toFixed(1)}, 52 ${(yApex + 0.02 * cH).toFixed(1)}, 54 ${(yApex + 0.07 * cH).toFixed(1)} C 60 ${(yApex + 0.18 * cH).toFixed(1)}, 67 ${(yApex + 0.20 * cH).toFixed(1)}, 72 ${(yApex + 0.31 * cH).toFixed(1)} C 76 ${(yApex + 0.40 * cH).toFixed(1)}, 82 ${(yApex + 0.38 * cH).toFixed(1)}, 86 ${(yApex + 0.45 * cH).toFixed(1)} C 92 ${(yApex + 0.54 * cH).toFixed(1)}, 100 ${(yApex + 0.54 * cH).toFixed(1)}, 100 ${(yApex + 0.72 * cH).toFixed(1)} L 100 ${yW.toFixed(1)}`;
+  // Traditional South Indian Torana contour scaling smoothly with scroll scrub
+  const contourD = `M 0 ${yW.toFixed(1)} L 0 ${(yApex + 0.32 * cH).toFixed(1)} L 5 ${(yApex + 0.32 * cH).toFixed(1)} L 5 ${(yApex + 0.28 * cH).toFixed(1)} L 8 ${(yApex + 0.28 * cH).toFixed(1)} L 8 ${(yApex + 0.24 * cH).toFixed(1)} C 8 ${(yApex + 0.19 * cH).toFixed(1)}, 14 ${(yApex + 0.17 * cH).toFixed(1)}, 18 ${(yApex + 0.16 * cH).toFixed(1)} L 20 ${(yApex + 0.17 * cH).toFixed(1)} C 22 ${(yApex + 0.12 * cH).toFixed(1)}, 28 ${(yApex + 0.08 * cH).toFixed(1)}, 36 ${(yApex + 0.06 * cH).toFixed(1)} L 38 ${(yApex + 0.07 * cH).toFixed(1)} C 40 ${(yApex + 0.04 * cH).toFixed(1)}, 44 ${(yApex + 0.03 * cH).toFixed(1)}, 46 ${(yApex + 0.025 * cH).toFixed(1)} L 46 ${(yApex + 0.015 * cH).toFixed(1)} L 48 ${(yApex + 0.015 * cH).toFixed(1)} L 48 ${yApex.toFixed(1)} L 52 ${yApex.toFixed(1)} L 52 ${(yApex + 0.015 * cH).toFixed(1)} L 54 ${(yApex + 0.015 * cH).toFixed(1)} L 54 ${(yApex + 0.025 * cH).toFixed(1)} C 56 ${(yApex + 0.03 * cH).toFixed(1)}, 60 ${(yApex + 0.04 * cH).toFixed(1)}, 62 ${(yApex + 0.07 * cH).toFixed(1)} L 64 ${(yApex + 0.06 * cH).toFixed(1)} C 72 ${(yApex + 0.08 * cH).toFixed(1)}, 78 ${(yApex + 0.12 * cH).toFixed(1)}, 80 ${(yApex + 0.17 * cH).toFixed(1)} L 82 ${(yApex + 0.16 * cH).toFixed(1)} C 86 ${(yApex + 0.17 * cH).toFixed(1)}, 92 ${(yApex + 0.19 * cH).toFixed(1)}, 92 ${(yApex + 0.24 * cH).toFixed(1)} L 92 ${(yApex + 0.28 * cH).toFixed(1)} L 95 ${(yApex + 0.28 * cH).toFixed(1)} L 95 ${(yApex + 0.32 * cH).toFixed(1)} L 100 ${(yApex + 0.32 * cH).toFixed(1)} L 100 ${yW.toFixed(1)}`;
   const veilD = `${contourD} L 100 144 L 0 144 Z`;
   return { contourD, veilD };
 };
@@ -47,6 +53,7 @@ export default function HeroLogoTransition({
   const archContourPathRef = useRef<SVGPathElement>(null);
   const archGlowRef = useRef<HTMLDivElement>(null);
   const archedPhotoImgRef = useRef<HTMLImageElement>(null);
+  const archRevealSvgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -191,6 +198,14 @@ export default function HeroLogoTransition({
         );
       }
 
+      if (archRevealSvgRef.current) {
+        masterTl.to(
+          archRevealSvgRef.current,
+          { opacity: 0, duration: 0.16, ease: "power2.out" },
+          0.46
+        );
+      }
+
       // ── Stage E: 0.55 – 0.80 (The Vows Side Text Entrances) ──
       if (openingLeftColRef.current) {
         masterTl.fromTo(
@@ -236,12 +251,13 @@ export default function HeroLogoTransition({
           }
 
           // Dynamic Arch Contour & Mask Scrubbing
-          if (progress >= 0.16 && progress <= 0.80) {
-            const archProg = Math.min(1, Math.max(0, (progress - 0.16) / 0.48));
+          if (progress >= 0.16 && progress <= 0.65) {
+            const archProg = Math.min(1, Math.max(0, (progress - 0.16) / 0.36));
             const { contourD, veilD } = buildBellamArchPaths(archProg);
 
             if (archMaskPathRef.current) {
               archMaskPathRef.current.setAttribute("d", veilD);
+              archMaskPathRef.current.style.opacity = `${Math.max(0, 1 - archProg * 1.1)}`;
             }
             if (archContourPathRef.current) {
               archContourPathRef.current.setAttribute("d", contourD);
@@ -252,7 +268,11 @@ export default function HeroLogoTransition({
               archGlowRef.current.style.opacity = `${glowOp}`;
               archGlowRef.current.style.transform = `scale(${0.7 + archProg * 0.5})`;
             }
-          } else if (progress > 0.80) {
+          } else if (progress > 0.65) {
+            if (archMaskPathRef.current) {
+              archMaskPathRef.current.setAttribute("d", "");
+              archMaskPathRef.current.style.opacity = "0";
+            }
             if (archContourPathRef.current) archContourPathRef.current.style.opacity = "0";
             if (archGlowRef.current) archGlowRef.current.style.opacity = "0";
           }
@@ -309,11 +329,11 @@ export default function HeroLogoTransition({
 
   return (
     <div ref={rootRef} className={styles.transitionRoot} aria-hidden="true">
-      {/* ── Mathematical Clip Path Defs for Arch ── */}
+      {/* ── Mathematical Clip Path Defs for South Indian Hindu Mandapam Torana Arch ── */}
       <svg className={styles.svgClipDefs} width="1" height="1" viewBox="0 0 1 1">
         <defs>
           <clipPath id="mandapamArchClip" clipPathUnits="objectBoundingBox">
-            <path d="M 0 1 L 0 0.32 C 0 0.24, 0.08 0.24, 0.14 0.20 C 0.18 0.17, 0.24 0.18, 0.28 0.14 C 0.33 0.09, 0.40 0.08, 0.46 0.03 C 0.48 0.01, 0.49 0.00, 0.50 0.00 C 0.51 0.00, 0.52 0.01, 0.54 0.03 C 0.60 0.08, 0.67 0.09, 0.72 0.14 C 0.76 0.18, 0.82 0.17, 0.86 0.20 C 0.92 0.24, 1.00 0.24, 1.00 0.32 L 1 1 Z" />
+            <path d="M 0 1 L 0 0.32 L 0.05 0.32 L 0.05 0.28 L 0.08 0.28 L 0.08 0.24 C 0.08 0.19, 0.14 0.17, 0.18 0.16 L 0.20 0.17 C 0.22 0.12, 0.28 0.08, 0.36 0.06 L 0.38 0.07 C 0.40 0.04, 0.44 0.03, 0.46 0.025 L 0.46 0.015 L 0.48 0.015 L 0.48 0 L 0.52 0 L 0.52 0.015 L 0.54 0.015 L 0.54 0.025 C 0.56 0.03, 0.60 0.04, 0.62 0.07 L 0.64 0.06 C 0.72 0.08, 0.78 0.12, 0.80 0.17 L 0.82 0.16 C 0.86 0.17, 0.92 0.19, 0.92 0.24 L 0.92 0.28 L 0.95 0.28 L 0.95 0.32 L 1 0.32 L 1 1 Z" />
           </clipPath>
         </defs>
       </svg>
@@ -389,6 +409,7 @@ export default function HeroLogoTransition({
 
                 {/* Mandapam Arch Reveal SVG */}
                 <svg
+                  ref={archRevealSvgRef}
                   className={styles.archRevealSvg}
                   viewBox="0 0 100 140"
                   preserveAspectRatio="none"
@@ -396,9 +417,9 @@ export default function HeroLogoTransition({
                 >
                   <defs>
                     <radialGradient id="archPalaceVeilGradHero" cx="50%" cy="18%" r="80%">
-                      <stop offset="0%" stopColor="#092a23" />
-                      <stop offset="75%" stopColor="#061812" />
-                      <stop offset="100%" stopColor="#04100c" />
+                      <stop offset="0%" stopColor="#082A20" />
+                      <stop offset="75%" stopColor="#061A12" />
+                      <stop offset="100%" stopColor="#061A12" />
                     </radialGradient>
                   </defs>
                   <path ref={archMaskPathRef} fill="url(#archPalaceVeilGradHero)" />
@@ -408,6 +429,39 @@ export default function HeroLogoTransition({
                     stroke="#D4AF37"
                     strokeWidth="1.6"
                     strokeOpacity="0.85"
+                  />
+                </svg>
+
+                {/* Permanent Traditional South Indian Hindu Mandapam Torana Architectural Frame */}
+                <svg
+                  className={styles.mandapamArchitecturalBorderSvg}
+                  viewBox="0 0 100 140"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <linearGradient id="goldToranaBorderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#F5E29E" />
+                      <stop offset="30%" stopColor="#D4AF37" />
+                      <stop offset="65%" stopColor="#8C6E26" />
+                      <stop offset="100%" stopColor="#C8A84E" />
+                    </linearGradient>
+                  </defs>
+                  {/* Outer Torana Contour */}
+                  <path
+                    d="M 0 140 L 0 44.8 L 5 44.8 L 5 39.2 L 8 39.2 L 8 33.6 C 8 26.6, 14 23.8, 18 22.4 L 20 23.8 C 22 16.8, 28 11.2, 36 8.4 L 38 9.8 C 40 5.6, 44 4.2, 46 3.5 L 46 2.1 L 48 2.1 L 48 0 L 52 0 L 52 2.1 L 54 2.1 L 54 3.5 C 56 4.2, 60 5.6, 62 9.8 L 64 8.4 C 72 11.2, 78 16.8, 80 23.8 L 82 22.4 C 86 23.8, 92 26.6, 92 33.6 L 92 39.2 L 95 39.2 L 95 44.8 L 100 44.8 L 100 140"
+                    fill="none"
+                    stroke="url(#goldToranaBorderGrad)"
+                    strokeWidth="1.2"
+                    strokeOpacity="0.88"
+                  />
+                  {/* Subtle Inner Carved Relief Line */}
+                  <path
+                    d="M 1.5 140 L 1.5 46 L 6.5 46 L 6.5 40.5 L 9.5 40.5 L 9.5 35 C 9.5 28.5, 15 25.5, 19 24.2 L 20.8 25.5 C 23 18.5, 29 13, 37 10.2 L 38.8 11.5 C 41 7.5, 45 6, 47 5.2 L 47 3.8 L 49 3.8 L 49 1.5 L 51 1.5 L 51 3.8 L 53 3.8 L 53 5.2 C 55 6, 59 7.5, 61.2 11.5 L 63 10.2 C 71 13, 77 18.5, 79.2 25.5 L 81 24.2 C 85 25.5, 90.5 28.5, 90.5 35 L 90.5 40.5 L 93.5 40.5 L 93.5 46 L 98.5 46 L 98.5 140"
+                    fill="none"
+                    stroke="#D4AF37"
+                    strokeWidth="0.5"
+                    strokeOpacity="0.4"
                   />
                 </svg>
                 <div ref={archGlowRef} className={styles.archApexGlow} />

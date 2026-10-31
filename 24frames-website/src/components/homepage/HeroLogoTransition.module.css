@@ -25,7 +25,8 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 50% 50%, #0e3d2d 0%, #061a12 62%, #030d09 100%);
+  background-color: var(--color-brand-forest-dark, #061A12);
+  background: var(--color-brand-forest-dark, #061A12);
   opacity: 0;
   will-change: opacity, transform;
 }
@@ -270,6 +271,15 @@
   height: 100%;
   pointer-events: none;
   z-index: 3;
+}
+
+.mandapamArchitecturalBorderSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
 }
 
 .archApexGlow {
