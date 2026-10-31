@@ -16,7 +16,7 @@ export default function HeroSection() {
   const metadataRef = useRef<HTMLDivElement>(null);
   const topBarRef = useRef<HTMLDivElement>(null);
 
-  /* ── Act I — The First Frame: Immediate Hero Photograph Display ── */
+  /* ── The First Frame: Immediate Hero Photograph Display ── */
   useEffect(() => {
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isReduced) return;
@@ -60,18 +60,29 @@ export default function HeroSection() {
       ref={sectionRef}
       id="hero"
       className={styles.heroSection}
-      aria-label="Act I — The First Frame"
+      aria-label="The First Frame"
     >
       {/* ── FULL-BLEED CINEMATIC PHOTOGRAPH (Edge-to-edge) ── */}
       <div ref={frameRef} className={styles.cinematicCanvas}>
-        {/* Real Landscape Photograph: Hrithika & Abhishek Cover */}
-        <img
-          ref={heroImgRef}
-          src="/images/portfolio/hrithika-abhishek/cover.jpg"
-          alt="Some moments deserve to outlive time — 24 Frames Master Wedding Commission"
-          className={styles.heroImage}
-          loading="eager"
-        />
+        {/* Real Landscape Photograph: Hrithika & Abhishek Cover (with dedicated mobile portrait crop) */}
+        <picture>
+          <source
+            media="(max-width: 820px)"
+            srcSet="/images/portfolio/hrithika-abhishek/cover-mobile.webp"
+            type="image/webp"
+          />
+          <source
+            media="(max-width: 820px)"
+            srcSet="/images/portfolio/hrithika-abhishek/cover-mobile.jpg"
+          />
+          <img
+            ref={heroImgRef}
+            src="/images/portfolio/hrithika-abhishek/cover.jpg"
+            alt="Some moments deserve to outlive time — 24 Frames Master Wedding Commission"
+            className={styles.heroImage}
+            loading="eager"
+          />
+        </picture>
 
         {/* Subtle, Natural Cinematic Vignette (Preserves Natural Photo Contrast) */}
         <div className={styles.framingVignette} aria-hidden="true" />
@@ -83,7 +94,7 @@ export default function HeroSection() {
         <div ref={topBarRef} className={styles.frameTopBar}>
           <div className={styles.kickerBadge}>
             <span className={styles.kickerDot} />
-            <span>ACT I · THE FIRST FRAME</span>
+            <span>THE FIRST FRAME</span>
           </div>
           <span className={styles.frameEdition}>HYDERABAD · PALACE COMMISSION</span>
         </div>

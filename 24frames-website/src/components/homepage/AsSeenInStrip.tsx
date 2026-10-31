@@ -56,17 +56,16 @@ export default function AsSeenInStrip() {
         );
       }
 
-      // 2. Publication logos reveal from softened mask into sharp focus
+      // 2. Publication logos reveal cleanly into focus
       if (marqueeRef.current) {
         tl.fromTo(
           marqueeRef.current,
-          { clipPath: "inset(0 15% 0 15%)", filter: "blur(3px)", opacity: 0.35 },
+          { opacity: 0.35, y: 10 },
           {
-            clipPath: "inset(0 0% 0 0%)",
-            filter: "blur(0px)",
             opacity: 1,
-            duration: 1.25,
-            ease: "power3.out",
+            y: 0,
+            duration: 1.0,
+            ease: "power2.out",
           },
           0.2
         );

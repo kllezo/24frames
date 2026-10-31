@@ -272,8 +272,8 @@ export default function InquirePage() {
   // 5: Personalized Confirmation Folio
   const [stage, setStage] = useState<number>(0);
 
-  // Commission selections
-  const [selectedCategory, setSelectedCategory] = useState<string>("weddings");
+  // Commission selections (initially unselected; requires explicit client choice)
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   // Timeline events
   const [events, setEvents] = useState<EventTimelineEntry[]>([
@@ -373,9 +373,15 @@ export default function InquirePage() {
     setEvents((prev) => prev.filter((item) => item.id !== id));
   };
 
-  /* ── Category Selection & Immediate Advance ── */
-  const handleSelectCategoryAndAdvance = (catId: string) => {
+  /* ── Category Selection (Explicit Client Selection) ── */
+  const handleSelectCategory = (catId: string) => {
     setSelectedCategory(catId);
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next.category;
+      return next;
+    });
+
     const targetCat = COMMISSION_CATEGORIES.find((c) => c.id === catId);
     const cfg = getTimelineConfig(catId);
 
@@ -428,17 +434,9 @@ export default function InquirePage() {
       }
       return prev;
     });
-
-    // Advance immediately with safe lock to prevent double-navigation
-    if (!navigatingRef.current) {
-      navigatingRef.current = true;
-      setTimeout(() => {
-        setStage(2);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        navigatingRef.current = false;
-      }, 160);
-    }
   };
+
+  const handleSelectCategoryAndAdvance = handleSelectCategory;
 
   /* ── Visual Direction & Service Toggles ── */
   const toggleDirection = (id: string) => {
@@ -455,6 +453,18 @@ export default function InquirePage() {
 
   /* ── Navigation & Validation ── */
   const handleNext = () => {
+    if (stage === 1 && !selectedCategory) {
+      setErrors((prev) => ({
+        ...prev,
+        category: "Please select a commission type to continue.",
+      }));
+      return;
+    }
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next.category;
+      return next;
+    });
     setStage((prev) => Math.min(5, prev + 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -729,6 +739,13 @@ export default function InquirePage() {
                 Choose the commission that reflects your celebration. Your selection shapes the timeline and creative direction that follow.
               </p>
               <div className={styles.goldDividerRule} aria-hidden="true" />
+              {errors.category && (
+                <div style={{ textAlign: "center", marginTop: "1.25rem" }}>
+                  <span className={styles.errorText} style={{ fontSize: "0.85rem", fontWeight: 600 }}>
+                    {errors.category}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className={styles.categoryGrid}>

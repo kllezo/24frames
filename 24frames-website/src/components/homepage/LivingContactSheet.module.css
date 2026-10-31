@@ -5,7 +5,8 @@
    ========================================================================== */
 
 .section {
-  padding: clamp(7rem, 12vw, 11.25rem) 0;
+  padding-top: clamp(4rem, 8vw, 6.5rem);
+  padding-bottom: clamp(2rem, 3.5vw, 3rem);
   background-color: var(--color-bg, #FAF8F2);
   position: relative;
   overflow: hidden;
@@ -380,6 +381,10 @@
   margin-bottom: clamp(5rem, 9.5vh, 8.5rem);
   width: 100%;
   position: relative;
+}
+
+.editorialBlock:last-of-type {
+  margin-bottom: clamp(2rem, 3.5vh, 3rem);
 }
 
 /* Full Bleed Film Block spanning edge to edge */
@@ -1026,7 +1031,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  padding: 2.25rem 0 0 0;
+  padding: 1.5rem 0 0 0;
   border-top: 1px solid rgba(9, 69, 62, 0.12);
 }
 

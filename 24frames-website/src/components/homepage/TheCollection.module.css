@@ -8,8 +8,7 @@
 .section {
   position: relative;
   background-color: var(--color-bg, #FAF8F2);
-  padding: clamp(7rem, 11vw, 10.75rem) 0;
-  overflow: hidden;
+  padding: clamp(3.5rem, 5.5vw, 5rem) 0;
   border-top: 1px solid rgba(9, 69, 62, 0.08);
   scroll-margin-top: 5rem;
 }

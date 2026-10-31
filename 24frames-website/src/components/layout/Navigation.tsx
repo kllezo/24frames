@@ -28,10 +28,17 @@ export default function Navigation() {
       }
 
       // Check current section under navigation header (~70px from top)
-      const navTarget = document.elementFromPoint(window.innerWidth / 2, 70);
-      if (navTarget) {
-        const obsidianAncestor = navTarget.closest('[data-theme="obsidian"]');
-        setIsLightSection(!obsidianAncestor);
+      const explicitTheme = document.documentElement.dataset.heroHeaderTheme;
+      if (explicitTheme === "dark") {
+        setIsLightSection(false);
+      } else if (explicitTheme === "light") {
+        setIsLightSection(true);
+      } else {
+        const navTarget = document.elementFromPoint(window.innerWidth / 2, 70);
+        if (navTarget) {
+          const darkAncestor = navTarget.closest('#hero, [data-theme="dark"], [data-theme="obsidian"]');
+          setIsLightSection(!darkAncestor);
+        }
       }
     };
 
@@ -55,7 +62,7 @@ export default function Navigation() {
     <>
       <header
         className={`${styles.header} ${scrolled ? styles.scrolled : ""} ${
-          isLightSection && scrolled ? styles.themeLight : styles.themeDark
+          isLightSection ? styles.themeLight : styles.themeDark
         }`}
         role="banner"
       >

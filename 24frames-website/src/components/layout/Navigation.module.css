@@ -29,9 +29,6 @@
   padding: 0.85rem 0;
   backdrop-filter: blur(24px) saturate(1.4);
   -webkit-backdrop-filter: blur(24px) saturate(1.4);
-  background: rgba(250, 248, 242, 0.96) !important;
-  border-bottom: 1px solid #E4DED2;
-  box-shadow: 0 4px 20px rgba(32, 35, 31, 0.05);
 }
 
 .themeDark,
@@ -39,9 +36,16 @@
   background: transparent;
 }
 
-.scrolled.themeDark,
+.scrolled.themeDark {
+  background: rgba(6, 26, 18, 0.88);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
 .scrolled.themeLight {
-  background: rgba(250, 248, 242, 0.96) !important;
+  background: rgba(250, 248, 242, 0.96);
+  border-bottom: 1px solid #E4DED2;
+  box-shadow: 0 4px 20px rgba(32, 35, 31, 0.05);
 }
 
 .nav {
@@ -111,6 +115,18 @@
 
 .themeLight .link {
   color: #77766E;
+}
+
+.themeDark .link {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.themeDark .link:hover {
+  color: #FFFFFF;
+}
+
+.themeDark .link::after {
+  background: #C8A84E;
 }
 
 .link::after {

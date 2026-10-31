@@ -118,8 +118,8 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
   const showcaseRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  // Default active discipline on initial load is Cinema & Feature Films (as featured card)
-  const [activeId, setActiveId] = useState<string | null>("cinema");
+  // Default active discipline on initial load is Weddings & Celebrations (as featured card)
+  const [activeId, setActiveId] = useState<string | null>("weddings");
   const [activeMobileIndex, setActiveMobileIndex] = useState<number>(0);
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
 
@@ -172,7 +172,7 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
 
   const handleTrackPointerLeave = useCallback(() => {
     if (isTouchRef.current) return;
-    setActiveId(null);
+    setActiveId("weddings");
   }, []);
 
   /* ── Mobile Scroll & Pagination Synchronization ──────────────── */

@@ -56,7 +56,7 @@ export default function InvitationCTA() {
       ref={sectionRef}
       id="inquire"
       className={styles.section}
-      aria-label="Act V — The Lasting Frame (Begin a Conversation)"
+      aria-label="The Lasting Frame (Begin a Conversation)"
     >
       <div id="invitation" className={styles.anchorOffset} aria-hidden="true" />
 
@@ -81,7 +81,7 @@ export default function InvitationCTA() {
           <div ref={textContentRef} className={styles.editorialContent}>
             <div className={styles.kickerRow}>
               <span className={styles.kickerLine} aria-hidden="true" />
-              <span className={styles.chapterTag}>ACT V · THE LASTING FRAME</span>
+              <span className={styles.chapterTag}>THE LASTING FRAME</span>
               <span className={styles.kickerLine} aria-hidden="true" />
             </div>
 

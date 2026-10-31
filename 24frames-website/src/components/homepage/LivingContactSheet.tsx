@@ -147,7 +147,7 @@ export const ITEM_PROJECT_04: GalleryProjectItem = {
   webpImage: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
   aspectRatio: "16 / 10",
   storyUrl: "/stories/karthik-and-gayathri",
-  objectPosition: "60% 16%",
+  objectPosition: "center 20%",
   narrative:
     "Sun-drenched botanical glasshouse sceneries, breezy columned verandas, and spontaneous dance before cascading blush florals.",
 };
@@ -453,18 +453,6 @@ const sampleGreenBottom = (p: number): GreenBottomCoords => {
   }
 };
 
-/* 1. Sreenivas Bellamkonda Architectural Mandapam Arch Reveal (viewBox 0 0 100 140) */
-const buildBellamArchPaths = (p: number) => {
-  const yApex = -20 + 170 * Math.pow(p, 1.1);
-  const cH = 44.8 * (1 - p * 0.2);
-  const yW = yApex + cH;
-
-  // Authentic Cusped Torana Arch Silhouette derived from mandapp.png
-  const contourD = `M 0 ${yW.toFixed(1)} L 0 ${(yApex + 0.72 * cH).toFixed(1)} C 0 ${(yApex + 0.54 * cH).toFixed(1)}, 8 ${(yApex + 0.54 * cH).toFixed(1)}, 14 ${(yApex + 0.45 * cH).toFixed(1)} C 18 ${(yApex + 0.38 * cH).toFixed(1)}, 24 ${(yApex + 0.40 * cH).toFixed(1)}, 28 ${(yApex + 0.31 * cH).toFixed(1)} C 33 ${(yApex + 0.20 * cH).toFixed(1)}, 40 ${(yApex + 0.18 * cH).toFixed(1)}, 46 ${(yApex + 0.07 * cH).toFixed(1)} C 48 ${(yApex + 0.02 * cH).toFixed(1)}, 49 ${yApex.toFixed(1)}, 50 ${yApex.toFixed(1)} C 51 ${yApex.toFixed(1)}, 52 ${(yApex + 0.02 * cH).toFixed(1)}, 54 ${(yApex + 0.07 * cH).toFixed(1)} C 60 ${(yApex + 0.18 * cH).toFixed(1)}, 67 ${(yApex + 0.20 * cH).toFixed(1)}, 72 ${(yApex + 0.31 * cH).toFixed(1)} C 76 ${(yApex + 0.40 * cH).toFixed(1)}, 82 ${(yApex + 0.38 * cH).toFixed(1)}, 86 ${(yApex + 0.45 * cH).toFixed(1)} C 92 ${(yApex + 0.54 * cH).toFixed(1)}, 100 ${(yApex + 0.54 * cH).toFixed(1)}, 100 ${(yApex + 0.72 * cH).toFixed(1)} L 100 ${yW.toFixed(1)}`;
-  const veilD = `${contourD} L 100 144 L 0 144 Z`;
-  return { contourD, veilD };
-};
-
 /* 2. Vinitha & Vivekananda Fluid Silk Veil (viewBox 0 0 1600 900) */
 const buildVinithaSilkPaths = (p: number) => {
   const sweep = -600 + 2800 * Math.pow(p, 0.95);
@@ -527,17 +515,9 @@ const buildHrithikaDrapePaths = (p: number) => {
 
 export default function LivingContactSheet() {
   const sectionRef = useRef<HTMLElement>(null);
-  const openingRef = useRef<HTMLDivElement>(null);
-  const archedFrameRef = useRef<HTMLDivElement>(null);
   const hrithikaCanvasRef = useRef<HTMLDivElement>(null);
   const karthikCanvasRef = useRef<HTMLDivElement>(null);
   const sireeshCanvasRef = useRef<HTMLDivElement>(null);
-
-  /* Belamkonda Arch Reveal References */
-  const archMaskPathRef = useRef<SVGPathElement>(null);
-  const archContourPathRef = useRef<SVGPathElement>(null);
-  const archGlowRef = useRef<HTMLDivElement>(null);
-  const archedPhotoImgRef = useRef<HTMLImageElement>(null);
 
   /* Vinitha Liquid Silk Veil References */
   const vinithaSilkFillPathRef = useRef<SVGPathElement>(null);
@@ -885,106 +865,7 @@ export default function LivingContactSheet() {
     if (isReduced) return;
 
     const ctx = gsap.context(() => {
-      // 1. Chapter 02 — The Vows: Belamkonda Arch Reveal (Continuous Viewport-Scrubbed)
-      if (openingRef.current) {
-        const leftElements = openingRef.current.querySelectorAll(`.${styles.chapterBadgeRow}, .${styles.monumentalHeading}`);
-        const supportingElements = openingRef.current.querySelectorAll(
-          `.${styles.openingNarrative}, .${styles.exploreActionBtn}, .${styles.openingRightCol} > *`
-        );
-
-        // Initially hide typography until photo reaches full alignment and settles
-        gsap.set(leftElements, { opacity: 0, y: 22 });
-        gsap.set(supportingElements, { opacity: 0, y: 16 });
-
-        let typographyRevealed = false;
-        const archProxy = { val: 0 };
-
-        const renderArch = (p: number) => {
-          const { contourD, veilD } = buildBellamArchPaths(p);
-          if (archMaskPathRef.current) {
-            archMaskPathRef.current.setAttribute("d", veilD);
-          }
-          if (archContourPathRef.current) {
-            archContourPathRef.current.setAttribute("d", contourD);
-            archContourPathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
-          }
-          if (archGlowRef.current) {
-            const glowOp = p < 0.35 ? (p / 0.35) * 0.85 : Math.max(0, 0.85 * (1 - (p - 0.35) / 0.65));
-            archGlowRef.current.style.opacity = `${glowOp}`;
-            archGlowRef.current.style.transform = `scale(${0.7 + p * 0.5})`;
-          }
-          if (archedPhotoImgRef.current) {
-            if (p >= 0.98) {
-              archedPhotoImgRef.current.style.filter = "none";
-              archedPhotoImgRef.current.style.transform = "none";
-            } else {
-              const blur = Math.max(0, (1 - p) * 3);
-              const bright = 0.7 + p * 0.3;
-              const scale = 1.06 - p * 0.06;
-              archedPhotoImgRef.current.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
-              archedPhotoImgRef.current.style.transform = `scale(${scale.toFixed(3)})`;
-            }
-          }
-
-          // The Vows Typography Reveal: Left-side title & editorial text and right-side commission details
-          // must reveal ONLY AFTER the photograph reaches final alignment and settles!
-          if (p >= 0.92 && !typographyRevealed) {
-            typographyRevealed = true;
-            if (leftElements.length) {
-              gsap.to(leftElements, {
-                opacity: 1,
-                y: 0,
-                duration: 0.85,
-                stagger: 0.12,
-                ease: "power2.out",
-                overwrite: "auto",
-              });
-            }
-            if (supportingElements.length) {
-              gsap.to(supportingElements, {
-                opacity: 1,
-                y: 0,
-                duration: 0.75,
-                stagger: 0.06,
-                delay: 0.12,
-                ease: "power2.out",
-                overwrite: "auto",
-              });
-            }
-          } else if (p < 0.50 && typographyRevealed) {
-            typographyRevealed = false;
-            gsap.to(leftElements, {
-              opacity: 0,
-              y: 22,
-              duration: 0.35,
-              ease: "power1.in",
-              overwrite: "auto",
-            });
-            gsap.to(supportingElements, {
-              opacity: 0,
-              y: 16,
-              duration: 0.35,
-              ease: "power1.in",
-              overwrite: "auto",
-            });
-          }
-        };
-
-        renderArch(0);
-
-        gsap.to(archProxy, {
-          val: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: openingRef.current,
-            start: "top 88%",
-            end: "center 50%",
-            scrub: 0.5,
-            onUpdate: () => renderArch(archProxy.val),
-          },
-        });
-      }
-
+      // 1. The Vows opening composition is seamlessly orchestrated via HeroLogoTransition
       // 2. Cinema Passage 01 — Vinitha & Vivekananda: Fluid Champagne Silk Veil (Continuous Viewport-Scrubbed)
       if (vinithaStageRef.current) {
         const vinithaProxy = { val: 0 };
@@ -1433,141 +1314,8 @@ export default function LivingContactSheet() {
       </svg>
 
       <div className={styles.mainContainer}>
-        {/* Curated Exhibition Anchor */}
+        {/* Curated Exhibition Anchors */}
         <div id="exhibition" className={styles.anchorOffset} aria-hidden="true" />
-
-        {/* ══════════════════════════════════════════════════════════════════════
-            01 — FEATURED EDITORIAL OPENING (EXACT 3-COLUMN COMPOSITION)
-        ══════════════════════════════════════════════════════════════════════ */}
-        <div ref={openingRef} className={styles.openingComposition}>
-          {/* Left Column: Title & Editorial Anthology Thesis */}
-          <div className={styles.openingLeftCol}>
-            <div className={styles.chapterBadgeRow}>
-              <span className={styles.chapterLabel}>THE VOWS</span>
-              <span className={styles.labelDividerLine} />
-            </div>
-
-            <h2 className={styles.monumentalHeading}>
-              <span className={styles.headingThe}>The</span>
-              <span className={styles.headingVows}>Vows</span>
-            </h2>
-
-            <p className={styles.openingNarrative}>
-              An anthology of love in its truest, timeless, most authentic form.
-              Intimate stories, iconic days, and 35mm inspired imagery of real human souls.
-            </p>
-
-            <a href="#stories-showcase" className={styles.exploreActionBtn}>
-              <span className={styles.exploreCircleIcon}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-              <span className={styles.exploreActionText}>EXPLORE THE STORIES</span>
-            </a>
-          </div>
-
-          {/* Center Column: Arched Roman Portrait (Bellamkonda & Kavya) */}
-          <div className={styles.openingCenterCol}>
-            <Link
-              href={ITEM_PROJECT_01.storyUrl}
-              className={styles.archedPhotoLink}
-              aria-label={`Open featured commission: ${ITEM_PROJECT_01.clientNames}`}
-            >
-              <div ref={archedFrameRef} className={styles.archedFrame}>
-                <picture>
-                  <source srcSet={ITEM_PROJECT_01.webpImage} type="image/webp" />
-                  <img
-                    ref={archedPhotoImgRef}
-                    src={ITEM_PROJECT_01.image}
-                    alt={ITEM_PROJECT_01.clientNames}
-                    className={styles.archedPhotoImg}
-                    style={{ objectPosition: ITEM_PROJECT_01.objectPosition }}
-                    loading="eager"
-                  />
-                </picture>
-                <div className={styles.photoSheenOverlay} />
-
-                {/* Architectural Indian Palace Arch Reveal SVG */}
-                <svg
-                  className={styles.archRevealSvg}
-                  viewBox="0 0 100 140"
-                  preserveAspectRatio="none"
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <radialGradient id="archPalaceVeilGrad" cx="50%" cy="18%" r="80%">
-                      <stop offset="0%" stopColor="#092a23" />
-                      <stop offset="75%" stopColor="#061812" />
-                      <stop offset="100%" stopColor="#04100c" />
-                    </radialGradient>
-                  </defs>
-                  <path
-                    ref={archMaskPathRef}
-                    fill="url(#archPalaceVeilGrad)"
-                  />
-                  <path
-                    ref={archContourPathRef}
-                    fill="none"
-                    stroke="#D4AF37"
-                    strokeWidth="1.6"
-                    strokeOpacity="0.85"
-                  />
-                </svg>
-                <div ref={archGlowRef} className={styles.archApexGlow} />
-              </div>
-            </Link>
-          </div>
-
-          {/* Right Column: Featured Commission Details & Metadata */}
-          <div className={styles.openingRightCol}>
-            <div className={styles.featuredBadgeRow}>
-              <span className={styles.featuredCommissionLabel}>FEATURED COMMISSION</span>
-              <span className={styles.labelDividerLine} />
-            </div>
-
-            <h3 className={styles.featuredCoupleName}>
-              <Link href={ITEM_PROJECT_01.storyUrl} className={styles.nameLink}>
-                {ITEM_PROJECT_01.clientNames}
-              </Link>
-            </h3>
-
-            <p className={styles.featuredVenueSub}>{ITEM_PROJECT_01.location}</p>
-
-            <p className={styles.featuredStoryCopy}>
-              The quiet and overwhelming union of two people, set against the grandeur
-              of celebration, personal moments, and everything in between. A wedding
-              captured with honesty, cinematic depth and timeless transitions.
-            </p>
-
-            <div className={styles.specsTable}>
-              <div className={styles.specRow}>
-                <span className={styles.specKey}>DISCIPLINE</span>
-                <span className={styles.specValue}>Celebrity Wedding</span>
-              </div>
-              <div className={styles.specRow}>
-                <span className={styles.specKey}>LOCATION</span>
-                <span className={styles.specValue}>Hyderabad</span>
-              </div>
-              <div className={styles.specRow}>
-                <span className={styles.specKey}>OPTICAL CREW</span>
-                <span className={styles.specValue}>35mm Prime Cinema Optics</span>
-              </div>
-              <div className={styles.specRow}>
-                <span className={styles.specKey}>ARCHIVE ACCESS</span>
-                <span className={styles.specValue}>Curated Master Story</span>
-              </div>
-            </div>
-
-            <div className={styles.featuredCtaWrap}>
-              <Link href={ITEM_PROJECT_01.storyUrl} className={styles.btnExplorePill}>
-                EXPLORE FULL STORY <span className={styles.pillArrow}>→</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Anchor for Explore Action */}
         <div id="stories-showcase" className={styles.anchorOffset} aria-hidden="true" />
       </div>
 

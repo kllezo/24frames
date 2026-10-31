@@ -50,16 +50,16 @@ export default function HomePage() {
       >
         <Navigation />
         <main>
-          {/* Act I — The First Frame (Cinematic Hero Opening) */}
+          {/* The First Frame (Cinematic Hero Opening) */}
           <HeroSection />
 
-          {/* Chapter 02 — The Vows (Curated Exhibition & Wedding Stories Archive) */}
+          {/* The Vows (Curated Exhibition & Wedding Stories Archive) */}
           <LivingContactSheet />
 
-          {/* Act III — The Archive Opens (The Six Curated Disciplines) */}
+          {/* The Collection (Curated Disciplines of Optics) */}
           <TheCollection />
 
-          {/* Act IV — The Artist & Visionary (Phani Gogireddy Exact Reference Composition) */}
+          {/* The Artist & Visionary (Phani Gogireddy Exact Reference Composition) */}
           <FounderRecognitionSection />
 
           {/* Media Recognition & Publication Strip */}
@@ -68,7 +68,7 @@ export default function HomePage() {
           {/* Royal Palace Client Suite — The 24 Frames Client Gallery Experience */}
           <ClientGalleryExperience />
 
-          {/* Act V — The Lasting Frame (Invitation & Conversation) */}
+          {/* The Lasting Frame (Invitation & Conversation) */}
           <InvitationCTA />
         </main>
         <Footer />
