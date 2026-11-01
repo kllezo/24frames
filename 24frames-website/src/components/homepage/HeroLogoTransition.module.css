@@ -1,12 +1,12 @@
 /* ============================================================
-   24 FRAMES — HERO TO VOWS CONTINUOUS CINEMATIC TRANSITION
+   24 FRAMES — THE VOWS: CINEMATIC TRIANGLE TRANSFORMATION
    Choreography:
-   0–15%: Hero Photograph -> Living Green 24 FRAMES Logo Hold
-   15–35%: Logo morphs smoothly into Mandapam Arch silhouette
-   30–55%: Arch emerges & deep green dissolves to Warm Ivory (#FAF8F2)
-   45–70%: Bellamkonda Photograph aligns inside arch (center 18%)
-   55–80%: The Vows Left & Right Editorial Columns enter
-   80–100%: Full 3-column composition settles & holds for reading
+   01. Hero Opening: Authentic original 24 FRAMES studio logo appears on cinematic dark
+   02. Focus on "A": Warm champagne-gold ambient glow illuminates the letter 'A' in the original logo
+   03. "A" Transforms: Letter 'A' expands from original logo into double-line champagne-gold triangle
+   04. Reveal Story: Canvas dissolves to Warm Luxury Ivory (#FAF8F2) as Bellamkonda & Kavya wedding photo reveals inside triangle
+   05. Settle: Triangle frame settles into geometric architectural precision with apex backlight
+   06. Content Arrives: The Vows 3-column editorial stage glides in over signature Warm Ivory
    ============================================================ */
 
 .transitionRoot {
@@ -19,19 +19,23 @@
   overflow: hidden;
 }
 
-/* ── Deep Luxury Green Backdrop (Living Tonal Illumination) ── */
-.backdropGreen {
+/* ── Deep Luxury Dark Backdrop for Studio Signature Moment ── */
+.backdropDark {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--color-brand-forest-dark, #061A12);
-  background: var(--color-brand-forest-dark, #061A12);
+  background: radial-gradient(
+    circle at 50% 50%,
+    #0e3d2d 0%,
+    #061a12 62%,
+    #030d09 100%
+  );
   opacity: 0;
-  will-change: opacity, transform;
+  will-change: opacity;
 }
 
-/* ── Warm Luxury Ivory Backdrop (Transforms into The Vows) ── */
+/* ── Warm Luxury Ivory Backdrop (Signature Website Theme) ── */
 .backdropIvory {
   position: absolute;
   inset: 0;
@@ -42,24 +46,25 @@
   will-change: opacity;
 }
 
-/* ── Authentic 24 FRAMES Studio Signature ── */
+/* ── Stage 01 & 02: Authentic Original 24 FRAMES Logo File ── */
 .logoWrap {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: clamp(260px, 45vw, 640px);
+  width: clamp(280px, 46vw, 680px);
   max-width: 88vw;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   opacity: 0;
   z-index: 12;
   will-change: transform, opacity;
   pointer-events: none;
 }
 
-.logoImage {
+.originalLogoImage {
   width: 100%;
   height: auto;
   display: block;
@@ -67,18 +72,81 @@
   filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.7));
 }
 
-/* ── Hidden SVG Definition Container for Clip Paths ── */
-.svgClipDefs {
+/* Concentrated Champagne-Gold Ambient Glow on the letter 'A' of the original logo */
+.aGlowSpot {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
+  top: 65%;
+  left: 52.85%;
+  transform: translate(-50%, -50%);
+  width: clamp(60px, 9vw, 110px);
+  height: clamp(60px, 9vw, 110px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(232, 207, 141, 0.95) 0%,
+    rgba(200, 168, 78, 0.50) 45%,
+    transparent 72%
+  );
+  filter: blur(14px);
   pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  will-change: opacity, transform;
 }
 
-/* ── The Vows 3-Column Editorial Stage ── */
+/* ── Stage 03, 04, 05: The Actual Transforming 'A' / Triangle Vector Frame ── */
+.transformingAContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+
+/* Warm Golden Backlight behind Triangle Apex */
+.apexBacklight {
+  position: absolute;
+  top: -12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(260px, 30vw, 420px);
+  height: clamp(260px, 30vw, 420px);
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(200, 168, 78, 0.45) 0%,
+    rgba(200, 168, 78, 0.15) 45%,
+    transparent 72%
+  );
+  filter: blur(28px);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.triangleFrameWrap {
+  width: clamp(320px, 30vw, 440px);
+  height: clamp(320px, 30vw, 440px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  filter: drop-shadow(0 18px 45px rgba(9, 69, 62, 0.16));
+  will-change: transform;
+}
+
+.triangleSvg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* ── Stage 06: The Vows 3-Column Editorial Stage on Warm Luxury Ivory ── */
 .vowsStageWrap {
   position: absolute;
   inset: 0;
@@ -87,36 +155,33 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1rem, 2.8vw, 2.5rem);
-  z-index: 14;
-  pointer-events: none;
+  padding: clamp(2rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 4.5rem);
+  padding-top: clamp(80px, 10vh, 120px);
+  z-index: 16;
+  pointer-events: auto;
   opacity: 0;
   will-change: opacity;
 }
 
-.vowsStageWrap a,
-.vowsStageWrap button {
-  pointer-events: auto;
-}
-
 .vowsComposition {
   display: grid;
-  grid-template-columns: 1fr 1.18fr 1fr;
-  gap: clamp(1.5rem, 3vw, 3.25rem);
+  grid-template-columns: 1fr minmax(320px, 440px) 1fr;
   align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 3.5vw, 4rem);
+  max-width: 1400px;
   width: 100%;
-  max-width: 1360px;
   margin: 0 auto;
 }
 
-/* ── Left Column: Monumental The Vows Editorial ── */
+/* ── Left Column: Title & Editorial Thesis ── */
 .openingLeftCol {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding-right: clamp(0.5rem, 1.5vw, 1.5rem);
   opacity: 0;
-  transform: translateX(-24px);
+  transform: translateX(-28px);
   will-change: transform, opacity;
 }
 
@@ -133,60 +198,58 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #727670;
+  color: var(--color-kllezo-green, #09453e);
   white-space: nowrap;
 }
 
 .labelDividerLine {
-  flex: 1;
+  display: inline-block;
+  width: 38px;
   height: 1px;
-  background-color: rgba(9, 69, 62, 0.18);
-  min-width: 28px;
-  max-width: 72px;
+  background: linear-gradient(90deg, #C8A84E 0%, transparent 100%);
 }
 
 .monumentalHeading {
-  margin: 0.15rem 0 1.1rem 0;
+  margin: 0.15rem 0 1.15rem 0;
+  line-height: 0.88;
   display: flex;
   flex-direction: column;
-  line-height: 0.88;
 }
 
 .headingThe {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(3.4rem, 4.8vw, 5.2rem);
+  font-size: clamp(3.2rem, 4.5vw, 5rem);
   font-weight: 600;
-  color: var(--color-charcoal, #181C1A);
   letter-spacing: -0.02em;
+  color: var(--color-charcoal, #181C1A);
 }
 
 .headingVows {
   font-family: var(--font-script, "Allura", cursive);
-  font-size: clamp(4.4rem, 6.6vw, 7rem);
+  font-size: clamp(4.2rem, 6.4vw, 6.8rem);
   font-weight: 400;
   color: var(--color-kllezo-green, #09453e);
   margin-top: -0.15em;
-  letter-spacing: 0.01em;
+  display: inline-block;
 }
 
 .openingNarrative {
   font-family: var(--font-body, Inter, sans-serif);
-  font-size: clamp(0.85rem, 0.95vw, 0.98rem);
+  font-size: clamp(0.85rem, 0.95vw, 0.96rem);
   line-height: 1.68;
   color: #4A504C;
-  margin: 0 0 clamp(1.25rem, 2.5vh, 2rem) 0;
-  max-width: 380px;
+  margin: 0 0 1.75rem 0;
+  max-width: 360px;
 }
 
 .exploreActionBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.75rem;
   text-decoration: none;
-  cursor: pointer;
   color: var(--color-charcoal, #181C1A);
-  transition: transform 0.25s ease, color 0.25s ease;
   width: fit-content;
+  transition: transform 0.25s ease, color 0.25s ease;
 }
 
 .exploreActionBtn:hover {
@@ -195,8 +258,8 @@
 }
 
 .exploreCircleIcon {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1px solid rgba(24, 28, 26, 0.25);
   display: flex;
@@ -207,13 +270,13 @@
 }
 
 .exploreCircleIcon svg {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 
 .exploreActionBtn:hover .exploreCircleIcon {
   border-color: var(--color-kllezo-green, #09453e);
-  background-color: rgba(9, 69, 62, 0.06);
+  background-color: rgba(9, 69, 62, 0.08);
   color: var(--color-kllezo-green, #09453e);
 }
 
@@ -223,91 +286,26 @@
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  color: var(--color-charcoal, #181C1A);
 }
 
-/* ── Center Column: Mandapam Architectural Arch ── */
+/* ── Center Column: Position Holder & Interactive Link ── */
 .openingCenterCol {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  position: relative;
 }
 
-.archedPhotoLink {
+.triangleLinkOverlay {
   display: block;
-  width: 100%;
+  width: clamp(320px, 30vw, 440px);
+  height: clamp(320px, 30vw, 440px);
   text-decoration: none;
   outline: none;
-}
-
-.archedFrame {
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 3.2 / 4.6;
-  clip-path: url(#mandapamArchClip);
-  -webkit-clip-path: url(#mandapamArchClip);
-  overflow: hidden;
-  position: relative;
-  background-color: #E6E1D7;
-  filter: drop-shadow(0 18px 45px rgba(9, 69, 62, 0.15));
-  margin: 0 auto;
-  will-change: clip-path, transform, opacity;
-}
-
-.archedPhotoImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 18%;
-  display: block;
-  transform: scale(1.04);
-  will-change: transform, filter;
-}
-
-.archRevealSvg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.mandapamArchitecturalBorderSvg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 4;
-}
-
-.archApexGlow {
-  position: absolute;
-  top: 4%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 160px;
-  height: 120px;
-  background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.45) 0%, transparent 70%);
-  filter: blur(14px);
-  pointer-events: none;
-  z-index: 4;
-  opacity: 0;
-  will-change: opacity, transform;
-}
-
-.photoSheenOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    transparent 35%,
-    rgba(0, 0, 0, 0.15) 100%
-  );
-  pointer-events: none;
-  z-index: 2;
+  cursor: pointer;
+  z-index: 20;
 }
 
 /* ── Right Column: Featured Commission Details ── */
@@ -317,7 +315,7 @@
   justify-content: center;
   padding-left: clamp(0.5rem, 1.5vw, 1.5rem);
   opacity: 0;
-  transform: translateX(24px);
+  transform: translateX(28px);
   will-change: transform, opacity;
 }
 
@@ -334,13 +332,13 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #727670;
+  color: var(--color-kllezo-green, #09453e);
   white-space: nowrap;
 }
 
 .featuredCoupleName {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
-  font-size: clamp(1.8rem, 2.4vw, 2.4rem);
+  font-size: clamp(1.8rem, 2.3vw, 2.4rem);
   font-weight: 600;
   line-height: 1.15;
   color: var(--color-charcoal, #181C1A);
@@ -362,7 +360,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-kllezo-green, #09453e);
+  color: #8C928E;
   margin: 0 0 1rem 0;
 }
 
@@ -381,7 +379,7 @@
   gap: 0.45rem;
   margin-bottom: 1.4rem;
   padding-top: 0.85rem;
-  border-top: 1px solid rgba(9, 69, 62, 0.12);
+  border-top: 1px solid rgba(9, 69, 62, 0.16);
 }
 
 .specRow {
@@ -422,7 +420,7 @@
 
 .btnViewStory:hover {
   transform: translateX(4px);
-  color: #181C1A;
+  color: var(--color-charcoal, #181C1A);
 }
 
 .actionArrow {
@@ -452,19 +450,31 @@
 }
 
 @media (max-width: 768px) {
+  .transformingAContainer {
+    top: clamp(145px, 21vh, 180px);
+  }
+
+  .triangleFrameWrap {
+    width: clamp(200px, 58vw, 240px);
+    height: clamp(200px, 58vw, 240px);
+  }
+
   .vowsStageWrap {
-    padding: 1.25rem 1rem;
+    padding: 1rem;
+    padding-top: clamp(320px, 42vh, 360px);
+    align-items: flex-start;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .vowsComposition {
     grid-template-columns: 1fr;
-    gap: 1.75rem;
+    gap: 2.25rem;
+    padding-bottom: 3rem;
   }
 
   .openingCenterCol {
-    max-width: 300px;
-    margin: 0 auto;
+    display: none;
   }
 
   .openingLeftCol,
@@ -472,6 +482,13 @@
     text-align: center;
     align-items: center;
     padding: 0;
+  }
+
+  .openingNarrative,
+  .featuredStoryCopy {
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .chapterBadgeRow,
@@ -482,5 +499,12 @@
   .specsTable {
     width: 100%;
     max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .triangleLinkOverlay {
+    width: 240px;
+    height: 240px;
   }
 }

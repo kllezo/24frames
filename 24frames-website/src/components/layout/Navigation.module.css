@@ -37,7 +37,7 @@
 }
 
 .scrolled.themeDark {
-  background: var(--color-brand-forest-dark, #061A12);
+  background: transparent;
   border-bottom: 1px solid transparent;
   box-shadow: none;
   backdrop-filter: none;
@@ -120,7 +120,8 @@
 }
 
 .themeDark .link {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 .themeDark .link:hover {

@@ -893,13 +893,12 @@ export default function LivingContactSheet() {
           }
           if (vinithaImg) {
             if (p >= 0.98) {
-              vinithaImg.style.filter = "none";
               vinithaImg.style.transform = "none";
+              vinithaImg.style.opacity = "1";
             } else {
-              const blur = Math.max(0, (1 - p) * 6);
-              const bright = 0.65 + p * 0.35;
               const scale = 1.06 - p * 0.06;
-              vinithaImg.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
+              const op = 0.7 + p * 0.3;
+              vinithaImg.style.opacity = `${op.toFixed(2)}`;
               vinithaImg.style.transform = `scale(${scale.toFixed(3)})`;
             }
           }
@@ -956,13 +955,12 @@ export default function LivingContactSheet() {
           }
           if (hrithikaPhotoImgRef.current) {
             if (p >= 0.98) {
-              hrithikaPhotoImgRef.current.style.filter = "none";
               hrithikaPhotoImgRef.current.style.transform = "none";
+              hrithikaPhotoImgRef.current.style.opacity = "1";
             } else {
-              const blur = Math.max(0, (1 - p) * 3);
-              const bright = 0.8 + p * 0.2;
               const scale = 1.06 - p * 0.06;
-              hrithikaPhotoImgRef.current.style.filter = `blur(${blur.toFixed(1)}px) brightness(${bright.toFixed(2)})`;
+              const op = 0.8 + p * 0.2;
+              hrithikaPhotoImgRef.current.style.opacity = `${op.toFixed(2)}`;
               hrithikaPhotoImgRef.current.style.transform = `scale(${scale.toFixed(3)})`;
             }
           }

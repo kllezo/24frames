@@ -214,12 +214,12 @@ export default function FounderRecognitionSection({
     if (isReduced) return;
 
     const ctx = gsap.context(() => {
-      /* 1. Coordinated 5-Stage Living Portrait Reveal Timeline */
+      /* 1. Synchronized Living Portrait & Founder Name Reveal Timeline */
       if (portraitWrapRef.current && portraitImgRef.current) {
         const portraitTl = gsap.timeline({
           scrollTrigger: {
             trigger: portraitWrapRef.current,
-            start: isDedicatedRoute ? "top 95%" : "top 78%",
+            start: isDedicatedRoute ? "top 95%" : "top 80%",
             once: true,
           },
         });
@@ -227,63 +227,63 @@ export default function FounderRecognitionSection({
         // Stage 0: Portrait frame emerges with subtle elevation
         portraitTl.fromTo(
           portraitWrapRef.current,
-          { clipPath: "polygon(0 8%, 100% 0%, 100% 92%, 0 100%)", opacity: 0.85, y: 20 },
-          { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)", opacity: 1, y: 0, duration: 1.1, ease: "power3.out" },
+          { clipPath: "polygon(0 4%, 100% 0%, 100% 96%, 0 100%)", opacity: 0.85, y: 16 },
+          { clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)", opacity: 1, y: 0, duration: 0.85, ease: "power2.out" },
           0
         );
 
-        // Stage 1: Viewfinder 4 corners converge toward focus center (0.0s - 0.45s)
-        if (viewfinderHudRef.current) {
+        // Stage 1: The Signature name panel appears SIMULTANEOUSLY (staggered by only 80ms)
+        if (namePanelRef.current) {
           portraitTl.fromTo(
-            viewfinderHudRef.current,
-            { opacity: 0, scale: 1.22 },
-            { opacity: 1, scale: 1.0, duration: 0.5, ease: "power3.out" },
-            0.1
+            namePanelRef.current,
+            { opacity: 0, y: 14 },
+            { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+            0.08
           );
         }
 
-        // Stage 2: Vertical light band sweeps through portrait (0.35s - 1.15s)
+        // Stage 2: Viewfinder 4 corners converge toward focus center (0.05s - 0.45s)
+        if (viewfinderHudRef.current) {
+          portraitTl.fromTo(
+            viewfinderHudRef.current,
+            { opacity: 0, scale: 1.15 },
+            { opacity: 1, scale: 1.0, duration: 0.45, ease: "power2.out" },
+            0.05
+          );
+        }
+
+        // Stage 3: Vertical light band sweeps through portrait (0.15s - 0.85s)
         if (lightBandRef.current) {
           portraitTl.fromTo(
             lightBandRef.current,
             { left: "-20%", opacity: 0.85 },
-            { left: "120%", opacity: 0, duration: 0.85, ease: "power2.inOut" },
-            0.35
+            { left: "120%", opacity: 0, duration: 0.75, ease: "power2.inOut" },
+            0.15
           );
         }
 
-        // Stage 3: Darkroom shadow fades as portrait focus settles into crisp clarity
+        // Stage 4: Darkroom shadow fades as portrait settles into crisp clarity
         if (darkroomOverlayRef.current) {
           portraitTl.to(
             darkroomOverlayRef.current,
-            { opacity: 0, duration: 0.75, ease: "power2.out" },
-            0.35
+            { opacity: 0, duration: 0.65, ease: "power2.out" },
+            0.15
           );
         }
 
         portraitTl.fromTo(
           portraitImgRef.current,
-          { scale: 1.05, filter: "blur(6px)" },
-          { scale: 1.0, filter: "blur(0px)", duration: 0.75, ease: "power2.out" },
-          0.45
+          { scale: 1.04 },
+          { scale: 1.0, duration: 0.85, ease: "power2.out" },
+          0
         );
 
-        // Stage 4: Viewfinder corners retreat as shot is acquired
+        // Stage 5: Viewfinder corners retreat smoothly as focus is locked
         if (viewfinderHudRef.current) {
           portraitTl.to(
             viewfinderHudRef.current,
-            { opacity: 0, scale: 1.1, duration: 0.45, ease: "power2.in" },
-            1.2
-          );
-        }
-
-        // Stage 5: The Signature name panel appears
-        if (namePanelRef.current) {
-          portraitTl.fromTo(
-            namePanelRef.current,
-            { opacity: 0, y: 14 },
-            { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
-            1.45
+            { opacity: 0, scale: 1.08, duration: 0.4, ease: "power2.in" },
+            0.75
           );
         }
       }

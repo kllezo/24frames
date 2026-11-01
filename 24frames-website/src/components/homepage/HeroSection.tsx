@@ -87,9 +87,6 @@ export default function HeroSection() {
         {/* Subtle, Natural Cinematic Vignette (Preserves Natural Photo Contrast) */}
         <div className={styles.framingVignette} aria-hidden="true" />
 
-        {/* Top Header Transition Overlay — Ensures navigation legibility */}
-        <div className={styles.headerUnderlay} aria-hidden="true" />
-
         {/* Top Eyebrow Tag Row (Metadata Edition Only — First Frame Pill Removed) */}
         <div ref={topBarRef} className={styles.frameTopBar}>
           <span className={styles.frameEdition}>HYDERABAD · PALACE COMMISSION</span>

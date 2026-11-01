@@ -21,6 +21,15 @@ export default function Navigation() {
   const rafIdRef = useRef<number | null>(null);
 
   useEffect(() => {
+    let cachedHeroHeight = 0;
+    const measureHero = () => {
+      const heroEl = document.getElementById("hero");
+      if (heroEl) {
+        cachedHeroHeight = heroEl.offsetHeight;
+      }
+    };
+    measureHero();
+
     const updateNavigation = () => {
       const scrollY = window.scrollY;
       const isNowScrolled = scrollY > 50;
@@ -46,11 +55,8 @@ export default function Navigation() {
       } else if (explicitTheme === "light") {
         nextIsLight = true;
       } else {
-        const heroEl = document.getElementById("hero");
-        if (heroEl) {
-          const heroRect = heroEl.getBoundingClientRect();
-          // Hero (dark) extends to heroRect.bottom; below it is light ivory
-          nextIsLight = heroRect.bottom <= 70;
+        if (cachedHeroHeight > 0) {
+          nextIsLight = scrollY >= cachedHeroHeight - 70;
         } else {
           nextIsLight = true;
         }
@@ -70,11 +76,18 @@ export default function Navigation() {
       });
     };
 
+    const handleResize = () => {
+      measureHero();
+      updateNavigation();
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize, { passive: true });
     updateNavigation();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
       if (rafIdRef.current !== null) {
         cancelAnimationFrame(rafIdRef.current);
       }
