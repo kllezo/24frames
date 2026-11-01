@@ -1,0 +1,9 @@
+http://localhost:3000/
+http://localhost:3000/#vows
+http://localhost:3000/#collection
+http://localhost:3000/stories
+http://localhost:3000/stories/bellam-srikonda
+http://localhost:3000/artist
+http://localhost:3000/inquire
+http://localhost:3000/client-gallery
+

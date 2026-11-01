@@ -116,10 +116,27 @@
 .heroImage {
   width: 100%;
   height: auto;
-  max-height: clamp(480px, 58vh, 620px);
-  object-fit: cover;
-  object-position: center 25%;
   display: block;
+  object-fit: cover;
+  object-position: center 20%;
+}
+
+@media (max-width: 900px) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .heroImageFrame {
+    max-width: 100%;
+    border-radius: 14px;
+  }
+
+  .heroImage {
+    max-height: none;
+    height: auto;
+    object-position: center 18%;
+  }
 }
 
 .heroImageCaption {

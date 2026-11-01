@@ -147,7 +147,7 @@ export const ITEM_PROJECT_04: GalleryProjectItem = {
   webpImage: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
   aspectRatio: "4 / 5",
   storyUrl: "/stories/karthik-and-gayathri",
-  objectPosition: "center 10%",
+  objectPosition: "center 15%",
   narrative:
     "Sun-drenched botanical glasshouse sceneries, breezy columned verandas, and spontaneous dance before cascading blush florals.",
 };
@@ -873,7 +873,10 @@ export default function LivingContactSheet() {
         const narrativeItems = vinithaStageRef.current.querySelectorAll<HTMLElement>(`.${styles.filmNarrativeSide} > *`);
         const playBeacon = vinithaStageRef.current.querySelector<HTMLElement>(`.${styles.filmPlaySide}`);
 
+        let lastVinithaP = -1;
         const renderVinitha = (p: number) => {
+          if (Math.abs(p - lastVinithaP) < 0.003 && p > 0.01 && p < 0.98) return;
+          lastVinithaP = p;
           const { edgeD, fillD, rippleD } = buildVinithaSilkPaths(p);
           if (vinithaSilkFillPathRef.current) {
             vinithaSilkFillPathRef.current.setAttribute("d", fillD);
@@ -935,7 +938,10 @@ export default function LivingContactSheet() {
       // 3. Featured Story 03 — Hrithika & Abhishek: Continuous Flowing Diagonal Silk Drape
       if (hrithikaCanvasRef.current) {
         const hrithikaProxy = { val: 0 };
+        let lastHrithikaP = -1;
         const renderHrithika = (p: number) => {
+          if (Math.abs(p - lastHrithikaP) < 0.003 && p > 0.01 && p < 0.98) return;
+          lastHrithikaP = p;
           const { trimD, fillD, rippleD } = buildHrithikaDrapePaths(p);
           if (hrithikaDrapeFillPathRef.current) {
             hrithikaDrapeFillPathRef.current.setAttribute("d", fillD);
@@ -1145,7 +1151,10 @@ export default function LivingContactSheet() {
           `.${styles.nishanthRightNarrative} > *`
         );
 
+        let lastNishanthP = -1;
         const renderNishanth = (p: number) => {
+          if (Math.abs(p - lastNishanthP) < 0.003 && p > 0.01 && p < 0.98) return;
+          lastNishanthP = p;
           const ap = sampleAperture(p);
           const sec = sampleSecondary(p);
           const greenBot = sampleGreenBottom(p);

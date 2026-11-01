@@ -43,3 +43,11 @@ next-env.d.ts
 # IDE and tool state
 *.last-skill-routing.json
 
+# sitespeed.io performance reports
+/performance-reports
+/sitespeed-result
+
+# Scratch profiling & test scripts
+/scratch
+
+

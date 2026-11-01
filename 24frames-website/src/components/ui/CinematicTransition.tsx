@@ -382,7 +382,7 @@ export default function CinematicTransition() {
       clearSafetyTimeout();
       safetyTimeoutRef.current = setTimeout(() => {
         forceReset();
-      }, 3200);
+      }, 1800);
 
       // Reduced motion accessibility fallback
       if (isReducedMotion) {
@@ -438,26 +438,32 @@ export default function CinematicTransition() {
       if (vignetteRef.current) gsap.set(vignetteRef.current, { opacity: 0 });
       if (guideRingsRef.current) gsap.set(guideRingsRef.current, { opacity: 0 });
 
-      // ── PHASE 1: CAMERA SHUTTER CLOSES COMPLETELY (0.36s) ──
+      const isMobile = typeof window !== "undefined" && window.innerWidth <= 820;
+
+      // ── PHASE 1: CAMERA SHUTTER CLOSES COMPLETELY (0.24s / 0.18s mobile) ──
       const closeTl = gsap.timeline();
       masterTimelineRef.current = closeTl;
 
+      const closeDuration = isMobile ? 0.18 : 0.24;
+      const holdDuration = isMobile ? 40 : 60;
+      const openDuration = isMobile ? 0.20 : 0.26;
+
       closeTl.to([vignetteRef.current, cornersRef.current], {
         opacity: 0.85,
-        duration: 0.18,
+        duration: closeDuration * 0.5,
         ease: "power1.out",
       }, 0.00);
 
       closeTl.to(guideRingsRef.current, {
         opacity: 0.35,
-        duration: 0.18,
+        duration: closeDuration * 0.5,
         ease: "power1.out",
       }, 0.00);
 
       const closeBladeState = { angle: -38 };
       closeTl.to(closeBladeState, {
         angle: 36,
-        duration: 0.36,
+        duration: closeDuration,
         ease: "power2.in",
         onUpdate: () => {
           setBladeAngle(closeBladeState.angle);
@@ -467,9 +473,9 @@ export default function CinematicTransition() {
       if (backdropRef.current) {
         closeTl.to(backdropRef.current, {
           opacity: 1,
-          duration: 0.20,
+          duration: closeDuration * 0.6,
           ease: "power2.in",
-        }, 0.16);
+        }, closeDuration * 0.4);
       }
 
       await new Promise<void>((resolve) => {
@@ -482,20 +488,20 @@ export default function CinematicTransition() {
         });
       });
 
-      // ── BRIEF CINEMATIC HOLD (100ms) WHILE FULLY SEALED ──
-      await new Promise((r) => setTimeout(r, 100));
+      // ── BRIEF CINEMATIC HOLD (40–60ms) WHILE FULLY SEALED ──
+      await new Promise((r) => setTimeout(r, holdDuration));
 
       // ── ROUTE SWAP / SCROLL OCCURS WHILE SEALED ──
       await performRouteSwapOrScroll(targetUrl, targetHash);
 
-      // ── PHASE 2: CAMERA SHUTTER OPENS COMPLETELY (0.36s) ──
+      // ── PHASE 2: CAMERA SHUTTER OPENS COMPLETELY (0.26s / 0.20s mobile) ──
       const openTl = gsap.timeline();
       masterTimelineRef.current = openTl;
 
       const openBladeState = { angle: 36 };
       openTl.to(openBladeState, {
         angle: -38,
-        duration: 0.36,
+        duration: openDuration,
         ease: "power2.out",
         onUpdate: () => {
           setBladeAngle(openBladeState.angle);
@@ -505,16 +511,16 @@ export default function CinematicTransition() {
       if (backdropRef.current) {
         openTl.to(backdropRef.current, {
           opacity: 0,
-          duration: 0.26,
+          duration: openDuration * 0.7,
           ease: "power2.out",
         }, 0.00);
       }
 
       openTl.to([cornersRef.current, guideRingsRef.current, vignetteRef.current], {
         opacity: 0,
-        duration: 0.24,
+        duration: openDuration * 0.65,
         ease: "power1.out",
-      }, 0.04);
+      }, 0.02);
 
       await new Promise<void>((resolve) => {
         openTl.eventCallback("onComplete", () => {
@@ -530,7 +536,13 @@ export default function CinematicTransition() {
       if (vignetteRef.current) vignetteRef.current.style.display = "none";
       if (guideRingsRef.current) guideRingsRef.current.style.display = "none";
 
-      // ── PHASE 3: THE EXISTING GOLD FOCUS RING TRAVELS TO THE DESTINATION ──
+      // On mobile viewports: restore immediate interaction instantly!
+      if (isMobile) {
+        forceReset();
+        return;
+      }
+
+      // ── PHASE 3: THE GOLD FOCUS RING TRAVELS TO THE DESTINATION (DESKTOP) ──
       if (!focusRingRef.current) {
         forceReset();
         return;
@@ -540,7 +552,6 @@ export default function CinematicTransition() {
       const targetEl = resolveTargetElement(targetUrl, targetHash);
 
       if (!targetEl) {
-        // "If the target is unavailable, fail gracefully rather than tracking toward an invented position."
         forceReset();
         return;
       }
@@ -548,7 +559,7 @@ export default function CinematicTransition() {
       const targetCoords = computeTargetCoordinates(targetEl, cleanUrl);
       const startSize = targetCoords.startSize || targetCoords.width;
 
-      // Make reticle visible at center (0, 0) with relatively large scale at start
+      // Make reticle visible at center (0, 0)
       gsap.set(focusRingRef.current, {
         xPercent: -50,
         yPercent: -50,
@@ -564,12 +575,12 @@ export default function CinematicTransition() {
         gsap.set(reticleAssemblyRef.current, { rotation: 0, transformOrigin: "400px 400px" });
       }
 
-      // Optical focus element travels towards target while progressively reducing scale with smooth deceleration
+      // Optical focus element travels towards target (0.28s)
       await new Promise<void>((resolve) => {
         if (reticleAssemblyRef.current) {
           gsap.to(reticleAssemblyRef.current, {
-            rotation: 22,
-            duration: 0.62,
+            rotation: 16,
+            duration: 0.28,
             ease: "power2.out",
           });
         }
@@ -580,21 +591,21 @@ export default function CinematicTransition() {
           y: targetCoords.y,
           width: targetCoords.width,
           height: targetCoords.height,
-          duration: 0.62,
+          duration: 0.28,
           ease: "power2.out",
           onComplete: () => resolve(),
         });
       });
 
-      // ── PHASE 4: BRIEF FOCUS SNAP & CLEANUP ──
+      // ── PHASE 4: BRIEF FOCUS SNAP & CLEANUP (0.16s) ──
       await new Promise<void>((resolve) => {
         if (!focusRingRef.current) {
           resolve();
           return;
         }
         gsap.to(focusRingRef.current, {
-          scale: 1.08,
-          duration: 0.08,
+          scale: 1.05,
+          duration: 0.06,
           ease: "power1.out",
           onComplete: () => {
             if (!focusRingRef.current) {
@@ -604,7 +615,7 @@ export default function CinematicTransition() {
             gsap.to(focusRingRef.current, {
               scale: 1.0,
               opacity: 0,
-              duration: 0.16,
+              duration: 0.10,
               ease: "power1.inOut",
               onComplete: () => resolve(),
             });
@@ -657,13 +668,10 @@ export default function CinematicTransition() {
       // Exclude different origins
       if (url.origin !== window.location.origin) return;
 
-      // Identical path and hash: do not re-trigger transition
+      // Same-page links (with or without hash): NEVER trigger shutter transition!
+      // Let SmoothScroll handle smooth 60fps scrolling with the luxury header offset.
       const currentUrl = new URL(window.location.href);
-      if (
-        url.pathname === currentUrl.pathname &&
-        url.search === currentUrl.search &&
-        url.hash === currentUrl.hash
-      ) {
+      if (url.pathname === currentUrl.pathname) {
         return;
       }
 

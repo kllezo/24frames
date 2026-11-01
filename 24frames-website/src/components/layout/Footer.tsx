@@ -299,8 +299,16 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
                 Client Archive
               </Link>
               <span className={styles.bottomDot}>·</span>
+              <Link href="/privacy" className={styles.bottomLink}>
+                Privacy
+              </Link>
+              <span className={styles.bottomDot}>·</span>
+              <Link href="/terms" className={styles.bottomLink}>
+                Terms
+              </Link>
+              <span className={styles.bottomDot}>·</span>
               <Link href="/inquire" className={styles.bottomLink}>
-                Commence Dialogue
+                Inquire
               </Link>
             </div>
 

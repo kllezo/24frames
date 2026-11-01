@@ -42,6 +42,41 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Allura&family=Anton&family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:ital,wght@0,600;0,700;0,800;1,700;1,800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
           rel="stylesheet"
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "PhotographyBusiness",
+              name: "24 Frames Photography",
+              alternateName: "24 Frames",
+              founder: {
+                "@type": "Person",
+                name: "Phani Gogireddy",
+                jobTitle: "Principal Cinematographer & Photographer",
+              },
+              url: "https://24frames-kllezo.vercel.app",
+              logo: "https://24frames-kllezo.vercel.app/images/logo.png",
+              image: "https://24frames-kllezo.vercel.app/images/portfolio/hrithika-abhishek/cover.jpg",
+              description:
+                "Premium cinematic wedding photography and films by Phani Gogireddy. Capturing South India's grandest celebrations with editorial artistry.",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Hyderabad",
+                addressRegion: "Telangana",
+                addressCountry: "IN",
+              },
+              telephone: "+919014433074",
+              email: "hello@24framesphotography.com",
+              priceRange: "$$$$",
+              sameAs: [
+                "https://www.instagram.com/24framesphotography_official/",
+                "https://youtube.com/@24framesphotography",
+              ],
+              award: "ET Excellence Award 2025 Winner",
+            }),
+          }}
+        />
       </head>
       <body suppressHydrationWarning>
         <FilmGrain />

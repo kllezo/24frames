@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "perf": "npm run perf:desktop && npm run perf:mobile",
+    "perf:desktop": "sitespeed.io tests/perf/urls.txt --config tests/perf/desktop-config.json",
+    "perf:mobile": "sitespeed.io tests/perf/urls.txt --config tests/perf/mobile-config.json"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -24,6 +27,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
+    "sitespeed.io": "^42.10.0",
     "typescript": "^5"
   }
 }

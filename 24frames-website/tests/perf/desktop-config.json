@@ -1,0 +1,19 @@
+{
+  "browsertime": {
+    "iterations": 1,
+    "browser": "chrome",
+    "viewPort": "1440x900",
+    "chrome": {
+      "binaryPath": "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
+      "args": [
+        "headless",
+        "disable-gpu",
+        "no-sandbox"
+      ]
+    }
+  },
+  "outputFolder": "performance-reports/desktop",
+  "html": {
+    "showAllWaterfallSummary": true
+  }
+}

@@ -18,17 +18,34 @@ export default function SmoothScroll() {
     // and instant tactile responsiveness without competing RAF loops.
     ScrollTrigger.refresh();
 
+    // Ensure document is never trapped in an unintended overflow lock
+    if (document.body.style.overflow === "hidden") {
+      document.body.style.overflow = "";
+    }
+    if (document.documentElement.style.overflow === "hidden") {
+      document.documentElement.style.overflow = "";
+    }
+
     // 3. Universal Anchor Navigation with Fixed Luxury Header Offset (-80px)
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       const anchor = target?.closest("a") as HTMLAnchorElement | null;
       if (!anchor) return;
 
-      const href = anchor.getAttribute("href");
-      if (!href) return;
+      const rawHref = anchor.getAttribute("href");
+      if (!rawHref) return;
 
-      if (href.startsWith("#") && href.length > 1) {
-        const targetElement = document.querySelector(href);
+      let targetId = "";
+      if (rawHref.startsWith("#") && rawHref.length > 1) {
+        targetId = rawHref;
+      } else if (rawHref.startsWith("/#") && rawHref.length > 2) {
+        if (window.location.pathname === "/" || window.location.pathname === "") {
+          targetId = rawHref.substring(1);
+        }
+      }
+
+      if (targetId) {
+        const targetElement = document.querySelector(targetId);
         if (targetElement) {
           e.preventDefault();
           const top = targetElement.getBoundingClientRect().top + window.scrollY - 80;
@@ -36,6 +53,11 @@ export default function SmoothScroll() {
             top,
             behavior: "smooth",
           });
+          try {
+            history.pushState(null, "", targetId);
+          } catch {
+            // fallback
+          }
         }
       }
     };

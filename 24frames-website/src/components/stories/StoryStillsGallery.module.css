@@ -270,6 +270,14 @@
   max-height: 560px;
 }
 
+.aspectPortrait .galleryImg {
+  object-position: center 18%;
+}
+
+.aspectLandscape .galleryImg {
+  object-position: center 25%;
+}
+
 .galleryImg {
   width: 100%;
   height: 100%;

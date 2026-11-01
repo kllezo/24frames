@@ -304,7 +304,7 @@ export default function HeroLogoTransition({
             </a>
           </div>
 
-          {/* Center Column: Refined Editorial Photo Frame (Bellamkonda & Kavya) */}
+          {/* Center Column: Refined Editorial Photo Frame (Golden Vintage Arch Reference) */}
           <div ref={openingCenterColRef} className={styles.openingCenterCol}>
             <Link
               href="/stories/bellam-srikonda"
@@ -312,18 +312,43 @@ export default function HeroLogoTransition({
               aria-label="Open featured commission: Bellamkonda Sai Sreenivas & Kavya Reddy"
             >
               <div className={styles.archedFrame}>
-                <picture>
-                  <source srcSet="/images/stories/bellam-srikonda/IMG_6339.webp" type="image/webp" />
-                  <img
-                    ref={archedPhotoImgRef}
-                    src="/images/stories/bellam-srikonda/IMG_6339.jpg"
-                    alt="Bellamkonda Sai Sreenivas & Kavya Reddy"
-                    className={styles.archedPhotoImg}
-                    loading="eager"
-                    decoding="async"
+                <div className={styles.archPhotoMask}>
+                  <picture>
+                    <source srcSet="/images/stories/bellam-srikonda/IMG_6339.webp" type="image/webp" />
+                    <img
+                      ref={archedPhotoImgRef}
+                      src="/images/stories/bellam-srikonda/IMG_6339.jpg"
+                      alt="Bellamkonda Sai Sreenivas & Kavya Reddy"
+                      className={styles.archedPhotoImg}
+                      loading="eager"
+                      decoding="async"
+                    />
+                  </picture>
+                  <div className={styles.photoSheenOverlay} />
+                </div>
+                <svg
+                  className={styles.archGoldFrameSvg}
+                  viewBox="0 0 243 403"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <linearGradient id="champagneGoldArchVows" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#E8D7AD" />
+                      <stop offset="25%" stopColor="#C8A84E" />
+                      <stop offset="50%" stopColor="#F3E8C8" />
+                      <stop offset="75%" stopColor="#BE9E46" />
+                      <stop offset="100%" stopColor="#D8C082" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 1.25,121.5 A 120.25,120.25 0 0,1 241.75,121.5 L 241.75,401.75 L 1.25,401.75 Z"
+                    fill="none"
+                    stroke="url(#champagneGoldArchVows)"
+                    strokeWidth="2"
+                    vectorEffect="non-scaling-stroke"
                   />
-                </picture>
-                <div className={styles.photoSheenOverlay} />
+                </svg>
               </div>
             </Link>
           </div>
