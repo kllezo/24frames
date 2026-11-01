@@ -54,11 +54,11 @@ export default function HeroLogoTransition({
         ],
         { opacity: 0 }
       );
-      if (openingLeftColRef.current) gsap.set(openingLeftColRef.current, { opacity: 0, x: -24 });
-      if (openingRightColRef.current) gsap.set(openingRightColRef.current, { opacity: 0, x: 24 });
-      if (openingCenterColRef.current) gsap.set(openingCenterColRef.current, { opacity: 0, scale: 0.88 });
+      if (openingLeftColRef.current) gsap.set(openingLeftColRef.current, { opacity: 0, y: 24 });
+      if (openingCenterColRef.current) gsap.set(openingCenterColRef.current, { opacity: 0, scale: 0.94 });
+      if (openingRightColRef.current) gsap.set(openingRightColRef.current, { opacity: 0, y: 24 });
       if (archedPhotoImgRef.current) {
-        gsap.set(archedPhotoImgRef.current, { opacity: 0, scale: 1.04 });
+        gsap.set(archedPhotoImgRef.current, { opacity: 0, scale: 1.05 });
       }
 
       // Master timeline scrubbed by ScrollTrigger
@@ -104,17 +104,17 @@ export default function HeroLogoTransition({
         // Living depth / breathing illumination
         masterTl.to(
           logoWrapRef.current,
-          { scale: 1.02, duration: 0.03, ease: "power1.inOut" },
+          { scale: 1.02, duration: 0.04, ease: "power1.inOut" },
           0.12
         );
       }
 
-      // ── Stage B: 0.15 – 0.28 (Logo smoothly transitions out as ivory emerges) ──
+      // ── Stage B: 0.16 – 0.26 (Logo smoothly dissolves out as warm ivory emerges) ──
       if (logoWrapRef.current) {
         masterTl.to(
           logoWrapRef.current,
-          { opacity: 0, scale: 0.94, duration: 0.12, ease: "power2.in" },
-          0.15
+          { opacity: 0, scale: 1.04, duration: 0.10, ease: "power2.in" },
+          0.16
         );
       }
 
@@ -122,7 +122,7 @@ export default function HeroLogoTransition({
         masterTl.fromTo(
           ivoryBackdropRef.current,
           { opacity: 0 },
-          { opacity: 1, duration: 0.18, ease: "power2.inOut" },
+          { opacity: 1, duration: 0.14, ease: "power2.inOut" },
           0.18
         );
       }
@@ -131,19 +131,30 @@ export default function HeroLogoTransition({
         masterTl.fromTo(
           vowsStageWrapRef.current,
           { opacity: 0 },
-          { opacity: 1, duration: 0.14, ease: "power2.out" },
+          { opacity: 1, duration: 0.10, ease: "power2.out" },
           0.20
         );
       }
 
-      // ── Stage C: 0.22 – 0.50 (Frame & Photo Reveal Together, Perfectly Synchronized) ──
-      // Frame and wedding photograph begin TOGETHER with zero grey placeholder pause
+      // ── STEP 1: 0.24 – 0.46: THE VOWS TEXT (Sequential Story Reveal) ──
+      // The Vows heading & thesis arrive and settle into place first. Photo & couple info remain hidden.
+      if (openingLeftColRef.current) {
+        masterTl.fromTo(
+          openingLeftColRef.current,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.22, ease: "power2.out" },
+          0.24
+        );
+      }
+
+      // ── STEP 2: 0.46 – 0.70: BELAMKONDA PHOTOGRAPH (Golden Vintage Arch) ──
+      // As visitor continues scrolling, central photograph arrives into view inside golden arch frame
       if (openingCenterColRef.current) {
         masterTl.fromTo(
           openingCenterColRef.current,
           { opacity: 0, scale: 0.94 },
-          { opacity: 1, scale: 1.0, duration: 0.28, ease: "power2.out" },
-          0.22
+          { opacity: 1, scale: 1.0, duration: 0.24, ease: "power2.out" },
+          0.46
         );
       }
 
@@ -151,44 +162,35 @@ export default function HeroLogoTransition({
         masterTl.fromTo(
           archedPhotoImgRef.current,
           { opacity: 0, scale: 1.05 },
-          { opacity: 1, scale: 1.0, duration: 0.28, ease: "power2.out" },
-          0.22
+          { opacity: 1, scale: 1.0, duration: 0.24, ease: "power2.out" },
+          0.46
         );
       }
 
-      // The Vows Heading arrives in close harmony with the photograph
-      if (openingLeftColRef.current) {
-        masterTl.fromTo(
-          openingLeftColRef.current,
-          { opacity: 0, x: -20 },
-          { opacity: 1, x: 0, duration: 0.25, ease: "power2.out" },
-          0.26
-        );
-      }
-
-      // Featured Commission Details arrives in close harmony with the photograph
+      // ── STEP 3: 0.70 – 0.92: COUPLE INFORMATION ──
+      // Couple's name, venue, story copy & CTA enter to complete unified 3-column composition
       if (openingRightColRef.current) {
         masterTl.fromTo(
           openingRightColRef.current,
-          { opacity: 0, x: 20 },
-          { opacity: 1, x: 0, duration: 0.25, ease: "power2.out" },
-          0.28
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.22, ease: "power2.out" },
+          0.70
         );
       }
 
-      // ── Stage D: 0.52 – 1.00 (Full 3-Column Composition Settled & Holding) ──
-      masterTl.to({}, { duration: 0.48 }, 0.52);
+      // ── Full Composition Settle & Hold (0.92 – 1.00) ──
+      masterTl.to({}, { duration: 0.08 }, 0.92);
 
-      // ── ScrollTrigger Pinning ──
+      // ── ScrollTrigger Pinning (Optimized for 1–2 deliberate scrolls) ──
       const isMobile = window.innerWidth < 820;
-      const pinDistance = isMobile ? "+=180%" : "+=240%";
+      const pinDistance = isMobile ? "+=95%" : "+=120%";
 
       ScrollTrigger.create({
         trigger: heroSectionRef.current,
         start: "top top",
         end: pinDistance,
         pin: true,
-        scrub: 0.5,
+        scrub: 0.35,
         onUpdate: (self) => {
           const progress = self.progress;
           masterTl.progress(progress);
@@ -322,13 +324,14 @@ export default function HeroLogoTransition({
                       className={styles.archedPhotoImg}
                       loading="eager"
                       decoding="async"
+                      draggable={false}
                     />
                   </picture>
                   <div className={styles.photoSheenOverlay} />
                 </div>
                 <svg
                   className={styles.archGoldFrameSvg}
-                  viewBox="0 0 243 403"
+                  viewBox="0 0 245 404"
                   preserveAspectRatio="none"
                   aria-hidden="true"
                 >
@@ -342,10 +345,10 @@ export default function HeroLogoTransition({
                     </linearGradient>
                   </defs>
                   <path
-                    d="M 1.25,121.5 A 120.25,120.25 0 0,1 241.75,121.5 L 241.75,401.75 L 1.25,401.75 Z"
+                    d="M 1,122.5 A 121.5,121.5 0 0,1 244,122.5 L 244,403 L 1,403 Z"
                     fill="none"
                     stroke="url(#champagneGoldArchVows)"
-                    strokeWidth="2"
+                    strokeWidth="1.75"
                     vectorEffect="non-scaling-stroke"
                   />
                 </svg>
@@ -373,25 +376,6 @@ export default function HeroLogoTransition({
               of celebration, personal moments, and everything in between. A wedding
               captured with honesty, cinematic depth and timeless transitions.
             </p>
-
-            <div className={styles.specsTable}>
-              <div className={styles.specRow}>
-                <span className={styles.specKey}>DISCIPLINE</span>
-                <span className={styles.specValue}>Celebrity Wedding</span>
-              </div>
-              <div className={styles.specRow}>
-                <span className={styles.specKey}>LOCATION</span>
-                <span className={styles.specValue}>Hyderabad</span>
-              </div>
-              <div className={styles.specRow}>
-                <span className={styles.specKey}>OPTICAL CREW</span>
-                <span className={styles.specValue}>35mm Prime Cinema Optics</span>
-              </div>
-              <div className={styles.specRow}>
-                <span className={styles.specKey}>ARCHIVE ACCESS</span>
-                <span className={styles.specValue}>Curated Master Story</span>
-              </div>
-            </div>
 
             <Link href="/stories/bellam-srikonda" className={styles.btnViewStory}>
               <span>VIEW FULL COMMISSION</span>

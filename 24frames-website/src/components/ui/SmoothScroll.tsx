@@ -27,6 +27,25 @@ export default function SmoothScroll() {
     }
 
     // 3. Universal Anchor Navigation with Fixed Luxury Header Offset (-80px)
+    const scrollToHash = (hash: string) => {
+      if (!hash || hash.length <= 1) return;
+      if (hash === "#vows") {
+        window.scrollTo({
+          top: Math.round(window.innerHeight * 0.60),
+          behavior: "smooth",
+        });
+        return;
+      }
+      const targetElement = document.querySelector(hash);
+      if (targetElement) {
+        const top = targetElement.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({
+          top,
+          behavior: "smooth",
+        });
+      }
+    };
+
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       const anchor = target?.closest("a") as HTMLAnchorElement | null;
@@ -45,24 +64,21 @@ export default function SmoothScroll() {
       }
 
       if (targetId) {
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          e.preventDefault();
-          const top = targetElement.getBoundingClientRect().top + window.scrollY - 80;
-          window.scrollTo({
-            top,
-            behavior: "smooth",
-          });
-          try {
-            history.pushState(null, "", targetId);
-          } catch {
-            // fallback
-          }
+        e.preventDefault();
+        scrollToHash(targetId);
+        try {
+          history.pushState(null, "", targetId);
+        } catch {
+          // fallback
         }
       }
     };
 
     document.addEventListener("click", handleAnchorClick, { capture: true });
+
+    if (window.location.hash) {
+      setTimeout(() => scrollToHash(window.location.hash), 200);
+    }
 
     // Handle responsive breakpoint changes
     const handleResize = () => {

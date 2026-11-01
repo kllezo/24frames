@@ -6,9 +6,9 @@ import styles from "./Navigation.module.css";
 
 const NAV_LINKS = [
   { label: "The Vows", href: "/#vows" },
-  { label: "The Collection", href: "/collection" },
+  { label: "The Collection", href: "/#collection" },
   { label: "Stories", href: "/stories" },
-  { label: "The Artist", href: "/artist" },
+  { label: "The Artist", href: "/#artist" },
 ];
 
 export default function Navigation() {

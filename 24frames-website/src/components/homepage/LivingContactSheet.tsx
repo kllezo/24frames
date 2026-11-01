@@ -988,88 +988,75 @@ export default function LivingContactSheet() {
       }
 
       // 4. Featured Story 04 — Karthik & Gayathri: Painterly Brush Reveal (Top-Right towards Center)
+      // Viewport-relative trigger: begins ONLY when photo container enters view (top 72%),
+      // scrubs smoothly with scroll, and completes cleanly before section leaves.
       if (karthikCanvasRef.current) {
         const karthikTl = gsap.timeline({
           scrollTrigger: {
             trigger: karthikCanvasRef.current,
-            start: "top 88%",
-            once: true,
-          },
-          onComplete: () => {
-            if (karthikBrushOverlayRef.current) karthikBrushOverlayRef.current.style.display = "none";
-            if (karthikPhotoImgRef.current) {
-              karthikPhotoImgRef.current.style.filter = "none";
-              karthikPhotoImgRef.current.style.transform = "none";
-            }
+            start: "top 72%",
+            end: "center 48%",
+            scrub: true,
+            invalidateOnRefresh: true,
           },
         });
 
         if (karthikPhotoImgRef.current) {
           karthikTl.fromTo(
             karthikPhotoImgRef.current,
-            { scale: 1.05, filter: "blur(2px) brightness(0.95)" },
-            { scale: 1.0, filter: "blur(0px) brightness(1.0)", duration: 0.55, ease: "power2.out" },
-            0.05
+            { scale: 1.05, filter: "blur(3px) brightness(0.95)" },
+            { scale: 1.0, filter: "blur(0px) brightness(1.0)", ease: "none" },
+            0.0
           );
         }
 
-        // Diagonal brush strokes sweep from top-right towards center
+        // Diagonal brush strokes sweep from top-right towards center with scroll
         if (karthikBrushOverlayRef.current) {
           karthikTl.fromTo(
             karthikBrushOverlayRef.current,
             { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", opacity: 1 },
-            { clipPath: "polygon(0 0, 46% 0, 100% 48%, 100% 100%, 0 100%)", duration: 0.22, ease: "power2.out" },
-            0.02
+            { clipPath: "polygon(0 0, 46% 0, 100% 48%, 100% 100%, 0 100%)", ease: "none" },
+            0.0
           );
           karthikTl.to(
             karthikBrushOverlayRef.current,
-            { clipPath: "polygon(0 0, 0% 32%, 58% 85%, 100% 100%, 0 100%)", duration: 0.22, ease: "power2.inOut" },
-            0.20
+            { clipPath: "polygon(0 0, 0% 32%, 58% 85%, 100% 100%, 0 100%)", ease: "none" },
+            0.35
           );
           karthikTl.to(
             karthikBrushOverlayRef.current,
-            { clipPath: "polygon(0 80%, 20% 100%, 0 100%)", duration: 0.18, ease: "power2.out" },
-            0.40
+            { clipPath: "polygon(0 80%, 20% 100%, 0 100%)", opacity: 0.6, ease: "none" },
+            0.70
           );
           karthikTl.to(
             karthikBrushOverlayRef.current,
-            { opacity: 0, duration: 0.15, ease: "power1.out" },
-            0.55
+            { opacity: 0, ease: "none" },
+            0.90
           );
         }
       }
 
-      // 5. Featured Story 05 — Sireesh & Harshitha: Soft-Focus Memory Reveal (6 Stages)
+      // 5. Featured Story 05 — Sireesh & Harshitha: Soft-Focus Memory Reveal (Viewport-Synchronized)
+      // Viewport-relative trigger: begins ONLY when visual container enters view (top 72%),
+      // smoothly scrubs through focus pull and sunlight sweep, reversible without pops.
       if (sireeshCanvasRef.current) {
         const sireeshTl = gsap.timeline({
           scrollTrigger: {
             trigger: sireeshCanvasRef.current,
-            start: "top 88%",
-            once: true,
-          },
-          onComplete: () => {
-            if (sireeshImgRef.current) {
-              sireeshImgRef.current.style.filter = "none";
-              sireeshImgRef.current.style.transform = "none";
-            }
-            if (sireeshSunlightRef.current) sireeshSunlightRef.current.style.display = "none";
-            if (sireeshVeilRef.current) sireeshVeilRef.current.style.display = "none";
-            if (sireeshPetalsRef.current) sireeshPetalsRef.current.style.display = "none";
+            start: "top 72%",
+            end: "center 48%",
+            scrub: true,
+            invalidateOnRefresh: true,
           },
         });
 
-        // Stage 01 - 04: Focus pull from soft dreamlike impression to crisp image
+        // Stage 01 - 04: Focus pull from dreamlike impression to crisp image
         if (sireeshImgRef.current) {
           sireeshTl.fromTo(
             sireeshImgRef.current,
-            { filter: "blur(10px) brightness(1.08)", scale: 1.05 },
-            { filter: "blur(3px) brightness(1.03)", scale: 1.02, duration: 0.40, ease: "power2.out" },
-            0.02
-          );
-          sireeshTl.to(
-            sireeshImgRef.current,
-            { filter: "blur(0px) brightness(1.0)", scale: 1.0, duration: 0.30, ease: "power1.out" },
-            0.42
+            { filter: "blur(8px) brightness(1.06)", scale: 1.04 },
+            { filter: "blur(0px) brightness(1.0)", scale: 1.0, ease: "none" },
+            0.0
           );
         }
 
@@ -1078,13 +1065,13 @@ export default function LivingContactSheet() {
           sireeshTl.fromTo(
             sireeshSunlightRef.current,
             { x: "-60%", y: "-50%", opacity: 0 },
-            { x: "-10%", y: "-10%", opacity: 0.85, duration: 0.40, ease: "power2.out" },
-            0.02
+            { x: "0%", y: "0%", opacity: 0.85, ease: "none" },
+            0.0
           );
           sireeshTl.to(
             sireeshSunlightRef.current,
-            { x: "35%", y: "25%", opacity: 0, duration: 0.35, ease: "power2.in" },
-            0.42
+            { x: "50%", y: "35%", opacity: 0, ease: "none" },
+            0.55
           );
         }
 
@@ -1093,13 +1080,13 @@ export default function LivingContactSheet() {
           sireeshTl.fromTo(
             sireeshVeilRef.current,
             { x: "-40%", y: "-35%", opacity: 0 },
-            { x: "15%", y: "15%", opacity: 0.65, duration: 0.40, ease: "power2.inOut" },
-            0.12
+            { x: "15%", y: "15%", opacity: 0.65, ease: "none" },
+            0.15
           );
           sireeshTl.to(
             sireeshVeilRef.current,
-            { x: "65%", y: "55%", opacity: 0, duration: 0.30, ease: "power2.in" },
-            0.48
+            { x: "70%", y: "60%", opacity: 0, ease: "none" },
+            0.70
           );
         }
 
@@ -1110,13 +1097,13 @@ export default function LivingContactSheet() {
             sireeshTl.fromTo(
               petals,
               { opacity: 0, y: -25, x: -18, rotate: -30 },
-              { opacity: 0.85, y: 30, x: 20, rotate: 45, duration: 0.45, stagger: 0.04, ease: "sine.inOut" },
+              { opacity: 0.85, y: 30, x: 20, rotate: 45, stagger: 0.04, ease: "none" },
               0.25
             );
             sireeshTl.to(
               petals,
-              { opacity: 0, y: 65, x: 45, rotate: 95, duration: 0.25, stagger: 0.03, ease: "power1.in" },
-              0.62
+              { opacity: 0, y: 70, x: 50, rotate: 95, stagger: 0.03, ease: "none" },
+              0.65
             );
           }
         }
@@ -1135,7 +1122,7 @@ export default function LivingContactSheet() {
             ease: "power2.out",
             scrollTrigger: {
               trigger: block,
-              start: "top 88%",
+              start: "top 80%",
               once: true,
             },
           }
@@ -1143,7 +1130,8 @@ export default function LivingContactSheet() {
       });
 
       // ══════════════════════════════════════════════════════════════════════
-      // NISHANTH & SANZENA: CINEMATIC LIQUID WAVE REVEAL (Continuous Viewport-Scrubbed)
+      // NISHANTH & SANZENA: CINEMATIC LIQUID WAVE REVEAL (100% Stable Continuous Scrub)
+      // Completely eliminated jumping, flickering, and mask destruction.
       // ══════════════════════════════════════════════════════════════════════
       if (nishanthStageRef.current) {
         const nishanthProxy = { val: 0 };
@@ -1151,10 +1139,7 @@ export default function LivingContactSheet() {
           `.${styles.nishanthRightNarrative} > *`
         );
 
-        let lastNishanthP = -1;
         const renderNishanth = (p: number) => {
-          if (Math.abs(p - lastNishanthP) < 0.003 && p > 0.01 && p < 0.98) return;
-          lastNishanthP = p;
           const ap = sampleAperture(p);
           const sec = sampleSecondary(p);
           const greenBot = sampleGreenBottom(p);
@@ -1195,21 +1180,19 @@ export default function LivingContactSheet() {
           if (waveWatermarkRef.current) {
             waveWatermarkRef.current.style.opacity = `${Math.max(0, 0.24 * (1 - p / 0.75))}`;
           }
+          // Never toggle display: none (which destroys SVG mask raster cache).
+          // Fade opacity gracefully to 0 while keeping the mask and paths live and reversible.
           if (waveSvgRef.current) {
-            if (p >= 0.98) {
-              waveSvgRef.current.style.display = "none";
-            } else {
-              waveSvgRef.current.style.display = "block";
-              waveSvgRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
-            }
+            waveSvgRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
+            waveSvgRef.current.style.pointerEvents = p >= 0.95 ? "none" : "auto";
           }
           if (nishanthLeftControlRef.current) {
-            const ctrlP = Math.max(0, Math.min(1, (p - 0.62) / 0.35));
+            const ctrlP = Math.max(0, Math.min(1, (p - 0.50) / 0.40));
             nishanthLeftControlRef.current.style.opacity = `${ctrlP}`;
             nishanthLeftControlRef.current.style.transform = `translateY(${(18 * (1 - ctrlP)).toFixed(1)}px)`;
           }
           if (narrativeItems.length) {
-            const textP = Math.max(0, Math.min(1, (p - 0.65) / 0.32));
+            const textP = Math.max(0, Math.min(1, (p - 0.52) / 0.42));
             narrativeItems.forEach((item, idx) => {
               const itemP = Math.max(0, Math.min(1, (textP - idx * 0.08) / 0.7));
               item.style.opacity = `${itemP}`;
@@ -1225,9 +1208,10 @@ export default function LivingContactSheet() {
           ease: "none",
           scrollTrigger: {
             trigger: nishanthStageRef.current,
-            start: "top 88%",
-            end: "center 50%",
-            scrub: 0.5,
+            start: "top 75%",
+            end: "bottom 85%",
+            scrub: true,
+            invalidateOnRefresh: true,
             onUpdate: () => renderNishanth(nishanthProxy.val),
           },
         });
@@ -1279,9 +1263,9 @@ export default function LivingContactSheet() {
   return (
     <section
       ref={sectionRef}
-      id="vows"
+      id="vows-stories"
       className={styles.section}
-      aria-label="The Vows"
+      aria-label="The Vows Stories"
     >
       {/* ── Hidden SVG Definition for Smooth Mathematical Path Morphing ── */}
       <svg
