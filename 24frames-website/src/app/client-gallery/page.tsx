@@ -359,12 +359,19 @@ export default function ClientGalleryPage() {
                               </picture>
                               <div className={styles.cinemaScrim} />
 
-                              {/* Luxury Cinema Play Button Badge */}
+                              {/* Refined Luxury Play Button */}
                               <div className={styles.cinemaPlayCenter}>
-                                <div className={styles.playButtonPill}>
+                                <button
+                                  type="button"
+                                  className={styles.playButtonCircle}
+                                  aria-label="Play wedding film"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsPlayingCinemaVideo(true);
+                                  }}
+                                >
                                   <span className={styles.playTriangleIcon} aria-hidden="true">▶</span>
-                                  <span className={styles.playText}>WATCH WEDDING FILM · 14:55</span>
-                                </div>
+                                </button>
                                 <span className={styles.cinemaQualityBadge}>
                                   4K THEATRICAL CUT · SONY FX9 &amp; FX6 CINEMA PRIMES
                                 </span>

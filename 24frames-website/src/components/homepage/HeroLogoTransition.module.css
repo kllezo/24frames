@@ -87,11 +87,12 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: clamp(1rem, 2.5vw, 2rem) clamp(1rem, 3vw, 3rem) 0 clamp(1rem, 3vw, 3rem);
+  padding: max(clamp(1.5rem, 3vw, 2.5rem), calc(80px + 1rem)) clamp(1rem, 3vw, 3rem) 0 clamp(1rem, 3vw, 3rem);
   z-index: 14;
   pointer-events: none;
   opacity: 0;
   will-change: opacity;
+  scroll-margin-top: 80px;
 }
 
 .vowsStageInteractive a,
@@ -460,22 +461,27 @@
 
 @media (max-width: 768px) {
   .vowsStageWrap {
-    padding: clamp(3.25rem, 7vh, 4.25rem) 1.25rem clamp(1rem, 2.5vh, 1.5rem) 1.25rem;
-    align-items: center;
+    padding-top: calc(72px + env(safe-area-inset-top, 0px) + clamp(0.5rem, 1.5vh, 1rem));
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(0.5rem, 1.5vh, 1rem));
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    align-items: flex-start;
     justify-content: center;
-    overflow: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     pointer-events: none;
+    scroll-margin-top: calc(72px + env(safe-area-inset-top, 0px));
   }
 
   .vowsComposition {
     grid-template-columns: 1fr;
-    gap: clamp(0.5rem, 1.5vh, 0.85rem);
+    gap: clamp(0.35rem, 1.2vh, 0.75rem);
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     max-width: 380px;
-    margin: 0 auto;
+    margin: auto auto;
     padding-bottom: 0;
     height: auto;
   }
@@ -597,5 +603,44 @@
   .chapterLabel,
   .featuredCommissionLabel {
     font-size: 0.78rem;
+  }
+}
+
+@media (max-height: 720px) and (max-width: 768px) {
+  .vowsComposition {
+    gap: 0.25rem;
+  }
+
+  .monumentalHeading {
+    margin: 0 0 0.15rem 0;
+  }
+
+  .headingThe {
+    font-size: clamp(2.4rem, 6.5vw, 3.0rem);
+  }
+
+  .headingVows {
+    font-size: clamp(3.4rem, 9vw, 4.2rem);
+  }
+
+  .openingNarrative {
+    font-size: 0.85rem;
+    line-height: 1.35;
+    margin: 0 0 0.35rem 0;
+  }
+
+  .archedFrame {
+    max-width: clamp(140px, 35vw, 175px);
+  }
+
+  .featuredCoupleName {
+    font-size: 1.2rem;
+    margin: 0 0 0.15rem 0;
+  }
+
+  .featuredStoryCopy {
+    font-size: 0.8rem;
+    line-height: 1.35;
+    margin: 0 0 0.35rem 0;
   }
 }

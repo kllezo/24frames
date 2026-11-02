@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HeroLogoTransition from "./HeroLogoTransition";
@@ -47,13 +48,6 @@ export default function HeroSection() {
 
     return () => ctx.revert();
   }, []);
-
-  const handleScrollToVows = () => {
-    const vowsEl = document.getElementById("the-vows") || document.getElementById("vows");
-    if (vowsEl) {
-      vowsEl.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <section
@@ -129,14 +123,14 @@ export default function HeroSection() {
             <span className={styles.filmSubject}>HRITHIKA &amp; ABHISHEK · NINE-SCENE UNION</span>
           </div>
 
-          <button
-            onClick={handleScrollToVows}
+          <Link
+            href="/#vows"
             className={styles.scrollDownBtn}
             aria-label="Scroll to The Vows chapter"
           >
             <span>EXPLORE THE LIVING CINEMA</span>
-            <span className={styles.arrowIcon}>↓</span>
-          </button>
+            <span className={styles.arrowIcon} aria-hidden="true">↓</span>
+          </Link>
         </div>
 
         {/* ── Pure Hero Image → 24 FRAMES Logo Cinematic Transition ── */}

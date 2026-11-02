@@ -239,6 +239,7 @@ export default function HeroLogoTransition({
       const pinDistance = isMobile ? "+=95%" : "+=120%";
 
       ScrollTrigger.create({
+        id: "heroLogoTransition",
         trigger: heroSectionRef.current,
         start: "top top",
         end: pinDistance,

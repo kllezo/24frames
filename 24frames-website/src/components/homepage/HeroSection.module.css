@@ -180,8 +180,11 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
+  text-decoration: none;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .scrollDownBtn:hover {
@@ -189,16 +192,29 @@
   border-color: rgba(200, 168, 78, 0.6);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(9, 69, 62, 0.45);
+  color: #FFFFFF;
+}
+
+.scrollDownBtn:active {
+  transform: translateY(0) scale(0.97);
+  background: rgba(9, 69, 62, 0.95);
+  border-color: rgba(200, 168, 78, 0.8);
+  box-shadow: 0 4px 12px rgba(9, 69, 62, 0.35);
 }
 
 .arrowIcon {
   font-size: 0.875rem;
   color: #C8A84E;
   transition: transform 0.3s ease;
+  display: inline-block;
 }
 
 .scrollDownBtn:hover .arrowIcon {
   transform: translateY(2px);
+}
+
+.scrollDownBtn:active .arrowIcon {
+  transform: translateY(3px);
 }
 
 /* ─────────────────────────────────────────────────────────────

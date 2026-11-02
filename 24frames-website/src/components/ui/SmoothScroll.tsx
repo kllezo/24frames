@@ -1,21 +1,20 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function SmoothScroll() {
+  const pathname = usePathname();
+  const hasScrolledDownRef = useRef(false);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     // 1. Accessibility Check: Prefers-reduced-motion
     const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isReducedMotion) {
-      return;
-    }
 
-    // 2. Pure Native Browser Scrolling Architecture across both Desktop and Mobile:
-    // Guarantees zero touch interception, zero scroll lock, 60fps native GPU compositor scrolling,
-    // and instant tactile responsiveness without competing RAF loops.
+    // Refresh ScrollTrigger calculations
     ScrollTrigger.refresh();
 
     // Ensure document is never trapped in an unintended overflow lock
@@ -26,34 +25,70 @@ export default function SmoothScroll() {
       document.documentElement.style.overflow = "";
     }
 
+    // Exact scroll position for The Vows section (#vows)
+    const getVowsScrollPosition = (): number => {
+      try {
+        const st = ScrollTrigger.getById("heroLogoTransition");
+        if (st && typeof st.start === "number" && typeof st.end === "number") {
+          // Progress 0.95 aligns precisely with the settled 3-column hold state
+          return Math.round(st.start + (st.end - st.start) * 0.95);
+        }
+      } catch {
+        // Fallback to calculation
+      }
+
+      const heroEl = document.getElementById("hero");
+      const heroTop = heroEl ? heroEl.offsetTop : 0;
+      const isMobile = window.innerWidth < 820;
+      const pinDistance = window.innerHeight * (isMobile ? 0.95 : 1.20);
+      return Math.round(heroTop + pinDistance * 0.95);
+    };
+
     // 3. Universal Anchor Navigation with Fixed Luxury Header Offset (-80px)
     const scrollToHash = (hash: string) => {
       if (!hash || hash.length <= 1) return;
+
+      let top = 0;
       if (hash === "#vows") {
-        const top = Math.round(window.innerHeight * 0.60);
-        window.scrollTo({
-          top,
-          behavior: "smooth",
-        });
-        setTimeout(() => window.dispatchEvent(new Event("scroll")), 50);
-        setTimeout(() => window.dispatchEvent(new Event("scroll")), 300);
-        return;
+        top = getVowsScrollPosition();
+      } else {
+        const targetElement = document.querySelector(hash);
+        if (targetElement) {
+          top = Math.max(0, targetElement.getBoundingClientRect().top + window.scrollY - 80);
+        } else {
+          return;
+        }
       }
-      const targetElement = document.querySelector(hash);
-      if (targetElement) {
-        const top = targetElement.getBoundingClientRect().top + window.scrollY - 80;
+
+      // Re-use Lenis if active on window, otherwise native smooth scroll
+      const lenis = (
+        window as unknown as {
+          __lenis?: {
+            scrollTo: (
+              target: number | HTMLElement | string,
+              options?: { offset?: number; duration?: number; immediate?: boolean }
+            ) => void;
+          };
+        }
+      ).__lenis;
+
+      if (lenis?.scrollTo) {
+        lenis.scrollTo(top, { duration: isReducedMotion ? 0 : 1.2 });
+      } else {
         window.scrollTo({
           top,
-          behavior: "smooth",
+          behavior: isReducedMotion ? "auto" : "smooth",
         });
-        setTimeout(() => window.dispatchEvent(new Event("scroll")), 50);
-        setTimeout(() => window.dispatchEvent(new Event("scroll")), 300);
       }
     };
 
-    // Clean hash when visitor returns to top of page
+    // Clean hash only when visitor returns to top of page after having scrolled down
     const handleScrollTopHash = () => {
-      if (window.scrollY < 50 && window.location.hash) {
+      const scrollY = window.scrollY;
+      if (scrollY >= 120) {
+        hasScrolledDownRef.current = true;
+      } else if (hasScrolledDownRef.current && scrollY < 10 && window.location.hash) {
+        hasScrolledDownRef.current = false;
         try {
           history.replaceState(null, "", window.location.pathname + window.location.search);
         } catch {
@@ -63,6 +98,7 @@ export default function SmoothScroll() {
     };
     window.addEventListener("scroll", handleScrollTopHash, { passive: true });
 
+    // Universal anchor click handler (capture phase to intercept before native jumps)
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       const anchor = target?.closest("a") as HTMLAnchorElement | null;
@@ -93,9 +129,33 @@ export default function SmoothScroll() {
 
     document.addEventListener("click", handleAnchorClick, { capture: true });
 
-    if (window.location.hash) {
-      setTimeout(() => scrollToHash(window.location.hash), 200);
-    }
+    // Handle initial hash or hash from cross-route navigation
+    const handleInitialHash = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        setTimeout(() => scrollToHash(hash), 150);
+        setTimeout(() => scrollToHash(hash), 450);
+      }
+    };
+    handleInitialHash();
+
+    // Handle browser back / forward navigation
+    const handlePopState = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        scrollToHash(hash);
+      } else if (window.location.pathname === "/" || window.location.pathname === "") {
+        const lenis = (window as unknown as { __lenis?: { scrollTo: (t: number) => void } }).__lenis;
+        if (lenis?.scrollTo) {
+          lenis.scrollTo(0);
+        } else {
+          window.scrollTo({ top: 0, behavior: isReducedMotion ? "auto" : "smooth" });
+        }
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    window.addEventListener("hashchange", handlePopState);
 
     // Handle responsive breakpoint changes
     const handleResize = () => {
@@ -107,9 +167,11 @@ export default function SmoothScroll() {
     return () => {
       window.removeEventListener("scroll", handleScrollTopHash);
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("hashchange", handlePopState);
       document.removeEventListener("click", handleAnchorClick, { capture: true });
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }
