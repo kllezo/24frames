@@ -101,13 +101,26 @@ export default function ArtistPreview() {
           <div ref={portraitWrapRef} className={styles.portraitWrap}>
             <div className={styles.portraitFrame}>
               <div className={styles.imageOverflow}>
-                <img
-                  ref={portraitImgRef}
-                  src="/images/founder-portrait.jpg"
-                  alt="Phani Gogireddy — Founder & Creative Director of 24 Frames Photography"
-                  className={styles.portrait}
-                  loading="lazy"
-                />
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcSet="/images/founder-portrait-mobile.avif 720w, /images/founder-portrait.avif 1200w"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  <source
+                    type="image/webp"
+                    srcSet="/images/founder-portrait-mobile.webp 720w, /images/founder-portrait.webp 1200w"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  <img
+                    ref={portraitImgRef}
+                    src="/images/founder-portrait.jpg"
+                    alt="Phani Gogireddy — Founder & Creative Director of 24 Frames Photography"
+                    className={styles.portrait}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
               </div>
               <div className={styles.frameApertureBadge}>
                 <span>35MM CINEMA STILL · PHANI GOGIREDDY</span>

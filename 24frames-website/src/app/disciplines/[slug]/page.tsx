@@ -152,13 +152,26 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
               )}
               <picture>
                 {discipline.heroWebp && (
-                  <source srcSet={discipline.heroWebp} type="image/webp" />
+                  <>
+                    <source
+                      type="image/avif"
+                      srcSet={`${discipline.heroWebp.replace(/\.webp$/i, "-mobile.avif")} 720w, ${discipline.heroWebp.replace(/\.webp$/i, ".avif")} 1400w`}
+                      sizes="(max-width: 768px) 100vw, 1200px"
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet={`${discipline.heroWebp.replace(/\.webp$/i, "-mobile.webp")} 720w, ${discipline.heroWebp} 1400w`}
+                      sizes="(max-width: 768px) 100vw, 1200px"
+                    />
+                  </>
                 )}
                 <img
                   src={discipline.heroImage}
                   alt={discipline.title}
                   className={`${styles.heroImg} ${styles[`${slug}HeroImg`] || ""}`}
                   loading="eager"
+                  fetchPriority="high"
+                  decoding="sync"
                 />
               </picture>
               <div className={styles.heroVignette} aria-hidden="true" />
@@ -274,12 +287,29 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
                   className={styles.relatedCard}
                 >
                   <div className={styles.relatedImgWrap}>
-                    <img
-                      src={related.heroImage}
-                      alt={related.title}
-                      className={styles.relatedImg}
-                      loading="lazy"
-                    />
+                    <picture>
+                      {related.heroWebp && (
+                        <>
+                          <source
+                            type="image/avif"
+                            srcSet={`${related.heroWebp.replace(/\.webp$/i, "-mobile.avif")} 720w, ${related.heroWebp.replace(/\.webp$/i, ".avif")} 1400w`}
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                          />
+                          <source
+                            type="image/webp"
+                            srcSet={`${related.heroWebp.replace(/\.webp$/i, "-mobile.webp")} 720w, ${related.heroWebp} 1400w`}
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                          />
+                        </>
+                      )}
+                      <img
+                        src={related.heroImage}
+                        alt={related.title}
+                        className={styles.relatedImg}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
                     <div className={styles.relatedOverlay} />
                   </div>
                   <div className={styles.relatedContent}>

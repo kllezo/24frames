@@ -1,7 +1,3 @@
-"use client";
-
-import { useState } from "react";
-import dynamic from "next/dynamic";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/homepage/HeroSection";
@@ -11,68 +7,36 @@ import FounderRecognitionSection from "@/components/homepage/FounderRecognitionS
 import AsSeenInStrip from "@/components/homepage/AsSeenInStrip";
 import ClientGalleryExperience from "@/components/homepage/ClientGalleryExperience";
 import InvitationCTA from "@/components/homepage/InvitationCTA";
-
-const Preloader = dynamic(() => import("@/components/ui/Preloader"), { ssr: false });
+import HomePreloader from "@/components/homepage/HomePreloader";
 
 export default function HomePage() {
-  // Preloader runs only on initial browser entry or full page reload, never on internal SPA navigation
-  const [showPreloader, setShowPreloader] = useState(() => {
-    if (typeof window === "undefined") return true;
-    const isDirect = window.location.search.includes("direct");
-    const isInternalNav = (window as unknown as { __24FRAMES_INITIAL_LOAD_DONE__?: boolean }).__24FRAMES_INITIAL_LOAD_DONE__;
-    return !(isDirect || isInternalNav);
-  });
-
-  const [siteReady, setSiteReady] = useState(() => {
-    if (typeof window === "undefined") return false;
-    const isDirect = window.location.search.includes("direct");
-    const isInternalNav = (window as unknown as { __24FRAMES_INITIAL_LOAD_DONE__?: boolean }).__24FRAMES_INITIAL_LOAD_DONE__;
-    return Boolean(isDirect || isInternalNav);
-  });
-
-  const handlePreloaderComplete = () => {
-    if (typeof window !== "undefined") {
-      (window as unknown as { __24FRAMES_INITIAL_LOAD_DONE__?: boolean }).__24FRAMES_INITIAL_LOAD_DONE__ = true;
-    }
-    setShowPreloader(false);
-    setSiteReady(true);
-  };
-
   return (
     <>
-      {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
+      <HomePreloader />
+      <Navigation />
+      <main>
+        {/* The First Frame (Cinematic Hero Opening) */}
+        <HeroSection />
 
-      <div
-        style={{
-          opacity: siteReady ? 1 : 0,
-          transition: "opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
-        }}
-      >
-        <Navigation />
-        <main>
-          {/* The First Frame (Cinematic Hero Opening) */}
-          <HeroSection />
+        {/* The Vows (Curated Exhibition & Wedding Stories Archive) */}
+        <LivingContactSheet />
 
-          {/* The Vows (Curated Exhibition & Wedding Stories Archive) */}
-          <LivingContactSheet />
+        {/* The Collection (Curated Disciplines of Optics) */}
+        <TheCollection />
 
-          {/* The Collection (Curated Disciplines of Optics) */}
-          <TheCollection />
+        {/* The Artist & Visionary (Phani Gogireddy Exact Reference Composition) */}
+        <FounderRecognitionSection />
 
-          {/* The Artist & Visionary (Phani Gogireddy Exact Reference Composition) */}
-          <FounderRecognitionSection />
+        {/* Media Recognition & Publication Strip */}
+        <AsSeenInStrip />
 
-          {/* Media Recognition & Publication Strip */}
-          <AsSeenInStrip />
+        {/* Royal Palace Client Suite — The 24 Frames Client Gallery Experience */}
+        <ClientGalleryExperience />
 
-          {/* Royal Palace Client Suite — The 24 Frames Client Gallery Experience */}
-          <ClientGalleryExperience />
-
-          {/* The Lasting Frame (Invitation & Conversation) */}
-          <InvitationCTA />
-        </main>
-        <Footer />
-      </div>
+        {/* The Lasting Frame (Invitation & Conversation) */}
+        <InvitationCTA />
+      </main>
+      <Footer />
     </>
   );
 }

@@ -255,7 +255,7 @@ export default function AchievementBookshelf() {
                       {/* Book/Frame visual */}
                       <div className={styles.itemVisual}>
                         {item.image ? (
-                          <img src={item.image} alt="" className={styles.itemImage} loading="lazy" />
+                          <img src={item.image} alt="" className={styles.itemImage} loading="lazy" decoding="async" />
                         ) : (
                           <div className={styles.itemColorBlock} style={{ background: item.color }} />
                         )}

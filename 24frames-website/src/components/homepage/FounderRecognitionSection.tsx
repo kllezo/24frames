@@ -407,13 +407,26 @@ export default function FounderRecognitionSection({
 
             {/* 2. Large Founder Portrait with Living Portrait Animation & Interactive Studio Glare */}
             <div ref={portraitWrapRef} className={styles.portraitWrap}>
-              <img
-                ref={portraitImgRef}
-                src="/images/founder-portrait.jpg"
-                alt="Phani Gogireddy — Managing Director of 24 Frames Wedding Films"
-                className={styles.portraitImg}
-                loading="eager"
-              />
+              <picture>
+                <source
+                  type="image/avif"
+                  srcSet="/images/founder-portrait-mobile.avif 720w, /images/founder-portrait.avif 1200w"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <source
+                  type="image/webp"
+                  srcSet="/images/founder-portrait-mobile.webp 720w, /images/founder-portrait.webp 1200w"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <img
+                  ref={portraitImgRef}
+                  src="/images/founder-portrait.jpg"
+                  alt="Phani Gogireddy — Managing Director of 24 Frames Wedding Films"
+                  className={styles.portraitImg}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
 
               {/* Subdued Darkroom Starting Overlay */}
               <div
@@ -582,12 +595,19 @@ export default function FounderRecognitionSection({
                       </div>
 
                       <div className={styles.cardImageContainer}>
-                        <img
-                          src={item.imageSrc}
-                          alt={item.imageAlt}
-                          className={styles.cardCoverImg}
-                          loading="lazy"
-                        />
+                        <picture>
+                          <source
+                            type="image/avif"
+                            srcSet={item.imageSrc.replace(/\.webp$/, ".avif")}
+                          />
+                          <img
+                            src={item.imageSrc}
+                            alt={item.imageAlt}
+                            className={styles.cardCoverImg}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </picture>
                       </div>
 
                       <div className={styles.cardFooterInfo}>
@@ -687,11 +707,18 @@ export default function FounderRecognitionSection({
 
             <div className={styles.modalBody}>
               <div className={styles.modalMediaCol}>
-                <img
-                  src={activeItem.imageSrc}
-                  alt={activeItem.imageAlt}
-                  className={styles.modalImg}
-                />
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcSet={activeItem.imageSrc.replace(/\.webp$/, ".avif")}
+                  />
+                  <img
+                    src={activeItem.imageSrc}
+                    alt={activeItem.imageAlt}
+                    className={styles.modalImg}
+                    decoding="async"
+                  />
+                </picture>
               </div>
 
               <div className={styles.modalContentCol}>

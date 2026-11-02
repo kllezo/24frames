@@ -388,8 +388,19 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                   {/* Background Photographic Canvas */}
                   <div className={styles.imageCanvas}>
                     <picture>
-                      {!hasError && discipline.webpImage && (
-                        <source srcSet={discipline.webpImage} type="image/webp" />
+                      {!hasError && (
+                        <>
+                          <source
+                            type="image/avif"
+                            srcSet={`${discipline.image.replace(/\.(jpg|jpeg|png)$/i, "-mobile.avif")} 720w, ${discipline.image.replace(/\.(jpg|jpeg|png)$/i, ".avif")} 1400w`}
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                          />
+                          <source
+                            type="image/webp"
+                            srcSet={`${discipline.image.replace(/\.(jpg|jpeg|png)$/i, "-mobile.webp")} 720w, ${discipline.image.replace(/\.(jpg|jpeg|png)$/i, ".webp")} 1400w`}
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                          />
+                        </>
                       )}
                       <img
                         src={displayImage}
@@ -397,6 +408,7 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                         className={styles.cardImage}
                         style={{ objectPosition: discipline.objectPosition || "center 25%" }}
                         loading="lazy"
+                        decoding="async"
                         onError={() => handleImageError(discipline.id)}
                       />
                     </picture>

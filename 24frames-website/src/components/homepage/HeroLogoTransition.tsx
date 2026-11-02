@@ -316,7 +316,16 @@ export default function HeroLogoTransition({
               <div className={styles.archedFrame}>
                 <div className={styles.archPhotoMask}>
                   <picture>
-                    <source srcSet="/images/stories/bellam-srikonda/IMG_6339.webp" type="image/webp" />
+                    <source
+                      type="image/avif"
+                      srcSet="/images/stories/bellam-srikonda/IMG_6339-mobile.avif 720w, /images/stories/bellam-srikonda/IMG_6339.avif 1108w"
+                      sizes="(max-width: 768px) 720px, 350px"
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet="/images/stories/bellam-srikonda/IMG_6339-mobile.webp 720w, /images/stories/bellam-srikonda/IMG_6339.webp 1108w"
+                      sizes="(max-width: 768px) 720px, 350px"
+                    />
                     <img
                       ref={archedPhotoImgRef}
                       src="/images/stories/bellam-srikonda/IMG_6339.jpg"

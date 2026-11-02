@@ -134,12 +134,22 @@ export default function StoryStillsGallery({ frames, storyTitle, editorial }: Pr
           }`}
         >
           <picture>
-            <source srcSet={frame.webpUrl} type="image/webp" />
+            <source
+              type="image/avif"
+              srcSet={`${frame.webpUrl.replace(/\.webp$/i, "-mobile.avif")} 720w, ${frame.webpUrl.replace(/\.webp$/i, ".avif")} 1400w`}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+            <source
+              type="image/webp"
+              srcSet={`${frame.webpUrl.replace(/\.webp$/i, "-mobile.webp")} 720w, ${frame.webpUrl} 1400w`}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
             <img
               src={frame.url}
               alt={frame.caption}
               className={styles.galleryImg}
               loading={originalIndex < 2 ? "eager" : "lazy"}
+              decoding="async"
             />
           </picture>
           <div className={styles.imageOverlay} />
@@ -180,12 +190,22 @@ export default function StoryStillsGallery({ frames, storyTitle, editorial }: Pr
           }`}
         >
           <picture>
-            <source srcSet={frame.webpUrl} type="image/webp" />
+            <source
+              type="image/avif"
+              srcSet={`${frame.webpUrl.replace(/\.webp$/i, "-mobile.avif")} 720w, ${frame.webpUrl.replace(/\.webp$/i, ".avif")} 1400w`}
+              sizes="(max-width: 768px) 100vw, 80vw"
+            />
+            <source
+              type="image/webp"
+              srcSet={`${frame.webpUrl.replace(/\.webp$/i, "-mobile.webp")} 720w, ${frame.webpUrl} 1400w`}
+              sizes="(max-width: 768px) 100vw, 80vw"
+            />
             <img
               src={frame.url}
               alt={frame.caption}
               className={styles.galleryImg}
               loading="lazy"
+              decoding="async"
             />
           </picture>
           <div className={styles.imageOverlay} />
@@ -353,6 +373,10 @@ export default function StoryStillsGallery({ frames, storyTitle, editorial }: Pr
             <div className={styles.modalImageWrap}>
               <picture>
                 <source
+                  srcSet={frames[activeImageIndex].webpUrl.replace(/\.webp$/i, ".avif")}
+                  type="image/avif"
+                />
+                <source
                   srcSet={frames[activeImageIndex].webpUrl}
                   type="image/webp"
                 />
@@ -360,6 +384,7 @@ export default function StoryStillsGallery({ frames, storyTitle, editorial }: Pr
                   src={frames[activeImageIndex].url}
                   alt={frames[activeImageIndex].caption}
                   className={styles.modalImg}
+                  decoding="async"
                 />
               </picture>
             </div>

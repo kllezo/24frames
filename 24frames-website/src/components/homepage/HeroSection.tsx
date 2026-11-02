@@ -68,6 +68,11 @@ export default function HeroSection() {
         <picture>
           <source
             media="(max-width: 820px)"
+            srcSet="/images/portfolio/hrithika-abhishek/cover-mobile.avif"
+            type="image/avif"
+          />
+          <source
+            media="(max-width: 820px)"
             srcSet="/images/portfolio/hrithika-abhishek/cover-mobile.webp"
             type="image/webp"
           />
@@ -75,12 +80,22 @@ export default function HeroSection() {
             media="(max-width: 820px)"
             srcSet="/images/portfolio/hrithika-abhishek/cover-mobile.jpg"
           />
+          <source
+            srcSet="/images/portfolio/hrithika-abhishek/cover.avif"
+            type="image/avif"
+          />
+          <source
+            srcSet="/images/portfolio/hrithika-abhishek/cover.webp"
+            type="image/webp"
+          />
           <img
             ref={heroImgRef}
             src="/images/portfolio/hrithika-abhishek/cover.jpg"
             alt="Some moments deserve to outlive time — 24 Frames Master Wedding Commission"
             className={styles.heroImage}
             loading="eager"
+            fetchPriority="high"
+            decoding="sync"
           />
         </picture>
 

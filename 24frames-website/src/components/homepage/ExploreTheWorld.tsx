@@ -153,13 +153,25 @@ export default function ExploreTheWorld() {
                   >
                     <picture>
                       {discipline.heroWebp && (
-                        <source srcSet={discipline.heroWebp} type="image/webp" />
+                        <>
+                          <source
+                            type="image/avif"
+                            srcSet={`${discipline.heroWebp.replace(/\.webp$/i, "-mobile.avif")} 720w, ${discipline.heroWebp.replace(/\.webp$/i, ".avif")} 1400w`}
+                            sizes="(max-width: 768px) 100vw, 100vw"
+                          />
+                          <source
+                            type="image/webp"
+                            srcSet={`${discipline.heroWebp.replace(/\.webp$/i, "-mobile.webp")} 720w, ${discipline.heroWebp} 1400w`}
+                            sizes="(max-width: 768px) 100vw, 100vw"
+                          />
+                        </>
                       )}
                       <img
                         src={discipline.heroImage}
                         alt={discipline.title}
                         className={styles.displayImg}
                         loading="lazy"
+                        decoding="async"
                       />
                     </picture>
                   </div>

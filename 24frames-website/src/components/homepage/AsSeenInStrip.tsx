@@ -97,24 +97,34 @@ export default function AsSeenInStrip() {
             {/* Set 1 */}
             {PRESS_LOGOS.map((logo, idx) => (
               <div key={`logo-1-${idx}`} className={styles.logoItem}>
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  className={styles.logoImg}
-                  loading="lazy"
-                />
+                <picture>
+                  <source srcSet={logo.src.replace(/\.png$/, ".avif")} type="image/avif" />
+                  <source srcSet={logo.src.replace(/\.png$/, ".webp")} type="image/webp" />
+                  <img
+                    src={logo.src}
+                    alt={logo.alt}
+                    className={styles.logoImg}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
               </div>
             ))}
 
             {/* Set 2 (for seamless infinite loop) */}
             {PRESS_LOGOS.map((logo, idx) => (
               <div key={`logo-2-${idx}`} className={styles.logoItem}>
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  className={styles.logoImg}
-                  loading="lazy"
-                />
+                <picture>
+                  <source srcSet={logo.src.replace(/\.png$/, ".avif")} type="image/avif" />
+                  <source srcSet={logo.src.replace(/\.png$/, ".webp")} type="image/webp" />
+                  <img
+                    src={logo.src}
+                    alt={logo.alt}
+                    className={styles.logoImg}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
               </div>
             ))}
           </div>

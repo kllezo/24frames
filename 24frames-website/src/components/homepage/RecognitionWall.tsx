@@ -217,6 +217,7 @@ export default function RecognitionWall() {
                       alt=""
                       className={styles.cardBg}
                       loading="lazy"
+                      decoding="async"
                       aria-hidden="true"
                     />
                     <div className={styles.cardVignette} />

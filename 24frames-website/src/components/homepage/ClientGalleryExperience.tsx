@@ -399,16 +399,29 @@ export default function ClientGalleryExperience({
                 >
                   {/* Layer 1: Back Photographic Canvas (Revealed vertically as cover compresses) */}
                   <div className={styles.cardPhotoArea}>
-                    <img
-                      src={item.artImage}
-                      alt={item.artAlt}
-                      className={styles.cardPhotoImg}
-                      style={{
-                        objectPosition: item.objectPosition,
-                        objectFit: item.objectFit || "cover",
-                      }}
-                      loading="lazy"
-                    />
+                    <picture>
+                      <source
+                        type="image/avif"
+                        srcSet={`${item.artImage.replace(/\.(png|jpg|jpeg)$/, '-mobile.avif')} 720w, ${item.artImage.replace(/\.(png|jpg|jpeg)$/, '.avif')} 1200w`}
+                        sizes="(max-width: 768px) 720px, 360px"
+                      />
+                      <source
+                        type="image/webp"
+                        srcSet={`${item.artImage.replace(/\.(png|jpg|jpeg)$/, '-mobile.webp')} 720w, ${item.artImage.replace(/\.(png|jpg|jpeg)$/, '.webp')} 1200w`}
+                        sizes="(max-width: 768px) 720px, 360px"
+                      />
+                      <img
+                        src={item.artImage}
+                        alt={item.artAlt}
+                        className={styles.cardPhotoImg}
+                        style={{
+                          objectPosition: item.objectPosition,
+                          objectFit: item.objectFit || "cover",
+                        }}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
                     <div className={styles.photoVignette} aria-hidden="true" />
                   </div>
 

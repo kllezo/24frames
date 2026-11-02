@@ -124,19 +124,23 @@ export default function Navigation() {
         <nav className={styles.nav} aria-label="Main navigation">
           <Link href="/" className={styles.logo} aria-label="24 Frames Photography — Home">
             <picture className={styles.logoPicture}>
+              <source srcSet="/images/logo-dark-header.avif" type="image/avif" />
               <source srcSet="/images/logo-dark-header.webp" type="image/webp" />
               <img
                 src="/images/logo-dark-header.png"
                 alt="24 Frames — Phani Gogireddy"
                 className={`${styles.logoImg} ${styles.logoImgDark}`}
+                decoding="async"
               />
             </picture>
             <picture className={styles.logoPicture}>
+              <source srcSet="/images/logo-light-header.avif" type="image/avif" />
               <source srcSet="/images/logo-light-header.webp" type="image/webp" />
               <img
                 src="/images/logo-light-header.png"
                 alt="24 Frames — Phani Gogireddy"
                 className={`${styles.logoImg} ${styles.logoImgLight}`}
+                decoding="async"
               />
             </picture>
           </Link>

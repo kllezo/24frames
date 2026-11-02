@@ -65,12 +65,25 @@ export default function InvitationCTA() {
         <div ref={stageRef} className={styles.stage}>
           {/* Photographic Background Canvas (Fades softly into Warm Ivory) */}
           <div ref={photoFrameRef} className={styles.photoCanvasWrap}>
-            <img
-              src="/images/stories/karthik-and-gayathri/IMG_6330.jpg"
-              alt="Tell us what you want to remember — 24 Frames Commission"
-              className={styles.canvasImg}
-              loading="lazy"
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcSet="/images/stories/karthik-and-gayathri/IMG_6330-mobile.avif 720w, /images/stories/karthik-and-gayathri/IMG_6330.avif 1080w"
+                sizes="(max-width: 768px) 100vw, 100vw"
+              />
+              <source
+                type="image/webp"
+                srcSet="/images/stories/karthik-and-gayathri/IMG_6330-mobile.webp 720w, /images/stories/karthik-and-gayathri/IMG_6330.webp 1080w"
+                sizes="(max-width: 768px) 100vw, 100vw"
+              />
+              <img
+                src="/images/stories/karthik-and-gayathri/IMG_6330.jpg"
+                alt="Tell us what you want to remember — 24 Frames Commission"
+                className={styles.canvasImg}
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
             {/* Atmospheric Ivory Radial & Linear Fade Gradients */}
             <div className={styles.ivoryFadeTop} aria-hidden="true" />
             <div className={styles.ivoryFadeBottom} aria-hidden="true" />

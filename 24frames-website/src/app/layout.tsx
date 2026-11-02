@@ -1,8 +1,45 @@
 import type { Metadata } from "next";
+import { Inter, Cormorant_Garamond, Montserrat, Allura, Space_Mono } from "next/font/google";
 import FilmGrain from "@/components/ui/FilmGrain";
 import CinematicTransition from "@/components/ui/CinematicTransition";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-montserrat",
+  display: "swap",
+});
+
+const allura = Allura({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-allura",
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-space-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://24frames-kllezo.vercel.app"),
@@ -34,14 +71,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${inter.variable} ${cormorant.variable} ${montserrat.variable} ${allura.variable} ${spaceMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Allura&family=Anton&family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:ital,wght@0,600;0,700;0,800;1,700;1,800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
-          rel="stylesheet"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

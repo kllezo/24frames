@@ -1322,12 +1322,22 @@ export default function LivingContactSheet() {
         >
           {/* Background Poster Image */}
           <picture>
-            <source srcSet={ITEM_VIDEO_01.webpPoster} type="image/webp" />
+            <source
+              type="image/avif"
+              srcSet="/videos/portfolio/vinitha-vivekananda/poster-mobile.avif 720w, /videos/portfolio/vinitha-vivekananda/poster.avif 1920w"
+              sizes="(max-width: 768px) 100vw, 100vw"
+            />
+            <source
+              type="image/webp"
+              srcSet="/videos/portfolio/vinitha-vivekananda/poster-mobile.webp 720w, /videos/portfolio/vinitha-vivekananda/poster.webp 1920w"
+              sizes="(max-width: 768px) 100vw, 100vw"
+            />
             <img
               src={ITEM_VIDEO_01.poster}
               alt={ITEM_VIDEO_01.filmTitle}
               className={styles.curvedPosterImg}
               loading="lazy"
+              decoding="async"
             />
           </picture>
 
@@ -1453,7 +1463,16 @@ export default function LivingContactSheet() {
                   style={{ aspectRatio: ITEM_PROJECT_03.aspectRatio }}
                 >
                   <picture>
-                    <source srcSet={ITEM_PROJECT_03.webpImage} type="image/webp" />
+                    <source
+                      type="image/avif"
+                      srcSet="/images/stories/hrithika-abhishek/IMG_6333_cropped-mobile.avif 720w, /images/stories/hrithika-abhishek/IMG_6333_cropped.avif 1080w"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet="/images/stories/hrithika-abhishek/IMG_6333_cropped-mobile.webp 720w, /images/stories/hrithika-abhishek/IMG_6333_cropped.webp 1080w"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                     <img
                       ref={hrithikaPhotoImgRef}
                       src={ITEM_PROJECT_03.image}
@@ -1461,6 +1480,7 @@ export default function LivingContactSheet() {
                       className={styles.storyCoverImg}
                       style={{ objectPosition: ITEM_PROJECT_03.objectPosition }}
                       loading="lazy"
+                      decoding="async"
                     />
                   </picture>
                   <div className={styles.imageHoverShimmer} />
@@ -1566,7 +1586,16 @@ export default function LivingContactSheet() {
                   style={{ aspectRatio: ITEM_PROJECT_04.aspectRatio }}
                 >
                   <picture>
-                    <source srcSet={ITEM_PROJECT_04.webpImage} type="image/webp" />
+                    <source
+                      type="image/avif"
+                      srcSet="/images/stories/karthik-and-gayathri/IMG_6330-mobile.avif 720w, /images/stories/karthik-and-gayathri/IMG_6330.avif 1080w"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet="/images/stories/karthik-and-gayathri/IMG_6330-mobile.webp 720w, /images/stories/karthik-and-gayathri/IMG_6330.webp 1080w"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                     <img
                       ref={karthikPhotoImgRef}
                       src={ITEM_PROJECT_04.image}
@@ -1574,6 +1603,7 @@ export default function LivingContactSheet() {
                       className={styles.storyCoverImg}
                       style={{ objectPosition: ITEM_PROJECT_04.objectPosition }}
                       loading="lazy"
+                      decoding="async"
                     />
                   </picture>
                   <div className={styles.imageHoverShimmer} />
@@ -1633,7 +1663,16 @@ export default function LivingContactSheet() {
               >
                 <div ref={sireeshCanvasRef} className={styles.tallPortraitCanvas}>
                   <picture>
-                    <source srcSet={ITEM_PROJECT_02.webpImage} type="image/webp" />
+                    <source
+                      type="image/avif"
+                      srcSet="/images/stories/sirish-and-harshitha/IMG_6347-mobile.avif 720w, /images/stories/sirish-and-harshitha/IMG_6347.avif 1080w"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet="/images/stories/sirish-and-harshitha/IMG_6347-mobile.webp 720w, /images/stories/sirish-and-harshitha/IMG_6347.webp 1080w"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                     <img
                       ref={sireeshImgRef}
                       src={ITEM_PROJECT_02.image}
@@ -1641,6 +1680,7 @@ export default function LivingContactSheet() {
                       className={styles.storyCoverImg}
                       style={{ objectPosition: ITEM_PROJECT_02.objectPosition }}
                       loading="lazy"
+                      decoding="async"
                     />
                   </picture>
                   <div className={styles.imageHoverShimmer} />
@@ -1688,13 +1728,23 @@ export default function LivingContactSheet() {
         >
           {/* Sunset Mountain Landscape Poster */}
           <picture>
-            <source srcSet={ITEM_VIDEO_02.webpPoster} type="image/webp" />
+            <source
+              type="image/avif"
+              srcSet="/videos/portfolio/nishanth-sanzena/poster-mobile.avif 720w, /videos/portfolio/nishanth-sanzena/poster.avif 1920w"
+              sizes="(max-width: 768px) 100vw, 100vw"
+            />
+            <source
+              type="image/webp"
+              srcSet="/videos/portfolio/nishanth-sanzena/poster-mobile.webp 720w, /videos/portfolio/nishanth-sanzena/poster.webp 1920w"
+              sizes="(max-width: 768px) 100vw, 100vw"
+            />
             <img
               ref={nishanthPosterRef}
               src={ITEM_VIDEO_02.poster}
               alt={ITEM_VIDEO_02.filmTitle}
               className={styles.nishanthPosterImg}
               loading="lazy"
+              decoding="async"
             />
           </picture>
 

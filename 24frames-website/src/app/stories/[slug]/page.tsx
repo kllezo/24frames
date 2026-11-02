@@ -75,13 +75,24 @@ export default async function StoryDetailPage({ params }: PageProps) {
               <div className={styles.heroVisualCol}>
                 <div className={styles.heroImageFrame}>
                   <picture>
-                    <source srcSet={story.coverWebp} type="image/webp" />
+                    <source
+                      type="image/avif"
+                      srcSet={`${story.coverWebp.replace(/\.webp$/i, "-mobile.avif")} 720w, ${story.coverWebp.replace(/\.webp$/i, ".avif")} 1400w`}
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet={`${story.coverWebp.replace(/\.webp$/i, "-mobile.webp")} 720w, ${story.coverWebp} 1400w`}
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                     <img
                       src={story.coverImage}
                       alt={story.coverCaption || story.title}
                       className={styles.heroImage}
                       style={{ objectPosition: story.coverPosition || "center 25%" }}
                       loading="eager"
+                      fetchPriority="high"
+                      decoding="sync"
                     />
                   </picture>
                 </div>

@@ -361,6 +361,7 @@ export default function TheVowSection() {
                       className={styles.cardImage}
                       style={{ objectPosition: item.objectPosition || "center 30%" }}
                       loading="lazy"
+                      decoding="async"
                     />
                     <div className={styles.cardVignette} />
                   </div>
@@ -420,6 +421,7 @@ export default function TheVowSection() {
                     className={styles.cardImage}
                     style={{ objectPosition: item.objectPosition || "center 30%" }}
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className={styles.cardVignette} />
                 </div>
@@ -483,6 +485,7 @@ export default function TheVowSection() {
                       className={styles.cardImage}
                       style={{ objectPosition: item.objectPosition || "center 30%" }}
                       loading="lazy"
+                      decoding="async"
                     />
                     <div className={styles.cardVignette} />
                   </div>
@@ -542,6 +545,7 @@ export default function TheVowSection() {
                     className={styles.cardImage}
                     style={{ objectPosition: item.objectPosition || "center 30%" }}
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className={styles.cardVignette} />
                 </div>
