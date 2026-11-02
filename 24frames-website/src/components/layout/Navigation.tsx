@@ -46,17 +46,45 @@ export default function Navigation() {
         progressBarRef.current.style.transform = `scaleX(${progress})`;
       }
 
-      // Check current section under navigation header (~70px from top)
-      const explicitTheme = document.documentElement.dataset.heroHeaderTheme;
+      // Check current section under navigation header (~45px from top)
+      const explicitHeroTheme = document.documentElement.dataset.heroHeaderTheme;
+      const heroEl = document.getElementById("hero");
       let nextIsLight = isLightRef.current;
 
-      if (explicitTheme === "dark") {
-        nextIsLight = false;
-      } else if (explicitTheme === "light") {
-        nextIsLight = true;
+      if (heroEl && explicitHeroTheme && scrollY < (cachedHeroHeight || heroEl.offsetHeight) - 70) {
+        nextIsLight = explicitHeroTheme === "light";
       } else {
-        if (cachedHeroHeight > 0) {
-          nextIsLight = scrollY >= cachedHeroHeight - 70;
+        const navHeader = document.querySelector('header[role="banner"]');
+        const elements = document.elementsFromPoint(window.innerWidth / 2, 45);
+        const target = elements.find((el) => el !== navHeader && !navHeader?.contains(el));
+
+        if (target) {
+          const themedAncestor = target.closest("[data-header-theme]");
+          if (themedAncestor) {
+            nextIsLight = themedAncestor.getAttribute("data-header-theme") === "light";
+          } else {
+            let curr: Element | null = target;
+            let foundBg = false;
+            while (curr && curr !== document.documentElement) {
+              const bg = window.getComputedStyle(curr).backgroundColor;
+              if (bg && bg !== "transparent" && bg !== "rgba(0, 0, 0, 0)") {
+                const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+                if (match) {
+                  const r = parseInt(match[1], 10);
+                  const g = parseInt(match[2], 10);
+                  const b = parseInt(match[3], 10);
+                  const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+                  nextIsLight = brightness >= 135;
+                  foundBg = true;
+                  break;
+                }
+              }
+              curr = curr.parentElement;
+            }
+            if (!foundBg) {
+              nextIsLight = true;
+            }
+          }
         } else {
           nextIsLight = true;
         }

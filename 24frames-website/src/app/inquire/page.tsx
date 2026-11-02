@@ -32,6 +32,7 @@ export interface CommissionCategory {
   subtitle: string;
   image: string;
   isWeddingLike: boolean;
+  imageFocalPoint?: string;
 }
 
 export interface VisualDirectionItem {
@@ -55,6 +56,7 @@ const COMMISSION_CATEGORIES: CommissionCategory[] = [
     subtitle: "Multi-day royal celebrations, sacred muhurthams, destination unions & generational memories.",
     image: "/images/portfolio/sireesh-harshitha/cover.jpg",
     isWeddingLike: true,
+    imageFocalPoint: "center 85%",
   },
   {
     id: "pre-wedding",
@@ -62,6 +64,7 @@ const COMMISSION_CATEGORIES: CommissionCategory[] = [
     subtitle: "Cinematic portrait films, destination love stories, and intimate visual poetry on cinema primes.",
     image: "/videos/portfolio/vinitha-vivekananda/poster.jpg",
     isWeddingLike: true,
+    imageFocalPoint: "center 25%",
   },
   {
     id: "events",
@@ -76,6 +79,7 @@ const COMMISSION_CATEGORIES: CommissionCategory[] = [
     subtitle: "Bespoke designer lookbooks, high-jewelry campaigns, and avant-garde couture spreads.",
     image: "/images/stories/bellam-srikonda/IMG_6341.jpg",
     isWeddingLike: false,
+    imageFocalPoint: "center 22%",
   },
   {
     id: "commercial",
@@ -436,7 +440,19 @@ export default function InquirePage() {
     });
   };
 
-  const handleSelectCategoryAndAdvance = handleSelectCategory;
+  const handleSelectCategoryAndAdvance = (id: string) => {
+    handleSelectCategory(id);
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next.category;
+      return next;
+    });
+    // Auto-advance to Stage 2 after natural brief delay (~350ms)
+    setTimeout(() => {
+      setStage(2);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 350);
+  };
 
   /* ── Visual Direction & Service Toggles ── */
   const toggleDirection = (id: string) => {
@@ -584,65 +600,76 @@ export default function InquirePage() {
 
   return (
     <div className={styles.atelierPage}>
-      {/* ── ATELIER MASTHEAD ── */}
+      {/* ── ATELIER MASTHEAD (CLEAN 2-SIDED EDITORIAL HEADER) ── */}
       <header className={styles.atelierHeader} role="banner">
         <div className={styles.headerInner}>
-          <Link href="/" className={styles.backLink} aria-label="Return to 24 Frames website">
-            <span className={styles.backArrow} aria-hidden="true">←</span>
-            <span>24 FRAMES ARCHIVE</span>
-          </Link>
-
-          <div className={styles.headerCrest}>
-            <span className={styles.crestText}>24 FRAMES ATELIER</span>
-            <span className={styles.crestDivider}>·</span>
-            <span className={styles.crestSub}>HYDERABAD</span>
+          <div className={styles.headerLeft}>
+            <Link href="/" className={styles.backLink} aria-label="Return to 24 Frames website">
+              <span className={styles.backArrow} aria-hidden="true">←</span>
+              <span className={styles.logoWordmark}>24 FRAMES</span>
+              <span className={styles.archiveLabel}>ARCHIVE</span>
+            </Link>
           </div>
 
-          <div className={styles.folioIndicator}>
-            <span className={styles.folioTag}>COMMISSION FOLIO</span>
-            <span className={styles.folioId}>24F-2026</span>
+          <div className={styles.headerRight}>
+            <span className={styles.folioMetadata}>24F-2026</span>
           </div>
         </div>
 
-        {/* Refined Luxury Editorial Journey Indicator (Active Stages 1–4) */}
+        {/* Refined Luxury Collapsible Journey Indicator (Active Stages 1–4) */}
         {stage >= 1 && stage <= 4 && (
           <nav className={styles.editorialJourneyTracker} aria-label="Commission Progress">
             <div className={styles.journeyTrack}>
               {[
-                { step: 1, label: "Commission" },
-                { step: 2, label: "Timeline" },
-                { step: 3, label: "Direction & Craft" },
-                { step: 4, label: "Living Brief" },
-              ].map((s, idx) => (
-                <div key={s.step} className={styles.journeyStageWrapper}>
-                  {idx > 0 && (
-                    <span
-                      className={`${styles.journeyConnector} ${
-                        stage >= s.step ? styles.journeyConnectorActive : ""
+                { step: 1, label: "COMMISSION" },
+                { step: 2, label: "TIMELINE" },
+                { step: 3, label: "DIRECTION & CRAFT" },
+                { step: 4, label: "LIVING BRIEF" },
+              ].map((s, idx) => {
+                const isActive = s.step === stage;
+                const isComplete = s.step < stage;
+                const isUpcoming = s.step > stage;
+                const circleNumber = ["①", "②", "③", "④"][s.step - 1];
+
+                return (
+                  <div key={s.step} className={styles.journeyStageWrapper}>
+                    {idx > 0 && (
+                      <span
+                        className={`${styles.journeyConnector} ${
+                          stage >= s.step ? styles.journeyConnectorActive : ""
+                        }`}
+                        aria-hidden="true"
+                      />
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => s.step <= stage && handleJumpToStage(s.step)}
+                      disabled={isUpcoming}
+                      className={`${styles.journeyStepBtn} ${
+                        isActive
+                          ? styles.journeyStepActive
+                          : isComplete
+                          ? styles.journeyStepComplete
+                          : styles.journeyStepUpcoming
                       }`}
-                      aria-hidden="true"
-                    />
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => s.step <= stage && handleJumpToStage(s.step)}
-                    disabled={s.step > stage}
-                    className={`${styles.journeyTab} ${
-                      s.step === stage
-                        ? styles.journeyTabActive
-                        : s.step < stage
-                        ? styles.journeyTabComplete
-                        : styles.journeyTabUpcoming
-                    }`}
-                    aria-current={s.step === stage ? "step" : undefined}
-                  >
-                    <span className={styles.journeyStepNumber}>
-                      {s.step < stage ? "✓" : `0${s.step}`}
-                    </span>
-                    <span className={styles.journeyStepLabel}>{s.label}</span>
-                  </button>
-                </div>
-              ))}
+                      aria-current={isActive ? "step" : undefined}
+                      aria-label={`Step 0${s.step}: ${s.label}`}
+                    >
+                      {isActive ? (
+                        <div className={styles.expandedStepContent}>
+                          <span className={styles.activeStepDot} aria-hidden="true">●</span>
+                          <span className={styles.activeStepNum}>0{s.step}</span>
+                          <span className={styles.activeStepLabel}>{s.label}</span>
+                        </div>
+                      ) : (
+                        <div className={styles.collapsedCircle}>
+                          <span className={styles.circleSymbol}>{circleNumber}</span>
+                        </div>
+                      )}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </nav>
         )}
@@ -721,12 +748,6 @@ export default function InquirePage() {
                   <span>Back</span>
                 </button>
               </div>
-              <div className={styles.stageTopNavRight}>
-                <button onClick={handleNext} className={styles.primaryAtelierBtn} type="button" aria-label="Continue to Timeline">
-                  <span>Continue to Timeline</span>
-                  <span className={styles.btnArrowIcon}>→</span>
-                </button>
-              </div>
             </div>
 
             <div className={styles.stageHeader}>
@@ -767,7 +788,12 @@ export default function InquirePage() {
                     aria-pressed={isSelected}
                   >
                     <div className={styles.categoryImageWrap}>
-                      <img src={cat.image} alt={cat.title} className={styles.categoryCoverImg} />
+                      <img
+                        src={cat.image}
+                        alt={cat.title}
+                        className={styles.categoryCoverImg}
+                        style={cat.imageFocalPoint ? { objectPosition: cat.imageFocalPoint } : undefined}
+                      />
                       <div className={styles.categoryOverlay} />
                       {isSelected && (
                         <div className={styles.selectedBadge}>

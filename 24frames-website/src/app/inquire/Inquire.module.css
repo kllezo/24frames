@@ -30,151 +30,202 @@
 .headerInner {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 1rem clamp(1.25rem, 3.5vw, 2.5rem);
+  padding: 0.95rem clamp(1.25rem, 3.5vw, 2.5rem);
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
 }
 
 .backLink {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #09453E;
+  gap: 0.65rem;
   text-decoration: none;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .backLink:hover {
-  color: #06312C;
+  opacity: 0.85;
   transform: translateX(-2px);
 }
 
 .backArrow {
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  color: #09453E;
+  font-weight: 600;
 }
 
-.headerCrest {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.6875rem;
+.logoWordmark {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.92rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #141713;
+  letter-spacing: 0.16em;
+  color: #09453E;
 }
 
-.crestDivider {
-  color: #C8A84E;
-}
-
-.crestSub {
-  color: #727A74;
-}
-
-.folioIndicator {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  background: rgba(9, 69, 62, 0.06);
-  border: 1px solid rgba(9, 69, 62, 0.15);
-  padding: 0.3rem 0.75rem;
-  border-radius: 9999px;
+.archiveLabel {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  color: #09453E;
-}
-
-.folioTag {
-  color: #727A74;
-}
-
-.folioId {
   font-weight: 700;
-  color: #09453E;
+  letter-spacing: 0.2em;
+  color: #727A74;
+  padding-left: 0.45rem;
+  border-left: 1px solid rgba(9, 69, 62, 0.2);
+  line-height: 1;
 }
 
-/* Editorial Journey Indicator (Commission → Timeline → Direction & Craft → Living Brief) */
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.folioMetadata {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: #6A7770;
+  background: rgba(9, 69, 62, 0.05);
+  border: 1px solid rgba(9, 69, 62, 0.12);
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   COLLAPSIBLE EDITORIAL JOURNEY TRACKER
+   Active stage: expanded (● 0X LABEL)
+   Inactive stages: collapsed compact circular number (①, ②, ③, ④)
+   ───────────────────────────────────────────────────────────── */
 .editorialJourneyTracker {
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(9, 69, 62, 0.08);
+  border-bottom: 1px solid rgba(9, 69, 62, 0.08);
   background: #F4EFE6;
-  padding: 0.85rem 0;
+  padding: 0.65rem 0;
 }
 
 .journeyTrack {
-  max-width: 1240px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 clamp(1.25rem, 3.5vw, 2.5rem);
+  padding: 0 clamp(1rem, 3vw, 2rem);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: clamp(0.5rem, 1.8vw, 1.5rem);
 }
 
 .journeyStageWrapper {
   display: flex;
   align-items: center;
-  flex: 1;
-}
-
-.journeyStageWrapper:last-child {
-  flex: none;
+  gap: clamp(0.5rem, 1.8vw, 1.5rem);
 }
 
 .journeyConnector {
-  flex: 1;
+  width: clamp(20px, 4vw, 44px);
   height: 1px;
   background: rgba(9, 69, 62, 0.15);
-  margin: 0 1rem;
   transition: background-color 0.3s ease;
 }
 
 .journeyConnectorActive {
-  background: #09453E;
+  background: #C8A84E;
 }
 
-.journeyTab {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
+.journeyStepBtn {
   background: transparent;
   border: none;
+  padding: 0;
   cursor: pointer;
-  padding: 0.35rem 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  transition: all 0.25s ease;
+}
+
+.journeyStepBtn:disabled {
+  cursor: default;
+}
+
+/* Expanded active step */
+.expandedStepContent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #09453E;
+  color: #FBF5E9;
+  padding: 0.38rem 0.95rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 14px rgba(9, 69, 62, 0.18);
+}
+
+.activeStepDot {
+  color: #C8A84E;
+  font-size: 0.6rem;
+  line-height: 1;
+}
+
+.activeStepNum {
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  color: #C8A84E;
+}
+
+.activeStepLabel {
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #8C9690;
-  transition: color 0.25s ease;
+  color: #FBF5E9;
   white-space: nowrap;
 }
 
-.journeyTabActive {
+/* Collapsed inactive step circles */
+.collapsedCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(9, 69, 62, 0.2);
+  background: #FAF7F0;
+  transition: all 0.2s ease;
+}
+
+.circleSymbol {
+  font-size: 1.05rem;
+  color: #6A7770;
+  line-height: 1;
+}
+
+.journeyStepComplete .collapsedCircle {
+  border-color: #09453E;
+  background: rgba(9, 69, 62, 0.08);
+}
+
+.journeyStepComplete .circleSymbol {
   color: #09453E;
-  font-weight: 700;
+  font-weight: 600;
 }
 
-.journeyTabComplete {
-  color: #1F453E;
+.journeyStepComplete:hover .collapsedCircle {
+  background: #09453E;
+  border-color: #09453E;
 }
 
-.journeyTabComplete:hover {
-  color: #09453E;
+.journeyStepComplete:hover .circleSymbol {
+  color: #FBF5E9;
 }
 
-.journeyTabUpcoming {
-  cursor: default;
-  color: #8C9690;
+.journeyStepUpcoming .collapsedCircle {
+  opacity: 0.55;
+  border-color: rgba(9, 69, 62, 0.12);
 }
 
 .journeyStepNumber {

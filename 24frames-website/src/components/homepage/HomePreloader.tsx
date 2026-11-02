@@ -23,3 +23,4 @@ export default function HomePreloader() {
 
   return <Preloader onComplete={handlePreloaderComplete} />;
 }
+

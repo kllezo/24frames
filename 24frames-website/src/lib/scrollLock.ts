@@ -33,14 +33,25 @@ export function unlockScroll() {
   activeScrollLocks = Math.max(0, activeScrollLocks - 1);
 
   if (activeScrollLocks === 0) {
-    document.body.style.overflow = previousBodyOverflow;
-    document.documentElement.style.overflow = previousHtmlOverflow;
+    document.body.style.overflow = previousBodyOverflow === "hidden" ? "" : previousBodyOverflow;
+    document.documentElement.style.overflow = previousHtmlOverflow === "hidden" ? "" : previousHtmlOverflow;
 
     // Resume Lenis smooth scrolling
     const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
     if (lenis?.start) {
       lenis.start();
     }
+  }
+}
+
+export function forceUnlockAllScroll() {
+  if (typeof window === "undefined") return;
+  activeScrollLocks = 0;
+  document.body.style.overflow = "";
+  document.documentElement.style.overflow = "";
+  const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+  if (lenis?.start) {
+    lenis.start();
   }
 }
 

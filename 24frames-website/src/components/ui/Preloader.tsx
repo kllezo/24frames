@@ -27,16 +27,14 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   // Lock body scroll while intro plays
   useEffect(() => {
     const origBodyOverflow = document.body.style.overflow;
-    const origHtmlOverflow = document.documentElement.style.overflow;
     const origBodyMargin = document.body.style.margin;
 
     document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
     document.body.style.margin = "0";
 
     return () => {
-      document.body.style.overflow = origBodyOverflow;
-      document.documentElement.style.overflow = origHtmlOverflow;
+      document.body.style.overflow = origBodyOverflow || "";
+      document.documentElement.style.overflow = "";
       document.body.style.margin = origBodyMargin;
     };
   }, []);
@@ -84,8 +82,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         // Final clean unmount
         gsap.to(overlay, {
           opacity: 0,
-          duration: 0.42,
+          duration: 0.35,
           ease: "power2.inOut",
+          onStart: () => {
+            overlay.style.pointerEvents = "none";
+          },
           onComplete: () => {
             setVisible(false);
             onComplete();

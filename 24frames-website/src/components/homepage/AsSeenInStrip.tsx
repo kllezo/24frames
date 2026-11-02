@@ -11,23 +11,23 @@ interface PressLogo {
   name: string;
   src: string;
   alt: string;
-  heightRatio?: number;
+  variant: "ultrawide" | "wide" | "compact" | "square";
 }
 
 const PRESS_LOGOS: PressLogo[] = [
-  { name: "The Indian Express", src: "/images/press/indian-express.png", alt: "The Indian Express editorial feature" },
-  { name: "Telangana Today", src: "/images/press/telangana-today.png", alt: "Telangana Today feature coverage" },
-  { name: "The Times of India", src: "/images/press/times-of-india.png", alt: "The Times of India spotlight feature" },
-  { name: "The Hindu", src: "/images/press/the-hindu.png", alt: "The Hindu publication feature" },
-  { name: "Vogue", src: "/images/press/vogue.png", alt: "Vogue India editorial feature" },
-  { name: "Nikon", src: "/images/press/nikon.png", alt: "Nikon creator community & optical imaging partner" },
-  { name: "Times Business Awards", src: "/images/press/times-business-awards.png", alt: "Times Business Awards distinction" },
-  { name: "ET Excellence", src: "/images/press/et-excellence.png", alt: "Economic Times Excellence Awards" },
-  { name: "Inovexia International", src: "/images/press/inovexia.png", alt: "Indian Eminent Awards presented by Inovexia International" },
-  { name: "WPPI", src: "/images/press/wppi.png", alt: "WPPI international wedding & portrait photography association" },
-  { name: "TCEI", src: "/images/press/tcei.png", alt: "Telangana Chamber of Events Industry distinction" },
-  { name: "WedMeGood", src: "/images/press/wedmegood.png", alt: "WedMeGood partner platform" },
-  { name: "PIC-TIME", src: "/images/press/pic-time.png", alt: "Pic-Time global client gallery delivery platform" },
+  { name: "The Indian Express", src: "/images/press/indian-express.png", alt: "The Indian Express editorial feature", variant: "ultrawide" },
+  { name: "Telangana Today", src: "/images/press/telangana-today.png", alt: "Telangana Today feature coverage", variant: "ultrawide" },
+  { name: "The Times of India", src: "/images/press/times-of-india.png", alt: "The Times of India spotlight feature", variant: "wide" },
+  { name: "The Hindu", src: "/images/press/the-hindu.png", alt: "The Hindu publication feature", variant: "wide" },
+  { name: "Vogue", src: "/images/press/vogue.png", alt: "Vogue India editorial feature", variant: "wide" },
+  { name: "Nikon", src: "/images/press/nikon.png", alt: "Nikon creator community & optical imaging partner", variant: "square" },
+  { name: "Times Business Awards", src: "/images/press/times-business-awards.png", alt: "Times Business Awards distinction", variant: "compact" },
+  { name: "ET Excellence", src: "/images/press/et-excellence.png", alt: "Economic Times Excellence Awards", variant: "wide" },
+  { name: "Inovexia International", src: "/images/press/inovexia.png", alt: "Indian Eminent Awards presented by Inovexia International", variant: "wide" },
+  { name: "WPPI", src: "/images/press/wppi.png", alt: "WPPI international wedding & portrait photography association", variant: "square" },
+  { name: "TCEI", src: "/images/press/tcei.png", alt: "Telangana Chamber of Events Industry distinction", variant: "wide" },
+  { name: "WedMeGood", src: "/images/press/wedmegood.png", alt: "WedMeGood partner platform", variant: "square" },
+  { name: "PIC-TIME", src: "/images/press/pic-time.png", alt: "Pic-Time global client gallery delivery platform", variant: "compact" },
 ];
 
 export default function AsSeenInStrip() {
@@ -97,14 +97,13 @@ export default function AsSeenInStrip() {
             {/* Set 1 */}
             {PRESS_LOGOS.map((logo, idx) => (
               <div key={`logo-1-${idx}`} className={styles.logoItem}>
-                <picture>
+                <picture className={styles.logoPicture}>
                   <source srcSet={logo.src.replace(/\.png$/, ".avif")} type="image/avif" />
                   <source srcSet={logo.src.replace(/\.png$/, ".webp")} type="image/webp" />
                   <img
                     src={logo.src}
                     alt={logo.alt}
-                    className={styles.logoImg}
-                    loading="lazy"
+                    className={`${styles.logoImg} ${styles[logo.variant]}`}
                     decoding="async"
                   />
                 </picture>
@@ -114,14 +113,13 @@ export default function AsSeenInStrip() {
             {/* Set 2 (for seamless infinite loop) */}
             {PRESS_LOGOS.map((logo, idx) => (
               <div key={`logo-2-${idx}`} className={styles.logoItem}>
-                <picture>
+                <picture className={styles.logoPicture}>
                   <source srcSet={logo.src.replace(/\.png$/, ".avif")} type="image/avif" />
                   <source srcSet={logo.src.replace(/\.png$/, ".webp")} type="image/webp" />
                   <img
                     src={logo.src}
                     alt={logo.alt}
-                    className={styles.logoImg}
-                    loading="lazy"
+                    className={`${styles.logoImg} ${styles[logo.variant]}`}
                     decoding="async"
                   />
                 </picture>

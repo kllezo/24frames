@@ -73,6 +73,11 @@ export default function HeroSection() {
           />
           <source
             media="(max-width: 820px)"
+            srcSet="/images/portfolio/hrithika-abhishek/cover-mobile.avif"
+            type="image/avif"
+          />
+          <source
+            media="(max-width: 820px)"
             srcSet="/images/portfolio/hrithika-abhishek/cover-mobile.webp"
             type="image/webp"
           />

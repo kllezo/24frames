@@ -123,3 +123,4 @@ Headless Chrome visual testing at desktop (1440x900) and mobile (390x844) confir
 ## 4. Build & Production Verification
 - `npm run build`: **Compiled successfully in 128 ms** with 0 errors and 0 warnings.
 - All 27 static pages (including 5 disciplines and 8 stories) pre-rendered cleanly as SSG.
+

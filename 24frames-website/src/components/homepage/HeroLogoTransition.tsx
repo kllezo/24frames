@@ -58,7 +58,7 @@ export default function HeroLogoTransition({
       if (openingCenterColRef.current) gsap.set(openingCenterColRef.current, { opacity: 0, scale: 0.94 });
       if (openingRightColRef.current) gsap.set(openingRightColRef.current, { opacity: 0, y: 24 });
       if (archedPhotoImgRef.current) {
-        gsap.set(archedPhotoImgRef.current, { opacity: 0, scale: 1.05 });
+        gsap.set(archedPhotoImgRef.current, { opacity: 1, scale: 1.0 });
       }
 
       // Master timeline scrubbed by ScrollTrigger
@@ -158,13 +158,9 @@ export default function HeroLogoTransition({
         );
       }
 
+      // Ensure photograph is 100% crisp and fully opaque
       if (archedPhotoImgRef.current) {
-        masterTl.fromTo(
-          archedPhotoImgRef.current,
-          { opacity: 0, scale: 1.05 },
-          { opacity: 1, scale: 1.0, duration: 0.24, ease: "power2.out" },
-          0.46
-        );
+        gsap.set(archedPhotoImgRef.current, { opacity: 1 });
       }
 
       // ── STEP 3: 0.70 – 0.92: COUPLE INFORMATION ──
@@ -203,7 +199,14 @@ export default function HeroLogoTransition({
             window.dispatchEvent(new Event("scroll"));
           }
 
-
+          // Interactivity toggle: enable links only once composition has settled (progress >= 0.70)
+          if (vowsStageWrapRef.current) {
+            if (progress >= 0.70) {
+              vowsStageWrapRef.current.classList.add(styles.vowsStageInteractive);
+            } else {
+              vowsStageWrapRef.current.classList.remove(styles.vowsStageInteractive);
+            }
+          }
 
           // Boundary Reset on Reverse to Hero
           if (progress <= 0.005) {
@@ -211,7 +214,10 @@ export default function HeroLogoTransition({
             if (greenBackdropRef.current) greenBackdropRef.current.style.opacity = "0";
             if (ivoryBackdropRef.current) ivoryBackdropRef.current.style.opacity = "0";
             if (logoWrapRef.current) logoWrapRef.current.style.opacity = "0";
-            if (vowsStageWrapRef.current) vowsStageWrapRef.current.style.opacity = "0";
+            if (vowsStageWrapRef.current) {
+              vowsStageWrapRef.current.style.opacity = "0";
+              vowsStageWrapRef.current.classList.remove(styles.vowsStageInteractive);
+            }
             if (heroImageRef.current) {
               heroImageRef.current.style.opacity = "1";
               heroImageRef.current.style.filter = "none";
@@ -236,6 +242,9 @@ export default function HeroLogoTransition({
     return () => {
       ctx.revert();
       delete document.documentElement.dataset.heroHeaderTheme;
+      if (vowsStageWrapRef.current) {
+        vowsStageWrapRef.current.classList.remove(styles.vowsStageInteractive);
+      }
       if (heroImageRef.current) {
         heroImageRef.current.style.opacity = "";
         heroImageRef.current.style.filter = "";

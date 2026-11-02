@@ -18,7 +18,7 @@ export default function StoriesPage() {
 
       <main className={styles.main}>
         {/* ── Page Header ────────────────────────────────────────── */}
-        <header className={styles.headerSection}>
+        <header className={styles.headerSection} data-header-theme="dark">
           <div className={styles.headerPattern} />
           <div className={styles.container}>
             <div className={styles.headerContent}>
@@ -35,7 +35,7 @@ export default function StoriesPage() {
         </header>
 
         {/* ── Stories Grid ───────────────────────────────────────── */}
-        <section className={styles.storiesSection}>
+        <section className={styles.storiesSection} data-header-theme="light">
           <div className={styles.container}>
             <div className={styles.storiesGrid}>
               {STORIES_LIST.map((story) => (

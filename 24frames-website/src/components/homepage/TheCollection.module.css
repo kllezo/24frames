@@ -702,6 +702,25 @@
     min-width: 0;
   }
 
+  /* Mobile Bottom-Focused Expansion Zoom for Weddings & Celebrations and Cinema & Feature Films */
+  .card[data-discipline-id="weddings"] .cardImage {
+    transform-origin: 50% 90%;
+    transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+  }
+
+  .cardActive[data-discipline-id="weddings"] .cardImage {
+    transform: scale(1.52);
+  }
+
+  .card[data-discipline-id="cinema"] .cardImage {
+    transform-origin: 52% 82%;
+    transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+  }
+
+  .cardActive[data-discipline-id="cinema"] .cardImage {
+    transform: scale(1.48);
+  }
+
   .activeContent {
     padding: 1.15rem;
   }

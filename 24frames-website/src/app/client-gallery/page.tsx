@@ -203,6 +203,7 @@ interface LightboxItem {
 export default function ClientGalleryPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeLightbox, setActiveLightbox] = useState<LightboxItem | null>(null);
+  const [isPlayingCinemaVideo, setIsPlayingCinemaVideo] = useState(false);
 
   const handleCloseLightbox = useCallback(() => {
     setActiveLightbox(null);
@@ -211,12 +212,16 @@ export default function ClientGalleryPage() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        handleCloseLightbox();
+        if (isPlayingCinemaVideo) {
+          setIsPlayingCinemaVideo(false);
+        } else {
+          handleCloseLightbox();
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleCloseLightbox]);
+  }, [handleCloseLightbox, isPlayingCinemaVideo]);
 
   // Lock body & Lenis scrolling when lightbox modal is open
   useScrollLock(activeLightbox !== null);
@@ -295,48 +300,125 @@ export default function ClientGalleryPage() {
                   >
                     {/* Media Column with Adaptive Aspect Ratios */}
                     <div className={styles.mediaColumn}>
-                      {/* Primary Canvas */}
-                      <div
-                        className={styles.primaryCanvas}
-                        style={{ aspectRatio: section.primaryAspect }}
-                        onClick={() =>
-                          setActiveLightbox({
-                            src: section.primaryImage,
-                            alt: section.primaryImageAlt,
-                            title: section.title,
-                            caption: section.tagline,
-                          })
-                        }
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
+                      {/* Primary Canvas / Cinema Video Player */}
+                      {section.id === "cinema-room" ? (
+                        <div
+                          className={`${styles.primaryCanvas} ${styles.cinemaCanvas}`}
+                          style={{ aspectRatio: "16 / 9" }}
+                        >
+                          {isPlayingCinemaVideo ? (
+                            <div className={styles.videoPlayerContainer}>
+                              <iframe
+                                src="https://www.youtube-nocookie.com/embed/LNtlLgfT5uY?autoplay=1&rel=0&playsinline=1&modestbranding=1"
+                                title="Vinitha & Vivekananda Wedding Film"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                                className={styles.cinemaVideoIframe}
+                              />
+                              <button
+                                type="button"
+                                className={styles.closeVideoButton}
+                                onClick={() => setIsPlayingCinemaVideo(false)}
+                                aria-label="Close cinema playback"
+                              >
+                                ✕ CLOSE SCREENING
+                              </button>
+                            </div>
+                          ) : (
+                            <div
+                              className={styles.cinemaPosterWrapper}
+                              onClick={() => setIsPlayingCinemaVideo(true)}
+                              role="button"
+                              tabIndex={0}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  setIsPlayingCinemaVideo(true);
+                                }
+                              }}
+                              aria-label="Play Vinitha & Vivekananda Wedding Film in 4K"
+                            >
+                              <picture>
+                                <source
+                                  type="image/avif"
+                                  srcSet="/videos/portfolio/vinitha-vivekananda/poster-mobile.avif 720w, /videos/portfolio/vinitha-vivekananda/poster.avif 1920w"
+                                  sizes="(max-width: 768px) 100vw, 580px"
+                                />
+                                <source
+                                  type="image/webp"
+                                  srcSet="/videos/portfolio/vinitha-vivekananda/poster-mobile.webp 720w, /videos/portfolio/vinitha-vivekananda/poster.webp 1920w"
+                                  sizes="(max-width: 768px) 100vw, 580px"
+                                />
+                                <img
+                                  src="/videos/portfolio/vinitha-vivekananda/poster.jpg"
+                                  alt="Vinitha & Vivekananda Master 4K Theatrical Wedding Film"
+                                  className={styles.primaryImg}
+                                  style={{ objectFit: "cover" }}
+                                  loading="lazy"
+                                />
+                              </picture>
+                              <div className={styles.cinemaScrim} />
+
+                              {/* Luxury Cinema Play Button Badge */}
+                              <div className={styles.cinemaPlayCenter}>
+                                <div className={styles.playButtonPill}>
+                                  <span className={styles.playTriangleIcon} aria-hidden="true">▶</span>
+                                  <span className={styles.playText}>WATCH WEDDING FILM · 14:55</span>
+                                </div>
+                                <span className={styles.cinemaQualityBadge}>
+                                  4K THEATRICAL CUT · SONY FX9 &amp; FX6 CINEMA PRIMES
+                                </span>
+                              </div>
+
+                              <span className={styles.floatingChapterBadge}>
+                                {section.title} · 4K MASTER
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div
+                          className={styles.primaryCanvas}
+                          style={{ aspectRatio: section.primaryAspect }}
+                          onClick={() =>
                             setActiveLightbox({
                               src: section.primaryImage,
                               alt: section.primaryImageAlt,
                               title: section.title,
                               caption: section.tagline,
-                            });
+                            })
                           }
-                        }}
-                        aria-label={`View full frame: ${section.title}`}
-                      >
-                        <img
-                          src={section.primaryImage}
-                          alt={section.primaryImageAlt}
-                          className={styles.primaryImg}
-                          style={{ objectFit: section.primaryFit }}
-                          loading="lazy"
-                        />
-                        <div className={styles.imageScrim} />
-                        <span className={styles.floatingChapterBadge}>
-                          {section.title}
-                        </span>
-                        <span className={styles.expandPill} aria-hidden="true">
-                          EXPAND ↗
-                        </span>
-                      </div>
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              setActiveLightbox({
+                                src: section.primaryImage,
+                                alt: section.primaryImageAlt,
+                                title: section.title,
+                                caption: section.tagline,
+                              });
+                            }
+                          }}
+                          aria-label={`View full frame: ${section.title}`}
+                        >
+                          <img
+                            src={section.primaryImage}
+                            alt={section.primaryImageAlt}
+                            className={styles.primaryImg}
+                            style={{ objectFit: section.primaryFit }}
+                            loading="lazy"
+                          />
+                          <div className={styles.imageScrim} />
+                          <span className={styles.floatingChapterBadge}>
+                            {section.title}
+                          </span>
+                          <span className={styles.expandPill} aria-hidden="true">
+                            EXPAND ↗
+                          </span>
+                        </div>
+                      )}
 
                       {/* Secondary Canvas */}
                       {section.secondaryImage && (

@@ -591,9 +591,9 @@ export const STORIES_DATA: Record<string, StoryDetail> = {
     venue: "Botanical Glasshouse & Pavilion",
     year: "2025",
     chapterKicker: "BOTANICAL HARMONY & UNREHEARSED JOY",
-    coverImage: "/images/stories/karthik-and-gayathri/IMG_6330.jpg",
-    coverWebp: "/images/stories/karthik-and-gayathri/IMG_6330.webp",
-    coverPosition: "60% 16%",
+    coverImage: "/images/stories/karthik-and-gayathri/IMG_6330_stories_cover.jpg",
+    coverWebp: "/images/stories/karthik-and-gayathri/IMG_6330_stories_cover.webp",
+    coverPosition: "54% 8%",
     coverCaption: "Intimate forehead embrace: Gayathri in emerald silk & Karthik in ceremonial ivory",
     narrativeOverview:
       "Set against a sun-drenched conservatory of cascading blush blooms, terracotta urns, and open verandas, Karthik and Gayathri's wedding unfolded with breezy elegance, spontaneous dance, and quiet, soulful intimacy.",
