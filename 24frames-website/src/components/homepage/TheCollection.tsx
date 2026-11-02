@@ -389,31 +389,76 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                 >
                   {/* Background Photographic Canvas */}
                   <div className={styles.imageCanvas}>
-                    <picture>
-                      {!hasError && (
-                        <>
-                          <source
-                            type="image/avif"
-                            srcSet={`${discipline.image.replace(/\.(jpg|jpeg|png)$/i, "-mobile.avif")} 720w, ${discipline.image.replace(/\.(jpg|jpeg|png)$/i, ".avif")} 1400w`}
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                          />
+                    {discipline.id === "weddings" ? (
+                      <div className={styles.weddingsMedia}>
+                        {/* Collapsed state: actual lower 30% crop of source image (Y=70%–100%) */}
+                        <picture className={`${styles.weddingsPicture} ${styles.weddingsCollapsed}`}>
                           <source
                             type="image/webp"
-                            srcSet={`${discipline.image.replace(/\.(jpg|jpeg|png)$/i, "-mobile.webp")} 720w, ${discipline.image.replace(/\.(jpg|jpeg|png)$/i, ".webp")} 1400w`}
-                            sizes="(max-width: 768px) 100vw, 33vw"
+                            srcSet="/images/portfolio/sireesh-harshitha/cover-bottom-30.webp"
                           />
-                        </>
-                      )}
-                      <img
-                        src={displayImage}
-                        alt={discipline.title}
-                        className={styles.cardImage}
-                        style={{ objectPosition: discipline.objectPosition || "center 25%" }}
-                        loading={discipline.id === "weddings" ? "eager" : "lazy"}
-                        decoding="async"
-                        onError={() => handleImageError(discipline.id)}
-                      />
-                    </picture>
+                          <img
+                            src="/images/portfolio/sireesh-harshitha/cover-bottom-30.jpg"
+                            alt={discipline.title}
+                            className={styles.weddingsCropImg}
+                            loading="eager"
+                            decoding="async"
+                          />
+                        </picture>
+
+                        {/* Expanded state: full source photograph with lower 30% focal region & context */}
+                        <picture className={`${styles.weddingsPicture} ${styles.weddingsExpanded}`}>
+                          {!hasError && (
+                            <>
+                              <source
+                                type="image/avif"
+                                srcSet="/images/portfolio/sireesh-harshitha/cover.avif 1400w"
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                              />
+                              <source
+                                type="image/webp"
+                                srcSet="/images/portfolio/sireesh-harshitha/cover.webp 1400w"
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                              />
+                            </>
+                          )}
+                          <img
+                            src={displayImage}
+                            alt={discipline.title}
+                            className={styles.weddingsFullImg}
+                            loading="eager"
+                            decoding="async"
+                            onError={() => handleImageError(discipline.id)}
+                          />
+                        </picture>
+                      </div>
+                    ) : (
+                      <picture>
+                        {!hasError && (
+                          <>
+                            <source
+                              type="image/avif"
+                              srcSet={`${discipline.image.replace(/\.(jpg|jpeg|png)$/i, "-mobile.avif")} 720w, ${discipline.image.replace(/\.(jpg|jpeg|png)$/i, ".avif")} 1400w`}
+                              sizes="(max-width: 768px) 100vw, 33vw"
+                            />
+                            <source
+                              type="image/webp"
+                              srcSet={`${discipline.image.replace(/\.(jpg|jpeg|png)$/i, "-mobile.webp")} 720w, ${discipline.image.replace(/\.(jpg|jpeg|png)$/i, ".webp")} 1400w`}
+                              sizes="(max-width: 768px) 100vw, 33vw"
+                            />
+                          </>
+                        )}
+                        <img
+                          src={displayImage}
+                          alt={discipline.title}
+                          className={styles.cardImage}
+                          style={{ objectPosition: discipline.objectPosition || "center 25%" }}
+                          loading="lazy"
+                          decoding="async"
+                          onError={() => handleImageError(discipline.id)}
+                        />
+                      </picture>
+                    )}
 
                     <div
                       className={isSelected ? styles.activeGradient : styles.collapsedGradient}

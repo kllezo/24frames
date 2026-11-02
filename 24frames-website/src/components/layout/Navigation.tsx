@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import styles from "./Navigation.module.css";
 
 const NAV_LINKS = [
@@ -12,12 +13,55 @@ const NAV_LINKS = [
 ];
 
 export default function Navigation() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [isLightSection, setIsLightSection] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef(false);
   const isLightRef = useRef(false);
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    setMenuOpen(false);
+
+    const isHome = pathname === "/" || pathname === "";
+    if (isHome) {
+      e.preventDefault();
+
+      // Clear any hash in URL without full reload
+      if (window.location.hash) {
+        try {
+          history.pushState(null, "", window.location.pathname);
+        } catch {
+          // ignore
+        }
+      }
+
+      // Reset hero dataset attributes to opening state
+      document.documentElement.dataset.heroStage = "hero-active";
+      document.documentElement.dataset.heroHeaderTheme = "dark";
+
+      // Smooth scroll to absolute top (0)
+      const lenis = (
+        window as unknown as {
+          __lenis?: {
+            scrollTo: (
+              target: number,
+              options?: { duration?: number; immediate?: boolean }
+            ) => void;
+          };
+        }
+      ).__lenis;
+
+      if (lenis?.scrollTo) {
+        lenis.scrollTo(0, { duration: 1.0 });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      window.dispatchEvent(new Event("scroll"));
+    }
+  };
 
   useEffect(() => {
     let cachedHeroHeight = 0;
@@ -47,7 +91,7 @@ export default function Navigation() {
         // Phase 2 (scrollY >= 260px or #vows): Only after hero logo exits and warm ivory arrives,
         // transition smoothly into solid warm ivory background matching The Vows.
         const isMobile = window.innerWidth < 820;
-        const heroExitThreshold = isMobile ? window.innerHeight * 0.24 : 260;
+        const heroExitThreshold = isMobile ? window.innerHeight * 0.75 : window.innerHeight * 0.95;
         const isAtHeroTop = scrollY < 50;
         const heroExited = isVowsHash || (!isAtHeroTop && (scrollY >= heroExitThreshold || heroStage === "hero-exited"));
 
@@ -169,7 +213,12 @@ export default function Navigation() {
         />
 
         <nav className={styles.nav} aria-label="Main navigation">
-          <Link href="/" className={styles.logo} aria-label="24 Frames Photography — Home">
+          <Link
+            href="/"
+            className={styles.logo}
+            aria-label="Go to homepage"
+            onClick={handleLogoClick}
+          >
             <picture className={styles.logoPicture}>
               <source srcSet="/images/logo-dark-header.avif" type="image/avif" />
               <source srcSet="/images/logo-dark-header.webp" type="image/webp" />

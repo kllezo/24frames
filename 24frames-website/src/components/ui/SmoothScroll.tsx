@@ -30,8 +30,8 @@ export default function SmoothScroll() {
       try {
         const st = ScrollTrigger.getById("heroLogoTransition");
         if (st && typeof st.start === "number" && typeof st.end === "number") {
-          // Progress 0.95 aligns precisely with the settled 3-column hold state
-          return Math.round(st.start + (st.end - st.start) * 0.95);
+          // Progress 0.96 aligns precisely with the settled 3-column hold state
+          return Math.round(st.start + (st.end - st.start) * 0.96);
         }
       } catch {
         // Fallback to calculation
@@ -40,8 +40,8 @@ export default function SmoothScroll() {
       const heroEl = document.getElementById("hero");
       const heroTop = heroEl ? heroEl.offsetTop : 0;
       const isMobile = window.innerWidth < 820;
-      const pinDistance = window.innerHeight * (isMobile ? 0.95 : 1.20);
-      return Math.round(heroTop + pinDistance * 0.95);
+      const pinDistance = window.innerHeight * (isMobile ? 1.80 : 2.20);
+      return Math.round(heroTop + pinDistance * 0.96);
     };
 
     // 3. Universal Anchor Navigation with Fixed Luxury Header Offset (-80px)

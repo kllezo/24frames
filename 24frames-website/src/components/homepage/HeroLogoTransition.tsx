@@ -79,54 +79,57 @@ export default function HeroLogoTransition({
         defaults: { ease: "none" },
       });
 
-      // ── Stage A: 0.00 – 0.15 (Hero Dissolve & Living Green 24 FRAMES Logo Hold) ──
+      // ── STAGE 1: 0.00 – 0.44 (Homepage Opening → Dedicated 24 FRAMES Logo Moment) ──
+      // Hero photograph and typography dissolve as the deep luxury forest green arrives
       if (heroImageRef.current) {
         masterTl.to(
           heroImageRef.current,
-          { opacity: 0, scale: 1.025, duration: 0.12, ease: "power2.inOut" },
+          { opacity: 0, scale: 1.025, duration: 0.10, ease: "power2.inOut" },
           0.00
         );
       }
       if (headlineRef.current) {
-        masterTl.to(headlineRef.current, { opacity: 0, y: -14, duration: 0.10, ease: "power2.in" }, 0.00);
+        masterTl.to(headlineRef.current, { opacity: 0, y: -14, duration: 0.09, ease: "power2.in" }, 0.00);
       }
       if (metadataRef.current) {
-        masterTl.to(metadataRef.current, { opacity: 0, y: 14, duration: 0.10, ease: "power2.in" }, 0.00);
+        masterTl.to(metadataRef.current, { opacity: 0, y: 14, duration: 0.09, ease: "power2.in" }, 0.00);
       }
       if (topBarRef.current) {
-        masterTl.to(topBarRef.current, { opacity: 0, duration: 0.09, ease: "power1.in" }, 0.00);
+        masterTl.to(topBarRef.current, { opacity: 0, duration: 0.08, ease: "power1.in" }, 0.00);
       }
 
       if (greenBackdropRef.current) {
         masterTl.fromTo(
           greenBackdropRef.current,
           { opacity: 0 },
-          { opacity: 1, duration: 0.12, ease: "power2.inOut" },
+          { opacity: 1, duration: 0.10, ease: "power2.inOut" },
           0.00
         );
       }
 
+      // Bring the large 24 FRAMES logo into its intended cinematic position (0.02 - 0.12)
       if (logoWrapRef.current) {
         masterTl.fromTo(
           logoWrapRef.current,
           { opacity: 0, scale: 0.95 },
-          { opacity: 1, scale: 1.0, duration: 0.12, ease: "power2.out" },
+          { opacity: 1, scale: 1.0, duration: 0.10, ease: "power2.out" },
           0.02
         );
-        // Living depth / breathing illumination
+        // Dedicated 24 FRAMES Logo Hold (0.12 – 0.44):
+        // Logo has its own moment on screen with subtle living breath; The Vows is not visible.
         masterTl.to(
           logoWrapRef.current,
-          { scale: 1.02, duration: 0.04, ease: "power1.inOut" },
+          { scale: 1.02, duration: 0.32, ease: "power1.inOut" },
           0.12
         );
       }
 
-      // ── Stage B: 0.16 – 0.26 (Logo smoothly dissolves out as warm ivory emerges) ──
+      // ── STAGE 2 TRANSITION: 0.44 – 0.56 (24 FRAMES Logo Dissolves → Warm Ivory Arrives) ──
       if (logoWrapRef.current) {
         masterTl.to(
           logoWrapRef.current,
           { opacity: 0, scale: 1.04, duration: 0.10, ease: "power2.in" },
-          0.16
+          0.44
         );
       }
 
@@ -134,8 +137,8 @@ export default function HeroLogoTransition({
         masterTl.fromTo(
           ivoryBackdropRef.current,
           { opacity: 0 },
-          { opacity: 1, duration: 0.14, ease: "power2.inOut" },
-          0.18
+          { opacity: 1, duration: 0.12, ease: "power2.inOut" },
+          0.46
         );
       }
 
@@ -144,19 +147,18 @@ export default function HeroLogoTransition({
           vowsStageWrapRef.current,
           { opacity: 0 },
           { opacity: 1, duration: 0.10, ease: "power2.out" },
-          0.20
+          0.48
         );
       }
 
-      // ── STEP 1: 0.20 – 0.46: THE VOWS CINEMATIC TITLE REVEAL ──
-      // Organic, delicate, memorable entrance like a luxury wedding film opening title:
-      // "The" softly breathes in with gentle focus pull, followed by "Vows" sweeping in with a delicate ink-spread reveal
+      // ── STAGE 2: 0.52 – 0.94: THE VOWS CINEMATIC REVEAL ──
+      // Step A: The Vows Monumental Title Reveal (0.52 – 0.74)
       if (openingLeftColRef.current) {
         masterTl.fromTo(
           openingLeftColRef.current,
           { opacity: 0 },
           { opacity: 1, duration: 0.08, ease: "power1.out" },
-          0.20
+          0.52
         );
       }
 
@@ -164,8 +166,8 @@ export default function HeroLogoTransition({
         masterTl.fromTo(
           headingTheRef.current,
           { opacity: 0, y: 18, filter: "blur(6px)" },
-          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.18, ease: "power2.out" },
-          0.21
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.16, ease: "power2.out" },
+          0.54
         );
       }
 
@@ -185,10 +187,10 @@ export default function HeroLogoTransition({
             scale: 1.0,
             WebkitMaskPosition: "0% 0",
             maskPosition: "0% 0",
-            duration: 0.24,
+            duration: 0.20,
             ease: "power2.out",
           },
-          0.25
+          0.58
         );
       }
 
@@ -199,19 +201,18 @@ export default function HeroLogoTransition({
         masterTl.fromTo(
           leftColItems,
           { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.18, stagger: 0.04, ease: "power2.out" },
-          0.30
+          { opacity: 1, y: 0, duration: 0.16, stagger: 0.04, ease: "power2.out" },
+          0.62
         );
       }
 
-      // ── STEP 2: 0.46 – 0.70: BELAMKONDA PHOTOGRAPH (Golden Vintage Arch) ──
-      // As visitor continues scrolling, central photograph arrives into view inside golden arch frame
+      // Step B: Central Photograph Arrives in Golden Arch Frame (0.68 – 0.86)
       if (openingCenterColRef.current) {
         masterTl.fromTo(
           openingCenterColRef.current,
           { opacity: 0, scale: 0.94 },
-          { opacity: 1, scale: 1.0, duration: 0.24, ease: "power2.out" },
-          0.46
+          { opacity: 1, scale: 1.0, duration: 0.18, ease: "power2.out" },
+          0.68
         );
       }
 
@@ -220,23 +221,22 @@ export default function HeroLogoTransition({
         gsap.set(archedPhotoImgRef.current, { opacity: 1 });
       }
 
-      // ── STEP 3: 0.70 – 0.92: COUPLE INFORMATION ──
-      // Couple's name, venue, story copy & CTA enter to complete unified 3-column composition
+      // Step C: Couple Information & Viewing CTA (0.80 – 0.94)
       if (openingRightColRef.current) {
         masterTl.fromTo(
           openingRightColRef.current,
           { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.22, ease: "power2.out" },
-          0.70
+          { opacity: 1, y: 0, duration: 0.16, ease: "power2.out" },
+          0.80
         );
       }
 
-      // ── Full Composition Settle & Hold (0.92 – 1.00) ──
-      masterTl.to({}, { duration: 0.08 }, 0.92);
+      // Full Composition Settle & Hold (0.94 – 1.00)
+      masterTl.to({}, { duration: 0.06 }, 0.94);
 
-      // ── ScrollTrigger Pinning (Optimized for 1–2 deliberate scrolls) ──
+      // ── Two-Stage Cinematic Pinning with Natural Gesture Snapping ──
       const isMobile = window.innerWidth < 820;
-      const pinDistance = isMobile ? "+=95%" : "+=120%";
+      const pinDistance = isMobile ? "+=180%" : "+=220%";
 
       ScrollTrigger.create({
         id: "heroLogoTransition",
@@ -245,14 +245,20 @@ export default function HeroLogoTransition({
         end: pinDistance,
         pin: true,
         scrub: 0.35,
+        snap: {
+          snapTo: [0, 0.28, 0.96],
+          duration: { min: 0.35, max: 0.75 },
+          delay: 0.12,
+          ease: "power2.out",
+        },
         onUpdate: (self) => {
           const progress = self.progress;
           masterTl.progress(progress);
 
           // Single authoritative hero transition state for header:
-          // Phase 1 (progress < 0.26): Hero photograph dissolves, green backdrop & 24 FRAMES logo hold -> header is completely transparent.
-          // Phase 2 (progress >= 0.26): 24 FRAMES logo has exited and warm ivory has arrived -> header transitions to solid light (themeLight, warm ivory).
-          const heroExited = progress >= 0.26;
+          // Stage 1 (progress < 0.46): Hero opening & 24 FRAMES logo hold -> transparent dark header.
+          // Stage 2 (progress >= 0.46): 24 FRAMES logo exits, warm ivory arrives -> solid light header.
+          const heroExited = progress >= 0.46;
           const nextHeroStage = heroExited ? "hero-exited" : "hero-active";
           const nextHeaderTheme = heroExited ? "light" : "dark";
 
@@ -269,16 +275,16 @@ export default function HeroLogoTransition({
             window.dispatchEvent(new Event("scroll"));
           }
 
-          // Interactivity toggle: enable links only once composition has settled (progress >= 0.70)
+          // Interactivity toggle: enable links once composition has settled (progress >= 0.85)
           if (vowsStageWrapRef.current) {
-            if (progress >= 0.70) {
+            if (progress >= 0.85) {
               vowsStageWrapRef.current.classList.add(styles.vowsStageInteractive);
             } else {
               vowsStageWrapRef.current.classList.remove(styles.vowsStageInteractive);
             }
           }
 
-          // Boundary Reset on Reverse to Hero
+          // Boundary Reset on Reverse to Hero Opening (progress <= 0.005)
           if (progress <= 0.005) {
             document.documentElement.dataset.heroStage = "hero-active";
             document.documentElement.dataset.heroHeaderTheme = "dark";
