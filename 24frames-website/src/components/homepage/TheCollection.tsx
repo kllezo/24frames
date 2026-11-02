@@ -261,12 +261,14 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
           );
 
           // Inner image settles smoothly with subtle optical deceleration
-          const img = card.querySelector(`.${styles.cardImage}`);
-          if (img) {
+          // Exclude custom-cropped cards (e.g. weddings) so GSAP doesn't override CSS transforms with inline styles
+          const img = card.querySelector<HTMLElement>(`.${styles.cardImage}`);
+          const isCustomCropped = card.dataset.disciplineId === "weddings";
+          if (img && !isCustomCropped) {
             tl.fromTo(
               img,
               { scale: 1.08 },
-              { scale: 1.0, duration: 0.75, ease: "power2.out" },
+              { scale: 1.0, duration: 0.75, ease: "power2.out", clearProps: "transform" },
               startTime
             );
           }
