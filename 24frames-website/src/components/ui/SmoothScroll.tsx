@@ -30,10 +30,13 @@ export default function SmoothScroll() {
     const scrollToHash = (hash: string) => {
       if (!hash || hash.length <= 1) return;
       if (hash === "#vows") {
+        const top = Math.round(window.innerHeight * 0.60);
         window.scrollTo({
-          top: Math.round(window.innerHeight * 0.60),
+          top,
           behavior: "smooth",
         });
+        setTimeout(() => window.dispatchEvent(new Event("scroll")), 50);
+        setTimeout(() => window.dispatchEvent(new Event("scroll")), 300);
         return;
       }
       const targetElement = document.querySelector(hash);
@@ -43,8 +46,22 @@ export default function SmoothScroll() {
           top,
           behavior: "smooth",
         });
+        setTimeout(() => window.dispatchEvent(new Event("scroll")), 50);
+        setTimeout(() => window.dispatchEvent(new Event("scroll")), 300);
       }
     };
+
+    // Clean hash when visitor returns to top of page
+    const handleScrollTopHash = () => {
+      if (window.scrollY < 50 && window.location.hash) {
+        try {
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+        } catch {
+          // ignore
+        }
+      }
+    };
+    window.addEventListener("scroll", handleScrollTopHash, { passive: true });
 
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
@@ -88,6 +105,7 @@ export default function SmoothScroll() {
     window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
+      window.removeEventListener("scroll", handleScrollTopHash);
       window.removeEventListener("resize", handleResize);
       document.removeEventListener("click", handleAnchorClick, { capture: true });
     };

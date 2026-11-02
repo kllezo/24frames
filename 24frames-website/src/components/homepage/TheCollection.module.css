@@ -209,6 +209,28 @@
   transform: scale(1.015);
 }
 
+/* ── Weddings & Celebrations Card: Lower-30% Photographic Focal Point ──
+   Original asset is 1280x1600 (4:5). Sireesh & Harshitha reside in lower 29.8% (Y: 1123-1599, X: 300-900).
+   Lift and scale the image so the couple is front, center, and prominent as the undisputed hero subject
+   in both expanded and collapsed card states, eliminating excessive veil/fabric emphasis and top watermark. */
+.card[data-discipline-id="weddings"] .cardImage {
+  transform-origin: 47% 84%;
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+}
+
+.cardInactive[data-discipline-id="weddings"] .cardImage {
+  transform: translate(0, -35%) scale(2.6);
+}
+
+.cardInactive[data-discipline-id="weddings"]:hover .cardImage {
+  transform: translate(0, -35%) scale(2.65);
+}
+
+.cardActive[data-discipline-id="weddings"] .cardImage {
+  transform: translate(0, -38%) scale(2.35);
+  filter: brightness(1) contrast(1.06);
+}
+
 /* Gradients Tailored for Absolute Photographic Contrast Without Muddying */
 .activeGradient {
   position: absolute;
@@ -702,14 +724,18 @@
     min-width: 0;
   }
 
-  /* Mobile Bottom-Focused Expansion Zoom for Weddings & Celebrations and Cinema & Feature Films */
+  /* Mobile Bottom-Focused Expansion Zoom for Weddings & Celebrations (Lower 30% Couple Focus) */
   .card[data-discipline-id="weddings"] .cardImage {
-    transform-origin: 50% 90%;
+    transform-origin: 47% 84%;
     transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
   }
 
+  .cardInactive[data-discipline-id="weddings"] .cardImage {
+    transform: translate(0, -35%) scale(2.2);
+  }
+
   .cardActive[data-discipline-id="weddings"] .cardImage {
-    transform: scale(1.52);
+    transform: translate(0, -38%) scale(2.35);
   }
 
   .card[data-discipline-id="cinema"] .cardImage {

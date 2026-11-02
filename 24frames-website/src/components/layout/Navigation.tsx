@@ -18,7 +18,6 @@ export default function Navigation() {
   const progressBarRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef(false);
   const isLightRef = useRef(false);
-  const rafIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     let cachedHeroHeight = 0;
@@ -32,28 +31,37 @@ export default function Navigation() {
 
     const updateNavigation = () => {
       const scrollY = window.scrollY;
-      const isNowScrolled = scrollY > 50;
-
-      if (scrolledRef.current !== isNowScrolled) {
-        scrolledRef.current = isNowScrolled;
-        setScrolled(isNowScrolled);
-      }
-
-      // Fast direct DOM update for scroll progress bar (zero React re-renders during active scroll)
-      if (progressBarRef.current) {
-        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = totalHeight > 0 ? Math.min(1, Math.max(0, scrollY / totalHeight)) : 0;
-        progressBarRef.current.style.transform = `scaleX(${progress})`;
-      }
-
-      // Check current section under navigation header (~45px from top)
-      const explicitHeroTheme = document.documentElement.dataset.heroHeaderTheme;
       const heroEl = document.getElementById("hero");
+      const heroSpacer = heroEl ? (heroEl.closest(".pin-spacer") as HTMLElement | null) || heroEl : null;
+      const heroBottom = heroSpacer ? heroSpacer.getBoundingClientRect().bottom : 0;
+      const heroStage = document.documentElement.dataset.heroStage;
+      const isVowsHash = typeof window !== "undefined" && window.location.hash === "#vows";
+
+      let isNowScrolled = false;
       let nextIsLight = isLightRef.current;
 
-      if (heroEl && explicitHeroTheme && scrollY < (cachedHeroHeight || heroEl.offsetHeight) - 70) {
-        nextIsLight = explicitHeroTheme === "light";
+      if (heroEl && heroBottom > 70) {
+        // Controlled Single Header Transition on Homepage:
+        // Phase 1 (scrollY < 260px): While 24 FRAMES hero logo is visible,
+        // header is completely colourless / transparent (no background, no borders, no flashing).
+        // Phase 2 (scrollY >= 260px or #vows): Only after hero logo exits and warm ivory arrives,
+        // transition smoothly into solid warm ivory background matching The Vows.
+        const isMobile = window.innerWidth < 820;
+        const heroExitThreshold = isMobile ? window.innerHeight * 0.24 : 260;
+        const isAtHeroTop = scrollY < 50;
+        const heroExited = isVowsHash || (!isAtHeroTop && (scrollY >= heroExitThreshold || heroStage === "hero-exited"));
+
+        if (heroExited) {
+          isNowScrolled = true;
+          nextIsLight = true;
+        } else {
+          isNowScrolled = false;
+          nextIsLight = false; // crisp white branding over dark hero and green backdrop
+        }
       } else {
+        // Standard scroll behavior for other pages or below homepage hero
+        isNowScrolled = scrollY > 50;
+
         const navHeader = document.querySelector('header[role="banner"]');
         const elements = document.elementsFromPoint(window.innerWidth / 2, 45);
         const target = elements.find((el) => el !== navHeader && !navHeader?.contains(el));
@@ -90,6 +98,18 @@ export default function Navigation() {
         }
       }
 
+      if (scrolledRef.current !== isNowScrolled) {
+        scrolledRef.current = isNowScrolled;
+        setScrolled(isNowScrolled);
+      }
+
+      // Fast direct DOM update for scroll progress bar (zero React re-renders during active scroll)
+      if (progressBarRef.current) {
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = totalHeight > 0 ? Math.min(1, Math.max(0, scrollY / totalHeight)) : 0;
+        progressBarRef.current.style.transform = `scaleX(${progress})`;
+      }
+
       if (isLightRef.current !== nextIsLight) {
         isLightRef.current = nextIsLight;
         setIsLightSection(nextIsLight);
@@ -97,11 +117,7 @@ export default function Navigation() {
     };
 
     const handleScroll = () => {
-      if (rafIdRef.current !== null) return;
-      rafIdRef.current = requestAnimationFrame(() => {
-        rafIdRef.current = null;
-        updateNavigation();
-      });
+      updateNavigation();
     };
 
     const handleResize = () => {
@@ -111,14 +127,17 @@ export default function Navigation() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleResize, { passive: true });
+    window.addEventListener("hashchange", updateNavigation);
     updateNavigation();
+    const t1 = setTimeout(updateNavigation, 250);
+    const t2 = setTimeout(updateNavigation, 500);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
+      window.removeEventListener("hashchange", updateNavigation);
+      clearTimeout(t1);
+      clearTimeout(t2);
     };
   }, []);
 

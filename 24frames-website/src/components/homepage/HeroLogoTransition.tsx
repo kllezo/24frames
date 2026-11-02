@@ -29,6 +29,8 @@ export default function HeroLogoTransition({
   const logoWrapRef = useRef<HTMLDivElement>(null);
   const vowsStageWrapRef = useRef<HTMLDivElement>(null);
   const openingLeftColRef = useRef<HTMLDivElement>(null);
+  const headingTheRef = useRef<HTMLSpanElement>(null);
+  const headingVowsRef = useRef<HTMLSpanElement>(null);
   const openingCenterColRef = useRef<HTMLDivElement>(null);
   const openingRightColRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +56,17 @@ export default function HeroLogoTransition({
         ],
         { opacity: 0 }
       );
-      if (openingLeftColRef.current) gsap.set(openingLeftColRef.current, { opacity: 0, y: 24 });
+      if (openingLeftColRef.current) gsap.set(openingLeftColRef.current, { opacity: 0 });
+      if (headingTheRef.current) gsap.set(headingTheRef.current, { opacity: 0, y: 18, filter: "blur(6px)" });
+      if (headingVowsRef.current) {
+        gsap.set(headingVowsRef.current, {
+          opacity: 0,
+          y: 14,
+          scale: 0.95,
+          WebkitMaskPosition: "100% 0",
+          maskPosition: "100% 0",
+        });
+      }
       if (openingCenterColRef.current) gsap.set(openingCenterColRef.current, { opacity: 0, scale: 0.94 });
       if (openingRightColRef.current) gsap.set(openingRightColRef.current, { opacity: 0, y: 24 });
       if (archedPhotoImgRef.current) {
@@ -136,14 +148,59 @@ export default function HeroLogoTransition({
         );
       }
 
-      // ── STEP 1: 0.24 – 0.46: THE VOWS TEXT (Sequential Story Reveal) ──
-      // The Vows heading & thesis arrive and settle into place first. Photo & couple info remain hidden.
+      // ── STEP 1: 0.20 – 0.46: THE VOWS CINEMATIC TITLE REVEAL ──
+      // Organic, delicate, memorable entrance like a luxury wedding film opening title:
+      // "The" softly breathes in with gentle focus pull, followed by "Vows" sweeping in with a delicate ink-spread reveal
       if (openingLeftColRef.current) {
         masterTl.fromTo(
           openingLeftColRef.current,
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 0.22, ease: "power2.out" },
-          0.24
+          { opacity: 0 },
+          { opacity: 1, duration: 0.08, ease: "power1.out" },
+          0.20
+        );
+      }
+
+      if (headingTheRef.current) {
+        masterTl.fromTo(
+          headingTheRef.current,
+          { opacity: 0, y: 18, filter: "blur(6px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.18, ease: "power2.out" },
+          0.21
+        );
+      }
+
+      if (headingVowsRef.current) {
+        masterTl.fromTo(
+          headingVowsRef.current,
+          {
+            opacity: 0,
+            y: 14,
+            scale: 0.95,
+            WebkitMaskPosition: "100% 0",
+            maskPosition: "100% 0",
+          },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1.0,
+            WebkitMaskPosition: "0% 0",
+            maskPosition: "0% 0",
+            duration: 0.24,
+            ease: "power2.out",
+          },
+          0.25
+        );
+      }
+
+      const leftColItems = openingLeftColRef.current?.querySelectorAll(
+        `.${styles.chapterBadgeRow}, .${styles.openingNarrative}, .${styles.exploreActionBtn}`
+      );
+      if (leftColItems && leftColItems.length > 0) {
+        masterTl.fromTo(
+          leftColItems,
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.18, stagger: 0.04, ease: "power2.out" },
+          0.30
         );
       }
 
@@ -191,11 +248,23 @@ export default function HeroLogoTransition({
           const progress = self.progress;
           masterTl.progress(progress);
 
-          // Update header theme synchronously: dark green intro -> warm ivory
-          const nextHeaderTheme = progress >= 0.45 ? "light" : "dark";
+          // Single authoritative hero transition state for header:
+          // Phase 1 (progress < 0.26): Hero photograph dissolves, green backdrop & 24 FRAMES logo hold -> header is completely transparent.
+          // Phase 2 (progress >= 0.26): 24 FRAMES logo has exited and warm ivory has arrived -> header transitions to solid light (themeLight, warm ivory).
+          const heroExited = progress >= 0.26;
+          const nextHeroStage = heroExited ? "hero-exited" : "hero-active";
+          const nextHeaderTheme = heroExited ? "light" : "dark";
+
+          let stateChanged = false;
+          if (document.documentElement.dataset.heroStage !== nextHeroStage) {
+            document.documentElement.dataset.heroStage = nextHeroStage;
+            stateChanged = true;
+          }
           if (document.documentElement.dataset.heroHeaderTheme !== nextHeaderTheme) {
             document.documentElement.dataset.heroHeaderTheme = nextHeaderTheme;
-            // Dispatch custom event so Navigation updates smoothly
+            stateChanged = true;
+          }
+          if (stateChanged) {
             window.dispatchEvent(new Event("scroll"));
           }
 
@@ -210,13 +279,25 @@ export default function HeroLogoTransition({
 
           // Boundary Reset on Reverse to Hero
           if (progress <= 0.005) {
+            document.documentElement.dataset.heroStage = "hero-active";
             document.documentElement.dataset.heroHeaderTheme = "dark";
+            window.dispatchEvent(new Event("scroll"));
             if (greenBackdropRef.current) greenBackdropRef.current.style.opacity = "0";
             if (ivoryBackdropRef.current) ivoryBackdropRef.current.style.opacity = "0";
             if (logoWrapRef.current) logoWrapRef.current.style.opacity = "0";
             if (vowsStageWrapRef.current) {
               vowsStageWrapRef.current.style.opacity = "0";
               vowsStageWrapRef.current.classList.remove(styles.vowsStageInteractive);
+            }
+            if (headingTheRef.current) {
+              headingTheRef.current.style.opacity = "0";
+              headingTheRef.current.style.transform = "none";
+              headingTheRef.current.style.filter = "none";
+            }
+            if (headingVowsRef.current) {
+              headingVowsRef.current.style.opacity = "0";
+              headingVowsRef.current.style.transform = "none";
+              headingVowsRef.current.style.webkitMaskPosition = "100% 0";
             }
             if (heroImageRef.current) {
               heroImageRef.current.style.opacity = "1";
@@ -296,8 +377,8 @@ export default function HeroLogoTransition({
             </div>
 
             <h2 className={styles.monumentalHeading}>
-              <span className={styles.headingThe}>The</span>
-              <span className={styles.headingVows}>Vows</span>
+              <span ref={headingTheRef} className={styles.headingThe}>The</span>
+              <span ref={headingVowsRef} className={styles.headingVows}>Vows</span>
             </h2>
 
             <p className={styles.openingNarrative}>

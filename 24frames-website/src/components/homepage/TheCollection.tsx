@@ -42,7 +42,7 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     webpImage: "/images/portfolio/sireesh-harshitha/cover.webp",
     fallbackImage: "/images/disciplines/weddings/223fd95b-d4b5-4f7d-840e-3f484b8d8966.JPG",
     href: "/disciplines/weddings",
-    objectPosition: "center 22%",
+    objectPosition: "47% 84%",
   },
   {
     id: "celebrities",
@@ -407,7 +407,7 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                         alt={discipline.title}
                         className={styles.cardImage}
                         style={{ objectPosition: discipline.objectPosition || "center 25%" }}
-                        loading="lazy"
+                        loading={discipline.id === "weddings" ? "eager" : "lazy"}
                         decoding="async"
                         onError={() => handleImageError(discipline.id)}
                       />

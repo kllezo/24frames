@@ -85,9 +85,9 @@
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  padding: clamp(1rem, 2.8vw, 2.5rem);
+  padding: clamp(1rem, 2.5vw, 2rem) clamp(1rem, 3vw, 3rem) 0 clamp(1rem, 3vw, 3rem);
   z-index: 14;
   pointer-events: none;
   opacity: 0;
@@ -101,12 +101,13 @@
 
 .vowsComposition {
   display: grid;
-  grid-template-columns: 1fr 1.18fr 1fr;
+  grid-template-columns: 1fr 1.22fr 1fr;
   gap: clamp(1.5rem, 3vw, 3.25rem);
-  align-items: center;
+  align-items: flex-end;
   width: 100%;
-  max-width: 1360px;
+  max-width: 1440px;
   margin: 0 auto;
+  height: 100%;
 }
 
 /* ── Left Column: Monumental The Vows Editorial ── */
@@ -114,9 +115,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-self: center;
+  margin-bottom: clamp(1.2rem, 3vh, 2.5rem);
   padding-right: clamp(0.5rem, 1.5vw, 1.5rem);
   opacity: 0;
-  transform: translateY(24px);
   will-change: transform, opacity;
   user-select: text;
   -webkit-user-select: text;
@@ -160,6 +162,7 @@
   font-weight: 600;
   color: var(--color-charcoal, #181C1A);
   letter-spacing: -0.02em;
+  will-change: transform, opacity, filter;
 }
 
 .headingVows {
@@ -169,6 +172,15 @@
   color: var(--color-kllezo-green, #09453e);
   margin-top: -0.15em;
   letter-spacing: 0.01em;
+  will-change: transform, opacity, -webkit-mask-position;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 55%, transparent 95%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 55%, transparent 95%);
+  -webkit-mask-size: 240% 100%;
+  mask-size: 240% 100%;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 .openingNarrative {
@@ -231,24 +243,30 @@
 .openingCenterCol {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
+  align-self: flex-end;
   width: 100%;
+  height: 100%;
+  transform-origin: center bottom;
 }
 
 .archedPhotoLink {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
   width: 100%;
+  height: 100%;
   text-decoration: none;
   outline: none;
 }
 
 .archedFrame {
   width: 100%;
-  max-width: 350px;
-  aspect-ratio: 100 / 165;
+  max-width: clamp(390px, 29vw, 465px);
+  height: clamp(560px, 84vh, 760px);
   position: relative;
   margin: 0 auto;
-  filter: drop-shadow(0 20px 48px rgba(9, 69, 62, 0.12));
+  filter: drop-shadow(0 20px 48px rgba(9, 69, 62, 0.14));
   will-change: transform, opacity;
   background: transparent;
   isolation: isolate;
@@ -260,14 +278,20 @@
 }
 
 .archPhotoMask {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   border-radius: 50% 50% 0 0 / 30.3% 30.3% 0 0;
   overflow: hidden;
-  position: relative;
   background: #181C1A;
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
   isolation: isolate;
+}
+
+.archPhotoMask picture {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .archGoldFrameSvg {
@@ -288,7 +312,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 18%;
+  object-position: center 15%;
   display: block;
   border-radius: 50% 50% 0 0 / 30.3% 30.3% 0 0;
   opacity: 1;
@@ -318,6 +342,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-self: center;
+  margin-bottom: clamp(1.2rem, 3vh, 2.5rem);
   padding-left: clamp(0.5rem, 1.5vw, 1.5rem);
   opacity: 0;
   transform: translateY(20px);
@@ -443,7 +469,7 @@
 
   .vowsComposition {
     grid-template-columns: 1fr;
-    gap: clamp(0.6rem, 1.8vh, 1rem);
+    gap: clamp(0.5rem, 1.5vh, 0.85rem);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -451,23 +477,26 @@
     max-width: 380px;
     margin: 0 auto;
     padding-bottom: 0;
+    height: auto;
   }
 
   .openingLeftCol {
     order: 1;
     text-align: center;
     align-items: center;
+    align-self: center;
+    margin-bottom: 0;
     padding: 0;
     max-width: 320px;
     margin: 0 auto;
   }
 
   .chapterBadgeRow {
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.25rem;
   }
 
   .monumentalHeading {
-    margin: 0.05rem 0 0.35rem 0;
+    margin: 0.05rem 0 0.25rem 0;
   }
 
   .headingThe {
@@ -492,13 +521,21 @@
 
   .openingCenterCol {
     order: 2;
-    max-width: clamp(140px, 34vw, 185px);
+    max-width: clamp(170px, 44vw, 220px);
+    height: auto;
     margin: 0 auto;
+    align-self: center;
+  }
+
+  .archedPhotoLink {
+    height: auto;
+    align-items: center;
   }
 
   .archedFrame {
     aspect-ratio: 100 / 150;
-    max-width: clamp(140px, 34vw, 185px);
+    height: auto;
+    max-width: clamp(170px, 44vw, 220px);
   }
 
   .archPhotoMask {
@@ -507,13 +544,15 @@
 
   .archedPhotoImg {
     border-radius: 50% 50% 0 0 / 33.3% 33.3% 0 0;
-    object-position: center 16%;
+    object-position: center 15%;
   }
 
   .openingRightCol {
     order: 3;
     text-align: center;
     align-items: center;
+    align-self: center;
+    margin-bottom: 0;
     padding: 0;
     max-width: 340px;
     margin: 0 auto;
