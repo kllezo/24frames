@@ -234,7 +234,7 @@ export default function HeroLogoTransition({
       // Full Composition Settle & Hold (0.94 – 1.00)
       masterTl.to({}, { duration: 0.06 }, 0.94);
 
-      // ── Two-Stage Cinematic Pinning with Natural Gesture Snapping ──
+      // ── Two-Stage Cinematic Pinning with Natural Scroll Responsiveness ──
       const isMobile = window.innerWidth < 820;
       const pinDistance = isMobile ? "+=180%" : "+=220%";
 
@@ -245,12 +245,6 @@ export default function HeroLogoTransition({
         end: pinDistance,
         pin: true,
         scrub: 0.35,
-        snap: {
-          snapTo: [0, 0.28, 0.96],
-          duration: { min: 0.35, max: 0.75 },
-          delay: 0.12,
-          ease: "power2.out",
-        },
         onUpdate: (self) => {
           const progress = self.progress;
           masterTl.progress(progress);

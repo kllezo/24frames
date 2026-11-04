@@ -2,11 +2,15 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import Lenis from "lenis";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import "lenis/dist/lenis.css";
 
 export default function SmoothScroll() {
   const pathname = usePathname();
   const hasScrolledDownRef = useRef(false);
+  const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -23,6 +27,38 @@ export default function SmoothScroll() {
     }
     if (document.documentElement.style.overflow === "hidden") {
       document.documentElement.style.overflow = "";
+    }
+
+    let lenis: Lenis | null = null;
+    let tickerCallback: ((time: number) => void) | null = null;
+    let onLenisScroll: (() => void) | null = null;
+
+    if (!isReducedMotion) {
+      // 2. Lenis smooth scroll normalizes wheel delta across Windows desktop & macOS
+      lenis = new Lenis({
+        duration: 1.15,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: "vertical",
+        gestureOrientation: "vertical",
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.0,
+        infinite: false,
+      });
+
+      lenisRef.current = lenis;
+      (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+
+      onLenisScroll = () => {
+        ScrollTrigger.update();
+      };
+      lenis.on("scroll", onLenisScroll);
+
+      tickerCallback = (time: number) => {
+        lenis?.raf(time * 1000);
+      };
+      gsap.ticker.add(tickerCallback);
+      gsap.ticker.lagSmoothing(0);
     }
 
     // Exact scroll position for The Vows section (#vows)
@@ -60,20 +96,9 @@ export default function SmoothScroll() {
         }
       }
 
-      // Re-use Lenis if active on window, otherwise native smooth scroll
-      const lenis = (
-        window as unknown as {
-          __lenis?: {
-            scrollTo: (
-              target: number | HTMLElement | string,
-              options?: { offset?: number; duration?: number; immediate?: boolean }
-            ) => void;
-          };
-        }
-      ).__lenis;
-
-      if (lenis?.scrollTo) {
-        lenis.scrollTo(top, { duration: isReducedMotion ? 0 : 1.2 });
+      const activeLenis = lenisRef.current;
+      if (activeLenis && !isReducedMotion) {
+        activeLenis.scrollTo(top, { duration: 1.2 });
       } else {
         window.scrollTo({
           top,
@@ -145,9 +170,9 @@ export default function SmoothScroll() {
       if (hash) {
         scrollToHash(hash);
       } else if (window.location.pathname === "/" || window.location.pathname === "") {
-        const lenis = (window as unknown as { __lenis?: { scrollTo: (t: number) => void } }).__lenis;
-        if (lenis?.scrollTo) {
-          lenis.scrollTo(0);
+        const activeLenis = lenisRef.current;
+        if (activeLenis && !isReducedMotion) {
+          activeLenis.scrollTo(0, { duration: 1.0 });
         } else {
           window.scrollTo({ top: 0, behavior: isReducedMotion ? "auto" : "smooth" });
         }
@@ -170,6 +195,18 @@ export default function SmoothScroll() {
       window.removeEventListener("popstate", handlePopState);
       window.removeEventListener("hashchange", handlePopState);
       document.removeEventListener("click", handleAnchorClick, { capture: true });
+
+      if (lenis && onLenisScroll) {
+        lenis.off("scroll", onLenisScroll);
+      }
+      if (tickerCallback) {
+        gsap.ticker.remove(tickerCallback);
+      }
+      if (lenis) {
+        lenis.destroy();
+      }
+      lenisRef.current = null;
+      delete (window as unknown as { __lenis?: unknown }).__lenis;
     };
   }, [pathname]);
 

@@ -654,12 +654,24 @@ export default function LivingContactSheet() {
       },
     });
 
-    // 1. Fade out text overlays & play beacon gracefully
+    // 1. Fade out text overlays & play beacon gracefully, hide silk drape during video playback
     if (overlays) {
       tl.to(overlays, {
         opacity: 0,
         duration: 0.45,
         ease: "power2.out",
+      }, 0);
+    }
+    if (vinithaVeilOverlayRef.current) {
+      tl.to(vinithaVeilOverlayRef.current, {
+        opacity: 0,
+        duration: 0.35,
+        ease: "power2.out",
+        onComplete: () => {
+          if (vinithaVeilOverlayRef.current) {
+            vinithaVeilOverlayRef.current.style.display = "none";
+          }
+        },
       }, 0);
     }
 
@@ -727,12 +739,24 @@ export default function LivingContactSheet() {
       ease: "power2.inOut",
     }, 0);
 
-    // 3. Fade text overlays & play beacon back in as unified single element
+    // 3. Fade text overlays & play beacon back in as unified single element, restore silk drape
     if (overlays) {
       tl.to(overlays, {
         opacity: 1,
         duration: 0.55,
         ease: "power2.in",
+      }, 0.45);
+    }
+    if (vinithaVeilOverlayRef.current) {
+      tl.to(vinithaVeilOverlayRef.current, {
+        opacity: 1,
+        duration: 0.55,
+        ease: "power2.in",
+        onStart: () => {
+          if (vinithaVeilOverlayRef.current) {
+            vinithaVeilOverlayRef.current.style.display = "block";
+          }
+        },
       }, 0.45);
     }
   }, []);
@@ -761,7 +785,7 @@ export default function LivingContactSheet() {
       },
     });
 
-    // 1. Fade out text overlays & play beacon gracefully
+    // 1. Fade out text overlays & play beacon gracefully, hide wave layer during video playback
     if (overlays) {
       tl.to(overlays, {
         opacity: 0,
@@ -875,38 +899,39 @@ export default function LivingContactSheet() {
 
         let lastVinithaP = -1;
         const renderVinitha = (p: number) => {
-          if (Math.abs(p - lastVinithaP) < 0.003 && p > 0.01 && p < 0.98) return;
-          lastVinithaP = p;
-          const { edgeD, fillD, rippleD } = buildVinithaSilkPaths(p);
+          const clampedP = Math.max(0, Math.min(1, p));
+          if (Math.abs(clampedP - lastVinithaP) < 0.002 && clampedP > 0.005 && clampedP < 0.995) return;
+          lastVinithaP = clampedP;
+          const { edgeD, fillD, rippleD } = buildVinithaSilkPaths(clampedP);
           if (vinithaSilkFillPathRef.current) {
             vinithaSilkFillPathRef.current.setAttribute("d", fillD);
           }
           if (vinithaSilkEdgePathRef.current) {
             vinithaSilkEdgePathRef.current.setAttribute("d", edgeD);
-            vinithaSilkEdgePathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
+            vinithaSilkEdgePathRef.current.style.opacity = clampedP > 0.85 ? `${Math.max(0, 1 - (clampedP - 0.85) / 0.15)}` : "1";
           }
           if (vinithaSilkRipplePathRef.current) {
             vinithaSilkRipplePathRef.current.setAttribute("d", rippleD);
-            vinithaSilkRipplePathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "0.75";
+            vinithaSilkRipplePathRef.current.style.opacity = clampedP > 0.85 ? `${Math.max(0, 1 - (clampedP - 0.85) / 0.15)}` : "0.75";
           }
           if (vinithaVeilOverlayRef.current) {
-            const op = p > 0.85 ? Math.max(0, 1 - (p - 0.85) / 0.15) : 1;
+            const op = clampedP >= 0.98 ? 0 : clampedP > 0.85 ? Math.max(0, 1 - (clampedP - 0.85) / 0.15) : 1;
             vinithaVeilOverlayRef.current.style.opacity = `${op}`;
             vinithaVeilOverlayRef.current.style.display = op <= 0.005 ? "none" : "block";
           }
           if (vinithaImg) {
-            if (p >= 0.98) {
+            if (clampedP >= 0.98) {
               vinithaImg.style.transform = "none";
               vinithaImg.style.opacity = "1";
             } else {
-              const scale = 1.06 - p * 0.06;
-              const op = 0.7 + p * 0.3;
+              const scale = 1.06 - clampedP * 0.06;
+              const op = 0.7 + clampedP * 0.3;
               vinithaImg.style.opacity = `${op.toFixed(2)}`;
               vinithaImg.style.transform = `scale(${scale.toFixed(3)})`;
             }
           }
           if (narrativeItems.length) {
-            const textP = Math.max(0, Math.min(1, (p - 0.48) / 0.45));
+            const textP = Math.max(0, Math.min(1, (clampedP - 0.48) / 0.45));
             narrativeItems.forEach((item, idx) => {
               const itemP = Math.max(0, Math.min(1, (textP - idx * 0.08) / 0.7));
               item.style.opacity = `${itemP}`;
@@ -914,7 +939,7 @@ export default function LivingContactSheet() {
             });
           }
           if (playBeacon) {
-            const playP = Math.max(0, Math.min(1, (p - 0.58) / 0.35));
+            const playP = Math.max(0, Math.min(1, (clampedP - 0.58) / 0.35));
             playBeacon.style.opacity = `${playP}`;
             playBeacon.style.transform = `scale(${0.85 + playP * 0.15})`;
           }
@@ -925,12 +950,40 @@ export default function LivingContactSheet() {
         gsap.to(vinithaProxy, {
           val: 1,
           ease: "none",
+          onUpdate: () => renderVinitha(vinithaProxy.val),
           scrollTrigger: {
             trigger: vinithaStageRef.current,
             start: "top 88%",
             end: "center 50%",
             scrub: 0.5,
-            onUpdate: () => renderVinitha(vinithaProxy.val),
+            onEnter: () => {
+              if (vinithaVeilOverlayRef.current) {
+                vinithaVeilOverlayRef.current.style.display = "block";
+              }
+              renderVinitha(vinithaProxy.val);
+            },
+            onEnterBack: () => {
+              if (vinithaVeilOverlayRef.current) {
+                vinithaVeilOverlayRef.current.style.display = "block";
+              }
+              renderVinitha(vinithaProxy.val);
+            },
+            onLeave: () => {
+              vinithaProxy.val = 1;
+              renderVinitha(1);
+              if (vinithaVeilOverlayRef.current) {
+                vinithaVeilOverlayRef.current.style.opacity = "0";
+                vinithaVeilOverlayRef.current.style.display = "none";
+              }
+            },
+            onLeaveBack: () => {
+              vinithaProxy.val = 0;
+              renderVinitha(0);
+              if (vinithaVeilOverlayRef.current) {
+                vinithaVeilOverlayRef.current.style.opacity = "1";
+                vinithaVeilOverlayRef.current.style.display = "block";
+              }
+            },
           },
         });
       }
@@ -940,32 +993,33 @@ export default function LivingContactSheet() {
         const hrithikaProxy = { val: 0 };
         let lastHrithikaP = -1;
         const renderHrithika = (p: number) => {
-          if (Math.abs(p - lastHrithikaP) < 0.003 && p > 0.01 && p < 0.98) return;
-          lastHrithikaP = p;
-          const { trimD, fillD, rippleD } = buildHrithikaDrapePaths(p);
+          const clampedP = Math.max(0, Math.min(1, p));
+          if (Math.abs(clampedP - lastHrithikaP) < 0.002 && clampedP > 0.005 && clampedP < 0.995) return;
+          lastHrithikaP = clampedP;
+          const { trimD, fillD, rippleD } = buildHrithikaDrapePaths(clampedP);
           if (hrithikaDrapeFillPathRef.current) {
             hrithikaDrapeFillPathRef.current.setAttribute("d", fillD);
           }
           if (hrithikaDrapeTrimPathRef.current) {
             hrithikaDrapeTrimPathRef.current.setAttribute("d", trimD);
-            hrithikaDrapeTrimPathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
+            hrithikaDrapeTrimPathRef.current.style.opacity = clampedP > 0.85 ? `${Math.max(0, 1 - (clampedP - 0.85) / 0.15)}` : "1";
           }
           if (hrithikaDrapeRipplePathRef.current) {
             hrithikaDrapeRipplePathRef.current.setAttribute("d", rippleD);
-            hrithikaDrapeRipplePathRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "0.7";
+            hrithikaDrapeRipplePathRef.current.style.opacity = clampedP > 0.85 ? `${Math.max(0, 1 - (clampedP - 0.85) / 0.15)}` : "0.7";
           }
           if (hrithikaDrapeRef.current) {
-            const op = p > 0.85 ? Math.max(0, 1 - (p - 0.85) / 0.15) : 1;
+            const op = clampedP >= 0.98 ? 0 : clampedP > 0.85 ? Math.max(0, 1 - (clampedP - 0.85) / 0.15) : 1;
             hrithikaDrapeRef.current.style.opacity = `${op}`;
             hrithikaDrapeRef.current.style.display = op <= 0.005 ? "none" : "block";
           }
           if (hrithikaPhotoImgRef.current) {
-            if (p >= 0.98) {
+            if (clampedP >= 0.98) {
               hrithikaPhotoImgRef.current.style.transform = "none";
               hrithikaPhotoImgRef.current.style.opacity = "1";
             } else {
-              const scale = 1.06 - p * 0.06;
-              const op = 0.8 + p * 0.2;
+              const scale = 1.06 - clampedP * 0.06;
+              const op = 0.8 + clampedP * 0.2;
               hrithikaPhotoImgRef.current.style.opacity = `${op.toFixed(2)}`;
               hrithikaPhotoImgRef.current.style.transform = `scale(${scale.toFixed(3)})`;
             }
@@ -977,12 +1031,40 @@ export default function LivingContactSheet() {
         gsap.to(hrithikaProxy, {
           val: 1,
           ease: "none",
+          onUpdate: () => renderHrithika(hrithikaProxy.val),
           scrollTrigger: {
             trigger: hrithikaCanvasRef.current,
             start: "top 88%",
             end: "center 50%",
             scrub: 0.5,
-            onUpdate: () => renderHrithika(hrithikaProxy.val),
+            onEnter: () => {
+              if (hrithikaDrapeRef.current) {
+                hrithikaDrapeRef.current.style.display = "block";
+              }
+              renderHrithika(hrithikaProxy.val);
+            },
+            onEnterBack: () => {
+              if (hrithikaDrapeRef.current) {
+                hrithikaDrapeRef.current.style.display = "block";
+              }
+              renderHrithika(hrithikaProxy.val);
+            },
+            onLeave: () => {
+              hrithikaProxy.val = 1;
+              renderHrithika(1);
+              if (hrithikaDrapeRef.current) {
+                hrithikaDrapeRef.current.style.opacity = "0";
+                hrithikaDrapeRef.current.style.display = "none";
+              }
+            },
+            onLeaveBack: () => {
+              hrithikaProxy.val = 0;
+              renderHrithika(0);
+              if (hrithikaDrapeRef.current) {
+                hrithikaDrapeRef.current.style.opacity = "1";
+                hrithikaDrapeRef.current.style.display = "block";
+              }
+            },
           },
         });
       }
@@ -1140,9 +1222,10 @@ export default function LivingContactSheet() {
         );
 
         const renderNishanth = (p: number) => {
-          const ap = sampleAperture(p);
-          const sec = sampleSecondary(p);
-          const greenBot = sampleGreenBottom(p);
+          const clampedP = Math.max(0, Math.min(1, p));
+          const ap = sampleAperture(clampedP);
+          const sec = sampleSecondary(clampedP);
+          const greenBot = sampleGreenBottom(clampedP);
 
           const apPath = buildAperturePath(ap);
           const apStroke = buildWaveStroke(ap);
@@ -1156,43 +1239,43 @@ export default function LivingContactSheet() {
           }
           if (wavePrimaryStrokeRef.current) {
             wavePrimaryStrokeRef.current.setAttribute("d", apStroke);
-            wavePrimaryStrokeRef.current.style.opacity = p > 0.75 ? `${Math.max(0, 1 - (p - 0.75) / 0.25)}` : "1";
+            wavePrimaryStrokeRef.current.style.opacity = clampedP > 0.75 ? `${Math.max(0, 1 - (clampedP - 0.75) / 0.25)}` : "1";
           }
           if (wavePrimaryGlowRef.current) {
             wavePrimaryGlowRef.current.setAttribute("d", apStroke);
-            wavePrimaryGlowRef.current.style.opacity = p > 0.75 ? `${Math.max(0, 1 - (p - 0.75) / 0.25) * 0.85}` : "0.85";
+            wavePrimaryGlowRef.current.style.opacity = clampedP > 0.75 ? `${Math.max(0, 1 - (clampedP - 0.75) / 0.25) * 0.85}` : "0.85";
           }
           if (waveSecondaryPathRef.current) {
             waveSecondaryPathRef.current.setAttribute("d", secPath);
           }
           if (waveSecondaryStrokeRef.current) {
             waveSecondaryStrokeRef.current.setAttribute("d", secStroke);
-            waveSecondaryStrokeRef.current.style.opacity = p > 0.75 ? `${Math.max(0, 1 - (p - 0.75) / 0.25) * 0.7}` : "0.7";
+            waveSecondaryStrokeRef.current.style.opacity = clampedP > 0.75 ? `${Math.max(0, 1 - (clampedP - 0.75) / 0.25) * 0.7}` : "0.7";
           }
           if (waveGreenBottomPathRef.current) {
             waveGreenBottomPathRef.current.setAttribute("d", greenPath);
-            waveGreenBottomPathRef.current.style.opacity = p > 0.70 ? `${Math.max(0, 1 - (p - 0.70) / 0.30)}` : "1";
+            waveGreenBottomPathRef.current.style.opacity = clampedP > 0.70 ? `${Math.max(0, 1 - (clampedP - 0.70) / 0.30)}` : "1";
           }
           if (waveGreenBottomStrokeRef.current) {
             waveGreenBottomStrokeRef.current.setAttribute("d", greenStroke);
-            waveGreenBottomStrokeRef.current.style.opacity = p > 0.70 ? `${Math.max(0, 1 - (p - 0.70) / 0.30) * 0.85}` : "0.85";
+            waveGreenBottomStrokeRef.current.style.opacity = clampedP > 0.70 ? `${Math.max(0, 1 - (clampedP - 0.70) / 0.30) * 0.85}` : "0.85";
           }
           if (waveWatermarkRef.current) {
-            waveWatermarkRef.current.style.opacity = `${Math.max(0, 0.24 * (1 - p / 0.75))}`;
+            waveWatermarkRef.current.style.opacity = `${Math.max(0, 0.24 * (1 - clampedP / 0.75))}`;
           }
-          // Never toggle display: none (which destroys SVG mask raster cache).
-          // Fade opacity gracefully to 0 while keeping the mask and paths live and reversible.
           if (waveSvgRef.current) {
-            waveSvgRef.current.style.opacity = p > 0.85 ? `${Math.max(0, 1 - (p - 0.85) / 0.15)}` : "1";
-            waveSvgRef.current.style.pointerEvents = p >= 0.95 ? "none" : "auto";
+            const op = clampedP >= 0.98 ? 0 : clampedP > 0.85 ? Math.max(0, 1 - (clampedP - 0.85) / 0.15) : 1;
+            waveSvgRef.current.style.opacity = `${op}`;
+            waveSvgRef.current.style.display = op <= 0.005 ? "none" : "block";
+            waveSvgRef.current.style.pointerEvents = clampedP >= 0.95 ? "none" : "auto";
           }
           if (nishanthLeftControlRef.current) {
-            const ctrlP = Math.max(0, Math.min(1, (p - 0.50) / 0.40));
+            const ctrlP = Math.max(0, Math.min(1, (clampedP - 0.50) / 0.40));
             nishanthLeftControlRef.current.style.opacity = `${ctrlP}`;
             nishanthLeftControlRef.current.style.transform = `translateY(${(18 * (1 - ctrlP)).toFixed(1)}px)`;
           }
           if (narrativeItems.length) {
-            const textP = Math.max(0, Math.min(1, (p - 0.52) / 0.42));
+            const textP = Math.max(0, Math.min(1, (clampedP - 0.52) / 0.42));
             narrativeItems.forEach((item, idx) => {
               const itemP = Math.max(0, Math.min(1, (textP - idx * 0.08) / 0.7));
               item.style.opacity = `${itemP}`;
@@ -1206,13 +1289,41 @@ export default function LivingContactSheet() {
         gsap.to(nishanthProxy, {
           val: 1,
           ease: "none",
+          onUpdate: () => renderNishanth(nishanthProxy.val),
           scrollTrigger: {
             trigger: nishanthStageRef.current,
             start: "top 75%",
             end: "bottom 85%",
             scrub: true,
             invalidateOnRefresh: true,
-            onUpdate: () => renderNishanth(nishanthProxy.val),
+            onEnter: () => {
+              if (waveSvgRef.current) {
+                waveSvgRef.current.style.display = "block";
+              }
+              renderNishanth(nishanthProxy.val);
+            },
+            onEnterBack: () => {
+              if (waveSvgRef.current) {
+                waveSvgRef.current.style.display = "block";
+              }
+              renderNishanth(nishanthProxy.val);
+            },
+            onLeave: () => {
+              nishanthProxy.val = 1;
+              renderNishanth(1);
+              if (waveSvgRef.current) {
+                waveSvgRef.current.style.opacity = "0";
+                waveSvgRef.current.style.display = "none";
+              }
+            },
+            onLeaveBack: () => {
+              nishanthProxy.val = 0;
+              renderNishanth(0);
+              if (waveSvgRef.current) {
+                waveSvgRef.current.style.opacity = "1";
+                waveSvgRef.current.style.display = "block";
+              }
+            },
           },
         });
       }

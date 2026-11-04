@@ -392,14 +392,24 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                   <div className={styles.imageCanvas}>
                     {discipline.id === "weddings" ? (
                       <div className={styles.weddingsMedia}>
-                        {/* Collapsed state: actual lower 30% crop of source image (Y=70%–100%) */}
+                        {/* Collapsed state: original source photograph positioned to show both bride and groom together */}
                         <picture className={`${styles.weddingsPicture} ${styles.weddingsCollapsed}`}>
-                          <source
-                            type="image/webp"
-                            srcSet="/images/portfolio/sireesh-harshitha/cover-bottom-30.webp"
-                          />
+                          {!hasError && (
+                            <>
+                              <source
+                                type="image/avif"
+                                srcSet="/images/portfolio/sireesh-harshitha/cover.avif 1400w"
+                                sizes="(max-width: 768px) 100vw, 33vw"
+                              />
+                              <source
+                                type="image/webp"
+                                srcSet="/images/portfolio/sireesh-harshitha/cover.webp 1400w"
+                                sizes="(max-width: 768px) 100vw, 33vw"
+                              />
+                            </>
+                          )}
                           <img
-                            src="/images/portfolio/sireesh-harshitha/cover-bottom-30.jpg"
+                            src="/images/portfolio/sireesh-harshitha/cover.jpg"
                             alt={discipline.title}
                             className={styles.weddingsCropImg}
                             loading="eager"
@@ -434,22 +444,50 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                         </picture>
                       </div>
                     ) : discipline.id === "cinema" ? (
-                      <picture>
-                        {!hasError && (
-                          <source
-                            type="image/webp"
-                            srcSet="/images/disciplines/cinema/IMG_6319-bottom-30.webp"
+                      <div className={styles.cinemaMedia}>
+                        {/* Collapsed state: original full photograph showing landscape, building, and architectural details */}
+                        <picture className={`${styles.cinemaPicture} ${styles.cinemaCollapsed}`}>
+                          {!hasError && (
+                            <>
+                              <source
+                                type="image/avif"
+                                srcSet="/images/disciplines/cinema/IMG_6319.avif 1400w"
+                                sizes="(max-width: 768px) 100vw, 33vw"
+                              />
+                              <source
+                                type="image/webp"
+                                srcSet="/images/disciplines/cinema/IMG_6319.webp 1400w"
+                                sizes="(max-width: 768px) 100vw, 33vw"
+                              />
+                            </>
+                          )}
+                          <img
+                            src="/images/disciplines/cinema/IMG_6319.jpg"
+                            alt={discipline.title}
+                            className={styles.cinemaFullImg}
+                            loading="lazy"
+                            decoding="async"
                           />
-                        )}
-                        <img
-                          src={hasError ? discipline.fallbackImage : "/images/disciplines/cinema/IMG_6319-bottom-30.jpg"}
-                          alt={discipline.title}
-                          className={styles.cinemaCropImg}
-                          loading="lazy"
-                          decoding="async"
-                          onError={() => handleImageError(discipline.id)}
-                        />
-                      </picture>
+                        </picture>
+
+                        {/* Expanded state: keep current bottom-30% crop exactly as it is */}
+                        <picture className={`${styles.cinemaPicture} ${styles.cinemaExpanded}`}>
+                          {!hasError && (
+                            <source
+                              type="image/webp"
+                              srcSet="/images/disciplines/cinema/IMG_6319-bottom-30.webp"
+                            />
+                          )}
+                          <img
+                            src={hasError ? discipline.fallbackImage : "/images/disciplines/cinema/IMG_6319-bottom-30.jpg"}
+                            alt={discipline.title}
+                            className={styles.cinemaCropImg}
+                            loading="lazy"
+                            decoding="async"
+                            onError={() => handleImageError(discipline.id)}
+                          />
+                        </picture>
+                      </div>
                     ) : (
                       <picture>
                         {!hasError && (
