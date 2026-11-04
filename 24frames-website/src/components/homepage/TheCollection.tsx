@@ -99,10 +99,11 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     tagline: "2.39:1 Anamorphic motion pictures paired with orchestral audio scores.",
     heroDescription:
       "Shot with dedicated cinema crews on ARRI and Sony FX cinema lines. Edited as theatrical-grade wedding features.",
-    image: "/images/disciplines/cinema/IMG_6319.jpg",
+    image: "/images/disciplines/cinema/IMG_6319-bottom-30.jpg",
+    webpImage: "/images/disciplines/cinema/IMG_6319-bottom-30.webp",
     fallbackImage: "/images/disciplines/cinema/IMG_6467.jpg",
     href: "/disciplines/cinema",
-    objectPosition: "center 25%",
+    objectPosition: "53% center",
   },
 ];
 
@@ -261,9 +262,9 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
           );
 
           // Inner image settles smoothly with subtle optical deceleration
-          // Exclude custom-cropped cards (e.g. weddings) so GSAP doesn't override CSS transforms with inline styles
+          // Exclude custom-cropped cards (e.g. weddings, cinema) so GSAP doesn't override CSS transforms with inline styles
           const img = card.querySelector<HTMLElement>(`.${styles.cardImage}`);
-          const isCustomCropped = card.dataset.disciplineId === "weddings";
+          const isCustomCropped = card.dataset.disciplineId === "weddings" || card.dataset.disciplineId === "cinema";
           if (img && !isCustomCropped) {
             tl.fromTo(
               img,
@@ -432,6 +433,23 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                           />
                         </picture>
                       </div>
+                    ) : discipline.id === "cinema" ? (
+                      <picture>
+                        {!hasError && (
+                          <source
+                            type="image/webp"
+                            srcSet="/images/disciplines/cinema/IMG_6319-bottom-30.webp"
+                          />
+                        )}
+                        <img
+                          src={hasError ? discipline.fallbackImage : "/images/disciplines/cinema/IMG_6319-bottom-30.jpg"}
+                          alt={discipline.title}
+                          className={styles.cinemaCropImg}
+                          loading="lazy"
+                          decoding="async"
+                          onError={() => handleImageError(discipline.id)}
+                        />
+                      </picture>
                     ) : (
                       <picture>
                         {!hasError && (

@@ -647,8 +647,12 @@
   display: grid;
   grid-template-columns: 1fr 1.18fr;
   gap: clamp(2rem, 5vw, 5rem);
-  align-items: center;
+  align-items: flex-start;
   position: relative;
+}
+
+.duoGridKarthik .duoContentSide {
+  padding-top: clamp(1.75rem, 3.8vh, 3rem);
 }
 
 .duoVisualSide {
@@ -1380,6 +1384,10 @@
   .duoGridKarthik {
     grid-template-columns: 1fr;
     gap: 1.75rem;
+  }
+
+  .duoGridKarthik .duoContentSide {
+    padding-top: 0;
   }
 
   .layeredGrid {
