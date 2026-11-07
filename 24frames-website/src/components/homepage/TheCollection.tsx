@@ -35,9 +35,9 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     title: "Weddings & Celebrations",
     shortTitle: "Weddings",
     count: "40+",
-    tagline: "Sacred Telugu traditions, royal muhurthams & emotional generational tears.",
+    tagline: "Sacred Telugu traditions, royal unions and multi-day celebrations",
     heroDescription:
-      "Multi-day coverage spanning Mangalasnanam, Sangeet galas, and dawn ceremonies. Documented without invasive lighting or forced poses.",
+      "Muhurthams, Sangeets and receptions documented with reverence for ritual and an eye for the unscripted glance.",
     image: "/images/portfolio/sireesh-harshitha/cover.jpg",
     webpImage: "/images/portfolio/sireesh-harshitha/cover.webp",
     fallbackImage: "/images/disciplines/weddings/223fd95b-d4b5-4f7d-840e-3f484b8d8966.JPG",
@@ -287,6 +287,13 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
   const handleCardClick = useCallback(
     (discipline: CollectionDiscipline, displayImage: string) => {
       if (isDraggingRef.current) return;
+      if (typeof window !== "undefined" && window.innerWidth <= 820) {
+        if (activeId !== discipline.id) {
+          setActiveId(discipline.id);
+          return;
+        }
+        return;
+      }
       if (activeId === discipline.id || !isTouchRef.current) {
         navigateWithCameraTransition(discipline.href, {
           image: displayImage,
@@ -359,7 +366,6 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
         >
           <div
             ref={trackRef}
-            data-lenis-prevent
             className={styles.accordionTrack}
             onScroll={handleTrackScroll}
             onPointerLeave={handleTrackPointerLeave}
@@ -531,10 +537,14 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                       <div className={styles.activeMetaTag}>
                         <span className={styles.activeCategory}>{discipline.shortTitle}</span>
                       </div>
+                      <div className={styles.cardTopBrand} aria-hidden="true">
+                        <span className={styles.cardBrandKicker}>PHANI GOGIREDDY</span>
+                        <span className={styles.cardBrandWordmark}>24 FRAMES</span>
+                      </div>
                       <span className={styles.activeStatusPill}>
                         {discipline.count.includes("ANAMORPHIC")
                           ? discipline.count
-                          : `${discipline.count} Master Films`}
+                          : `${discipline.count} MASTER FILMS`}
                       </span>
                     </div>
 

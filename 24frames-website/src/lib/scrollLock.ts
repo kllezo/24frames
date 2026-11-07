@@ -6,22 +6,24 @@ import { useEffect } from "react";
 let activeScrollLocks = 0;
 let previousBodyOverflow = "";
 let previousHtmlOverflow = "";
+let savedScrollY = 0;
 
 export function lockScroll() {
   if (typeof window === "undefined") return;
 
   if (activeScrollLocks === 0) {
+    savedScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
     previousBodyOverflow = document.body.style.overflow;
     previousHtmlOverflow = document.documentElement.style.overflow;
+  }
 
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
+  document.body.style.overflow = "hidden";
+  document.documentElement.style.overflow = "hidden";
 
-    // Pause Lenis smooth scrolling so wheel/touch gestures don't scroll the page behind the modal
-    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
-    if (lenis?.stop) {
-      lenis.stop();
-    }
+  // Pause Lenis smooth scrolling so wheel/touch gestures don't scroll the page behind the modal
+  const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+  if (lenis?.stop) {
+    lenis.stop();
   }
 
   activeScrollLocks++;
@@ -37,9 +39,16 @@ export function unlockScroll() {
     document.documentElement.style.overflow = previousHtmlOverflow === "hidden" ? "" : previousHtmlOverflow;
 
     // Resume Lenis smooth scrolling
-    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void; scrollTo: (target: number, opt?: { immediate?: boolean }) => void } }).__lenis;
     if (lenis?.start) {
       lenis.start();
+    }
+
+    // Restore exact prior scroll position
+    if (lenis?.scrollTo) {
+      lenis.scrollTo(savedScrollY, { immediate: true });
+    } else {
+      window.scrollTo(0, savedScrollY);
     }
   }
 }
@@ -66,4 +75,3 @@ export function useScrollLock(isLocked: boolean) {
     };
   }, [isLocked]);
 }
-

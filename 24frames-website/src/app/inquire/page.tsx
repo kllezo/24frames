@@ -49,6 +49,19 @@ export interface ServiceOption {
   tag: string;
 }
 
+export interface CelebrationScale {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export const CELEBRATION_SCALES: CelebrationScale[] = [
+  { id: "intimate", title: "Intimate", description: "A single day, close family." },
+  { id: "signature", title: "Signature", description: "A multi-day celebration." },
+  { id: "grand", title: "Grand production", description: "A large guest list and multiple crews." },
+  { id: "undecided", title: "Not sure yet", description: "Let's discuss what fits." },
+];
+
 const COMMISSION_CATEGORIES: CommissionCategory[] = [
   {
     id: "weddings",
@@ -313,6 +326,7 @@ export default function InquirePage() {
     "signature-reels",
   ]);
   const [selectedInvestment, setSelectedInvestment] = useState<string>("tier2");
+  const [selectedScale, setSelectedScale] = useState<string>("signature");
 
   // Client Details
   const [fullName, setFullName] = useState<string>("");
@@ -456,15 +470,31 @@ export default function InquirePage() {
 
   /* ── Visual Direction & Service Toggles ── */
   const toggleDirection = (id: string) => {
-    setSelectedDirections((prev) =>
-      prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id]
-    );
+    setSelectedDirections((prev) => {
+      const next = prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id];
+      if (next.length > 0) {
+        setErrors((errs) => {
+          const updated = { ...errs };
+          delete updated.directions;
+          return updated;
+        });
+      }
+      return next;
+    });
   };
 
   const toggleService = (id: string) => {
-    setSelectedServices((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
-    );
+    setSelectedServices((prev) => {
+      const next = prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id];
+      if (next.length > 0) {
+        setErrors((errs) => {
+          const updated = { ...errs };
+          delete updated.services;
+          return updated;
+        });
+      }
+      return next;
+    });
   };
 
   /* ── Navigation & Validation ── */
@@ -476,9 +506,30 @@ export default function InquirePage() {
       }));
       return;
     }
+
+    if (stage === 3) {
+      const stageErrors: Record<string, string> = {};
+      if (selectedDirections.length === 0) {
+        stageErrors.directions = "Choose at least one visual direction";
+      }
+      if (selectedServices.length === 0) {
+        stageErrors.services = "Choose at least one craft service.";
+      }
+      if (!selectedScale) {
+        stageErrors.scale = "Choose the scale of your celebration.";
+      }
+      if (Object.keys(stageErrors).length > 0) {
+        setErrors((prev) => ({ ...prev, ...stageErrors }));
+        return;
+      }
+    }
+
     setErrors((prev) => {
       const next = { ...prev };
       delete next.category;
+      delete next.directions;
+      delete next.services;
+      delete next.scale;
       return next;
     });
     setStage((prev) => Math.min(5, prev + 1));
@@ -531,6 +582,7 @@ export default function InquirePage() {
     `• *Requested Craft Services:* ${selectedServices
       .map((s) => SERVICE_OPTIONS.find((so) => so.id === s)?.name || s)
       .join(", ")}\n` +
+    `• *Scale of Celebration:* ${CELEBRATION_SCALES.find((s) => s.id === selectedScale)?.title || "Signature"} (${CELEBRATION_SCALES.find((s) => s.id === selectedScale)?.description || ""})\n` +
     `• *Investment Scope:* ${currentInvestment.label}\n` +
     `• *Contact:* ${email} | ${phone}\n` +
     (memoriesToRemember ? `• *Memories to Remember:* "${memoriesToRemember}"\n` : "") +
@@ -600,7 +652,7 @@ export default function InquirePage() {
 
   return (
     <div className={styles.atelierPage}>
-      {/* ── ATELIER MASTHEAD (CLEAN 2-SIDED EDITORIAL HEADER) ── */}
+      {/* ── ATELIER MASTHEAD (CLEAN 3-ZONE EDITORIAL HEADER WITH INTEGRATED TRACKER) ── */}
       <header className={styles.atelierHeader} role="banner">
         <div className={styles.headerInner}>
           <div className={styles.headerLeft}>
@@ -611,68 +663,71 @@ export default function InquirePage() {
             </Link>
           </div>
 
+          {/* Integrated 4-Stage Progress Tracker Matching Reference */}
+          {stage >= 1 && stage <= 4 && (
+            <nav className={styles.headerCenterTracker} aria-label="Commission Progress">
+              <div className={styles.journeyTrack}>
+                {[
+                  { step: 1, label: "COMMISSION" },
+                  { step: 2, label: "TIMELINE" },
+                  { step: 3, label: "DIRECTION & CRAFT" },
+                  { step: 4, label: "LIVING BRIEF" },
+                ].map((s, idx) => {
+                  const isActive = s.step === stage;
+                  const isComplete = s.step < stage;
+                  const isUpcoming = s.step > stage;
+
+                  return (
+                    <div key={s.step} className={styles.journeyStageWrapper}>
+                      {idx > 0 && (
+                        <span
+                          className={`${styles.journeyConnector} ${
+                            stage >= s.step ? styles.journeyConnectorActive : ""
+                          }`}
+                          aria-hidden="true"
+                        />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => s.step <= stage && handleJumpToStage(s.step)}
+                        disabled={isUpcoming}
+                        className={`${styles.journeyStepBtn} ${
+                          isActive
+                            ? styles.journeyStepActive
+                            : isComplete
+                            ? styles.journeyStepComplete
+                            : styles.journeyStepUpcoming
+                        }`}
+                        aria-current={isActive ? "step" : undefined}
+                        aria-label={`Step 0${s.step}: ${s.label}`}
+                      >
+                        {isActive ? (
+                          <div className={styles.expandedStepContent}>
+                            <span className={styles.activeStepDot} aria-hidden="true">●</span>
+                            <span className={styles.activeStepNum}>0{s.step}</span>
+                            <span className={styles.activeStepLabel}>{s.label}</span>
+                          </div>
+                        ) : isComplete ? (
+                          <div className={styles.collapsedCircle}>
+                            <span className={styles.checkSymbol}>✓</span>
+                          </div>
+                        ) : (
+                          <div className={styles.collapsedCircle}>
+                            <span className={styles.circleSymbol}>{s.step}</span>
+                          </div>
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </nav>
+          )}
+
           <div className={styles.headerRight}>
-            <span className={styles.folioMetadata}>24F-2026</span>
+            <span className={styles.folioMetadata}>DAY / TIME</span>
           </div>
         </div>
-
-        {/* Refined Luxury Collapsible Journey Indicator (Active Stages 1–4) */}
-        {stage >= 1 && stage <= 4 && (
-          <nav className={styles.editorialJourneyTracker} aria-label="Commission Progress">
-            <div className={styles.journeyTrack}>
-              {[
-                { step: 1, label: "COMMISSION" },
-                { step: 2, label: "TIMELINE" },
-                { step: 3, label: "DIRECTION & CRAFT" },
-                { step: 4, label: "LIVING BRIEF" },
-              ].map((s, idx) => {
-                const isActive = s.step === stage;
-                const isComplete = s.step < stage;
-                const isUpcoming = s.step > stage;
-                const circleNumber = ["①", "②", "③", "④"][s.step - 1];
-
-                return (
-                  <div key={s.step} className={styles.journeyStageWrapper}>
-                    {idx > 0 && (
-                      <span
-                        className={`${styles.journeyConnector} ${
-                          stage >= s.step ? styles.journeyConnectorActive : ""
-                        }`}
-                        aria-hidden="true"
-                      />
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => s.step <= stage && handleJumpToStage(s.step)}
-                      disabled={isUpcoming}
-                      className={`${styles.journeyStepBtn} ${
-                        isActive
-                          ? styles.journeyStepActive
-                          : isComplete
-                          ? styles.journeyStepComplete
-                          : styles.journeyStepUpcoming
-                      }`}
-                      aria-current={isActive ? "step" : undefined}
-                      aria-label={`Step 0${s.step}: ${s.label}`}
-                    >
-                      {isActive ? (
-                        <div className={styles.expandedStepContent}>
-                          <span className={styles.activeStepDot} aria-hidden="true">●</span>
-                          <span className={styles.activeStepNum}>0{s.step}</span>
-                          <span className={styles.activeStepLabel}>{s.label}</span>
-                        </div>
-                      ) : (
-                        <div className={styles.collapsedCircle}>
-                          <span className={styles.circleSymbol}>{circleNumber}</span>
-                        </div>
-                      )}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </nav>
-        )}
       </header>
 
       <main className={styles.atelierMain}>
@@ -986,15 +1041,18 @@ export default function InquirePage() {
                 </button>
               </div>
               <div className={styles.stageTopNavRight}>
-                <button onClick={handleNext} className={styles.primaryAtelierBtn} type="button" aria-label="Continue to Living Brief">
-                  <span>Continue to Living Brief</span>
+                <button onClick={handleNext} className={styles.continueToBriefBtn} type="button" aria-label="Continue to Living Brief">
+                  <span>CONTINUE TO LIVING BRIEF</span>
                   <span className={styles.btnArrowIcon}>→</span>
                 </button>
               </div>
             </div>
 
             <div className={styles.stageHeader}>
-              <span className={styles.stageEyebrow}>STAGE III · VISUAL DIRECTION &amp; CRAFT</span>
+              <div className={styles.stageEyebrowRow}>
+                <span className={styles.stageEyebrow}>STAGE III · VISUAL DIRECTION &amp; CRAFT</span>
+                <span className={styles.stageStepMarker}>03 / 04</span>
+              </div>
               <h2 className={styles.stageHeadline}>Compose your aesthetic &amp; craft suite.</h2>
               <p className={styles.stageSubtitle}>
                 Select the visual styles that resonate with your family, and tailor the cinema and
@@ -1002,11 +1060,11 @@ export default function InquirePage() {
               </p>
             </div>
 
-            {/* Part A: Visual Direction Board */}
+            {/* Part A: Visual Direction Preferences */}
             <div className={styles.subSectionBlock}>
               <div className={styles.subSectionTitleRow}>
-                <h3 className={styles.subSectionTitle}>Visual Direction Preferences</h3>
-                <span className={styles.subSectionNote}>Select one or several creative directions</span>
+                <h3 className={styles.subSectionTitle}>Visual direction preferences</h3>
+                <span className={styles.subSectionNote}>Select one or several</span>
               </div>
 
               <div className={styles.directionGrid}>
@@ -1024,7 +1082,9 @@ export default function InquirePage() {
                       <div className={styles.directionImgWrap}>
                         <img src={dir.image} alt={dir.title} className={styles.directionImg} />
                         <div className={styles.directionOverlay} />
-                        {isSelected && <span className={styles.checkBadge}>✓</span>}
+                        <div className={`${styles.circleIndicator} ${isSelected ? styles.circleIndicatorSelected : ""}`}>
+                          {isSelected && <span>✓</span>}
+                        </div>
                       </div>
 
                       <div className={styles.directionContent}>
@@ -1036,22 +1096,29 @@ export default function InquirePage() {
                 })}
               </div>
 
+              {errors.directions && (
+                <div className={styles.inlineErrorWarning}>
+                  <span className={styles.errorIcon}>!</span>
+                  <span>{errors.directions}</span>
+                </div>
+              )}
+
               <div className={styles.optionalInspoRow}>
-                <label className={styles.fieldLabel}>Specific Visual References or Pinterest / Inspiration Link (Optional)</label>
+                <label className={styles.fieldLabel}>Specific visual references or Pinterest / inspiration link (optional)</label>
                 <input
                   type="text"
                   value={inspirationNote}
                   onChange={(e) => setInspirationNote(e.target.value)}
-                  placeholder="Paste reference link or mention specific films, styles, or aesthetics you love..."
+                  placeholder="Paste a link or mention films, styles or aesthetics you love..."
                   className={styles.atelierInput}
                 />
               </div>
             </div>
 
-            {/* Part B: Craft Services Selection */}
+            {/* Part B: Selectable Craft Services */}
             <div className={styles.subSectionBlock}>
               <div className={styles.subSectionTitleRow}>
-                <h3 className={styles.subSectionTitle}>Selectable Craft Services</h3>
+                <h3 className={styles.subSectionTitle}>Selectable craft services</h3>
                 <span className={styles.subSectionNote}>Curated for uncompromised archival quality</span>
               </div>
 
@@ -1069,7 +1136,7 @@ export default function InquirePage() {
                     >
                       <div className={styles.serviceTopRow}>
                         <span className={styles.serviceTag}>{srv.tag}</span>
-                        <div className={styles.serviceCheckbox}>
+                        <div className={`${styles.serviceCheckbox} ${isChecked ? styles.serviceCheckboxChecked : ""}`}>
                           {isChecked ? <span>✓</span> : null}
                         </div>
                       </div>
@@ -1080,36 +1147,59 @@ export default function InquirePage() {
                   );
                 })}
               </div>
+
+              {errors.services && (
+                <div className={styles.inlineErrorWarning}>
+                  <span className={styles.errorIcon}>!</span>
+                  <span>{errors.services}</span>
+                </div>
+              )}
             </div>
 
-            {/* Part C: Investment Scope */}
+            {/* Part C: Scale of Celebration */}
             <div className={styles.subSectionBlock}>
               <div className={styles.subSectionTitleRow}>
-                <h3 className={styles.subSectionTitle}>Investment Scope</h3>
-                <span className={styles.subSectionNote}>Helps our studio tailor appropriate optical crew &amp; equipment</span>
+                <h3 className={styles.subSectionTitle}>Scale of celebration</h3>
+                <span className={styles.subSectionNote}>Helps us plan the right crew and equipment</span>
               </div>
 
-              <div className={styles.investmentGrid}>
-                {INVESTMENT_RANGES.map((inv) => {
-                  const isChosen = selectedInvestment === inv.id;
+              <div className={styles.celebrationGrid}>
+                {CELEBRATION_SCALES.map((scale) => {
+                  const isChosen = selectedScale === scale.id;
 
                   return (
                     <button
-                      key={inv.id}
+                      key={scale.id}
                       type="button"
-                      onClick={() => setSelectedInvestment(inv.id)}
-                      className={`${styles.investmentCard} ${isChosen ? styles.investmentCardChosen : ""}`}
+                      onClick={() => {
+                        setSelectedScale(scale.id);
+                        setErrors((prev) => {
+                          const next = { ...prev };
+                          delete next.scale;
+                          return next;
+                        });
+                      }}
+                      className={`${styles.celebrationCard} ${isChosen ? styles.celebrationCardChosen : ""}`}
                       aria-pressed={isChosen}
                     >
-                      <div className={styles.investmentTop}>
-                        <span className={styles.investmentLabel}>{inv.label}</span>
-                        {isChosen && <span className={styles.goldRadioDot} />}
+                      <div className={styles.celebrationTop}>
+                        <h4 className={styles.celebrationTitle}>{scale.title}</h4>
+                        <div className={`${styles.radioCircle} ${isChosen ? styles.radioCircleChosen : ""}`}>
+                          {isChosen && <span className={styles.radioInnerDot} />}
+                        </div>
                       </div>
-                      <span className={styles.investmentDesc}>{inv.desc}</span>
+                      <p className={styles.celebrationDesc}>{scale.description}</p>
                     </button>
                   );
                 })}
               </div>
+
+              {errors.scale && (
+                <div className={styles.inlineErrorWarning}>
+                  <span className={styles.errorIcon}>!</span>
+                  <span>{errors.scale}</span>
+                </div>
+              )}
             </div>
           </section>
         )}
@@ -1245,10 +1335,10 @@ export default function InquirePage() {
                     )}
                   </div>
 
-                  {/* Craft Services Section */}
+                    {/* Craft Services Section */}
                   <div className={styles.docSection}>
                     <div className={styles.docSectionTitleRow}>
-                      <span className={styles.docSectionKicker}>IV. CRAFT SERVICES &amp; SCOPE</span>
+                      <span className={styles.docSectionKicker}>IV. CRAFT SERVICES</span>
                       <button onClick={() => handleJumpToStage(3)} className={styles.editSectionBtn}>
                         Edit ↗
                       </button>
@@ -1263,8 +1353,21 @@ export default function InquirePage() {
                         );
                       })}
                     </ul>
-                    <div className={styles.docInvestmentTag}>
-                      <span>Scope: {currentInvestment.label}</span>
+                  </div>
+
+                  {/* Scale of Celebration Section */}
+                  <div className={styles.docSection}>
+                    <div className={styles.docSectionTitleRow}>
+                      <span className={styles.docSectionKicker}>V. SCALE OF CELEBRATION</span>
+                      <button onClick={() => handleJumpToStage(3)} className={styles.editSectionBtn}>
+                        Edit ↗
+                      </button>
+                    </div>
+                    <div className={styles.docValueHighlighted}>
+                      {CELEBRATION_SCALES.find((s) => s.id === selectedScale)?.title || "Signature"}
+                    </div>
+                    <div className={styles.docValueMuted}>
+                      {CELEBRATION_SCALES.find((s) => s.id === selectedScale)?.description || "A multi-day celebration."}
                     </div>
                   </div>
                 </div>

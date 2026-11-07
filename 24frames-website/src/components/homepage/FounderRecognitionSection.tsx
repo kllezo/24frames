@@ -364,7 +364,7 @@ export default function FounderRecognitionSection({
     if (activeItem) {
       const trigger = triggerRefs.current[activeItem.id];
       setActiveItem(null);
-      setTimeout(() => trigger?.focus(), 40);
+      setTimeout(() => trigger?.focus({ preventScroll: true }), 40);
     }
   }, [activeItem]);
 
@@ -394,14 +394,16 @@ export default function FounderRecognitionSection({
       <div className={styles.container}>
         {/* ── TWO-COLUMN DESKTOP COMPOSITION MATCHING REFERENCE SCREENSHOT ── */}
         <div className={styles.twoColumnGrid}>
-          {/* ══════════ LEFT COLUMN ══════════ */}
+          {/* ══════════ LEFT COLUMN (STICKY) ══════════ */}
           <div className={styles.leftColumn}>
             {/* 1. Founder Name Panel */}
             <div ref={namePanelRef} className={styles.founderNamePanel}>
               <span className={styles.namePanelKicker}>
                 THE ARTIST &amp; VISIONARY
               </span>
-              <h2 className={styles.founderNameHeading}>PHANI GOGIREDDY</h2>
+              <h2 className={styles.founderNameHeading}>
+                Phani<br />Gogireddy
+              </h2>
               <span className={styles.founderDesignation}>MANAGING DIRECTOR</span>
             </div>
 
@@ -461,69 +463,9 @@ export default function FounderRecognitionSection({
                 <span className={`${styles.vfCorner} ${styles.vfCornerBR}`} />
               </div>
             </div>
-
-            {/* 3. Horizontal Statistics Panel with 3 Equal Sections */}
-            <div ref={statsRef} className={styles.statsPanel}>
-              <div className={styles.statBox}>
-                <span className={styles.statNumber}>2016</span>
-                <span className={styles.statDesc}>ESTABLISHED IN HYDERABAD</span>
-              </div>
-              <div className={styles.statDivider} aria-hidden="true" />
-              <div className={styles.statBox}>
-                <span className={styles.statNumber}>1,000+</span>
-                <span className={styles.statDesc}>WEDDINGS CAPTURED</span>
-              </div>
-              <div className={styles.statDivider} aria-hidden="true" />
-              <div className={styles.statBox}>
-                <span className={styles.statNumber}>6,000</span>
-                <span className={styles.statDesc}>SQ. FT. CORPORATE HEADQUARTERS</span>
-              </div>
-            </div>
-
-            {/* 4. Three Core Principles Stacked Directly Beneath Statistics */}
-            <div ref={principlesRef} className={styles.principlesContainer}>
-              <div className={styles.principlesHeaderRow}>
-                <span className={styles.principlesKicker}>THREE CORE PRINCIPLES</span>
-                <span className={styles.principlesLine} aria-hidden="true" />
-              </div>
-              <div className={styles.principlesList}>
-                {/* Principle 01 */}
-                <div className={styles.principleCard}>
-                  <div className={styles.principleTitleRow}>
-                    <span className={styles.principleNumber}>01</span>
-                    <h4 className={styles.principleTitle}>On-Time Delivery</h4>
-                  </div>
-                  <p className={styles.principleDescription}>
-                    Setting industry benchmarks with a fast, disciplined turnaround for master edits and stills.
-                  </p>
-                </div>
-
-                {/* Principle 02 */}
-                <div className={styles.principleCard}>
-                  <div className={styles.principleTitleRow}>
-                    <span className={styles.principleNumber}>02</span>
-                    <h4 className={styles.principleTitle}>Uncompromising Quality</h4>
-                  </div>
-                  <p className={styles.principleDescription}>
-                    Blending technical mastery with creative vision on optical cinema primes and archival grades.
-                  </p>
-                </div>
-
-                {/* Principle 03 */}
-                <div className={styles.principleCard}>
-                  <div className={styles.principleTitleRow}>
-                    <span className={styles.principleNumber}>03</span>
-                    <h4 className={styles.principleTitle}>Heartfelt Storytelling</h4>
-                  </div>
-                  <p className={styles.principleDescription}>
-                    Transforming fleeting, unrepeatable moments into enduring generational heirlooms.
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* ══════════ RIGHT COLUMN ══════════ */}
+          {/* ══════════ RIGHT COLUMN (SCROLLING NARRATIVE) ══════════ */}
           <div className={styles.rightColumn}>
             {/* 1. Honours & Editorial Recognition Panel with Inner Carousel */}
             <div ref={recognitionCardRef} className={styles.recognitionPanel}>
@@ -642,18 +584,36 @@ export default function FounderRecognitionSection({
                 </button>
               </div>
 
-              {/* Fine Editorial Divider separating recognition from narrative biography */}
+              {/* Fine Editorial Divider separating recognition from stats */}
               <div className={styles.editorialDivider} aria-hidden="true" />
             </div>
 
-            {/* 2. Wide Cream Biography Panel */}
+            {/* 2. Horizontal Statistics Panel with 3 Equal Sections */}
+            <div ref={statsRef} className={styles.statsPanel}>
+              <div className={styles.statBox}>
+                <span className={styles.statNumber}>2016</span>
+                <span className={styles.statDesc}>ESTABLISHED IN HYDERABAD</span>
+              </div>
+              <div className={styles.statDivider} aria-hidden="true" />
+              <div className={styles.statBox}>
+                <span className={styles.statNumber}>1,000+</span>
+                <span className={styles.statDesc}>WEDDINGS CAPTURED</span>
+              </div>
+              <div className={styles.statDivider} aria-hidden="true" />
+              <div className={styles.statBox}>
+                <span className={styles.statNumber}>6,000</span>
+                <span className={styles.statDesc}>SQ. FT. CREATIVE STUDIO</span>
+              </div>
+            </div>
+
+            {/* 3. Wide Cream Biography Panel */}
             <div ref={bioRef} className={styles.bioPanel}>
               <p className={styles.bioText}>
                 Established in 2016 from a modest setup of two computers, 24 Frames was founded on an unyielding dedication to heartfelt visual storytelling. Bringing cinematic framing, lighting nuance, and deep emotional sensitivity from Telugu cinema to real weddings, Phani Gogireddy has shaped South India&apos;s premier luxury wedding film aesthetic. Today, backed by a 6,000 sq. ft. studio and an award-winning creative team, the company has documented over 1,000 celebrated unions across India and abroad.
               </p>
             </div>
 
-            {/* 3. Founder Pull Quote Panel with Forest-Green Left Rule */}
+            {/* 4. Founder Pull Quote Panel with Forest-Green Left Rule */}
             <div ref={quoteRef} className={styles.quotePanel}>
               <p className={styles.quoteText}>
                 “From reel to real, every dream pursued with heart becomes a timeless shot.”
@@ -663,7 +623,49 @@ export default function FounderRecognitionSection({
               </span>
             </div>
 
-            {/* 4. Commission Phani Gogireddy CTA Button */}
+            {/* 5. Three Core Principles */}
+            <div ref={principlesRef} className={styles.principlesContainer}>
+              <div className={styles.principlesHeaderRow}>
+                <span className={styles.principlesKicker}>THREE CORE PRINCIPLES</span>
+                <span className={styles.principlesLine} aria-hidden="true" />
+              </div>
+              <div className={styles.principlesList}>
+                {/* Principle 01 */}
+                <div className={styles.principleCard}>
+                  <div className={styles.principleTitleRow}>
+                    <span className={styles.principleNumber}>01</span>
+                    <h4 className={styles.principleTitle}>On-Time Delivery</h4>
+                  </div>
+                  <p className={styles.principleDescription}>
+                    Setting industry benchmarks with a fast, disciplined turnaround for master edits and stills.
+                  </p>
+                </div>
+
+                {/* Principle 02 */}
+                <div className={styles.principleCard}>
+                  <div className={styles.principleTitleRow}>
+                    <span className={styles.principleNumber}>02</span>
+                    <h4 className={styles.principleTitle}>Uncompromising Quality</h4>
+                  </div>
+                  <p className={styles.principleDescription}>
+                    Blending technical mastery with creative vision on optical cinema primes and archival grades.
+                  </p>
+                </div>
+
+                {/* Principle 03 */}
+                <div className={styles.principleCard}>
+                  <div className={styles.principleTitleRow}>
+                    <span className={styles.principleNumber}>03</span>
+                    <h4 className={styles.principleTitle}>Heartfelt Storytelling</h4>
+                  </div>
+                  <p className={styles.principleDescription}>
+                    Transforming fleeting, unrepeatable moments into enduring generational heirlooms.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 6. Commission Phani Gogireddy CTA Button */}
             <div ref={ctaContainerRef} className={styles.rightColumnCtaWrap}>
               <Link
                 href="/inquire"
@@ -690,6 +692,7 @@ export default function FounderRecognitionSection({
           <div
             className={styles.modalContainer}
             onClick={(e) => e.stopPropagation()}
+            data-lenis-prevent
           >
             <div className={styles.modalHeader}>
               <div className={styles.modalHeaderMeta}>

@@ -290,52 +290,56 @@ export default function AchievementBookshelf() {
               role="dialog"
               aria-modal="true"
               aria-label={expandedItem.title}
+              data-lenis-prevent
             >
-              <button
-                className={styles.closeBtn}
-                onClick={closeItem}
-                aria-label="Return item to shelf"
-              >
-                ✕
-              </button>
+              <div className={styles.expandedHeader}>
+                <div className={styles.expandedBadgeRow}>
+                  <span className={styles.expandedType} style={{ color: expandedItem.color }}>
+                    {TYPE_ICONS[expandedItem.type]} {TYPE_LABELS[expandedItem.type]}
+                  </span>
+                  <span className={styles.expandedYear}>{expandedItem.year}</span>
+                </div>
+                <button
+                  className={styles.closeBtn}
+                  onClick={closeItem}
+                  aria-label="Return item to shelf"
+                >
+                  ✕
+                </button>
+              </div>
 
-              <div className={styles.expandedLayout}>
-                {expandedItem.image && (
-                  <div className={styles.expandedImageWrap}>
-                    <img
-                      src={expandedItem.image}
-                      alt={expandedItem.title}
-                      className={styles.expandedImage}
-                    />
-                  </div>
-                )}
-
-                <div className={styles.expandedContent}>
-                  <div className={styles.expandedBadgeRow}>
-                    <span className={styles.expandedType} style={{ color: expandedItem.color }}>
-                      {TYPE_ICONS[expandedItem.type]} {TYPE_LABELS[expandedItem.type]}
-                    </span>
-                    <span className={styles.expandedYear}>{expandedItem.year}</span>
-                  </div>
-
-                  <h3 className={styles.expandedTitle}>{expandedItem.title}</h3>
-                  <p className={styles.expandedOrg}>{expandedItem.organization}</p>
-                  <p className={styles.expandedCitation}>{expandedItem.citation}</p>
-
-                  <div className={styles.expandedDivider} />
-
-                  <p className={styles.expandedDesc}>{expandedItem.description}</p>
-
-                  {expandedItem.linkUrl && (
-                    <a
-                      href={expandedItem.linkUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.expandedLink}
-                    >
-                      {expandedItem.linkText || "View source →"}
-                    </a>
+              <div className={styles.expandedScrollArea}>
+                <div className={styles.expandedLayout}>
+                  {expandedItem.image && (
+                    <div className={styles.expandedImageWrap}>
+                      <img
+                        src={expandedItem.image}
+                        alt={expandedItem.title}
+                        className={styles.expandedImage}
+                      />
+                    </div>
                   )}
+
+                  <div className={styles.expandedContent}>
+                    <h3 className={styles.expandedTitle}>{expandedItem.title}</h3>
+                    <p className={styles.expandedOrg}>{expandedItem.organization}</p>
+                    <p className={styles.expandedCitation}>{expandedItem.citation}</p>
+
+                    <div className={styles.expandedDivider} />
+
+                    <p className={styles.expandedDesc}>{expandedItem.description}</p>
+
+                    {expandedItem.linkUrl && (
+                      <a
+                        href={expandedItem.linkUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.expandedLink}
+                      >
+                        {expandedItem.linkText || "View source →"}
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

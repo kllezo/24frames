@@ -242,18 +242,22 @@
   z-index: 1000;
   background: rgba(250, 248, 242, 0.85);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: max(1rem, env(safe-area-inset-top, 1rem)) max(1rem, env(safe-area-inset-right, 1rem)) max(1rem, env(safe-area-inset-bottom, 1rem)) max(1rem, env(safe-area-inset-left, 1rem));
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 /* ── Expanded Card ──────────────────────────────────── */
 .expandedCard {
   position: relative;
   width: min(90vw, 780px);
-  max-height: 85vh;
-  overflow-y: auto;
+  max-height: calc(100dvh - 2rem);
+  max-height: calc(100svh - 2rem);
+  overflow: hidden;
   background: #FFFFFF;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -261,15 +265,27 @@
     0 40px 80px rgba(22, 75, 64, 0.12),
     0 16px 32px rgba(32, 35, 31, 0.06);
   will-change: transform, opacity;
+  display: flex;
+  flex-direction: column;
+  overscroll-behavior: contain;
+  touch-action: auto;
+}
+
+.expandedHeader {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--color-border);
+  z-index: 10;
 }
 
 .closeBtn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 10;
-  width: 36px;
-  height: 36px;
+  position: static;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: var(--color-surface-alt);
   border: 1px solid var(--color-border);
@@ -280,12 +296,22 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .closeBtn:hover {
   background: #164B40;
   color: #FAF8F2;
   border-color: #164B40;
+}
+
+.expandedScrollArea {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 .expandedLayout {
@@ -450,21 +476,36 @@
     max-width: 80px;
   }
 
+  .expandedBackdrop {
+    padding: max(0.5rem, env(safe-area-inset-top, 0.5rem)) max(0.5rem, env(safe-area-inset-right, 0.5rem)) max(0.5rem, env(safe-area-inset-bottom, 0.5rem)) max(0.5rem, env(safe-area-inset-left, 0.5rem));
+  }
+
+  .expandedCard {
+    width: calc(100% - 1rem);
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 1rem);
+    border-radius: 16px;
+  }
+
+  .expandedHeader {
+    padding: 0.85rem 1.15rem;
+  }
+
   .expandedLayout {
     flex-direction: column;
   }
 
   .expandedImageWrap {
     width: 100%;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-radius: 0;
   }
 
   .expandedImage {
-    min-height: 200px;
+    min-height: unset;
+    height: clamp(160px, 24vh, 220px);
     max-height: 240px;
   }
 
-  .expandedCard {
-    width: 95vw;
+  .expandedContent {
+    padding: 1.15rem 1.15rem calc(1.75rem + env(safe-area-inset-bottom, 0px)) 1.15rem;
   }
 }
