@@ -638,6 +638,9 @@ export default function CinematicTransition() {
         return;
       }
 
+      // The private studio experience manages its own transitions.
+      if (window.location.pathname.startsWith("/studio")) return;
+
       const target = e.target as HTMLElement | null;
       const anchor = target?.closest("a") as HTMLAnchorElement | null;
       if (!anchor) return;

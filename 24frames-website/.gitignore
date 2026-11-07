@@ -51,3 +51,7 @@ next-env.d.ts
 /scratch
 
 
+!.env.example
+
+# Private studio commission records (customer data — never commit)
+/.studio-data
