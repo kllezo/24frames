@@ -1,0 +1,392 @@
+/* Proposal preview, submission, confirmation and sharing. */
+
+.proposalGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.preview {
+  border: 1px solid var(--line);
+  background: var(--ivory-deep);
+}
+
+.previewBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 48px;
+  padding: 0.35rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.previewBar .mono {
+  font-size: 10px;
+}
+
+.previewFrame {
+  position: relative;
+  height: min(78vh, 900px);
+  min-height: 420px;
+}
+
+.previewFrame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #e9e3d6;
+}
+
+.previewMsg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--forest);
+}
+
+.previewMsg small {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--sage);
+}
+
+/* A sheet of paper "developing" while the PDF renders. */
+.develop {
+  position: relative;
+  width: 84px;
+  height: 112px;
+  margin-bottom: 0.75rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  box-shadow: 0 20px 30px -24px rgba(6, 46, 41, 0.6);
+}
+
+.develop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(176, 145, 90, 0.4) 50%, transparent 100%);
+  transform: translateY(-100%);
+  animation: develop 1.6s var(--ease-io) infinite;
+}
+
+@keyframes develop {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.submitPanel {
+  position: sticky;
+  top: calc(var(--topbar) + 1.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.75rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.submitTotal {
+  font-family: var(--serif);
+  font-size: clamp(40px, 4vw, 54px);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--forest);
+  font-variant-numeric: tabular-nums;
+}
+
+.submitBtn {
+  width: 100%;
+  white-space: normal;
+}
+
+.messagePreview {
+  border-top: 1px solid var(--line);
+  padding-top: 0.75rem;
+  font-size: 13px;
+}
+
+.messagePreview summary {
+  cursor: pointer;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: var(--forest);
+}
+
+.messagePreview pre {
+  max-height: 320px;
+  overflow: auto;
+  margin-top: 0.5rem;
+  padding: 0.9rem;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  background: #eef3ea;
+  border-left: 2px solid #5f9c6f;
+}
+
+.fine {
+  font-size: 12.5px;
+  color: var(--sage);
+}
+
+@media (max-width: 1000px) {
+  .proposalGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .submitPanel {
+    position: static;
+    order: -1;
+  }
+
+  .previewFrame {
+    height: 70vh;
+  }
+}
+
+/* ---------- Composed (confirmation) ---------- */
+
+.composed {
+  padding: clamp(2rem, 5vw, 4.5rem) clamp(16px, 4vw, 4rem) 5rem;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.composedHero {
+  text-align: center;
+  padding-bottom: 3rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.composedSeal {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 1.5rem;
+}
+
+.composedSeal svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.2;
+}
+
+.composedSeal circle {
+  stroke-dasharray: 360;
+  stroke-dashoffset: 360;
+  animation: draw 1.6s var(--ease) forwards;
+}
+
+.composedSeal circle + circle {
+  animation-delay: 0.25s;
+  stroke: rgba(176, 145, 90, 0.45);
+}
+
+.composedSeal path {
+  stroke: var(--forest);
+  stroke-width: 2;
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+  animation: draw 0.9s 0.9s var(--ease) forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.composedTitle {
+  font-family: var(--serif);
+  font-size: clamp(44px, 6vw, 86px);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--forest);
+  animation: rise 1.2s 0.3s var(--ease) both;
+}
+
+.composedTitle em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.composedLead {
+  margin-top: 1rem;
+  font-family: var(--serif);
+  font-size: 24px;
+  font-style: italic;
+  color: var(--sage);
+  animation: rise 1.2s 0.6s var(--ease) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.composedFacts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem 3rem;
+  margin-top: 2.5rem;
+  animation: rise 1.2s 0.9s var(--ease) both;
+}
+
+.composedFacts dt {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
+.composedFacts dd {
+  font-family: var(--serif);
+  font-size: 24px;
+  color: var(--forest);
+}
+
+.composedEnd {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+/* ---------- Share center ---------- */
+
+.share {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(300px, 1fr);
+  gap: 2rem;
+  align-items: start;
+  margin-top: 2rem;
+}
+
+.sharePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.shareTitle {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--forest);
+}
+
+.shareStep {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 0.75rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line);
+}
+
+.shareStep h3 {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 500;
+  color: var(--forest);
+  margin-bottom: 0.6rem;
+}
+
+.shareStep .mono {
+  color: var(--gold);
+  padding-top: 0.35rem;
+}
+
+.shareStep > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.shareStep label {
+  width: 100%;
+}
+
+.shareRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.shareNote {
+  padding: 0.75rem 1rem;
+  font-size: 13.5px;
+  border-left: 2px solid var(--gold);
+  background: var(--gold-soft);
+}
+
+.activity h3 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 0.5rem;
+}
+
+.activity ol {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.activity li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: start;
+  font-size: 13px;
+}
+
+.activity small {
+  display: block;
+  color: var(--sage);
+}
+
+.pill {
+  padding: 0.12rem 0.5rem;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: var(--forest);
+  background: rgba(9, 69, 62, 0.08);
+}
+
+.pillFail {
+  color: var(--danger);
+  background: rgba(154, 58, 42, 0.1);
+}
+
+@media (max-width: 1000px) {
+  .share {
+    grid-template-columns: 1fr;
+  }
+}
