@@ -85,7 +85,7 @@ export default function CommissionStudio({
           <span className={styles.consultant} title="Signed-in consultant">
             {consultant}
           </span>
-          <a className={styles.btnGhost} href="/studio/admin" data-no-transition>
+          <a className={styles.btnGhost} href="/quotebuilder/admin" data-no-transition>
             Studio admin
           </a>
           <button className={styles.btnGhost} onClick={() => setConfirmReset(true)}>
@@ -95,7 +95,7 @@ export default function CommissionStudio({
             className={styles.btnGhost}
             onClick={async () => {
               await fetch("/api/studio/auth", { method: "DELETE" }).catch(() => null);
-              window.location.assign("/studio/login");
+              window.location.assign("/quotebuilder/login");
             }}
           >
             Sign out

@@ -3,7 +3,7 @@
    ------------------------------------------------------------
    Every price, multiplier and budget band below is a fictional
    placeholder supplied for testing. None of them are approved
-   24 Frames prices. The studio replaces them from /studio/admin;
+   24 Frames prices. The studio replaces them from /quotebuilder/admin;
    the stored configuration then overrides this file entirely.
    This file is the ONLY place these demo values live.
    ============================================================ */

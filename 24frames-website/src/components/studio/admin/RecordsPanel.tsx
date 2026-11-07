@@ -50,7 +50,7 @@ export default function RecordsPanel() {
       updatedAt: now,
       duplicatedFrom: record.id,
     });
-    window.location.assign("/studio");
+    window.location.assign("/quotebuilder");
   }
 
   if (open) {

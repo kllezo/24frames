@@ -105,7 +105,7 @@ export default function IdleLock({ onWipe }: { onWipe: () => void }) {
           onClick={async () => {
             onWipe();
             await fetch("/api/studio/auth", { method: "DELETE" }).catch(() => null);
-            window.location.assign("/studio/login");
+            window.location.assign("/quotebuilder/login");
           }}
         >
           Discard this consultation &amp; sign out

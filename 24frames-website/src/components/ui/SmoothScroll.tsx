@@ -16,7 +16,7 @@ export default function SmoothScroll() {
     if (typeof window === "undefined") return;
     // The private studio experience uses native scrolling (nested scroll
     // panes, sticky ledger, modal sheets).
-    if (pathname?.startsWith("/studio")) return;
+    if (pathname?.startsWith("/quotebuilder")) return;
 
     // 1. Accessibility Check: Prefers-reduced-motion
     const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

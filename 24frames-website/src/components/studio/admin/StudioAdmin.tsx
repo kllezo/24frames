@@ -86,7 +86,7 @@ export default function StudioAdmin({
     <div className={styles.admin}>
       <header className={styles.head}>
         <div>
-          <a className={base.btnText} href="/studio" data-no-transition>← Back to the consultation</a>
+          <a className={base.btnText} href="/quotebuilder" data-no-transition>← Back to the consultation</a>
           <p className={base.kicker}>Studio administration</p>
           <h1 className={styles.title}>The atelier ledger</h1>
           <p className={styles.meta}>

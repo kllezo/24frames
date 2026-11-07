@@ -1,6 +1,6 @@
 # 24 Frames — Private Wedding Commission Studio
 
-A private consultation tool at **`/studio`**: the consultant signs in with a PIN, the couple composes their commission across six "frames", the studio submits it, and a personalised PDF proposal plus a WhatsApp summary are prepared.
+A private consultation tool at **`/quotebuilder`**: the consultant signs in with a PIN, the couple composes their commission across six "frames", the studio submits it, and a personalised PDF proposal plus a WhatsApp summary are prepared.
 
 Not linked from the public site, not in the sitemap, and every response carries `X-Robots-Tag: noindex` plus `<meta name="robots" content="noindex">`. It is deliberately **not** listed in `robots.txt`, because that would publish the URL.
 
@@ -36,7 +36,7 @@ The live ledger is visible throughout: a right-hand column on laptops, and a sti
 src/lib/commission/      Pure domain: types, demo config, pricing engine,
                          recommendations, validation, WhatsApp message, formatting
 src/lib/studio/          session.ts (signed cookie), server/repository.ts (storage)
-src/proxy.ts             Guards /studio/** and /api/studio/**
+src/proxy.ts             Guards /quotebuilder/** and /api/studio/**
 src/app/studio/          login, consultation, admin pages
 src/app/api/studio/      auth, session, config, commissions, activity, whatsapp, media
 src/components/studio/   UI: stages, ledger, dossier, timeline, PDF, admin

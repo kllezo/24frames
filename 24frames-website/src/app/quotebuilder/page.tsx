@@ -1,23 +1,24 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import StudioAdmin from "@/components/studio/admin/StudioAdmin";
+import CommissionStudio from "@/components/studio/CommissionStudio";
 import { getConfig } from "@/lib/studio/server/repository";
 import { SESSION_COOKIE, sessionSecret, verifySession } from "@/lib/studio/session";
 
 export const dynamic = "force-dynamic";
 
-export default async function StudioAdminPage() {
+export default async function StudioPage() {
   const secret = sessionSecret();
   const session = secret ? await verifySession((await cookies()).get(SESSION_COOKIE)?.value, secret) : null;
-  if (!session) redirect("/studio/login?next=/studio/admin");
-  let initial;
+  if (!session) redirect("/quotebuilder/login");
+
+  let config;
   let storageIssue: string | null = null;
   try {
-    initial = await getConfig();
+    config = (await getConfig()).config;
   } catch (err) {
     const { DEFAULT_STUDIO_CONFIG } = await import("@/lib/commission/defaults");
-    initial = { config: DEFAULT_STUDIO_CONFIG, stored: false };
+    config = DEFAULT_STUDIO_CONFIG;
     storageIssue = (err as Error).message;
   }
-  return <StudioAdmin initialConfig={initial.config} stored={initial.stored} consultant={session.consultant} storageIssue={storageIssue} />;
+  return <CommissionStudio config={config} consultant={session.consultant} storageIssue={storageIssue} />;
 }

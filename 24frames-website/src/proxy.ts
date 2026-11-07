@@ -1,6 +1,6 @@
 /* ============================================================
    Proxy — protects the private studio experience.
-   · /studio/**        → redirect to /studio/login without a valid session
+   · /quotebuilder/**        → redirect to /quotebuilder/login without a valid session
    · /api/studio/**    → 401 without a valid session (auth endpoint exempt)
    · Every studio response carries X-Robots-Tag: noindex and no-store.
    · Valid sessions are re-signed (sliding idle timeout).
@@ -18,7 +18,7 @@ import {
   verifySession,
 } from "@/lib/studio/session";
 
-const PUBLIC_STUDIO_PATHS = new Set(["/studio/login", "/api/studio/auth"]);
+const PUBLIC_STUDIO_PATHS = new Set(["/quotebuilder/login", "/api/studio/auth"]);
 
 function harden(res: NextResponse) {
   res.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
@@ -42,9 +42,9 @@ export async function proxy(request: NextRequest) {
       return harden(NextResponse.json({ error: "Studio session expired. Sign in again." }, { status: 401 }));
     }
     const url = request.nextUrl.clone();
-    url.pathname = "/studio/login";
+    url.pathname = "/quotebuilder/login";
     url.search = "";
-    if (pathname !== "/studio") url.searchParams.set("next", pathname);
+    if (pathname !== "/quotebuilder") url.searchParams.set("next", pathname);
     const res = NextResponse.redirect(url);
     if (token) res.cookies.delete(SESSION_COOKIE);
     return harden(res);
@@ -61,5 +61,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/studio", "/studio/:path*", "/api/studio/:path*"],
+  matcher: ["/quotebuilder", "/quotebuilder/:path*", "/api/studio/:path*"],
 };

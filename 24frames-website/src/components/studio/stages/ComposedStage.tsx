@@ -36,7 +36,7 @@ export default function ComposedStage({ submitted, actions }: StageProps) {
       <ShareCenter record={submitted} />
 
       <div className={styles.composedEnd}>
-        <a className={base.btnSecondary} href="/studio/admin" data-no-transition>Open studio records</a>
+        <a className={base.btnSecondary} href="/quotebuilder/admin" data-no-transition>Open studio records</a>
         <button className={base.btnPrimary} onClick={() => actions.reset()}>Begin a new consultation</button>
       </div>
     </main>

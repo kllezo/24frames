@@ -639,7 +639,7 @@ export default function CinematicTransition() {
       }
 
       // The private studio experience manages its own transitions.
-      if (window.location.pathname.startsWith("/studio")) return;
+      if (window.location.pathname.startsWith("/quotebuilder")) return;
 
       const target = e.target as HTMLElement | null;
       const anchor = target?.closest("a") as HTMLAnchorElement | null;
