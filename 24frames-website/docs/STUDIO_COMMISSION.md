@@ -103,10 +103,12 @@ Decisions needed:
 - which delivery tiers are offered, and the default tier (currently 60 days, pre-selected and visibly marked)
 - proposal validity (14 days) and the terms text
 
-### 2. Storage for deployment (integration point)
-Records are kept in a JSON file through `src/lib/studio/server/repository.ts`. This works locally and on any server with a writable disk. **Serverless hosts such as Vercel have a read-only filesystem.** There, submissions fail with a clear "storage unavailable" message rather than pretending to save. Before deploying there, implement the same exported functions against Postgres (or similar). Nothing else changes.
+### 2. Storage
+With `DATABASE_URL` set (a Supabase "Transaction pooler" URI, port 6543), records, studio settings and uploaded photographs go to Postgres. Tables are created automatically in a private `studio` schema with row-level security enabled, so Supabase's public API can't read them. A copy of the schema is in `db/studio-schema.sql`.
 
-Uploaded service photographs (`/api/studio/media`) have the same constraint.
+Without `DATABASE_URL`, the app falls back to a local JSON file (`.studio-data/`), which suits local development only.
+
+**Moving to your own domain:** nothing in the app or the data refers to the Vercel URL. Add the domain in Vercel, and the database, settings and existing records carry over unchanged. Moving to a different Postgres host only means changing `DATABASE_URL`.
 
 ### 3. Credentials (environment variables)
 
@@ -114,7 +116,8 @@ Uploaded service photographs (`/api/studio/media`) have the same constraint.
 |---|---|
 | `STUDIO_PIN` | Consultant sign-in PIN, at least 6 characters recommended |
 | `STUDIO_SESSION_SECRET` | 32+ random characters (`openssl rand -hex 32`) |
-| `STUDIO_DATA_DIR` | Optional storage directory |
+| `DATABASE_URL` | Postgres connection string (production storage) |
+| `STUDIO_DATA_DIR` | Optional local storage directory when no database is set |
 | `WHATSAPP_CLOUD_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID` | Optional: enables automated PDF delivery |
 
 WhatsApp Business only allows free-form document messages inside a 24-hour customer-service window. Outside that window it needs an approved template, which is not built yet. Delivery receipts need a webhook, also not built.
