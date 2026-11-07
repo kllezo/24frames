@@ -1758,7 +1758,10 @@ export default function LivingContactSheet() {
         </div>
 
         {/* Narrative Cursive Bridge Line */}
-        <div className={styles.cursiveBridge} aria-hidden="true">
+        <div
+          className={`${styles.cursiveBridge} ${styles.cursiveBridgeSireesh}`}
+          aria-hidden="true"
+        >
           In the sacred flame, promises made to outlive generations.
         </div>
 
