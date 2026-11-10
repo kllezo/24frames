@@ -149,8 +149,14 @@ export default function ProposalDocument({ draft, quote, config, reference, issu
     <Document title={`24 Frames — ${names} — Wedding Commission`} author="24 Frames Photography" subject="Wedding commission proposal" creator="24 Frames Private Studio">
       {/* ── Cover ─────────────────────────────── */}
       <Page size="A4" style={s.pageBare}>
-        <View style={{ height: 520, position: "relative" }}>
-          <Image src={img(config.proposal.coverImage)} style={{ width: "100%", height: 520, objectFit: "cover" }} />
+        {/* The studio's mark on ivory, inside a fine gold frame — no photograph. */}
+        <View style={{ height: 520, padding: 28 }}>
+          <View style={{ flex: 1, borderWidth: 0.8, borderColor: C.gold, alignItems: "center", justifyContent: "center" }}>
+            <View style={{ position: "absolute", top: 6, left: 6, right: 6, bottom: 6, borderWidth: 0.4, borderColor: C.gold, opacity: 0.6 }} />
+            <Image src={img("/images/logo-dark-header.png")} style={{ width: 300, objectFit: "contain" }} />
+            <View style={{ width: 120, height: 0.6, backgroundColor: C.gold, marginTop: 26, marginBottom: 14 }} />
+            <Text style={[s.mono, { letterSpacing: 3 }]}>PHOTOGRAPHY · CINEMA · LEGACIES</Text>
+          </View>
         </View>
         <View style={{ paddingHorizontal: 56, paddingTop: 34, flex: 1 }}>
           <Text style={s.kicker}>A private wedding commission</Text>
@@ -159,8 +165,7 @@ export default function ProposalDocument({ draft, quote, config, reference, issu
           <Text style={{ fontFamily: SERIF, fontSize: 14, fontStyle: "italic", color: C.ink }}>
             {date ? `Celebrating ${date}${c.city ? ` · ${c.city}` : ""}` : c.city || "Your celebration"}
           </Text>
-          <View style={{ position: "absolute", bottom: 34, left: 56, right: 56, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
-            <Image src={img("/images/logo-dark-header.png")} style={{ height: 22, objectFit: "contain" }} />
+          <View style={{ position: "absolute", bottom: 34, left: 56, right: 56, flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-end" }}>
             <View style={{ alignItems: "flex-end" }}>
               <Text style={s.mono}>{reference ? `Ref. ${reference}` : "Draft proposal"}</Text>
               <Text style={[s.mono, { marginTop: 3 }]}>Prepared {issued}</Text>

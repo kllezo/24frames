@@ -90,6 +90,9 @@ export default function CommissionStudio({
           <span className={styles.consultant} title="Signed-in consultant">
             {consultant}
           </span>
+          <a className={styles.btnGhost} href="/quotes" data-no-transition>
+            Quotes
+          </a>
           <a className={styles.btnGhost} href="/quotebuilder/admin" data-no-transition>
             Studio admin
           </a>

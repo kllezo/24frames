@@ -41,13 +41,10 @@
 }
 
 .monumentalLogo {
-  font-family: 'Anton', 'Bebas Neue', 'Impact', -apple-system, sans-serif;
-  font-size: clamp(4.5rem, 13vw, 12rem);
-  font-weight: 900;
-  line-height: 0.85;
-  color: #09453E;
-  letter-spacing: -0.015em;
-  text-transform: uppercase;
+  display: block;
+  width: clamp(240px, 40vw, 600px);
+  max-width: 100%;
+  height: auto;
   margin: 0;
   user-select: none;
 }

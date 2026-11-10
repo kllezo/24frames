@@ -779,25 +779,25 @@
 .rightColumnCtaWrap {
   display: flex;
   width: 100%;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .commissionPillBtn {
   background: #09453E;
   color: #FAF8F2;
   border-radius: 9999px;
-  padding: 1.25rem 2.25rem;
+  padding: 0.55rem 0.55rem 0.55rem 1.9rem;
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.85rem;
-  width: 100%;
+  gap: 1.1rem;
+  width: auto;
   box-shadow: 0 8px 24px rgba(9, 69, 62, 0.24);
   transition: all 0.25s ease;
 }
@@ -809,12 +809,19 @@
 }
 
 .btnArrow {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
   font-size: 1.05rem;
-  transition: transform 0.25s ease;
+  color: #09453E;
+  background: #FAF8F2;
+  border-radius: 50%;
+  transition: transform 0.35s var(--ease-out);
 }
 
 .commissionPillBtn:hover .btnArrow {
-  transform: translateX(4px);
+  transform: translateX(3px) rotate(-8deg);
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -1132,5 +1139,23 @@
   .portraitImg {
     transform: none !important;
     filter: none !important;
+  }
+}
+
+/* Phones: the commission button stays on one line. */
+@media (max-width: 520px) {
+  .commissionPillBtn {
+    width: 100%;
+    justify-content: space-between;
+    padding-left: 1.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 521px) {
+  .commissionPillBtn {
+    width: auto !important;
   }
 }

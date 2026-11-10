@@ -1,5 +1,6 @@
 "use client";
 
+import { optimised } from "../ui/optimised";
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "../ensemble.module.css";
 import cx from "../cinema.module.css";
@@ -137,7 +138,7 @@ export default function EnsembleStage(props: StageProps) {
                   }}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className={cx.posterImg} src={s.image} alt={s.imageAlt} loading="lazy" id={`img-${s.id}`} />
+                  <img className={cx.posterImg} src={optimised(s.image, 640)} alt={s.imageAlt} loading="lazy" decoding="async" id={`img-${s.id}`} />
                   <span className={cx.posterShade} aria-hidden="true" />
                   <span className={cx.posterNo}>{roman(i)}</span>
                   {s.signature && <span className={cx.posterBadge}>Signature</span>}
@@ -285,7 +286,7 @@ function Matrix({
               <th key={s.id} scope="col">
                 <button className={`${styles.matrixSvc} ${cx.mxSvc}`} onClick={() => onOpen(s.id)}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={s.image} alt="" />
+                  <img src={optimised(s.image, 256)} alt="" loading="lazy" decoding="async" />
                   <span>{s.name.replace(/ (Photographer|Videographer)$/, (m) => m === " Photographer" ? " Photo" : " Video").replace("Aerial Photography & Drone", "Aerial").replace("Creative Cinematography", "Cinematography")}</span>
                   <small>{formatINR(s.price)}</small>
                 </button>
@@ -302,7 +303,7 @@ function Matrix({
               <tr key={e.id}>
                 <th scope="row">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className={cx.mxThumb} src={occasionImage(e.type)} alt="" />
+                  <img className={cx.mxThumb} src={optimised(occasionImage(e.type), 256)} alt="" loading="lazy" decoding="async" />
                   <span className={styles.matrixEvent}>{eventDisplayName(e, config)}</span>
                   <small>{e.guestCount ? `${groupIndian(e.guestCount)} guests` : ""}</small>
                 </th>
@@ -365,7 +366,7 @@ function Dossier({
       <div className={styles.dossierInner}>
         <div className={styles.dossierMedia}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={s.image} alt={s.imageAlt} />
+          <img src={optimised(s.image, 828)} alt={s.imageAlt} decoding="async" />
           <div className={styles.dossierMediaCap}>
             <span className={base.mono}>No. {String(s.order).padStart(2, "0")} · {s.epithet.toUpperCase()}</span>
           </div>
@@ -409,7 +410,7 @@ function Dossier({
                 <li key={e.id} className={q > 0 ? cx.dosOn : ""}>
                   <div className={cx.dosRow}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={occasionImage(e.type)} alt="" />
+                    <img src={optimised(occasionImage(e.type), 256)} alt="" loading="lazy" decoding="async" />
                     <span className={cx.dosEvent}>
                       <b>{eventDisplayName(e, config)}</b>
                       {sug && sug.quantity !== q ? (
