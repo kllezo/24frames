@@ -103,3 +103,24 @@ export function safeEqual(a: string, b: string): boolean {
   for (let i = 0; i < len; i++) diff |= (x[i] ?? 0) ^ (y[i] ?? 0);
   return diff === 0;
 }
+
+/* ------------------------------------------------------------
+   Admin elevation: the studio admin asks for the PIN again and
+   holds a separate, short-lived signed cookie (15 minutes).
+   ------------------------------------------------------------ */
+export const ADMIN_COOKIE = "tf_studio_admin";
+export const ADMIN_TTL_MS = 15 * 60 * 1000;
+const ADMIN_MARK = "\u0000admin";
+
+export async function signAdmin(secret: string, now = Date.now()): Promise<string> {
+  return signSession({ v: 1, consultant: ADMIN_MARK, iat: now, last: now }, secret);
+}
+
+export async function verifyAdmin(token: string | undefined, secret: string, now = Date.now()): Promise<boolean> {
+  const s = await verifySession(token, secret, now);
+  return !!s && s.consultant === ADMIN_MARK && now - s.iat <= ADMIN_TTL_MS;
+}
+
+export function adminCookieOptions() {
+  return { ...sessionCookieOptions(), maxAge: Math.floor(ADMIN_TTL_MS / 1000) };
+}

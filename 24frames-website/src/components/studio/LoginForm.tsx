@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./studio.module.css";
+import cx from "./cinema.module.css";
 
 export default function LoginForm({
   next,
@@ -45,7 +46,7 @@ export default function LoginForm({
   }
 
   return (
-    <main className={styles.login}>
+    <main className={`${styles.login} ${cx.cinema}`}>
       <div className={styles.loginVisual} aria-hidden="true">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/portfolio/sireesh-harshitha/cover.jpg" alt="" />

@@ -20,6 +20,16 @@
   --line: rgba(9, 69, 62, 0.14);
   --line-strong: rgba(9, 69, 62, 0.26);
   --danger: #9a3a2a;
+  /* Surfaces that stay dark in both themes, and theme-aware tints. */
+  --night: #062e29;
+  --night-2: #09453e;
+  --gold-ink: #7c5f28;
+  --tint: rgba(9, 69, 62, 0.045);
+  --tint-strong: rgba(9, 69, 62, 0.08);
+  --glass: rgba(251, 245, 233, 0.94);
+  --field: rgba(255, 252, 245, 0.6);
+  --ghost: rgba(9, 69, 62, 0.22);
+  --on-accent: var(--ivory);
   --serif: var(--studio-serif), "Cormorant Garamond", Georgia, serif;
   --sans: var(--studio-sans), "Inter", -apple-system, sans-serif;
   --mono: var(--studio-mono), "Space Mono", ui-monospace, monospace;
@@ -70,7 +80,7 @@
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--forest);
   margin-bottom: 0.6rem;
 }
 
@@ -141,7 +151,7 @@
 
 .btnSecondary:hover:not(:disabled) {
   border-color: var(--forest);
-  background: rgba(9, 69, 62, 0.04);
+  background: var(--tint);
 }
 
 .btnGhost {
@@ -279,7 +289,7 @@ select.input {
   min-height: 88px;
   padding: 0.7rem 0.75rem;
   border: 1px solid var(--line);
-  background: rgba(255, 252, 245, 0.6);
+  background: var(--field);
 }
 
 .input:hover,
@@ -291,7 +301,7 @@ select.input {
 .textarea:focus {
   outline: none;
   border-color: var(--forest);
-  background: rgba(255, 252, 245, 0.7);
+  background: var(--field);
 }
 
 .input::placeholder,
@@ -317,6 +327,10 @@ select.input {
 .hint {
   font-size: 12.5px;
   color: var(--sage);
+}
+
+.hintError {
+  color: var(--danger);
 }
 
 .error {
@@ -384,6 +398,16 @@ select.input {
   outline-offset: 2px;
 }
 
+.segmentedFull {
+  display: flex;
+  width: 100%;
+}
+
+.segmentedFull > label {
+  flex: 1;
+  justify-content: center;
+}
+
 .segOn {
   background: var(--forest) !important;
   color: var(--ivory) !important;
@@ -416,7 +440,7 @@ select.input {
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #7c5f28;
+  color: var(--gold-ink);
   background: rgba(176, 145, 90, 0.14);
   border: 1px dashed rgba(176, 145, 90, 0.55);
 }
@@ -452,7 +476,7 @@ select.input {
 }
 
 .stepper button:hover:not(:disabled) {
-  background: rgba(9, 69, 62, 0.06);
+  background: var(--tint);
 }
 
 .stepper button:disabled {
@@ -582,7 +606,7 @@ select.input {
 .loginVisual {
   position: relative;
   overflow: hidden;
-  background: var(--forest-deep);
+  background: var(--night);
 }
 
 .loginVisual img {
@@ -681,7 +705,7 @@ select.input {
   display: grid;
   place-items: center;
   padding: 16px;
-  background: rgba(251, 245, 233, 0.88);
+  background: var(--glass);
   backdrop-filter: blur(22px) saturate(0.7);
   animation: fadeIn 0.6s var(--ease);
 }
@@ -741,7 +765,7 @@ select.input {
   gap: 1rem;
   height: var(--topbar);
   padding: 0 clamp(16px, 2.5vw, 2rem);
-  background: rgba(251, 245, 233, 0.94);
+  background: var(--glass);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
 }
@@ -812,7 +836,6 @@ select.input {
   gap: 1rem;
   height: calc(100vh - var(--topbar));
   padding: 2.5rem 0 2rem 1.75rem;
-  border-right: 1px solid var(--line);
 }
 
 .rail ol {
@@ -935,7 +958,41 @@ select.input {
 }
 
 .ledgerBody {
-  padding: 2.5rem 1.75rem 2rem;
+  position: relative;
+  margin: 1.25rem;
+  padding: 2rem 1.4rem 1.75rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 60px -48px rgba(16, 48, 42, 0.5);
+}
+
+.ledgerBody::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(169, 138, 82, 0.4);
+  pointer-events: none;
+}
+
+.ledgerCrest {
+  display: block;
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 0.6rem;
+  color: var(--gold);
+}
+
+.ledgerHead {
+  text-align: center;
+}
+
+.ledgerFolio {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--sage);
 }
 
 .ledgerTitle {
@@ -1050,154 +1107,153 @@ select.input {
 
 /* ---------- Tablet & mobile ---------- */
 
-@media (max-width: 1179px) {
-  .workspace {
-    grid-template-columns: minmax(0, 1fr);
-    padding-bottom: calc(76px + env(safe-area-inset-bottom));
-  }
+/* ---------- Single-column studio: chapter line on top, folio drawer for the bill ---------- */
+.workspace {
+  grid-template-columns: minmax(0, 1fr);
+  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+}
 
-  .rail {
-    position: sticky;
-    top: var(--topbar);
-    z-index: 30;
-    height: auto;
-    padding: 0;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-    background: rgba(251, 245, 233, 0.96);
-    backdrop-filter: blur(8px);
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
+.rail {
+  position: sticky;
+  top: var(--topbar);
+  z-index: 30;
+  height: auto;
+  padding: 0;
+  border-right: 0;
+  border-bottom: 1px solid var(--line);
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
 
-  .rail::-webkit-scrollbar {
-    display: none;
-  }
+.rail::-webkit-scrollbar {
+  display: none;
+}
 
-  .rail ol {
-    flex-direction: row;
-    gap: 0;
-    padding: 0 clamp(8px, 2vw, 1.5rem);
-  }
+.rail ol {
+  flex-direction: row;
+  gap: 0;
+  padding: 0 clamp(8px, 2vw, 1.5rem);
+}
 
-  .rail li {
-    flex: 1 0 auto;
-  }
+.rail li {
+  flex: 1 0 auto;
+}
 
-  .railItem {
-    grid-template-columns: auto auto;
-    justify-content: center;
-    gap: 0.4rem;
-    padding: 0.85rem 0.8rem;
-    border-bottom: 2px solid transparent;
-  }
+.railItem {
+  grid-template-columns: auto auto;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.85rem 0.8rem;
+  border-bottom: 2px solid transparent;
+}
 
-  .railItem:hover:not(:disabled) {
-    transform: none;
-  }
+.railItem:hover:not(:disabled) {
+  transform: none;
+}
 
-  .railCurrent {
-    border-bottom-color: var(--gold);
-  }
+.railCurrent {
+  border-bottom-color: var(--gold);
+}
 
-  .railTitle {
-    display: none;
-  }
+.railTitle {
+  display: none;
+}
 
-  .railShort {
-    display: inline;
-    font-size: 13px;
-    font-weight: 500;
-  }
+.railShort {
+  display: inline;
+  font-size: 13px;
+  font-weight: 500;
+}
 
-  .railFilm {
-    display: none;
-  }
+.railFilm {
+  display: none;
+}
 
-  .ledger {
-    position: fixed;
-    top: auto;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 50;
-    height: auto;
-    max-height: 82vh;
-    overflow: visible;
-    border-left: 0;
-    border-top: 1px solid var(--line-strong);
-    background: var(--ivory);
-    box-shadow: 0 -18px 40px -24px rgba(6, 46, 41, 0.35);
-  }
+.ledger {
+  position: fixed;
+  top: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  height: auto;
+  max-height: 82vh;
+  overflow: visible;
+  border-left: 0;
+  border-top: 1px solid var(--line-strong);
+  background: var(--ivory);
+  box-shadow: 0 -18px 40px -24px rgba(6, 46, 41, 0.35);
+}
 
-  .ledgerBar {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-    min-height: 68px;
-    padding: 0.6rem 16px calc(0.6rem + env(safe-area-inset-bottom));
-    background: none;
-    border: 0;
-    cursor: pointer;
-    text-align: left;
-    color: var(--ink);
-  }
+.ledgerBar {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-height: 68px;
+  padding: 0.6rem 16px calc(0.6rem + env(safe-area-inset-bottom));
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  color: var(--ink);
+}
 
-  .ledgerBarLabel {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--sage);
-  }
+.ledgerBarLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
 
-  .ledgerBarLabel small {
-    display: block;
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 0;
-    text-transform: none;
-  }
+.ledgerBarLabel small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
 
-  .ledgerBarTotal {
-    font-family: var(--serif);
-    font-size: 28px;
-    font-weight: 500;
-    color: var(--forest);
-    font-variant-numeric: tabular-nums;
-  }
+.ledgerBarTotal {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--forest);
+  font-variant-numeric: tabular-nums;
+}
 
-  .ledgerChevron {
-    width: 18px;
-    height: 18px;
-    fill: none;
-    stroke: var(--forest);
-    stroke-width: 1.5;
-    transition: transform 0.4s var(--ease);
-  }
+.ledgerChevron {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--forest);
+  stroke-width: 1.5;
+  transition: transform 0.4s var(--ease);
+}
 
-  .ledgerOpen .ledgerChevron {
-    transform: rotate(180deg);
-  }
+.ledgerOpen .ledgerChevron {
+  transform: rotate(180deg);
+}
 
-  .ledgerBody {
-    display: none;
-    max-height: calc(82vh - 70px);
-    overflow-y: auto;
-    padding: 0.5rem 16px 1.5rem;
-    border-top: 1px solid var(--line);
-  }
+.ledgerBody {
+  display: none;
+  max-height: calc(82vh - 70px);
+  overflow-y: auto;
+  padding: 0.5rem 16px 1.5rem;
+  border-top: 1px solid var(--line);
+}
 
-  .ledgerOpen .ledgerBody {
-    display: block;
-    animation: fadeIn 0.4s var(--ease);
-  }
+.ledgerOpen .ledgerBody {
+  display: block;
+  animation: fadeIn 0.4s var(--ease);
+}
 
-  .consultant {
-    display: none;
-  }
+.consultant {
+  display: none;
 }
 
 @media (max-width: 760px) {
@@ -1252,4 +1308,243 @@ select.input {
   .ledgerGrandFig {
     font-size: 36px;
   }
+}
+
+/* A glint passes over the total whenever it changes. */
+.ledgerGlintWrap {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.ledgerGlint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 30%, rgba(216, 189, 133, 0.6) 50%, transparent 70%);
+  transform: translateX(-130%);
+  animation: glint 1.3s 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes glint {
+  to { transform: translateX(130%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ledgerGlint {
+    display: none;
+  }
+}
+
+
+/* ============================================================
+   Desktop: a chapter line under the header and a floating folio
+   ============================================================ */
+@media (min-width: 761px) {
+  .rail {
+    background: var(--glass);
+    backdrop-filter: blur(14px) saturate(1.2);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .rail ol {
+    position: relative;
+    justify-content: center;
+    gap: 0;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* A hairline threads the chapters together. */
+  .rail ol::before {
+    content: "";
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line-strong) 12%, var(--line-strong) 88%, transparent);
+  }
+
+  .rail li {
+    position: relative;
+    flex: 0 1 auto;
+  }
+
+  .railItem {
+    position: relative;
+    padding: 0.95rem 1.15rem;
+    background: var(--ivory);
+    border-bottom: 0;
+  }
+
+  .railItem::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: var(--forest);
+    translate: -50% 0;
+    transition: width 0.6s var(--ease);
+  }
+
+  .railCurrent::after {
+    width: 60%;
+  }
+
+  .railItem:disabled {
+    opacity: 1;
+  }
+
+  .railItem:disabled > * {
+    opacity: 0.38;
+  }
+
+  .railTitle {
+    display: inline;
+    font-size: 17px;
+  }
+
+  .railShort {
+    display: none;
+  }
+
+  .railFrame {
+    font-size: 10px;
+  }
+
+  .consultant {
+    display: inline;
+  }
+
+  .stage {
+    padding-inline: clamp(24px, 5vw, 5rem);
+  }
+
+  /* The folio: a floating seal that opens into a drawer. */
+  .ledger {
+    top: auto;
+    left: auto;
+    right: 28px;
+    bottom: 28px;
+    width: auto;
+    max-height: none;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .ledgerBar {
+    grid-template-columns: auto auto auto;
+    gap: 1.1rem;
+    min-height: 64px;
+    padding: 0.55rem 1.1rem 0.55rem 1.4rem;
+    background: var(--paper);
+    border: 1px solid var(--forest);
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 4px var(--paper), inset 0 0 0 5px rgba(169, 138, 82, 0.5), 0 24px 50px -24px rgba(16, 48, 42, 0.55);
+    transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+  }
+
+  .ledgerBar:hover {
+    transform: translateY(-3px);
+  }
+
+  .ledgerBarTotal {
+    font-size: 26px;
+  }
+
+  .ledgerChevron {
+    transform: rotate(-90deg);
+  }
+
+  .ledgerOpen .ledgerChevron {
+    transform: rotate(90deg);
+  }
+
+  .ledgerBody {
+    position: fixed;
+    top: calc(var(--topbar) + 12px);
+    right: 16px;
+    bottom: 104px;
+    width: min(420px, calc(100vw - 32px));
+    max-height: none;
+    margin: 0;
+    padding: 2rem 1.6rem 1.75rem;
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    border-top: 1px solid var(--line);
+    display: block !important;
+    opacity: 0;
+    visibility: hidden;
+    translate: 24px 0;
+    transition: opacity 0.5s var(--ease), translate 0.6s var(--ease), visibility 0s 0.6s;
+    animation: none !important;
+  }
+
+  .ledgerOpen .ledgerBody {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition: opacity 0.5s var(--ease), translate 0.6s var(--ease), visibility 0s;
+  }
+
+  .workspace {
+    padding-bottom: 120px;
+  }
+}
+
+.ledgerScrim {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background: rgba(16, 32, 28, 0.18);
+  backdrop-filter: blur(3px);
+  animation: fadeIn 0.4s var(--ease);
+}
+
+/* Tablets: the chapter strip already names the stage, so the frame
+   counter in the top bar steps aside rather than crowding the logo. */
+@media (min-width: 641px) and (max-width: 1000px) {
+  .topbarCenter .mono {
+    display: none;
+  }
+}
+
+img.ledgerCrest {
+  width: 132px;
+  height: auto;
+  max-width: none;
+  object-fit: contain;
+}
+
+/* Typeable count inside the stepper. */
+.stepperInput {
+  width: 2.6rem;
+  min-width: 2.4rem;
+  padding: 0;
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--forest);
+  background: transparent;
+  border: 0;
+  border-inline: 1px solid var(--line);
+  outline: none;
+  cursor: text;
+}
+
+.stepperInput:focus {
+  background: var(--paper) !important;
+  color: var(--forest) !important;
+  box-shadow: inset 0 0 0 2px rgba(169, 138, 82, 0.6);
+}
+
+.stepperOn .stepperInput {
+  background: var(--forest);
+  color: var(--ivory);
+  border-color: var(--forest);
 }

@@ -2,15 +2,20 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "../ensemble.module.css";
+import cx from "../cinema.module.css";
 import st from "../stages.module.css";
 import base from "../studio.module.css";
 import { StageFooter, StageHeader } from "./StageChrome";
 import Stepper from "../ui/Stepper";
+import QtyInput, { MAX_QTY } from "../ui/QtyInput";
+import { scrollToElement } from "../ui/scroll";
+import { flyToFolio } from "../ui/fly";
 import IllustrativeTag from "../ui/IllustrativeTag";
 import AnimatedNumber from "../ui/AnimatedNumber";
-import { formatINR, groupIndian, plural } from "@/lib/commission/format";
+import { formatDateLong, formatINR, groupIndian, plural, roman } from "@/lib/commission/format";
+import { occasionImage, occasionLine, storyFor } from "@/lib/commission/stories";
 import { eventDisplayName, getAssignment } from "@/lib/commission/model";
-import { commissionNotes, guidanceFor, type EventGuidance } from "@/lib/commission/recommendations";
+import { guidanceFor, type EventGuidance } from "@/lib/commission/recommendations";
 import type { CelebrationEvent, ServiceDefinition } from "@/lib/commission/types";
 import type { StageProps } from "./types";
 
@@ -32,16 +37,15 @@ export default function EnsembleStage(props: StageProps) {
   const event = draft.events.find((e) => e.id === focusEvent) ?? null;
   const eventQuote = quote.events.find((e) => e.eventId === focusEvent);
   const g = event ? guidance.get(event.id) : undefined;
-  const notes = commissionNotes(draft);
   const openService = services.find((s) => s.id === dossier) ?? null;
 
   return (
     <div className={st.stageInner}>
       <StageHeader
-        frame="03"
-        kicker="Frame 03 · The Ensemble"
-        title={<>Compose your <em>creative team.</em></>}
-        lead="Seven disciplines, each with its own way of seeing. Choose who joins each event — and how many."
+        frame="04"
+        kicker="Frame 04 · The Casting"
+        title={<>Cast your crew, <em>occasion by occasion.</em></>}
+        lead="Each occasion in turn. Every role is written for that day — choose who joins it, and how many."
       >
         <IllustrativeTag show={config.pricingIsIllustrative} />
       </StageHeader>
@@ -49,7 +53,7 @@ export default function EnsembleStage(props: StageProps) {
       <div className={styles.toolbar}>
         <div className={base.segmented} role="tablist" aria-label="View">
           <button role="tab" aria-selected={view === "catalogue"} className={view === "catalogue" ? base.segOn : ""} onClick={() => setView("catalogue")}>
-            Event by event
+            Occasion by occasion
           </button>
           <button role="tab" aria-selected={view === "matrix"} className={view === "matrix" ? base.segOn : ""} onClick={() => setView("matrix")}>
             Full composition
@@ -60,15 +64,10 @@ export default function EnsembleStage(props: StageProps) {
         </span>
       </div>
 
-      {notes.length > 0 && (
-        <ul className={styles.commissionNotes}>
-          {notes.map((n) => <li key={n}>{n}</li>)}
-        </ul>
-      )}
 
       {view === "catalogue" ? (
         <>
-          <div className={styles.eventTabs} role="tablist" aria-label="Composing for event">
+          <div className={styles.eventTabs} role="tablist" aria-label="Casting for occasion" data-cast-top>
             {draft.events.map((e, i) => {
               const pe = quote.events.find((x) => x.eventId === e.id);
               return (
@@ -90,16 +89,27 @@ export default function EnsembleStage(props: StageProps) {
           </div>
 
           {event && (
-            <section className={styles.focusHead} aria-live="polite">
-              <div>
-                <p className={base.kicker}>Composing for</p>
-                <h2 className={styles.focusTitle}>{eventDisplayName(event, config)}</h2>
-                <p className={st.muted}>
-                  {[event.guestCount ? `${groupIndian(event.guestCount)} guests` : "Guest count not set", event.venue].filter(Boolean).join(" · ")}
-                </p>
-              </div>
-              <div className={styles.focusTotal}>
-                <span>Event subtotal</span>
+            <section className={`${cx.scene} ${cx.sceneThemed}`} data-theme={event.type} key={event.id} aria-live="polite">
+              <span className={cx.scenePattern} aria-hidden="true" />
+              <p className={cx.sceneKicker}>
+                Occasion {draft.events.findIndex((e) => e.id === event.id) + 1} of {draft.events.length}
+              </p>
+              <h2 className={cx.sceneTitle} data-depth="6">{eventDisplayName(event, config)}</h2>
+              <span className={cx.ornament} aria-hidden="true"><i /></span>
+              <p className={cx.sceneLine}>{occasionLine(event.type)}</p>
+              <p className={cx.sceneMeta}>
+                {[
+                  event.date ? formatDateLong(event.date) : "",
+                  event.guestCount ? `${groupIndian(event.guestCount)} guests` : "",
+                  event.venue,
+                ].filter(Boolean).join("  ·  ") || "Date and venue to be confirmed"}
+              </p>
+              <div className={cx.sceneTotal}>
+                <span>
+                  {(eventQuote?.professionals ?? 0) === 0
+                    ? "No one cast yet"
+                    : `${eventQuote!.professionals} ${eventQuote!.professionals === 1 ? "person" : "people"} cast`}
+                </span>
                 <AnimatedNumber value={eventQuote?.subtotal ?? 0} />
               </div>
             </section>
@@ -107,60 +117,101 @@ export default function EnsembleStage(props: StageProps) {
 
           {g && <GuidancePanel guidance={g} event={event!} {...props} />}
 
-          <div className={styles.catalogue}>
+          <div className={cx.posterGrid} data-theme={event?.type}>
             {services.map((s, i) => {
               const a = event ? getAssignment(draft, event.id, s.id) : undefined;
               const q = a?.quantity ?? 0;
               const sug = g?.suggestions.find((x) => x.serviceId === s.id);
               const suitable = !event || s.suitableFor.length === 0 || s.suitableFor.includes(event.type);
               const line = eventQuote?.lines.find((l) => l.serviceId === s.id);
+              const story = event ? storyFor(s.id, event.type, eventDisplayName(event, config)) : null;
               return (
-                <article key={s.id} className={`${styles.card} ${q > 0 ? styles.cardOn : ""} ${s.signature ? styles.cardSignature : ""}`} style={{ animationDelay: `${i * 60}ms` }}>
-                  <button className={styles.cardMedia} onClick={() => setDossier(s.id)} aria-label={`Explore ${s.name}`}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={s.image} alt={s.imageAlt} loading="lazy" />
-                    <span className={styles.cardNo}>No. {String(s.order).padStart(2, "0")}</span>
-                    {s.signature && <span className={styles.cardBadge}>Signature</span>}
-                    {q > 0 && <span className={styles.cardCount} aria-hidden="true">×{q}</span>}
-                  </button>
-                  <div className={styles.cardBody}>
-                    <p className={styles.cardEpithet}>{s.epithet}</p>
-                    <h3 className={styles.cardName}>{s.name}</h3>
-                    <p className={styles.cardIntro}>{s.introduction}</p>
-                    <p className={styles.cardPrice}>
-                      {formatINR(s.price)} <small>{s.unitLabel}</small>
-                    </p>
+                <article
+                  key={`${focusEvent}-${s.id}`}
+                  className={`${cx.poster} ${q > 0 ? cx.posterOn : ""}`}
+                  style={{ "--i": i } as React.CSSProperties}
+                  data-tilt="5"
+                  onClick={(ev) => {
+                    if ((ev.target as HTMLElement).closest("button, input")) return;
+                    setDossier(s.id);
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className={cx.posterImg} src={s.image} alt={s.imageAlt} loading="lazy" id={`img-${s.id}`} />
+                  <span className={cx.posterShade} aria-hidden="true" />
+                  <span className={cx.posterNo}>{roman(i)}</span>
+                  {s.signature && <span className={cx.posterBadge}>Signature</span>}
+                  {q > 0 && <span className={cx.posterCount} aria-hidden="true">×{q}</span>}
+                  <div className={cx.posterBody}>
+                    <h3 className={cx.posterName}>
+                      <button className={cx.posterNameBtn} onClick={() => setDossier(s.id)} aria-label={`${s.name} — full profile`}>{s.name}</button>
+                    </h3>
+                    <p className={cx.posterLine}>{story?.headline ?? s.introduction}</p>
+                    {sug && sug.quantity !== q && (
+                      <button className={cx.posterSug} onClick={() => event && actions.setQuantity(event.id, s.id, Math.min(sug.quantity, MAX_QTY))} title={sug.reason}>
+                        ✦ Studio suggests {sug.quantity}
+                      </button>
+                    )}
                     {event && (
-                      <div className={styles.cardControls}>
-                        <Stepper
-                          value={q}
-                          max={s.maxQuantity}
-                          min={0}
-                          label={`${s.name} for ${eventDisplayName(event, config)}`}
-                          onChange={(n) => actions.setQuantity(event.id, s.id, n)}
-                        />
-                        <span className={styles.cardLine}>{line ? formatINR(line.lineTotal) : "—"}</span>
+                      <div className={cx.posterFoot}>
+                        <span className={cx.posterPrice}>
+                          {formatINR(s.price)}
+                          <small>{line ? `${formatINR(line.lineTotal)} total` : "per person"}</small>
+                        </span>
+                        {q === 0 ? (
+                          <button
+                            className={cx.posterAdd}
+                            onClick={() => {
+                              actions.setQuantity(event.id, s.id, 1);
+                              flyToFolio(document.getElementById(`img-${s.id}`));
+                            }}
+                          >
+                            <span aria-hidden="true">+</span> Add
+                          </button>
+                        ) : (
+                          <div className={cx.posterStep}>
+                            <button onClick={() => actions.setQuantity(event.id, s.id, q - 1)} aria-label={`One fewer ${s.name}`}>−</button>
+                            <QtyInput className={cx.posterQty} value={q} label={`Number of ${s.name}`} onChange={(n) => actions.setQuantity(event.id, s.id, n)} />
+                            <button
+                              onClick={() => { if (q < MAX_QTY) { actions.setQuantity(event.id, s.id, q + 1); flyToFolio(document.getElementById(`img-${s.id}`)); } }}
+                              disabled={q >= MAX_QTY}
+                              aria-label={`One more ${s.name}`}
+                            >+</button>
+                          </div>
+                        )}
                       </div>
                     )}
-                    <div className={styles.cardFoot}>
-                      {sug ? (
-                        sug.quantity === q ? (
-                          <span className={styles.sugMatched}>Matches the studio suggestion</span>
-                        ) : (
-                          <button className={styles.sugChip} onClick={() => event && actions.setQuantity(event.id, s.id, Math.min(sug.quantity, s.maxQuantity))} title={sug.reason}>
-                            Suggested {sug.quantity} · apply
-                          </button>
-                        )
-                      ) : !suitable ? (
-                        <span className={styles.sugQuiet}>Less typical for this event</span>
-                      ) : <span />}
-                      <button className={base.btnText} onClick={() => setDossier(s.id)}>Discover →</button>
-                    </div>
+                    {!sug && !suitable && <span className={cx.posterQuiet}>Less typical for this occasion</span>}
                   </div>
                 </article>
               );
             })}
           </div>
+
+          {event && draft.events.length > 1 && (
+            <div className={cx.nextScene}>
+              {(() => {
+                const idx = draft.events.findIndex((e) => e.id === event.id);
+                const next = draft.events[idx + 1];
+                return next ? (
+                  <button
+                    className={cx.nextSceneBtn}
+                    data-theme={next.type}
+                    onClick={() => {
+                      setFocusEvent(next.id);
+                      scrollToElement(document.querySelector<HTMLElement>("[data-cast-top]"), -110);
+                    }}
+                  >
+                    <span className={base.mono}>Next occasion</span>
+                    <b>{eventDisplayName(next, config)}</b>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 6l6 6-6 6" /></svg>
+                  </button>
+                ) : (
+                  <p className={st.muted}>That was your last occasion. Review the full composition, or continue to delivery.</p>
+                );
+              })()}
+            </div>
+          )}
         </>
       ) : (
         <Matrix {...props} services={services} guidance={guidance} onOpen={setDossier} />
@@ -171,7 +222,7 @@ export default function EnsembleStage(props: StageProps) {
       )}
 
       <StageFooter
-        onBack={() => go("celebration")}
+        onBack={() => go("crew")}
         onNext={() => go("delivery")}
         nextLabel="Choose your delivery"
         hint={quote.lines.length === 0 ? "Select at least one professional for any event." : undefined}
@@ -225,15 +276,17 @@ function Matrix({
   onOpen,
 }: StageProps & { services: ServiceDefinition[]; guidance: Map<string, EventGuidance>; onOpen: (id: string) => void }) {
   return (
-    <div className={styles.matrixWrap} tabIndex={0} aria-label="Composition matrix — scroll horizontally on small screens">
-      <table className={styles.matrix}>
+    <div className={`${styles.matrixWrap} ${cx.mxWrap}`} data-lenis-prevent tabIndex={0} aria-label="Composition matrix — scroll horizontally on small screens">
+      <table className={`${styles.matrix} ${cx.mx}`}>
         <thead>
           <tr>
             <th scope="col" className={styles.matrixCorner}>Event</th>
             {services.map((s) => (
               <th key={s.id} scope="col">
-                <button className={styles.matrixSvc} onClick={() => onOpen(s.id)}>
-                  <span>{s.name}</span>
+                <button className={`${styles.matrixSvc} ${cx.mxSvc}`} onClick={() => onOpen(s.id)}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={s.image} alt="" />
+                  <span>{s.name.replace(/ (Photographer|Videographer)$/, (m) => m === " Photographer" ? " Photo" : " Video").replace("Aerial Photography & Drone", "Aerial").replace("Creative Cinematography", "Cinematography")}</span>
                   <small>{formatINR(s.price)}</small>
                 </button>
               </th>
@@ -248,6 +301,8 @@ function Matrix({
             return (
               <tr key={e.id}>
                 <th scope="row">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className={cx.mxThumb} src={occasionImage(e.type)} alt="" />
                   <span className={styles.matrixEvent}>{eventDisplayName(e, config)}</span>
                   <small>{e.guestCount ? `${groupIndian(e.guestCount)} guests` : ""}</small>
                 </th>
@@ -256,9 +311,9 @@ function Matrix({
                   const sug = g?.suggestions.find((x) => x.serviceId === s.id);
                   return (
                     <td key={s.id} className={q > 0 ? styles.matrixOn : ""}>
-                      <Stepper size="sm" value={q} max={s.maxQuantity} label={`${s.name}, ${eventDisplayName(e, config)}`} onChange={(n) => actions.setQuantity(e.id, s.id, n)} />
+                      <Stepper size="sm" value={q} label={`${s.name}, ${eventDisplayName(e, config)}`} onChange={(n) => actions.setQuantity(e.id, s.id, n)} />
                       {sug && sug.quantity !== q && (
-                        <button className={styles.matrixSug} onClick={() => actions.setQuantity(e.id, s.id, Math.min(sug.quantity, s.maxQuantity))} title={sug.reason}>
+                        <button className={styles.matrixSug} onClick={() => actions.setQuantity(e.id, s.id, Math.min(sug.quantity, MAX_QTY))} title={sug.reason}>
                           suggest {sug.quantity}
                         </button>
                       )}
@@ -304,12 +359,9 @@ function Dossier({
   }, []);
   const lines = quote.lines.filter((l) => l.serviceId === s.id);
   const total = lines.reduce((a, l) => a + l.lineTotal, 0);
-  const suitableLabels = s.suitableFor.length
-    ? s.suitableFor.map((id) => config.eventPresets.find((p) => p.id === id)?.label).filter(Boolean).join(", ")
-    : "Every occasion";
 
   return (
-    <dialog ref={ref} className={styles.dossier} onClose={onClose} aria-labelledby="dossier-title" onClick={(e) => { if (e.target === ref.current) ref.current?.close(); }}>
+    <dialog data-lenis-prevent ref={ref} className={styles.dossier} onClose={onClose} aria-labelledby="dossier-title" onClick={(e) => { if (e.target === ref.current) ref.current?.close(); }}>
       <div className={styles.dossierInner}>
         <div className={styles.dossierMedia}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -318,56 +370,57 @@ function Dossier({
             <span className={base.mono}>No. {String(s.order).padStart(2, "0")} · {s.epithet.toUpperCase()}</span>
           </div>
         </div>
-        <div className={styles.dossierText}>
+        <div className={`${styles.dossierText} ${cx.dos}`}>
           <button className={styles.dossierClose} onClick={() => ref.current?.close()} aria-label="Close">
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" /></svg>
           </button>
-          <p className={base.kicker}>{s.epithet}</p>
-          <h2 id="dossier-title" className={styles.dossierTitle}>{s.name}</h2>
-          <p className={styles.dossierIntro}>{s.introduction}</p>
-          <p>{s.role}</p>
+          <p className={cx.dosEpithet}>{s.epithet}</p>
+          <h2 id="dossier-title" className={cx.dosName}>{s.name}</h2>
+          <p className={cx.dosIntro}>{s.introduction}</p>
 
-          <div className={styles.dossierCols}>
-            <div>
-              <h3>What they capture</h3>
-              <ul>{s.captures.map((c) => <li key={c}>{c}</li>)}</ul>
-            </div>
-            <div>
-              <h3>What you receive</h3>
-              <ul>{s.deliverables.map((c) => <li key={c}>{c}</li>)}</ul>
-            </div>
+          <div className={cx.dosChips}>
+            {s.deliverables.slice(0, 3).map((c) => <span key={c}>{c}</span>)}
           </div>
-          <blockquote className={styles.dossierWhy}>{s.whyItMatters}</blockquote>
-          <dl className={styles.dossierFacts}>
-            <div><dt>Suited to</dt><dd>{suitableLabels}</dd></div>
-            <div><dt>Recommended team</dt><dd>{s.recommendedNote}</dd></div>
-            <div><dt>Investment</dt><dd>{formatINR(s.price)} <small>{s.unitLabel}</small> <IllustrativeTag show={config.pricingIsIllustrative} compact /></dd></div>
-            {s.technicalNotes?.length ? (
-              <div><dt>Requirements</dt><dd><ul>{s.technicalNotes.map((n) => <li key={n}>{n}</li>)}</ul></dd></div>
-            ) : null}
-          </dl>
 
-          <h3 className={styles.assignTitle}>Assign to your events</h3>
-          <ul className={styles.assignList}>
+          <div className={cx.dosPrice}>
+            <span>{formatINR(s.price)}</span>
+            <small>{s.unitLabel}</small>
+            <IllustrativeTag show={config.pricingIsIllustrative} compact />
+          </div>
+
+          <div className={cx.dosAssignHead}>
+            <h3>Add to your occasions</h3>
+            {draft.events.some((e) => !getAssignment(draft, e.id, s.id)) && (
+              <button
+                className={cx.addBtn}
+                onClick={() => draft.events.forEach((e) => { if (!getAssignment(draft, e.id, s.id)) actions.setQuantity(e.id, s.id, 1); })}
+              >
+                <span aria-hidden="true">+</span> Every occasion
+              </button>
+            )}
+          </div>
+          <ul className={cx.dosList}>
             {draft.events.map((e) => {
               const a = getAssignment(draft, e.id, s.id);
               const q = a?.quantity ?? 0;
               const sug = guidance.get(e.id)?.suggestions.find((x) => x.serviceId === s.id);
               const line = lines.find((l) => l.eventId === e.id);
               return (
-                <li key={e.id} className={q > 0 ? styles.assignOn : ""}>
-                  <div className={styles.assignRow}>
-                    <span className={styles.assignEvent}>
-                      {eventDisplayName(e, config)}
-                      {sug && <small title={sug.reason}>Suggested: {sug.quantity}{sug.quantity !== q && (
-                        <button className={base.btnText} onClick={() => actions.setQuantity(e.id, s.id, Math.min(sug.quantity, s.maxQuantity))}>apply</button>
-                      )}</small>}
+                <li key={e.id} className={q > 0 ? cx.dosOn : ""}>
+                  <div className={cx.dosRow}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={occasionImage(e.type)} alt="" />
+                    <span className={cx.dosEvent}>
+                      <b>{eventDisplayName(e, config)}</b>
+                      {sug && sug.quantity !== q ? (
+                        <button className={cx.dosSug} onClick={() => actions.setQuantity(e.id, s.id, Math.min(sug.quantity, MAX_QTY))} title={sug.reason}>
+                          Suggested {sug.quantity}
+                        </button>
+                      ) : (
+                        <small>{line ? formatINR(line.lineTotal) : "Not added"}</small>
+                      )}
                     </span>
-                    <Stepper value={q} max={s.maxQuantity} label={`${s.name}, ${eventDisplayName(e, config)}`} onChange={(n) => actions.setQuantity(e.id, s.id, n)} />
-                    <span className={styles.assignAmt}>
-                      {line ? formatINR(line.lineTotal) : "—"}
-                      {line?.overridden && <small>adjusted</small>}
-                    </span>
+                    <Stepper value={q} size="sm" label={`${s.name}, ${eventDisplayName(e, config)}`} onChange={(n) => actions.setQuantity(e.id, s.id, n)} />
                   </div>
                   {q > 0 && (
                     editing === e.id ? (
@@ -380,7 +433,7 @@ function Dossier({
                       />
                     ) : (
                       <button className={styles.overrideLink} onClick={() => setEditing(e.id)}>
-                        {a?.unitPriceOverride != null ? `Studio price ${formatINR(a.unitPriceOverride)} — ${a.overrideReason} · change` : "Studio price adjustment"}
+                        {a?.unitPriceOverride != null ? `Studio price ${formatINR(a.unitPriceOverride)} · change` : "Adjust price"}
                       </button>
                     )
                   )}
@@ -388,11 +441,14 @@ function Dossier({
               );
             })}
           </ul>
-          <div className={styles.dossierTotal}>
-            <span>{s.name} across your celebration</span>
+          <div className={cx.dosTotal}>
+            <span>Across your celebration</span>
             <AnimatedNumber value={total} />
           </div>
-          <button className={base.btnPrimary} onClick={() => ref.current?.close()}>Return to the ensemble</button>
+          <button className={base.btnPrimary} onClick={() => ref.current?.close()}>
+            Done
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 6l6 6-6 6" /></svg>
+          </button>
         </div>
       </div>
     </dialog>

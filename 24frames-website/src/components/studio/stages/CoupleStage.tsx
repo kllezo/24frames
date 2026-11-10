@@ -1,10 +1,13 @@
 "use client";
 
+import cx from "../cinema.module.css";
 import styles from "../stages.module.css";
 import base from "../studio.module.css";
+import DatePicker from "../ui/DatePicker";
 import { StageFooter, StageHeader } from "./StageChrome";
+import Invitation from "../ui/Invitation";
 import { coupleHints } from "@/lib/commission/validation";
-import { formatDateLong, weekdayOf } from "@/lib/commission/format";
+import { formatDateLong, isPastDate, todayISO, weekdayOf } from "@/lib/commission/format";
 import type { PreferredContact } from "@/lib/commission/types";
 import type { StageProps } from "./types";
 
@@ -18,7 +21,7 @@ export default function CoupleStage({ draft, actions, go }: StageProps) {
   const c = draft.couple;
   const hints = coupleHints(draft);
   const hasName = !!(c.brideName.trim() || c.groomName.trim());
-  const initials = [c.brideName.trim()[0], c.groomName.trim()[0]].filter(Boolean).join("");
+  const past = isPastDate(c.weddingDate);
 
   return (
     <div className={styles.stageInner}>
@@ -26,142 +29,123 @@ export default function CoupleStage({ draft, actions, go }: StageProps) {
         frame="01"
         kicker="Frame 01 · The Couple"
         title={<>Tell us whose story <em>we are telling.</em></>}
-        lead="Only a name is needed to begin — everything else can be added whenever it is known."
+        lead="Only a name is needed to begin. Watch the invitation write itself as you go."
       />
 
-      <section className={styles.dedication} aria-label="Couple names">
-        <div className={styles.monogram} aria-hidden="true">
-          <span>{initials || "24"}</span>
-        </div>
-        <p className={styles.dedicationLine}>
-          <span className={styles.dedicationPre}>This commission is composed for</span>
-          <span className={styles.nameRow}>
-            <label className={styles.nameField}>
-              <span className="sr-only">Bride&apos;s name</span>
-              <input
-                value={c.brideName}
-                onChange={(e) => actions.couple({ brideName: e.target.value })}
-                placeholder="Bride"
-                maxLength={60}
-                autoComplete="off"
-                size={Math.max(6, c.brideName.length + 1)}
-              />
-              <small>Bride</small>
-            </label>
-            <span className={styles.ampersand} aria-hidden="true">&amp;</span>
-            <label className={styles.nameField}>
-              <span className="sr-only">Groom&apos;s name</span>
-              <input
-                value={c.groomName}
-                onChange={(e) => actions.couple({ groomName: e.target.value })}
-                placeholder="Groom"
-                maxLength={60}
-                autoComplete="off"
-                size={Math.max(6, c.groomName.length + 1)}
-              />
-              <small>Groom</small>
-            </label>
-          </span>
-        </p>
-      </section>
-
-      <section className={styles.formGrid} aria-label="Contact and wedding details">
-        <label className={base.field}>
-          <span className={base.fieldLabel}>Primary contact number</span>
-          <input
-            className={base.input}
-            type="tel"
-            inputMode="tel"
-            value={c.phone}
-            onChange={(e) => actions.couple({ phone: e.target.value })}
-            placeholder="+91 98765 43210"
-            maxLength={20}
-            aria-invalid={!!hints.phone}
-          />
-          {hints.phone && <span className={base.hint}>{hints.phone}</span>}
-        </label>
-        <label className={base.field}>
-          <span className={base.fieldLabel}>Email address</span>
-          <input
-            className={base.input}
-            type="email"
-            value={c.email}
-            onChange={(e) => actions.couple({ email: e.target.value })}
-            placeholder="name@example.com"
-            maxLength={120}
-            aria-invalid={!!hints.email}
-          />
-          {hints.email && <span className={base.hint}>{hints.email}</span>}
-        </label>
-        <label className={base.field}>
-          <span className={base.fieldLabel}>Wedding date</span>
-          <input
-            className={base.input}
-            type="date"
-            value={c.weddingDate}
-            onChange={(e) => actions.couple({ weddingDate: e.target.value })}
-          />
-          <span className={base.hint}>
-            {c.weddingDate ? `${weekdayOf(c.weddingDate)}, ${formatDateLong(c.weddingDate)}` : "Leave blank if not yet fixed."}
-          </span>
-        </label>
-        <label className={base.field}>
-          <span className={base.fieldLabel}>Or an approximate date</span>
-          <input
-            className={base.input}
-            value={c.approximateDate}
-            onChange={(e) => actions.couple({ approximateDate: e.target.value })}
-            placeholder="e.g. Late February 2027"
-            maxLength={60}
-            disabled={!!c.weddingDate}
-          />
-        </label>
-        <label className={base.field}>
-          <span className={base.fieldLabel}>City</span>
-          <input
-            className={base.input}
-            value={c.city}
-            onChange={(e) => actions.couple({ city: e.target.value })}
-            placeholder="Hyderabad"
-            maxLength={60}
-          />
-        </label>
-        <fieldset className={base.field}>
-          <legend className={base.fieldLabel}>Preferred contact</legend>
-          <div className={base.segmented}>
-            {CONTACTS.map((o) => (
-              <label key={o.id} className={c.preferredContact === o.id ? base.segOn : ""}>
-                <input
-                  type="radio"
-                  name="preferredContact"
-                  value={o.id}
-                  checked={c.preferredContact === o.id}
-                  onChange={() => actions.couple({ preferredContact: o.id })}
-                />
-                {o.label}
+      <div className={cx.coupleLayout}>
+        <div className={cx.atelierForm}>
+          <section className={cx.formCard} aria-labelledby="f-names">
+            <h2 id="f-names" className={cx.formCardTitle}><span>I</span> The couple</h2>
+            <div className={cx.namePair}>
+              <label className={cx.lux}>
+                <input value={c.brideName} onChange={(e) => actions.couple({ brideName: e.target.value })} placeholder=" " maxLength={60} autoComplete="off" />
+                <span>Bride&apos;s name</span>
               </label>
-            ))}
-          </div>
-        </fieldset>
-        <label className={`${base.field} ${styles.span2}`}>
-          <span className={base.fieldLabel}>Special notes</span>
-          <textarea
-            className={base.textarea}
-            rows={3}
-            value={c.notes}
-            onChange={(e) => actions.couple({ notes: e.target.value })}
-            placeholder="Family traditions, people who must be photographed, things you love…"
-            maxLength={2000}
-          />
-        </label>
-      </section>
+              <span className={cx.nameAmp} aria-hidden="true">&amp;</span>
+              <label className={cx.lux}>
+                <input value={c.groomName} onChange={(e) => actions.couple({ groomName: e.target.value })} placeholder=" " maxLength={60} autoComplete="off" />
+                <span>Groom&apos;s name</span>
+              </label>
+            </div>
+          </section>
+
+          <section className={cx.formCard} aria-labelledby="f-date">
+            <h2 id="f-date" className={cx.formCardTitle}><span>II</span> The date</h2>
+            <div className={cx.datePair}>
+              <DatePicker
+                label="Exact date"
+                value={c.weddingDate}
+                min={todayISO()}
+                invalid={past}
+                disabled={!!c.approximateDate.trim()}
+                onChange={(v) => actions.couple({ weddingDate: v && isPastDate(v) ? "" : v })}
+              />
+              <span className={cx.orRule} aria-hidden="true">or</span>
+              <label className={cx.lux}>
+                <input
+                  value={c.approximateDate}
+                  onChange={(e) => actions.couple({ approximateDate: e.target.value })}
+                  placeholder=" "
+                  maxLength={60}
+                  disabled={!!c.weddingDate}
+                />
+                <span>Approximate, e.g. late February 2027</span>
+              </label>
+            </div>
+            <div className={cx.dateFoot}>
+              <span className={`${base.hint} ${past ? base.hintError : ""}`} role={past ? "alert" : undefined}>
+                {past
+                  ? "That date has already passed — choose today or a later date."
+                  : c.weddingDate
+                    ? `${weekdayOf(c.weddingDate)}, ${formatDateLong(c.weddingDate)}`
+                    : c.approximateDate.trim() ? "Using the approximate date." : "Choose one — an exact date or an approximate one."}
+              </span>
+              {(c.weddingDate || c.approximateDate) && (
+                <button type="button" className={base.btnText} onClick={() => actions.couple({ weddingDate: "", approximateDate: "" })}>
+                  Clear date
+                </button>
+              )}
+            </div>
+          </section>
+
+          <section className={cx.formCard} aria-labelledby="f-reach">
+            <h2 id="f-reach" className={cx.formCardTitle}><span>III</span> How to reach you</h2>
+            <div className={cx.reachGrid}>
+              <label className={cx.lux}>
+                <input type="tel" inputMode="tel" value={c.phone} onChange={(e) => actions.couple({ phone: e.target.value })} placeholder=" " maxLength={20} aria-invalid={!!hints.phone} />
+                <span>Phone number</span>
+                {hints.phone && <small className={base.hint}>{hints.phone}</small>}
+              </label>
+              <label className={cx.lux}>
+                <input type="email" value={c.email} onChange={(e) => actions.couple({ email: e.target.value })} placeholder=" " maxLength={120} aria-invalid={!!hints.email} />
+                <span>Email address</span>
+                {hints.email && <small className={base.hint}>{hints.email}</small>}
+              </label>
+              <label className={cx.lux}>
+                <input value={c.city} onChange={(e) => actions.couple({ city: e.target.value })} placeholder=" " maxLength={60} />
+                <span>City</span>
+              </label>
+              <fieldset className={cx.contactPick}>
+                <legend>Best way to reach you</legend>
+                <div>
+                  {CONTACTS.map((o) => (
+                    <label key={o.id} className={c.preferredContact === o.id ? cx.contactOn : ""}>
+                      <input
+                        type="radio"
+                        name="preferredContact"
+                        value={o.id}
+                        checked={c.preferredContact === o.id}
+                        onChange={() => actions.couple({ preferredContact: o.id })}
+                      />
+                      {o.label}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            </div>
+          </section>
+
+          <section className={cx.formCard} aria-labelledby="f-note">
+            <h2 id="f-note" className={cx.formCardTitle}><span>IV</span> Anything we should know</h2>
+            <label className={`${cx.lux} ${cx.luxArea}`}>
+              <textarea rows={3} value={c.notes} onChange={(e) => actions.couple({ notes: e.target.value })} placeholder=" " maxLength={2000} />
+              <span>Family traditions, people who must be photographed, things you love…</span>
+            </label>
+          </section>
+        </div>
+
+        <aside className={cx.coupleAside} aria-label="Invitation preview">
+          <Invitation couple={c} />
+        </aside>
+      </div>
 
       <StageFooter
         onBack={() => go("overture")}
         backLabel="Opening"
         onNext={() => go("celebration")}
         nextLabel="Build the celebration"
-        hint={hasName ? undefined : "Add at least one name — it will appear on the proposal."}
+        nextDisabled={past}
+        hint={past ? "The wedding date has already passed." : hasName ? undefined : "Add at least one name — it will appear on the proposal."}
       />
     </div>
   );

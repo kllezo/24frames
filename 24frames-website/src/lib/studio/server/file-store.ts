@@ -341,14 +341,15 @@ export async function saveMedia(name: string, _contentType: string, bytes: Uint8
     await fs.mkdir(mediaDir(), { recursive: true, mode: 0o700 });
     await fs.writeFile(path.join(mediaDir(), name), bytes, { mode: 0o600 });
   } catch (err) {
-    throw new StorageUnavailableError(`Image could not be stored (${(err as NodeJS.ErrnoException).code ?? "error"}).`);
+    throw new StorageUnavailableError(`File could not be stored (${(err as NodeJS.ErrnoException).code ?? "error"}).`);
   }
 }
 
 export async function getMedia(name: string): Promise<{ contentType: string; bytes: Uint8Array } | null> {
   try {
     const data = await fs.readFile(path.join(mediaDir(), name));
-    return { contentType: name.endsWith(".png") ? "image/png" : "image/jpeg", bytes: new Uint8Array(data) };
+    const contentType = name.endsWith(".pdf") ? "application/pdf" : name.endsWith(".png") ? "image/png" : "image/jpeg";
+    return { contentType, bytes: new Uint8Array(data) };
   } catch {
     return null;
   }

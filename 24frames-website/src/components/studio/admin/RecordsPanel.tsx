@@ -20,6 +20,7 @@ export default function RecordsPanel() {
   useEffect(() => {
     const t = window.setTimeout(async () => {
       const res = await fetch(`/api/studio/commissions?q=${encodeURIComponent(q)}`, { cache: "no-store" }).catch(() => null);
+      if (res?.status === 403) { window.location.reload(); return; }
       const data = res ? await res.json().catch(() => ({})) : {};
       if (res?.ok) {
         setRows(data.commissions);
@@ -35,6 +36,7 @@ export default function RecordsPanel() {
   async function openRecord(id: string) {
     setLoadingId(id);
     const res = await fetch(`/api/studio/commissions/${id}`, { cache: "no-store" }).catch(() => null);
+    if (res?.status === 403) { window.location.reload(); return; }
     const data = res ? await res.json().catch(() => ({})) : {};
     setLoadingId(null);
     if (res?.ok) setOpen(data.record);

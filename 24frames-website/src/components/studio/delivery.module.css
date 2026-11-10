@@ -336,8 +336,9 @@
 
 .feeCard {
   padding: 1.75rem;
-  background: var(--forest);
-  color: var(--ivory);
+  background: var(--night-2);
+  color: #fbf5e9;
+  border: 1px solid var(--line-strong);
 }
 
 .feeCard p:first-child {
@@ -444,7 +445,7 @@
 }
 
 .bandNote b {
-  color: var(--ivory);
+  color: #fbf5e9;
   font-weight: 600;
 }
 

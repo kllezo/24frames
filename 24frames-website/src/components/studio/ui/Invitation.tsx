@@ -1,0 +1,63 @@
+"use client";
+
+import { useState } from "react";
+import cx from "../cinema.module.css";
+import Crest from "./Crest";
+import { formatDateLong, weekdayOf } from "@/lib/commission/format";
+import type { CoupleDetails } from "@/lib/commission/types";
+
+const CONTACT_LABEL = { whatsapp: "WhatsApp", call: "a phone call", email: "email" } as const;
+
+/* A wedding invitation that writes itself as the couple types. It tilts
+   toward the pointer and turns over to show how the studio will reach them. */
+export default function Invitation({ couple: c }: { couple: CoupleDetails }) {
+  const [flipped, setFlipped] = useState(false);
+  const bride = c.brideName.trim();
+  const groom = c.groomName.trim();
+  const when = c.weddingDate
+    ? `${weekdayOf(c.weddingDate)}, ${formatDateLong(c.weddingDate)}`
+    : c.approximateDate.trim() || "A date to be announced";
+
+  return (
+    <div className={cx.invite}>
+      <div
+        className={`${cx.inviteCard} ${flipped ? cx.inviteFlipped : ""}`}
+        data-tilt="9"
+        onClick={() => setFlipped((f) => !f)}
+        role="button"
+        tabIndex={0}
+        aria-label={flipped ? "Turn the invitation to the front" : "Turn the invitation over"}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setFlipped((f) => !f); } }}
+      >
+        <div className={cx.inviteFace}>
+          <Crest className={cx.inviteCrest} numeral={[bride[0], groom[0]].filter(Boolean).join("") || undefined} />
+          <p className={cx.inviteSmall}>Together with their families</p>
+          <p className={cx.inviteNames}>
+            <span className={bride ? "" : cx.inviteGhost}>{bride || "The bride"}</span>
+            <em>&amp;</em>
+            <span className={groom ? "" : cx.inviteGhost}>{groom || "The groom"}</span>
+          </p>
+          <p className={cx.inviteSmall}>request the pleasure of your company</p>
+          <span className={cx.ornament} aria-hidden="true"><i /></span>
+          <p className={cx.inviteWhen}>{when}</p>
+          <p className={cx.inviteWhere}>{c.city.trim() || "City to be announced"}</p>
+          <p className={cx.inviteFoot}>Photographed &amp; filmed by 24 Frames</p>
+        </div>
+        <div className={`${cx.inviteFace} ${cx.inviteBack}`}>
+          <p className={cx.inviteSmall}>Répondez s&apos;il vous plaît</p>
+          <p className={cx.inviteBackTitle}>How we&apos;ll reach you</p>
+          <dl className={cx.inviteDl}>
+            <div><dt>Phone</dt><dd>{c.phone.trim() || "—"}</dd></div>
+            <div><dt>Email</dt><dd>{c.email.trim() || "—"}</dd></div>
+            <div><dt>Prefers</dt><dd>{CONTACT_LABEL[c.preferredContact]}</dd></div>
+          </dl>
+          {c.notes.trim() && <p className={cx.inviteNote}>&ldquo;{c.notes.trim().slice(0, 140)}{c.notes.length > 140 ? "…" : ""}&rdquo;</p>}
+        </div>
+      </div>
+      <button type="button" className={cx.inviteTurn} onClick={() => setFlipped((f) => !f)}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 3v4h-4M6 21v-4h4" /></svg>
+        {flipped ? "Turn to the front" : "Turn the card"}
+      </button>
+    </div>
+  );
+}
