@@ -4226,7 +4226,7 @@
 .med {
   --R: clamp(170px, 36vw, 400px);
   --m: clamp(70px, 9.4vw, 104px);
-  --top: calc(var(--m) * 1.3);
+  --top: calc(var(--m) * 1.3 + 40px);
   --ease-orbit: cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
   margin-top: 0.75rem;
@@ -5694,4 +5694,82 @@ img.overtureCrest {
 .crewDots i.crewDotOn {
   background: var(--forest);
   border-color: var(--forest);
+}
+
+/* Crew: a subtle curved arrow over the lens, flowing right to left. */
+.spinArc {
+  --sr: calc(var(--R) + var(--m) * 1.08 + 30px);
+  position: absolute;
+  left: 50%;
+  top: calc(var(--top) + var(--R) - var(--sr));
+  z-index: 3;
+  width: calc(var(--sr) * 2);
+  height: calc(var(--sr) * 2);
+  margin-left: calc(var(--sr) * -1);
+  overflow: visible;
+  pointer-events: none;
+  animation: spinFade 0.8s 0.6s ease both;
+}
+
+.spinTrack,
+.spinFlow,
+.spinHead {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.spinTrack {
+  stroke: rgba(169, 138, 82, 0.25);
+  stroke-width: 1;
+}
+
+.spinFlow {
+  stroke: rgba(15, 61, 53, 0.7);
+  stroke-width: 1.6;
+  stroke-dasharray: 3 7;
+  animation: spinFlow 1.6s linear infinite;
+}
+
+.spinHead {
+  stroke: rgba(15, 61, 53, 0.85);
+  stroke-width: 1.7;
+  animation: spinNudge 1.6s ease-in-out infinite;
+}
+
+@keyframes spinFlow {
+  to { stroke-dashoffset: -20; }
+}
+
+@keyframes spinNudge {
+  50% { transform: translateX(-2.5px); }
+}
+
+@keyframes spinFade {
+  from { opacity: 0; }
+}
+
+.spinLabel {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--top) - var(--m) * 1.08 - 56px);
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--sage);
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: spinFade 0.8s 0.6s ease both, hintBreathe 2.8s 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinFlow,
+  .spinHead,
+  .spinLabel {
+    animation: none;
+  }
 }

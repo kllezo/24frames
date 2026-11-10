@@ -185,6 +185,19 @@ export default function CrewStage({ config, draft, go }: StageProps) {
         }}
       >
         <div className={cx.medStage}>
+          {seen.size < need && (
+            <>
+              {/* A curved arrow over the lens, flowing right to left: spin me. */}
+              <svg className={cx.spinArc} viewBox="-100 -100 200 200" aria-hidden="true">
+                <path className={cx.spinTrack} d="M 32.83 -90.21 A 96 96 0 0 0 -32.83 -90.21" />
+                <path className={cx.spinFlow} d="M 32.83 -90.21 A 96 96 0 0 0 -32.83 -90.21" />
+                <g transform="translate(-32.83 -90.21) rotate(-20)">
+                  <path className={cx.spinHead} d="M 6 -5.5 L -1.5 0 L 6 5.5" />
+                </g>
+              </svg>
+              <span className={cx.spinLabel} aria-hidden="true">Spin the lens</span>
+            </>
+          )}
           <span className={cx.medKnurl} aria-hidden="true" />
           <span className={cx.medIndex} aria-hidden="true" />
           <svg className={cx.medLens} viewBox="-500 -500 1000 1000" aria-hidden="true">
