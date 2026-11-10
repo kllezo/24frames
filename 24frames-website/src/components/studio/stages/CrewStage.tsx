@@ -32,7 +32,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
   const n = Math.max(1, services.length);
   const step = 360 / n;
   const [active, setActive] = useState(0);
-  // The way forward unlocks once they've met at least four of the crew.
+  // The way forward unlocks once they've met every member of the crew.
   const [seen, setSeen] = useState<Set<number>>(() => new Set([0]));
   const choose = (i: number) => {
     setActive(i);
@@ -139,18 +139,19 @@ export default function CrewStage({ config, draft, go }: StageProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
-  const need = Math.min(4, services.length);
+  const need = services.length;
   const svc = services[active];
   const occasions = draft.events.slice(0, 3);
 
   return (
     <div className={st.stageInner}>
-      <StageHeader
-        frame="03"
-        kicker="Frame 03 · The Crew"
-        title={<>Know your crew <em>before you choose.</em></>}
-        lead="Seven kinds of photographers and filmmakers, each seeing your day differently. Understand what each one brings — then pick who joins every occasion. Swipe the lens or tap a medallion."
-      >
+      <div className={cx.crewHead}>
+        <StageHeader
+          frame="03"
+          kicker="Frame 03 · The Crew"
+          title={<>Know your crew <em>before you choose.</em></>}
+          lead="Seven kinds of photographers and filmmakers, each seeing your day differently. Understand what each one brings — then pick who joins every occasion."
+        />
         <div className={cx.crewGate} aria-live="polite">
           {seen.size >= need ? (
             <button type="button" className={`${base.btnPrimary} ${cx.crewNext}`} onClick={() => go("ensemble")}>
@@ -158,15 +159,16 @@ export default function CrewStage({ config, draft, go }: StageProps) {
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 6l6 6-6 6" /></svg>
             </button>
           ) : (
-            <p className={cx.crewProgress}>
+            <>
               <span className={cx.crewDots} aria-hidden="true">
                 {Array.from({ length: need }, (_, i) => <i key={i} className={i < seen.size ? cx.crewDotOn : ""} />)}
               </span>
-              Meet {need - seen.size} more to continue · {seen.size} of {services.length} explored
-            </p>
+              <p className={cx.crewProgress}>{seen.size} of {need} explored</p>
+              <p className={cx.crewScrollHint}>Swipe the lens to meet the others →</p>
+            </>
           )}
         </div>
-      </StageHeader>
+      </div>
 
       <section
         ref={section}
