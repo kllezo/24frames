@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { createCommission, getConfig, listCommissions } from "@/lib/studio/server/repository";
-import { noStore, readJson, requireStudio, storageError } from "@/lib/studio/server/guard";
+import { noStore, readJson, requireStudio, storageError, requireAdmin } from "@/lib/studio/server/guard";
 import { validateDraftForSubmit } from "@/lib/commission/validation";
 import { normaliseDraft } from "@/lib/commission/model";
 import { quoteCommission } from "@/lib/commission/pricing";
 import type { CommissionDraft } from "@/lib/commission/types";
 
 export async function GET(request: Request) {
-  const session = await requireStudio();
+  const session = await requireAdmin();
   if (session instanceof NextResponse) return session;
   const q = new URL(request.url).searchParams.get("q") ?? "";
   try {

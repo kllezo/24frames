@@ -1,23 +1,41 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { lockClick } from "../ui/shutter";
 import styles from "../delivery.module.css";
+import cx from "../cinema.module.css";
 import st from "../stages.module.css";
 import base from "../studio.module.css";
 import { StageFooter, StageHeader } from "./StageChrome";
 import AnimatedNumber from "../ui/AnimatedNumber";
 import IllustrativeTag from "../ui/IllustrativeTag";
-import { formatINR, formatINRCompact } from "@/lib/commission/format";
-import type { BandTable } from "@/lib/commission/types";
+import { formatINR } from "@/lib/commission/format";
 import type { StageProps } from "./types";
 
-function Lock({ open }: { open: boolean }) {
+/** A brass padlock. Closed on every timeline; the chosen one springs open. */
+function BrassLock({ open, className }: { open?: boolean; className?: string }) {
+  const id = useId().replace(/:/g, "");
   return (
-    <svg className={`${styles.lock} ${open ? styles.lockOpen : ""}`} viewBox="0 0 40 48" aria-hidden="true">
-      <path className={styles.shackle} d="M12 22v-7.5a8 8 0 0 1 16 0V22" />
-      <rect className={styles.lockBody} x="7" y="22" width="26" height="20" rx="1.5" />
-      <circle className={styles.keyhole} cx="20" cy="30.5" r="2" />
-      <path className={styles.keyhole} d="M20 32.5v3.5" />
+    <svg className={`${className ?? ""} ${open ? cx.lockOpen : ""}`} viewBox="0 0 40 50" aria-hidden="true">
+      <defs>
+        <linearGradient id={`b${id}`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#f3dfa6" />
+          <stop offset="0.45" stopColor="#c9a25a" />
+          <stop offset="1" stopColor="#8a6a32" />
+        </linearGradient>
+        <linearGradient id={`s${id}`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#8a6a32" />
+          <stop offset="0.5" stopColor="#f0d99a" />
+          <stop offset="1" stopColor="#8a6a32" />
+        </linearGradient>
+      </defs>
+      <path className={cx.lockShackle} d="M12.5 23v-8a7.5 7.5 0 0 1 15 0v8" fill="none" stroke={`url(#s${id})`} strokeWidth="3.4" strokeLinecap="round" />
+      <rect x="6" y="22" width="28" height="23" rx="4.5" fill={`url(#b${id})`} />
+      <rect x="8.2" y="24.2" width="23.6" height="18.6" rx="3" fill="none" stroke="rgba(255,248,225,0.55)" strokeWidth="0.8" />
+      <g className={cx.lockKey}>
+        <circle cx="20" cy="31.5" r="2.6" fill="#3a2a10" />
+        <path d="M18.7 33h2.6l.8 5.2h-4.2z" fill="#3a2a10" />
+      </g>
     </svg>
   );
 }
@@ -30,7 +48,23 @@ export default function DeliveryStage({ config, draft, quote, actions, go }: Sta
   const pp = quote.postProduction;
   const selectedIdx = tiers.findIndex((t) => t.id === draft.deliveryTierId);
   const selected = selectedIdx >= 0 ? tiers[selectedIdx] : null;
-  const pos = (i: number) => (tiers.length === 1 ? 50 : (i / (tiers.length - 1)) * 100);
+  // Stops sit at the centre of equal columns, so labels and track align.
+  const pos = (i: number) => ((i + 0.5) / Math.max(1, tiers.length)) * 100;
+  const track = useRef<HTMLDivElement>(null);
+  const lastTier = useRef(draft.deliveryTierId);
+  useEffect(() => {
+    if (lastTier.current && draft.deliveryTierId && lastTier.current !== draft.deliveryTierId) lockClick();
+    lastTier.current = draft.deliveryTierId;
+  }, [draft.deliveryTierId]);
+  const dragging = useRef(false);
+  /** Slide: the knob jumps to the stop nearest the finger. */
+  function pickAt(x: number) {
+    const r = track.current?.getBoundingClientRect();
+    if (!r || !tiers.length) return;
+    const f = Math.min(0.999, Math.max(0, (x - r.left) / r.width));
+    const t = tiers[Math.floor(f * tiers.length)];
+    if (t && t.id !== draft.deliveryTierId) actions.setTier(t.id);
+  }
   const roundTo = config.postProduction.roundTo || 1;
   const feeAt = (m: number) => Math.round((pp.baseFee * m) / roundTo) * roundTo;
 
@@ -48,10 +82,10 @@ export default function DeliveryStage({ config, draft, quote, actions, go }: Sta
   return (
     <div className={st.stageInner}>
       <StageHeader
-        frame="04"
-        kicker="Frame 04 · The Delivery"
+        frame="05"
+        kicker="Frame 05 · The Delivery"
         title={<>When would you like to <em>relive it?</em></>}
-        lead="After the last guest leaves, our edit suite begins: selection, retouching, colour grading, sound design and final exports. Choose how quickly your story returns to you."
+        lead="Choose how soon your story comes home. Sooner moves it to the front of our edit suite."
       >
         <IllustrativeTag show={config.pricingIsIllustrative} />
       </StageHeader>
@@ -63,99 +97,94 @@ export default function DeliveryStage({ config, draft, quote, actions, go }: Sta
         </div>
       ) : (
         <>
-          <div className={styles.timelineWrap}>
-          <section className={styles.timelineStage} aria-label="Delivery timeline">
-            <div className={styles.origin}>
-              <span className={base.mono}>DAY 0</span>
-              <span>Your final event</span>
+          <section
+            className={cx.tl}
+            role="radiogroup"
+            aria-label="Delivery timeline"
+            style={{ "--sel": `${selected ? pos(selectedIdx) : pos(0)}%`, "--first": `${pos(0)}%`, "--n": tiers.length } as React.CSSProperties}
+            onPointerDown={(e) => {
+              dragging.current = true;
+              (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+              pickAt(e.clientX);
+            }}
+            onPointerMove={(e) => { if (dragging.current) pickAt(e.clientX); }}
+            onPointerUp={() => { dragging.current = false; }}
+            onPointerCancel={() => { dragging.current = false; }}
+          >
+            <div className={cx.tlStops}>
+              {tiers.map((t, i) => {
+                const isSel = t.id === draft.deliveryTierId;
+                const months = t.days >= 90;
+                return (
+                  <button
+                    key={t.id}
+                    id={`tier-${t.id}`}
+                    role="radio"
+                    aria-checked={isSel}
+                    tabIndex={isSel || (!selected && i === 0) ? 0 : -1}
+                    className={`${cx.tlStop} ${isSel ? cx.tlOn : ""}`}
+                    onClick={() => actions.setTier(t.id)}
+                    onKeyDown={(e) => onKey(e, i)}
+                    aria-label={`${t.priorityName}, ${months ? Math.round(t.days / 30) + " months" : t.days + " days"}`}
+                  >
+                    <span className={cx.tlNum}>{months ? Math.round(t.days / 30) : t.days}</span>
+                    <span className={cx.tlUnit}>{months ? "months" : "days"}</span>
+                  </button>
+                );
+              })}
             </div>
-            <div className={styles.track} style={{ ["--sel" as string]: selected ? `${pos(selectedIdx)}%` : "0%" }}>
-              <div className={styles.rail} aria-hidden="true">
-                <span className={styles.railFill} />
-                <span className={`${styles.indicator} ${selected ? styles.indicatorOn : ""}`}>
-                  <i />
+            <div className={cx.tlTrack} ref={track} aria-hidden="true">
+              <span className={cx.tlFill} />
+              {tiers.map((t, i) => {
+                const on = t.id === draft.deliveryTierId;
+                return (
+                  <span key={on ? `${t.id}-open` : t.id} className={`${cx.tlMed} ${on ? cx.tlMedOn : ""}`} style={{ left: `${pos(i)}%` }}>
+                    <span className={cx.tlMedRing} />
+                    <BrassLock open={on} className={cx.tlMedLock} />
+                  </span>
+                );
+              })}
+            </div>
+            <div className={cx.tlNames} aria-hidden="true">
+              {tiers.map((t) => (
+                <span key={t.id} className={t.id === draft.deliveryTierId ? cx.tlOn : ""}>
+                  <b>{t.priorityName}</b>
+                  <small>{pp.baseFee > 0 ? formatINR(feeAt(t.multiplier)) : "—"}</small>
                 </span>
-              </div>
-              <div className={styles.milestones} role="radiogroup" aria-label="Delivery timeline">
-                {tiers.map((t, i) => {
-                  const isSel = t.id === draft.deliveryTierId;
-                  return (
-                    <button
-                      key={t.id}
-                      id={`tier-${t.id}`}
-                      role="radio"
-                      aria-checked={isSel}
-                      tabIndex={isSel || (!selected && i === 0) ? 0 : -1}
-                      className={`${styles.milestone} ${isSel ? styles.milestoneOn : ""} ${selected && i < selectedIdx ? styles.milestonePassed : ""}`}
-                      style={{ ["--x" as string]: `${pos(i)}%` }}
-                      onClick={() => actions.setTier(t.id)}
-                      onKeyDown={(e) => onKey(e, i)}
-                    >
-                      <span className={styles.lockWrap}><Lock open={isSel} /></span>
-                      <span className={styles.msDays}>{t.days < 90 ? `${t.days} days` : `${Math.round(t.days / 30)} months`}</span>
-                      <span className={styles.msName}>{t.priorityName}</span>
-                      <span className={styles.msMult}>{t.multiplier}×</span>
-                      <span className={styles.msFee}>{pp.baseFee > 0 ? formatINR(feeAt(t.multiplier)) : "—"}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              ))}
             </div>
           </section>
-          </div>
 
-          <div className={styles.detailGrid}>
-            <section className={styles.tierDetail} aria-live="polite">
-              {selected ? (
-                <div key={selected.id} className={styles.tierDetailInner}>
-                  <p className={base.kicker}>{selected.label}</p>
-                  <h2 className={styles.tierTitle}>{selected.priorityName}</h2>
-                  <p className={styles.tierMeaning}>{selected.meaning}</p>
-                  <dl className={styles.tierFacts}>
-                    <div><dt>Why this price</dt><dd>{selected.whyPrice}</dd></div>
-                    <div><dt>What to expect</dt><dd>{selected.expectations}</dd></div>
-                    <div><dt>Covers</dt><dd>{selected.covers.join(" · ")}</dd></div>
-                    <div><dt>Conditions</dt><dd>{selected.conditions}</dd></div>
-                  </dl>
-                </div>
-              ) : (
-                <p className={st.muted}>Select a milestone to unlock its delivery promise.</p>
-              )}
-            </section>
-
-            <section className={styles.feeCard} aria-label="Post-production fee">
-              <p className={base.kicker}>Post-production</p>
-              <div className={styles.feeFigure}>
-                <AnimatedNumber value={pp.finalFee} />
-                {pp.overridden && <small>Studio adjusted — {pp.overrideReason}</small>}
+          {selected ? (
+            <section className={cx.vaultResult} key={selected.id} aria-live="polite">
+              <div className={cx.vaultCopy}>
+                <p className={cx.vaultLabel}>{selected.label}</p>
+                <h2 className={cx.vaultTitle}>{selected.priorityName}</h2>
+                <p className={cx.vaultMeaning}>{selected.meaning}</p>
+                {selected.covers.length > 0 && (
+                  <div className={cx.dosChips}>
+                    {selected.covers.slice(0, 4).map((c) => <span key={c}>{c}</span>)}
+                  </div>
+                )}
+                <details className={cx.vaultTerms}>
+                  <summary>Terms</summary>
+                  <p>{selected.expectations}</p>
+                  <p>{selected.conditions}</p>
+                </details>
               </div>
-              <div className={styles.equation}>
-                <span><small>Base fee</small>{formatINR(pp.baseFee)}</span>
-                <span className={styles.op}>×</span>
-                <span><small>Priority</small>{pp.multiplier !== null ? `${pp.multiplier}×` : "—"}</span>
-                <span className={styles.op}>=</span>
-                <span><small>Computed</small>{formatINR(pp.computedFee)}</span>
+              <div className={cx.vaultFeeCard}>
+                <p>Post-production</p>
+                <AnimatedNumber value={pp.finalFee} className={cx.vaultFeeFig} />
+                <small>
+                  {pp.overridden
+                    ? `Studio adjusted — ${pp.overrideReason}`
+                    : `${formatINR(pp.baseFee)} base × ${pp.multiplier ?? 1}× for this timeline`}
+                </small>
               </div>
-              {pp.resolutions.map((r) => (
-                <div key={r.pool} className={styles.bandBlock}>
-                  <BandChart
-                    table={config.postProduction.mode === "split" ? config.postProduction[r.pool as "photo" | "video"] : config.postProduction.combined}
-                    subtotal={r.subtotal}
-                    fee={r.fee}
-                    label={r.pool === "combined" ? "Creative production" : r.pool === "photo" ? "Photography" : "Video"}
-                  />
-                  <p className={styles.bandNote}>
-                    {r.pool === "combined" ? "Production subtotal" : `${r.pool[0].toUpperCase()}${r.pool.slice(1)} subtotal`}{" "}
-                    <b>{formatINR(r.subtotal)}</b> → base fee <b>{formatINR(r.fee)}</b>. {r.explanation}
-                  </p>
-                </div>
-              ))}
-              <p className={styles.bandFoot}>
-                The base fee follows the studio&apos;s budget bands — it is not a fixed percentage
-                {quote.otherSubtotal > 0 ? "; live streaming needs no post-production and is excluded" : ""}.
-              </p>
             </section>
-          </div>
+          ) : (
+            <p className={cx.vaultHint}>Slide the key, or tap a lock to open its timeline.</p>
+          )}
 
           <StudioAdjustments config={config} draft={draft} quote={quote} actions={actions} />
         </>
@@ -169,43 +198,6 @@ export default function DeliveryStage({ config, draft, quote, actions, go }: Sta
         hint={!selected ? "Choose a delivery timeline to continue." : undefined}
       />
     </div>
-  );
-}
-
-function BandChart({ table, subtotal, fee, label }: { table: BandTable; subtotal: number; fee: number; label: string }) {
-  const bands = [...table.bands].sort((a, b) => a.threshold - b.threshold);
-  if (bands.length === 0) return null;
-  const W = 320, H = 96, P = 10;
-  const maxX = Math.max(bands[bands.length - 1].threshold * 1.15, subtotal * 1.05);
-  const maxY = Math.max(...bands.map((b) => b.fee), fee) * 1.2 || 1;
-  const x = (v: number) => P + (v / maxX) * (W - 2 * P);
-  const y = (v: number) => H - P - (v / maxY) * (H - 2 * P);
-  const pts: [number, number][] = [];
-  if (table.belowFirstBand === "proportional") pts.push([0, 0]);
-  else pts.push([0, bands[0].fee]);
-  bands.forEach((b, i) => {
-    if (table.interpolation === "step" && i > 0) pts.push([b.threshold, bands[i - 1].fee]);
-    pts.push([b.threshold, b.fee]);
-  });
-  pts.push([maxX, bands[bands.length - 1].fee]);
-  const d = pts.map(([a, b], i) => `${i ? "L" : "M"}${x(a).toFixed(1)},${y(b).toFixed(1)}`).join(" ");
-  return (
-    <svg className={styles.bandChart} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${label} budget bands: base fee ${formatINR(fee)} at ${formatINR(subtotal)}`}>
-      <path className={styles.bandAxis} d={`M${P},${H - P}H${W - P}`} />
-      <path className={styles.bandLine} d={d} />
-      {bands.map((b) => (
-        <g key={b.threshold}>
-          <circle className={styles.bandPt} cx={x(b.threshold)} cy={y(b.fee)} r="2.2" />
-          <text className={styles.bandTick} x={x(b.threshold)} y={H - 1} textAnchor="middle">{formatINRCompact(b.threshold).replace("₹", "")}</text>
-        </g>
-      ))}
-      {subtotal > 0 && (
-        <g className={styles.bandMarker} style={{ transform: `translate(${x(Math.min(subtotal, maxX))}px, ${y(fee)}px)` }}>
-          <line x1="0" y1="0" x2="0" y2={H - P - y(fee)} />
-          <circle r="4.5" />
-        </g>
-      )}
-    </svg>
   );
 }
 

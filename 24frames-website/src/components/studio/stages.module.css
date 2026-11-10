@@ -12,7 +12,7 @@
 .reel {
   position: relative;
   overflow: hidden;
-  background: var(--forest-deep);
+  background: var(--night);
 }
 
 .reelFrame {
@@ -69,7 +69,7 @@
   font-family: var(--serif);
   font-size: 22px;
   font-style: italic;
-  color: var(--ivory);
+  color: #fbf5e9;
 }
 
 /* Film sprocket holes along the right edge of the reel. */
@@ -227,6 +227,7 @@
 }
 
 .frameNo {
+  display: none;
   position: absolute;
   top: -0.35em;
   right: 0;
@@ -241,6 +242,7 @@
 }
 
 .stageTitle {
+  animation: titleIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   position: relative;
   font-family: var(--serif);
   font-size: clamp(38px, 4.6vw, 64px);
@@ -257,6 +259,7 @@
 }
 
 .stageLead {
+  animation: leadIn 1.2s 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
   position: relative;
   max-width: 40rem;
   font-size: 17px;
@@ -395,7 +398,7 @@
 }
 
 .nameField input::placeholder {
-  color: rgba(9, 69, 62, 0.22);
+  color: var(--ghost);
   font-style: italic;
 }
 
@@ -716,7 +719,7 @@
   margin-top: 0.3rem;
   padding: 0.1rem 0.5rem;
   font-size: 11.5px;
-  color: #7c5f28;
+  color: var(--gold-ink);
   background: var(--gold-soft);
 }
 
@@ -772,5 +775,55 @@
     grid-template-columns: 1fr;
     padding: 1rem;
     margin-left: -70px;
+  }
+}
+
+.dateActions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: -0.75rem;
+}
+
+.dateActions svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+@keyframes titleIn {
+  from { opacity: 0; transform: translateY(28px); clip-path: inset(0 0 100% 0); filter: blur(6px); }
+  to { opacity: 1; transform: none; clip-path: inset(0 0 -20% 0); filter: none; }
+}
+
+@keyframes leadIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Form fields arrive one after another. */
+.formGrid > * {
+  animation: leadIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.formGrid > :nth-child(1) { animation-delay: 0.3s; }
+.formGrid > :nth-child(2) { animation-delay: 0.36s; }
+.formGrid > :nth-child(3) { animation-delay: 0.42s; }
+.formGrid > :nth-child(4) { animation-delay: 0.48s; }
+.formGrid > :nth-child(5) { animation-delay: 0.54s; }
+.formGrid > :nth-child(6) { animation-delay: 0.6s; }
+.formGrid > :nth-child(7) { animation-delay: 0.66s; }
+.formGrid > :nth-child(n + 8) { animation-delay: 0.72s; }
+
+.overtureText {
+  position: relative;
+  isolation: isolate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stageTitle,
+  .stageLead,
+  .formGrid > * {
+    animation: none;
   }
 }

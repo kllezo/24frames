@@ -12,8 +12,8 @@ export default function ReviewStage({ config, draft, quote, go }: StageProps) {
   return (
     <div className={st.stageInner}>
       <StageHeader
-        frame="05"
-        kicker="Frame 05 · The Commission"
+        frame="06"
+        kicker="Frame 06 · The Commission"
         title={<>Your celebration, <em>composed.</em></>}
         lead="Read it through together. Anything can be revised — every change carries through to the proposal."
       />

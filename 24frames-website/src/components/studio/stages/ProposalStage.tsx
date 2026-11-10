@@ -62,8 +62,8 @@ export default function ProposalStage({ config, draft, quote, actions, go, consu
   return (
     <div className={st.stageInner}>
       <StageHeader
-        frame="06"
-        kicker="Frame 06 · The Proposal"
+        frame="07"
+        kicker="Frame 07 · The Proposal"
         title={<>A proposal, composed <em>for {coupleNames(draft.couple, "you")}.</em></>}
         lead="Preview the proposal exactly as it will be shared. Submitting records the commission with the studio and issues its reference."
       />

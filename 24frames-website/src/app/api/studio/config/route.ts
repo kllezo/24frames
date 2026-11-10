@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getConfig, saveConfig } from "@/lib/studio/server/repository";
-import { noStore, readJson, requireStudio, storageError } from "@/lib/studio/server/guard";
+import { noStore, readJson, requireStudio, storageError, requireAdmin } from "@/lib/studio/server/guard";
 import { validateConfig } from "@/lib/commission/validation";
 import type { StudioConfig } from "@/lib/commission/types";
 
@@ -15,7 +15,7 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
-  const session = await requireStudio();
+  const session = await requireAdmin();
   if (session instanceof NextResponse) return session;
   const body = await readJson<{ config: StudioConfig; baseVersion: number }>(request);
   if (!body?.config) return noStore(NextResponse.json({ error: "Missing configuration." }, { status: 400 }));

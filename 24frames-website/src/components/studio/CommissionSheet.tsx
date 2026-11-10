@@ -36,7 +36,6 @@ export default function CommissionSheet({
 }) {
   const c = draft.couple;
   const pp = quote.postProduction;
-  const serviceById = new Map(config.services.map((s) => [s.id, s]));
   const date = weddingDateLabel(c, formatDateLong);
   const edit = (section: SheetSection, label = "Revise") =>
     onEdit ? (
@@ -108,16 +107,15 @@ export default function CommissionSheet({
                 {pe && pe.lines.length > 0 ? (
                   <table className={styles.lines}>
                     <thead>
-                      <tr><th scope="col">Professional</th><th scope="col">Team</th><th scope="col">Unit</th><th scope="col">Amount</th></tr>
+                      <tr><th scope="col">Professional</th><th scope="col">No.</th><th scope="col">Rate each</th><th scope="col">Amount</th></tr>
                     </thead>
                     <tbody>
                       {pe.lines.map((l) => (
                         <tr key={l.assignmentId}>
                           <td>
                             <b>{l.serviceName}</b>
-                            <small>{serviceById.get(l.serviceId)?.introduction}</small>
                           </td>
-                          <td>{plural(l.quantity, l.unitNoun)}</td>
+                          <td>{l.quantity}</td>
                           <td>
                             {formatINR(l.unitPrice)}
                             {l.overridden && <small>Studio adjusted · {l.overrideReason}</small>}

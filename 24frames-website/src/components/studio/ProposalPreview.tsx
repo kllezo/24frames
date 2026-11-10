@@ -89,8 +89,17 @@ export default function ProposalPreview({
         ) : state.status === "error" ? (
           <div className={styles.previewMsg} role="alert">
             <p>The proposal could not be composed.</p>
-            <small>{state.message}</small>
-            <button className={base.btnSecondary} onClick={onRetry}>Try again</button>
+            {/chunk/i.test(state.message) ? (
+              <>
+                <small>The studio was updated while this page was open. Reload to continue — your commission is kept.</small>
+                <button className={base.btnSecondary} onClick={() => window.location.reload()}>Reload the studio</button>
+              </>
+            ) : (
+              <>
+                <small>{state.message}</small>
+                <button className={base.btnSecondary} onClick={onRetry}>Try again</button>
+              </>
+            )}
           </div>
         ) : (
           <div className={styles.previewMsg} aria-live="polite">

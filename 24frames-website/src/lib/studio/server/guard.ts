@@ -3,7 +3,7 @@
 
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { SESSION_COOKIE, sessionSecret, verifySession, type StudioSession } from "@/lib/studio/session";
+import { ADMIN_COOKIE, SESSION_COOKIE, sessionSecret, verifyAdmin, verifySession, type StudioSession } from "@/lib/studio/session";
 import { StorageUnavailableError } from "./repository";
 
 export async function requireStudio(): Promise<StudioSession | NextResponse> {
@@ -14,6 +14,17 @@ export async function requireStudio(): Promise<StudioSession | NextResponse> {
   const store = await cookies();
   const session = await verifySession(store.get(SESSION_COOKIE)?.value, secret);
   if (!session) return NextResponse.json({ error: "Studio session expired. Sign in again." }, { status: 401 });
+  return session;
+}
+
+/** Session plus a fresh admin PIN confirmation (the studio admin). */
+export async function requireAdmin(): Promise<StudioSession | NextResponse> {
+  const session = await requireStudio();
+  if (session instanceof NextResponse) return session;
+  const store = await cookies();
+  if (!(await verifyAdmin(store.get(ADMIN_COOKIE)?.value, sessionSecret()!))) {
+    return NextResponse.json({ error: "Confirm the studio PIN to use the admin.", code: "admin_required" }, { status: 403 });
+  }
   return session;
 }
 

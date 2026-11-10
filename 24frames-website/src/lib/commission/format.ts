@@ -101,3 +101,14 @@ export function plural(n: number, noun: string): string {
   if (noun.endsWith("y") && !/[aeiou]y$/.test(noun)) return `${n} ${noun.slice(0, -1)}ies`;
   return `${n} ${noun}s`;
 }
+
+/** Today's date as YYYY-MM-DD in the viewer's local time zone. */
+export function todayISO(now = new Date()): string {
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${now.getFullYear()}-${p(now.getMonth() + 1)}-${p(now.getDate())}`;
+}
+
+/** True when a YYYY-MM-DD date is earlier than today. Empty dates are never past. */
+export function isPastDate(iso: string, today = todayISO()): boolean {
+  return !!iso && /^\d{4}-\d{2}-\d{2}$/.test(iso) && iso < today;
+}

@@ -1,0 +1,386 @@
+/* Premium date and time pickers for the commission studio. */
+
+.field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.4rem 0.1rem 0.5rem;
+  font-family: var(--serif);
+  font-size: 21px;
+  text-align: left;
+  color: var(--forest-ink);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  cursor: pointer;
+  transition: border-color 0.35s var(--ease);
+}
+
+.trigger span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.trigger:hover,
+.trigger[aria-expanded="true"] {
+  border-bottom-color: var(--forest);
+}
+
+.trigger svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--forest);
+  stroke-width: 1.3;
+}
+
+.empty {
+  font-style: italic;
+  color: rgba(16, 48, 42, 0.38);
+}
+
+.invalid {
+  border-bottom-color: var(--danger, #9b2c2c);
+}
+
+.pop {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 30;
+  width: 330px;
+  max-width: calc(100vw - 32px);
+  padding: 1.1rem 1.1rem 0.9rem;
+  background: var(--paper);
+  border: 1px solid rgba(169, 138, 82, 0.5);
+  border-radius: 10px;
+  box-shadow: 0 0 0 5px var(--paper), 0 0 0 6px rgba(169, 138, 82, 0.28), 0 40px 70px -30px rgba(16, 48, 42, 0.5);
+  transform-origin: top left;
+  animation: popIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+}
+
+.calHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+}
+
+.month {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 24px;
+  color: var(--forest-ink);
+  animation: popIn 0.35s var(--ease) both;
+}
+
+.month span {
+  font-size: 18px;
+  color: var(--sage);
+}
+
+.nav {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  color: var(--forest);
+  background: none;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.nav svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.nav:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+@media (hover: hover) {
+  .nav:not(:disabled):hover {
+    color: #f7f2e8;
+    background: var(--forest);
+  }
+}
+
+.week,
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  text-align: center;
+}
+
+.week span {
+  padding: 0.35rem 0;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
+.grid {
+  animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.grid[data-dir="-1"] {
+  animation-name: slideInBack;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(14px); }
+}
+
+@keyframes slideInBack {
+  from { opacity: 0; transform: translateX(-14px); }
+}
+
+.day {
+  position: relative;
+  aspect-ratio: 1;
+  padding: 0;
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--forest-ink);
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+}
+
+@media (hover: hover) {
+  .day:not(:disabled):not(.dayOn):hover {
+    background: rgba(15, 61, 53, 0.08);
+  }
+}
+
+.day:disabled {
+  color: rgba(16, 48, 42, 0.22);
+  text-decoration: line-through;
+  text-decoration-color: rgba(16, 48, 42, 0.18);
+  cursor: default;
+}
+
+.today {
+  box-shadow: inset 0 0 0 1px rgba(169, 138, 82, 0.8);
+}
+
+.dayOn {
+  color: #fffaf0;
+  background: var(--forest);
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px rgba(169, 138, 82, 0.7);
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--line);
+}
+
+.link {
+  padding: 0.3rem 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--forest);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.done {
+  padding: 0.55rem 1.2rem;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f7f2e8;
+  background: var(--forest);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+/* Time: three scrolling drums under a fine gold band. */
+.popTime {
+  width: 280px;
+}
+
+.drums {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  height: calc(42px * 5);
+  -webkit-mask: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+  mask: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+}
+
+.band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 42px;
+  transform: translateY(-50%);
+  border-top: 1px solid rgba(169, 138, 82, 0.6);
+  border-bottom: 1px solid rgba(169, 138, 82, 0.6);
+  background: rgba(15, 61, 53, 0.05);
+  pointer-events: none;
+}
+
+.drum {
+  position: relative;
+  width: 64px;
+  height: 100%;
+  padding: calc(42px * 2) 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  box-sizing: border-box;
+}
+
+.drum::-webkit-scrollbar {
+  display: none;
+}
+
+.drumItem {
+  display: block;
+  width: 100%;
+  height: 42px;
+  padding: 0;
+  font-family: var(--serif);
+  font-size: 24px;
+  color: rgba(16, 48, 42, 0.45);
+  background: none;
+  border: 0;
+  scroll-snap-align: center;
+  cursor: pointer;
+  transition: color 0.25s, font-size 0.25s;
+}
+
+.drumOn {
+  font-size: 28px;
+  color: var(--forest-ink);
+}
+
+.colon {
+  font-family: var(--serif);
+  font-size: 26px;
+  color: var(--forest);
+}
+
+.trigger:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Month and year in the title are buttons: tap to jump. */
+.titleBtn {
+  padding: 0.1rem 0.35rem;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-bottom: 1px dashed rgba(169, 138, 82, 0.55);
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s;
+}
+
+.titleYear {
+  font-size: 18px;
+  color: var(--sage);
+}
+
+@media (hover: hover) {
+  .titleBtn:hover {
+    background: rgba(15, 61, 53, 0.06);
+  }
+}
+
+.titleOn {
+  border-bottom: 1.5px solid var(--forest);
+  background: rgba(15, 61, 53, 0.06);
+}
+
+.pickGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 0.3rem 0 0.2rem;
+  animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.pick {
+  height: 48px;
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--forest-ink);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
+}
+
+@media (hover: hover) {
+  .pick:not(:disabled):not(.pickOn):hover {
+    border-color: rgba(169, 138, 82, 0.55);
+  }
+}
+
+.pick:disabled {
+  color: rgba(16, 48, 42, 0.22);
+  text-decoration: line-through;
+  cursor: default;
+}
+
+.pickOn {
+  color: #fffaf0;
+  background: var(--forest);
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px rgba(169, 138, 82, 0.7);
+}

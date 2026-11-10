@@ -377,7 +377,7 @@
   letter-spacing: 0.06em;
   white-space: nowrap;
   color: var(--forest);
-  background: rgba(9, 69, 62, 0.08);
+  background: var(--tint-strong);
 }
 
 .pillFail {

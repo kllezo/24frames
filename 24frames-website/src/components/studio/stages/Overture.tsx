@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import styles from "../stages.module.css";
 import base from "../studio.module.css";
 import { STAGES } from "../state/store";
+import Crest from "../ui/Crest";
+import Motes from "../ui/Motes";
+import cx from "../cinema.module.css";
 import { coupleNames } from "@/lib/commission/model";
 import type { StageProps } from "./types";
 
@@ -32,7 +35,7 @@ export default function Overture({ draft, actions, go, hasProgress }: StageProps
         {REEL.map((r, i) => (
           <figure key={r.src} className={`${styles.reelFrame} ${i === frame ? styles.reelActive : ""}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={r.src} alt="" />
+            <img src={r.src} alt="" data-depth="-16" />
           </figure>
         ))}
         <div className={styles.reelCounter}>
@@ -45,8 +48,10 @@ export default function Overture({ draft, actions, go, hasProgress }: StageProps
       </div>
 
       <section className={styles.overtureText}>
-        <p className={base.kicker}>24 Frames · A private commission</p>
-        <h1 className={styles.overtureTitle} tabIndex={-1}>
+        <Motes className={cx.motes} />
+        <span className={cx.depthWrap} data-depth="10"><Crest className={cx.overtureCrest} /></span>
+        <p className={base.kicker}>By private appointment · 24 Frames</p>
+        <h1 className={styles.overtureTitle} tabIndex={-1} data-depth="5">
           {HEADLINE.map((w, i) => (
             <span key={i}>
               <span className={styles.word} style={{ animationDelay: `${180 + i * 90}ms` }}>
@@ -80,7 +85,7 @@ export default function Overture({ draft, actions, go, hasProgress }: StageProps
           )}
         </div>
 
-        <ol className={styles.journey} aria-label="The six frames of your commission">
+        <ol className={styles.journey} aria-label="The seven frames of your commission">
           {STAGES.slice(1).map((s) => (
             <li key={s.id}>
               <span className={base.mono}>{s.frame}</span>

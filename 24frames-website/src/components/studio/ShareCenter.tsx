@@ -11,7 +11,7 @@
      sends the document; logged as "accepted by WhatsApp".
    ============================================================ */
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import styles from "./proposal.module.css";
 import base from "./studio.module.css";
 import ProposalPreview, { downloadBlob, useProposalPdf } from "./ProposalPreview";
@@ -49,10 +49,10 @@ export default function ShareCenter({ record }: { record: CommissionRecord }) {
   );
   const { state, render } = useProposalPdf(input);
   const [activity, setActivity] = useState<ShareActivity[]>(record.activity);
-  const [cloud, setCloud] = useState<"unknown" | "configured" | "not_configured">("unknown");
-  const [cloudBusy, setCloudBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const [recipient, setRecipient] = useState(record.draft.couple.phone);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [linking, setLinking] = useState(false);
 
   const message = buildWhatsAppMessage(record.draft, record.quote, config, record.reference);
   const coupleDigits = toWhatsAppDigits(recipient);
@@ -61,13 +61,6 @@ export default function ShareCenter({ record }: { record: CommissionRecord }) {
     state.status === "ready" &&
     typeof navigator.canShare === "function" &&
     navigator.canShare({ files: [new File([state.blob], state.filename, { type: "application/pdf" })] });
-
-  useEffect(() => {
-    fetch("/api/studio/whatsapp", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : { configured: false }))
-      .then((d: { configured: boolean }) => setCloud(d.configured ? "configured" : "not_configured"))
-      .catch(() => setCloud("not_configured"));
-  }, []);
 
   async function log(channel: ShareActivity["channel"], status: ShareActivity["status"], detail: string) {
     const res = await fetch(`/api/studio/commissions/${record.id}/activity`, {
@@ -110,6 +103,49 @@ export default function ShareCenter({ record }: { record: CommissionRecord }) {
     setNote("WhatsApp is open with the summary. Attach the downloaded PDF in the chat before sending — it is not attached automatically.");
   }
 
+  /** Upload the PDF once and return its private link. */
+  async function ensureLink(): Promise<string | null> {
+    if (pdfUrl) return pdfUrl;
+    if (state.status !== "ready") return null;
+    const form = new FormData();
+    form.append("pdf", state.blob, state.filename);
+    const res = await fetch(`/api/studio/commissions/${record.id}/pdf`, { method: "POST", body: form }).catch(() => null);
+    const data = res ? await res.json().catch(() => ({})) : {};
+    if (!res?.ok || !data.url) {
+      setNote(`The PDF link could not be created: ${data.error ?? "the studio server could not be reached"}.`);
+      return null;
+    }
+    setPdfUrl(data.url);
+    return data.url as string;
+  }
+
+  /** WhatsApp the couple the summary plus a private link to the PDF. */
+  async function sendPdfOnWhatsApp(to: "couple" | "studio") {
+    const digits = to === "couple" ? coupleDigits : config.studio.whatsappNumber;
+    // Open the tab inside the click so pop-up blockers allow it, then fill it.
+    const tab = window.open("about:blank", "_blank");
+    setLinking(true);
+    const url = await ensureLink();
+    setLinking(false);
+    if (!url) {
+      tab?.close();
+      return;
+    }
+    const text = `${message}\n\nYour proposal (PDF): ${url}`;
+    if (tab) {
+      tab.opener = null;
+      tab.location.href = whatsAppLink(digits, text);
+    } else {
+      window.location.href = whatsAppLink(digits, text);
+    }
+    void log(
+      "whatsapp_click_to_chat",
+      "opened",
+      `WhatsApp opened for ${to === "couple" ? `the couple (+${digits})` : "the studio number"} with the summary and a private PDF link.`,
+    );
+    setNote("WhatsApp is open with the message and the PDF link. Press send in WhatsApp to deliver it.");
+  }
+
   async function copyMessage() {
     try {
       await navigator.clipboard.writeText(message);
@@ -120,39 +156,18 @@ export default function ShareCenter({ record }: { record: CommissionRecord }) {
     }
   }
 
-  async function sendViaCloud() {
-    if (state.status !== "ready" || !coupleDigits) return;
-    setCloudBusy(true);
-    setNote(null);
-    const form = new FormData();
-    form.append("commissionId", record.id);
-    form.append("to", coupleDigits);
-    form.append("pdf", state.blob, state.filename);
-    const res = await fetch("/api/studio/whatsapp", { method: "POST", body: form }).catch(() => null);
-    const data = res ? await res.json().catch(() => ({})) : {};
-    setCloudBusy(false);
-    if (res?.ok && data.activity) {
-      setActivity((a) => [...a, data.activity]);
-      setNote("Accepted by WhatsApp. Delivery has not been confirmed yet.");
-    } else {
-      setNote(`WhatsApp Business could not send the PDF: ${data.error ?? "unknown error"}`);
-      if (res && res.status !== 501) {
-        // failures are logged server-side; refresh is enough
-      }
-    }
-  }
-
   return (
     <section className={styles.share} aria-label="Proposal and sharing">
       <ProposalPreview state={state} onRetry={render} draftLabel={`PROPOSAL · ${record.reference}`} />
 
       <div className={styles.sharePanel}>
-        <h2 className={styles.shareTitle}>Share the proposal</h2>
+        <p className={base.kicker}>The proposal is ready</p>
+        <h2 className={styles.shareTitle}>Share it with the couple</h2>
 
         <div className={styles.shareStep}>
           <span className={base.mono}>01</span>
           <div>
-            <h3>Keep the studio copy</h3>
+            <h3>Download</h3>
             <button className={base.btnPrimary} onClick={download} disabled={state.status !== "ready"}>
               Download PDF
             </button>
@@ -162,48 +177,31 @@ export default function ShareCenter({ record }: { record: CommissionRecord }) {
         <div className={styles.shareStep}>
           <span className={base.mono}>02</span>
           <div>
-            <h3>Send on WhatsApp</h3>
+            <h3>WhatsApp</h3>
             <label className={base.field}>
               <span className={base.fieldLabel}>Couple&apos;s WhatsApp number</span>
               <input className={base.input} value={recipient} onChange={(e) => setRecipient(e.target.value)} inputMode="tel" />
             </label>
             <div className={styles.shareRow}>
-              <button className={base.btnSecondary} onClick={() => openWhatsApp("couple")} disabled={!coupleDigits}>
-                Message the couple
+              <button
+                className={base.btnPrimary}
+                onClick={() => sendPdfOnWhatsApp("couple")}
+                disabled={!coupleDigits || state.status !== "ready" || linking}
+              >
+                {linking ? "Preparing the PDF…" : "Send PDF on WhatsApp"}
               </button>
-              <button className={base.btnSecondary} onClick={() => openWhatsApp("studio")}>
+              <button className={base.btnSecondary} onClick={() => sendPdfOnWhatsApp("studio")} disabled={state.status !== "ready" || linking}>
                 Send to studio WhatsApp
               </button>
+            </div>
+            <div className={styles.shareRow}>
               {canNativeShare && (
-                <button className={base.btnSecondary} onClick={nativeShare}>Share PDF from this device</button>
+                <button className={base.btnText} onClick={nativeShare}>Attach the PDF file instead</button>
               )}
+              <button className={base.btnText} onClick={() => openWhatsApp("couple")} disabled={!coupleDigits}>Message without the PDF</button>
               <button className={base.btnText} onClick={copyMessage}>Copy message</button>
             </div>
-            <p className={styles.fine}>
-              WhatsApp links carry the text summary only. Attach the downloaded PDF in the chat
-              {canNativeShare ? ", or use “Share PDF” to send the file directly from this device" : ""}.
-            </p>
-          </div>
-        </div>
-
-        <div className={styles.shareStep}>
-          <span className={base.mono}>03</span>
-          <div>
-            <h3>Automated delivery</h3>
-            {cloud === "configured" ? (
-              <>
-                <button className={base.btnSecondary} onClick={sendViaCloud} disabled={cloudBusy || !coupleDigits || state.status !== "ready"}>
-                  {cloudBusy ? "Sending…" : "Send PDF via WhatsApp Business"}
-                </button>
-                <p className={styles.fine}>Requires an open 24-hour conversation with the couple or an approved template.</p>
-              </>
-            ) : (
-              <p className={styles.fine}>
-                {cloud === "unknown"
-                  ? "Checking WhatsApp Business configuration…"
-                  : "WhatsApp Business Cloud API is not configured for this studio, so PDFs are never sent automatically. Use the steps above."}
-              </p>
-            )}
+            <p className={styles.fine}>Sends the summary with a private link to the PDF.{pdfUrl ? " Link ready." : ""}</p>
           </div>
         </div>
 

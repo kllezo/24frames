@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./studio.module.css";
+import cx from "./cinema.module.css";
 import { STAGES, clearStoredConsultation, useStudioStore, type StageId } from "./state/store";
 import type { StudioConfig } from "@/lib/commission/types";
 import { coupleNames } from "@/lib/commission/model";
@@ -10,7 +11,10 @@ import IdleLock from "./ui/IdleLock";
 import Overture from "./stages/Overture";
 import CoupleStage from "./stages/CoupleStage";
 import CelebrationStage from "./stages/CelebrationStage";
+import CrewStage from "./stages/CrewStage";
 import EnsembleStage from "./stages/EnsembleStage";
+import Cinema from "./ui/Cinema";
+import { scrollToTop } from "./ui/scroll";
 import DeliveryStage from "./stages/DeliveryStage";
 import ReviewStage from "./stages/ReviewStage";
 import ProposalStage from "./stages/ProposalStage";
@@ -38,7 +42,7 @@ export default function CommissionStudio({
   // Each stage change returns the reader to its top and moves focus to the
   // stage heading for screen-reader users.
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
+    scrollToTop();
     stageRef.current?.querySelector<HTMLElement>("h1, h2")?.focus({ preventScroll: true });
   }, [state.stage]);
 
@@ -65,7 +69,8 @@ export default function CommissionStudio({
   const inJourney = state.stage !== "overture" && state.stage !== "composed";
 
   return (
-    <div className={styles.shell} data-stage={state.stage}>
+    <div className={`${styles.shell} ${cx.cinema}`} data-stage={state.stage}>
+      <Cinema stage={state.stage} frame={current?.frame} title={current?.title} scope={stageRef} />
       <header className={styles.topbar}>
         <button className={styles.brand} onClick={() => go("overture")} aria-label="Return to the opening">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -74,7 +79,7 @@ export default function CommissionStudio({
         <div className={styles.topbarCenter}>
           {inJourney && current ? (
             <span className={styles.mono}>
-              FRAME {current.frame} <span aria-hidden="true">/</span> 06 · {current.title.toUpperCase()}
+              FRAME {current.frame} <span aria-hidden="true">/</span> {String(STAGES.length - 1).padStart(2, "0")} · {current.title.toUpperCase()}
             </span>
           ) : (
             <span className={styles.mono}>PRIVATE COMMISSION STUDIO</span>
@@ -139,13 +144,14 @@ export default function CommissionStudio({
               })}
             </ol>
             <div className={styles.railFilm} aria-hidden="true">
-              <span style={{ height: `${(Math.max(stageIdx, 1) / 6) * 100}%` }} />
+              <span style={{ height: `${(Math.max(stageIdx, 1) / (STAGES.length - 1)) * 100}%` }} />
             </div>
           </nav>
 
           <main className={styles.stage} ref={stageRef} key={state.stage}>
             {state.stage === "couple" && <CoupleStage {...props} />}
             {state.stage === "celebration" && <CelebrationStage {...props} />}
+            {state.stage === "crew" && <CrewStage {...props} />}
             {state.stage === "ensemble" && <EnsembleStage {...props} />}
             {state.stage === "delivery" && <DeliveryStage {...props} />}
             {state.stage === "commission" && <ReviewStage {...props} />}
@@ -157,6 +163,7 @@ export default function CommissionStudio({
       )}
 
       <dialog
+        data-lenis-prevent
         ref={dialogRef}
         className={styles.dialog}
         onClose={() => setConfirmReset(false)}

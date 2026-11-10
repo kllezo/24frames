@@ -20,6 +20,12 @@ export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const TIME_RE = /^([01]?\d|2[0-3]):[0-5]\d$/;
 
+/** Earliest acceptable celebration date. One day of grace absorbs the
+    difference between the server's UTC clock and the studio's local day. */
+function earliestDate(): string {
+  return new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
+}
+
 export function coupleHints(draft: CommissionDraft): Record<string, string> {
   const c = draft.couple;
   const hints: Record<string, string> = {};
@@ -48,6 +54,9 @@ export function validateDraftForSubmit(draft: unknown, config: StudioConfig): Va
     if (c.phone && !PHONE_RE.test(c.phone.trim())) issues.push({ path: "couple.phone", message: "Invalid phone number." });
     if (c.email && !EMAIL_RE.test(c.email.trim())) issues.push({ path: "couple.email", message: "Invalid email address." });
     if (c.weddingDate && !DATE_RE.test(c.weddingDate)) issues.push({ path: "couple.weddingDate", message: "Invalid date." });
+    else if (c.weddingDate && c.weddingDate < earliestDate()) {
+      issues.push({ path: "couple.weddingDate", message: "The wedding date has already passed." });
+    }
     if (!["whatsapp", "call", "email"].includes(c.preferredContact)) {
       issues.push({ path: "couple.preferredContact", message: "Invalid contact preference." });
     }
@@ -67,6 +76,9 @@ export function validateDraftForSubmit(draft: unknown, config: StudioConfig): Va
         if (!isStr(e[key]) || e[key].length > MAX_TEXT) issues.push({ path: `events.${i}.${key}`, message: "Text too long." });
       }
       if (e.date && !DATE_RE.test(e.date)) issues.push({ path: `events.${i}.date`, message: "Invalid date." });
+      else if (e.date && e.date < earliestDate()) {
+        issues.push({ path: `events.${i}.date`, message: `${e.name || "An event"} is dated in the past.` });
+      }
       if (e.startTime && !TIME_RE.test(e.startTime)) issues.push({ path: `events.${i}.startTime`, message: "Invalid time." });
       if (e.endTime && !TIME_RE.test(e.endTime)) issues.push({ path: `events.${i}.endTime`, message: "Invalid time." });
       if (e.guestCount !== null && (!isNum(e.guestCount) || e.guestCount < 0 || e.guestCount > 100000)) {
@@ -90,8 +102,8 @@ export function validateDraftForSubmit(draft: unknown, config: StudioConfig): Va
       seen.add(key);
       if (!isNum(a.quantity) || !Number.isInteger(a.quantity) || a.quantity < 0) {
         issues.push({ path: `assignments.${i}.quantity`, message: "Invalid quantity." });
-      } else if (s && a.quantity > s.maxQuantity) {
-        issues.push({ path: `assignments.${i}.quantity`, message: `${s.name}: at most ${s.maxQuantity} per event.` });
+      } else if (a.quantity > 99) {
+        issues.push({ path: `assignments.${i}.quantity`, message: `${s?.name ?? "Service"}: at most 99 per event.` });
       }
       if (a.unitPriceOverride !== null && (!isNum(a.unitPriceOverride) || a.unitPriceOverride < 0)) {
         issues.push({ path: `assignments.${i}.unitPriceOverride`, message: "Invalid price override." });

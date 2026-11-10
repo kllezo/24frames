@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getCommission } from "@/lib/studio/server/repository";
-import { noStore, requireStudio, storageError } from "@/lib/studio/server/guard";
+import { noStore, storageError, requireAdmin } from "@/lib/studio/server/guard";
 
 export async function GET(_request: Request, ctx: RouteContext<"/api/studio/commissions/[id]">) {
-  const session = await requireStudio();
+  const session = await requireAdmin();
   if (session instanceof NextResponse) return session;
   const { id } = await ctx.params;
   try {

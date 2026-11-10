@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import {
+  ADMIN_COOKIE,
+  adminCookieOptions,
+  signAdmin,
   SESSION_COOKIE,
   safeEqual,
   sessionCookieOptions,
@@ -39,7 +42,7 @@ export async function POST(request: Request) {
     return noStore(NextResponse.json({ error: `Too many attempts. Try again in ${minutes} min.` }, { status: 429 }));
   }
 
-  const body = await readJson<{ pin?: unknown; consultant?: unknown }>(request, 2000);
+  const body = await readJson<{ pin?: unknown; consultant?: unknown; scope?: unknown }>(request, 2000);
   const given = typeof body?.pin === "string" ? body.pin.trim() : "";
   if (!safeEqual(given, pin)) {
     const count = (state && state.until <= now && state.count >= MAX_FAILURES ? 0 : state?.count ?? 0) + 1;
@@ -47,6 +50,13 @@ export async function POST(request: Request) {
     return noStore(NextResponse.json({ error: "That PIN isn't right." }, { status: 401 }));
   }
   attempts.delete(key);
+
+  // Re-confirmation for the studio admin: issue only the admin cookie.
+  if (body?.scope === "admin") {
+    const res = NextResponse.json({ ok: true, scope: "admin" });
+    res.cookies.set(ADMIN_COOKIE, await signAdmin(secret, now), adminCookieOptions());
+    return noStore(res);
+  }
 
   const consultant =
     typeof body?.consultant === "string" && body.consultant.trim() ? body.consultant.trim().slice(0, 60) : "Studio";
@@ -59,5 +69,6 @@ export async function POST(request: Request) {
 export async function DELETE() {
   const res = NextResponse.json({ ok: true });
   res.cookies.set(SESSION_COOKIE, "", { ...sessionCookieOptions(), maxAge: 0 });
+  res.cookies.set(ADMIN_COOKIE, "", { ...sessionCookieOptions(), maxAge: 0 });
   return noStore(res);
 }

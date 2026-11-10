@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./studio.module.css";
 import AnimatedNumber from "./ui/AnimatedNumber";
 import IllustrativeTag from "./ui/IllustrativeTag";
+import Crest from "./ui/Crest";
 import { formatINR, plural } from "@/lib/commission/format";
 import { eventDisplayName } from "@/lib/commission/model";
 import type { CommissionDraft, CommissionQuote, StudioConfig } from "@/lib/commission/types";
@@ -24,8 +25,17 @@ export default function Ledger({
   const [open, setOpen] = useState(false);
   const pp = quote.postProduction;
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
   return (
-    <aside className={`${styles.ledger} ${open ? styles.ledgerOpen : ""}`} aria-label="Live commission estimate">
+    <>
+    {open && <div className={styles.ledgerScrim} onClick={() => setOpen(false)} aria-hidden="true" />}
+    <aside data-lenis-prevent className={`${styles.ledger} ${open ? styles.ledgerOpen : ""}`} aria-label="Live commission estimate">
       <button
         className={styles.ledgerBar}
         onClick={() => setOpen((o) => !o)}
@@ -41,9 +51,13 @@ export default function Ledger({
       </button>
 
       <div className={styles.ledgerBody} id="ledger-body">
-        <p className={styles.kicker}>The ledger</p>
-        <h2 className={styles.ledgerTitle}>Your commission, live</h2>
-        <IllustrativeTag show={quote.illustrative} compact />
+        <div className={styles.ledgerHead}>
+          <Crest className={styles.ledgerCrest} />
+          <p className={styles.kicker}>Private folio</p>
+          <h2 className={styles.ledgerTitle}>Your commission</h2>
+          <span className={styles.ledgerFolio}>NO. {draft.id.replace(/[^a-z0-9]/gi, "").slice(-6).toUpperCase()}</span>
+          <IllustrativeTag show={quote.illustrative} compact />
+        </div>
 
         {draft.events.length === 0 ? (
           <p className={styles.ledgerEmpty}>Your events and creative team will appear here as you compose them.</p>
@@ -97,7 +111,10 @@ export default function Ledger({
 
         <div className={styles.ledgerGrand} aria-live="polite">
           <span>Estimated total</span>
-          <AnimatedNumber value={quote.grandTotal} className={styles.ledgerGrandFig} />
+          <span className={styles.ledgerGlintWrap}>
+            <AnimatedNumber value={quote.grandTotal} className={styles.ledgerGrandFig} />
+            <i key={quote.grandTotal} className={styles.ledgerGlint} aria-hidden="true" />
+          </span>
           {!quote.tax && <small>{config.tax.enabled ? "" : "Taxes not included"}</small>}
         </div>
 
@@ -108,5 +125,6 @@ export default function Ledger({
         )}
       </div>
     </aside>
+    </>
   );
 }

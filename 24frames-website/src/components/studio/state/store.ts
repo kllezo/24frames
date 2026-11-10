@@ -23,10 +23,11 @@ export const STAGES = [
   { id: "overture", frame: "00", title: "Overture", short: "Welcome" },
   { id: "couple", frame: "01", title: "The Couple", short: "Couple" },
   { id: "celebration", frame: "02", title: "The Celebration", short: "Events" },
-  { id: "ensemble", frame: "03", title: "The Ensemble", short: "Team" },
-  { id: "delivery", frame: "04", title: "The Delivery", short: "Delivery" },
-  { id: "commission", frame: "05", title: "The Commission", short: "Review" },
-  { id: "proposal", frame: "06", title: "The Proposal", short: "Proposal" },
+  { id: "crew", frame: "03", title: "The Crew", short: "Crew" },
+  { id: "ensemble", frame: "04", title: "The Casting", short: "Team" },
+  { id: "delivery", frame: "05", title: "The Delivery", short: "Delivery" },
+  { id: "commission", frame: "06", title: "The Commission", short: "Review" },
+  { id: "proposal", frame: "07", title: "The Proposal", short: "Proposal" },
 ] as const;
 
 export type StageId = (typeof STAGES)[number]["id"] | "composed";

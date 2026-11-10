@@ -50,6 +50,7 @@ export default function StudioAdmin({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ config, baseVersion: saved.version }),
     }).catch(() => null);
+    if (res?.status === 403) { window.location.reload(); return; }
     const data = res ? await res.json().catch(() => ({})) : {};
     setBusy(false);
     if (res?.ok) {
@@ -70,6 +71,7 @@ export default function StudioAdmin({
     if (!window.confirm("Replace the entire studio configuration with the illustrative demo defaults?")) return;
     setBusy(true);
     const res = await fetch("/api/studio/config/reset", { method: "POST" }).catch(() => null);
+    if (res?.status === 403) { window.location.reload(); return; }
     const data = res ? await res.json().catch(() => ({})) : {};
     setBusy(false);
     if (res?.ok) {

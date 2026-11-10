@@ -149,6 +149,7 @@ function ImageField({ value, onChange }: { value: string; onChange: (v: string) 
     const form = new FormData();
     form.append("file", file);
     const res = await fetch("/api/studio/media", { method: "POST", body: form }).catch(() => null);
+    if (res?.status === 403) { window.location.reload(); return; }
     const data = res ? await res.json().catch(() => ({})) : {};
     if (res?.ok) {
       onChange(data.url);
