@@ -38,7 +38,7 @@ export default function CoupleStage({ draft, actions, go }: StageProps) {
             <h2 id="f-names" className={cx.formCardTitle}><span>I</span> The couple</h2>
             <div className={cx.namePair}>
               <label className={cx.lux}>
-                <input value={c.brideName} onChange={(e) => actions.couple({ brideName: e.target.value })} placeholder=" " maxLength={60} autoComplete="off" />
+                <input id="bride-name" value={c.brideName} onChange={(e) => actions.couple({ brideName: e.target.value })} placeholder=" " maxLength={60} autoComplete="off" />
                 <span>Bride&apos;s name</span>
               </label>
               <span className={cx.nameAmp} aria-hidden="true">&amp;</span>

@@ -1,9 +1,11 @@
 "use client";
 
+import { optimised } from "../ui/optimised";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { shutter } from "../ui/shutter";
 import cx from "../cinema.module.css";
 import st from "../stages.module.css";
+import base from "../studio.module.css";
 import { StageFooter, StageHeader } from "./StageChrome";
 import { roman } from "@/lib/commission/format";
 import { eventDisplayName } from "@/lib/commission/model";
@@ -30,6 +32,12 @@ export default function CrewStage({ config, draft, go }: StageProps) {
   const n = Math.max(1, services.length);
   const step = 360 / n;
   const [active, setActive] = useState(0);
+  // The way forward unlocks once they've met at least four of the crew.
+  const [seen, setSeen] = useState<Set<number>>(() => new Set([0]));
+  const choose = (i: number) => {
+    setActive(i);
+    setSeen((prev) => (prev.has(i) ? prev : new Set(prev).add(i)));
+  };
   const [turn, setTurn] = useState(0);
   const [dragging, setDragging] = useState(false);
   const drag = useRef<{ x: number; start: number } | null>(null);
@@ -44,7 +52,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
     if (delta < -180) delta += 360;
     if (target !== norm(active)) shutter();
     setTurn((t) => t + delta);
-    setActive(target);
+    choose(target);
   }
   /** Degrees the orbit turns per pixel of finger travel, so the medallion
       under the finger follows it along the arc. */
@@ -81,7 +89,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
     const snapped = start + steps * step;
     if (steps) shutter();
     setTurn(snapped);
-    setActive(norm(Math.round(-snapped / step)));
+    choose(norm(Math.round(-snapped / step)));
     window.setTimeout(() => { moved.current = false; }, 0);
   }
 
@@ -120,7 +128,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
         const idx = norm(Math.round(-snapped / step));
         if (idx !== activeRef.current) shutter();
         setTurn(snapped);
-        setActive(idx);
+        choose(idx);
       }, 140);
     };
     el.addEventListener("wheel", onWheel, { passive: false });
@@ -131,6 +139,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
+  const need = Math.min(4, services.length);
   const svc = services[active];
   const occasions = draft.events.slice(0, 3);
 
@@ -139,9 +148,25 @@ export default function CrewStage({ config, draft, go }: StageProps) {
       <StageHeader
         frame="03"
         kicker="Frame 03 · The Crew"
-        title={<>Meet the <em>crew.</em></>}
-        lead="Seven specialists, each with their own way of seeing. Swipe the lens or tap a medallion to meet them."
-      />
+        title={<>Know your crew <em>before you choose.</em></>}
+        lead="Seven kinds of photographers and filmmakers, each seeing your day differently. Understand what each one brings — then pick who joins every occasion. Swipe the lens or tap a medallion."
+      >
+        <div className={cx.crewGate} aria-live="polite">
+          {seen.size >= need ? (
+            <button type="button" className={`${base.btnPrimary} ${cx.crewNext}`} onClick={() => go("ensemble")}>
+              Choose your crew
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 6l6 6-6 6" /></svg>
+            </button>
+          ) : (
+            <p className={cx.crewProgress}>
+              <span className={cx.crewDots} aria-hidden="true">
+                {Array.from({ length: need }, (_, i) => <i key={i} className={i < seen.size ? cx.crewDotOn : ""} />)}
+              </span>
+              Meet {need - seen.size} more to continue · {seen.size} of {services.length} explored
+            </p>
+          )}
+        </div>
+      </StageHeader>
 
       <section
         ref={section}
@@ -194,7 +219,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
                   <span className={cx.medInner}>
                     <span className={cx.medDisc}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={s.image} alt="" draggable={false} loading="eager" />
+                      <img src={optimised(s.image, 384)} alt="" draggable={false} loading="eager" decoding="async" />
                     </span>
                     <span className={cx.medNo}>{roman(i)}</span>
                   </span>
@@ -234,7 +259,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
         )}
       </section>
 
-      <StageFooter onBack={() => go("celebration")} backLabel="Occasions" onNext={() => go("ensemble")} nextLabel="Begin the casting" />
+      <StageFooter onBack={() => go("celebration")} backLabel="Occasions" />
     </div>
   );
 }

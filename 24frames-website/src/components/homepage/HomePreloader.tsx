@@ -1,26 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Preloader from "@/components/ui/Preloader";
 
+type FramesWindow = Window & { __24FRAMES_INITIAL_LOAD_DONE__?: boolean };
+
+const noop = () => () => {};
+/** Show the preloader on a fresh visit, not on ?direct links or in-app navigation. */
+const wantsPreloader = () => {
+  const w = window as FramesWindow;
+  return !(w.location.search.includes("direct") || w.__24FRAMES_INITIAL_LOAD_DONE__);
+};
+
 export default function HomePreloader() {
-  const [showPreloader, setShowPreloader] = useState(() => {
-    if (typeof window === "undefined") return false;
-    const isDirect = window.location.search.includes("direct");
-    const isInternalNav = (window as unknown as { __24FRAMES_INITIAL_LOAD_DONE__?: boolean })
-      .__24FRAMES_INITIAL_LOAD_DONE__;
-    return !(isDirect || isInternalNav);
-  });
+  // The server always renders the preloader (so the first paint is the
+  // curtain, never a flash of content); the browser then decides. Using an
+  // external store keeps server and client markup identical while hydrating.
+  const wanted = useSyncExternalStore(noop, wantsPreloader, () => true);
+  const [done, setDone] = useState(false);
 
   const handlePreloaderComplete = () => {
-    if (typeof window !== "undefined") {
-      (window as unknown as { __24FRAMES_INITIAL_LOAD_DONE__?: boolean }).__24FRAMES_INITIAL_LOAD_DONE__ = true;
-    }
-    setShowPreloader(false);
+    (window as FramesWindow).__24FRAMES_INITIAL_LOAD_DONE__ = true;
+    setDone(true);
   };
 
-  if (!showPreloader) return null;
-
+  if (!wanted || done) return null;
   return <Preloader onComplete={handlePreloaderComplete} />;
 }
-

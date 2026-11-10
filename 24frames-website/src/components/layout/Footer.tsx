@@ -46,7 +46,8 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
         <div className={styles.topRow}>
           {/* Huge condensed 24 FRAMES title */}
           <div className={styles.brandTitleBlock}>
-            <h1 className={styles.monumentalLogo}>24 FRAMES</h1>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className={styles.monumentalLogo} src="/images/logo-dark.webp" alt="24 Frames" loading="lazy" decoding="async" />
           </div>
 
           {/* Right statement column */}

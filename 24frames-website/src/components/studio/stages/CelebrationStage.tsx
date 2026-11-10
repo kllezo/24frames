@@ -1,5 +1,6 @@
 "use client";
 
+import { optimised } from "../ui/optimised";
 import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { scrollToElement } from "../ui/scroll";
@@ -289,7 +290,7 @@ export default function CelebrationStage({ config, draft, actions, go }: StagePr
                     >
                       <span className={cx.occasionPhoto}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={occasionImage(p.id)} alt="" loading="lazy" />
+                        <img src={optimised(occasionImage(p.id), 640)} alt="" loading="lazy" decoding="async" />
                       </span>
                       <span className={cx.occasionNo}>{roman(i)}</span>
                       <span className={cx.occasionName}>{p.label}</span>
@@ -328,7 +329,7 @@ export default function CelebrationStage({ config, draft, actions, go }: StagePr
                       <button className={cx.occasionMain} aria-pressed aria-expanded={false} onClick={() => toggle(key, () => e.id)}>
                         <span className={cx.occasionPhoto}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={occasionImage(e.type)} alt="" loading="lazy" />
+                          <img src={optimised(occasionImage(e.type), 640)} alt="" loading="lazy" decoding="async" />
                         </span>
                         <span className={cx.occasionNo}>{roman(config.eventPresets.length + j)}</span>
                         <span className={cx.occasionName}>{eventDisplayName(e, config)}</span>
@@ -439,7 +440,7 @@ function SceneCard({
     <div className={`${cx.sceneCard} ${cx.scenePop} ${steps.every(Boolean) ? cx.sceneDone : ""}`}>
       <div className={cx.scenePhoto}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={occasionImage(event.type)} alt="" loading="lazy" />
+        <img src={optimised(occasionImage(event.type), 640)} alt="" loading="lazy" decoding="async" />
         <span className={cx.sceneIdx}>{roman(index)}</span>
         <span className={cx.sceneSteps} aria-label={`${steps.filter(Boolean).length} of 3 details added`}>
           {steps.map((on, k) => <i key={k} className={on ? cx.stepOn : ""} />)}

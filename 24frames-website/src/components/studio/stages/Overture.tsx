@@ -1,5 +1,6 @@
 "use client";
 
+import { optimised } from "../ui/optimised";
 import { useEffect, useState } from "react";
 import styles from "../stages.module.css";
 import base from "../studio.module.css";
@@ -35,7 +36,7 @@ export default function Overture({ draft, actions, go, hasProgress }: StageProps
         {REEL.map((r, i) => (
           <figure key={r.src} className={`${styles.reelFrame} ${i === frame ? styles.reelActive : ""}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={r.src} alt="" data-depth="-16" />
+            <img src={optimised(r.src, 1200)} alt="" data-depth="-16" decoding="async" />
           </figure>
         ))}
         <div className={styles.reelCounter}>

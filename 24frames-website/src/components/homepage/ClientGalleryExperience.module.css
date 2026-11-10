@@ -83,9 +83,9 @@
 
 .editorialTitle {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-size: clamp(2.5rem, 4.6vw, 4.2rem);
   font-weight: 500;
-  letter-spacing: 0.03em;
+  letter-spacing: -0.012em;
   color: #09453E;
   margin: 0;
   line-height: 1.15;
@@ -471,7 +471,7 @@
 
 .folderTitle {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(1.05rem, 1.2vw, 1.25rem);
+  font-size: clamp(1.3rem, 1.55vw, 1.6rem);
   font-weight: 600;
   line-height: 1.22;
   margin: 0 0 0.5rem 0;
@@ -912,4 +912,11 @@
     transition: none !important;
     transform: none !important;
   }
+}
+
+/* Italic accent within the section title, like "The Collection". */
+.editorialTitle em {
+  font-style: italic;
+  font-weight: 500;
+  color: #0d5c52;
 }

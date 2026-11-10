@@ -363,7 +363,7 @@ export default function ClientGalleryExperience({
           </div>
 
           <h2 className={styles.editorialTitle}>
-            THE 24 FRAMES CLIENT GALLERY EXPERIENCE
+            The 24 Frames <em>Client Gallery</em>
           </h2>
 
           <p className={styles.editorialSubtitle}>
