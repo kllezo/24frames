@@ -187,15 +187,18 @@ export default function CrewStage({ config, draft, go }: StageProps) {
         <div className={cx.medStage}>
           {seen.size < need && (
             <>
-              {/* A curved arrow over the lens, flowing right to left: spin me. */}
+              {/* A small label with a curved arrow beneath it, flowing right to left. */}
+              <span className={cx.spinCue} aria-hidden="true">
+                <span className={cx.spinLabel}>Spin the lens</span>
+              </span>
+              {/* The arrow is a short arc of a circle around the lens, so it bends with the ring. */}
               <svg className={cx.spinArc} viewBox="-100 -100 200 200" aria-hidden="true">
-                <path className={cx.spinTrack} d="M 32.83 -90.21 A 96 96 0 0 0 -32.83 -90.21" />
-                <path className={cx.spinFlow} d="M 32.83 -90.21 A 96 96 0 0 0 -32.83 -90.21" />
-                <g transform="translate(-32.83 -90.21) rotate(-20)">
-                  <path className={cx.spinHead} d="M 6 -5.5 L -1.5 0 L 6 5.5" />
+                <path className={cx.spinTrack} d="M 10.03 -95.47 A 96 96 0 0 0 -10.03 -95.47" />
+                <path className={cx.spinFlow} d="M 10.03 -95.47 A 96 96 0 0 0 -10.03 -95.47" />
+                <g transform="translate(-10.03 -95.47) rotate(-6)">
+                  <path className={cx.spinHead} d="M 1.25 -1.1 L -0.35 0 L 1.25 1.1" />
                 </g>
               </svg>
-              <span className={cx.spinLabel} aria-hidden="true">Spin the lens</span>
             </>
           )}
           <span className={cx.medKnurl} aria-hidden="true" />
@@ -269,6 +272,16 @@ export default function CrewStage({ config, draft, go }: StageProps) {
               <button type="button" className={cx.reelArrow} onClick={() => go1(active + 1)} aria-label="Next">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
               </button>
+            </div>
+            <div className={cx.medCta} data-no-drag aria-live="polite">
+              {seen.size >= need ? (
+                <button type="button" className={`${base.btnPrimary} ${cx.crewNext}`} onClick={() => go("ensemble")}>
+                  Choose your crew
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 6l6 6-6 6" /></svg>
+                </button>
+              ) : (
+                <p className={cx.medCtaNote}>Meet all seven to choose your crew · {seen.size} of {need}</p>
+              )}
             </div>
           </div>
         )}
