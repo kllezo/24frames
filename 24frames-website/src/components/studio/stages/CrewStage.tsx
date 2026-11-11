@@ -3,6 +3,7 @@
 import { optimised } from "../ui/optimised";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { shutter } from "../ui/shutter";
+import { scrollToElement } from "../ui/scroll";
 import cx from "../cinema.module.css";
 import st from "../stages.module.css";
 import base from "../studio.module.css";
@@ -95,6 +96,30 @@ export default function CrewStage({ config, draft, go }: StageProps) {
 
   // Trackpad: a sideways two-finger swipe turns the orbit, then it settles.
   const section = useRef<HTMLElement>(null);
+
+  // On a tall screen the lens starts below the fold. Once the stage has
+  // settled, glide down so the lens and its story are in view — unless the
+  // person has already started scrolling themselves.
+  useEffect(() => {
+    const el = section.current;
+    if (!el) return;
+    let touched = false;
+    const mark = () => { touched = true; };
+    const opts = { passive: true } as const;
+    window.addEventListener("wheel", mark, opts);
+    window.addEventListener("touchstart", mark, opts);
+    window.addEventListener("keydown", mark);
+    const t = window.setTimeout(() => {
+      if (touched || window.scrollY > 40) return;
+      if (el.getBoundingClientRect().top > window.innerHeight * 0.45) scrollToElement(el, -150);
+    }, 1500);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("wheel", mark);
+      window.removeEventListener("touchstart", mark);
+      window.removeEventListener("keydown", mark);
+    };
+  }, []);
   const turnRef = useRef(turn);
   const activeRef = useRef(active);
   useEffect(() => {
