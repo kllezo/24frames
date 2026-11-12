@@ -23,13 +23,10 @@ export default function StoriesPage() {
           <div className={styles.container}>
             <div className={styles.headerContent}>
               <Link href="/#vows" className={styles.topBackLink}>
-                <span>←</span> Back to The Vows Collection
+                <span>←</span> The Vows
               </Link>
-              <span className={styles.label}>ARCHIVAL WEDDING ANTHOLOGY · CURATED COMMISSIONS</span>
-              <h1 className={styles.title}>CLIENT WEDDING STORIES</h1>
-              <p className={styles.subtitle}>
-                Each wedding is an unrepeatable tapestry of sacred rituals, quiet intimate glances, and monumental family celebrations. Explore each commissioned story below.
-              </p>
+              <span className={styles.label}>Curated commissions</span>
+              <h1 className={styles.title}>Client Wedding <em>Stories</em></h1>
             </div>
           </div>
         </header>

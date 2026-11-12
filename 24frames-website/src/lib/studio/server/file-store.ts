@@ -21,7 +21,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { randomBytes, randomUUID } from "node:crypto";
-import { DEFAULT_STUDIO_CONFIG } from "@/lib/commission/defaults";
+import { DEFAULT_STUDIO_CONFIG, reviseConfig } from "@/lib/commission/defaults";
 import { coupleNames } from "@/lib/commission/model";
 import { StorageUnavailableError } from "./store-types";
 import type {
@@ -139,7 +139,7 @@ async function save(db: Database): Promise<void> {
 
 export async function getConfig(): Promise<{ config: StudioConfig; stored: boolean }> {
   const db = await load();
-  return db.config ? { config: db.config, stored: true } : { config: DEFAULT_STUDIO_CONFIG, stored: false };
+  return db.config ? { config: reviseConfig(db.config), stored: true } : { config: DEFAULT_STUDIO_CONFIG, stored: false };
 }
 
 export function saveConfig(next: StudioConfig): Promise<StudioConfig> {

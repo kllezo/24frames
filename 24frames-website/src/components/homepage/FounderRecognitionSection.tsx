@@ -174,6 +174,53 @@ export default function FounderRecognitionSection({
     };
   }, [updateScrollState]);
 
+  /* ── The Verified Archive drifts on its own: one card every few seconds,
+        pausing while the visitor hovers, touches, has a proof open, or the
+        panel is off screen; loops back to the first card at the end. ── */
+  const archivePausedRef = useRef(false);
+  useEffect(() => {
+    archivePausedRef.current = activeItem !== null;
+  }, [activeItem]);
+  useEffect(() => {
+    const track = carouselTrackRef.current;
+    if (!track) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let hovering = false;
+    let visible = false;
+    let resumeAt = 0;
+    const pause = () => { hovering = true; };
+    const resume = () => { hovering = false; resumeAt = Date.now() + 2500; };
+    const onTouch = () => { resumeAt = Date.now() + 6000; };
+    track.addEventListener("pointerenter", pause);
+    track.addEventListener("pointerleave", resume);
+    track.addEventListener("focusin", pause);
+    track.addEventListener("focusout", resume);
+    track.addEventListener("touchstart", onTouch, { passive: true });
+
+    const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0.35 });
+    io.observe(track);
+
+    const timer = window.setInterval(() => {
+      if (!visible || hovering || archivePausedRef.current || Date.now() < resumeAt) return;
+      const card = track.firstElementChild as HTMLElement | null;
+      const gap = parseFloat(getComputedStyle(track).columnGap || "0") || 0;
+      const stepPx = (card?.offsetWidth ?? 260) + gap;
+      const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 6;
+      track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + stepPx, behavior: "smooth" });
+    }, 3200);
+
+    return () => {
+      window.clearInterval(timer);
+      io.disconnect();
+      track.removeEventListener("pointerenter", pause);
+      track.removeEventListener("pointerleave", resume);
+      track.removeEventListener("focusin", pause);
+      track.removeEventListener("focusout", resume);
+      track.removeEventListener("touchstart", onTouch);
+    };
+  }, []);
+
   /* ── Interactive Artist Portrait Studio Lighting ── */
   useEffect(() => {
     const wrap = portraitWrapRef.current;
@@ -476,8 +523,7 @@ export default function FounderRecognitionSection({
                     HONOURS &amp; EDITORIAL RECOGNITION
                   </span>
                   <h3 className={styles.recognitionMainTitle}>
-                    The Verified Archive{" "}
-                    <span className={styles.cursiveTag}>a little of who you are</span>
+                    The Verified Archive
                   </h3>
                 </div>
 

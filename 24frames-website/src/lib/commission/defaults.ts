@@ -30,7 +30,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     {
       id: "traditional-photographer",
       order: 1,
-      name: "Traditional Photographer",
+      name: "Event Photographer",
       epithet: "The Record",
       introduction:
         "The keeper of every ritual, every blessing and every family that came to stand beside you.",
@@ -67,7 +67,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     {
       id: "traditional-videographer",
       order: 2,
-      name: "Traditional Videographer",
+      name: "Event Videographer",
       epithet: "The Chronicle",
       introduction:
         "Unbroken, faithful coverage of the ceremony — every vow, every speech, every mantra, as it happened.",
@@ -103,7 +103,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     {
       id: "candid-photographer",
       order: 3,
-      name: "Candid Photographer",
+      name: "Creative Artist",
       epithet: "The Witness",
       introduction:
         "Unposed, unhurried, unseen — the photographer who catches the moments nobody planned.",
@@ -138,7 +138,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     {
       id: "candid-videographer",
       order: 4,
-      name: "Candid Videographer",
+      name: "Story Teller",
       epithet: "The Storyteller",
       introduction:
         "Documentary-style filmmaking that follows emotion, not the programme.",
@@ -173,7 +173,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     {
       id: "aerial-drone",
       order: 5,
-      name: "Aerial Photography & Drone",
+      name: "Drone",
       epithet: "The Horizon",
       introduction:
         "The view nobody at the celebration gets to see — the whole of it, from above.",
@@ -213,7 +213,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     {
       id: "creative-cinematography",
       order: 6,
-      name: "Creative Cinematography",
+      name: "Lead Story Teller",
       epithet: "The Auteur",
       introduction:
         "A premium cinematic production — directed, composed and lit like film.",
@@ -251,7 +251,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     {
       id: "web-live-stream",
       order: 7,
-      name: "Web Live Stream",
+      name: "Web Live",
       epithet: "The Bridge",
       introduction:
         "For everyone who cannot be in the room — the celebration, live, wherever they are.",
@@ -408,7 +408,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       covers: ["Edited photographs", "Highlight film", "Full-length films", "Album selection"],
       expectations: "Complete delivery within six months of your final event.",
       conditions: "Delivery dates are scheduled by the studio within the window.",
-      available: true,
+      available: false,
     },
   ],
   defaultDeliveryTierId: "standard-60",
@@ -460,3 +460,29 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
 };
 
 export const CUSTOM_EVENT_TYPE = "custom";
+
+/** Names the studio uses on its own proposals (Prem & Ravali format). */
+const SERVICE_NAMES: Record<string, { from: string; to: string }> = {
+  "traditional-photographer": { from: "Traditional Photographer", to: "Event Photographer" },
+  "traditional-videographer": { from: "Traditional Videographer", to: "Event Videographer" },
+  "candid-photographer": { from: "Candid Photographer", to: "Creative Artist" },
+  "candid-videographer": { from: "Candid Videographer", to: "Story Teller" },
+  "aerial-drone": { from: "Aerial Photography & Drone", to: "Drone" },
+  "creative-cinematography": { from: "Creative Cinematography", to: "Lead Story Teller" },
+  "web-live-stream": { from: "Web Live Stream", to: "Web Live" },
+};
+
+/** Brings a config saved before these revisions up to date: renames roles
+    that still carry their original default name, and retires the
+    six-month delivery timeline. Admin-chosen names are left alone. */
+export function reviseConfig(config: StudioConfig): StudioConfig {
+  return {
+    ...config,
+    services: config.services.map((s) => {
+      const r = SERVICE_NAMES[s.id];
+      return r && s.name === r.from ? { ...s, name: r.to } : s;
+    }),
+    deliveryTiers: config.deliveryTiers.map((t) => (t.id === "archival-180" ? { ...t, available: false } : t)),
+    defaultDeliveryTierId: config.defaultDeliveryTierId === "archival-180" ? "standard-60" : config.defaultDeliveryTierId,
+  };
+}

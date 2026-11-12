@@ -42,7 +42,7 @@ export function useProposalPdf(input: Omit<ProposalInput, "origin"> | null, auto
     }
   }, []);
 
-  const key = input ? `${input.reference}|${input.draft.updatedAt}|${input.quote.grandTotal}|${input.config.version}` : "";
+  const key = input ? `${input.reference}|${input.draft.updatedAt}|${input.quote.grandTotal}|${input.config.version}|${input.finalPrice ?? ""}` : "";
   useEffect(() => {
     if (auto && key) void render();
   }, [auto, key, render]);

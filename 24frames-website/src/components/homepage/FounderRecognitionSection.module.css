@@ -104,7 +104,7 @@
 .namePanelKicker {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #55625B;
@@ -135,7 +135,7 @@
   width: 100%;
   aspect-ratio: 3.2 / 3.9;
   height: clamp(480px, 42vw, 560px);
-  border-radius: 16px;
+  border-radius: 4px;
   overflow: hidden;
   background-color: #121816;
   border: 1px solid rgba(9, 69, 62, 0.12);
@@ -282,7 +282,7 @@
 .statDesc {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.58rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #55625B;
@@ -318,7 +318,7 @@
 .principlesKicker {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.625rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #55625B;
@@ -368,14 +368,14 @@
 .principleNumber {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.8125rem;
-  font-weight: 700;
+  font-weight: 500;
   color: #B5985A;
 }
 
 .principleTitle {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   font-size: 1.15rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #142821;
   margin: 0;
 }
@@ -427,7 +427,7 @@
 .recognitionKicker {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #55625B;
@@ -518,7 +518,7 @@
   min-width: 260px;
   max-width: 340px;
   background: #FAF7F2;
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 1.35rem 1.25rem;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(9, 69, 62, 0.12);
@@ -546,7 +546,7 @@
 .cardBadge {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.62rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #0F4339;
@@ -570,7 +570,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1.30;
-  border-radius: 12px;
+  border-radius: 4px;
   overflow: hidden;
   background: #EFEAE0;
   display: flex;
@@ -584,7 +584,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center 20%;
-  border-radius: 12px;
+  border-radius: 4px;
   display: block;
   transition: transform 0.4s ease;
 }
@@ -593,7 +593,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 12px;
+  border-radius: 4px;
   display: block;
   transition: transform 0.4s ease;
 }
@@ -692,7 +692,7 @@
   border: none;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.625rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #55625B;
@@ -769,7 +769,7 @@
 .quoteAttribution {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #55625B;
@@ -789,7 +789,7 @@
   padding: 0.55rem 0.55rem 0.55rem 1.9rem;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
@@ -845,7 +845,7 @@
 .modalContainer {
   background: #FAF7F0;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 20px;
+  border-radius: 4px;
   max-width: 780px;
   width: 100%;
   max-height: calc(100dvh - 2rem);
@@ -878,7 +878,7 @@
 .modalBadge {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.5625rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #09453E;
@@ -890,7 +890,7 @@
 .modalYear {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #64726B;
 }
 
@@ -925,7 +925,7 @@
 }
 
 .modalMediaCol {
-  border-radius: 12px;
+  border-radius: 4px;
   overflow: hidden;
   background: #EBE5D8;
   height: 360px;
@@ -947,7 +947,7 @@
 .modalCategory {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.625rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #B5985A;
@@ -956,7 +956,7 @@
 .modalTitle {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   font-size: 1.55rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #142821;
   line-height: 1.25;
   margin: 0;
@@ -999,7 +999,7 @@
   gap: 0.45rem;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.1em;
   color: #09453E;
   text-decoration: none;
@@ -1057,7 +1057,7 @@
 
   .modalContainer {
     max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 1rem);
-    border-radius: 16px;
+    border-radius: 4px;
   }
 
   .modalHeader {

@@ -135,7 +135,7 @@
 .chapterLabel {
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.88rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #727670;
@@ -160,7 +160,7 @@
 .headingThe {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: clamp(5.1rem, 7.2vw, 7.8rem);
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color-charcoal, #181C1A);
   letter-spacing: -0.02em;
   will-change: transform, opacity, filter;
@@ -235,7 +235,7 @@
 .exploreActionText {
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.88rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
@@ -363,7 +363,7 @@
 .featuredCommissionLabel {
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.88rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #727670;
@@ -373,7 +373,7 @@
 .featuredCoupleName {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: clamp(2.35rem, 3.1vw, 3.12rem);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.18;
   color: var(--color-charcoal, #181C1A);
   margin: 0 0 0.4rem 0;
@@ -419,7 +419,7 @@
   gap: 0.65rem;
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.88rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-kllezo-green, #09453e);

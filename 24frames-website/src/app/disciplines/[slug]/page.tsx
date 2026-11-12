@@ -86,7 +86,6 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
 
             <h1 className={styles.heroTitle}>{discipline.title}</h1>
             <p className={styles.heroTagline}>{discipline.tagline}</p>
-            <p className={styles.heroLead}>{discipline.fullDescription}</p>
 
             {/* Monumental Hero Photograph Canvas (Bespoke per-discipline editorial aspect & framing) */}
             <div

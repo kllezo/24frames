@@ -124,3 +124,24 @@ export async function verifyAdmin(token: string | undefined, secret: string, now
 export function adminCookieOptions() {
   return { ...sessionCookieOptions(), maxAge: Math.floor(ADMIN_TTL_MS / 1000) };
 }
+
+/* ------------------------------------------------------------
+   Generic signed tokens (used by the client & studio portal).
+   ------------------------------------------------------------ */
+export async function signToken(payload: object, secret: string): Promise<string> {
+  const body = b64url(enc.encode(JSON.stringify(payload)));
+  const sig = new Uint8Array(await crypto.subtle.sign("HMAC", await hmacKey(secret), enc.encode(body)));
+  return `${body}.${b64url(sig)}`;
+}
+
+export async function verifyToken<T>(token: string | undefined, secret: string): Promise<T | null> {
+  if (!token) return null;
+  const [body, sig] = token.split(".");
+  if (!body || !sig) return null;
+  try {
+    const ok = await crypto.subtle.verify("HMAC", await hmacKey(secret), fromB64url(sig) as BufferSource, enc.encode(body));
+    return ok ? (JSON.parse(new TextDecoder().decode(fromB64url(body))) as T) : null;
+  } catch {
+    return null;
+  }
+}

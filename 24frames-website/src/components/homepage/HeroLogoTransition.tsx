@@ -321,7 +321,10 @@ export default function HeroLogoTransition({
       });
     }, heroSectionRef);
 
+    const releaseStops = installScrollStops();
+
     return () => {
+      releaseStops();
       ctx.revert();
       delete document.documentElement.dataset.heroHeaderTheme;
       if (vowsStageWrapRef.current) {
@@ -486,4 +489,113 @@ export default function HeroLogoTransition({
       </div>
     </div>
   );
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Opening scroll stops.
+   Inside the pinned opening, one scroll gesture = one stop:
+     hero  →  the 24 FRAMES logo  →  The Vows (Bellamkonda, story open).
+   Half-scrolls are completed for the visitor, and a quiet "speed breaker"
+   swallows the rest of a fast flick so the Vows composition is always seen.
+   Beyond the last stop the page scrolls freely again.
+   ────────────────────────────────────────────────────────────────────────── */
+const STOPS = [0, 0.28, 1];
+const GLIDE = 1.15; // seconds per stop
+const SETTLE_MS = 650; // speed breaker after each arrival
+
+type LenisLike = { scrollTo: (t: number, o?: Record<string, unknown>) => void; scroll: number };
+
+function installScrollStops(): () => void {
+  if (typeof window === "undefined") return () => {};
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return () => {};
+
+  let busyUntil = 0;
+  let touchY: number | null = null;
+
+  const trigger = () => ScrollTrigger.getById("heroLogoTransition");
+  const lenis = () => (window as unknown as { __lenis?: LenisLike }).__lenis;
+  const currentY = () => lenis()?.scroll ?? window.scrollY;
+
+  const range = () => {
+    const t = trigger();
+    return t ? { start: t.start, end: t.end } : null;
+  };
+
+  const goTo = (y: number) => {
+    busyUntil = performance.now() + GLIDE * 1000 + SETTLE_MS;
+    const l = lenis();
+    if (l) l.scrollTo(y, { duration: GLIDE, lock: true, force: true, easing: (t: number) => 1 - Math.pow(1 - t, 3) });
+    else window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
+  // Returns true when the gesture was handled (and must not scroll natively).
+  const step = (dir: 1 | -1): boolean => {
+    const r = range();
+    if (!r) return false;
+    const y = currentY();
+    const span = r.end - r.start;
+    // Only take over inside the opening (a few px tolerance past the end on the way up).
+    if (y < r.start - 2 || y > r.end + 2) return false;
+    if (dir === 1 && y >= r.end - 2) return false; // past the last stop: free scrolling
+    if (performance.now() < busyUntil) return true; // speed breaker
+    const p = (y - r.start) / span;
+    const target =
+      dir === 1
+        ? STOPS.find((s) => s > p + 0.02) ?? 1
+        : [...STOPS].reverse().find((s) => s < p - 0.02) ?? 0;
+    goTo(r.start + target * span);
+    return true;
+  };
+
+  const onWheel = (e: WheelEvent) => {
+    if (Math.abs(e.deltaY) < 2 || e.ctrlKey) return;
+    if (step(e.deltaY > 0 ? 1 : -1)) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  };
+
+  const onKey = (e: KeyboardEvent) => {
+    const t = e.target as HTMLElement | null;
+    if (t && (t.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(t.tagName))) return;
+    const down = ["ArrowDown", "PageDown", " "].includes(e.key) && !e.shiftKey;
+    const up = ["ArrowUp", "PageUp"].includes(e.key) || (e.key === " " && e.shiftKey);
+    if (!down && !up) return;
+    if (step(down ? 1 : -1)) e.preventDefault();
+  };
+
+  const onTouchStart = (e: TouchEvent) => {
+    touchY = e.touches[0]?.clientY ?? null;
+  };
+  const onTouchMove = (e: TouchEvent) => {
+    if (touchY === null) return;
+    const dy = touchY - (e.touches[0]?.clientY ?? touchY);
+    const r = range();
+    if (!r) return;
+    const y = currentY();
+    const inside = y >= r.start - 2 && (dy > 0 ? y < r.end - 2 : y <= r.end + 2);
+    if (inside && e.cancelable) e.preventDefault();
+    if (Math.abs(dy) > 24) {
+      step(dy > 0 ? 1 : -1);
+      touchY = null;
+    }
+  };
+  const onTouchEnd = () => {
+    touchY = null;
+  };
+
+  const opts = { passive: false, capture: true } as AddEventListenerOptions;
+  window.addEventListener("wheel", onWheel, opts);
+  window.addEventListener("keydown", onKey, opts);
+  window.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
+  window.addEventListener("touchmove", onTouchMove, opts);
+  window.addEventListener("touchend", onTouchEnd, { capture: true });
+
+  return () => {
+    window.removeEventListener("wheel", onWheel, opts);
+    window.removeEventListener("keydown", onKey, opts);
+    window.removeEventListener("touchstart", onTouchStart, { capture: true });
+    window.removeEventListener("touchmove", onTouchMove, opts);
+    window.removeEventListener("touchend", onTouchEnd, { capture: true });
+  };
 }

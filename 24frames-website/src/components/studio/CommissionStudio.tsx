@@ -19,19 +19,26 @@ import DeliveryStage from "./stages/DeliveryStage";
 import ReviewStage from "./stages/ReviewStage";
 import ProposalStage from "./stages/ProposalStage";
 import ComposedStage from "./stages/ComposedStage";
-import type { StageProps } from "./stages/types";
+import type { PortalInfo, StageProps } from "./stages/types";
+import PortalSync from "./PortalSync";
 
 export default function CommissionStudio({
   config: initialConfig,
   consultant,
   storageIssue,
+  portal,
 }: {
   config: StudioConfig;
   consultant: string;
   storageIssue: string | null;
+  /** Online client mode: the quotation is saved to the client's account. */
+  portal?: PortalInfo;
 }) {
   const [config, setConfig] = useState(initialConfig);
-  const { state, quote, actions } = useStudioStore(config);
+  const { state, quote, actions } = useStudioStore(
+    config,
+    portal ? { storageKey: `tf-portal-quote-${portal.quoteId}`, initialDraft: portal.initialDraft } : {},
+  );
   const [confirmReset, setConfirmReset] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const stageRef = useRef<HTMLElement>(null);
@@ -63,6 +70,7 @@ export default function CommissionStudio({
     consultant,
     submitted: state.submitted,
     onConfigRefresh: setConfig,
+    portal,
   };
 
   const names = coupleNames(state.draft.couple, "");
@@ -82,33 +90,51 @@ export default function CommissionStudio({
               FRAME {current.frame} <span aria-hidden="true">/</span> {String(STAGES.length - 1).padStart(2, "0")} · {current.title.toUpperCase()}
             </span>
           ) : (
-            <span className={styles.mono}>PRIVATE COMMISSION STUDIO</span>
+            <span className={styles.mono}>{portal ? `YOUR QUOTATION · ${portal.reference}` : "PRIVATE COMMISSION STUDIO"}</span>
           )}
           {names && <span className={styles.topbarNames}>{names}</span>}
         </div>
+        {portal ? (
+          <nav className={styles.topbarActions} aria-label="Your account">
+            <PortalSync portal={portal} draft={state.draft} />
+            <a className={styles.btnGhost} href="/account" data-no-transition>
+              My quotations
+            </a>
+            <button
+              className={styles.btnGhost}
+              onClick={async () => {
+                await fetch("/api/portal/auth", { method: "DELETE" }).catch(() => null);
+                window.location.assign("/account/login");
+              }}
+            >
+              Sign out
+            </button>
+          </nav>
+        ) : (
         <nav className={styles.topbarActions} aria-label="Studio">
-          <span className={styles.consultant} title="Signed-in consultant">
-            {consultant}
-          </span>
-          <a className={styles.btnGhost} href="/quotes" data-no-transition>
-            Quotes
-          </a>
-          <a className={styles.btnGhost} href="/quotebuilder/admin" data-no-transition>
-            Studio admin
-          </a>
-          <button className={styles.btnGhost} onClick={() => setConfirmReset(true)}>
-            New consultation
-          </button>
-          <button
-            className={styles.btnGhost}
-            onClick={async () => {
-              await fetch("/api/studio/auth", { method: "DELETE" }).catch(() => null);
-              window.location.assign("/quotebuilder/login");
-            }}
-          >
-            Sign out
-          </button>
-        </nav>
+            <span className={styles.consultant} title="Signed-in consultant">
+              {consultant}
+            </span>
+            <a className={styles.btnGhost} href="/quotes" data-no-transition>
+              Quotes
+            </a>
+            <a className={styles.btnGhost} href="/quotebuilder/admin" data-no-transition>
+              Studio admin
+            </a>
+            <button className={styles.btnGhost} onClick={() => setConfirmReset(true)}>
+              New consultation
+            </button>
+            <button
+              className={styles.btnGhost}
+              onClick={async () => {
+                await fetch("/api/studio/auth", { method: "DELETE" }).catch(() => null);
+                window.location.assign("/quotebuilder/login");
+              }}
+            >
+              Sign out
+            </button>
+          </nav>
+        )}
       </header>
 
       {storageIssue && (
@@ -194,7 +220,7 @@ export default function CommissionStudio({
         </div>
       </dialog>
 
-      <IdleLock onWipe={() => clearStoredConsultation()} />
+      {!portal && <IdleLock onWipe={() => clearStoredConsultation()} />}
     </div>
   );
 }

@@ -204,13 +204,25 @@ export function stashDraftForNewConsultation(draft: CommissionDraft) {
   }
 }
 
-export function useStudioStore(config: StudioConfig) {
-  const [state, dispatch] = useReducer(reducer, undefined, () => ({
-    draft: createDraft(config),
-    stage: "overture" as StageId,
-    reached: 0,
-    submitted: null,
-  }));
+export interface StoreOptions {
+  /** sessionStorage key (the online portal keeps one per quotation). */
+  storageKey?: string;
+  /** A saved quotation to open when nothing newer is stored locally. */
+  initialDraft?: CommissionDraft | null;
+}
+
+export function useStudioStore(config: StudioConfig, options: StoreOptions = {}) {
+  const key = options.storageKey ?? STORAGE_KEY;
+  const [state, dispatch] = useReducer(reducer, undefined, () => {
+    const seeded = options.initialDraft ? normaliseDraft(options.initialDraft, config) : null;
+    const started = !!seeded && (seeded.events.length > 0 || !!seeded.couple.brideName || !!seeded.couple.groomName);
+    return {
+      draft: seeded ?? createDraft(config),
+      stage: (started ? "couple" : "overture") as StageId,
+      reached: started ? stageIndex("commission") : 0,
+      submitted: null,
+    };
+  });
   // The blank initial state must never be persisted: on mount (and on React's
   // development double-mount) it would overwrite the saved consultation
   // before hydration reads it.
@@ -219,10 +231,12 @@ export function useStudioStore(config: StudioConfig) {
   // Hydrate after mount (sessionStorage is client-only).
   useEffect(() => {
     try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
+      const raw = sessionStorage.getItem(key);
       if (raw) {
         const saved = JSON.parse(raw) as StudioState;
-        if (saved?.draft?.schemaVersion === 1) {
+        const seed = options.initialDraft;
+        const stale = !!seed && saved?.draft?.id === seed.id && (saved.draft.updatedAt ?? "") < (seed.updatedAt ?? "");
+        if (saved?.draft?.schemaVersion === 1 && !stale && (!seed || saved.draft.id === seed.id)) {
           dispatch({
             type: "hydrate",
             state: { ...saved, draft: normaliseDraft(saved.draft, config) },
@@ -238,7 +252,7 @@ export function useStudioStore(config: StudioConfig) {
   useEffect(() => {
     if (state === initialState.current) return;
     try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      sessionStorage.setItem(key, JSON.stringify(state));
     } catch {
       /* storage full/unavailable — state still lives in memory */
     }
@@ -250,7 +264,11 @@ export function useStudioStore(config: StudioConfig) {
     () => ({
       go: (stage: StageId) => dispatch({ type: "go", stage }),
       reset: () => {
-        clearStoredConsultation();
+        try {
+          sessionStorage.removeItem(key);
+        } catch {
+          /* storage unavailable */
+        }
         dispatch({ type: "reset", config });
       },
       couple: (patch: Partial<CoupleDetails>) => dispatch({ type: "couple", patch }),
@@ -276,6 +294,7 @@ export function useStudioStore(config: StudioConfig) {
       submitted: (record: CommissionRecord) => dispatch({ type: "submitted", record }),
       loadDraft: (draft: CommissionDraft) => dispatch({ type: "loadDraft", draft }),
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [config],
   );
 

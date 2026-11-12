@@ -42,29 +42,26 @@ export default function EnsembleStage(props: StageProps) {
 
   return (
     <div className={st.stageInner}>
-      <StageHeader
-        frame="04"
-        kicker="Frame 04 · The Casting"
-        title={<>Cast your crew, <em>occasion by occasion.</em></>}
-        lead="Each occasion in turn. Every role is written for that day — choose who joins it, and how many."
-      >
-        <IllustrativeTag show={config.pricingIsIllustrative} />
-      </StageHeader>
-
-      <div className={styles.toolbar}>
-        <div className={base.segmented} role="tablist" aria-label="View">
-          <button role="tab" aria-selected={view === "catalogue"} className={view === "catalogue" ? base.segOn : ""} onClick={() => setView("catalogue")}>
-            Occasion by occasion
-          </button>
-          <button role="tab" aria-selected={view === "matrix"} className={view === "matrix" ? base.segOn : ""} onClick={() => setView("matrix")}>
-            Full composition
-          </button>
+      <div className={cx.castHead}>
+        <StageHeader
+          frame="04"
+          kicker="Frame 04 · The Casting"
+          title={<>Cast your crew, <em>occasion by occasion.</em></>}
+        />
+        <div className={cx.castTools}>
+          <div className={base.segmented} role="tablist" aria-label="View">
+            <button role="tab" aria-selected={view === "catalogue"} className={view === "catalogue" ? base.segOn : ""} onClick={() => setView("catalogue")}>
+              Occasion by occasion
+            </button>
+            <button role="tab" aria-selected={view === "matrix"} className={view === "matrix" ? base.segOn : ""} onClick={() => setView("matrix")}>
+              Full composition
+            </button>
+          </div>
+          <span className={base.mono}>
+            {plural(quote.totalProfessionals, "PROFESSIONAL").toUpperCase()} · {formatINR(quote.productionSubtotal)}
+          </span>
         </div>
-        <span className={base.mono}>
-          {plural(quote.totalProfessionals, "PROFESSIONAL").toUpperCase()} · {formatINR(quote.productionSubtotal)}
-        </span>
       </div>
-
 
       {view === "catalogue" ? (
         <>
@@ -349,6 +346,7 @@ function Dossier({
   draft,
   quote,
   actions,
+  portal,
 }: { service: ServiceDefinition; onClose: () => void; guidance: Map<string, EventGuidance> } & StageProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const [editing, setEditing] = useState<string | null>(null);
@@ -423,7 +421,7 @@ function Dossier({
                     </span>
                     <Stepper value={q} size="sm" label={`${s.name}, ${eventDisplayName(e, config)}`} onChange={(n) => actions.setQuantity(e.id, s.id, n)} />
                   </div>
-                  {q > 0 && (
+                  {q > 0 && !portal && (
                     editing === e.id ? (
                       <PriceOverride
                         initial={a?.unitPriceOverride ?? null}
