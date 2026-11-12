@@ -121,6 +121,17 @@ export default function Cinema({
     const queue = () => { if (!raf) raf = requestAnimationFrame(paint); };
     let tilted: HTMLElement | null = null;
     const move = (e: PointerEvent) => {
+      // Hold the page still behind an open dialog (profiles, confirmations):
+      // parallax and tilt moving under its blurred backdrop read as flicker.
+      if (document.querySelector("dialog[open]")) {
+        if (tilted) {
+          tilted.style.removeProperty("--rx");
+          tilted.style.removeProperty("--ry");
+          tilted.style.removeProperty("--glare");
+          tilted = null;
+        }
+        return;
+      }
       x = e.clientX;
       y = e.clientY;
       // Depth: layers marked [data-depth] drift against the pointer.

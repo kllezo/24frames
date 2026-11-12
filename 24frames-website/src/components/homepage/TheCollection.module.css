@@ -57,9 +57,9 @@
 }
 
 .chapterLabel {
-  font-family: var(--font-emphasis, Montserrat, sans-serif);
+  font-family: var(--font-mono);
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 400;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-kllezo-green, #09453e);
@@ -74,7 +74,7 @@
   border-radius: 999px;
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.625rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-kllezo-green, #09453e);
@@ -83,7 +83,7 @@
 .title {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: clamp(2.8rem, 4.8vw, 4.2rem);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.05;
   color: var(--color-charcoal, #141713);
   letter-spacing: -0.015em;
@@ -116,7 +116,7 @@
 .showcaseContainer {
   background: #FFFFFF;
   border: 1px solid rgba(9, 69, 62, 0.12);
-  border-radius: 20px;
+  border-radius: 4px;
   padding: clamp(0.75rem, 1.2vw, 1.1rem);
   box-shadow: 0 16px 44px rgba(9, 69, 62, 0.06);
   width: 100%;
@@ -134,7 +134,7 @@
 /* ── Individual Card Container ───────────────────────────────────────── */
 .card {
   position: relative;
-  border-radius: 16px;
+  border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
   outline: none;
@@ -255,7 +255,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 47% 82%;
+  object-position: 50% 60%;
   transform: scale(1.0);
   transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -268,14 +268,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 47% 84%;
-  transform-origin: 47% 82%;
-  transform: scale(1.95);
+  object-position: 50% 58%;
+  transform-origin: 50% 55%;
+  transform: scale(1.04);
   transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
 }
 
 .cardActive .weddingsFullImg {
-  transform: scale(1.95);
+  transform: scale(1.0);
   filter: brightness(1) contrast(1.05);
 }
 
@@ -444,7 +444,7 @@
 .activeCategory {
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(250, 248, 242, 0.9);
@@ -459,7 +459,7 @@
   border-radius: 999px;
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.625rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #FAF8F2;
@@ -479,7 +479,7 @@
 .activeTitle {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: clamp(1.8rem, 2.7vw, 2.6rem);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.08;
   color: #FFFFFF;
   letter-spacing: -0.01em;
@@ -529,7 +529,7 @@
   border-radius: 999px;
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   transition: all 0.3s ease;
@@ -563,7 +563,7 @@
   border-radius: 999px;
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   backdrop-filter: blur(8px);
@@ -621,7 +621,7 @@
 .compactTitle {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: clamp(0.95rem, 1.2vw, 1.22rem);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.15;
   color: #FFFFFF;
   letter-spacing: -0.01em;
@@ -646,7 +646,7 @@
   border-radius: 999px;
   font-family: var(--font-body, Inter, sans-serif);
   font-size: clamp(0.58rem, 0.68vw, 0.72rem);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   text-decoration: none;
@@ -675,18 +675,18 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-family: var(--font-emphasis, Montserrat, sans-serif);
+  font-family: var(--font-mono);
   font-size: clamp(0.68rem, 0.75vw, 0.8rem);
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.08em;
   color: #D4AF37;
   margin-top: 0.1rem;
 }
 
 .compactCount {
-  font-family: var(--font-emphasis, Montserrat, sans-serif);
+  font-family: var(--font-mono);
   font-size: inherit;
-  font-weight: 700;
+  font-weight: 400;
   color: inherit;
 }
 
@@ -695,13 +695,13 @@
 }
 
 .headerCursiveQuote {
-  font-family: var(--font-cursive, Allura, cursive);
-  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.05rem, 1.25vw, 1.25rem);
   color: var(--color-kllezo-green, #09453e);
   margin: 0.85rem 0 0 0;
   line-height: 1.35;
   font-weight: 400;
-  font-style: normal;
+  font-style: italic;
   letter-spacing: normal;
 }
 
@@ -714,14 +714,14 @@
 }
 
 .bottomCursiveQuote {
-  font-family: var(--font-cursive, Allura, cursive);
-  font-size: clamp(1.2rem, 1.7vw, 1.5rem);
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.05rem, 1.25vw, 1.25rem);
   color: var(--color-kllezo-green, #09453e);
   text-align: center;
   margin: 0;
   line-height: 1.4;
   font-weight: 400;
-  font-style: normal;
+  font-style: italic;
 }
 
 /* ── Mobile Touch Pagination Dots ───────────────────────────────────── */
@@ -743,7 +743,7 @@
   gap: 0.5rem;
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-kllezo-green, #09453e);
@@ -803,7 +803,7 @@
   }
 
   .showcaseContainer {
-    border-radius: 20px;
+    border-radius: 4px;
     padding: 0.65rem;
     overflow: hidden;
     background: #FAF7F0;
@@ -825,7 +825,7 @@
   .card {
     width: 100% !important;
     max-width: none !important;
-    border-radius: 16px;
+    border-radius: 4px;
     overflow: hidden;
     position: relative;
     cursor: pointer;
@@ -904,7 +904,7 @@
   .cardBrandKicker {
     font-family: var(--font-inter), sans-serif;
     font-size: 0.55rem;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: 0.16em;
     color: rgba(250, 248, 242, 0.7);
   }
@@ -1094,7 +1094,7 @@
   }
 
   .showcaseContainer {
-    border-radius: 18px;
+    border-radius: 4px;
     padding: 0.5rem;
   }
 

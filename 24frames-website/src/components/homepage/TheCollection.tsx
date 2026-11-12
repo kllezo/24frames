@@ -38,11 +38,11 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     tagline: "Sacred Telugu traditions, royal unions and multi-day celebrations",
     heroDescription:
       "Muhurthams, Sangeets and receptions documented with reverence for ritual and an eye for the unscripted glance.",
-    image: "/images/portfolio/sireesh-harshitha/cover.jpg",
-    webpImage: "/images/portfolio/sireesh-harshitha/cover.webp",
+    image: "/images/portfolio/karthik-falaknama/cover.jpg",
+    webpImage: "/images/portfolio/karthik-falaknama/cover.webp",
     fallbackImage: "/images/disciplines/weddings/223fd95b-d4b5-4f7d-840e-3f484b8d8966.JPG",
     href: "/disciplines/weddings",
-    objectPosition: "47% 84%",
+    objectPosition: "center 62%",
   },
   {
     id: "celebrities",
@@ -404,18 +404,18 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                             <>
                               <source
                                 type="image/avif"
-                                srcSet="/images/portfolio/sireesh-harshitha/cover.avif 1400w"
+                                srcSet="/images/portfolio/karthik-falaknama/cover.avif 1400w"
                                 sizes="(max-width: 768px) 100vw, 33vw"
                               />
                               <source
                                 type="image/webp"
-                                srcSet="/images/portfolio/sireesh-harshitha/cover.webp 1400w"
+                                srcSet="/images/portfolio/karthik-falaknama/cover.webp 1400w"
                                 sizes="(max-width: 768px) 100vw, 33vw"
                               />
                             </>
                           )}
                           <img
-                            src="/images/portfolio/sireesh-harshitha/cover.jpg"
+                            src="/images/portfolio/karthik-falaknama/cover.jpg"
                             alt={discipline.title}
                             className={styles.weddingsCropImg}
                             loading="eager"
@@ -429,12 +429,12 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                             <>
                               <source
                                 type="image/avif"
-                                srcSet="/images/portfolio/sireesh-harshitha/cover.avif 1400w"
+                                srcSet="/images/portfolio/karthik-falaknama/cover.avif 1400w"
                                 sizes="(max-width: 768px) 100vw, 50vw"
                               />
                               <source
                                 type="image/webp"
-                                srcSet="/images/portfolio/sireesh-harshitha/cover.webp 1400w"
+                                srcSet="/images/portfolio/karthik-falaknama/cover.webp 1400w"
                                 sizes="(max-width: 768px) 100vw, 50vw"
                               />
                             </>

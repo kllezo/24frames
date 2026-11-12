@@ -336,29 +336,30 @@ export default function CinematicTransition() {
         router.push(targetUrl);
       });
 
+      // Hold the shutter closed until the new route has actually mounted.
+      // Scrolling before then moved the *current* page (the homepage hero)
+      // and revealed it, so the first click looked like it went nowhere.
+      const startNav = Date.now();
+      while (Date.now() - startNav < 6000 && window.location.pathname !== destUrl.pathname) {
+        await new Promise((r) => setTimeout(r, 25));
+      }
+
+      const l = (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
       if (destUrl.hash && destUrl.hash.length > 1) {
-        if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
-          const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
-          l.scrollTo(destUrl.hash, { offset: -80, immediate: true });
-        }
+        l?.scrollTo(destUrl.hash, { offset: -80, immediate: true });
+      } else if (l) {
+        l.scrollTo(0, { immediate: true });
       } else {
-        if (typeof window !== "undefined" && (window as unknown as { __lenis?: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis) {
-          const l = (window as unknown as { __lenis: { scrollTo: (t: unknown, opt?: unknown) => void } }).__lenis;
-          l.scrollTo(0, { immediate: true });
-        } else {
-          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-        }
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       }
 
       // Await DOM readiness of the destination route while still sealed (poll up to 800ms)
       const startPoll = Date.now();
       while (Date.now() - startPoll < 800) {
-        if (window.location.pathname === destUrl.pathname) {
-          const found = resolveTargetElement(targetUrl, targetHash);
-          if (found) {
-            const rect = found.getBoundingClientRect();
-            if (rect.width > 0 && rect.height > 0) break;
-          }
+        const found = resolveTargetElement(targetUrl, targetHash);
+        if (found) {
+          const rect = found.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0) break;
         }
         await new Promise((r) => setTimeout(r, 25));
       }
@@ -382,7 +383,7 @@ export default function CinematicTransition() {
       clearSafetyTimeout();
       safetyTimeoutRef.current = setTimeout(() => {
         forceReset();
-      }, 1800);
+      }, 7500);
 
       // Reduced motion accessibility fallback
       if (isReducedMotion) {

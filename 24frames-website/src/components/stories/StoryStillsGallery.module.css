@@ -394,41 +394,44 @@
   }
 }
 
-/* ── FULL-SCREEN LIGHTBOX MODAL ── */
+/* ── FULL-SCREEN LIGHTBOX MODAL ──
+   A white gallery mat that hugs the photograph: the frame takes the
+   image's own size, the caption wraps to the image width, no dead space. */
 .modalBackdrop {
   position: fixed;
   inset: 0;
-  background: rgba(10, 20, 17, 0.94);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 16, 13, 0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1rem, 3vw, 2.5rem);
+  padding: clamp(0.75rem, 3vw, 2.5rem) clamp(0.75rem, 6vw, 6rem);
   animation: fadeIn 0.25s ease;
 }
 
 .modalContent {
   position: relative;
-  max-width: 1100px;
-  width: 100%;
-  max-height: 92vh;
+  width: fit-content;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
-  background: #14231E;
-  border-radius: 16px;
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-  overflow: hidden;
+  background: #FFFFFF;
+  padding: clamp(0.6rem, 1.2vw, 1rem);
+  border-radius: 4px;
+  box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.75);
+  animation: matIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .modalHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 1rem;
+  padding: 0 0 clamp(0.5rem, 1vw, 0.75rem);
+  width: 0;
+  min-width: 100%;
 }
 
 .modalMeta {
@@ -438,69 +441,86 @@
 }
 
 .modalBadge {
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #D4AF37;
+  letter-spacing: 0.14em;
+  color: #A8862F;
 }
 
 .modalCount {
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  color: #A3B5AE;
+  letter-spacing: 0.14em;
+  color: #6B746F;
 }
 
 .modalCloseBtn {
   background: transparent;
-  border: none;
-  color: #FAF8F2;
-  font-size: 1.25rem;
+  border: 1px solid rgba(9, 69, 62, 0.16);
+  color: #09453E;
+  font-size: 0.85rem;
   cursor: pointer;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .modalCloseBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: #09453E;
+  color: #FFFFFF;
 }
 
-.modalImageViewport {
-  position: relative;
-  flex: 1;
-  min-height: 280px;
-  max-height: 70vh;
+.modalImageWrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #091310;
-  overflow: hidden;
+  line-height: 0;
+}
+
+.modalImageWrap picture {
+  display: block;
 }
 
 .modalImg {
-  max-width: 100%;
-  max-height: 70vh;
-  object-fit: contain;
   display: block;
+  width: auto;
+  height: auto;
+  max-width: min(100%, calc(100vw - clamp(1.5rem, 12vw, 12rem) - 2rem));
+  max-height: calc(100vh - clamp(1.5rem, 6vw, 5rem) - 9rem);
+  object-fit: contain;
+}
+
+.modalCaptionBlock {
+  width: 0;
+  min-width: 100%;
+  padding-top: clamp(0.6rem, 1.2vw, 0.9rem);
+}
+
+.modalCaptionText {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(0.98rem, 1.2vw, 1.12rem);
+  font-style: italic;
+  color: #2A332F;
+  margin: 0;
+  line-height: 1.45;
+  text-align: center;
 }
 
 .modalNavBtn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  background: rgba(14, 38, 33, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #FAF8F2;
-  font-size: 1.25rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #FFFFFF;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -510,32 +530,35 @@
 }
 
 .modalNavBtn:hover {
-  background: #09453E;
-  border-color: #D4AF37;
-  color: #FFFFFF;
+  background: #FFFFFF;
+  color: #09453E;
 }
 
-.modalPrevBtn {
-  left: 1rem;
+.prevBtn {
+  left: calc(-46px - clamp(0.6rem, 1.6vw, 1.4rem));
 }
 
-.modalNextBtn {
-  right: 1rem;
+.nextBtn {
+  right: calc(-46px - clamp(0.6rem, 1.6vw, 1.4rem));
 }
 
-.modalCaptionWrap {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: #111E1A;
+@media (max-width: 760px) {
+  .modalNavBtn {
+    top: auto;
+    bottom: -60px;
+    transform: none;
+  }
+  .prevBtn { left: calc(50% - 56px); }
+  .nextBtn { right: calc(50% - 56px); }
+  .modalImg {
+    max-width: calc(100vw - 3rem);
+    max-height: calc(100vh - 14rem);
+  }
 }
 
-.modalCaption {
-  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: 1.15rem;
-  font-style: italic;
-  color: #E8EFEA;
-  margin: 0;
-  line-height: 1.4;
+@keyframes matIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @keyframes fadeIn {

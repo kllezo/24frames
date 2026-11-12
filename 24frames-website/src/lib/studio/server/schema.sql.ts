@@ -119,4 +119,35 @@ alter table studio.assignments enable row level security;
 alter table studio.quotes      enable row level security;
 alter table studio.activity    enable row level security;
 alter table studio.media       enable row level security;
+
+-- Client & studio portal: accounts (clients, sales, founder) and online quotations.
+create schema if not exists portal;
+
+create table if not exists portal.accounts (
+  id          text primary key,
+  email       text not null unique,
+  role        text not null,
+  data        jsonb not null,
+  created_at  timestamptz not null default now()
+);
+
+create table if not exists portal.quotes (
+  id          text primary key,
+  client_id   text not null,
+  status      text not null,
+  data        jsonb not null,
+  updated_at  timestamptz not null default now()
+);
+create index if not exists portal_quotes_client_idx on portal.quotes (client_id, updated_at desc);
+create index if not exists portal_quotes_status_idx on portal.quotes (status, updated_at desc);
+
+create table if not exists portal.access (
+  email       text primary key,
+  data        jsonb not null,
+  updated_at  timestamptz not null default now()
+);
+
+alter table portal.accounts enable row level security;
+alter table portal.access   enable row level security;
+alter table portal.quotes   enable row level security;
 `;

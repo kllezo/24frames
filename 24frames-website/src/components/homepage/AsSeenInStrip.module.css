@@ -49,7 +49,7 @@
 .title {
   font-family: var(--font-inter), sans-serif;
   font-size: clamp(0.75rem, 0.9vw, 0.875rem);
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #09453E;
@@ -105,8 +105,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  height: clamp(40px, 4.8vw, 54px);
-  padding: 0 clamp(0.5rem, 1vw, 1rem);
+  height: clamp(80px, 9.6vw, 108px);
+  padding: 0 clamp(1rem, 2vw, 2rem);
   filter: grayscale(100%) opacity(0.78);
   transition: filter 0.3s ease, transform 0.3s ease;
 }
@@ -131,19 +131,19 @@
 }
 
 .logoImg.ultrawide {
-  height: clamp(18px, 2.2vw, 24px);
+  height: clamp(36px, 4.4vw, 48px);
 }
 
 .logoImg.wide {
-  height: clamp(28px, 3.2vw, 35px);
+  height: clamp(56px, 6.4vw, 70px);
 }
 
 .logoImg.compact {
-  height: clamp(32px, 3.6vw, 38px);
+  height: clamp(64px, 7.2vw, 76px);
 }
 
 .logoImg.square {
-  height: clamp(36px, 4.0vw, 42px);
+  height: clamp(72px, 8vw, 84px);
 }
 
 @keyframes scrollMarquee {

@@ -44,21 +44,21 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
       <div className={styles.container}>
         {/* ── 1. MONUMENTAL BRAND HEADER ROW ── */}
         <div className={styles.topRow}>
-          {/* Huge condensed 24 FRAMES title */}
-          <div className={styles.brandTitleBlock}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className={styles.monumentalLogo} src="/images/logo-dark.webp" alt="24 Frames" loading="lazy" decoding="async" />
+          {/* Left: quiet studio motto */}
+          <div className={styles.statementCol}>
+            <span className={styles.brandMotto}>PEOPLE · FILMS · LEGACIES</span>
+            <div className={styles.quoteDivider} aria-hidden="true" />
+            <span className={styles.brandPlace}>Hyderabad · Pan-India · International</span>
           </div>
 
-          {/* Right statement column */}
-          <div className={styles.statementCol}>
-            <p className={styles.editorialQuote}>
-              Stories made
-              <br />
-              to <span className={styles.editorialQuoteItalic}>outlive time.</span>
+          {/* Right: invitation line resting on the signature */}
+          <div className={styles.brandTitleBlock}>
+            <p className={styles.planLine}>
+              <span className={styles.planRule} aria-hidden="true" />
+              Plan your events <em>with</em>
             </p>
-            <div className={styles.quoteDivider} aria-hidden="true" />
-            <span className={styles.brandMotto}>PEOPLE · FILMS · LEGACIES</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className={styles.monumentalLogo} src="/images/logo-dark.webp" alt="24 Frames" loading="lazy" decoding="async" />
           </div>
         </div>
 
@@ -296,6 +296,10 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
 
           <div className={styles.bottomRightGroup}>
             <div className={styles.bottomLinks}>
+              <a href="/account/login" className={styles.bottomLink} data-no-transition>
+                Client Login
+              </a>
+              <span className={styles.bottomDot}>·</span>
               <Link href="/client-gallery" className={styles.bottomLink}>
                 Client Archive
               </Link>

@@ -10,4 +10,15 @@ export interface StageProps {
   consultant: string;
   submitted: CommissionRecord | null;
   onConfigRefresh: (config: StudioConfig) => void;
+  portal?: PortalInfo;
+}
+
+/** The online client portal: this quotation lives in the client's account. */
+export interface PortalInfo {
+  quoteId: string;
+  reference: string;
+  status: string;
+  editable: boolean;
+  clientName: string;
+  initialDraft: CommissionDraft | null;
 }

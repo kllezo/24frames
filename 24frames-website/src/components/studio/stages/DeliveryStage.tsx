@@ -186,7 +186,6 @@ export default function DeliveryStage({ config, draft, quote, actions, go }: Sta
             <p className={cx.vaultHint}>Slide the key, or tap a lock to open its timeline.</p>
           )}
 
-          <StudioAdjustments config={config} draft={draft} quote={quote} actions={actions} />
         </>
       )}
 
@@ -201,63 +200,3 @@ export default function DeliveryStage({ config, draft, quote, actions, go }: Sta
   );
 }
 
-function StudioAdjustments({ config, draft, quote, actions }: Pick<StageProps, "config" | "draft" | "quote" | "actions">) {
-  const [open, setOpen] = useState(draft.appliedChargeIds.length > 0 || !!draft.postProductionOverride);
-  const [amount, setAmount] = useState(draft.postProductionOverride ? String(draft.postProductionOverride.amount) : "");
-  const [reason, setReason] = useState(draft.postProductionOverride?.reason ?? "");
-  const charges = config.charges.filter((c) => c.available);
-  const n = Number(amount);
-  const valid = amount !== "" && Number.isFinite(n) && n >= 0 && reason.trim().length > 0;
-
-  return (
-    <section className={styles.adjust}>
-      <button className={styles.adjustHead} onClick={() => setOpen((o) => !o)} aria-expanded={open}>
-        <span className={base.mono}>FOR THE CONSULTANT</span>
-        <span>Studio adjustments &amp; additional charges</span>
-        <svg viewBox="0 0 16 16" aria-hidden="true"><path d={open ? "M4 10l4-4 4 4" : "M4 6l4 4 4-4"} /></svg>
-      </button>
-      {open && (
-        <div className={styles.adjustBody}>
-          <div>
-            <h3>Additional charges</h3>
-            <p className={st.muted}>Only charges you tick are added — and every one is itemised on the proposal.</p>
-            {charges.length === 0 && <p className={st.muted}>No additional charges are configured.</p>}
-            {charges.map((c) => (
-              <label key={c.id} className={`${base.field} ${base.checkField}`}>
-                <input type="checkbox" checked={draft.appliedChargeIds.includes(c.id)} onChange={() => actions.toggleCharge(c.id)} />
-                <span>
-                  <b>{c.label}</b> — {c.kind === "fixed" ? formatINR(c.amount) : `${c.amount}% of creative production`}
-                  <small>{c.description}</small>
-                </span>
-              </label>
-            ))}
-          </div>
-          <div>
-            <h3>Post-production override</h3>
-            <p className={st.muted}>Replaces the computed fee of {formatINR(quote.postProduction.computedFee)}. Shown on the proposal as a studio adjustment.</p>
-            <div className={styles.overrideRow}>
-              <label className={base.field}>
-                <span className={base.fieldLabel}>Amount (₹)</span>
-                <input className={base.input} type="number" min={0} value={amount} onChange={(e) => setAmount(e.target.value)} />
-              </label>
-              <label className={base.field}>
-                <span className={base.fieldLabel}>Reason</span>
-                <input className={base.input} value={reason} maxLength={120} onChange={(e) => setReason(e.target.value)} />
-              </label>
-            </div>
-            <div className={styles.overrideActions}>
-              <button className={base.btnSecondary} disabled={!valid} onClick={() => actions.setPostOverride({ amount: Math.round(n), reason: reason.trim() })}>
-                Apply override
-              </button>
-              {draft.postProductionOverride && (
-                <button className={base.btnText} onClick={() => { actions.setPostOverride(null); setAmount(""); setReason(""); }}>
-                  Remove override
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
-  );
-}

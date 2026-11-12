@@ -105,7 +105,7 @@
 .featuredCommissionLabel {
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #727670;
@@ -130,7 +130,7 @@
 .headingThe {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: clamp(3.8rem, 5.2vw, 5.6rem);
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color-charcoal, #181C1A);
   letter-spacing: -0.02em;
 }
@@ -195,7 +195,7 @@
 .exploreActionText {
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
@@ -281,7 +281,7 @@
 .featuredCoupleName {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: clamp(1.85rem, 2.5vw, 2.45rem);
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color-charcoal, #181C1A);
   line-height: 1.15;
   margin: 0.2rem 0 0.5rem 0;
@@ -300,7 +300,7 @@
 .featuredVenueSub {
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.7rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #6D726D;
@@ -334,7 +334,7 @@
 .specKey {
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.64rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #8A8E89;
@@ -361,7 +361,7 @@
   border-radius: 999px;
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;
@@ -433,7 +433,7 @@
   max-width: 1040px;
   max-height: 585px;
   aspect-ratio: 16 / 9;
-  border-radius: 12px !important;
+  border-radius: 4px !important;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28), 0 4px 18px rgba(0, 0, 0, 0.12) !important;
   margin: 0 auto;
   clip-path: none !important;
@@ -500,7 +500,7 @@
 .filmIndexLabel {
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #C8A84E;
@@ -509,7 +509,7 @@
 .filmHeading {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: clamp(2.2rem, 4vw, 3.4rem);
-  font-weight: 600;
+  font-weight: 500;
   color: #FFFFFF;
   line-height: 1.1;
   margin: 0;
@@ -533,7 +533,7 @@
   margin-top: 0.75rem;
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -596,7 +596,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
 }
@@ -676,7 +676,7 @@
 
 .roundedImageCanvas {
   width: 100%;
-  border-radius: 14px;
+  border-radius: 4px;
   overflow: hidden;
   position: relative;
   background-color: #E6E1D7;
@@ -713,7 +713,7 @@
 .storySerialTag {
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #727670;
@@ -723,7 +723,7 @@
 .storyTitleLarge {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: clamp(2rem, 3.2vw, 2.85rem);
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color-charcoal, #181C1A);
   line-height: 1.15;
   margin: 0 0 1rem 0;
@@ -743,7 +743,7 @@
   gap: 0.65rem;
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-charcoal, #181C1A);
@@ -785,7 +785,7 @@
   width: 80%;
   max-width: 470px;
   aspect-ratio: 3.2 / 4.4;
-  border-radius: 14px;
+  border-radius: 4px;
   overflow: hidden;
   position: relative;
   background-color: #E6E1D7;
@@ -830,7 +830,7 @@
   max-width: 1040px;
   max-height: 585px;
   aspect-ratio: 16 / 9;
-  border-radius: 12px !important;
+  border-radius: 4px !important;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28), 0 4px 18px rgba(0, 0, 0, 0.12) !important;
   margin: 0 auto;
   clip-path: none !important;
@@ -911,7 +911,7 @@
 .nishanthFilmName {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: 1.15rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #FFFFFF;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -932,7 +932,7 @@
 .nishanthTag {
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #C8A84E;
@@ -941,7 +941,7 @@
 .nishanthTitle {
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: clamp(2rem, 3.4vw, 3rem);
-  font-weight: 600;
+  font-weight: 500;
   color: #FFFFFF;
   line-height: 1.1;
   margin: 0;
@@ -967,7 +967,7 @@
   border-radius: 999px;
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   cursor: pointer;
@@ -1057,7 +1057,7 @@
 .endingBrand {
   font-family: var(--font-mono, "Space Mono", monospace);
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #727670;
@@ -1080,7 +1080,7 @@
 .endingExploreLink {
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.08em;
   color: var(--color-charcoal, #181C1A);
   text-decoration: none;

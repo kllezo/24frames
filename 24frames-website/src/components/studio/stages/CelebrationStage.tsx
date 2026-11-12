@@ -196,6 +196,32 @@ export default function CelebrationStage({ config, draft, actions, go }: StagePr
   }
   const close = () => morph(() => setPop(null));
 
+  /* A tap on the empty page around the cards folds the open card away. */
+  const closeRef = useRef(close);
+  useEffect(() => {
+    closeRef.current = close;
+  });
+  const isOpen = pop !== null;
+  useEffect(() => {
+    if (!isOpen) return;
+    const onClick = (e: MouseEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (!t || !t.isConnected) return;
+      if (
+        t.closest(
+          "[data-occ], a, button, input, select, textarea, label, [role='dialog'], [role='listbox'], dialog, nav, aside, [data-picker]",
+        )
+      )
+        return;
+      closeRef.current();
+    };
+    const id = window.setTimeout(() => document.addEventListener("click", onClick), 0);
+    return () => {
+      window.clearTimeout(id);
+      document.removeEventListener("click", onClick);
+    };
+  }, [isOpen]);
+
   function addCustom(e: React.FormEvent) {
     e.preventDefault();
     const name = customName.trim();

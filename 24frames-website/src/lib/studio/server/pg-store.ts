@@ -7,7 +7,7 @@
 
 import postgres from "postgres";
 import { randomBytes, randomUUID } from "node:crypto";
-import { DEFAULT_STUDIO_CONFIG } from "@/lib/commission/defaults";
+import { DEFAULT_STUDIO_CONFIG, reviseConfig } from "@/lib/commission/defaults";
 import { coupleNames } from "@/lib/commission/model";
 import type {
   CelebrationEvent,
@@ -84,6 +84,11 @@ async function guarded<T>(fn: (s: Sql) => Promise<T>): Promise<T> {
   }
 }
 
+/** Shared, schema-ready connection for the client & studio portal. */
+export function portalSql<T>(fn: (s: Sql) => Promise<T>): Promise<T> {
+  return guarded(fn);
+}
+
 const iso = (v: Date | string) => (v instanceof Date ? v.toISOString() : new Date(v).toISOString());
 
 /* ---------------- Configuration ---------------- */
@@ -91,7 +96,7 @@ const iso = (v: Date | string) => (v instanceof Date ? v.toISOString() : new Dat
 async function getConfig() {
   return guarded(async (s) => {
     const rows = await s<{ config: StudioConfig }[]>`select config from studio.config where id = 1`;
-    return rows[0] ? { config: rows[0].config, stored: true } : { config: DEFAULT_STUDIO_CONFIG, stored: false };
+    return rows[0] ? { config: reviseConfig(rows[0].config), stored: true } : { config: DEFAULT_STUDIO_CONFIG, stored: false };
   });
 }
 

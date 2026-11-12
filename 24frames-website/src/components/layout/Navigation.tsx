@@ -251,9 +251,14 @@ export default function Navigation() {
             ))}
           </ul>
 
-          <Link href="/inquire" className={styles.cta}>
-            Inquire
-          </Link>
+          <span className={styles.ctaGroup}>
+            <a href="/account/login" className={`${styles.link} ${styles.signIn}`} data-no-transition>
+              Sign in
+            </a>
+            <Link href="/inquire" className={styles.cta}>
+              Inquire
+            </Link>
+          </span>
 
           <button
             className={`${styles.burger} ${menuOpen ? styles.burgerOpen : ""}`}
@@ -294,6 +299,14 @@ export default function Navigation() {
             <li
               className={styles.mobileLinkItem}
               style={{ transitionDelay: `${(NAV_LINKS.length + 1) * 80}ms` }}
+            >
+              <a href="/account/login" className={styles.mobileLink} onClick={() => setMenuOpen(false)} data-no-transition>
+                Sign in
+              </a>
+            </li>
+            <li
+              className={styles.mobileLinkItem}
+              style={{ transitionDelay: `${(NAV_LINKS.length + 2) * 80}ms` }}
             >
               <Link
                 href="/inquire"

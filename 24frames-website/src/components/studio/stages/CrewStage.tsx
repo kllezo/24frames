@@ -112,7 +112,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
     const t = window.setTimeout(() => {
       if (touched || window.scrollY > 40) return;
       if (el.getBoundingClientRect().top > window.innerHeight * 0.45) scrollToElement(el, -150);
-    }, 1500);
+    }, 4000);
     return () => {
       window.clearTimeout(t);
       window.removeEventListener("wheel", mark);

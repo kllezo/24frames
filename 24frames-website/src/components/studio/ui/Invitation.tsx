@@ -44,7 +44,7 @@ export default function Invitation({ couple: c }: { couple: CoupleDetails }) {
         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tapCard(); } }}
       >
         <div className={cx.inviteFace}>
-          <Crest className={cx.inviteCrest} numeral={[bride[0], groom[0]].filter(Boolean).join("") || undefined} />
+          <Crest className={cx.inviteCrest} />
           <p className={cx.inviteSmall}>Together with their families</p>
           <p className={cx.inviteNames}>
             <span className={bride ? "" : cx.inviteGhost}>{bride || "The bride"}</span>
