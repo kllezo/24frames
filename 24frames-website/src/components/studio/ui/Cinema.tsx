@@ -79,8 +79,19 @@ export default function Cinema({
     const root = document.documentElement;
     let x = window.innerWidth / 2;
     let y = window.innerHeight / 3;
+    let depth = false;
     const paint = () => {
       raf = 0;
+      // Depth: layers marked [data-depth] drift against the pointer — at most
+      // once a frame, and only on pages that have such layers (a change on
+      // the root restyles the whole document).
+      if (depth) {
+        depth = false;
+        if (document.querySelector("[data-depth]")) {
+          root.style.setProperty("--mx", ((x / window.innerWidth) * 2 - 1).toFixed(3));
+          root.style.setProperty("--my", ((y / window.innerHeight) * 2 - 1).toFixed(3));
+        }
+      }
       if (lightRef.current) lightRef.current.style.transform = `translate3d(${x - 400}px, ${y - 400}px, 0)`;
       if (progressRef.current) {
         const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -134,9 +145,10 @@ export default function Cinema({
       }
       x = e.clientX;
       y = e.clientY;
-      // Depth: layers marked [data-depth] drift against the pointer.
-      root.style.setProperty("--mx", ((x / window.innerWidth) * 2 - 1).toFixed(3));
-      root.style.setProperty("--my", ((y / window.innerHeight) * 2 - 1).toFixed(3));
+      // Hold still while a control is being dragged (the crew orbit):
+      // restyling the page under the pointer makes the drag stutter.
+      if (document.querySelector("[data-dragging]")) return;
+      depth = true;
       // Tilt: cards marked [data-tilt] lean toward the pointer and catch the light.
       const t = (e.target as HTMLElement | null)?.closest?.<HTMLElement>("[data-tilt]") ?? null;
       if (tilted && tilted !== t) {

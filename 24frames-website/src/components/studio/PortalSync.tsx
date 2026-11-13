@@ -58,7 +58,7 @@ export default function PortalSync({ portal, draft }: { portal: PortalInfo; draf
     saving: "Saving…",
     saved: shared ? "Update sent to the studio" : unshared ? "Saved · not yet sent to the studio" : "Saved to your account",
     error: "Not saved — check your connection",
-    locked: "With the studio · view only",
+    locked: portal.status === "accepted" ? "Accepted · view only" : "With the studio · view only",
   }[status];
   const firstName = portal.manager?.name.split(" ")[0];
 

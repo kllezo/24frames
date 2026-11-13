@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   compress: true,
+  // Dev only: lets several local addresses load the dev server (e.g. one
+  // portal login per address while testing). No effect on production.
+  allowedDevOrigins: ["127.0.0.1", "::1", "[::1]"],
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],

@@ -22,6 +22,7 @@ import ProposalStage from "./stages/ProposalStage";
 import ComposedStage from "./stages/ComposedStage";
 import type { PortalInfo, StageProps } from "./stages/types";
 import PortalSync from "./PortalSync";
+import LockBar from "../portal/LockBar";
 
 export default function CommissionStudio({
   config: initialConfig,
@@ -137,6 +138,8 @@ export default function CommissionStudio({
           </nav>
         )}
       </header>
+
+      {portal && !portal.editable && <LockBar portal={portal} />}
 
       {storageIssue && (
         <div className={styles.banner} role="alert">

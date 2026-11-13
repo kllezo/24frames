@@ -87,6 +87,8 @@ export interface QuoteEvent {
     | "forwarded"
     | "accepted"
     | "update_shared"
+    | "change_requested"
+    | "reopened"
     | "assigned"
     | "consultation"
     | "note";
@@ -114,7 +116,7 @@ export interface Consultation {
 /** Something the client did that the studio hasn't looked at yet. */
 export interface Attention {
   at: string;
-  kind: "submitted" | "update" | "accepted";
+  kind: "submitted" | "update" | "accepted" | "change_request";
   note: string;
 }
 

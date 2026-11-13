@@ -16,7 +16,10 @@ export default function ShareUpdate({
   manager,
   onClose,
   onShared,
+  request = false,
 }: {
+  /** Locked quotation: ask the relationship manager to reopen it instead. */
+  request?: boolean;
   open: boolean;
   quoteId: string;
   reference: string;
@@ -39,11 +42,17 @@ export default function ShareUpdate({
   }, [open]);
 
   async function share(via: "studio" | "whatsapp") {
+    if (request && !note.trim()) {
+      setError("Tell us what you'd like to change.");
+      return;
+    }
     setBusy(true);
     setError(null);
     // Open WhatsApp synchronously (inside the click) so pop-up blockers allow it.
     if (via === "whatsapp" && wa) {
-      const text = `Hi ${first}, I've updated my 24 Frames quotation (${reference}).${note.trim() ? ` ${note.trim()}` : ""}`;
+      const text = request
+        ? `Hi ${first}, I'd like to make a change to my 24 Frames quotation (${reference}): ${note.trim()}`
+        : `Hi ${first}, I've updated my 24 Frames quotation (${reference}).${note.trim() ? ` ${note.trim()}` : ""}`;
       window.open(`https://wa.me/${wa}?text=${encodeURIComponent(text)}`, "_blank", "noopener");
     }
     const res = await fetch(`/api/portal/quotes/${quoteId}`, {
@@ -68,16 +77,34 @@ export default function ShareUpdate({
 
   return (
     <dialog data-lenis-prevent ref={ref} className={base.dialog} onClose={onClose} aria-labelledby="share-title">
-      <h2 id="share-title">{first ? `Let ${first} know about your changes` : "Send your changes to the studio"}</h2>
-      <p>
-        Your changes to {reference} are saved.{" "}
-        {first
-          ? `${first}, your relationship manager, will review the latest version and confirm the price with you.`
-          : "Your relationship manager will review the latest version and confirm the price with you."}
-      </p>
-      <label className={px.field}>
-        <span>A note (optional)</span>
-        <textarea rows={3} maxLength={1000} value={note} onChange={(e) => setNote(e.target.value)} placeholder="e.g. We added a Sangeet and one more photographer for the reception." />
+      {request ? (
+        <>
+          <h2 id="share-title">{first ? `Ask ${first} to change your quotation` : "Ask the studio to change your quotation"}</h2>
+          <p>
+            {reference} is locked while the studio finalises it, or once it&apos;s accepted. Tell{" "}
+            {first ?? "your relationship manager"} what you&apos;d like to change — they&apos;ll reopen it so you can edit, or update it for you.
+          </p>
+        </>
+      ) : (
+        <>
+          <h2 id="share-title">{first ? `Let ${first} know about your changes` : "Send your changes to the studio"}</h2>
+          <p>
+            Your changes to {reference} are saved.{" "}
+            {first
+              ? `${first}, your relationship manager, will review the latest version and confirm the price with you.`
+              : "Your relationship manager will review the latest version and confirm the price with you."}
+          </p>
+        </>
+      )}
+      <label className={px.field} style={{ marginTop: 6 }}>
+        <span>{request ? "What would you like to change?" : "A note (optional)"}</span>
+        <textarea
+          rows={3}
+          maxLength={1000}
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder={request ? "e.g. We'd like to add a Mehendi and drop the drone at the reception." : "e.g. We added a Sangeet and one more photographer for the reception."}
+        />
       </label>
       {error && <p className={base.error} role="alert">{error}</p>}
       <div className={base.dialogActions}>
@@ -90,7 +117,7 @@ export default function ShareUpdate({
           </button>
         )}
         <button className={base.btnPrimary} onClick={() => share("studio")} disabled={busy}>
-          {busy ? "Sending…" : first ? `Notify ${first}` : "Notify the studio"}
+          {busy ? "Sending…" : request ? "Send request" : first ? `Notify ${first}` : "Notify the studio"}
         </button>
       </div>
     </dialog>

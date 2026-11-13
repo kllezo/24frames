@@ -29,7 +29,12 @@ export interface StaffMember {
   role: "sales" | "owner";
 }
 
-const ATTENTION_LABEL = { submitted: "New quotation from the client", update: "The client sent an update", accepted: "The client accepted the quotation" } as const;
+const ATTENTION_LABEL = {
+  submitted: "New quotation from the client",
+  update: "The client sent an update",
+  accepted: "The client accepted the quotation",
+  change_request: "The client asked to change the quotation",
+} as const;
 
 const ago = (iso: string) => {
   const m = Math.round((Date.now() - Date.parse(iso)) / 60000);
@@ -63,6 +68,8 @@ const ACTION_LABEL: Record<string, string> = {
   accepted: "Accepted the quotation",
   note: "Added a note",
   update_shared: "Sent an update to the studio",
+  change_requested: "Asked to change the quotation",
+  reopened: "Reopened the quotation for changes",
   assigned: "Relationship manager set to",
   consultation: "Logged a guided session",
 };
@@ -80,6 +87,16 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
   const [mine, setMine] = useState(false);
   const [staff, setStaff] = useState<StaffMember[]>([]);
   const [linkMsg, setLinkMsg] = useState<string | null>(null);
+
+  // Deep link from other desk pages: /desk?q=<id> opens that quotation.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("q");
+    if (id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setTab("all");
+      setOpenId(id);
+    }
+  }, []);
 
   useEffect(() => {
     fetch("/api/portal/staff", { cache: "no-store" })
@@ -336,9 +353,16 @@ function Detail({
             <b>{ATTENTION_LABEL[q.attention.kind]}</b> · {ago(q.attention.at)}
             {q.attention.note && <p className={px.attentionNote}>“{q.attention.note}”</p>}
           </div>
-          <button className={base.btnSecondary} disabled={busy} onClick={() => act("seen", {}, "Marked as seen.")}>
-            Mark as seen
-          </button>
+          <span className={px.attentionActions}>
+            {q.attention.kind === "change_request" && (
+              <button className={base.btnPrimary} disabled={busy} onClick={() => act("reopen", { note: "At the client's request." }, "Reopened — the client can edit again.")}>
+                Reopen for changes
+              </button>
+            )}
+            <button className={base.btnSecondary} disabled={busy} onClick={() => act("seen", {}, "Marked as seen.")}>
+              Mark as seen
+            </button>
+          </span>
         </div>
       )}
       {hasUnsharedChanges(q) && (

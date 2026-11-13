@@ -72,6 +72,8 @@ export async function POST(request: Request, ctx: Ctx) {
       action = { type: "share_update", note: String(b.note ?? ""), via: b.via === "whatsapp" ? "whatsapp" : "studio" };
     } else if (b.action === "seen") {
       action = { type: "seen" };
+    } else if (b.action === "reopen") {
+      action = { type: "reopen", note: String(b.note ?? "") };
     } else if (b.action === "assign") {
       let managerName: string | null = null;
       const managerId = b.managerId || null;
