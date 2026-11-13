@@ -22,8 +22,8 @@ export default function StoriesPage() {
           <div className={styles.headerPattern} />
           <div className={styles.container}>
             <div className={styles.headerContent}>
-              <Link href="/#vows" className={styles.topBackLink}>
-                <span>←</span> The Vows
+              <Link href="/#weddings" className={styles.topBackLink}>
+                <span>←</span> Home
               </Link>
               <span className={styles.label}>Curated commissions</span>
               <h1 className={styles.title}>Client Wedding <em>Stories</em></h1>

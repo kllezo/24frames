@@ -1731,7 +1731,7 @@ export default function LivingContactSheet() {
                         <linearGradient id="brushIvoryGrad" x1="100%" y1="0%" x2="0%" y2="100%">
                           <stop offset="0%" stopColor="#FAF8F5" />
                           <stop offset="60%" stopColor="#EAE5DC" />
-                          <stop offset="100%" stopColor="#09453E" stopOpacity="0.15" />
+                          <stop offset="100%" stopColor="#5B1F2A" stopOpacity="0.15" />
                         </linearGradient>
                       </defs>
                       {/* Painterly brush strokes sweeping diagonally from top-right towards center */}
@@ -1894,9 +1894,9 @@ export default function LivingContactSheet() {
               </linearGradient>
 
               <linearGradient id="deepGreenWaveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#0B1511" stopOpacity="0.98" />
-                <stop offset="60%" stopColor="#0E1B15" stopOpacity="0.95" />
-                <stop offset="100%" stopColor="#07100D" stopOpacity="1" />
+                <stop offset="0%" stopColor="#140C0D" stopOpacity="0.98" />
+                <stop offset="60%" stopColor="#1A0F10" stopOpacity="0.95" />
+                <stop offset="100%" stopColor="#0F0809" stopOpacity="1" />
               </linearGradient>
 
               <filter id="champagneGlowFilter" x="-20%" y="-20%" width="140%" height="140%">

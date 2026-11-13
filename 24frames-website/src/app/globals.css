@@ -3,7 +3,7 @@
    ============================================================
    Palette:
    - Warm Ivory (#FAF8F2) / Light Plaster (#F4EFE6)
-   - Kllezo Forest Green (#09453e)
+   - Oxblood (#5B1F2A) — the brand accent (was forest green)
    - Champagne Gold (#C8A84E, #D4AF37)
    - Deep Photographic Charcoal (#181C1A)
 
@@ -30,12 +30,12 @@
   --color-text-tertiary: #5E645F;
   
   /* Brand Green */
-  --color-kllezo-green: #09453e;
-  --color-brand-forest-dark: #061A12;
-  --color-accent: #09453e;
-  --color-accent-light: #165b53;
-  --color-accent-hover: #052c27;
-  --color-accent-muted: rgba(9, 69, 62, 0.08);
+  --color-kllezo-green: #5B1F2A;
+  --color-brand-forest-dark: #2A0D13;
+  --color-accent: #5B1F2A;
+  --color-accent-light: #74303B;
+  --color-accent-hover: #45151E;
+  --color-accent-muted: rgba(91, 31, 42, 0.08);
 
   /* Subtle Champagne / Gold */
   --color-gold: #C8A84E;
@@ -45,13 +45,13 @@
 
   /* Borders & Dividers */
   --color-border: #E5DFD5;
-  --color-border-subtle: rgba(9, 69, 62, 0.08);
+  --color-border-subtle: rgba(91, 31, 42, 0.08);
   --color-border-strong: #D5CEBE;
   
   /* Refined Shadows */
   --color-shadow-subtle: 0 4px 20px rgba(24, 28, 26, 0.04);
-  --color-shadow-card: 0 1px 2px rgba(9, 69, 62, 0.04), 0 18px 40px -24px rgba(9, 69, 62, 0.18);
-  --color-shadow-hover: 0 1px 2px rgba(9, 69, 62, 0.05), 0 28px 60px -28px rgba(9, 69, 62, 0.28);
+  --color-shadow-card: 0 1px 2px rgba(91, 31, 42, 0.04), 0 18px 40px -24px rgba(91, 31, 42, 0.18);
+  --color-shadow-hover: 0 1px 2px rgba(91, 31, 42, 0.05), 0 28px 60px -28px rgba(91, 31, 42, 0.28);
 
   /* === Backwards compatibility aliases mapped to light theme === */
   --obsidian-bg: #FAF8F2;
@@ -60,9 +60,9 @@
   --obsidian-text-primary: #181C1A;
   --obsidian-text-secondary: #585D58;
   --obsidian-text-tertiary: #888E87;
-  --obsidian-accent: #09453e;
-  --obsidian-accent-light: #165b53;
-  --obsidian-accent-hover: #052c27;
+  --obsidian-accent: #5B1F2A;
+  --obsidian-accent-light: #74303B;
+  --obsidian-accent-hover: #45151E;
   --obsidian-border: #E5DFD5;
   --obsidian-border-strong: #D5CEBE;
   --obsidian-border-glow: rgba(200, 168, 78, 0.25);
@@ -144,9 +144,9 @@
   --color-text-primary: #181C1A;
   --color-text-secondary: #585D58;
   --color-text-tertiary: #888E87;
-  --color-accent: #09453e;
-  --color-accent-light: #165b53;
-  --color-accent-hover: #052c27;
+  --color-accent: #5B1F2A;
+  --color-accent-light: #74303B;
+  --color-accent-hover: #45151E;
   --color-border: #E5DFD5;
   --color-border-strong: #D5CEBE;
 }
@@ -312,7 +312,7 @@ ul, ol {
 .btn--primary:hover {
   background: var(--color-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.22);
+  box-shadow: 0 8px 24px rgba(91, 31, 42, 0.22);
 }
 
 .btn--secondary {
@@ -324,7 +324,7 @@ ul, ol {
 .btn--secondary:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
-  background: rgba(9, 69, 62, 0.04);
+  background: rgba(91, 31, 42, 0.04);
 }
 
 /* --- Screen-Reader Only --- */

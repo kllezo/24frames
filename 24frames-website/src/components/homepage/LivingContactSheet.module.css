@@ -1,7 +1,7 @@
 /* ==========================================================================
    24 FRAMES PHOTOGRAPHY — CHAPTER 02: THE VOWS
    Precise Recreation of the Curated Editorial Reference Composition
-   Palette: Warm Ivory (#FAF8F2), Kllezo Green (#09453e), Deep Charcoal (#141713)
+   Palette: Warm Ivory (#FAF8F2), Kllezo Green (#5B1F2A), Deep Charcoal (#141713)
    ========================================================================== */
 
 .section {
@@ -73,7 +73,7 @@
 }
 
 .railNumberActive {
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   font-weight: 700;
 }
 
@@ -81,7 +81,7 @@
   display: inline-block;
   width: 2px;
   height: 18px;
-  background-color: var(--color-kllezo-green, #09453e);
+  background-color: var(--color-kllezo-green, #5B1F2A);
   border-radius: 2px;
 }
 
@@ -115,7 +115,7 @@
 .labelDividerLine {
   flex: 1;
   height: 1px;
-  background-color: rgba(9, 69, 62, 0.18);
+  background-color: rgba(91, 31, 42, 0.18);
   min-width: 28px;
   max-width: 72px;
 }
@@ -139,7 +139,7 @@
   font-family: var(--font-script, "Allura", cursive);
   font-size: clamp(4.8rem, 7.2vw, 7.6rem);
   font-weight: 400;
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   margin-top: -0.16em;
   margin-left: -0.04em;
   transform: rotate(-1deg);
@@ -166,7 +166,7 @@
 
 .exploreActionBtn:hover {
   transform: translateX(4px);
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
 }
 
 .exploreCircleIcon {
@@ -187,9 +187,9 @@
 }
 
 .exploreActionBtn:hover .exploreCircleIcon {
-  border-color: var(--color-kllezo-green, #09453e);
-  background-color: rgba(9, 69, 62, 0.06);
-  color: var(--color-kllezo-green, #09453e);
+  border-color: var(--color-kllezo-green, #5B1F2A);
+  background-color: rgba(91, 31, 42, 0.06);
+  color: var(--color-kllezo-green, #5B1F2A);
 }
 
 .exploreActionText {
@@ -222,7 +222,7 @@
   overflow: hidden;
   position: relative;
   border: 1.5px solid #C8A84E;
-  box-shadow: 0 0 0 1px rgba(223, 209, 172, 0.35), 0 24px 54px rgba(9, 69, 62, 0.12);
+  box-shadow: 0 0 0 1px rgba(223, 209, 172, 0.35), 0 24px 54px rgba(91, 31, 42, 0.12);
   margin: 0 auto;
   will-change: transform, opacity;
   background: transparent;
@@ -233,7 +233,7 @@
 .cursiveBridge {
   font-family: var(--font-script, "Allura", cursive);
   font-size: clamp(1.75rem, 2.4vw, 2.3rem);
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   text-align: center;
   margin: clamp(2.25rem, 4vw, 3.75rem) auto;
   opacity: 0.88;
@@ -294,7 +294,7 @@
 }
 
 .nameLink:hover {
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
 }
 
 .featuredVenueSub {
@@ -321,7 +321,7 @@
   gap: 0.65rem;
   margin-bottom: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(9, 69, 62, 0.12);
+  border-top: 1px solid rgba(91, 31, 42, 0.12);
 }
 
 .specRow {
@@ -355,7 +355,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  background-color: var(--color-kllezo-green, #09453e);
+  background-color: var(--color-kllezo-green, #5B1F2A);
   color: #FFFFFF;
   padding: 0.85rem 1.85rem;
   border-radius: 999px;
@@ -365,14 +365,14 @@
   letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;
-  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.22);
+  box-shadow: 0 8px 24px rgba(91, 31, 42, 0.22);
   transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .btnExplorePill:hover {
-  background-color: #052c27;
+  background-color: #45151E;
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(9, 69, 62, 0.30);
+  box-shadow: 0 12px 32px rgba(91, 31, 42, 0.30);
 }
 
 .pillArrow {
@@ -420,7 +420,7 @@
   height: clamp(490px, 59vh, 670px);
   position: relative;
   overflow: hidden;
-  background-color: #0E1613;
+  background-color: #150F10;
   clip-path: url(#vinithaMorphClip);
   -webkit-clip-path: url(#vinithaMorphClip);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
@@ -460,10 +460,10 @@
   inset: 0;
   background: linear-gradient(
     90deg,
-    rgba(6, 14, 11, 0.88) 0%,
-    rgba(6, 14, 11, 0.65) 45%,
-    rgba(6, 14, 11, 0.25) 75%,
-    rgba(6, 14, 11, 0.55) 100%
+    rgba(13, 7, 8, 0.88) 0%,
+    rgba(13, 7, 8, 0.65) 45%,
+    rgba(13, 7, 8, 0.25) 75%,
+    rgba(13, 7, 8, 0.55) 100%
   );
   pointer-events: none;
 }
@@ -680,7 +680,7 @@
   overflow: hidden;
   position: relative;
   background-color: #E6E1D7;
-  box-shadow: 0 16px 44px rgba(9, 69, 62, 0.09), 0 4px 16px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 16px 44px rgba(91, 31, 42, 0.09), 0 4px 16px rgba(0, 0, 0, 0.05);
   will-change: clip-path, transform;
 }
 
@@ -753,7 +753,7 @@
 }
 
 .btnViewStoryText:hover {
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   transform: translateX(4px);
 }
 
@@ -789,7 +789,7 @@
   overflow: hidden;
   position: relative;
   background-color: #E6E1D7;
-  box-shadow: 0 20px 48px rgba(9, 69, 62, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 48px rgba(91, 31, 42, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05);
   transform: translateY(clamp(-380px, -36vw, -540px));
   margin-bottom: clamp(-380px, -36vw, -540px);
   will-change: clip-path, transform;
@@ -817,7 +817,7 @@
   height: clamp(540px, 65vh, 740px);
   position: relative;
   overflow: hidden;
-  background-color: #0E1613;
+  background-color: #150F10;
   clip-path: url(#nishanthMorphClip);
   -webkit-clip-path: url(#nishanthMorphClip);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
@@ -875,10 +875,10 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(6, 14, 11, 0.1) 0%,
-    rgba(6, 14, 11, 0.35) 40%,
-    rgba(6, 14, 11, 0.8) 80%,
-    rgba(6, 14, 11, 0.94) 100%
+    rgba(13, 7, 8, 0.1) 0%,
+    rgba(13, 7, 8, 0.35) 40%,
+    rgba(13, 7, 8, 0.8) 80%,
+    rgba(13, 7, 8, 0.94) 100%
   );
   pointer-events: none;
   z-index: 2;
@@ -1007,7 +1007,7 @@
   font-size: 110px;
   font-weight: 300;
   letter-spacing: 0.16em;
-  fill: #1A2721;
+  fill: #261B1C;
   text-transform: uppercase;
 }
 
@@ -1051,7 +1051,7 @@
   justify-content: space-between;
   gap: 1.5rem;
   padding: 1.5rem 0 0 0;
-  border-top: 1px solid rgba(9, 69, 62, 0.12);
+  border-top: 1px solid rgba(91, 31, 42, 0.12);
 }
 
 .endingBrand {
@@ -1067,13 +1067,13 @@
 .endingDividerLine {
   flex: 1;
   height: 1px;
-  background-color: rgba(9, 69, 62, 0.12);
+  background-color: rgba(91, 31, 42, 0.12);
 }
 
 .endingCursivePhrase {
   font-family: var(--font-script, "Allura", cursive);
   font-size: clamp(1.6rem, 2.4vw, 2.2rem);
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   white-space: nowrap;
 }
 
@@ -1092,7 +1092,7 @@
 }
 
 .endingExploreLink:hover {
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   transform: translateX(3px);
 }
 
@@ -1112,7 +1112,7 @@
 .archRevealOverlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 18%, #092a23 0%, #061812 75%, #04100c 100%);
+  background: radial-gradient(circle at 50% 18%, #280b0f 0%, #170709 75%, #0f0506 100%);
   z-index: 3;
   pointer-events: none;
   will-change: clip-path, opacity;
@@ -1213,7 +1213,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  filter: drop-shadow(-8px 12px 18px rgba(9, 69, 62, 0.35));
+  filter: drop-shadow(-8px 12px 18px rgba(91, 31, 42, 0.35));
 }
 
 /* 4. Karthik & Gayathri Living Painterly Brush Reveal */

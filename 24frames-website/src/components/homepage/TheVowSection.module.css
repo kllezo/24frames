@@ -37,7 +37,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #164B40;
+  color: #6B2733;
 }
 
 .badge {
@@ -163,7 +163,7 @@
   overflow: visible; /* Allows refined elevation & caption action visibility */
   background-color: #EAE5D9;
   box-shadow: 
-    0 12px 32px rgba(22, 75, 64, 0.08),
+    0 12px 32px rgba(71, 26, 32, 0.08),
     0 2px 6px rgba(0, 0, 0, 0.04);
   cursor: pointer;
   outline: none;
@@ -184,12 +184,12 @@
   transform: scale(1.25) translateY(var(--offset, 0px));
   z-index: 50;
   box-shadow: 
-    0 28px 65px rgba(22, 75, 64, 0.24),
+    0 28px 65px rgba(71, 26, 32, 0.24),
     0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .photoCard:focus-visible {
-  outline: 2px solid #164B40;
+  outline: 2px solid #6B2733;
   outline-offset: 4px;
 }
 
@@ -229,8 +229,8 @@
   background: linear-gradient(
     to bottom,
     transparent 50%,
-    rgba(12, 48, 40, 0.15) 75%,
-    rgba(12, 48, 40, 0.65) 100%
+    rgba(45, 15, 19, 0.15) 75%,
+    rgba(45, 15, 19, 0.65) 100%
   );
   pointer-events: none;
 }
@@ -266,7 +266,7 @@
   font-size: 0.5625rem;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: #164B40;
+  color: #6B2733;
   background: #EAE5D9;
   padding: 0.15rem 0.4rem;
   border-radius: 3px;
@@ -316,13 +316,13 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #164B40;
+  color: #6B2733;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .openProjectLink:hover {
-  color: #0C3028;
+  color: #2D0F13;
   text-decoration: underline;
 }
 

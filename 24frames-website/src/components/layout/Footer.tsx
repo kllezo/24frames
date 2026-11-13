@@ -4,8 +4,8 @@ import Link from "next/link";
 import styles from "./Footer.module.css";
 
 const EXPLORE_LINKS = [
-  { label: "The Vows", href: "/#vows" },
-  { label: "The Collection", href: "/#collection" },
+  { label: "Weddings", href: "/#weddings" },
+  { label: "The Collection", href: "/collection" },
   { label: "Stories", href: "/stories" },
   { label: "The Artist", href: "/#artist" },
   { label: "Client Gallery", href: "/client-gallery" },

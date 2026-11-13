@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-brand-forest-dark, #061A12);
+  background-color: var(--color-brand-forest-dark, #2A0D13);
   color: #FAF8F2;
   padding: 2rem;
   text-align: center;
@@ -83,7 +83,7 @@
   text-transform: uppercase;
   padding: 0.85rem 1.85rem;
   background-color: #C8A84E;
-  color: #061A12;
+  color: #2A0D13;
   text-decoration: none;
   border-radius: 2px;
   transition: all 0.3s ease;

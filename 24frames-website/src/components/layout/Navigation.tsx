@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 import styles from "./Navigation.module.css";
 
 const NAV_LINKS = [
-  { label: "The Vows", href: "/#vows" },
-  { label: "The Collection", href: "/#collection" },
+  { label: "Weddings", href: "/#weddings" },
+  { label: "Experience", href: "/#experience" },
   { label: "Stories", href: "/stories" },
   { label: "The Artist", href: "/#artist" },
 ];

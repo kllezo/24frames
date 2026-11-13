@@ -59,7 +59,7 @@
   min-height: 0;
   border-radius: clamp(6px, 1.2vmin, 14px);
   border: 1px solid rgba(228, 222, 210, 0.65);
-  box-shadow: 0 4px 16px rgba(22, 75, 64, 0.05);
+  box-shadow: 0 4px 16px rgba(71, 26, 32, 0.05);
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -90,9 +90,9 @@
 /* Final 24th Tile Signature */
 .finalTile {
   background: #FFFFFF !important;
-  border: 1.5px solid #164B40 !important;
+  border: 1.5px solid #6B2733 !important;
   box-shadow: 
-    0 12px 32px rgba(22, 75, 64, 0.12),
+    0 12px 32px rgba(71, 26, 32, 0.12),
     0 0 24px rgba(200, 168, 78, 0.22) !important;
   padding: clamp(6px, 1.2vmin, 16px);
   display: flex;

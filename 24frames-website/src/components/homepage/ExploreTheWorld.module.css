@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════
    DISCOVER THE WORLD OF 24 FRAMES — EDITORIAL DISCIPLINES
-   Palette: Warm Ivory (#FDFBF7), Deep Forest Green (#09453e),
+   Palette: Warm Ivory (#FDFBF7), Deep Forest Green (#5B1F2A),
    Champagne Accents (#C5A880), Charcoal (#141713)
    ═══════════════════════════════════════════════════════════════════════ */
 
@@ -10,7 +10,7 @@
   position: relative;
   overflow: hidden;
   width: 100%;
-  border-top: 1px solid rgba(9, 69, 62, 0.08);
+  border-top: 1px solid rgba(91, 31, 42, 0.08);
   scroll-margin-top: 5rem;
 }
 
@@ -49,15 +49,15 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
 }
 
 .disciplineBadge {
   display: inline-flex;
   align-items: center;
   padding: 0.2rem 0.65rem;
-  background: rgba(9, 69, 62, 0.05);
-  border: 1px solid rgba(9, 69, 62, 0.14);
+  background: rgba(91, 31, 42, 0.05);
+  border: 1px solid rgba(91, 31, 42, 0.14);
   border-radius: 9999px;
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.625rem;
@@ -81,7 +81,7 @@
 .cursiveAccent {
   font-family: var(--font-cursive, Allura, cursive);
   font-weight: 400;
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   font-size: 1.28em;
   text-transform: none;
   letter-spacing: 0;
@@ -115,9 +115,9 @@
   position: relative;
   border-radius: 6px;
   overflow: hidden;
-  background-color: #070B09;
-  border: 1px solid rgba(9, 69, 62, 0.16);
-  box-shadow: 0 16px 45px rgba(9, 69, 62, 0.08);
+  background-color: #0B0708;
+  border: 1px solid rgba(91, 31, 42, 0.16);
+  box-shadow: 0 16px 45px rgba(91, 31, 42, 0.08);
   min-height: clamp(480px, 58vh, 560px);
   display: flex;
   flex-direction: column;
@@ -126,8 +126,8 @@
 }
 
 .monumentalDisplay:hover {
-  border-color: rgba(9, 69, 62, 0.35);
-  box-shadow: 0 20px 50px rgba(9, 69, 62, 0.14);
+  border-color: rgba(91, 31, 42, 0.35);
+  box-shadow: 0 20px 50px rgba(91, 31, 42, 0.14);
 }
 
 /* Photographic Crossfade Image Wrapper */
@@ -173,10 +173,10 @@
   pointer-events: none;
   background: linear-gradient(
     to top,
-    rgba(7, 11, 9, 0.95) 0%,
-    rgba(7, 11, 9, 0.65) 36%,
-    rgba(7, 11, 9, 0.18) 65%,
-    rgba(7, 11, 9, 0.05) 100%
+    rgba(11, 7, 8, 0.95) 0%,
+    rgba(11, 7, 8, 0.65) 36%,
+    rgba(11, 7, 8, 0.18) 65%,
+    rgba(11, 7, 8, 0.05) 100%
   );
 }
 
@@ -202,7 +202,7 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   color: #FDFBF7;
-  background: rgba(9, 69, 62, 0.75);
+  background: rgba(91, 31, 42, 0.75);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   padding: 0.2rem 0.6rem;
@@ -264,7 +264,7 @@
   align-items: center;
   gap: 0.55rem;
   padding: 0.65rem 1.45rem;
-  background: var(--color-kllezo-green, #09453e);
+  background: var(--color-kllezo-green, #5B1F2A);
   color: #FFFFFF;
   border-radius: 9999px;
   font-family: var(--font-body, Inter, sans-serif);
@@ -274,15 +274,15 @@
   letter-spacing: 0.1em;
   transition: all 0.25s ease;
   text-decoration: none;
-  box-shadow: 0 4px 14px rgba(9, 69, 62, 0.28);
+  box-shadow: 0 4px 14px rgba(91, 31, 42, 0.28);
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .worldCta:hover {
-  background: #06312c;
+  background: #2e090e;
   color: #FFFFFF;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(9, 69, 62, 0.38);
+  box-shadow: 0 6px 18px rgba(91, 31, 42, 0.38);
 }
 
 .arrow {
@@ -317,7 +317,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 0.5rem 0.45rem 0.65rem;
-  border-bottom: 1px solid rgba(9, 69, 62, 0.12);
+  border-bottom: 1px solid rgba(91, 31, 42, 0.12);
   margin-bottom: 0.25rem;
 }
 
@@ -327,7 +327,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
 }
 
 .railSubHeader {
@@ -351,30 +351,30 @@
   padding: 0.95rem 1.25rem;
   border-radius: 4px;
   background: #FFFFFF;
-  border: 1px solid rgba(9, 69, 62, 0.1);
+  border: 1px solid rgba(91, 31, 42, 0.1);
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: left;
   width: 100%;
   outline: none;
-  box-shadow: 0 2px 8px rgba(9, 69, 62, 0.03);
+  box-shadow: 0 2px 8px rgba(91, 31, 42, 0.03);
 }
 
 .railItem:focus-visible {
-  box-shadow: 0 0 0 2px var(--color-kllezo-green, #09453e);
+  box-shadow: 0 0 0 2px var(--color-kllezo-green, #5B1F2A);
 }
 
 .railItem:hover {
   background: #FFFFFF;
-  border-color: var(--color-kllezo-green, #09453e);
+  border-color: var(--color-kllezo-green, #5B1F2A);
   transform: translateX(4px);
-  box-shadow: 0 4px 14px rgba(9, 69, 62, 0.08);
+  box-shadow: 0 4px 14px rgba(91, 31, 42, 0.08);
 }
 
 .railItemActive {
-  background: var(--color-kllezo-green, #09453e) !important;
-  border-color: var(--color-kllezo-green, #09453e) !important;
-  box-shadow: 0 8px 22px rgba(9, 69, 62, 0.2) !important;
+  background: var(--color-kllezo-green, #5B1F2A) !important;
+  border-color: var(--color-kllezo-green, #5B1F2A) !important;
+  box-shadow: 0 8px 22px rgba(91, 31, 42, 0.2) !important;
   transform: translateX(6px);
 }
 
@@ -383,7 +383,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.1em;
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   transition: color 0.2s ease;
 }
 
@@ -427,7 +427,7 @@
 .railIndicator {
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.95rem;
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   opacity: 0;
   transform: translateX(-4px);
   transition: all 0.25s ease;

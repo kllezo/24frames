@@ -116,7 +116,7 @@
   font-weight: 500;
   letter-spacing: 0.02em;
   line-height: 1.05;
-  color: #142821;
+  color: #261618;
   margin: 0.2rem 0;
 }
 
@@ -137,9 +137,9 @@
   height: clamp(480px, 42vw, 560px);
   border-radius: 4px;
   overflow: hidden;
-  background-color: #121816;
-  border: 1px solid rgba(9, 69, 62, 0.12);
-  box-shadow: 0 16px 40px rgba(9, 69, 62, 0.08);
+  background-color: #181213;
+  border: 1px solid rgba(91, 31, 42, 0.12);
+  box-shadow: 0 16px 40px rgba(91, 31, 42, 0.08);
   will-change: clip-path, transform;
 }
 
@@ -157,7 +157,7 @@
 .darkroomOverlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(14, 24, 20, 0.38) 0%, rgba(8, 14, 12, 0.72) 100%);
+  background: radial-gradient(circle at center, rgba(23, 15, 16, 0.38) 0%, rgba(14, 8, 9, 0.72) 100%);
   pointer-events: none;
   opacity: 0;
   z-index: 2;
@@ -250,8 +250,8 @@
 .statsPanel {
   background: transparent;
   border: none;
-  border-top: 1px solid rgba(9, 69, 62, 0.14);
-  border-bottom: 1px solid rgba(9, 69, 62, 0.14);
+  border-top: 1px solid rgba(91, 31, 42, 0.14);
+  border-bottom: 1px solid rgba(91, 31, 42, 0.14);
   border-radius: 0;
   padding: 1.35rem 0.5rem;
   box-shadow: none;
@@ -276,7 +276,7 @@
   font-size: clamp(1.85rem, 2.3vw, 2.25rem);
   font-weight: 500;
   line-height: 1;
-  color: #142821;
+  color: #261618;
 }
 
 .statDesc {
@@ -292,7 +292,7 @@
 .statDivider {
   width: 1px;
   height: 36px;
-  background-color: rgba(9, 69, 62, 0.14);
+  background-color: rgba(91, 31, 42, 0.14);
 }
 
 /* 1.1.4 Three Core Principles — Clean Editorial 3-Column Grid Matching Reference */
@@ -328,7 +328,7 @@
 .principlesLine {
   flex: 1;
   height: 1px;
-  background: rgba(9, 69, 62, 0.12);
+  background: rgba(91, 31, 42, 0.12);
 }
 
 .principlesList {
@@ -341,7 +341,7 @@
 .principleCard {
   background: transparent;
   border: none;
-  border-top: 1px solid rgba(9, 69, 62, 0.12);
+  border-top: 1px solid rgba(91, 31, 42, 0.12);
   border-radius: 0;
   padding: 1.15rem 0 0.5rem;
   display: flex;
@@ -351,7 +351,7 @@
 }
 
 .principleCard:last-child {
-  border-top: 1px solid rgba(9, 69, 62, 0.12);
+  border-top: 1px solid rgba(91, 31, 42, 0.12);
 }
 
 .principleCard:hover {
@@ -376,7 +376,7 @@
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   font-size: 1.15rem;
   font-weight: 500;
-  color: #142821;
+  color: #261618;
   margin: 0;
 }
 
@@ -437,7 +437,7 @@
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(1.75rem, 2.3vw, 2.35rem);
   font-weight: 500;
-  color: #142821;
+  color: #261618;
   line-height: 1.15;
   margin: 0;
 }
@@ -446,7 +446,7 @@
   font-family: var(--font-allura), 'Allura', cursive;
   font-style: italic;
   font-size: 1.18em;
-  color: #507062;
+  color: #6E5256;
   margin-left: 0.5rem;
 }
 
@@ -462,12 +462,12 @@
   height: 36px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(9, 69, 62, 0.16);
+  border: 1px solid rgba(91, 31, 42, 0.16);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #142821;
+  color: #261618;
   transition: all 0.2s ease;
   padding: 0;
 }
@@ -478,9 +478,9 @@
 }
 
 .navCircleBtn:hover:not(:disabled) {
-  background: #09453E;
+  background: #5B1F2A;
   color: #FFFFFF;
-  border-color: #09453E;
+  border-color: #5B1F2A;
   transform: scale(1.04);
 }
 
@@ -521,7 +521,7 @@
   border-radius: 4px;
   padding: 1.35rem 1.25rem;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(9, 69, 62, 0.12);
+  border: 1px solid rgba(91, 31, 42, 0.12);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -532,8 +532,8 @@
 
 .magazineCard:hover {
   transform: translateY(-4px);
-  border-color: rgba(9, 69, 62, 0.28);
-  box-shadow: 0 12px 28px rgba(9, 69, 62, 0.08);
+  border-color: rgba(91, 31, 42, 0.28);
+  box-shadow: 0 12px 28px rgba(91, 31, 42, 0.08);
 }
 
 .cardHeaderMeta {
@@ -549,7 +549,7 @@
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #0F4339;
+  color: #3F1319;
   background: #E3ECE7;
   padding: 0.32rem 0.68rem;
   border-radius: 9999px;
@@ -625,7 +625,7 @@
   font-size: clamp(1.1rem, 1.25vw, 1.22rem);
   font-weight: 500;
   line-height: 1.24;
-  color: #142821;
+  color: #261618;
   min-height: 2.5em;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -653,7 +653,7 @@
   height: 36px;
   border-radius: 50%;
   background: #E2E8E4;
-  color: #1A3B32;
+  color: #391C20;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -663,9 +663,9 @@
 }
 
 .cardArrowBtnActive {
-  background: #0C4339;
+  background: #3F1016;
   color: #FFFFFF;
-  border-color: #0C4339;
+  border-color: #3F1016;
 }
 
 .cardArrowBtn svg {
@@ -674,9 +674,9 @@
 }
 
 .magazineCard:hover .cardArrowBtn {
-  background: #0C4339;
+  background: #3F1016;
   color: #FFFFFF;
-  border-color: #0C4339;
+  border-color: #3F1016;
   transform: scale(1.05);
 }
 
@@ -705,7 +705,7 @@
 }
 
 .exploreEvidenceLink:hover {
-  color: #09453E;
+  color: #5B1F2A;
 }
 
 .linkArrow {
@@ -721,7 +721,7 @@
 .editorialDivider {
   width: 100%;
   height: 1px;
-  background: rgba(9, 69, 62, 0.1);
+  background: rgba(91, 31, 42, 0.1);
   margin: 0.25rem 0;
 }
 
@@ -747,7 +747,7 @@
 .quotePanel {
   background: transparent;
   border: none;
-  border-left: 3.5px solid #09453E;
+  border-left: 3.5px solid #5B1F2A;
   border-radius: 0;
   padding: 0.5rem 0 0.5rem 1.75rem;
   box-shadow: none;
@@ -762,7 +762,7 @@
   font-style: italic;
   font-size: clamp(1.35rem, 1.75vw, 1.65rem);
   line-height: 1.45;
-  color: #142821;
+  color: #261618;
   margin: 0;
 }
 
@@ -783,7 +783,7 @@
 }
 
 .commissionPillBtn {
-  background: #09453E;
+  background: #5B1F2A;
   color: #FAF8F2;
   border-radius: 9999px;
   padding: 0.55rem 0.55rem 0.55rem 1.9rem;
@@ -798,13 +798,13 @@
   justify-content: center;
   gap: 1.1rem;
   width: auto;
-  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.24);
+  box-shadow: 0 8px 24px rgba(91, 31, 42, 0.24);
   transition: all 0.25s ease;
 }
 
 .commissionPillBtn:hover {
-  background: #0D5C52;
-  box-shadow: 0 12px 32px rgba(9, 69, 62, 0.35);
+  background: #56131C;
+  box-shadow: 0 12px 32px rgba(91, 31, 42, 0.35);
   transform: translateY(-2px);
 }
 
@@ -814,7 +814,7 @@
   width: 2.6rem;
   height: 2.6rem;
   font-size: 1.05rem;
-  color: #09453E;
+  color: #5B1F2A;
   background: #FAF8F2;
   border-radius: 50%;
   transition: transform 0.35s var(--ease-out);
@@ -830,7 +830,7 @@
 .modalBackdrop {
   position: fixed;
   inset: 0;
-  background: rgba(14, 20, 18, 0.75);
+  background: rgba(20, 14, 15, 0.75);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 9999;
@@ -881,8 +881,8 @@
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #09453E;
-  background: rgba(9, 69, 62, 0.08);
+  color: #5B1F2A;
+  background: rgba(91, 31, 42, 0.08);
   padding: 0.25rem 0.6rem;
   border-radius: 4px;
 }
@@ -908,7 +908,7 @@
 
 .modalCloseBtn:hover {
   background: rgba(0, 0, 0, 0.06);
-  color: #142821;
+  color: #261618;
 }
 
 .modalBody {
@@ -957,7 +957,7 @@
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   font-size: 1.55rem;
   font-weight: 500;
-  color: #142821;
+  color: #261618;
   line-height: 1.25;
   margin: 0;
 }
@@ -974,8 +974,8 @@
   font-style: italic;
   font-size: 1.0625rem;
   line-height: 1.45;
-  color: #142821;
-  border-left: 2px solid #09453E;
+  color: #261618;
+  border-left: 2px solid #5B1F2A;
   padding-left: 0.85rem;
   margin: 0.4rem 0;
 }
@@ -1001,13 +1001,13 @@
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.1em;
-  color: #09453E;
+  color: #5B1F2A;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .modalSourceLink:hover {
-  color: #0D5C52;
+  color: #56131C;
 }
 
 /* ─────────────────────────────────────────────────────────────

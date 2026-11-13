@@ -19,7 +19,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, #164B40 0%, #C8A84E 50%, #164B40 100%);
+  background: linear-gradient(90deg, #6B2733 0%, #C8A84E 50%, #6B2733 100%);
   transform-origin: 0% 50%;
   pointer-events: none;
   z-index: 101;
@@ -37,7 +37,7 @@
 }
 
 .scrolled.themeDark {
-  background: rgba(14, 22, 19, 0.92);
+  background: rgba(21, 15, 16, 0.92);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(24px) saturate(1.4);
@@ -139,20 +139,20 @@
   left: 0;
   width: 0;
   height: 1.5px;
-  background: #164B40;
+  background: #6B2733;
   transition: width 0.3s var(--ease-out);
 }
 
 .themeLight .link::after {
-  background: #164B40;
+  background: #6B2733;
 }
 
 .link:hover {
-  color: #164B40;
+  color: #6B2733;
 }
 
 .themeLight .link:hover {
-  color: #164B40;
+  color: #6B2733;
 }
 
 .link:hover::after {
@@ -167,40 +167,40 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #FFFFFF;
-  background: var(--color-kllezo-green, #09453e);
+  background: var(--color-kllezo-green, #5B1F2A);
   padding: 0.6rem 1.45rem;
   border-radius: var(--radius-full);
   transition: all 0.3s var(--ease-out);
-  box-shadow: 0 4px 14px rgba(9, 69, 62, 0.22);
+  box-shadow: 0 4px 14px rgba(91, 31, 42, 0.22);
   white-space: nowrap;
   text-decoration: none;
 }
 
 .themeDark .cta {
   background: #FAF8F2;
-  color: #09453e;
+  color: #5B1F2A;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 .themeDark .cta:hover {
   background: #FFFFFF;
-  color: #06312c;
+  color: #2e090e;
   transform: translateY(-1px);
 }
 
 .cta:hover {
-  background: #06312c;
+  background: #2e090e;
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(9, 69, 62, 0.32);
+  box-shadow: 0 6px 18px rgba(91, 31, 42, 0.32);
 }
 
 .introReplayBtn {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  background: rgba(22, 75, 64, 0.08);
-  border: 1px solid rgba(22, 75, 64, 0.2);
-  color: #164B40;
+  background: rgba(71, 26, 32, 0.08);
+  border: 1px solid rgba(71, 26, 32, 0.2);
+  color: #6B2733;
   font-family: var(--font-mono, 'Space Mono', monospace);
   font-size: 0.6875rem;
   font-weight: 400;
@@ -214,11 +214,11 @@
 }
 
 .introReplayBtn:hover {
-  background: #164B40;
+  background: #6B2733;
   color: #FFFFFF;
-  border-color: #164B40;
+  border-color: #6B2733;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(22, 75, 64, 0.18);
+  box-shadow: 0 4px 14px rgba(71, 26, 32, 0.18);
 }
 
 .introPulseDot {
@@ -346,19 +346,19 @@
 }
 
 .mobileLink:hover {
-  color: #164B40;
+  color: #6B2733;
 }
 
 .mobileLinkCta {
   color: #FAF8F2;
-  background: #164B40;
+  background: #6B2733;
   font-family: var(--font-body);
   font-size: clamp(1rem, 3vw, 1.25rem);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   margin-top: 1rem;
-  border: 1px solid #164B40;
+  border: 1px solid #6B2733;
   padding: 0.85rem 2rem;
   border-radius: var(--radius-full);
 }
