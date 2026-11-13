@@ -8,14 +8,40 @@ import px from "./portal.module.css";
 import CommissionSheet from "../studio/CommissionSheet";
 import DeskTop from "./DeskTop";
 import { downloadBlob, useProposalPdf } from "../studio/ProposalPreview";
-import { formatDateLong, formatINR } from "@/lib/commission/format";
-import { coupleNames } from "@/lib/commission/model";
+import { formatDateLong, formatINR, formatTimeRange, plural } from "@/lib/commission/format";
+import { coupleNames, eventDisplayName, weddingDateLabel } from "@/lib/commission/model";
+import { planningTitles } from "@/lib/commission/planning";
 import type { StudioConfig } from "@/lib/commission/types";
-import { STATUS_LABEL, type PortalQuote, type PublicAccount, type QuoteStatus } from "@/lib/portal/types";
+import {
+  CONSULT_LABEL,
+  STATUS_LABEL,
+  hasUnsharedChanges,
+  type ConsultMode,
+  type PortalQuote,
+  type PublicAccount,
+  type QuoteStatus,
+} from "@/lib/portal/types";
 
-type Tab = "inbox" | "approval" | "approved" | "returned" | "shared" | "all";
+type Tab = "updates" | "inbox" | "approval" | "approved" | "returned" | "shared" | "all";
+export interface StaffMember {
+  id: string;
+  name: string;
+  role: "sales" | "owner";
+}
+
+const ATTENTION_LABEL = { submitted: "New quotation from the client", update: "The client sent an update", accepted: "The client accepted the quotation" } as const;
+
+const ago = (iso: string) => {
+  const m = Math.round((Date.now() - Date.parse(iso)) / 60000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m} min ago`;
+  const h = Math.round(m / 60);
+  if (h < 24) return `${h} h ago`;
+  return formatDateLong(iso.slice(0, 10));
+};
 
 const TABS: { id: Tab; label: string; statuses?: QuoteStatus[] }[] = [
+  { id: "updates", label: "Notifications" },
   { id: "inbox", label: "New & in review", statuses: ["submitted"] },
   { id: "approval", label: "Awaiting founder", statuses: ["pending_approval"] },
   { id: "approved", label: "Approved", statuses: ["approved"] },
@@ -36,6 +62,9 @@ const ACTION_LABEL: Record<string, string> = {
   forwarded: "Shared the quotation with the client",
   accepted: "Accepted the quotation",
   note: "Added a note",
+  update_shared: "Sent an update to the studio",
+  assigned: "Relationship manager set to",
+  consultation: "Logged a guided session",
 };
 
 /* The studio desk: sales review online quotations, set the final price,
@@ -48,6 +77,29 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
   const [tab, setTab] = useState<Tab>(me.role === "owner" ? "approval" : "inbox");
   const [search, setSearch] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
+  const [mine, setMine] = useState(false);
+  const [staff, setStaff] = useState<StaffMember[]>([]);
+  const [linkMsg, setLinkMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/portal/staff", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : { staff: [] }))
+      .then((d: { staff?: StaffMember[] }) => setStaff(d.staff ?? []))
+      .catch(() => null);
+  }, []);
+
+  async function copyLink() {
+    setLinkMsg(null);
+    const res = await fetch("/api/portal/invite", { method: "POST" }).catch(() => null);
+    const data = res ? ((await res.json().catch(() => ({}))) as { url?: string; error?: string }) : {};
+    if (!data.url) return setLinkMsg(data.error ?? "Could not create your link.");
+    try {
+      await navigator.clipboard.writeText(data.url);
+      setLinkMsg("Your client link is copied — share it with a new lead. Whoever signs up through it is assigned to you.");
+    } catch {
+      window.prompt("Your personal client link", data.url);
+    }
+  }
 
   const load = useCallback(async () => {
     const res = await fetch("/api/portal/quotes", { cache: "no-store" }).catch(() => null);
@@ -71,16 +123,19 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
 
   const counts = useMemo(() => {
     const c: Partial<Record<Tab, number>> = {};
-    for (const t of TABS) if (t.statuses) c[t.id] = (quotes ?? []).filter((q) => t.statuses!.includes(q.status)).length;
+    const pool = (quotes ?? []).filter((q) => !mine || q.managerId === me.id);
+    for (const t of TABS) if (t.statuses) c[t.id] = pool.filter((q) => t.statuses!.includes(q.status)).length;
+    c.updates = pool.filter((q) => q.attention).length;
     return c;
-  }, [quotes]);
+  }, [quotes, mine, me.id]);
 
   const shown = useMemo(() => {
     const t = TABS.find((x) => x.id === tab);
     const term = search.trim().toLowerCase();
     return (quotes ?? [])
+      .filter((q) => !mine || q.managerId === me.id)
       .filter((q) => q.status !== "draft" || tab === "all")
-      .filter((q) => !t?.statuses || t.statuses.includes(q.status))
+      .filter((q) => (tab === "updates" ? !!q.attention : !t?.statuses || t.statuses.includes(q.status)))
       .filter(
         (q) =>
           !term ||
@@ -89,7 +144,7 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
             .toLowerCase()
             .includes(term),
       );
-  }, [quotes, tab, search]);
+  }, [quotes, tab, search, mine, me.id]);
 
   const open = quotes?.find((q) => q.id === openId) ?? null;
   const replace = (q: PortalQuote) => setQuotes((qs) => (qs ?? []).map((x) => (x.id === q.id ? q : x)));
@@ -107,6 +162,7 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
             </h1>
           </div>
           <dl className={qx.stats}>
+            <div><dt>Notifications</dt><dd>{counts.updates ?? "—"}</dd></div>
             <div><dt>In review</dt><dd>{counts.inbox ?? "—"}</dd></div>
             <div><dt>Awaiting founder</dt><dd>{counts.approval ?? "—"}</dd></div>
             <div><dt>Ready to share</dt><dd>{counts.approved ?? "—"}</dd></div>
@@ -131,6 +187,13 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
               </button>
             ))}
           </div>
+          <label className={px.mineToggle}>
+            <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} />
+            <span>Only my clients</span>
+          </label>
+          <button className={base.btnSecondary} onClick={copyLink}>
+            Copy my client link
+          </button>
           {(
             <input
               className={px.searchInput}
@@ -143,6 +206,7 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
           )}
         </div>
 
+        {linkMsg && <p className={px.ok} role="status">{linkMsg}</p>}
         {error && <p className={qx.error} role="alert">{error}</p>}
 
         {(
@@ -154,7 +218,10 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
                 <li key={q.id}>
                   <button className={`${px.row} ${q.id === openId ? px.rowOn : ""}`} onClick={() => setOpenId(q.id)}>
                     <span className={px.rowTop}>
-                      <span className={px.rowRef}>{q.reference}</span>
+                      <span className={px.rowRef}>
+                        {q.attention && <i className={px.dot} aria-label="New activity" />}
+                        {q.reference}
+                      </span>
                       <span className={`${px.chip} ${px[`chip_${q.status}`] ?? ""}`}>{STATUS_LABEL[q.status]}</span>
                     </span>
                     <span className={px.rowName}>{coupleNames(q.draft.couple, q.clientName)}</span>
@@ -162,13 +229,17 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
                       {q.clientName} · {q.draft.events.length} occasion{q.draft.events.length === 1 ? "" : "s"} ·{" "}
                       {formatINR(q.finalPrice ?? q.quote.grandTotal)}
                     </span>
+                    <span className={px.rowMeta}>
+                      {q.managerName ? `RM · ${q.managerName}` : "No relationship manager yet"}
+                      {q.attention ? ` · ${ago(q.attention.at)}` : ""}
+                    </span>
                   </button>
                 </li>
               ))}
             </ul>
             <section className={px.detail}>
               {open ? (
-                <Detail key={open.id} q={open} me={me} config={config} onChange={replace} />
+                <Detail key={open.id} q={open} me={me} config={config} staff={staff} onChange={replace} onReload={load} />
               ) : (
                 <div className={px.detailEmpty}>
                   <p className={px.emptyTitle}>Choose a quotation</p>
@@ -183,7 +254,21 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
   );
 }
 
-function Detail({ q, me, config, onChange }: { q: PortalQuote; me: PublicAccount; config: StudioConfig; onChange: (q: PortalQuote) => void }) {
+function Detail({
+  q,
+  me,
+  config,
+  staff,
+  onChange,
+  onReload,
+}: {
+  q: PortalQuote;
+  me: PublicAccount;
+  config: StudioConfig;
+  staff: StaffMember[];
+  onChange: (q: PortalQuote) => void;
+  onReload: () => Promise<void> | void;
+}) {
   const estimate = q.quote.grandTotal;
   const [price, setPrice] = useState(String(q.finalPrice ?? estimate));
   const [note, setNote] = useState(q.salesNote);
@@ -244,6 +329,25 @@ function Detail({ q, me, config, onChange }: { q: PortalQuote; me: PublicAccount
         </div>
         <span className={`${px.chip} ${px[`chip_${q.status}`] ?? ""}`}>{STATUS_LABEL[q.status]}</span>
       </div>
+
+      {q.attention && (
+        <div className={px.attention} role="status">
+          <div>
+            <b>{ATTENTION_LABEL[q.attention.kind]}</b> · {ago(q.attention.at)}
+            {q.attention.note && <p className={px.attentionNote}>“{q.attention.note}”</p>}
+          </div>
+          <button className={base.btnSecondary} disabled={busy} onClick={() => act("seen", {}, "Marked as seen.")}>
+            Mark as seen
+          </button>
+        </div>
+      )}
+      {hasUnsharedChanges(q) && (
+        <p className={px.callout}>The client is still editing — they have saved changes they haven&apos;t sent yet.</p>
+      )}
+
+      <ManagerRow q={q} me={me} staff={staff} onDone={onReload} />
+      <Brief q={q} config={config} />
+      <Consultations q={q} busy={busy} act={act} />
 
       {/* Price & decision */}
       <section className={px.pricePanel}>
@@ -384,5 +488,172 @@ function Detail({ q, me, config, onChange }: { q: PortalQuote; me: PublicAccount
         </ol>
       </section>
     </div>
+  );
+}
+
+/* Who looks after this client. Assigning applies to the client and all of
+   their quotations. */
+function ManagerRow({ q, me, staff, onDone }: { q: PortalQuote; me: PublicAccount; staff: StaffMember[]; onDone: () => Promise<void> | void }) {
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  async function assign(managerId: string | null) {
+    setBusy(true);
+    setErr(null);
+    const res = await fetch("/api/portal/clients", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clientId: q.clientId, managerId }),
+    }).catch(() => null);
+    setBusy(false);
+    if (res?.ok) await onDone();
+    else setErr(((await res?.json().catch(() => ({}))) as { error?: string })?.error ?? "Could not assign.");
+  }
+  return (
+    <section className={px.managerRow}>
+      <span className={px.priceLabel}>Relationship manager</span>
+      <select value={q.managerId ?? ""} disabled={busy} onChange={(e) => assign(e.target.value || null)} aria-label="Relationship manager">
+        <option value="">Not assigned</option>
+        {staff.map((s) => (
+          <option key={s.id} value={s.id}>
+            {s.name}
+            {s.role === "owner" ? " (founder level)" : ""}
+          </option>
+        ))}
+      </select>
+      {q.managerId !== me.id && (
+        <button className={base.btnGhost} disabled={busy} onClick={() => assign(me.id)}>
+          Assign to me
+        </button>
+      )}
+      {err && <span className={qx.error}>{err}</span>}
+    </section>
+  );
+}
+
+/* Everything the team needs at a glance: the couple, each occasion with
+   its timing, venue, guests and crew, and any planning help requested. */
+function Brief({ q, config }: { q: PortalQuote; config: StudioConfig }) {
+  const c = q.draft.couple;
+  const date = weddingDateLabel(c, formatDateLong);
+  const planning = planningTitles(q.draft.planning);
+  const events = [...q.draft.events].sort((a, b) => `${a.date || "9"}${a.startTime}`.localeCompare(`${b.date || "9"}${b.startTime}`));
+  return (
+    <section className={px.brief}>
+      <p className={base.kicker}>Client brief</p>
+      <dl className={px.briefFacts}>
+        <div><dt>Wedding</dt><dd>{date || "Date to be confirmed"}{c.city ? ` · ${c.city}` : ""}</dd></div>
+        <div><dt>Scale</dt><dd>{plural(q.draft.events.length, "occasion")} · {plural(q.quote.totalProfessionals, "professional")}</dd></div>
+        <div><dt>Prefers</dt><dd>{{ whatsapp: "WhatsApp", call: "Phone call", email: "Email" }[c.preferredContact] ?? "—"}</dd></div>
+        <div><dt>Estimate</dt><dd>{formatINR(q.quote.grandTotal)}</dd></div>
+        {c.notes && <div className={px.briefWide}><dt>Their notes</dt><dd>{c.notes}</dd></div>}
+        {(planning.length > 0 || q.draft.planning?.note) && (
+          <div className={px.briefWide}>
+            <dt>Planning help</dt>
+            <dd>
+              <span className={px.briefChips}>
+                {planning.map((p) => (
+                  <span key={p}>{p}</span>
+                ))}
+              </span>
+              {q.draft.planning?.note && <span className={px.briefNote}>{q.draft.planning.note}</span>}
+            </dd>
+          </div>
+        )}
+      </dl>
+      {events.length > 0 && (
+        <div className={px.tableWrap}>
+          <table className={px.table}>
+            <thead>
+              <tr>
+                <th>Occasion</th>
+                <th>When</th>
+                <th>Where</th>
+                <th>Guests</th>
+                <th>Crew</th>
+              </tr>
+            </thead>
+            <tbody>
+              {events.map((e) => {
+                const priced = q.quote.events.find((p) => p.eventId === e.id);
+                return (
+                  <tr key={e.id}>
+                    <td>
+                      <span className={px.cellName}>{eventDisplayName(e, config)}</span>
+                      {(e.specialRequirements || e.notes) && <span className={px.cellSub}>{[e.specialRequirements, e.notes].filter(Boolean).join(" — ")}</span>}
+                    </td>
+                    <td>
+                      {e.date ? formatDateLong(e.date) : "Date TBC"}
+                      {(e.startTime || e.endTime) && <span className={px.cellSub}>{formatTimeRange(e.startTime, e.endTime)}</span>}
+                    </td>
+                    <td>
+                      {e.venue || "—"}
+                      {(e.location || e.venueSetting) && <span className={px.cellSub}>{[e.location, e.venueSetting].filter(Boolean).join(" · ")}</span>}
+                    </td>
+                    <td>{e.guestCount ?? "—"}</td>
+                    <td>
+                      <span className={px.cellName}>{priced?.professionals ?? 0}</span>
+                      <span className={px.cellSub}>{priced?.lines.map((l) => `${l.quantity}× ${l.serviceName}`).join(", ") || "No crew yet"}</span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* Guided sessions: the relationship manager records when they walked the
+   client through the quotation — in the studio, on a call or on WhatsApp. */
+function Consultations({
+  q,
+  busy,
+  act,
+}: {
+  q: PortalQuote;
+  busy: boolean;
+  act: (action: string, extra?: Record<string, unknown>, ok?: string) => Promise<void>;
+}) {
+  const [mode, setMode] = useState<ConsultMode>("studio");
+  const [at, setAt] = useState(() => new Date().toISOString().slice(0, 10));
+  const [note, setNote] = useState("");
+  const list = q.consultations ?? [];
+  return (
+    <section className={px.consults}>
+      <p className={base.kicker}>Guided sessions</p>
+      {list.length === 0 ? (
+        <p className={qx.fine}>Not logged yet. Did you build this quotation with the client? Record it here — the founder sees it when approving.</p>
+      ) : (
+        <ul className={px.consultList}>
+          {list.map((c) => (
+            <li key={c.id}>
+              <b>{CONSULT_LABEL[c.mode]}</b> · {formatDateLong(c.at.slice(0, 10))} · {c.by}
+              {c.note && <em> — {c.note}</em>}
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className={px.consultForm}>
+        <select value={mode} onChange={(e) => setMode(e.target.value as ConsultMode)} aria-label="How the session took place">
+          {(Object.keys(CONSULT_LABEL) as ConsultMode[]).map((m) => (
+            <option key={m} value={m}>{CONSULT_LABEL[m]}</option>
+          ))}
+        </select>
+        <input type="date" value={at} onChange={(e) => setAt(e.target.value)} aria-label="Session date" />
+        <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="What you covered (optional)" maxLength={1000} aria-label="Session note" />
+        <button
+          className={base.btnSecondary}
+          disabled={busy}
+          onClick={async () => {
+            await act("log_consultation", { mode, at: `${at}T12:00:00`, note }, "Session logged.");
+            setNote("");
+          }}
+        >
+          Log session
+        </button>
+      </div>
+    </section>
   );
 }

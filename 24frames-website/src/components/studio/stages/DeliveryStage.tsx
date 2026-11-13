@@ -82,8 +82,8 @@ export default function DeliveryStage({ config, draft, quote, actions, go }: Sta
   return (
     <div className={st.stageInner}>
       <StageHeader
-        frame="05"
-        kicker="Frame 05 · The Delivery"
+        frame="06"
+        kicker="Frame 06 · The Delivery"
         title={<>When would you like to <em>relive it?</em></>}
         lead="Choose how soon your story comes home. Sooner moves it to the front of our edit suite."
       >

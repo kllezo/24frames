@@ -296,10 +296,6 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
 
           <div className={styles.bottomRightGroup}>
             <div className={styles.bottomLinks}>
-              <a href="/account/login" className={styles.bottomLink} data-no-transition>
-                Client Login
-              </a>
-              <span className={styles.bottomDot}>·</span>
               <Link href="/client-gallery" className={styles.bottomLink}>
                 Client Archive
               </Link>

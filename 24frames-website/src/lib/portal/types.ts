@@ -26,6 +26,8 @@ export interface PortalAccount {
   location: string;
   /** The founder account created at set-up: grants and revokes desk access. */
   superadmin?: boolean;
+  /** Clients: the studio team member who looks after them (their relationship manager). */
+  managerId?: string | null;
   /** scrypt$N$r$p$salt$hash */
   passwordHash: string;
   active: boolean;
@@ -56,6 +58,8 @@ export interface CrmClient {
   email: string;
   phone: string;
   location: string;
+  managerId: string | null;
+  managerName: string | null;
   createdAt: string;
   lastLoginAt: string | null;
   quotes: number;
@@ -82,9 +86,43 @@ export interface QuoteEvent {
     | "rejected"
     | "forwarded"
     | "accepted"
+    | "update_shared"
+    | "assigned"
+    | "consultation"
     | "note";
   note?: string;
   price?: number;
+}
+
+/** How a relationship manager walked the client through the quotation. */
+export type ConsultMode = "studio" | "video" | "phone" | "whatsapp";
+export const CONSULT_LABEL: Record<ConsultMode, string> = {
+  studio: "In the studio",
+  video: "Zoom / video call",
+  phone: "Phone call",
+  whatsapp: "WhatsApp",
+};
+
+export interface Consultation {
+  id: string;
+  at: string;
+  mode: ConsultMode;
+  by: string;
+  note: string;
+}
+
+/** Something the client did that the studio hasn't looked at yet. */
+export interface Attention {
+  at: string;
+  kind: "submitted" | "update" | "accepted";
+  note: string;
+}
+
+/** What a client sees of their relationship manager. */
+export interface ManagerCard {
+  name: string;
+  phone: string;
+  email: string;
 }
 
 export interface PortalQuote {
@@ -109,7 +147,22 @@ export interface PortalQuote {
   history: QuoteEvent[];
   createdAt: string;
   updatedAt: string;
+  /** Relationship manager (copied from the client's account). */
+  managerId?: string | null;
+  managerName?: string | null;
+  /** Unseen client activity — the studio's notification. */
+  attention?: Attention | null;
+  /** Guided sessions logged by the relationship manager. */
+  consultations?: Consultation[];
+  /** Bumped on every saved change; `sharedRevision` is the last one the client sent to the studio. */
+  revision?: number;
+  sharedRevision?: number;
+  lastSharedAt?: string | null;
 }
+
+/** True when the client has saved changes the studio hasn't been told about. */
+export const hasUnsharedChanges = (q: PortalQuote) =>
+  q.status === "submitted" && (q.revision ?? 0) > (q.sharedRevision ?? 0);
 
 export const STATUS_LABEL: Record<QuoteStatus, string> = {
   draft: "In progress",
@@ -133,7 +186,7 @@ export const CLIENT_STATUS_LABEL: Record<QuoteStatus, string> = {
 };
 
 /** Client view of a quotation: internal notes and decisions removed. */
-export function forClient(q: PortalQuote) {
+export function forClient(q: PortalQuote, manager: ManagerCard | null = null) {
   const ready = q.status === "sent" || q.status === "accepted";
   return {
     id: q.id,
@@ -146,6 +199,10 @@ export function forClient(q: PortalQuote) {
     createdAt: q.createdAt,
     updatedAt: q.updatedAt,
     editable: q.status === "draft" || q.status === "submitted" || q.status === "sent",
+    manager,
+    unshared: hasUnsharedChanges(q),
+    lastSharedAt: q.lastSharedAt ?? null,
+    consultations: (q.consultations ?? []).map((c) => ({ at: c.at, mode: c.mode, by: c.by })),
   };
 }
 export type ClientQuote = ReturnType<typeof forClient>;

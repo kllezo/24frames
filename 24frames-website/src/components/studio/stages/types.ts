@@ -1,5 +1,6 @@
 import type { CommissionDraft, CommissionQuote, CommissionRecord, StudioConfig } from "@/lib/commission/types";
 import type { StageId, StudioActions } from "../state/store";
+import type { ManagerCard } from "@/lib/portal/types";
 
 export interface StageProps {
   config: StudioConfig;
@@ -21,4 +22,8 @@ export interface PortalInfo {
   editable: boolean;
   clientName: string;
   initialDraft: CommissionDraft | null;
+  /** Their relationship manager, once assigned. */
+  manager: ManagerCard | null;
+  /** Saved changes the studio hasn't been told about yet. */
+  unshared: boolean;
 }

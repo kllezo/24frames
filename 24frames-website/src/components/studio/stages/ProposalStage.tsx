@@ -38,6 +38,16 @@ function ClientProposal({ config, draft, quote, go, consultant, portal }: StageP
         body: JSON.stringify({ action: alreadySent ? "save" : "submit", draft }),
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string; issues?: { message: string }[] };
+      if (res.ok && alreadySent) {
+        // Already with the studio: tell the relationship manager about the changes.
+        await fetch(`/api/portal/quotes/${portal!.quoteId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "share_update", note: "", via: "studio" }),
+        }).catch(() => null);
+        window.location.assign(`/account?updated=${encodeURIComponent(portal!.reference)}`);
+        return;
+      }
       if (res.ok) {
         window.location.assign(`/account?sent=${encodeURIComponent(portal!.reference)}`);
         return;
@@ -57,8 +67,8 @@ function ClientProposal({ config, draft, quote, go, consultant, portal }: StageP
   return (
     <div className={st.stageInner}>
       <StageHeader
-        frame="07"
-        kicker="Frame 07 · Your quotation"
+        frame="08"
+        kicker="Frame 08 · Your quotation"
         title={<>Your quotation, composed <em>for {coupleNames(draft.couple, "you")}.</em></>}
         lead="Preview it exactly as it will be shared. Send it to 24 Frames — our team will review your selections, confirm the details with you and share your final quotation here."
       />
@@ -76,7 +86,7 @@ function ClientProposal({ config, draft, quote, go, consultant, portal }: StageP
           ) : null}
           {portal!.editable ? (
             <button className={`${base.btnPrimaryLg} ${styles.submitBtn}`} onClick={send} disabled={busy || messages.length > 0}>
-              {busy ? "Sending…" : alreadySent ? "Save my changes" : "Send to 24 Frames"}
+              {busy ? "Sending…" : alreadySent ? `Send my changes to ${portal!.manager?.name.split(" ")[0] ?? "the studio"}` : "Send to 24 Frames"}
             </button>
           ) : (
             <p className={st.muted}>The studio is finalising this quotation. You can edit it again once it is shared with you.</p>
@@ -146,8 +156,8 @@ function StudioProposal({ config, draft, quote, actions, go, consultant, onConfi
   return (
     <div className={st.stageInner}>
       <StageHeader
-        frame="07"
-        kicker="Frame 07 · The Proposal"
+        frame="08"
+        kicker="Frame 08 · The Proposal"
         title={<>A proposal, composed <em>for {coupleNames(draft.couple, "you")}.</em></>}
         lead="Preview the proposal exactly as it will be shared. Submitting records the commission with the studio and issues its reference."
       />

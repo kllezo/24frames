@@ -16,18 +16,20 @@ import type {
   CommissionRecord,
   CoupleDetails,
   ManualOverride,
+  PlanningRequest,
   StudioConfig,
 } from "@/lib/commission/types";
 
 export const STAGES = [
   { id: "overture", frame: "00", title: "Overture", short: "Welcome" },
   { id: "couple", frame: "01", title: "The Couple", short: "Couple" },
-  { id: "celebration", frame: "02", title: "The Celebration", short: "Events" },
-  { id: "crew", frame: "03", title: "The Crew", short: "Crew" },
-  { id: "ensemble", frame: "04", title: "The Casting", short: "Team" },
-  { id: "delivery", frame: "05", title: "The Delivery", short: "Delivery" },
-  { id: "commission", frame: "06", title: "The Commission", short: "Review" },
-  { id: "proposal", frame: "07", title: "The Proposal", short: "Proposal" },
+  { id: "planning", frame: "02", title: "The Planning", short: "Planning" },
+  { id: "celebration", frame: "03", title: "The Celebration", short: "Events" },
+  { id: "crew", frame: "04", title: "The Crew", short: "Crew" },
+  { id: "ensemble", frame: "05", title: "The Casting", short: "Team" },
+  { id: "delivery", frame: "06", title: "The Delivery", short: "Delivery" },
+  { id: "commission", frame: "07", title: "The Commission", short: "Review" },
+  { id: "proposal", frame: "08", title: "The Proposal", short: "Proposal" },
 ] as const;
 
 export type StageId = (typeof STAGES)[number]["id"] | "composed";
@@ -58,6 +60,7 @@ type Action =
   | { type: "setTier"; tierId: string | null }
   | { type: "toggleCharge"; id: string }
   | { type: "setPostOverride"; override: ManualOverride | null }
+  | { type: "setPlanning"; planning: PlanningRequest | undefined }
   | { type: "submitted"; record: CommissionRecord }
   | { type: "loadDraft"; draft: CommissionDraft };
 
@@ -180,6 +183,8 @@ function reducer(state: StudioState, action: Action): StudioState {
       });
     case "setPostOverride":
       return withDraft({ ...d, postProductionOverride: action.override });
+    case "setPlanning":
+      return withDraft({ ...d, planning: action.planning });
     case "submitted":
       return { ...state, submitted: action.record, stage: "composed" };
   }
@@ -291,6 +296,7 @@ export function useStudioStore(config: StudioConfig, options: StoreOptions = {})
       setTier: (tierId: string | null) => dispatch({ type: "setTier", tierId }),
       toggleCharge: (id: string) => dispatch({ type: "toggleCharge", id }),
       setPostOverride: (override: ManualOverride | null) => dispatch({ type: "setPostOverride", override }),
+      setPlanning: (planning: PlanningRequest | undefined) => dispatch({ type: "setPlanning", planning }),
       submitted: (record: CommissionRecord) => dispatch({ type: "submitted", record }),
       loadDraft: (draft: CommissionDraft) => dispatch({ type: "loadDraft", draft }),
     }),

@@ -10,7 +10,7 @@ import path from "node:path";
 import { randomBytes, randomUUID } from "node:crypto";
 import { databaseUrl, portalSql } from "@/lib/studio/server/pg-store";
 import { makeReference, StorageUnavailableError } from "@/lib/studio/server/store-types";
-import type { PortalAccount, PortalQuote, PortalRole, StaffAccess } from "./types";
+import type { ManagerCard, PortalAccount, PortalQuote, PortalRole, StaffAccess } from "./types";
 
 export { StorageUnavailableError };
 
@@ -299,4 +299,14 @@ export async function saveAccess(entry: StaffAccess): Promise<StaffAccess> {
     await save(db);
     return next;
   });
+}
+
+/* ---------------- relationship managers ---------------- */
+
+/** What a client may see of their relationship manager. */
+export async function managerCard(id: string | null | undefined): Promise<ManagerCard | null> {
+  if (!id) return null;
+  const m = await getAccount(id);
+  if (!m || !m.active || m.role === "client") return null;
+  return { name: m.name, phone: m.phone, email: m.email };
 }

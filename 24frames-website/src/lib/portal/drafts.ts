@@ -4,6 +4,7 @@
 
 import { normaliseDraft } from "@/lib/commission/model";
 import { quoteCommission } from "@/lib/commission/pricing";
+import { cleanPlanning } from "@/lib/commission/planning";
 import type { CommissionDraft, StudioConfig } from "@/lib/commission/types";
 
 export function prepareClientDraft(input: CommissionDraft, config: StudioConfig) {
@@ -13,6 +14,7 @@ export function prepareClientDraft(input: CommissionDraft, config: StudioConfig)
     assignments: normalised.assignments.map((a) => ({ ...a, unitPriceOverride: null, overrideReason: "" })),
     postProductionOverride: null,
     appliedChargeIds: [],
+    planning: cleanPlanning(normalised.planning),
     // Keep the client's own timestamp: the browser compares it with its local
     // copy to decide which is newer (e.g. edits made on another device).
     updatedAt: typeof input.updatedAt === "string" ? input.updatedAt.slice(0, 40) : new Date().toISOString(),

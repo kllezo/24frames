@@ -44,8 +44,8 @@ export default function EnsembleStage(props: StageProps) {
     <div className={st.stageInner}>
       <div className={cx.castHead}>
         <StageHeader
-          frame="04"
-          kicker="Frame 04 · The Casting"
+          frame="05"
+          kicker="Frame 05 · The Casting"
           title={<>Cast your crew, <em>occasion by occasion.</em></>}
         />
         <div className={cx.castTools}>
