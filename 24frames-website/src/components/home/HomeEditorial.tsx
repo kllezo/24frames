@@ -78,7 +78,11 @@ const PRESS = [
   ["Telangana Today", "/images/press/telangana-today.png"],
   ["ET Excellence", "/images/press/et-excellence.png"],
   ["Nikon", "/images/press/nikon.png"],
+  ["Times Business Awards", "/images/press/times-business-awards.png"],
+  ["Indian Eminent Awards", "/images/press/inovexia.png"],
   ["WPPI", "/images/press/wppi.png"],
+  ["TCEI", "/images/press/tcei.png"],
+  ["WedMeGood", "/images/press/wedmegood.png"],
 ] as const;
 
 const AWARDS = [
@@ -236,14 +240,18 @@ export default function HomeEditorial() {
         <Reveal className={s.sectionHead}>
           <p className={s.kicker} id="press-title">As seen in &amp; recognised by</p>
         </Reveal>
-        <ul className={s.logos}>
-          {PRESS.map(([name, src]) => (
-            <li key={name}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt={name} loading="lazy" decoding="async" />
-            </li>
-          ))}
-        </ul>
+        {/* A slow, endless strip: the list is drawn twice and slides by half its
+            width, so the loop is seamless. Pauses on hover; static for reduced motion. */}
+        <div className={s.marquee}>
+          <ul className={s.logos}>
+            {[...PRESS, ...PRESS].map(([name, src], i) => (
+              <li key={`${name}-${i}`} aria-hidden={i >= PRESS.length ? true : undefined}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt={i >= PRESS.length ? "" : name} loading="lazy" decoding="async" />
+              </li>
+            ))}
+          </ul>
+        </div>
         <ul className={s.awards}>
           {AWARDS.map((a) => (
             <Reveal as="li" key={a.title} className={s.award}>
