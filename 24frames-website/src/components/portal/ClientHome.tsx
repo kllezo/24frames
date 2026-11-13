@@ -37,7 +37,7 @@ export default function ClientHome({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const first = account.name.split(" ")[0];
-  const [sharing, setSharing] = useState<ClientQuote | null>(null);
+  const [sharing, setSharing] = useState<{ q: ClientQuote; request: boolean } | null>(null);
   const wa = manager?.phone.replace(/[^\d]/g, "") ?? "";
 
   async function begin() {
@@ -148,18 +148,26 @@ export default function ClientHome({
         ) : (
           <ul className={px.cards}>
             {quotes.map((q) => (
-              <QuoteCard key={q.id} q={q} config={config} onAccept={() => accept(q.id)} onShare={() => setSharing(q)} />
+              <QuoteCard
+                key={q.id}
+                q={q}
+                config={config}
+                onAccept={() => accept(q.id)}
+                onShare={() => setSharing({ q, request: false })}
+                onRequest={() => setSharing({ q, request: true })}
+              />
             ))}
           </ul>
         )}
         {sharing && (
           <ShareUpdate
             open
-            quoteId={sharing.id}
-            reference={sharing.reference}
+            request={sharing.request}
+            quoteId={sharing.q.id}
+            reference={sharing.q.reference}
             manager={manager}
             onClose={() => setSharing(null)}
-            onShared={() => setQuotes((qs) => qs.map((q) => (q.id === sharing.id ? { ...q, unshared: false } : q)))}
+            onShared={() => setQuotes((qs) => qs.map((q) => (q.id === sharing.q.id ? { ...q, unshared: false } : q)))}
           />
         )}
       </main>
@@ -167,7 +175,19 @@ export default function ClientHome({
   );
 }
 
-function QuoteCard({ q, config, onAccept, onShare }: { q: ClientQuote; config: StudioConfig; onAccept: () => void; onShare: () => void }) {
+function QuoteCard({
+  q,
+  config,
+  onAccept,
+  onShare,
+  onRequest,
+}: {
+  q: ClientQuote;
+  config: StudioConfig;
+  onAccept: () => void;
+  onShare: () => void;
+  onRequest: () => void;
+}) {
   const ready = q.status === "sent" || q.status === "accepted";
   const [wantPdf, setWantPdf] = useState(false);
   const { state } = useProposalPdf(
@@ -224,6 +244,11 @@ function QuoteCard({ q, config, onAccept, onShare }: { q: ClientQuote; config: S
               disabled={state.status === "rendering"}
             >
               {state.status === "rendering" ? "Preparing PDF…" : state.status === "ready" ? "Download PDF" : "Prepare PDF"}
+            </button>
+          )}
+          {(q.status === "accepted" || q.status === "pending_approval" || q.status === "approved" || q.status === "rejected") && (
+            <button className={base.btnGhost} onClick={onRequest}>
+              Request a change
             </button>
           )}
           {q.unshared && (

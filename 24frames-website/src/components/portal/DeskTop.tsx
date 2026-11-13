@@ -8,9 +8,10 @@ import type { PublicAccount } from "@/lib/portal/types";
 
 /* The studio desk's top bar: quotations, the client CRM and — for the
    superadmin only — desk access. */
-export default function DeskTop({ me, current }: { me: PublicAccount; current: "quotes" | "clients" | "access" }) {
+export default function DeskTop({ me, current }: { me: PublicAccount; current: "quotes" | "converted" | "clients" | "access" }) {
   const links = [
     { id: "quotes", href: "/desk", label: "Quotations" },
+    { id: "converted", href: "/desk/converted", label: "Converted" },
     { id: "clients", href: "/desk/clients", label: "Clients" },
     ...(me.superadmin ? [{ id: "access", href: "/desk/access", label: "Access" }] : []),
   ];

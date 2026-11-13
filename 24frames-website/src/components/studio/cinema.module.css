@@ -4364,6 +4364,7 @@
 .medDragging .medWheel,
 .medDragging .medInner {
   transition: none;
+  will-change: transform;
 }
 
 .medDragging {

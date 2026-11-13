@@ -40,11 +40,66 @@ export default function CrewStage({ config, draft, go }: StageProps) {
     setSeen((prev) => (prev.has(i) ? prev : new Set(prev).add(i)));
   };
   const [turn, setTurn] = useState(0);
+  const turnRef = useRef(0);
+  const section = useRef<HTMLElement>(null);
+  const activeRef = useRef(0);
   const [dragging, setDragging] = useState(false);
   const drag = useRef<{ x: number; start: number } | null>(null);
   const moved = useRef(false);
 
   const norm = (i: number) => ((i % n) + n) % n;
+
+  /* How each medallion looks at a given orbit angle: it grows and comes
+     into colour as it nears the crown, and fades away round the back. */
+  const look = (i: number, t: number) => {
+    let ang = (i * step + t) % 360;
+    if (ang > 180) ang -= 360;
+    if (ang < -180) ang += 360;
+    const dist = Math.abs(ang) / step;
+    const scale = 1 + 1.05 * Math.max(0, 1 - dist);
+    const opacity = dist < 0.5 ? 1 : dist <= 2.3 ? Math.max(0.35, 0.95 - (dist - 1) * 0.35) : 0;
+    return { scale, opacity };
+  };
+
+  /* While a finger or trackpad is turning the orbit, paint straight onto
+     the page once per frame instead of re-rendering the whole stage on
+     every pointer event — that re-render is what made the spin stutter. */
+  const items = useRef<(HTMLButtonElement | null)[]>([]);
+  const live = useRef<number | null>(null);
+  const frame = useRef(0);
+  const paintTurn = (t: number) => {
+    live.current = t;
+    if (frame.current) return;
+    frame.current = requestAnimationFrame(() => {
+      frame.current = 0;
+      const v = live.current;
+      const el = section.current;
+      if (v === null || !el) return;
+      el.style.setProperty("--turn", `${v}deg`);
+      items.current.forEach((b, i) => {
+        if (!b) return;
+        const { scale, opacity } = look(i, v);
+        b.style.setProperty("--s", scale.toFixed(3));
+        b.style.opacity = String(opacity);
+      });
+    });
+  };
+  /** Settle on a final angle: React state and the painted page agree again. */
+  const settleTurn = (t: number) => {
+    live.current = null;
+    if (frame.current) cancelAnimationFrame(frame.current);
+    frame.current = 0;
+    const el = section.current;
+    if (el) el.style.setProperty("--turn", `${t}deg`);
+    items.current.forEach((b, i) => {
+      if (!b) return;
+      const { scale, opacity } = look(i, t);
+      b.style.setProperty("--s", scale.toFixed(3));
+      b.style.opacity = String(opacity);
+    });
+    turnRef.current = t;
+    setTurn(t);
+  };
   /** Turn the orbit the short way round so medallion i rests at the crown. */
   function go1(i: number) {
     const target = norm(i);
@@ -52,7 +107,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
     if (delta > 180) delta -= 360;
     if (delta < -180) delta += 360;
     if (target !== norm(active)) shutter();
-    setTurn((t) => t + delta);
+    settleTurn(turnRef.current + delta);
     choose(target);
   }
   /** Degrees the orbit turns per pixel of finger travel, so the medallion
@@ -64,7 +119,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
   function onDown(e: React.PointerEvent) {
     if ((e.target as HTMLElement).closest("[data-no-drag]")) return;
     if (e.pointerType === "mouse" && e.button !== 0) return;
-    drag.current = { x: e.clientX, start: turn };
+    drag.current = { x: e.clientX, start: turnRef.current };
     moved.current = false;
   }
   function onMove(e: React.PointerEvent) {
@@ -75,7 +130,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
       setDragging(true);
       try { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); } catch { /* pointer already gone */ }
     }
-    if (moved.current) setTurn(drag.current.start + dx * degPerPx());
+    if (moved.current) paintTurn(drag.current.start + dx * degPerPx());
   }
   function onUp(e: React.PointerEvent) {
     if (!drag.current) return;
@@ -89,13 +144,12 @@ export default function CrewStage({ config, draft, go }: StageProps) {
     const steps = Math.abs(dx) < 24 ? 0 : Math.sign(delta) * Math.max(1, Math.round(Math.abs(delta) / step));
     const snapped = start + steps * step;
     if (steps) shutter();
-    setTurn(snapped);
+    settleTurn(snapped);
     choose(norm(Math.round(-snapped / step)));
     window.setTimeout(() => { moved.current = false; }, 0);
   }
 
   // Trackpad: a sideways two-finger swipe turns the orbit, then it settles.
-  const section = useRef<HTMLElement>(null);
 
   // On a tall screen the lens starts below the fold. Once the stage has
   // settled, glide down so the lens and its story are in view — unless the
@@ -103,29 +157,17 @@ export default function CrewStage({ config, draft, go }: StageProps) {
   useEffect(() => {
     const el = section.current;
     if (!el) return;
-    let touched = false;
-    const mark = () => { touched = true; };
-    const opts = { passive: true } as const;
-    window.addEventListener("wheel", mark, opts);
-    window.addEventListener("touchstart", mark, opts);
-    window.addEventListener("keydown", mark);
+    // Only a deliberate scroll down to the lens cancels the glide; a nudge of
+    // the wheel or a key press while reading no longer does.
     const t = window.setTimeout(() => {
-      if (touched || window.scrollY > 40) return;
-      if (el.getBoundingClientRect().top > window.innerHeight * 0.45) scrollToElement(el, -150);
-    }, 4000);
-    return () => {
-      window.clearTimeout(t);
-      window.removeEventListener("wheel", mark);
-      window.removeEventListener("touchstart", mark);
-      window.removeEventListener("keydown", mark);
-    };
+      const top = el.getBoundingClientRect().top;
+      if (top > window.innerHeight * 0.3) scrollToElement(el, -110);
+    }, 3500);
+    return () => window.clearTimeout(t);
   }, []);
-  const turnRef = useRef(turn);
-  const activeRef = useRef(active);
   useEffect(() => {
-    turnRef.current = turn;
     activeRef.current = active;
-  }, [turn, active]);
+  }, [active]);
   useEffect(() => {
     const el = section.current;
     if (!el) return;
@@ -138,21 +180,20 @@ export default function CrewStage({ config, draft, go }: StageProps) {
       if (from === null) { from = turnRef.current; travel = 0; }
       travel += e.deltaX;
       setDragging(true);
-      const next = turnRef.current - e.deltaX * degPerPx();
-      turnRef.current = next;
-      setTurn(next);
+      const next = (live.current ?? turnRef.current) - e.deltaX * degPerPx();
+      paintTurn(next);
       window.clearTimeout(settle);
       settle = window.setTimeout(() => {
         setDragging(false);
         // A deliberate swipe always moves at least one medallion.
         const start = from ?? turnRef.current;
-        const delta = turnRef.current - start;
+        const delta = (live.current ?? turnRef.current) - start;
         const steps = Math.abs(travel) < 30 ? 0 : Math.sign(delta || -travel) * Math.max(1, Math.round(Math.abs(delta) / step));
         from = null;
         const snapped = Math.round(start / step) * step + steps * step;
         const idx = norm(Math.round(-snapped / step));
         if (idx !== activeRef.current) shutter();
-        setTurn(snapped);
+        settleTurn(snapped);
         choose(idx);
       }, 140);
     };
@@ -199,6 +240,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
         ref={section}
         className={`${cx.med} ${dragging ? cx.medDragging : ""}`}
         aria-label="The crew"
+        data-dragging={dragging ? "" : undefined}
         style={{ "--turn": `${turn}deg` } as React.CSSProperties}
         onPointerDown={onDown}
         onPointerMove={onMove}
@@ -240,17 +282,12 @@ export default function CrewStage({ config, draft, go }: StageProps) {
           </svg>
           <div className={cx.medWheel}>
             {services.map((s, i) => {
-              let ang = (i * step + turn) % 360;
-              if (ang > 180) ang -= 360;
-              if (ang < -180) ang += 360;
-              const dist = Math.abs(ang) / step;
               const on = i === active;
-              // Grows as it nears the crown — continuously while dragging.
-              const scale = 1 + 1.05 * Math.max(0, 1 - dist);
-              const opacity = dist < 0.5 ? 1 : dist <= 2.3 ? Math.max(0.35, 0.95 - (dist - 1) * 0.35) : 0;
+              const { scale, opacity } = look(i, turn);
               return (
                 <button
                   key={s.id}
+                  ref={(b) => { items.current[i] = b; }}
                   type="button"
                   className={`${cx.medItem} ${on ? cx.medOn : ""}`}
                   style={{ "--a": `${i * step}deg`, "--s": scale.toFixed(3), opacity, pointerEvents: opacity ? undefined : "none" } as React.CSSProperties}

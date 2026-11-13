@@ -18,6 +18,7 @@ export type QuoteAction =
   | { type: "forward"; note: string }
   | { type: "share_update"; note: string; via: "studio" | "whatsapp" }
   | { type: "seen" }
+  | { type: "reopen"; note: string }
   | { type: "assign"; managerId: string | null; managerName: string | null }
   | { type: "log_consultation"; id: string; mode: ConsultMode; at: string; note: string };
 
@@ -156,6 +157,18 @@ export function applyAction(q: PortalQuote, action: QuoteAction, by: PortalAccou
     }
     case "share_update": {
       if (!isClient) return new Error("Only the client shares their changes.");
+      // A locked quotation (with the founder, approved, shared or accepted):
+      // the client asks their relationship manager to reopen it.
+      if (["pending_approval", "approved", "rejected", "sent", "accepted"].includes(q.status)) {
+        const ask = action.note.trim().slice(0, 1000);
+        if (!ask) return new Error("Tell us what you'd like to change.");
+        return {
+          ...q,
+          attention: { at: now, kind: "change_request", note: ask },
+          history: log({ action: "change_requested", note: [action.via === "whatsapp" ? "Also sent on WhatsApp." : "", ask].filter(Boolean).join(" ") }),
+          updatedAt: now,
+        };
+      }
       if (q.status !== "submitted") return new Error("There are no changes to share right now.");
       const note = action.note.trim().slice(0, 1000);
       return {
@@ -167,6 +180,21 @@ export function applyAction(q: PortalQuote, action: QuoteAction, by: PortalAccou
           action: "update_shared",
           note: [action.via === "whatsapp" ? "Also sent on WhatsApp." : "", note].filter(Boolean).join(" ") || undefined,
         }),
+        updatedAt: now,
+      };
+    }
+    case "reopen": {
+      if (!isStaff) return new Error("Only the studio can reopen a quotation.");
+      if (!["pending_approval", "approved", "rejected", "sent", "accepted"].includes(q.status)) return new Error("This quotation is already open for changes.");
+      return {
+        ...q,
+        status: "submitted",
+        finalPrice: null,
+        founderComment: "",
+        decidedBy: null,
+        decidedAt: null,
+        attention: null,
+        history: log({ action: "reopened", note: action.note.trim().slice(0, 500) || undefined }),
         updatedAt: now,
       };
     }
