@@ -10,6 +10,7 @@ import Ledger from "./Ledger";
 import IdleLock from "./ui/IdleLock";
 import Overture from "./stages/Overture";
 import CoupleStage from "./stages/CoupleStage";
+import PlanningStage from "./stages/PlanningStage";
 import CelebrationStage from "./stages/CelebrationStage";
 import CrewStage from "./stages/CrewStage";
 import EnsembleStage from "./stages/EnsembleStage";
@@ -179,6 +180,7 @@ export default function CommissionStudio({
 
           <main className={styles.stage} ref={stageRef} key={state.stage}>
             {state.stage === "couple" && <CoupleStage {...props} />}
+            {state.stage === "planning" && <PlanningStage {...props} />}
             {state.stage === "celebration" && <CelebrationStage {...props} />}
             {state.stage === "crew" && <CrewStage {...props} />}
             {state.stage === "ensemble" && <EnsembleStage {...props} />}

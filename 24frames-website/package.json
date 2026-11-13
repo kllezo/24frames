@@ -10,6 +10,7 @@
     "perf": "npm run perf:desktop && npm run perf:mobile",
     "perf:desktop": "sitespeed.io tests/perf/urls.txt --config tests/perf/desktop-config.json",
     "perf:mobile": "sitespeed.io tests/perf/urls.txt --config tests/perf/mobile-config.json",
+    "seed:demo": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./tests/studio/resolve-ts.mjs scripts/seed-portal-demo.mts",
     "test:studio": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./tests/studio/resolve-ts.mjs --test tests/studio/commission.test.mts"
   },
   "dependencies": {

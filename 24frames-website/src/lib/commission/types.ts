@@ -235,6 +235,14 @@ export interface CommissionDraft {
   updatedAt: ISODateTime;
   /** When duplicated from a stored record. */
   duplicatedFrom: string | null;
+  /** Event-planning services the couple would like help with (optional). */
+  planning?: PlanningRequest;
+}
+
+/** Beyond photography: planning services the couple ticked, and a note. */
+export interface PlanningRequest {
+  services: string[];
+  note: string;
 }
 
 /* ---------- Pricing output ---------- */

@@ -274,8 +274,8 @@ export default function CelebrationStage({ config, draft, actions, go }: StagePr
   return (
     <div className={styles.stageInner}>
       <StageHeader
-        frame="02"
-        kicker="Frame 02 · The Celebration"
+        frame="03"
+        kicker="Frame 03 · The Celebration"
         title={<>Every wedding has its own <em>shape.</em></>}
         lead="First, choose every occasion you are celebrating. Once the list is complete, we will introduce the crew — and only then decide who joins each one."
       />
@@ -421,7 +421,7 @@ export default function CelebrationStage({ config, draft, actions, go }: StagePr
       )}
 
       <StageFooter
-        onBack={() => go("couple")}
+        onBack={() => go("planning")}
         onNext={() => go("crew")}
         nextLabel="Meet your crew"
         nextDisabled={draft.events.length === 0 || pastEvents.length > 0}

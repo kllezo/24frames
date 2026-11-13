@@ -172,8 +172,8 @@ export default function CrewStage({ config, draft, go }: StageProps) {
     <div className={st.stageInner}>
       <div className={cx.crewHead}>
         <StageHeader
-          frame="03"
-          kicker="Frame 03 · The Crew"
+          frame="04"
+          kicker="Frame 04 · The Crew"
           title={<>Know your crew <em>before you choose.</em></>}
           lead="Seven kinds of photographers and filmmakers, each seeing your day differently. Understand what each one brings — then pick who joins every occasion."
         />

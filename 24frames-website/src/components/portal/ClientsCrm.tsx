@@ -18,6 +18,26 @@ export default function ClientsCrm({ me }: { me: PublicAccount }) {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [city, setCity] = useState("");
+  const [staff, setStaff] = useState<{ id: string; name: string }[]>([]);
+  const [mine, setMine] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/portal/staff", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : { staff: [] }))
+      .then((d: { staff?: { id: string; name: string }[] }) => setStaff(d.staff ?? []))
+      .catch(() => null);
+  }, []);
+
+  async function assign(clientId: string, managerId: string | null) {
+    const res = await fetch("/api/portal/clients", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clientId, managerId }),
+    }).catch(() => null);
+    const data = res ? ((await res.json().catch(() => ({}))) as { managerId?: string | null; managerName?: string | null; error?: string }) : {};
+    if (res?.ok) setRows((rs) => (rs ?? []).map((r) => (r.id === clientId ? { ...r, managerId: data.managerId ?? null, managerName: data.managerName ?? null } : r)));
+    else setError(data.error ?? "Could not assign the relationship manager.");
+  }
 
   useEffect(() => {
     let alive = true;
@@ -42,18 +62,19 @@ export default function ClientsCrm({ me }: { me: PublicAccount }) {
     const t = search.trim().toLowerCase();
     return (rows ?? []).filter(
       (r) =>
+        (!mine || r.managerId === me.id) &&
         (!city || r.location.trim() === city) &&
         (!t || [r.name, r.email, r.phone, r.location, r.latestReference ?? ""].join(" ").toLowerCase().includes(t)),
     );
-  }, [rows, search, city]);
+  }, [rows, search, city, mine, me.id]);
 
   const thisMonth = (rows ?? []).filter((r) => r.createdAt.slice(0, 7) === new Date().toISOString().slice(0, 7)).length;
 
   function exportCsv() {
     const esc = (v: string | number | null) => `"${String(v ?? "").replace(/"/g, '""')}"`;
-    const head = ["Name", "Mobile", "Email", "Location", "Signed up", "Last sign-in", "Quotations", "Latest reference", "Latest status", "Latest value"];
+    const head = ["Name", "Mobile", "Email", "Location", "Relationship manager", "Signed up", "Last sign-in", "Quotations", "Latest reference", "Latest status", "Latest value"];
     const lines = shown.map((r) =>
-      [r.name, r.phone, r.email, r.location, r.createdAt.slice(0, 10), r.lastLoginAt?.slice(0, 10) ?? "", r.quotes, r.latestReference ?? "", r.latestStatus ? STATUS_LABEL[r.latestStatus] : "", r.latestValue ?? ""]
+      [r.name, r.phone, r.email, r.location, r.managerName ?? "", r.createdAt.slice(0, 10), r.lastLoginAt?.slice(0, 10) ?? "", r.quotes, r.latestReference ?? "", r.latestStatus ? STATUS_LABEL[r.latestStatus] : "", r.latestValue ?? ""]
         .map(esc)
         .join(","),
     );
@@ -91,6 +112,10 @@ export default function ClientsCrm({ me }: { me: PublicAccount }) {
               <option key={c} value={c}>{c}</option>
             ))}
           </select>
+          <label className={px.mineToggle}>
+            <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} />
+            <span>Only my clients</span>
+          </label>
           <input className={px.searchInput} type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search name, mobile, email or reference" aria-label="Search clients" />
           <button className={base.btnSecondary} onClick={exportCsv} disabled={!shown.length}>Export CSV</button>
         </div>
@@ -104,16 +129,17 @@ export default function ClientsCrm({ me }: { me: PublicAccount }) {
                 <th>Client</th>
                 <th>Mobile</th>
                 <th>Location</th>
+                <th>Relationship manager</th>
                 <th>Signed up</th>
                 <th>Latest quotation</th>
               </tr>
             </thead>
             <tbody>
               {rows === null && !error && (
-                <tr><td colSpan={5}>Loading…</td></tr>
+                <tr><td colSpan={6}>Loading…</td></tr>
               )}
               {rows !== null && shown.length === 0 && (
-                <tr><td colSpan={5}>No clients match.</td></tr>
+                <tr><td colSpan={6}>No clients match.</td></tr>
               )}
               {shown.map((r) => {
                 const wa = r.phone.replace(/[^\d]/g, "");
@@ -132,6 +158,19 @@ export default function ClientsCrm({ me }: { me: PublicAccount }) {
                       )}
                     </td>
                     <td>{r.location || "—"}</td>
+                    <td>
+                      <select
+                        className={px.cellSelect}
+                        value={r.managerId ?? ""}
+                        onChange={(e) => assign(r.id, e.target.value || null)}
+                        aria-label={`Relationship manager for ${r.name}`}
+                      >
+                        <option value="">Not assigned</option>
+                        {staff.map((s) => (
+                          <option key={s.id} value={s.id}>{s.name}</option>
+                        ))}
+                      </select>
+                    </td>
                     <td>
                       {when(r.createdAt)}
                       <span className={px.cellSub}>Last in {when(r.lastLoginAt)}</span>

@@ -13,8 +13,9 @@ import {
 } from "@/lib/commission/format";
 import { coupleNames, eventDisplayName, eventTypeLabel, weddingDateLabel } from "@/lib/commission/model";
 import type { CommissionDraft, CommissionQuote, StudioConfig } from "@/lib/commission/types";
+import { planningTitles } from "@/lib/commission/planning";
 
-export type SheetSection = "couple" | "celebration" | "ensemble" | "delivery";
+export type SheetSection = "couple" | "planning" | "celebration" | "ensemble" | "delivery";
 
 const CONTACT_LABEL = { whatsapp: "WhatsApp", call: "Phone call", email: "Email" } as const;
 
@@ -69,6 +70,21 @@ export default function CommissionSheet({
           <div><dt>Wedding</dt><dd>{date || "Date to be confirmed"}{c.city ? `, ${c.city}` : ""}</dd></div>
           <div><dt>Prefers</dt><dd>{CONTACT_LABEL[c.preferredContact]}</dd></div>
           {c.notes && <div className={styles.wide}><dt>Notes</dt><dd>{c.notes}</dd></div>}
+          {draft.planning && (planningTitles(draft.planning).length > 0 || draft.planning.note) && (
+            <div className={styles.wide}>
+              <dt>Planning help</dt>
+              <dd>
+                {planningTitles(draft.planning).join(" · ") || "—"}
+                {draft.planning.note ? ` — ${draft.planning.note}` : ""}
+                {onEdit && (
+                  <>
+                    {" "}
+                    {edit("planning", "Change")}
+                  </>
+                )}
+              </dd>
+            </div>
+          )}
         </dl>
       </section>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import cx from "../studio/cinema.module.css";
 import base from "../studio/studio.module.css";
 import qx from "../studio/quotes/quotes.module.css";
@@ -18,13 +18,24 @@ export default function PortalAuth({
   next,
   initialMode,
   storageIssue = null,
+  invite = null,
 }: {
   audience: "client" | "staff";
   next: string;
   initialMode: Mode;
   storageIssue?: string | null;
+  /** A relationship manager's invite link (clients). */
+  invite?: string | null;
 }) {
   const [mode, setMode] = useState<Mode>(initialMode);
+  const [invitedBy, setInvitedBy] = useState<string | null>(null);
+  useEffect(() => {
+    if (!invite) return;
+    fetch(`/api/portal/invite?token=${encodeURIComponent(invite)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { manager?: { name: string } } | null) => setInvitedBy(d?.manager?.name ?? null))
+      .catch(() => null);
+  }, [invite]);
   const [f, setF] = useState({ name: "", email: "", phone: "", location: "", password: "", pin: "" });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +49,7 @@ export default function PortalAuth({
       const res = await fetch("/api/portal/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: mode, ...f }),
+        body: JSON.stringify({ action: mode, ...f, ...(invite && mode === "signup" ? { invite } : {}) }),
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string; next?: string; role?: string };
       if (!res.ok) {
@@ -84,6 +95,12 @@ export default function PortalAuth({
         </Link>
         <p className={base.kicker}>{copy.kicker}</p>
         <h1 className={qx.gateTitle}>{copy.title}</h1>
+        {invitedBy && (
+          <p className={px.invited}>
+            Invited by <b>{invitedBy}</b>, your relationship manager at 24 Frames. Create your account to compose your
+            quotation — {invitedBy.split(" ")[0]} will see it the moment you send it.
+          </p>
+        )}
 
         {audience === "client" && (
           <div className={`${base.segmented} ${px.authSwitch}`} role="tablist" aria-label="Account">

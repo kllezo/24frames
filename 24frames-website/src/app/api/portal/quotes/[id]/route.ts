@@ -1,15 +1,17 @@
 import { getConfig } from "@/lib/studio/server/repository";
 import { validateDraftForSubmit } from "@/lib/commission/validation";
-import { getQuote, mutateQuote } from "@/lib/portal/store";
-import { body, json, portalError, requireRole, sameOrigin } from "@/lib/portal/guard";
+import { randomUUID } from "node:crypto";
+import { getAccount, getQuote, managerCard, mutateQuote } from "@/lib/portal/store";
+import { body, deskAllowed, json, portalError, requireRole, sameOrigin } from "@/lib/portal/guard";
 import { prepareClientDraft } from "@/lib/portal/drafts";
 import { applyAction, type QuoteAction } from "@/lib/portal/workflow";
-import { forClient, type PortalAccount, type PortalQuote } from "@/lib/portal/types";
+import { CONSULT_LABEL, forClient, type ConsultMode, type PortalAccount, type PortalQuote } from "@/lib/portal/types";
 import type { CommissionDraft } from "@/lib/commission/types";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-const view = (q: PortalQuote, me: PortalAccount) => (me.role === "client" ? forClient(q) : q);
+const view = async (q: PortalQuote, me: PortalAccount) =>
+  me.role === "client" ? forClient(q, await managerCard(me.managerId)) : q;
 
 export async function GET(_request: Request, ctx: Ctx) {
   const me = await requireRole();
@@ -18,7 +20,7 @@ export async function GET(_request: Request, ctx: Ctx) {
   try {
     const q = await getQuote(id);
     if (!q || (me.role === "client" && q.clientId !== me.id)) return json({ error: "Quotation not found." }, 404);
-    return json({ quote: view(q, me) });
+    return json({ quote: await view(q, me) });
   } catch (err) {
     return portalError(err);
   }
@@ -36,6 +38,10 @@ export async function POST(request: Request, ctx: Ctx) {
     finalPrice?: number | null;
     note?: string;
     comment?: string;
+    via?: string;
+    managerId?: string | null;
+    mode?: string;
+    at?: string;
   }>(request);
   if (!b?.action) return json({ error: "Missing action." }, 400);
 
@@ -62,6 +68,24 @@ export async function POST(request: Request, ctx: Ctx) {
       action = { type: "forward", note: String(b.note ?? "") };
     } else if (b.action === "accept") {
       action = { type: "accept" };
+    } else if (b.action === "share_update") {
+      action = { type: "share_update", note: String(b.note ?? ""), via: b.via === "whatsapp" ? "whatsapp" : "studio" };
+    } else if (b.action === "seen") {
+      action = { type: "seen" };
+    } else if (b.action === "assign") {
+      let managerName: string | null = null;
+      const managerId = b.managerId || null;
+      if (managerId) {
+        const m = await getAccount(managerId);
+        if (!m || !m.active || m.role === "client" || !(await deskAllowed(m))) return json({ error: "Choose an active team member." }, 422);
+        managerName = m.name;
+      }
+      action = { type: "assign", managerId, managerName };
+    } else if (b.action === "log_consultation") {
+      const mode = String(b.mode ?? "") as ConsultMode;
+      if (!Object.hasOwn(CONSULT_LABEL, mode)) return json({ error: "Choose how the session took place." }, 422);
+      const at = typeof b.at === "string" && !Number.isNaN(Date.parse(b.at)) ? new Date(b.at).toISOString() : new Date().toISOString();
+      action = { type: "log_consultation", id: randomUUID(), mode, at, note: String(b.note ?? "") };
     } else {
       return json({ error: "Unknown action." }, 400);
     }
@@ -72,7 +96,7 @@ export async function POST(request: Request, ctx: Ctx) {
     });
     if (result === null) return json({ error: "Quotation not found." }, 404);
     if (result instanceof Error) return json({ error: result.message }, 409);
-    return json({ quote: view(result, me) });
+    return json({ quote: await view(result, me) });
   } catch (err) {
     return portalError(err);
   }

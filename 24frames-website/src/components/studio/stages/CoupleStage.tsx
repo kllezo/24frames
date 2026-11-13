@@ -142,8 +142,8 @@ export default function CoupleStage({ draft, actions, go }: StageProps) {
       <StageFooter
         onBack={() => go("overture")}
         backLabel="Opening"
-        onNext={() => go("celebration")}
-        nextLabel="Build the celebration"
+        onNext={() => go("planning")}
+        nextLabel="Continue"
         nextDisabled={past}
         hint={past ? "The wedding date has already passed." : hasName ? undefined : "Add at least one name — it will appear on the proposal."}
       />

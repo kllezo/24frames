@@ -1,4 +1,5 @@
-import { countOwners, createAccount, DuplicateEmailError, findAccountByEmail, getAccess, updateAccount } from "@/lib/portal/store";
+import { countOwners, createAccount, DuplicateEmailError, findAccountByEmail, getAccess, getAccount, updateAccount } from "@/lib/portal/store";
+import { readInvite } from "@/lib/portal/invite";
 import { hashPassword, passwordProblem, verifyPassword } from "@/lib/portal/password";
 import { PORTAL_COOKIE, portalCookieOptions, signPortal } from "@/lib/portal/session";
 import { body, deskAllowed, json, portalError, sameOrigin } from "@/lib/portal/guard";
@@ -23,6 +24,7 @@ type Body = {
   name?: string;
   phone?: string;
   pin?: string;
+  invite?: string;
 };
 
 function home(a: PortalAccount) {
@@ -80,7 +82,12 @@ export async function POST(request: Request) {
       if (problem) return json({ error: problem }, 422);
       const staff = await getAccess(email);
       if (staff?.active) return json({ error: "This email is authorised for the studio desk — activate it at /desk/login." }, 409);
-      const account = await createAccount({ role: "client", name, email, phone, location, passwordHash: await hashPassword(password), createdBy: null });
+      // Signed up through a relationship manager's link → they look after this client.
+      const invitedBy = await readInvite(b.invite);
+      const manager = invitedBy ? await getAccount(invitedBy) : null;
+      const managerId = manager && manager.active && manager.role !== "client" && (await deskAllowed(manager)) ? manager.id : null;
+      const created = await createAccount({ role: "client", name, email, phone, location, passwordHash: await hashPassword(password), createdBy: managerId });
+      const account = managerId ? (await updateAccount(created.id, { managerId })) ?? created : created;
       return signedIn(account, 201);
     }
 
