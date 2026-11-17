@@ -1,0 +1,1172 @@
+/* ============================================================
+   24 FRAMES — CHAPTER 04: THE ARTIST & VISIONARY (PHANI GOGIREDDY)
+   Exact Desktop Composition Recreated from Visual Reference
+   Warm Ivory / Cream Palette · Evenly Spaced Grey Dot Grid Pattern
+   ============================================================ */
+
+.section {
+  position: relative;
+  width: 100%;
+  background-color: #FAF7F0;
+  color: #20231F;
+  overflow: visible;
+  padding-top: clamp(6rem, 10vw, 9.5rem);
+  padding-bottom: clamp(5rem, 8vw, 7.5rem);
+  scroll-margin-top: 80px;
+}
+
+/* Ambient Liquid Dot Canvas Layer (interactive cursor ripple) */
+.liquidCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+/* Subtle dot overlay fallback/reinforcement */
+.dotGridOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Anchor alias for smooth header/footer link navigation */
+.anchorOffset {
+  position: absolute;
+  top: -80px;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* Main Container — Expanded Editorial Canvas with Balanced Outer Margins */
+.container {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  padding-left: clamp(1.5rem, 3.5vw, 3.5rem);
+  padding-right: clamp(1.5rem, 3.5vw, 3.5rem);
+  position: relative;
+  z-index: 3;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   1. TWO-COLUMN EDITORIAL COMPOSITION (LEFT ~34% / RIGHT ~66%)
+   Aligned precisely at top baseline, eliminating dashboard cards
+   ───────────────────────────────────────────────────────────── */
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: minmax(360px, 400px) 1fr;
+  gap: clamp(2.5rem, 4.5vw, 5rem);
+  align-items: start;
+  margin-bottom: clamp(2rem, 3vw, 2.75rem);
+  width: 100%;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   1.1 LEFT COLUMN — THE ARTIST
+   ═════════════════════════════════════════════════════════════ */
+.leftColumn {
+  position: -webkit-sticky;
+  position: sticky;
+  top: clamp(4.5rem, 7.5vh, 6rem);
+  height: fit-content;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  z-index: 10;
+}
+
+/* 1.1.1 Top Founder Name Panel — Pure Editorial Typography, No Box */
+.founderNamePanel {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.namePanelKicker {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #55625B;
+}
+
+.founderNameHeading {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.4rem, 3.2vw, 3.1rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  color: #261618;
+  margin: 0.2rem 0;
+}
+
+.founderDesignation {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #55625B;
+}
+
+/* 1.1.2 Large Portrait Anchor with Living Portrait Animation */
+.portraitWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3.2 / 3.9;
+  height: clamp(480px, 42vw, 560px);
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #181213;
+  border: 1px solid rgba(91, 31, 42, 0.12);
+  box-shadow: 0 16px 40px rgba(91, 31, 42, 0.08);
+  will-change: clip-path, transform;
+}
+
+.portraitImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Living Portrait Subdued Darkroom Overlay */
+.darkroomOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(23, 15, 16, 0.38) 0%, rgba(14, 8, 9, 0.72) 100%);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 2;
+}
+
+/* Delicate Viewfinder Corners HUD */
+.viewfinderHud {
+  position: absolute;
+  inset: 16px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Interactive Studio Light Reflection Layer */
+.interactiveGlare {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  background: radial-gradient(
+    circle 260px at var(--glare-x, 50%) var(--glare-y, 40%),
+    rgba(255, 248, 230, 0.75) 0%,
+    rgba(245, 235, 210, 0.3) 45%,
+    transparent 75%
+  );
+  z-index: 5;
+}
+
+.verticalLightBand {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 90px;
+  left: -120px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.45) 30%,
+    rgba(212, 175, 55, 0.6) 50%,
+    rgba(255, 255, 255, 0.45) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 6;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+.vfCorner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: rgba(255, 255, 255, 0.85);
+  border-style: solid;
+  border-width: 0;
+}
+
+.vfCornerTL {
+  top: 0;
+  left: 0;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.vfCornerTR {
+  top: 0;
+  right: 0;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+.vfCornerBL {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.vfCornerBR {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+/* 1.1.3 Horizontal Statistics Strip (Single Cohesive Strip, Delicate Dividing Hairlines) */
+.statsPanel {
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(91, 31, 42, 0.14);
+  border-bottom: 1px solid rgba(91, 31, 42, 0.14);
+  border-radius: 0;
+  padding: 1.35rem 0.5rem;
+  box-shadow: none;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 0.25rem 0;
+  width: 100%;
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.3rem;
+}
+
+.statNumber {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.85rem, 2.3vw, 2.25rem);
+  font-weight: 500;
+  line-height: 1;
+  color: #261618;
+}
+
+.statDesc {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #55625B;
+  line-height: 1.3;
+}
+
+.statDivider {
+  width: 1px;
+  height: 36px;
+  background-color: rgba(91, 31, 42, 0.14);
+}
+
+/* 1.1.4 Three Core Principles — Clean Editorial 3-Column Grid Matching Reference */
+.principlesContainer {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.principlesHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.principlesKicker {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #55625B;
+  white-space: nowrap;
+}
+
+.principlesLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(91, 31, 42, 0.12);
+}
+
+.principlesList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2vw, 2.25rem);
+  width: 100%;
+}
+
+.principleCard {
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(91, 31, 42, 0.12);
+  border-radius: 0;
+  padding: 1.15rem 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: none;
+}
+
+.principleCard:last-child {
+  border-top: 1px solid rgba(91, 31, 42, 0.12);
+}
+
+.principleCard:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.principleTitleRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+}
+
+.principleNumber {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #B5985A;
+}
+
+.principleTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #261618;
+  margin: 0;
+}
+
+.principleDescription {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: #4C5952;
+  margin: 0;
+  padding-left: 0;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   1.2 RIGHT COLUMN — HERITAGE & HONOURS (CONTINUOUS EDITORIAL ZONE)
+   ═════════════════════════════════════════════════════════════ */
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  min-width: 0;
+}
+
+/* 1.2.1 Honours & Editorial Recognition Panel — Unboxed Header & Evidence Carousel */
+.recognitionPanel {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.recognitionHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.recognitionTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.recognitionKicker {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #55625B;
+}
+
+.recognitionMainTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.75rem, 2.3vw, 2.35rem);
+  font-weight: 500;
+  color: #261618;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.cursiveTag {
+  font-family: var(--font-allura), 'Allura', cursive;
+  font-style: italic;
+  font-size: 1.18em;
+  color: #6E5256;
+  margin-left: 0.5rem;
+}
+
+/* Circular Carousel Navigation Arrows */
+.carouselNavButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navCircleBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(91, 31, 42, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #261618;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.navCircleBtn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.navCircleBtn:hover:not(:disabled) {
+  background: #5B1F2A;
+  color: #FFFFFF;
+  border-color: #5B1F2A;
+  transform: scale(1.04);
+}
+
+.navCircleBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Carousel Track & Cards */
+.carouselWell {
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  border: none;
+}
+
+.carouselTrack {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.35rem 0.15rem 0.75rem;
+}
+
+.carouselTrack::-webkit-scrollbar {
+  display: none;
+}
+
+/* Individual Evidence Card */
+.magazineCard {
+  flex: 0 0 calc((100% - 2.5rem) / 3);
+  min-width: 260px;
+  max-width: 340px;
+  background: #FAF7F2;
+  border-radius: 4px;
+  padding: 1.35rem 1.25rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(91, 31, 42, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.magazineCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(91, 31, 42, 0.28);
+  box-shadow: 0 12px 28px rgba(91, 31, 42, 0.08);
+}
+
+.cardHeaderMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cardBadge {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3F1319;
+  background: #E3ECE7;
+  padding: 0.32rem 0.68rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardYear {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.95rem;
+  font-style: normal;
+  font-weight: 400;
+  color: #728078;
+}
+
+.cardImageContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.30;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #EFEAE0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.cardCoverImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  border-radius: 4px;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.cardCoverImgContain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.magazineCard:hover .cardCoverImg,
+.magazineCard:hover .cardCoverImgContain {
+  transform: scale(1.025);
+}
+
+.cardFooterInfo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.15rem;
+}
+
+.cardTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.cardMilestoneTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.1rem, 1.25vw, 1.22rem);
+  font-weight: 500;
+  line-height: 1.24;
+  color: #261618;
+  min-height: 2.5em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+.cardConferringBody {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: #707E76;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.cardArrowBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #E2E8E4;
+  color: #391C20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.cardArrowBtnActive {
+  background: #3F1016;
+  color: #FFFFFF;
+  border-color: #3F1016;
+}
+
+.cardArrowBtn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.magazineCard:hover .cardArrowBtn {
+  background: #3F1016;
+  color: #FFFFFF;
+  border-color: #3F1016;
+  transform: scale(1.05);
+}
+
+/* Recognition Bottom Link */
+.recognitionBottomLinkRow {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.25rem;
+}
+
+.exploreEvidenceLink {
+  background: transparent;
+  border: none;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #55625B;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.exploreEvidenceLink:hover {
+  color: #5B1F2A;
+}
+
+.linkArrow {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.exploreEvidenceLink:hover .linkArrow {
+  transform: translateX(3px);
+}
+
+/* Fine Editorial Hairline Divider */
+.editorialDivider {
+  width: 100%;
+  height: 1px;
+  background: rgba(91, 31, 42, 0.1);
+  margin: 0.25rem 0;
+}
+
+/* 1.2.2 Wide Biography Text — Usable Column Width, High Editorial Readability */
+.bioPanel {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+.bioLead {
+  font-family: var(--font-headline, "Cormorant Garamond", serif);
+  font-size: clamp(1.6rem, 2.3vw, 2.15rem);
+  font-weight: 400;
+  line-height: 1.32;
+  color: #231C1A;
+  margin: 0 0 1.4rem;
+  text-wrap: pretty;
+}
+
+.bioText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(1rem, 1.1vw, 1.08rem);
+  line-height: 1.85;
+  color: #5E524D;
+  text-wrap: pretty;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+/* 1.2.3 Founder Quotation Panel — Integrated Pull Quote with Green Accent Rule */
+.quotePanel {
+  background: transparent;
+  border: none;
+  border-left: 3.5px solid #5B1F2A;
+  border-radius: 0;
+  padding: 0.5rem 0 0.5rem 1.75rem;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.25rem 0;
+}
+
+.quoteText {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.35rem, 1.75vw, 1.65rem);
+  line-height: 1.45;
+  color: #261618;
+  margin: 0;
+}
+
+.quoteAttribution {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #55625B;
+}
+
+/* 1.2.4 Commission CTA Button — Integrated Full Width in Right Column */
+.rightColumnCtaWrap {
+  display: flex;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.commissionPillBtn {
+  background: #5B1F2A;
+  color: #FAF8F2;
+  border-radius: 9999px;
+  padding: 0.55rem 0.55rem 0.55rem 1.9rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  width: auto;
+  box-shadow: 0 8px 24px rgba(91, 31, 42, 0.24);
+  transition: all 0.25s ease;
+}
+
+.commissionPillBtn:hover {
+  background: #56131C;
+  box-shadow: 0 12px 32px rgba(91, 31, 42, 0.35);
+  transform: translateY(-2px);
+}
+
+.btnArrow {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  font-size: 1.05rem;
+  color: #5B1F2A;
+  background: #FAF8F2;
+  border-radius: 50%;
+  transition: transform 0.35s var(--ease-out);
+}
+
+.commissionPillBtn:hover .btnArrow {
+  transform: translateX(3px) rotate(-8deg);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. FORENSIC EVIDENCE MODAL FOR VERIFIED RECOGNITIONS
+   ───────────────────────────────────────────────────────────── */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 14, 15, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(1rem, env(safe-area-inset-top, 1rem)) max(1rem, env(safe-area-inset-right, 1rem)) max(1rem, env(safe-area-inset-bottom, 1rem)) max(1rem, env(safe-area-inset-left, 1rem));
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+
+.modalContainer {
+  background: #FAF7F0;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  max-width: 780px;
+  width: 100%;
+  max-height: calc(100dvh - 2rem);
+  max-height: calc(100svh - 2rem);
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overscroll-behavior: contain;
+  touch-action: auto;
+}
+
+.modalHeader {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.15rem 1.75rem;
+  background: #FAF7F0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  z-index: 10;
+}
+
+.modalHeaderMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.modalBadge {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5B1F2A;
+  background: rgba(91, 31, 42, 0.08);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+}
+
+.modalYear {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #64726B;
+}
+
+.modalCloseBtn {
+  background: transparent;
+  border: none;
+  font-size: 1.15rem;
+  color: #4C5952;
+  cursor: pointer;
+  padding: 0.4rem;
+  line-height: 1;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.modalCloseBtn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #261618;
+}
+
+.modalBody {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.75rem;
+  padding: 1.75rem;
+}
+
+.modalMediaCol {
+  border-radius: 4px;
+  overflow: hidden;
+  background: #EBE5D8;
+  height: 360px;
+}
+
+.modalImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.modalContentCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.modalCategory {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #B5985A;
+}
+
+.modalTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 500;
+  color: #261618;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.modalConferring {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  color: #55625B;
+  margin: 0;
+}
+
+.modalCitation {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  color: #261618;
+  border-left: 2px solid #5B1F2A;
+  padding-left: 0.85rem;
+  margin: 0.4rem 0;
+}
+
+.modalSummary {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: #334039;
+  margin: 0;
+}
+
+.modalActions {
+  margin-top: auto;
+  padding-top: 0.85rem;
+}
+
+.modalSourceLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: #5B1F2A;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.modalSourceLink:hover {
+  color: #56131C;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. RESPONSIVE DESIGN (TABLET & MOBILE)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .leftColumn {
+    position: static;
+    top: auto;
+  }
+
+  .principlesList {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .twoColumnGrid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .portraitWrap {
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+    height: 480px;
+  }
+
+  .magazineCard {
+    min-width: 260px;
+    flex: 0 0 calc((100% - 1.25rem) / 2);
+  }
+
+  .modalBody {
+    grid-template-columns: 1fr;
+  }
+
+  .modalMediaCol {
+    height: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modalBackdrop {
+    padding: max(0.5rem, env(safe-area-inset-top, 0.5rem)) max(0.5rem, env(safe-area-inset-right, 0.5rem)) max(0.5rem, env(safe-area-inset-bottom, 0.5rem)) max(0.5rem, env(safe-area-inset-left, 0.5rem));
+  }
+
+  .modalContainer {
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 1rem);
+    border-radius: 4px;
+  }
+
+  .modalHeader {
+    padding: 0.9rem 1.25rem;
+  }
+
+  .modalBody {
+    padding: 1.15rem 1.15rem calc(1.75rem + env(safe-area-inset-bottom, 0px)) 1.15rem;
+    gap: 1.1rem;
+  }
+
+  .modalMediaCol {
+    height: clamp(180px, 26vh, 230px);
+  }
+
+  .modalTitle {
+    font-size: 1.35rem;
+  }
+
+  .twoColumnGrid {
+    gap: 2.25rem;
+  }
+
+  .portraitWrap {
+    max-width: 100%;
+    height: 420px;
+  }
+
+  .statsPanel {
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 0.35rem;
+    padding: 1rem 0;
+  }
+
+  .statNumber {
+    font-size: 1.45rem;
+  }
+
+  .statDesc {
+    font-size: 0.52rem;
+  }
+
+  .statDivider {
+    height: 28px;
+  }
+
+  .magazineCard {
+    min-width: 240px;
+    flex: 0 0 82%;
+  }
+
+  .commissionPillBtn {
+    width: 100%;
+    min-width: 0;
+    padding: 1.1rem 1.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portraitImg,
+  .lightSweepBeam,
+  .darkroomOverlay,
+  .viewfinderHud,
+  .magazineCard,
+  .commissionPillBtn {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .darkroomOverlay {
+    display: none;
+  }
+
+  .lightSweepBeam {
+    display: none;
+  }
+
+  .portraitImg {
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+/* Phones: the commission button stays on one line. */
+@media (max-width: 520px) {
+  .commissionPillBtn {
+    width: 100%;
+    justify-content: space-between;
+    padding-left: 1.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 521px) {
+  .commissionPillBtn {
+    width: auto !important;
+  }
+}

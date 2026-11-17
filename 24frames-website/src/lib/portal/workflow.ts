@@ -5,7 +5,18 @@
      owner    everything sales can do, plus approve · reject            */
 
 import type { CommissionDraft, CommissionQuote } from "@/lib/commission/types";
-import { CONSULT_LABEL, type ConsultMode, type PortalAccount, type PortalQuote, type QuoteEvent } from "./types";
+import {
+  CONSULT_LABEL,
+  LOST_LABEL,
+  PRODUCTION_LABEL,
+  type ConsultMode,
+  type LostReason,
+  type PortalAccount,
+  type PortalQuote,
+  type Production,
+  type ProductionStatus,
+  type QuoteEvent,
+} from "./types";
 
 export type QuoteAction =
   | { type: "save"; draft: CommissionDraft; quote: CommissionQuote; configVersion: number }
@@ -20,7 +31,33 @@ export type QuoteAction =
   | { type: "seen" }
   | { type: "reopen"; note: string }
   | { type: "assign"; managerId: string | null; managerName: string | null }
-  | { type: "log_consultation"; id: string; mode: ConsultMode; at: string; note: string };
+  | { type: "log_consultation"; id: string; mode: ConsultMode; at: string; note: string }
+  | { type: "confirm_booking"; note: string }
+  | { type: "mark_lost"; reason: LostReason; detail: string }
+  | { type: "revive"; note: string }
+  | { type: "production"; status?: ProductionStatus; crew?: string; notes?: string; dueDate?: string | null; note?: string }
+  | { type: "record_payment"; id: string; amount: number; note: string; at: string };
+
+const addDays = (iso: string, d: number) => {
+  const t = new Date(`${iso}T00:00:00Z`);
+  t.setUTCDate(t.getUTCDate() + d);
+  return t.toISOString().slice(0, 10);
+};
+
+/** The operations team's starting point when a booking is confirmed. */
+export function newProduction(q: PortalQuote, deliveryDays: number | null, by: string, now: string): Production {
+  const dates = q.draft.events.map((e) => e.date).filter(Boolean).sort();
+  const last = dates[dates.length - 1] || q.draft.couple.weddingDate || "";
+  return {
+    status: "awaiting_assignment",
+    createdAt: now,
+    crew: "",
+    notes: "",
+    dueDate: last && deliveryDays ? addDays(last, deliveryDays) : null,
+    deliveredAt: null,
+    log: [{ at: now, by, status: "awaiting_assignment", note: "Production brief generated from the confirmed quotation." }],
+  };
+}
 
 const MAX_PRICE = 1_000_000_000;
 
@@ -31,7 +68,13 @@ function sameSelections(a: CommissionDraft, b: CommissionDraft) {
   return pick(a) === pick(b);
 }
 
-export function applyAction(q: PortalQuote, action: QuoteAction, by: PortalAccount, now = new Date().toISOString()): PortalQuote | Error {
+export function applyAction(
+  q: PortalQuote,
+  action: QuoteAction,
+  by: PortalAccount,
+  now = new Date().toISOString(),
+  deliveryDays: number | null = null,
+): PortalQuote | Error {
   const isClient = by.role === "client";
   const isStaff = by.role === "sales" || by.role === "owner";
   const log = (entry: Omit<QuoteEvent, "at" | "by" | "role">): QuoteEvent[] => [
@@ -92,6 +135,9 @@ export function applyAction(q: PortalQuote, action: QuoteAction, by: PortalAccou
       return {
         ...q,
         status: "accepted",
+        lost: null,
+        bookedAt: now,
+        production: q.production ?? newProduction(q, deliveryDays, "24 Frames", now),
         attention: { at: now, kind: "accepted", note: "" },
         history: log({ action: "accepted" }),
         updatedAt: now,
@@ -203,7 +249,7 @@ export function applyAction(q: PortalQuote, action: QuoteAction, by: PortalAccou
       return { ...q, attention: null };
     }
     case "assign": {
-      if (!isStaff) return new Error("Only the studio assigns relationship managers.");
+      if (by.role !== "owner") return new Error("Only the founder assigns relationship managers.");
       if ((q.managerId ?? null) === action.managerId) return q;
       return {
         ...q,
@@ -220,6 +266,73 @@ export function applyAction(q: PortalQuote, action: QuoteAction, by: PortalAccou
         ...q,
         consultations: [...(q.consultations ?? []), entry].sort((a, b) => a.at.localeCompare(b.at)),
         history: log({ action: "consultation", note: [CONSULT_LABEL[entry.mode], entry.note].filter(Boolean).join(" — ") }),
+        updatedAt: now,
+      };
+    }
+    case "confirm_booking": {
+      if (!isStaff) return new Error("Only the studio confirms a booking.");
+      if (!["approved", "sent"].includes(q.status)) return new Error("Only an approved quotation can be confirmed as a booking.");
+      return {
+        ...q,
+        status: "accepted",
+        lost: null,
+        bookedAt: now,
+        production: q.production ?? newProduction(q, deliveryDays, by.name, now),
+        attention: null,
+        history: log({ action: "booked", price: q.finalPrice ?? q.quote.grandTotal, note: action.note.trim().slice(0, 500) || undefined }),
+        updatedAt: now,
+      };
+    }
+    case "mark_lost": {
+      if (!isStaff) return new Error("Only the studio closes an enquiry.");
+      if (q.status === "accepted") return new Error("A confirmed booking can't be marked as lost.");
+      if (!Object.hasOwn(LOST_LABEL, action.reason)) return new Error("Choose why the enquiry was lost.");
+      const detail = action.detail.trim().slice(0, 1000);
+      return {
+        ...q,
+        lost: { at: now, by: by.name, reason: action.reason, detail },
+        attention: null,
+        history: log({ action: "lost", note: [LOST_LABEL[action.reason], detail].filter(Boolean).join(" — ") }),
+        updatedAt: now,
+      };
+    }
+    case "revive": {
+      if (!isStaff) return new Error("Only the studio reopens an enquiry.");
+      if (!q.lost) return q;
+      return { ...q, lost: null, history: log({ action: "revived", note: action.note.trim().slice(0, 500) || undefined }), updatedAt: now };
+    }
+    case "production": {
+      if (!isStaff) return new Error("Only the studio updates production.");
+      if (!q.production) return new Error("Production starts once the booking is confirmed.");
+      const p = q.production;
+      const status = action.status ?? p.status;
+      const changed = status !== p.status;
+      const next: Production = {
+        ...p,
+        status,
+        crew: action.crew !== undefined ? action.crew.slice(0, 1000) : p.crew,
+        notes: action.notes !== undefined ? action.notes.slice(0, 3000) : p.notes,
+        dueDate: action.dueDate !== undefined ? action.dueDate : p.dueDate,
+        deliveredAt: status === "delivered" ? p.deliveredAt ?? now : null,
+        log: changed ? [...p.log, { at: now, by: by.name, status, note: action.note?.slice(0, 500) || undefined }] : p.log,
+      };
+      return {
+        ...q,
+        production: next,
+        history: changed ? log({ action: "production", note: PRODUCTION_LABEL[status] }) : q.history,
+        updatedAt: now,
+      };
+    }
+    case "record_payment": {
+      if (!isStaff) return new Error("Only the studio records payments.");
+      if (q.status !== "accepted") return new Error("Payments are recorded against a confirmed booking.");
+      const amount = Math.round(action.amount);
+      if (!Number.isFinite(amount) || amount <= 0 || amount > MAX_PRICE) return new Error("Enter a valid amount.");
+      const entry = { id: action.id, at: action.at, amount, note: action.note.trim().slice(0, 300), by: by.name };
+      return {
+        ...q,
+        payments: [...(q.payments ?? []), entry].sort((a, b) => a.at.localeCompare(b.at)),
+        history: log({ action: "payment", price: amount, note: entry.note || undefined }),
         updatedAt: now,
       };
     }

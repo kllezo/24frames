@@ -5,6 +5,7 @@ import cx from "../studio/cinema.module.css";
 import base from "../studio/studio.module.css";
 import qx from "../studio/quotes/quotes.module.css";
 import px from "./portal.module.css";
+import ix from "./insights.module.css";
 import CommissionSheet from "../studio/CommissionSheet";
 import DeskTop from "./DeskTop";
 import { downloadBlob, useProposalPdf } from "../studio/ProposalPreview";
@@ -14,15 +15,18 @@ import { planningTitles } from "@/lib/commission/planning";
 import type { StudioConfig } from "@/lib/commission/types";
 import {
   CONSULT_LABEL,
+  LOST_LABEL,
+  PRODUCTION_LABEL,
   STATUS_LABEL,
   hasUnsharedChanges,
+  type LostReason,
   type ConsultMode,
   type PortalQuote,
   type PublicAccount,
   type QuoteStatus,
 } from "@/lib/portal/types";
 
-type Tab = "updates" | "inbox" | "approval" | "approved" | "returned" | "shared" | "all";
+type Tab = "updates" | "inbox" | "approval" | "approved" | "returned" | "shared" | "lost" | "all";
 export interface StaffMember {
   id: string;
   name: string;
@@ -52,6 +56,7 @@ const TABS: { id: Tab; label: string; statuses?: QuoteStatus[] }[] = [
   { id: "approved", label: "Approved", statuses: ["approved"] },
   { id: "returned", label: "Returned", statuses: ["rejected"] },
   { id: "shared", label: "Shared with clients", statuses: ["sent", "accepted"] },
+  { id: "lost", label: "Lost" },
   { id: "all", label: "All" },
 ];
 
@@ -72,6 +77,11 @@ const ACTION_LABEL: Record<string, string> = {
   reopened: "Reopened the quotation for changes",
   assigned: "Relationship manager set to",
   consultation: "Logged a guided session",
+  booked: "Confirmed the booking",
+  lost: "Marked the enquiry as lost",
+  revived: "Reopened the lost enquiry",
+  production: "Moved production to",
+  payment: "Recorded a payment",
 };
 
 /* The studio desk: sales review online quotations, set the final price,
@@ -141,8 +151,9 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
   const counts = useMemo(() => {
     const c: Partial<Record<Tab, number>> = {};
     const pool = (quotes ?? []).filter((q) => !mine || q.managerId === me.id);
-    for (const t of TABS) if (t.statuses) c[t.id] = pool.filter((q) => t.statuses!.includes(q.status)).length;
+    for (const t of TABS) if (t.statuses) c[t.id] = pool.filter((q) => !q.lost && t.statuses!.includes(q.status)).length;
     c.updates = pool.filter((q) => q.attention).length;
+    c.lost = pool.filter((q) => q.lost).length;
     return c;
   }, [quotes, mine, me.id]);
 
@@ -152,7 +163,9 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
     return (quotes ?? [])
       .filter((q) => !mine || q.managerId === me.id)
       .filter((q) => q.status !== "draft" || tab === "all")
-      .filter((q) => (tab === "updates" ? !!q.attention : !t?.statuses || t.statuses.includes(q.status)))
+      .filter((q) =>
+        tab === "updates" ? !!q.attention : tab === "lost" ? !!q.lost : tab === "all" ? true : !q.lost && (!t?.statuses || t.statuses.includes(q.status)),
+      )
       .filter(
         (q) =>
           !term ||
@@ -171,20 +184,24 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
       <DeskTop me={me} current="quotes" />
 
       <main className={qx.main}>
-        <div className={qx.head}>
-          <div>
-            <p className={base.kicker}>{me.role === "owner" ? "Founder's desk" : "Sales desk"}</p>
-            <h1 className={qx.title}>
-              Online quotations, <em>from request to yes.</em>
-            </h1>
-          </div>
-          <dl className={qx.stats}>
-            <div><dt>Notifications</dt><dd>{counts.updates ?? "—"}</dd></div>
-            <div><dt>In review</dt><dd>{counts.inbox ?? "—"}</dd></div>
-            <div><dt>Awaiting founder</dt><dd>{counts.approval ?? "—"}</dd></div>
-            <div><dt>Ready to share</dt><dd>{counts.approved ?? "—"}</dd></div>
-          </dl>
-        </div>
+        <section className={ix.hero}>
+          <p className={ix.heroKicker}>{me.role === "owner" ? "Founder's desk" : "Sales desk"} · quotations</p>
+          <h1 className={ix.heroTitle}>
+            Online quotations, <em>from request to yes.</em>
+          </h1>
+          <p className={ix.heroLine}>
+            {me.role === "owner"
+              ? "Review what the team has priced, approve or return it with a comment, and see every enquiry the studio has."
+              : "Your leads' quotations — confirm the selections with the client, set the price and send it to the founder."}
+          </p>
+        </section>
+        <dl className={ix.kpis}>
+          <div className={`${ix.kpi} ${counts.updates ? ix.kpiAccent : ""}`}><dt>Notifications</dt><dd>{counts.updates ?? "—"}</dd></div>
+          <div className={ix.kpi}><dt>In review</dt><dd>{counts.inbox ?? "—"}</dd></div>
+          <div className={ix.kpi}><dt>Awaiting founder</dt><dd>{counts.approval ?? "—"}</dd></div>
+          <div className={ix.kpi}><dt>Ready to share</dt><dd>{counts.approved ?? "—"}</dd></div>
+          <div className={ix.kpi}><dt>Lost</dt><dd>{counts.lost ?? "—"}</dd></div>
+        </dl>
 
         <div className={qx.tools}>
           <div className={px.tabs} role="tablist" aria-label="Quotations">
@@ -239,7 +256,7 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
                         {q.attention && <i className={px.dot} aria-label="New activity" />}
                         {q.reference}
                       </span>
-                      <span className={`${px.chip} ${px[`chip_${q.status}`] ?? ""}`}>{STATUS_LABEL[q.status]}</span>
+                      <span className={`${px.chip} ${px[`chip_${q.status}`] ?? ""}`}>{q.lost ? "Lost" : STATUS_LABEL[q.status]}</span>
                     </span>
                     <span className={px.rowName}>{coupleNames(q.draft.couple, q.clientName)}</span>
                     <span className={px.rowMeta}>
@@ -271,7 +288,7 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
   );
 }
 
-function Detail({
+export function Detail({
   q,
   me,
   config,
@@ -370,6 +387,7 @@ function Detail({
       )}
 
       <ManagerRow q={q} me={me} staff={staff} onDone={onReload} />
+      <Outcome q={q} busy={busy} act={act} />
       <Brief q={q} config={config} />
       <Consultations q={q} busy={busy} act={act} />
 
@@ -475,6 +493,21 @@ function Detail({
             </button>
           </div>
         )}
+        {(q.status === "approved" || q.status === "sent") && (
+          <div className={px.actions}>
+            <button
+              className={base.btnSecondary}
+              disabled={busy}
+              onClick={() => {
+                if (window.confirm("Confirm this booking? The client agreed outside the portal — the production brief is generated for the operations team.")) {
+                  void act("confirm_booking", { note: "" }, "Booking confirmed — the production brief is ready.");
+                }
+              }}
+            >
+              Client agreed — confirm booking
+            </button>
+          </div>
+        )}
 
         <div className={px.actions}>
           <button
@@ -531,6 +564,15 @@ function ManagerRow({ q, me, staff, onDone }: { q: PortalQuote; me: PublicAccoun
     setBusy(false);
     if (res?.ok) await onDone();
     else setErr(((await res?.json().catch(() => ({}))) as { error?: string })?.error ?? "Could not assign.");
+  }
+  if (me.role !== "owner") {
+    return (
+      <section className={px.managerRow}>
+        <span className={px.priceLabel}>Relationship manager</span>
+        <b>{q.managerName ?? "Not assigned yet"}</b>
+        <span className={qx.fine}>Only the founder changes who looks after a client.</span>
+      </section>
+    );
   }
   return (
     <section className={px.managerRow}>
@@ -678,6 +720,134 @@ function Consultations({
           Log session
         </button>
       </div>
+    </section>
+  );
+}
+
+/* Where the enquiry ended up: a confirmed booking (with payments and a
+   link to production), or lost — with the reason — and able to be revived. */
+function Outcome({
+  q,
+  busy,
+  act,
+}: {
+  q: PortalQuote;
+  busy: boolean;
+  act: (action: string, extra?: Record<string, unknown>, ok?: string) => Promise<void>;
+}) {
+  const [reason, setReason] = useState<LostReason>("budget");
+  const [detail, setDetail] = useState("");
+  const [amount, setAmount] = useState("");
+  const [payNote, setPayNote] = useState("");
+  const [payAt, setPayAt] = useState(() => new Date().toISOString().slice(0, 10));
+  const [lostOpen, setLostOpen] = useState(false);
+  const value = q.finalPrice ?? q.quote.grandTotal;
+  const received = (q.payments ?? []).reduce((a, p) => a + p.amount, 0);
+
+  if (q.status === "accepted") {
+    return (
+      <section className={px.pricePanel}>
+        <div className={px.priceRow}>
+          <div>
+            <span className={px.priceLabel}>Booked value</span>
+            <span className={px.priceValue}>{formatINR(value)}</span>
+          </div>
+          <div>
+            <span className={px.priceLabel}>Received</span>
+            <span className={px.priceValue}>{formatINR(received)}</span>
+          </div>
+          <div>
+            <span className={px.priceLabel}>Outstanding</span>
+            <span className={px.priceValue}>{formatINR(Math.max(value - received, 0))}</span>
+          </div>
+        </div>
+        {q.production && (
+          <p className={px.callout}>
+            <b>Production · {PRODUCTION_LABEL[q.production.status]}</b>
+            {q.production.dueDate ? ` · delivery due ${formatDateLong(q.production.dueDate)}` : ""} ·{" "}
+            <a href={`/desk/production?q=${q.id}`} data-no-transition>
+              Open the production brief →
+            </a>
+          </p>
+        )}
+        {(q.payments ?? []).length > 0 && (
+          <ul className={px.consultList}>
+            {(q.payments ?? []).map((p) => (
+              <li key={p.id}>
+                <b>{formatINR(p.amount)}</b> · {formatDateLong(p.at.slice(0, 10))} · {p.by}
+                {p.note && <em> — {p.note}</em>}
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className={px.consultForm}>
+          <input inputMode="numeric" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Amount received (₹)" aria-label="Amount received" />
+          <input type="date" value={payAt} onChange={(e) => setPayAt(e.target.value)} aria-label="Date received" />
+          <input value={payNote} onChange={(e) => setPayNote(e.target.value)} placeholder="Advance, second instalment…" aria-label="Payment note" />
+          <button
+            className={base.btnSecondary}
+            disabled={busy || !Number(amount.replace(/[^\d.]/g, ""))}
+            onClick={async () => {
+              await act("record_payment", { amount: Number(amount.replace(/[^\d.]/g, "")), note: payNote, at: `${payAt}T12:00:00` }, "Payment recorded.");
+              setAmount("");
+              setPayNote("");
+            }}
+          >
+            Record payment
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  if (q.lost) {
+    return (
+      <section className={px.attention} role="status">
+        <div>
+          <b>Lost · {LOST_LABEL[q.lost.reason]}</b> · {formatDateLong(q.lost.at.slice(0, 10))} · {q.lost.by}
+          {q.lost.detail && <p className={px.attentionNote}>“{q.lost.detail}”</p>}
+        </div>
+        <span className={px.attentionActions}>
+          <button className={base.btnSecondary} disabled={busy} onClick={() => act("revive", { note: "" }, "The enquiry is open again.")}>
+            Reopen enquiry
+          </button>
+        </span>
+      </section>
+    );
+  }
+
+  if (q.status === "draft") return null;
+  return (
+    <section className={px.managerRow}>
+      {!lostOpen ? (
+        <button className={base.btnGhost} onClick={() => setLostOpen(true)}>
+          Mark as lost…
+        </button>
+      ) : (
+        <div className={px.consultForm}>
+          <select value={reason} onChange={(e) => setReason(e.target.value as LostReason)} aria-label="Why it was lost">
+            {(Object.keys(LOST_LABEL) as LostReason[]).map((r) => (
+              <option key={r} value={r}>
+                {LOST_LABEL[r]}
+              </option>
+            ))}
+          </select>
+          <input value={detail} onChange={(e) => setDetail(e.target.value)} placeholder="What happened (optional)" aria-label="Details" />
+          <button
+            className={base.btnSecondary}
+            disabled={busy}
+            onClick={async () => {
+              await act("mark_lost", { reason, detail }, "Marked as lost.");
+              setLostOpen(false);
+            }}
+          >
+            Mark lost
+          </button>
+          <button className={base.btnGhost} onClick={() => setLostOpen(false)}>
+            Cancel
+          </button>
+        </div>
+      )}
     </section>
   );
 }

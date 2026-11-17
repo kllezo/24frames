@@ -7,40 +7,37 @@ import FounderRecognitionSection from "@/components/homepage/FounderRecognitionS
 import AsSeenInStrip from "@/components/homepage/AsSeenInStrip";
 import ClientGalleryExperience from "@/components/homepage/ClientGalleryExperience";
 import InvitationCTA from "@/components/homepage/InvitationCTA";
-import HomePreloader from "@/components/homepage/HomePreloader";
 import Ornament from "@/components/ui/Ornament";
 
+/* Running order leads with people: the photograph, then the artist behind
+   it, then the weddings, the collection, recognition, the client
+   experience and an invitation. Native scrolling throughout. */
 export default function HomePage() {
   return (
     <>
-      <HomePreloader />
       <Navigation />
       <main>
-        {/* The First Frame (Cinematic Hero Opening) */}
+        {/* The First Frame */}
         <HeroSection />
 
-        {/* The Vows (Curated Exhibition & Wedding Stories Archive) */}
-        <LivingContactSheet />
-
-        {/* The Collection (Curated Disciplines of Optics) */}
-        <TheCollection />
-
-        <Ornament label="The Artist" />
-
-        {/* The Artist & Visionary (Phani Gogireddy Exact Reference Composition) */}
+        {/* The Artist — Phani Gogireddy, right after the opening photograph */}
         <FounderRecognitionSection />
 
-        {/* Media Recognition & Publication Strip */}
+        {/* The Vows — wedding stories and films */}
+        <LivingContactSheet />
+
+        {/* The Collection */}
+        <TheCollection />
+
+        {/* As seen in */}
         <AsSeenInStrip />
 
         <Ornament label="For our clients" />
 
-        {/* Royal Palace Client Suite — The 24 Frames Client Gallery Experience */}
+        {/* The client gallery experience */}
         <ClientGalleryExperience />
 
-        <Ornament />
-
-        {/* The Lasting Frame (Invitation & Conversation) */}
+        {/* The invitation */}
         <InvitationCTA />
       </main>
       <Footer />

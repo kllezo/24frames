@@ -5,6 +5,7 @@ import { listQuotesForClient, managerCard } from "@/lib/portal/store";
 import { getConfig } from "@/lib/studio/server/repository";
 import { DEFAULT_STUDIO_CONFIG } from "@/lib/commission/defaults";
 import { forClient, publicAccount } from "@/lib/portal/types";
+import { configFor } from "@/lib/portal/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
   } catch (err) {
     issue = (err as Error).message;
   }
-  const config = await getConfig().then((r) => r.config).catch(() => DEFAULT_STUDIO_CONFIG);
+  // A client on a custom rate card only ever receives their own rates.
+  const config = configFor(await getConfig().then((r) => r.config).catch(() => DEFAULT_STUDIO_CONFIG), me);
   return <ClientHome account={publicAccount(me)} manager={manager} quotes={quotes} config={config} sentRef={sent ?? null} updatedRef={updated ?? null} storageIssue={issue} />;
 }

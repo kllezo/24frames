@@ -1,0 +1,416 @@
+/* ============================================================
+   24 FRAMES — FEATURED WORK / CURATORIAL MASTERWORK SALON
+   Distinct Split Composition: Monumental Canvas + Curatorial Rail
+   ============================================================ */
+
+.section {
+  position: relative;
+  width: 100%;
+  padding: clamp(4.5rem, 8vh, 7.5rem) 0;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ── Section Header ─────────────────────────────────── */
+.header {
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 5vh, 4rem);
+  max-width: 780px;
+  margin-inline: auto;
+  will-change: transform, opacity;
+}
+
+.headerMeta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: #6B2733;
+}
+
+.salonBadge {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #77766E;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+}
+
+.title {
+  font-family: var(--font-cinema);
+  font-size: var(--fs-section-title);
+  font-weight: 500;
+  letter-spacing: var(--ls-cinema);
+  text-transform: uppercase;
+  color: #20231F;
+  line-height: 1.12;
+  margin-bottom: 0.65rem;
+}
+
+.subtitle {
+  font-family: var(--font-editorial);
+  font-size: var(--fs-subtitle);
+  font-weight: 400;
+  font-style: italic;
+  color: #77766E;
+  max-width: 620px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* ── The Curatorial Salon Stage ─────────────────────── */
+.salonStage {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: clamp(2rem, 3.5vw, 3.5rem);
+  align-items: start;
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+/* ── Left: Masterwork Focal Canvas ───────────────────── */
+.focalCanvas {
+  width: 100%;
+}
+
+.focalFrameWrap {
+  background: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: clamp(1.25rem, 2vw, 2rem);
+  box-shadow: 0 16px 45px rgba(71, 26, 32, 0.06);
+  will-change: transform, opacity;
+}
+
+.focalMetaBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.focalFrameNo {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #6B2733;
+  letter-spacing: 0.1em;
+}
+
+.focalYear {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: #77766E;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.focalLiveBadge {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #C8A84E;
+  background: rgba(200, 168, 78, 0.1);
+  border: 1px solid rgba(200, 168, 78, 0.35);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.focalImageContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #EFECE6;
+}
+
+.focalImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.focalFrameWrap:hover .focalImage {
+  transform: scale(1.02);
+}
+
+/* Editorial Masterwork Details */
+.focalDetails {
+  margin-top: 1.5rem;
+}
+
+.focalCategory {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6B2733;
+  font-weight: 700;
+}
+
+.focalTitle {
+  font-family: var(--font-cinema);
+  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #20231F;
+  margin: 0.25rem 0 0.2rem;
+  line-height: 1.15;
+}
+
+.focalSubtitle {
+  font-family: var(--font-editorial);
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  font-style: italic;
+  color: #77766E;
+  margin-bottom: 0.85rem;
+}
+
+.focalStory {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #555850;
+  margin-bottom: 1.25rem;
+}
+
+.focalFooterRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--color-border);
+  padding-top: 1.15rem;
+}
+
+.focalSpecs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.specItem {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: #77766E;
+  letter-spacing: 0.04em;
+}
+
+.specKey {
+  color: #6B2733;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-right: 0.35rem;
+}
+
+.exploreBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.4rem;
+  background: #6B2733;
+  color: #FAF8F2;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: var(--ls-nav);
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(71, 26, 32, 0.2);
+}
+
+.exploreBtn:hover {
+  background: #2D0F13;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(71, 26, 32, 0.28);
+}
+
+.btnArrow {
+  transition: transform 0.2s ease;
+}
+
+.exploreBtn:hover .btnArrow {
+  transform: translateX(3px);
+}
+
+/* ── Right: Curatorial Index Rail ─────────────────────── */
+.curatorialIndex {
+  width: 100%;
+}
+
+.indexHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.indexHeaderLabel {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6B2733;
+}
+
+.indexCount {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  color: #77766E;
+}
+
+.indexList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.indexCard {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  padding: 0.85rem 1.15rem;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.indexCard:hover {
+  background: #FFFFFF;
+  border-color: #6B2733;
+  transform: translateX(4px);
+  box-shadow: 0 6px 20px rgba(71, 26, 32, 0.08);
+}
+
+.indexCardActive {
+  background: #FFFFFF !important;
+  border-color: #6B2733 !important;
+  box-shadow: 0 10px 28px rgba(71, 26, 32, 0.12) !important;
+  transform: translateX(4px);
+}
+
+.indexThumbWrap {
+  width: 88px;
+  height: 64px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #EFECE6;
+}
+
+.indexThumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.indexInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.indexTopRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.indexNumber {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #6B2733;
+}
+
+.indexYear {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: #77766E;
+  letter-spacing: 0.05em;
+}
+
+.indexTitle {
+  font-family: var(--font-cinema);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #20231F;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.indexLocation {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: #77766E;
+  margin-top: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activeIndicator {
+  position: absolute;
+  right: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 3.5px;
+  background: #6B2733;
+  border-radius: 2px 0 0 2px;
+}
+
+/* ── Responsive Adaptations ────────────────────────── */
+@media (max-width: 960px) {
+  .salonStage {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}

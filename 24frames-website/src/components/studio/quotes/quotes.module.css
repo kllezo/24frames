@@ -86,9 +86,10 @@
 }
 
 .main {
-  width: min(1180px, calc(100% - 2 * clamp(16px, 4vw, 40px)));
+  width: min(1280px, calc(100% - 2 * clamp(16px, 4vw, 48px)));
   margin: 0 auto;
-  padding-top: clamp(2rem, 5vw, 3.5rem);
+  padding-top: clamp(2.4rem, 5vw, 4rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
 }
 
 .head {

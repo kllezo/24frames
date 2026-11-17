@@ -147,6 +147,16 @@ create table if not exists portal.access (
   updated_at  timestamptz not null default now()
 );
 
+-- Notifications, follow-ups, price links and sales settings — one row per document.
+create table if not exists portal.docs (
+  kind        text not null,
+  id          text not null,
+  data        jsonb not null,
+  updated_at  timestamptz not null default now(),
+  primary key (kind, id)
+);
+
+alter table portal.docs     enable row level security;
 alter table portal.accounts enable row level security;
 alter table portal.access   enable row level security;
 alter table portal.quotes   enable row level security;

@@ -2,10 +2,12 @@ import { getConfig } from "@/lib/studio/server/repository";
 import { validateDraftForSubmit } from "@/lib/commission/validation";
 import { randomUUID } from "node:crypto";
 import { getAccount, getQuote, managerCard, mutateQuote } from "@/lib/portal/store";
-import { body, deskAllowed, json, portalError, requireRole, sameOrigin } from "@/lib/portal/guard";
+import { body, deskAllowed, json, leadVisible, portalError, requireRole, sameOrigin } from "@/lib/portal/guard";
+import { configFor } from "@/lib/portal/pricing";
+import { notify } from "@/lib/portal/notify";
 import { prepareClientDraft } from "@/lib/portal/drafts";
 import { applyAction, type QuoteAction } from "@/lib/portal/workflow";
-import { CONSULT_LABEL, forClient, type ConsultMode, type PortalAccount, type PortalQuote } from "@/lib/portal/types";
+import { CONSULT_LABEL, LOST_LABEL, PRODUCTION_LABEL, forClient, type ConsultMode, type LostReason, type PortalAccount, type PortalQuote, type ProductionStatus } from "@/lib/portal/types";
 import type { CommissionDraft } from "@/lib/commission/types";
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -19,7 +21,9 @@ export async function GET(_request: Request, ctx: Ctx) {
   const { id } = await ctx.params;
   try {
     const q = await getQuote(id);
-    if (!q || (me.role === "client" && q.clientId !== me.id)) return json({ error: "Quotation not found." }, 404);
+    if (!q || (me.role === "client" && q.clientId !== me.id) || (me.role !== "client" && !leadVisible(me, q.managerId))) {
+      return json({ error: "Quotation not found." }, 404);
+    }
     return json({ quote: await view(q, me) });
   } catch (err) {
     return portalError(err);
@@ -42,6 +46,13 @@ export async function POST(request: Request, ctx: Ctx) {
     managerId?: string | null;
     mode?: string;
     at?: string;
+    reason?: string;
+    detail?: string;
+    status?: string;
+    crew?: string;
+    notes?: string;
+    dueDate?: string | null;
+    amount?: number;
   }>(request);
   if (!b?.action) return json({ error: "Missing action." }, 400);
 
@@ -49,7 +60,7 @@ export async function POST(request: Request, ctx: Ctx) {
     let action: QuoteAction;
     if (b.action === "save" || b.action === "submit") {
       if (!b.draft || typeof b.draft !== "object") return json({ error: "Missing selections." }, 400);
-      const { config } = await getConfig();
+      const config = configFor((await getConfig()).config, me);
       const { draft, quote } = prepareClientDraft(b.draft, config);
       if (b.action === "submit") {
         const issues = validateDraftForSubmit(draft, config);
@@ -88,16 +99,56 @@ export async function POST(request: Request, ctx: Ctx) {
       if (!Object.hasOwn(CONSULT_LABEL, mode)) return json({ error: "Choose how the session took place." }, 422);
       const at = typeof b.at === "string" && !Number.isNaN(Date.parse(b.at)) ? new Date(b.at).toISOString() : new Date().toISOString();
       action = { type: "log_consultation", id: randomUUID(), mode, at, note: String(b.note ?? "") };
+    } else if (b.action === "confirm_booking") {
+      action = { type: "confirm_booking", note: String(b.note ?? "") };
+    } else if (b.action === "mark_lost") {
+      const reason = String(b.reason ?? "") as LostReason;
+      if (!Object.hasOwn(LOST_LABEL, reason)) return json({ error: "Choose why the enquiry was lost." }, 422);
+      action = { type: "mark_lost", reason, detail: String(b.detail ?? "") };
+    } else if (b.action === "revive") {
+      action = { type: "revive", note: String(b.note ?? "") };
+    } else if (b.action === "production") {
+      const status = b.status === undefined ? undefined : (String(b.status) as ProductionStatus);
+      if (status !== undefined && !Object.hasOwn(PRODUCTION_LABEL, status)) return json({ error: "Unknown production stage." }, 422);
+      const dueDate = b.dueDate === undefined ? undefined : b.dueDate && /^\d{4}-\d{2}-\d{2}$/.test(b.dueDate) ? b.dueDate : null;
+      action = {
+        type: "production",
+        status,
+        crew: b.crew === undefined ? undefined : String(b.crew),
+        notes: b.notes === undefined ? undefined : String(b.notes),
+        dueDate,
+        note: String(b.note ?? ""),
+      };
+    } else if (b.action === "record_payment") {
+      const amount = Number(b.amount);
+      if (!Number.isFinite(amount) || amount <= 0) return json({ error: "Enter a valid amount." }, 422);
+      const at = typeof b.at === "string" && !Number.isNaN(Date.parse(b.at)) ? new Date(b.at).toISOString() : new Date().toISOString();
+      action = { type: "record_payment", id: randomUUID(), amount, note: String(b.note ?? ""), at };
     } else {
       return json({ error: "Unknown action." }, 400);
     }
 
+    // Booking confirmations need the delivery tier to date the production timeline.
+    let deliveryDays: number | null = null;
+    if (action.type === "accept" || action.type === "confirm_booking") {
+      const { config } = await getConfig();
+      const cur = await getQuote(id);
+      deliveryDays = config.deliveryTiers.find((t) => t.id === cur?.draft.deliveryTierId)?.days ?? null;
+    }
+
     const result = await mutateQuote(id, (q) => {
       if (me.role === "client" && q.clientId !== me.id) return new Error("Quotation not found.");
-      return applyAction(q, action, me);
+      if (me.role !== "client" && !leadVisible(me, q.managerId)) return new Error("Quotation not found.");
+      return applyAction(q, action, me, undefined, deliveryDays);
     });
     if (result === null) return json({ error: "Quotation not found." }, 404);
     if (result instanceof Error) return json({ error: result.message }, 409);
+    if ((action.type === "accept" || action.type === "confirm_booking") && result.managerId && result.managerId !== me.id) {
+      await notify([result.managerId], "booking", `${result.clientName}'s booking (${result.reference}) is confirmed — the production brief is ready.`, {
+        quoteId: result.id,
+        clientId: result.clientId,
+      });
+    }
     return json({ quote: await view(result, me) });
   } catch (err) {
     return portalError(err);

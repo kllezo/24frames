@@ -38,7 +38,7 @@ const ACHIEVEMENTS: Achievement[] = [
     linkUrl: "https://www.youtube.com/shorts/Lh45ZBRJ1b8",
     linkText: "Watch ceremony →",
     shelf: 0,
-    color: "#164B40",
+    color: "#6B2733",
   },
   {
     id: "nikon",
@@ -66,7 +66,7 @@ const ACHIEVEMENTS: Achievement[] = [
     linkUrl: "https://www.wedmegood.com/profile/24framesphotography-174332",
     linkText: "View profile →",
     shelf: 1,
-    color: "#2E6F62",
+    color: "#6A333A",
   },
   {
     id: "indigo",
@@ -78,7 +78,7 @@ const ACHIEVEMENTS: Achievement[] = [
     description: "National reality competition celebrating pure, unmanipulated optical storytelling and cultural street documentation without synthetic retouching. Won through raw framing talent and documentary vision.",
     image: "https://images.unsplash.com/photo-1504151932400-72d4384f04b3?w=800&q=80&auto=format",
     shelf: 1,
-    color: "#4D8F80",
+    color: "#8A5259",
   },
   {
     id: "natgeo",

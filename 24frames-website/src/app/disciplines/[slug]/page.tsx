@@ -101,11 +101,11 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
                   >
                     {/* Concentric rings */}
                     <circle cx="200" cy="200" r="190" stroke="#D4AF37" strokeWidth="0.75" strokeDasharray="3 4" opacity="0.5" />
-                    <circle cx="200" cy="200" r="176" stroke="#8EA89D" strokeWidth="0.8" opacity="0.4" />
+                    <circle cx="200" cy="200" r="176" stroke="#A69093" strokeWidth="0.8" opacity="0.4" />
                     <circle cx="200" cy="200" r="150" stroke="#D4AF37" strokeWidth="0.75" opacity="0.6" />
-                    <circle cx="200" cy="200" r="120" stroke="#8EA89D" strokeWidth="0.75" strokeDasharray="2 3" opacity="0.5" />
+                    <circle cx="200" cy="200" r="120" stroke="#A69093" strokeWidth="0.75" strokeDasharray="2 3" opacity="0.5" />
                     <circle cx="200" cy="200" r="80" stroke="#D4AF37" strokeWidth="0.75" opacity="0.6" />
-                    <circle cx="200" cy="200" r="45" stroke="#8EA89D" strokeWidth="0.8" opacity="0.5" />
+                    <circle cx="200" cy="200" r="45" stroke="#A69093" strokeWidth="0.8" opacity="0.5" />
                     <circle cx="200" cy="200" r="16" stroke="#D4AF37" strokeWidth="1" opacity="0.8" />
                     <circle cx="200" cy="200" r="4" fill="#D4AF37" opacity="0.9" />
 
@@ -114,7 +114,7 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
                       <g key={deg} transform={`rotate(${deg} 200 200)`}>
                         <line x1="200" y1="200" x2="200" y2="10" stroke="#D4AF37" strokeWidth="0.6" opacity="0.45" />
                         <circle cx="200" cy="24" r="2.5" fill="#D4AF37" opacity="0.7" />
-                        <circle cx="200" cy="50" r="1.5" fill="#8EA89D" opacity="0.6" />
+                        <circle cx="200" cy="50" r="1.5" fill="#A69093" opacity="0.6" />
                         {/* Elegant Petal Arcs */}
                         <path
                           d="M 200 80 C 185 115 185 140 200 150 C 215 140 215 115 200 80 Z"
@@ -125,7 +125,7 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
                         />
                         <path
                           d="M 200 120 C 175 145 175 170 200 180 C 225 170 225 145 200 120 Z"
-                          stroke="#8EA89D"
+                          stroke="#A69093"
                           strokeWidth="0.6"
                           opacity="0.4"
                           fill="none"
@@ -142,7 +142,7 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
                     />
                     <polygon
                       points="200,80 285,115 320,200 285,285 200,320 115,285 80,200 115,115"
-                      stroke="#8EA89D"
+                      stroke="#A69093"
                       strokeWidth="0.6"
                       opacity="0.3"
                     />

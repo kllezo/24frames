@@ -2,7 +2,8 @@ import { randomUUID } from "node:crypto";
 import { getConfig } from "@/lib/studio/server/repository";
 import { createDraft } from "@/lib/commission/model";
 import { getAccount, insertQuote, listAllQuotes, listQuotesForClient, managerCard, newQuoteReference } from "@/lib/portal/store";
-import { json, portalError, requireRole, sameOrigin } from "@/lib/portal/guard";
+import { json, leadVisible, portalError, requireRole, sameOrigin } from "@/lib/portal/guard";
+import { configFor } from "@/lib/portal/pricing";
 import { prepareClientDraft } from "@/lib/portal/drafts";
 import { forClient, type PortalQuote } from "@/lib/portal/types";
 
@@ -14,7 +15,7 @@ export async function GET() {
       const manager = await managerCard(me.managerId);
       return json({ quotes: (await listQuotesForClient(me.id)).map((q) => forClient(q, manager)) });
     }
-    return json({ quotes: await listAllQuotes() });
+    return json({ quotes: (await listAllQuotes()).filter((q) => leadVisible(me, q.managerId)) });
   } catch (err) {
     return portalError(err);
   }
@@ -30,7 +31,7 @@ export async function POST(request: Request) {
     if (existing.filter((q) => q.status === "draft").length >= 10) {
       return json({ error: "You have several quotations in progress — please continue one of those." }, 429);
     }
-    const { config } = await getConfig();
+    const config = configFor((await getConfig()).config, me);
     const blank = createDraft(config);
     blank.couple = { ...blank.couple, phone: me.phone, email: me.email };
     const { draft, quote } = prepareClientDraft(blank, config);

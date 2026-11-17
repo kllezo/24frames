@@ -5,6 +5,7 @@ import { getQuote, managerCard } from "@/lib/portal/store";
 import { getConfig } from "@/lib/studio/server/repository";
 import { DEFAULT_STUDIO_CONFIG } from "@/lib/commission/defaults";
 import { forClient } from "@/lib/portal/types";
+import { configFor } from "@/lib/portal/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ export default async function ClientQuotePage({ params }: { params: Promise<{ id
   let storageIssue: string | null = null;
   let config = DEFAULT_STUDIO_CONFIG;
   try {
-    config = (await getConfig()).config;
+    config = configFor((await getConfig()).config, me);
   } catch (err) {
     storageIssue = (err as Error).message;
   }

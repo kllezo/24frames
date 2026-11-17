@@ -2,14 +2,14 @@
    24 FRAMES — CHAPTER 03: THE COLLECTION
    Deliberate Editorial Showcase (6 Curated Practices of Optics)
    Palette: Warm Ivory (#FAF8F2), Pure Architectural White (#FFFFFF),
-   Kllezo Green (#09453e), Champagne Highlights (#C8A84E, #D4AF37), Charcoal (#181C1A)
+   Kllezo Green (#5B1F2A), Champagne Highlights (#C8A84E, #D4AF37), Charcoal (#181C1A)
    ═══════════════════════════════════════════════════════════════════════ */
 
 .section {
   position: relative;
   background-color: var(--color-bg, #FAF8F2);
   padding: clamp(1.75rem, 2.8vw, 2.5rem) 0 clamp(3.5rem, 5.5vw, 5rem) 0;
-  border-top: 1px solid rgba(9, 69, 62, 0.08);
+  border-top: 1px solid rgba(91, 31, 42, 0.08);
   scroll-margin-top: 5rem;
 }
 
@@ -62,22 +62,22 @@
   font-weight: 400;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
 }
 
 .curatorialBadge {
   display: inline-flex;
   align-items: center;
   padding: 0.2rem 0.65rem;
-  background: rgba(9, 69, 62, 0.06);
-  border: 1px solid rgba(9, 69, 62, 0.16);
+  background: rgba(91, 31, 42, 0.06);
+  border: 1px solid rgba(91, 31, 42, 0.16);
   border-radius: 999px;
   font-family: var(--font-body, Inter, sans-serif);
   font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
 }
 
 .title {
@@ -92,7 +92,7 @@
 
 .cursiveAccent {
   font-family: var(--font-cursive, Allura, cursive);
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   font-weight: 400;
   font-size: 1.22em;
   text-transform: none;
@@ -115,10 +115,10 @@
 /* ── Outer Showcase Frame (Architectural Contrast & Clean Isolation) ─── */
 .showcaseContainer {
   background: #FFFFFF;
-  border: 1px solid rgba(9, 69, 62, 0.12);
+  border: 1px solid rgba(91, 31, 42, 0.12);
   border-radius: 4px;
   padding: clamp(0.75rem, 1.2vw, 1.1rem);
-  box-shadow: 0 16px 44px rgba(9, 69, 62, 0.06);
+  box-shadow: 0 16px 44px rgba(91, 31, 42, 0.06);
   width: 100%;
 }
 
@@ -138,7 +138,7 @@
   overflow: hidden;
   cursor: pointer;
   outline: none;
-  background: #0D1612;
+  background: #150E0F;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   flex: 1 1 0%;
   min-width: 0;
@@ -151,7 +151,7 @@
 }
 
 .card:focus-visible {
-  box-shadow: 0 0 0 3px var(--color-kllezo-green, #09453e);
+  box-shadow: 0 0 0 3px var(--color-kllezo-green, #5B1F2A);
 }
 
 /* Inactive Collapsed Card (Balanced, Never Squeezed Slivers) */
@@ -352,14 +352,14 @@
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(7, 13, 10, 0.94) 0%,
-    rgba(7, 13, 10, 0.68) 34%,
-    rgba(7, 13, 10, 0.15) 58%,
+    rgba(13, 7, 8, 0.94) 0%,
+    rgba(13, 7, 8, 0.68) 34%,
+    rgba(13, 7, 8, 0.15) 58%,
     transparent 75%
   ),
   linear-gradient(
     to bottom,
-    rgba(7, 13, 10, 0.35) 0%,
+    rgba(13, 7, 8, 0.35) 0%,
     transparent 22%
   );
   pointer-events: none;
@@ -370,13 +370,13 @@
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(7, 13, 10, 0.90) 0%,
-    rgba(7, 13, 10, 0.45) 36%,
+    rgba(13, 7, 8, 0.90) 0%,
+    rgba(13, 7, 8, 0.45) 36%,
     transparent 62%
   ),
   linear-gradient(
     to bottom,
-    rgba(7, 13, 10, 0.35) 0%,
+    rgba(13, 7, 8, 0.35) 0%,
     transparent 20%
   );
   pointer-events: none;
@@ -523,7 +523,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  background: var(--color-kllezo-green, #09453e);
+  background: var(--color-kllezo-green, #5B1F2A);
   color: #FFFFFF;
   padding: 0.65rem 1.35rem;
   border-radius: 999px;
@@ -539,9 +539,9 @@
 }
 
 .btnPrimary:hover {
-  background: #06312c;
+  background: #2e090e;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.4);
+  box-shadow: 0 8px 24px rgba(91, 31, 42, 0.4);
 }
 
 .arrowIcon {
@@ -640,7 +640,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  background: var(--color-kllezo-green, #09453e);
+  background: var(--color-kllezo-green, #5B1F2A);
   color: #FFFFFF;
   padding: 0.45rem clamp(0.65rem, 0.9vw, 0.95rem);
   border-radius: 999px;
@@ -658,7 +658,7 @@
 }
 
 .compactBtn:hover {
-  background: #06312c;
+  background: #2e090e;
   transform: translateY(-1px);
 }
 
@@ -697,7 +697,7 @@
 .headerCursiveQuote {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(1.05rem, 1.25vw, 1.25rem);
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   margin: 0.85rem 0 0 0;
   line-height: 1.35;
   font-weight: 400;
@@ -716,7 +716,7 @@
 .bottomCursiveQuote {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(1.05rem, 1.25vw, 1.25rem);
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   text-align: center;
   margin: 0;
   line-height: 1.4;
@@ -746,13 +746,13 @@
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-kllezo-green, #09453e);
+  color: var(--color-kllezo-green, #5B1F2A);
   text-decoration: none;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .discreetArchiveLink:hover {
-  color: #06312c;
+  color: #2e090e;
   transform: translateX(2px);
 }
 
@@ -808,7 +808,7 @@
     overflow: hidden;
     background: #FAF7F0;
     border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 10px 30px rgba(9, 69, 62, 0.05);
+    box-shadow: 0 10px 30px rgba(91, 31, 42, 0.05);
   }
 
   .accordionTrack {
@@ -926,7 +926,7 @@
     font-size: 0.6rem;
     padding: 0.25rem 0.65rem;
     border-radius: 9999px;
-    background: rgba(14, 20, 18, 0.45);
+    background: rgba(20, 14, 15, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.25);
     color: #FAF8F2;
   }

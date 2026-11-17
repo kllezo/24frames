@@ -33,7 +33,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--ls-mono);
-  color: #164B40;
+  color: #6B2733;
 }
 
 .citationBadge {
@@ -99,13 +99,13 @@
 }
 
 .card:hover {
-  border-color: #164B40;
-  box-shadow: 0 18px 45px rgba(22, 75, 64, 0.12);
+  border-color: #6B2733;
+  box-shadow: 0 18px 45px rgba(71, 26, 32, 0.12);
   transform: translateY(-4px);
 }
 
 .card:focus-visible {
-  outline: 2px solid #164B40;
+  outline: 2px solid #6B2733;
   outline-offset: 2px;
 }
 
@@ -124,7 +124,7 @@
 
 .type_testimonial {
   background: #FFFFFF;
-  border-left: 3px solid #164B40;
+  border-left: 3px solid #6B2733;
 }
 
 .cardImageWrap {
@@ -177,7 +177,7 @@
   font-size: 0.59375rem;
   font-weight: 700;
   letter-spacing: var(--ls-mono);
-  color: #164B40;
+  color: #6B2733;
 }
 
 .cardYear {
@@ -233,7 +233,7 @@
   font-family: var(--font-mono);
   font-size: 0.625rem;
   letter-spacing: var(--ls-mono);
-  color: #164B40;
+  color: #6B2733;
   text-transform: uppercase;
   font-weight: 700;
 }
@@ -262,13 +262,13 @@
 }
 
 .viewAll:hover {
-  border-color: #164B40;
-  color: #164B40;
+  border-color: #6B2733;
+  color: #6B2733;
   transform: translateY(-2px);
 }
 
 .arrow {
-  color: #164B40;
+  color: #6B2733;
   transition: transform 0.2s ease;
 }
 

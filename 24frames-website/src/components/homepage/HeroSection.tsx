@@ -4,7 +4,6 @@ import { useRef, useEffect } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import HeroLogoTransition from "./HeroLogoTransition";
 import styles from "./HeroSection.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -103,7 +102,7 @@ export default function HeroSection() {
 
         {/* Top Eyebrow Tag Row (Metadata Edition Only — First Frame Pill Removed) */}
         <div ref={topBarRef} className={styles.frameTopBar}>
-          <span className={styles.frameEdition}>HYDERABAD · PALACE COMMISSION</span>
+          <span className={styles.frameEdition}>Wedding photography &amp; films · Hyderabad</span>
         </div>
 
         {/* Editorial Headline Overlay */}
@@ -119,28 +118,19 @@ export default function HeroSection() {
         {/* Bottom Bar: Frame Metadata & Scroll Prompt */}
         <div ref={metadataRef} className={styles.frameBottomBar}>
           <div className={styles.filmMetadata}>
-            <span className={styles.filmStock}>OPTICAL CINEMA PRIMES · 24 FRAMES ARCHIVE</span>
-            <span className={styles.filmSubject}>HRITHIKA &amp; ABHISHEK · NINE-SCENE UNION</span>
+            <span className={styles.filmSubject}>Hrithika &amp; Abhishek · Hyderabad</span>
           </div>
 
           <Link
-            href="/#vows"
+            href="/#artist"
             className={styles.scrollDownBtn}
-            aria-label="Scroll to The Vows chapter"
+            aria-label="Meet the artist"
           >
-            <span>EXPLORE THE LIVING CINEMA</span>
+            <span>Meet the artist</span>
             <span className={styles.arrowIcon} aria-hidden="true">↓</span>
           </Link>
         </div>
 
-        {/* ── Pure Hero Image → 24 FRAMES Logo Cinematic Transition ── */}
-        <HeroLogoTransition
-          heroSectionRef={sectionRef}
-          heroImageRef={heroImgRef}
-          headlineRef={headlineRef}
-          metadataRef={metadataRef}
-          topBarRef={topBarRef}
-        />
       </div>
     </section>
   );

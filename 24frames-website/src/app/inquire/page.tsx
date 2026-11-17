@@ -10,7 +10,7 @@ import styles from "./Inquire.module.css";
 /* ════════════════════════════════════════════════════════════════════════════
    24 FRAMES — THE COMMISSION ATELIER
    A bespoke, royal wedding photography and cinema commissioning journey.
-   Warm Ivory, Parchment, Deep Forest Green (#09453E), Antique Gold (#C8A84E).
+   Warm Ivory, Parchment, Deep Forest Green (#5B1F2A), Antique Gold (#C8A84E).
    ════════════════════════════════════════════════════════════════════════════ */
 
 export interface EventTimelineEntry {

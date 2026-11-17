@@ -1,13 +1,13 @@
 /* ============================================================
    24 FRAMES — THE COMMISSION ATELIER
    Luxury Wedding Photography & Master Cinema Commissioning Suite
-   Warm Ivory, Parchment, Deep Forest Green (#09453E), Gold (#C8A84E)
+   Warm Ivory, Parchment, Deep Forest Green (#5B1F2A), Gold (#C8A84E)
    ============================================================ */
 
 .atelierPage {
   min-height: 100vh;
   background-color: #FAF7F0;
-  background-image: radial-gradient(rgba(35, 45, 40, 0.08) 1.25px, transparent 1.25px);
+  background-image: radial-gradient(rgba(44, 36, 37, 0.08) 1.25px, transparent 1.25px);
   background-size: 26px 26px;
   color: #141713;
   display: flex;
@@ -24,7 +24,7 @@
   background: rgba(250, 247, 240, 0.94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(9, 69, 62, 0.1);
+  border-bottom: 1px solid rgba(91, 31, 42, 0.1);
 }
 
 .headerInner {
@@ -52,7 +52,7 @@
 
 .checkSymbol {
   font-size: 0.85rem;
-  color: #09453E;
+  color: #5B1F2A;
   font-weight: 700;
   line-height: 1;
 }
@@ -72,7 +72,7 @@
 
 .backArrow {
   font-size: 0.95rem;
-  color: #09453E;
+  color: #5B1F2A;
   font-weight: 600;
 }
 
@@ -81,7 +81,7 @@
   font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: 0.16em;
-  color: #09453E;
+  color: #5B1F2A;
 }
 
 .archiveLabel {
@@ -91,7 +91,7 @@
   letter-spacing: 0.2em;
   color: #727A74;
   padding-left: 0.45rem;
-  border-left: 1px solid rgba(9, 69, 62, 0.2);
+  border-left: 1px solid rgba(91, 31, 42, 0.2);
   line-height: 1;
 }
 
@@ -106,8 +106,8 @@
   font-weight: 600;
   letter-spacing: 0.16em;
   color: #6A7770;
-  background: rgba(9, 69, 62, 0.05);
-  border: 1px solid rgba(9, 69, 62, 0.12);
+  background: rgba(91, 31, 42, 0.05);
+  border: 1px solid rgba(91, 31, 42, 0.12);
   padding: 0.3rem 0.75rem;
   border-radius: 9999px;
 }
@@ -118,8 +118,8 @@
    Inactive stages: collapsed compact circular number (①, ②, ③, ④)
    ───────────────────────────────────────────────────────────── */
 .editorialJourneyTracker {
-  border-top: 1px solid rgba(9, 69, 62, 0.08);
-  border-bottom: 1px solid rgba(9, 69, 62, 0.08);
+  border-top: 1px solid rgba(91, 31, 42, 0.08);
+  border-bottom: 1px solid rgba(91, 31, 42, 0.08);
   background: #F4EFE6;
   padding: 0.65rem 0;
 }
@@ -143,7 +143,7 @@
 .journeyConnector {
   width: clamp(20px, 4vw, 44px);
   height: 1px;
-  background: rgba(9, 69, 62, 0.15);
+  background: rgba(91, 31, 42, 0.15);
   transition: background-color 0.3s ease;
 }
 
@@ -172,11 +172,11 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: #09453E;
+  background: #5B1F2A;
   color: #FBF5E9;
   padding: 0.38rem 0.95rem;
   border-radius: 9999px;
-  box-shadow: 0 4px 14px rgba(9, 69, 62, 0.18);
+  box-shadow: 0 4px 14px rgba(91, 31, 42, 0.18);
 }
 
 .activeStepDot {
@@ -209,7 +209,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(9, 69, 62, 0.2);
+  border: 1px solid rgba(91, 31, 42, 0.2);
   background: #FAF7F0;
   transition: all 0.2s ease;
 }
@@ -221,18 +221,18 @@
 }
 
 .journeyStepComplete .collapsedCircle {
-  border-color: #09453E;
-  background: rgba(9, 69, 62, 0.08);
+  border-color: #5B1F2A;
+  background: rgba(91, 31, 42, 0.08);
 }
 
 .journeyStepComplete .circleSymbol {
-  color: #09453E;
+  color: #5B1F2A;
   font-weight: 600;
 }
 
 .journeyStepComplete:hover .collapsedCircle {
-  background: #09453E;
-  border-color: #09453E;
+  background: #5B1F2A;
+  border-color: #5B1F2A;
 }
 
 .journeyStepComplete:hover .circleSymbol {
@@ -241,7 +241,7 @@
 
 .journeyStepUpcoming .collapsedCircle {
   opacity: 0.55;
-  border-color: rgba(9, 69, 62, 0.12);
+  border-color: rgba(91, 31, 42, 0.12);
 }
 
 .journeyStepNumber {
@@ -258,7 +258,7 @@
 }
 
 .journeyTabActive .journeyStepNumber {
-  background: #09453E;
+  background: #5B1F2A;
   color: #FFFFFF;
 }
 
@@ -291,18 +291,18 @@
 
 .invitationCard {
   background: #FFFFFF;
-  border: 1px solid rgba(9, 69, 62, 0.12);
+  border: 1px solid rgba(91, 31, 42, 0.12);
   border-radius: 24px;
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr 1.15fr;
-  box-shadow: 0 20px 60px rgba(9, 69, 62, 0.08);
+  box-shadow: 0 20px 60px rgba(91, 31, 42, 0.08);
 }
 
 .invitationMediaSide {
   position: relative;
   min-height: 520px;
-  background: #0E1613;
+  background: #150F10;
 }
 
 .invitationHeroImg {
@@ -319,9 +319,9 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(14, 22, 19, 0.3) 0%,
+    rgba(21, 15, 16, 0.3) 0%,
     transparent 40%,
-    rgba(14, 22, 19, 0.65) 100%
+    rgba(21, 15, 16, 0.65) 100%
   );
 }
 
@@ -334,7 +334,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.4rem 0.85rem;
-  background: rgba(14, 22, 19, 0.7);
+  background: rgba(21, 15, 16, 0.7);
   backdrop-filter: blur(8px);
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -380,7 +380,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #09453E;
+  color: #5B1F2A;
 }
 
 .invitationTitle {
@@ -447,7 +447,7 @@
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #09453E;
+  color: #5B1F2A;
   margin: 0;
 }
 
@@ -492,7 +492,7 @@
   gap: 1.25rem;
   padding-bottom: 0.85rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid rgba(9, 69, 62, 0.12);
+  border-bottom: 1px solid rgba(91, 31, 42, 0.12);
   width: 100%;
 }
 
@@ -511,7 +511,7 @@
   align-items: center;
   justify-content: space-between;
   padding-top: 2rem;
-  border-top: 1px solid rgba(9, 69, 62, 0.14);
+  border-top: 1px solid rgba(91, 31, 42, 0.14);
   margin-top: 2rem;
 }
 
@@ -533,7 +533,7 @@
 }
 
 .backStepQuietBtn:hover {
-  color: #09453E;
+  color: #5B1F2A;
   transform: translateX(-3px);
 }
 
@@ -543,7 +543,7 @@
 }
 
 .primaryAtelierBtn {
-  background: #09453E;
+  background: #5B1F2A;
   color: #FFFFFF;
   border: none;
   border-radius: 9999px;
@@ -557,19 +557,19 @@
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.28);
+  box-shadow: 0 8px 24px rgba(91, 31, 42, 0.28);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
 }
 
 .primaryAtelierBtn:hover {
-  background: #06312C;
+  background: #2E090E;
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(9, 69, 62, 0.38);
+  box-shadow: 0 12px 28px rgba(91, 31, 42, 0.38);
 }
 
 .continueToBriefBtn {
-  background: #09453E;
+  background: #5B1F2A;
   color: #FAF8F2;
   border: none;
   border-radius: 9999px;
@@ -583,13 +583,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  box-shadow: 0 6px 20px rgba(9, 69, 62, 0.22);
+  box-shadow: 0 6px 20px rgba(91, 31, 42, 0.22);
   transition: all 0.25s ease;
 }
 
 .continueToBriefBtn:hover {
-  background: #0D5C52;
-  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.32);
+  background: #56131C;
+  box-shadow: 0 8px 24px rgba(91, 31, 42, 0.32);
   transform: translateY(-1px);
 }
 
@@ -599,13 +599,13 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #09453E;
+  color: #5B1F2A;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .secondaryAtelierBtn:hover {
-  color: #06312C;
+  color: #2E090E;
 }
 
 .backStepBtn {
@@ -662,13 +662,13 @@
 
 .categoryCard:hover {
   transform: translateY(-4px);
-  border-color: rgba(9, 69, 62, 0.35);
-  box-shadow: 0 12px 32px rgba(9, 69, 62, 0.1);
+  border-color: rgba(91, 31, 42, 0.35);
+  box-shadow: 0 12px 32px rgba(91, 31, 42, 0.1);
 }
 
 .categoryCardSelected {
-  border-color: #09453E !important;
-  box-shadow: 0 16px 40px rgba(9, 69, 62, 0.18) !important;
+  border-color: #5B1F2A !important;
+  box-shadow: 0 16px 40px rgba(91, 31, 42, 0.18) !important;
   background: #FAF7F0;
 }
 
@@ -677,7 +677,7 @@
   width: 100%;
   height: 180px;
   overflow: hidden;
-  background: #0E1613;
+  background: #150F10;
 }
 
 .categoryCoverImg {
@@ -694,14 +694,14 @@
 .categoryOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 50%, rgba(14, 22, 19, 0.6) 100%);
+  background: linear-gradient(180deg, transparent 50%, rgba(21, 15, 16, 0.6) 100%);
 }
 
 .selectedBadge {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: #09453E;
+  background: #5B1F2A;
   color: #FFFFFF;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.625rem;
@@ -736,7 +736,7 @@
 }
 
 .categoryCardSelected .categoryTitle {
-  color: #09453E;
+  color: #5B1F2A;
 }
 
 .categorySubtitle {
@@ -798,8 +798,8 @@
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #09453E;
-  background: rgba(9, 69, 62, 0.06);
+  color: #5B1F2A;
+  background: rgba(91, 31, 42, 0.06);
   padding: 0.2rem 0.55rem;
   border-radius: 4px;
 }
@@ -861,9 +861,9 @@
 }
 
 .atelierInput:focus {
-  border-color: #09453E;
+  border-color: #5B1F2A;
   background: #FFFFFF;
-  box-shadow: 0 0 0 3px rgba(9, 69, 62, 0.1);
+  box-shadow: 0 0 0 3px rgba(91, 31, 42, 0.1);
 }
 
 .atelierTextarea {
@@ -881,8 +881,8 @@
 }
 
 .atelierTextarea:focus {
-  border-color: #09453E;
-  box-shadow: 0 0 0 3px rgba(9, 69, 62, 0.1);
+  border-color: #5B1F2A;
+  box-shadow: 0 0 0 3px rgba(91, 31, 42, 0.1);
 }
 
 .entryScopeField {
@@ -890,7 +890,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
-  border-top: 1px dashed rgba(9, 69, 62, 0.14);
+  border-top: 1px dashed rgba(91, 31, 42, 0.14);
   padding-top: 1.15rem;
 }
 
@@ -905,7 +905,7 @@
 
 .addEventBtn {
   background: transparent;
-  border: 1px dashed rgba(9, 69, 62, 0.35);
+  border: 1px dashed rgba(91, 31, 42, 0.35);
   border-radius: 9999px;
   padding: 0.75rem 1.85rem;
   font-family: var(--font-inter), sans-serif;
@@ -913,7 +913,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #09453E;
+  color: #5B1F2A;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -922,8 +922,8 @@
 }
 
 .addEventBtn:hover {
-  background: rgba(9, 69, 62, 0.05);
-  border-color: #09453E;
+  background: rgba(91, 31, 42, 0.05);
+  border-color: #5B1F2A;
   transform: translateY(-1px);
 }
 
@@ -1005,13 +1005,13 @@
 
 .directionCard:hover {
   transform: translateY(-3px);
-  border-color: rgba(9, 69, 62, 0.35);
+  border-color: rgba(91, 31, 42, 0.35);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .directionCardSelected {
-  border-color: #09453E !important;
-  box-shadow: 0 10px 28px rgba(9, 69, 62, 0.15) !important;
+  border-color: #5B1F2A !important;
+  box-shadow: 0 10px 28px rgba(91, 31, 42, 0.15) !important;
   background: #F4EFE6;
 }
 
@@ -1020,7 +1020,7 @@
   width: 100%;
   height: 140px;
   overflow: hidden;
-  background: #0E1613;
+  background: #150F10;
 }
 
 .directionImg {
@@ -1037,7 +1037,7 @@
 .directionOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 50%, rgba(14, 22, 19, 0.5) 100%);
+  background: linear-gradient(180deg, transparent 50%, rgba(21, 15, 16, 0.5) 100%);
 }
 
 .checkBadge {
@@ -1047,7 +1047,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #09453E;
+  background: #5B1F2A;
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -1077,9 +1077,9 @@
 }
 
 .circleIndicatorSelected {
-  background: #09453E;
-  border-color: #09453E;
-  box-shadow: 0 2px 8px rgba(9, 69, 62, 0.35);
+  background: #5B1F2A;
+  border-color: #5B1F2A;
+  box-shadow: 0 2px 8px rgba(91, 31, 42, 0.35);
 }
 
 .directionContent {
@@ -1098,7 +1098,7 @@
 }
 
 .directionCardSelected .directionCardTitle {
-  color: #09453E;
+  color: #5B1F2A;
 }
 
 .directionCardDesc {
@@ -1138,13 +1138,13 @@
 
 .serviceCard:hover {
   transform: translateY(-2px);
-  border-color: rgba(9, 69, 62, 0.3);
+  border-color: rgba(91, 31, 42, 0.3);
 }
 
 .serviceCardChecked {
-  border-color: #09453E;
+  border-color: #5B1F2A;
   background: #FFFFFF;
-  box-shadow: 0 6px 20px rgba(9, 69, 62, 0.08);
+  box-shadow: 0 6px 20px rgba(91, 31, 42, 0.08);
 }
 
 .serviceTopRow {
@@ -1159,8 +1159,8 @@
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #09453E;
-  background: rgba(9, 69, 62, 0.08);
+  color: #5B1F2A;
+  background: rgba(91, 31, 42, 0.08);
   padding: 0.2rem 0.55rem;
   border-radius: 4px;
 }
@@ -1181,8 +1181,8 @@
 }
 
 .serviceCardChecked .serviceCheckbox {
-  background: #09453E;
-  border-color: #09453E;
+  background: #5B1F2A;
+  border-color: #5B1F2A;
 }
 
 .serviceName {
@@ -1222,13 +1222,13 @@
 }
 
 .celebrationCard:hover {
-  border-color: rgba(9, 69, 62, 0.3);
+  border-color: rgba(91, 31, 42, 0.3);
 }
 
 .celebrationCardChosen {
-  border-color: #09453E;
+  border-color: #5B1F2A;
   background: #FFFFFF;
-  box-shadow: 0 6px 20px rgba(9, 69, 62, 0.08);
+  box-shadow: 0 6px 20px rgba(91, 31, 42, 0.08);
 }
 
 .celebrationTop {
@@ -1246,7 +1246,7 @@
 }
 
 .celebrationCardChosen .celebrationTitle {
-  color: #09453E;
+  color: #5B1F2A;
 }
 
 .celebrationDesc {
@@ -1270,14 +1270,14 @@
 }
 
 .radioCircleChosen {
-  border-color: #09453E;
+  border-color: #5B1F2A;
 }
 
 .radioInnerDot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #09453E;
+  background: #5B1F2A;
 }
 
 .inlineErrorWarning {
@@ -1325,13 +1325,13 @@
 }
 
 .investmentCard:hover {
-  border-color: rgba(9, 69, 62, 0.3);
+  border-color: rgba(91, 31, 42, 0.3);
 }
 
 .investmentCardChosen {
-  border-color: #09453E;
+  border-color: #5B1F2A;
   background: #FFFFFF;
-  box-shadow: 0 6px 20px rgba(9, 69, 62, 0.08);
+  box-shadow: 0 6px 20px rgba(91, 31, 42, 0.08);
 }
 
 .investmentTop {
@@ -1344,7 +1344,7 @@
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: 1.25rem;
   font-weight: 700;
-  color: #09453E;
+  color: #5B1F2A;
 }
 
 .goldRadioDot {
@@ -1401,7 +1401,7 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #09453E;
+  color: #5B1F2A;
 }
 
 .docBrandSeal {
@@ -1428,7 +1428,7 @@
 .docRule {
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, #09453E 0%, #C8A84E 50%, transparent 100%);
+  background: linear-gradient(90deg, #5B1F2A 0%, #C8A84E 50%, transparent 100%);
 }
 
 .folioDocBody {
@@ -1471,7 +1471,7 @@
   font-family: var(--font-inter), sans-serif;
   font-size: 0.6875rem;
   font-weight: 600;
-  color: #09453E;
+  color: #5B1F2A;
   cursor: pointer;
   padding: 0;
   transition: color 0.2s ease;
@@ -1485,7 +1485,7 @@
   font-family: var(--font-headline, "Cormorant Garamond", serif);
   font-size: 1.45rem;
   font-weight: 600;
-  color: #09453E;
+  color: #5B1F2A;
 }
 
 .docValueMuted {
@@ -1560,13 +1560,13 @@
 
 .docPillTag {
   background: #FAF7F0;
-  border: 1px solid rgba(9, 69, 62, 0.15);
+  border: 1px solid rgba(91, 31, 42, 0.15);
   padding: 0.3rem 0.75rem;
   border-radius: 9999px;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.6875rem;
   font-weight: 600;
-  color: #09453E;
+  color: #5B1F2A;
 }
 
 .docInspoNote {
@@ -1623,10 +1623,10 @@
 /* Contact Details Side */
 .contactDetailsSide {
   background: #FFFFFF;
-  border: 1px solid rgba(9, 69, 62, 0.12);
+  border: 1px solid rgba(91, 31, 42, 0.12);
   border-radius: 20px;
   padding: clamp(1.75rem, 3vw, 2.5rem);
-  box-shadow: 0 16px 48px rgba(9, 69, 62, 0.06);
+  box-shadow: 0 16px 48px rgba(91, 31, 42, 0.06);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -1690,9 +1690,9 @@
 }
 
 .atelierFormInput:focus {
-  border-color: #09453E;
+  border-color: #5B1F2A;
   background: #FFFFFF;
-  box-shadow: 0 0 0 3px rgba(9, 69, 62, 0.1);
+  box-shadow: 0 0 0 3px rgba(91, 31, 42, 0.1);
 }
 
 .inputError {
@@ -1721,9 +1721,9 @@
 }
 
 .atelierFormTextarea:focus {
-  border-color: #09453E;
+  border-color: #5B1F2A;
   background: #FFFFFF;
-  box-shadow: 0 0 0 3px rgba(9, 69, 62, 0.1);
+  box-shadow: 0 0 0 3px rgba(91, 31, 42, 0.1);
 }
 
 .formActionGroup {
@@ -1732,7 +1732,7 @@
 
 .presentCommissionBtn {
   width: 100%;
-  background: #09453E;
+  background: #5B1F2A;
   color: #FFFFFF;
   border: none;
   border-radius: 9999px;
@@ -1747,14 +1747,14 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.28);
+  box-shadow: 0 8px 24px rgba(91, 31, 42, 0.28);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .presentCommissionBtn:hover {
-  background: #06312C;
+  background: #2E090E;
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(9, 69, 62, 0.4);
+  box-shadow: 0 12px 30px rgba(91, 31, 42, 0.4);
 }
 
 .presentCommissionBtn:disabled {
@@ -1780,10 +1780,10 @@
 
 .confirmationCard {
   background: #FFFFFF;
-  border: 1px solid rgba(9, 69, 62, 0.12);
+  border: 1px solid rgba(91, 31, 42, 0.12);
   border-radius: 24px;
   padding: clamp(2.5rem, 5vw, 4rem);
-  box-shadow: 0 20px 60px rgba(9, 69, 62, 0.08);
+  box-shadow: 0 20px 60px rgba(91, 31, 42, 0.08);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -1802,11 +1802,11 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: #09453E;
+  background: #5B1F2A;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.3);
+  box-shadow: 0 8px 24px rgba(91, 31, 42, 0.3);
   margin-bottom: 0.5rem;
 }
 
@@ -1822,7 +1822,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #09453E;
+  color: #5B1F2A;
 }
 
 .confirmationTitle {
@@ -1893,7 +1893,7 @@
 }
 
 .whatsAppDispatchBtn {
-  background: #09453E;
+  background: #5B1F2A;
   color: #FFFFFF;
   border-radius: 9999px;
   padding: 1.05rem 2.2rem;
@@ -1906,14 +1906,14 @@
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  box-shadow: 0 8px 24px rgba(9, 69, 62, 0.28);
+  box-shadow: 0 8px 24px rgba(91, 31, 42, 0.28);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .whatsAppDispatchBtn:hover {
-  background: #06312C;
+  background: #2E090E;
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(9, 69, 62, 0.4);
+  box-shadow: 0 12px 30px rgba(91, 31, 42, 0.4);
 }
 
 .returnHomeBtn {
@@ -1937,8 +1937,8 @@
 
 .copyBriefBtn {
   background: transparent;
-  color: #09453E;
-  border: 1px solid #09453E;
+  color: #5B1F2A;
+  border: 1px solid #5B1F2A;
   border-radius: 9999px;
   padding: 0.95rem 1.8rem;
   font-family: var(--font-inter), sans-serif;
@@ -1954,16 +1954,16 @@
 }
 
 .copyBriefBtn:hover {
-  background: rgba(9, 69, 62, 0.06);
+  background: rgba(91, 31, 42, 0.06);
 }
 
 .copyFeedback {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #09453E;
-  background: rgba(9, 69, 62, 0.08);
-  border: 1px solid rgba(9, 69, 62, 0.2);
+  color: #5B1F2A;
+  background: rgba(91, 31, 42, 0.08);
+  border: 1px solid rgba(91, 31, 42, 0.2);
   padding: 0.45rem 1rem;
   border-radius: 9999px;
   display: inline-flex;
@@ -1986,7 +1986,7 @@
   font-family: var(--font-inter), sans-serif;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #09453E;
+  color: #5B1F2A;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -2013,7 +2013,7 @@
   font-size: 0.6875rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #09453E;
+  color: #5B1F2A;
   display: inline-block;
   margin-top: 0.45rem;
 }

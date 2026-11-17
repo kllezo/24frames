@@ -33,7 +33,7 @@
   overflow: hidden;
   background: #FFFFFF;
   border: 1.5px solid var(--color-border);
-  box-shadow: 0 16px 45px rgba(22, 75, 64, 0.08);
+  box-shadow: 0 16px 45px rgba(71, 26, 32, 0.08);
   aspect-ratio: 4 / 5.2;
   transform-style: preserve-3d;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
@@ -43,7 +43,7 @@
   transform: perspective(1000px) rotateY(3deg) rotateX(-2deg) scale(1.02);
   border-color: #C8A84E;
   box-shadow: 
-    0 24px 60px rgba(22, 75, 64, 0.18),
+    0 24px 60px rgba(71, 26, 32, 0.18),
     0 0 35px rgba(200, 168, 78, 0.25);
 }
 
@@ -79,7 +79,7 @@
   font-size: 0.5625rem;
   font-weight: 700;
   letter-spacing: var(--ls-mono);
-  color: #164B40;
+  color: #6B2733;
   text-transform: uppercase;
 }
 
@@ -89,7 +89,7 @@
   left: 5%;
   width: 90%;
   height: 30px;
-  background: radial-gradient(ellipse at center, rgba(22, 75, 64, 0.1) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(71, 26, 32, 0.1) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -111,7 +111,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--ls-mono);
-  color: #164B40;
+  color: #6B2733;
 }
 
 .locationTag {
@@ -131,7 +131,7 @@
   color: #20231F;
   margin-bottom: 1.75rem;
   position: relative;
-  border-left: 2px solid #164B40;
+  border-left: 2px solid #6B2733;
   padding-left: clamp(1rem, 2vw, 1.75rem);
 }
 
@@ -196,7 +196,7 @@
   font-size: clamp(1.8rem, 2.5vw, 2.4rem);
   font-weight: 600;
   line-height: 1;
-  color: #164B40;
+  color: #6B2733;
 }
 
 .milestoneLabel {
@@ -218,7 +218,7 @@
   align-items: center;
   gap: 0.65rem;
   padding: 0.85rem 2rem;
-  background: #164B40;
+  background: #6B2733;
   color: #FAF8F2;
   border-radius: var(--radius-full);
   font-family: var(--font-body);
@@ -227,14 +227,14 @@
   text-transform: uppercase;
   letter-spacing: var(--ls-nav);
   transition: all 0.3s var(--ease-out);
-  box-shadow: 0 6px 20px rgba(22, 75, 64, 0.2);
+  box-shadow: 0 6px 20px rgba(71, 26, 32, 0.2);
   text-decoration: none;
 }
 
 .inquireBtn:hover {
-  background: #0E352D;
+  background: #321115;
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(22, 75, 64, 0.3);
+  box-shadow: 0 10px 28px rgba(71, 26, 32, 0.3);
 }
 
 .arrow {

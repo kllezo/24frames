@@ -6,8 +6,8 @@ import styles from "./Preloader.module.css";
 
 /* ── 24 Frames Color Progression: Deep Forest to Warm Stone to Pure Ivory ── */
 const FRAME_COLORS = [
-  "#0C3028", "#123C34", "#1A4D42", "#245E52", "#2E6F62", "#3D8070", // Row 1: 0–5
-  "#4D8F80", "#5E9D8E", "#6FAA9B", "#7FB5A8", "#8FBFB4", "#9EC7BE", // Row 2: 6–11
+  "#2D0F13", "#39151A", "#491E24", "#5A282F", "#6A333A", "#7B424A", // Row 1: 0–5
+  "#8A5259", "#98636A", "#A6737A", "#B18389", "#BB9398", "#9EC7BE", // Row 2: 6–11
   "#A6B0A3", "#AEB9AB", "#B6C1B3", "#BFC8BB", "#C5CCBF", "#CFC5B5", // Row 3: 12–17
   "#D5CCBC", "#DBD3C3", "#E1DACB", "#E7E1D3", "#EDE7DB", "#FFFFFF", // Row 4: 18–23
 ];
@@ -194,7 +194,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     // Subtle breath & luminous warm gold elevation on the standalone 24th frame
     tl.to(finalTile, {
       scale: 1.03,
-      boxShadow: "0 18px 48px rgba(22, 75, 64, 0.16), 0 0 28px rgba(200, 168, 78, 0.32)",
+      boxShadow: "0 18px 48px rgba(71, 26, 32, 0.16), 0 0 28px rgba(200, 168, 78, 0.32)",
       duration: 0.35,
       ease: "power2.out",
     }, 1.70);

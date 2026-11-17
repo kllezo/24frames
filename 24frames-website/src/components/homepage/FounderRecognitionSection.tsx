@@ -4,7 +4,6 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import LiquidDotCanvas from "./LiquidDotCanvas";
 import { useScrollLock } from "@/lib/scrollLock";
 import styles from "./FounderRecognitionSection.module.css";
 
@@ -430,13 +429,13 @@ export default function FounderRecognitionSection({
       ref={sectionRef}
       id="artist"
       className={styles.section}
+      data-header-theme="light"
       aria-label="The Artist & Visionary, Phani Gogireddy"
     >
       {/* Anchor alias to support legacy #founder links smoothly */}
       <div id="founder" className={styles.anchorOffset} aria-hidden="true" />
 
       {/* Interactive Liquid Dot Matrix Field (Single authentic dotted layer) */}
-      <LiquidDotCanvas className={styles.liquidCanvas} />
 
       <div className={styles.container}>
         {/* ── TWO-COLUMN DESKTOP COMPOSITION MATCHING REFERENCE SCREENSHOT ── */}
@@ -514,16 +513,40 @@ export default function FounderRecognitionSection({
 
           {/* ══════════ RIGHT COLUMN (SCROLLING NARRATIVE) ══════════ */}
           <div className={styles.rightColumn}>
+            {/* 3. Wide Cream Biography Panel */}
+            <div ref={bioRef} className={styles.bioPanel}>
+              <p className={styles.bioLead}>
+                I started 24 Frames in 2016 in a small room with two computers and one belief: a wedding is the
+                first chapter of a family&apos;s legacy.
+              </p>
+              <p className={styles.bioText}>
+                Ten years and more than a thousand weddings later, across India and abroad, that belief still
+                decides every frame. I bring the light, framing and patience of Telugu cinema to real celebrations —
+                and we take the time to know your families, so that on the day it never feels like being
+                photographed. Today our team works from a 6,000 sq. ft. studio in Hyderabad.
+              </p>
+            </div>
+
+            {/* 4. Founder Pull Quote Panel with Forest-Green Left Rule */}
+            <div ref={quoteRef} className={styles.quotePanel}>
+              <p className={styles.quoteText}>
+                “From reel to real, every dream pursued with heart becomes a timeless shot.”
+              </p>
+              <span className={styles.quoteAttribution}>
+                — PHANI GOGIREDDY, MANAGING DIRECTOR
+              </span>
+            </div>
+
             {/* 1. Honours & Editorial Recognition Panel with Inner Carousel */}
             <div ref={recognitionCardRef} className={styles.recognitionPanel}>
               {/* Header with Title and Prev/Next Carousel Arrows */}
               <div className={styles.recognitionHeader}>
                 <div className={styles.recognitionTitleBlock}>
                   <span className={styles.recognitionKicker}>
-                    HONOURS &amp; EDITORIAL RECOGNITION
+                    HONOURS &amp; PRESS
                   </span>
                   <h3 className={styles.recognitionMainTitle}>
-                    The Verified Archive
+                    Recognised along the way
                   </h3>
                 </div>
 
@@ -625,7 +648,7 @@ export default function FounderRecognitionSection({
                   onClick={() => scrollTrack("right")}
                   aria-label="Explore verified recognition evidence"
                 >
-                  <span>EXPLORE VERIFIED EVIDENCE</span>
+                  <span>ALL HONOURS</span>
                   <span className={styles.linkArrow}>→</span>
                 </button>
               </div>
@@ -650,23 +673,6 @@ export default function FounderRecognitionSection({
                 <span className={styles.statNumber}>6,000</span>
                 <span className={styles.statDesc}>SQ. FT. CREATIVE STUDIO</span>
               </div>
-            </div>
-
-            {/* 3. Wide Cream Biography Panel */}
-            <div ref={bioRef} className={styles.bioPanel}>
-              <p className={styles.bioText}>
-                Established in 2016 from a modest setup of two computers, 24 Frames was founded on an unyielding dedication to heartfelt visual storytelling. Bringing cinematic framing, lighting nuance, and deep emotional sensitivity from Telugu cinema to real weddings, Phani Gogireddy has shaped South India&apos;s premier luxury wedding film aesthetic. Today, backed by a 6,000 sq. ft. studio and an award-winning creative team, the company has documented over 1,000 celebrated unions across India and abroad.
-              </p>
-            </div>
-
-            {/* 4. Founder Pull Quote Panel with Forest-Green Left Rule */}
-            <div ref={quoteRef} className={styles.quotePanel}>
-              <p className={styles.quoteText}>
-                “From reel to real, every dream pursued with heart becomes a timeless shot.”
-              </p>
-              <span className={styles.quoteAttribution}>
-                — PHANI GOGIREDDY, MANAGING DIRECTOR
-              </span>
             </div>
 
             {/* 5. Three Core Principles */}
