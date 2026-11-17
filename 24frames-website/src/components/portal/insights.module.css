@@ -1235,3 +1235,131 @@
     margin: 0.3rem 0 0;
   }
 }
+
+/* ---------- production: stage rail + job cards ---------- */
+.rail {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 0 1.6rem;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+.rail li + li {
+  border-left: 1px solid var(--line);
+}
+.railStep {
+  display: grid;
+  gap: 0.25rem;
+  width: 100%;
+  height: 100%;
+  padding: 0.85rem 0.8rem;
+  text-align: left;
+  font: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.railStep b {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--sage);
+}
+.railStep span {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--sage);
+}
+.railStep:hover {
+  background: rgba(15, 61, 53, 0.04);
+}
+.railBusy b {
+  color: var(--forest-ink);
+}
+.railOn {
+  background: #0f3d35 !important;
+}
+.railOn b,
+.railOn span {
+  color: #fffaf0;
+}
+.jobs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+  margin-bottom: clamp(1.8rem, 3.5vw, 2.6rem);
+}
+.jobCard {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.15rem 1.25rem;
+  text-align: left;
+  font: inherit;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 50px -46px rgba(16, 48, 42, 0.6);
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+.jobCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--line-strong, rgba(16, 48, 42, 0.3));
+  box-shadow: 0 26px 50px -34px rgba(16, 48, 42, 0.55);
+}
+.jobTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+.progress {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.progress i {
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(15, 61, 53, 0.1);
+}
+.progress .progressOn {
+  background: linear-gradient(90deg, #0f3d35, #a98a52);
+}
+.jobFoot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  font-size: 12px;
+  color: var(--sage);
+}
+@media (max-width: 900px) {
+  .rail {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .rail li:nth-child(5) {
+    border-left: 0;
+  }
+  .rail li:nth-child(n + 5) {
+    border-top: 1px solid var(--line);
+  }
+}
+.adminInline {
+  display: none;
+}
+@media (max-width: 1100px) {
+  .adminInline {
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .adminMenu {
+    display: none;
+  }
+  .nav a {
+    white-space: nowrap;
+  }
+}

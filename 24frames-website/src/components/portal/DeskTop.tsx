@@ -62,7 +62,21 @@ export default function DeskTop({ me, current }: { me: PublicAccount; current: D
             {l.label}
           </a>
         ))}
+        {/* On phones the nav scrolls sideways (which would clip a dropdown), so
+            the admin pages sit inline there instead. */}
+        {admin.map((a) => (
+          <a
+            key={`m-${a.id}`}
+            href={a.href}
+            className={`${px.deskNavLink} ${ix.adminInline} ${current === a.id ? px.deskNavOn : ""}`}
+            aria-current={current === a.id ? "page" : undefined}
+            data-no-transition
+          >
+            {a.label}
+          </a>
+        ))}
         {admin.length > 0 && (
+          <span className={ix.adminMenu}>
           <Menu
             label={
               <span className={`${px.deskNavLink} ${inAdmin ? px.deskNavOn : ""}`}>
@@ -77,6 +91,7 @@ export default function DeskTop({ me, current }: { me: PublicAccount; current: D
               </a>
             ))}
           </Menu>
+          </span>
         )}
       </nav>
       <div className={ix.topActions}>

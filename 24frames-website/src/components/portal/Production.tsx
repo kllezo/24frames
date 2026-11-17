@@ -48,47 +48,96 @@ export default function Production({ me, config }: { me: PublicAccount; config: 
   );
   const open = quotes?.find((q) => q.id === openId) ?? null;
   const today = new Date().toISOString().slice(0, 10);
+  const [stage, setStage] = useState<ProductionStatus | "all">("all");
+  const shownJobs = stage === "all" ? lanes.flatMap((l) => l.jobs) : lanes.find((l) => l.id === stage)?.jobs ?? [];
+  const overdue = (quotes ?? []).filter((q) => q.production!.status !== "delivered" && q.production!.dueDate && q.production!.dueDate < today).length;
 
   return (
     <div className={`${cx.cinema} ${qx.page}`}>
       <DeskTop me={me} current="production" />
       <main className={qx.main}>
-        <section className={ix.hero}>
-          <p className={ix.heroKicker}>Operations</p>
-          <h1 className={ix.heroTitle}>
-            From booking <em>to delivery.</em>
-          </h1>
-          <p className={ix.heroLine}>
-            Every confirmed booking arrives here with its production brief already written from the quotation. Move it through the stages as the
-            crew is assigned, the celebration is filmed and the work is delivered.
-          </p>
-        </section>
+        <header className={ix.hero} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "1.5rem", flexWrap: "wrap" }}>
+          <div>
+            <p className={ix.heroKicker}>Operations</p>
+            <h1 className={ix.heroTitle}>
+              From booking <em>to delivery.</em>
+            </h1>
+          </div>
+          <ul className={ix.strip} style={{ margin: 0 }}>
+            <li>
+              Bookings <b>{quotes?.length ?? "—"}</b>
+            </li>
+            <li className={overdue ? ix.stripHot : ""}>
+              Overdue <b>{overdue}</b>
+            </li>
+            <li>
+              Delivered <b>{lanes.find((l) => l.id === "delivered")?.jobs.length ?? 0}</b>
+            </li>
+          </ul>
+        </header>
         {error && <p className={qx.error}>{error}</p>}
-        {quotes && quotes.length === 0 && <p className={ix.empty}>No confirmed bookings yet. When a client accepts — or you confirm a booking — its brief appears here.</p>}
 
-        <div className={ix.lanes}>
-          {lanes.map((l) => (
-            <div key={l.id} className={ix.lane}>
-              <div className={ix.laneHead}>
-                <span>{l.label}</span>
-                <span>{l.jobs.length}</span>
-              </div>
-              {l.jobs.map((q) => {
-                const due = q.production!.dueDate;
-                return (
-                  <button key={q.id} className={`${ix.job} ${q.id === openId ? ix.jobOn : ""}`} onClick={() => setOpenId(q.id)}>
-                    <span className={ix.jobName}>{coupleNames(q.draft.couple, q.clientName)}</span>
-                    <span className={ix.jobMeta}>
-                      {firstDate(q) ? formatDateLong(firstDate(q)) : "Date TBC"} · {plural(q.draft.events.length, "occasion")}
-                    </span>
-                    {due && q.production!.status !== "delivered" && (
-                      <span className={`${ix.jobMeta} ${due < today ? ix.overdue : ""}`}>Delivery due {formatDateLong(due)}</span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+        {/* The seven stages as one rail — tap a stage to filter. */}
+        <ol className={ix.rail} aria-label="Production stages">
+          <li>
+            <button className={`${ix.railStep} ${stage === "all" ? ix.railOn : ""}`} onClick={() => setStage("all")}>
+              <b>{quotes?.length ?? 0}</b>
+              <span>All</span>
+            </button>
+          </li>
+          {lanes.map((l, i) => (
+            <li key={l.id}>
+              <button className={`${ix.railStep} ${stage === l.id ? ix.railOn : ""} ${l.jobs.length ? ix.railBusy : ""}`} onClick={() => setStage(l.id)}>
+                <b>{l.jobs.length}</b>
+                <span>
+                  {i + 1}. {l.label}
+                </span>
+              </button>
+            </li>
           ))}
+        </ol>
+
+        {quotes && quotes.length === 0 && (
+          <p className={ix.empty}>No confirmed bookings yet. When a client accepts — or you confirm a booking — its brief appears here, already written.</p>
+        )}
+        {quotes && quotes.length > 0 && shownJobs.length === 0 && <p className={ix.empty}>Nothing at this stage.</p>}
+
+        <div className={ix.jobs}>
+          {shownJobs.map((q) => {
+            const p = q.production!;
+            const idx = PRODUCTION_STEPS.findIndex((s) => s.id === p.status);
+            const due = p.dueDate;
+            const late = !!due && p.status !== "delivered" && due < today;
+            return (
+              <button
+                key={q.id}
+                className={`${ix.jobCard} ${q.id === openId ? ix.jobOn : ""}`}
+                onClick={() => {
+                  setOpenId(q.id);
+                  window.setTimeout(() => document.getElementById("brief")?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+                }}
+              >
+                <span className={ix.jobTop}>
+                  <span className={ix.jobName}>{coupleNames(q.draft.couple, q.clientName)}</span>
+                  <span className={`${ix.pill} ${p.status === "delivered" ? ix.pillGreen : late ? ix.pillRed : ix.pillGold}`}>{PRODUCTION_LABEL[p.status]}</span>
+                </span>
+                <span className={ix.jobMeta}>
+                  {firstDate(q) ? formatDateLong(firstDate(q)) : "Date TBC"} · {plural(q.draft.events.length, "occasion")}
+                  {q.draft.couple.city ? ` · ${q.draft.couple.city}` : ""}
+                </span>
+                <span className={ix.progress} aria-label={`Stage ${idx + 1} of ${PRODUCTION_STEPS.length}`}>
+                  {PRODUCTION_STEPS.map((s, i) => (
+                    <i key={s.id} className={i <= idx ? ix.progressOn : ""} />
+                  ))}
+                </span>
+                <span className={ix.jobFoot}>
+                  <span>{q.managerName ? `RM · ${q.managerName}` : "No RM"}</span>
+                  {due && p.status !== "delivered" && <span className={late ? ix.overdue : ""}>Delivery {late ? "was due" : "due"} {formatDateLong(due)}</span>}
+                  {p.crew && <span>Crew · {p.crew}</span>}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         {open && <Brief key={open.id} q={open} config={config} onSaved={(q) => setQuotes((qs) => (qs ?? []).map((x) => (x.id === q.id ? q : x)))} />}
