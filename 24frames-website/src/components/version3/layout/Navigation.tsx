@@ -276,6 +276,10 @@ export default function Navigation() {
         className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ""}`}
         aria-hidden={!menuOpen}
       >
+        <button type="button" className={styles.mobileClose} onClick={() => setMenuOpen(false)} aria-label="Close menu" tabIndex={menuOpen ? 0 : -1}>
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+        </button>
         <nav className={styles.mobileNav} aria-label="Mobile navigation">
           <ul className={styles.mobileLinks}>
             {NAV_LINKS.map((link, i) => (

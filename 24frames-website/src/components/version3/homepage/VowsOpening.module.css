@@ -64,7 +64,7 @@
   position: relative;
   display: block;
   aspect-ratio: 3 / 4.4;
-  border-radius: 999px 999px 4px 4px;
+  border-radius: 2px;
   overflow: hidden;
   background: #efe7dc;
   box-shadow: 0 30px 60px -40px rgba(35, 28, 26, 0.45);
@@ -73,7 +73,7 @@
   content: "";
   position: absolute;
   inset: 10px;
-  border-radius: 999px 999px 2px 2px;
+  border-radius: 1px;
   border: 1px solid rgba(255, 246, 230, 0.55);
   pointer-events: none;
 }

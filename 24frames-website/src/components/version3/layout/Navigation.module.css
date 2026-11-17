@@ -394,3 +394,29 @@
   align-items: center;
   gap: 1.5rem;
 }
+
+/* Close button inside the mobile overlay (the overlay sits above the header,
+   so the burger's X is hidden behind it). */
+.mobileClose {
+  position: absolute;
+  top: max(1rem, env(safe-area-inset-top));
+  right: 1rem;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(35, 28, 26, 0.18);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+}
+.mobileClose span {
+  grid-area: 1 / 1;
+  width: 18px;
+  height: 1.5px;
+  background: #231c1a;
+  transform: rotate(45deg);
+}
+.mobileClose span:last-child { transform: rotate(-45deg); }
+.mobileClose:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
