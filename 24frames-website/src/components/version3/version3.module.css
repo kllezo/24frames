@@ -1,0 +1,19 @@
+/* Version 3 palette — oxblood accent and three type families, scoped to /version3 only. */
+.v3 {
+  --color-kllezo-green: #5B1F2A;
+  --color-brand-forest-dark: #2A0D13;
+  --color-accent: #5B1F2A;
+  --color-accent-light: #74303B;
+  --color-accent-hover: #45151E;
+  --color-accent-muted: rgba(91, 31, 42, 0.08);
+  --color-border-subtle: rgba(91, 31, 42, 0.08);
+  --color-shadow-card: 0 1px 2px rgba(91, 31, 42, 0.04), 0 18px 40px -24px rgba(91, 31, 42, 0.18);
+  --color-shadow-hover: 0 1px 2px rgba(91, 31, 42, 0.05), 0 28px 60px -28px rgba(91, 31, 42, 0.28);
+  --obsidian-accent: #5B1F2A;
+  --obsidian-accent-light: #74303B;
+  --obsidian-accent-hover: #45151E;
+  --font-emphasis: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-cinzel: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  background: #FAF8F2;
+}

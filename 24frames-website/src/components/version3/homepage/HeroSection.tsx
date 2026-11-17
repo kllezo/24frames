@@ -122,7 +122,7 @@ export default function HeroSection() {
           </div>
 
           <Link
-            href="/#artist"
+            href="/version3#artist"
             className={styles.scrollDownBtn}
             aria-label="Meet the artist"
           >

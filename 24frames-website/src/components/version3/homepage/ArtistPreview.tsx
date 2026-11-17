@@ -175,7 +175,7 @@ export default function ArtistPreview() {
             </div>
 
             <div className={styles.actions}>
-              <Link href="/#inquire" className={styles.inquireBtn}>
+              <Link href="/version3#inquire" className={styles.inquireBtn}>
                 Commission Phani Gogireddy
                 <span className={styles.arrow}>→</span>
               </Link>

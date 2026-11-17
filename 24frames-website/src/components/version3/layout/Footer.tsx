@@ -4,10 +4,10 @@ import Link from "next/link";
 import styles from "./Footer.module.css";
 
 const EXPLORE_LINKS = [
-  { label: "The Vows", href: "/#vows" },
-  { label: "The Collection", href: "/#collection" },
+  { label: "The Vows", href: "/version3#vows" },
+  { label: "The Collection", href: "/version3#collection" },
   { label: "Stories", href: "/stories" },
-  { label: "The Artist", href: "/#artist" },
+  { label: "The Artist", href: "/version3#artist" },
   { label: "Client Gallery", href: "/client-gallery" },
 ];
 

@@ -20,7 +20,7 @@ interface Row {
 }
 interface Data {
   stats: RepStats;
-  leads: { id: string; name: string; phone: string; location: string; createdAt: string; latest: Row | null }[];
+  leads: { id: string; name: string; phone: string; location: string; createdAt: string; latest: Row | null; summary: string | null }[];
   unassigned: number;
   followups: FollowUp[];
   consultationsToday: { id: string; at: string; title: string; detail: string; quoteId: string | null }[];
@@ -271,6 +271,7 @@ export default function SalesDashboard({ me }: { me: PublicAccount }) {
                     <tr key={l.id}>
                       <td>
                         <a href={`/desk/clients?c=${l.id}`}>{l.name}</a>
+                        {l.summary && <div className={ix.jobMeta} style={{ maxWidth: 420 }}>{l.summary}</div>}
                       </td>
                       <td>{l.phone || "—"}</td>
                       <td>{l.location || "—"}</td>

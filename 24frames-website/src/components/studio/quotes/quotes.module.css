@@ -88,7 +88,7 @@
 .main {
   width: min(1280px, calc(100% - 2 * clamp(16px, 4vw, 48px)));
   margin: 0 auto;
-  padding-top: clamp(2.4rem, 5vw, 4rem);
+  padding-top: clamp(1.6rem, 3vw, 2.4rem);
   padding-bottom: clamp(3rem, 6vw, 5rem);
 }
 
@@ -131,9 +131,8 @@
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
-  margin: 2rem 0 1.4rem;
-  padding: 1rem 0;
-  border-top: 1px solid var(--line);
+  margin: 0.4rem 0 1.4rem;
+  padding: 0 0 1rem;
   border-bottom: 1px solid var(--line);
 }
 

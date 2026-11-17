@@ -63,6 +63,7 @@ export async function POST(request: Request) {
   try {
     if (b?.action === "login") {
       const account = email ? await findAccountByEmail(email) : null;
+      if (account?.pendingSignup) return json({ error: "We have your enquiry — choose “Create account” with this email to set your password." }, 409);
       const ok = account && account.active && (await verifyPassword(password, account.passwordHash));
       if (!ok || !account) return fail("That email and password don't match.");
       attempts.delete(key);
@@ -94,6 +95,23 @@ export async function POST(request: Request) {
       const invitedBy = await readInvite(b.invite);
       const manager = invitedBy ? await getAccount(invitedBy) : null;
       const managerId = manager && manager.active && manager.role !== "client" && (await deskAllowed(manager)) ? manager.id : null;
+      // A couple who first wrote in through the enquiry form claims their record by signing up.
+      const existing = await findAccountByEmail(email);
+      if (existing && existing.role === "client" && existing.pendingSignup) {
+        let claimed =
+          (await updateAccount(existing.id, {
+            name,
+            phone,
+            location,
+            passwordHash: await hashPassword(password),
+            pendingSignup: false,
+            lastLoginAt: new Date().toISOString(),
+            ...(existing.managerId ? {} : { managerId }),
+          })) ?? existing;
+        const link = await usableLink(b.price, email, claimed.id);
+        if (link) claimed = await applyLink(claimed, link);
+        return signedIn(claimed, 201);
+      }
       const created = await createAccount({ role: "client", name, email, phone, location, passwordHash: await hashPassword(password), createdBy: managerId });
       let account = (await updateAccount(created.id, { managerId, source: managerId ? "rm_link" : "website" })) ?? created;
       const link = await usableLink(b.price, email, null);

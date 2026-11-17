@@ -16,6 +16,7 @@ import {
   SOURCE_LABEL,
   STATUS_LABEL,
   type CrmClient,
+  type EnquiryBrief,
   type FollowUp,
   type LeadSource,
   type PortalQuote,
@@ -350,6 +351,7 @@ function ClientDrawer({
         </div>
 
         <div className={ix.drawerBody}>
+          {client.enquiry && <EnquiryCard e={client.enquiry} />}
           <div className={ix.grid2} style={{ marginBottom: 0 }}>
             <Rates client={client} canPrice={canPrice} onChange={onClientChange} />
             <FollowUps client={client} quoteId={current?.id ?? null} list={followups} onChange={load} />
@@ -535,5 +537,56 @@ function FollowUps({ client, quoteId, list, onChange }: { client: CrmClient; quo
         {err && <p className={ix.msgErr}>{err}</p>}
       </div>
     </div>
+  );
+}
+
+/* What the couple told us in the website enquiry — read it before the first call. */
+function EnquiryCard({ e }: { e: EnquiryBrief }) {
+  return (
+    <section className={`${ix.panel} ${ix.kpiAccent}`}>
+      <div className={ix.panelHead}>
+        <h3 className={ix.panelTitle}>Their enquiry, in short</h3>
+        <span className={ix.panelNote}>Sent {formatDateLong(e.at.slice(0, 10))} from the website</span>
+      </div>
+      <p style={{ margin: "0 0 1.1rem", fontSize: 15, lineHeight: 1.7, color: "var(--forest-ink)" }}>{e.summary}</p>
+      <dl className={ix.briefGrid}>
+        <div>
+          <dt>Occasion</dt>
+          <dd>{e.category}</dd>
+        </div>
+        <div>
+          <dt>Scale · budget</dt>
+          <dd>{[e.scale, e.investment].filter(Boolean).join(" · ") || "—"}</dd>
+        </div>
+        <div>
+          <dt>Visual direction</dt>
+          <dd>{e.directions.join(", ") || "—"}</dd>
+        </div>
+        <div>
+          <dt>Services asked for</dt>
+          <dd>{e.services.join(", ") || "—"}</dd>
+        </div>
+        {e.events.length > 0 && (
+          <div style={{ gridColumn: "1 / -1" }}>
+            <dt>Events</dt>
+            <dd>
+              {e.events.map((ev, i) => (
+                <div key={i}>
+                  {ev.name} — {ev.date ? formatDateLong(ev.date) : "date TBD"}
+                  {ev.city ? ` · ${ev.city}` : ""}
+                  {ev.venue ? ` · ${ev.venue}` : ""}
+                </div>
+              ))}
+            </dd>
+          </div>
+        )}
+        {(e.notes || e.memories) && (
+          <div style={{ gridColumn: "1 / -1" }}>
+            <dt>In their words</dt>
+            <dd>{[e.notes, e.memories && `What they want to remember: “${e.memories}”`].filter(Boolean).join(" — ")}</dd>
+          </div>
+        )}
+      </dl>
+    </section>
   );
 }

@@ -10,7 +10,7 @@ import styles from "./Inquire.module.css";
 /* ════════════════════════════════════════════════════════════════════════════
    24 FRAMES — THE COMMISSION ATELIER
    A bespoke, royal wedding photography and cinema commissioning journey.
-   Warm Ivory, Parchment, Deep Forest Green (#5B1F2A), Antique Gold (#C8A84E).
+   Warm Ivory, Parchment, Deep Forest Green (#09453E), Antique Gold (#C8A84E).
    ════════════════════════════════════════════════════════════════════════════ */
 
 export interface EventTimelineEntry {
@@ -635,6 +635,32 @@ export default function InquirePage() {
 
     setErrors({});
     setIsSubmitting(true);
+
+    // File the enquiry with the studio desk as a new lead (assigned to a
+    // relationship manager, with a brief of everything chosen here).
+    try {
+      void fetch("/api/portal/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        keepalive: true,
+        body: JSON.stringify({
+          name: fullName,
+          email,
+          phone,
+          category: currentCategory.title,
+          events: events.map((ev) => ({ name: ev.name, date: ev.date, city: ev.city, venue: ev.venue })),
+          directions: selectedDirections.map((d) => VISUAL_DIRECTIONS.find((vd) => vd.id === d)?.title || d),
+          services: selectedServices.map((sv) => SERVICE_OPTIONS.find((so) => so.id === sv)?.name || sv),
+          scale: CELEBRATION_SCALES.find((sc) => sc.id === selectedScale)?.title || "",
+          investment: currentInvestment.label,
+          projectScope,
+          inspiration: inspirationNote,
+          memories: memoriesToRemember,
+        }),
+      }).catch(() => null);
+    } catch {
+      // The WhatsApp brief below still reaches the studio.
+    }
 
     // Dispatch WhatsApp directly with pre-compiled brief
     try {

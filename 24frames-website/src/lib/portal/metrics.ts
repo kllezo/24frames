@@ -130,13 +130,15 @@ export function studioAnalytics(
     return { month: m, value: inMonth.reduce((s, q) => s + bookingValue(q), 0), count: inMonth.length };
   });
 
-  const team = staff.filter((s) => s.role !== "client");
+  // The superadmin isn't part of the sales team's league table.
+  const team = staff.filter((s) => s.role !== "client" && !s.superadmin);
   const byRep = team.map((s) => repStats(s.id, s.name, quotes, clients, followups, settings, today));
-  const unassigned = booked.filter((q) => !q.managerId);
+  const teamIds = new Set(team.map((t) => t.id));
+  const unassigned = booked.filter((q) => !q.managerId || !teamIds.has(q.managerId));
   const revenueBySalesperson = [
     ...byRep.map((r) => ({ id: r.id, name: r.name, value: r.revenueTotal, count: r.bookings, conversion: r.conversion })),
     ...(unassigned.length
-      ? [{ id: "none", name: "Unassigned", value: unassigned.reduce((s, q) => s + bookingValue(q), 0), count: unassigned.length, conversion: 0 }]
+      ? [{ id: "none", name: "Founder / unassigned", value: unassigned.reduce((s, q) => s + bookingValue(q), 0), count: unassigned.length, conversion: 0 }]
       : []),
   ].sort((a, b) => b.value - a.value);
 
@@ -172,7 +174,7 @@ export function studioAnalytics(
         conversion: pct(new Set(bk.map((q) => q.clientId)).size, enq),
       };
     })
-    .filter((s) => s.leads > 0);
+    .filter((s) => s.leads > 0 && s.source !== "website");
 
   const lostQ = quotes.filter((q) => q.lost);
   const lostAnalysis = (Object.keys(LOST_LABEL) as LostReason[])
@@ -252,6 +254,10 @@ export function studioAnalytics(
       averageBookingValue: booked.length ? Math.round(total / booked.length) : 0,
       leads: clients.length,
       enquiries: enquiryClients.size,
+      proposals: quotes.filter((q) => q.status !== "draft").length,
+      // Funnel steps count couples, not quotations, so each step is a subset of the last.
+      approved: new Set(quotes.filter((q) => ["approved", "sent", "accepted"].includes(q.status)).map((q) => q.clientId)).size,
+      bookedClients: bookedClients.size,
       conversion: pct(bookedClients.size, enquiryClients.size),
       lost: lostQ.length,
       averageDiscount,

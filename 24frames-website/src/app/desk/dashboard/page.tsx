@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import SalesDashboard from "@/components/portal/SalesDashboard";
+import FounderDesk from "@/components/portal/FounderDesk";
 import { currentAccount } from "@/lib/portal/guard";
 import { publicAccount } from "@/lib/portal/types";
 
@@ -12,5 +13,5 @@ export default async function Page() {
   if (me.role === "client") redirect("/account");
 
 
-  return <SalesDashboard me={publicAccount(me)} />;
+  return me.role === "owner" ? <FounderDesk me={publicAccount(me)} /> : <SalesDashboard me={publicAccount(me)} />;
 }

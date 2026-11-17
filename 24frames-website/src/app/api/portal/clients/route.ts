@@ -37,6 +37,7 @@ export async function GET() {
           latestUpdatedAt: latest?.updatedAt ?? null,
           source: c.source ?? (c.createdBy ? "rm_link" : "website"),
           priceFactor: c.priceFactor ?? null,
+          enquiry: c.enquiry ?? null,
         };
       });
     return json({ clients: rows });

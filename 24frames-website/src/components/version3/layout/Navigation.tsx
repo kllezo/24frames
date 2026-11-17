@@ -6,10 +6,10 @@ import { usePathname } from "next/navigation";
 import styles from "./Navigation.module.css";
 
 const NAV_LINKS = [
-  { label: "The Vows", href: "/#vows" },
-  { label: "The Collection", href: "/#collection" },
+  { label: "The Vows", href: "/version3#vows" },
+  { label: "The Collection", href: "/version3#collection" },
   { label: "Stories", href: "/stories" },
-  { label: "The Artist", href: "/#artist" },
+  { label: "The Artist", href: "/version3#artist" },
 ];
 
 export default function Navigation() {
@@ -24,7 +24,7 @@ export default function Navigation() {
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     setMenuOpen(false);
 
-    const isHome = pathname === "/" || pathname === "";
+    const isHome = pathname === "/version3" || pathname === "/version3/";
     if (isHome) {
       e.preventDefault();
 
@@ -214,7 +214,7 @@ export default function Navigation() {
 
         <nav className={styles.nav} aria-label="Main navigation">
           <Link
-            href="/"
+            href="/version3"
             className={styles.logo}
             aria-label="Go to homepage"
             onClick={handleLogoClick}

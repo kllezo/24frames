@@ -36,6 +36,10 @@ export interface PortalAccount {
   priceLinkId?: string | null;
   /** Sales: the superadmin lets them see every lead, not only their own. */
   seeAllLeads?: boolean;
+  /** Clients: created from a website enquiry — they set their password when they first sign up. */
+  pendingSignup?: boolean;
+  /** Clients: what they told us in the website enquiry. */
+  enquiry?: EnquiryBrief | null;
   /** scrypt$N$r$p$salt$hash */
   passwordHash: string;
   active: boolean;
@@ -77,13 +81,30 @@ export interface CrmClient {
   latestUpdatedAt: string | null;
   source: LeadSource;
   priceFactor: number | null;
+  enquiry: EnquiryBrief | null;
+}
+
+/** A website enquiry, summarised for the relationship manager. */
+export interface EnquiryBrief {
+  at: string;
+  category: string;
+  events: { name: string; date: string; city: string; venue: string }[];
+  directions: string[];
+  services: string[];
+  scale: string;
+  investment: string;
+  notes: string;
+  memories: string;
+  /** One paragraph the RM can read before the first call. */
+  summary: string;
 }
 
 /* ---------------- leads, bookings and production ---------------- */
 
-export type LeadSource = "website" | "rm_link" | "price_link" | "referral" | "instagram" | "walk_in" | "other";
+export type LeadSource = "website" | "enquiry" | "rm_link" | "price_link" | "referral" | "instagram" | "walk_in" | "other";
 export const SOURCE_LABEL: Record<LeadSource, string> = {
-  website: "Website",
+  website: "Website sign-up",
+  enquiry: "Website enquiry form",
   rm_link: "Relationship manager link",
   price_link: "Custom price link",
   referral: "Referral",
@@ -148,7 +169,7 @@ export interface DeskNotification {
   id: string;
   to: string;
   at: string;
-  kind: "rm_changed" | "lead_assigned" | "lead_removed" | "booking" | "target" | "price_link";
+  kind: "rm_changed" | "lead_assigned" | "lead_removed" | "booking" | "target" | "price_link" | "enquiry";
   text: string;
   quoteId?: string | null;
   clientId?: string | null;

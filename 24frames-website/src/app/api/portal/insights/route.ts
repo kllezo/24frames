@@ -26,6 +26,55 @@ export async function GET(request: Request) {
       return json({ analytics: studioAnalytics(quotes, clients, staff, followups, settings, today), settings });
     }
 
+    if (me.role === "owner") {
+      const a = studioAnalytics(quotes, clients, staff, followups, settings, today);
+      const couple = (q: (typeof quotes)[number]) => coupleNames(q.draft.couple, q.clientName);
+      const since = new Date(Date.now() - 14 * 86400000).toISOString();
+      const in45 = new Date(Date.now() + 45 * 86400000).toISOString().slice(0, 10);
+      const names = new Map(staff.map((s) => [s.id, s.name]));
+      const open = quotes.filter((q) => !q.lost && ["submitted", "pending_approval", "approved", "sent"].includes(q.status));
+      const thisMonth = a.revenueByMonth[a.revenueByMonth.length - 1];
+      const lastMonth = a.revenueByMonth[a.revenueByMonth.length - 2];
+      return json({
+        founder: {
+          revenueThisMonth: thisMonth?.value ?? 0,
+          revenueLastMonth: lastMonth?.value ?? 0,
+          bookingsThisMonth: thisMonth?.count ?? 0,
+          teamTarget: Object.values(settings.targets).reduce((x, y) => x + y, 0),
+          pipelineValue: open.reduce((s, q) => s + bookingValue(q), 0),
+          pipelineCount: open.length,
+          totals: a.totals,
+          months: a.revenueByMonth.slice(-6),
+          approvals: quotes
+            .filter((q) => q.status === "pending_approval")
+            .map((q) => ({
+              id: q.id,
+              reference: q.reference,
+              couple: couple(q),
+              price: bookingValue(q),
+              estimate: q.quote.grandTotal,
+              by: q.salesOwner ?? q.managerName ?? "Sales",
+              note: q.salesNote,
+              at: [...q.history].reverse().find((h) => h.action === "sent_for_approval")?.at ?? q.updatedAt,
+            })),
+          newLeads: clients
+            .filter((c) => c.createdAt >= since)
+            .sort((x, y) => y.createdAt.localeCompare(x.createdAt))
+            .slice(0, 8)
+            .map((c) => ({ id: c.id, name: c.name, createdAt: c.createdAt, source: c.source ?? (c.createdBy ? "rm_link" : "website"), manager: c.managerId ? names.get(c.managerId) ?? null : null, summary: c.enquiry?.summary ?? null })),
+          unassigned: clients.filter((c) => !c.managerId).length,
+          league: a.team,
+          upcoming: a.upcoming.filter((u) => u.date && u.date <= in45).slice(0, 6),
+          overdueDeliveries: a.deliveryPerformance.overdue,
+          pulse: quotes
+            .flatMap((q) => q.history.map((h) => ({ ...h, quoteId: q.id, couple: couple(q) })))
+            .filter((h) => h.role !== "client" && h.by !== me.name)
+            .sort((x, y) => y.at.localeCompare(x.at))
+            .slice(0, 8),
+        },
+      });
+    }
+
     const mineQ = quotes.filter((q) => q.managerId === me.id);
     const mineC = clients.filter((c) => c.managerId === me.id);
     const stats = repStats(me.id, me.name, quotes, clients, followups, settings, today);
@@ -74,7 +123,7 @@ export async function GET(request: Request) {
       leads: mineC
         .map((c) => {
           const latest = mineQ.filter((q) => q.clientId === c.id)[0];
-          return { id: c.id, name: c.name, phone: c.phone, location: c.location, createdAt: c.createdAt, latest: latest ? row(latest) : null };
+          return { id: c.id, name: c.name, phone: c.phone, location: c.location, createdAt: c.createdAt, latest: latest ? row(latest) : null, summary: c.enquiry?.summary ?? null };
         })
         .sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
       unassigned: me.role === "sales" ? clients.filter((c) => !c.managerId && leadVisible(me, c.managerId)).length : 0,

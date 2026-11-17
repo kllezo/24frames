@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import base from "../studio/studio.module.css";
 import qx from "../studio/quotes/quotes.module.css";
 import px from "./portal.module.css";
 import ix from "./insights.module.css";
@@ -23,29 +22,36 @@ const ago = (iso: string) => {
    notifications, and — for the superadmin only — analytics, the team and
    desk access. */
 export default function DeskTop({ me, current }: { me: PublicAccount; current: DeskPage }) {
-  const links: { id: DeskPage; href: string; label: string }[] = [
+  const main: { id: DeskPage; href: string; label: string }[] = [
     { id: "dashboard", href: "/desk/dashboard", label: "My desk" },
     { id: "quotes", href: "/desk", label: "Quotations" },
     { id: "clients", href: "/desk/clients", label: "Clients" },
     { id: "converted", href: "/desk/converted", label: "Converted" },
     { id: "production", href: "/desk/production", label: "Production" },
     { id: "links", href: "/desk/price-links", label: "Price links" },
-    ...(me.superadmin
-      ? ([
-          { id: "analytics", href: "/desk/analytics", label: "Analytics" },
-          { id: "team", href: "/desk/team", label: "Team" },
-          { id: "access", href: "/desk/access", label: "Access" },
-        ] as const)
-      : []),
   ];
+  const admin: { id: DeskPage; href: string; label: string; note: string }[] = me.superadmin
+    ? [
+        { id: "analytics", href: "/desk/analytics", label: "Analytics", note: "Revenue, conversion, team" },
+        { id: "team", href: "/desk/team", label: "Team", note: "Accounts, targets, commission" },
+        { id: "access", href: "/desk/access", label: "Access", note: "Who may use the desk" },
+      ]
+    : [];
+  const inAdmin = admin.some((a) => a.id === current);
+  const initials = me.name
+    .split(/\s+/)
+    .filter((w) => /^[A-Za-z]/.test(w))
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join("");
   return (
     <header className={`${qx.top} ${ix.top}`}>
-      <Link href="/" aria-label="24 Frames home">
+      <Link href="/" aria-label="24 Frames home" className={ix.brand}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className={qx.logo} src="/images/logo-dark-header.png" alt="24 Frames" />
       </Link>
       <nav className={`${px.deskNav} ${ix.nav}`} aria-label="Studio desk">
-        {links.map((l) => (
+        {main.map((l) => (
           <a
             key={l.id}
             href={l.href}
@@ -56,26 +62,72 @@ export default function DeskTop({ me, current }: { me: PublicAccount; current: D
             {l.label}
           </a>
         ))}
+        {admin.length > 0 && (
+          <Menu
+            label={
+              <span className={`${px.deskNavLink} ${inAdmin ? px.deskNavOn : ""}`}>
+                Admin <span aria-hidden="true">▾</span>
+              </span>
+            }
+          >
+            {admin.map((a) => (
+              <a key={a.id} href={a.href} className={current === a.id ? ix.menuOn : ""} data-no-transition>
+                <b>{a.label}</b>
+                <span>{a.note}</span>
+              </a>
+            ))}
+          </Menu>
+        )}
       </nav>
-      <div className={qx.topRight}>
-        <Bell />
-        <a className={base.btnGhost} href="/quotebuilder" data-no-transition>
+      <div className={ix.topActions}>
+        <a className={ix.quoteBtn} href="/quotebuilder" data-no-transition>
           Quotebuilder
         </a>
-        <span className={qx.who}>
-          {me.name} · {me.superadmin ? "Superadmin" : me.role === "owner" ? "Founder level" : "Sales"}
-        </span>
-        <button
-          className={base.btnGhost}
-          onClick={async () => {
-            await fetch("/api/portal/auth", { method: "DELETE" }).catch(() => null);
-            window.location.assign("/desk/login");
-          }}
-        >
-          Sign out
-        </button>
+        <Bell />
+        <Menu label={<span className={ix.avatar} title={me.name}>{initials || "•"}</span>} align="right">
+          <div className={ix.menuWho}>
+            <b>{me.name}</b>
+            <span>{me.superadmin ? "Superadmin" : me.role === "owner" ? "Founder level" : "Sales"} · {me.email}</span>
+          </div>
+          <button
+            type="button"
+            onClick={async () => {
+              await fetch("/api/portal/auth", { method: "DELETE" }).catch(() => null);
+              window.location.assign("/desk/login");
+            }}
+          >
+            <b>Sign out</b>
+          </button>
+        </Menu>
       </div>
     </header>
+  );
+}
+
+/* A small dropdown that closes on outside click or Escape. */
+function Menu({ label, children, align = "left" }: { label: React.ReactNode; children: React.ReactNode; align?: "left" | "right" }) {
+  const [open, setOpen] = useState(false);
+  const box = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (box.current && !box.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("mousedown", onDown);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  return (
+    <div className={ix.menuWrap} ref={box}>
+      <button type="button" className={ix.menuBtn} aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+        {label}
+      </button>
+      {open && <div className={`${ix.menu} ${align === "right" ? ix.menuRight : ""}`}>{children}</div>}
+    </div>
   );
 }
 

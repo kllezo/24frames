@@ -347,7 +347,7 @@ export default function AchievementBookshelf() {
         )}
 
         <div className={styles.shelfFooter}>
-          <Link href="/#artist" className={styles.viewAll}>
+          <Link href="/version3#artist" className={styles.viewAll}>
             Discover the artist behind the lens
             <span className={styles.arrow}>↓</span>
           </Link>

@@ -184,24 +184,21 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
       <DeskTop me={me} current="quotes" />
 
       <main className={qx.main}>
-        <section className={ix.hero}>
-          <p className={ix.heroKicker}>{me.role === "owner" ? "Founder's desk" : "Sales desk"} · quotations</p>
-          <h1 className={ix.heroTitle}>
-            Online quotations, <em>from request to yes.</em>
-          </h1>
-          <p className={ix.heroLine}>
-            {me.role === "owner"
-              ? "Review what the team has priced, approve or return it with a comment, and see every enquiry the studio has."
-              : "Your leads' quotations — confirm the selections with the client, set the price and send it to the founder."}
-          </p>
-        </section>
-        <dl className={ix.kpis}>
-          <div className={`${ix.kpi} ${counts.updates ? ix.kpiAccent : ""}`}><dt>Notifications</dt><dd>{counts.updates ?? "—"}</dd></div>
-          <div className={ix.kpi}><dt>In review</dt><dd>{counts.inbox ?? "—"}</dd></div>
-          <div className={ix.kpi}><dt>Awaiting founder</dt><dd>{counts.approval ?? "—"}</dd></div>
-          <div className={ix.kpi}><dt>Ready to share</dt><dd>{counts.approved ?? "—"}</dd></div>
-          <div className={ix.kpi}><dt>Lost</dt><dd>{counts.lost ?? "—"}</dd></div>
-        </dl>
+        <header className={ix.hero} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "1.5rem", flexWrap: "wrap" }}>
+          <div>
+            <p className={ix.heroKicker}>{me.role === "owner" ? "Founder's desk" : "Sales desk"} · quotations</p>
+            <h1 className={ix.heroTitle}>
+              Online quotations, <em>from request to yes.</em>
+            </h1>
+          </div>
+          <ul className={ix.strip} style={{ margin: 0 }}>
+            <li className={counts.updates ? ix.stripHot : ""}>Notifications <b>{counts.updates ?? "—"}</b></li>
+            <li>In review <b>{counts.inbox ?? "—"}</b></li>
+            <li className={me.role === "owner" && counts.approval ? ix.stripHot : ""}>Awaiting founder <b>{counts.approval ?? "—"}</b></li>
+            <li>Ready to share <b>{counts.approved ?? "—"}</b></li>
+            <li>Lost <b>{counts.lost ?? "—"}</b></li>
+          </ul>
+        </header>
 
         <div className={qx.tools}>
           <div className={px.tabs} role="tablist" aria-label="Quotations">
