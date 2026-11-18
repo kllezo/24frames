@@ -77,3 +77,11 @@ export async function requireSuperadmin(): Promise<PortalAccount | NextResponse>
   if (!me.superadmin) return json({ error: "Only the superadmin can manage desk access." }, 403);
   return me;
 }
+
+/** Lead privacy: the founder sees every lead; a salesperson sees their own
+    leads and unassigned ones — others' only when the superadmin allows it. */
+export function leadVisible(me: PortalAccount, managerId: string | null | undefined): boolean {
+  if (me.role === "owner") return true;
+  if (me.role !== "sales") return false;
+  return !managerId || managerId === me.id || !!me.seeAllLeads;
+}

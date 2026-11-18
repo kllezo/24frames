@@ -448,7 +448,7 @@ export default function HeroLogoTransition({
                     </linearGradient>
                   </defs>
                   <path
-                    d="M 1,122.5 A 121.5,121.5 0 0,1 244,122.5 L 244,403 L 1,403 Z"
+                    d="M 1,1 L 244,1 L 244,403 L 1,403 Z"
                     fill="none"
                     stroke="url(#champagneGoldArchVows)"
                     strokeWidth="1.75"

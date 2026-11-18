@@ -19,6 +19,7 @@ export default function PortalAuth({
   initialMode,
   storageIssue = null,
   invite = null,
+  price = null,
 }: {
   audience: "client" | "staff";
   next: string;
@@ -26,6 +27,8 @@ export default function PortalAuth({
   storageIssue?: string | null;
   /** A relationship manager's invite link (clients). */
   invite?: string | null;
+  /** A custom price link (clients) — applied at sign-up or sign-in. */
+  price?: string | null;
 }) {
   const [mode, setMode] = useState<Mode>(initialMode);
   const [invitedBy, setInvitedBy] = useState<string | null>(null);
@@ -49,7 +52,12 @@ export default function PortalAuth({
       const res = await fetch("/api/portal/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: mode, ...f, ...(invite && mode === "signup" ? { invite } : {}) }),
+        body: JSON.stringify({
+          action: mode,
+          ...f,
+          ...(invite && mode === "signup" ? { invite } : {}),
+          ...(price && (mode === "signup" || mode === "login") ? { price } : {}),
+        }),
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string; next?: string; role?: string };
       if (!res.ok) {
@@ -95,6 +103,11 @@ export default function PortalAuth({
         </Link>
         <p className={base.kicker}>{copy.kicker}</p>
         <h1 className={qx.gateTitle}>{copy.title}</h1>
+        {price && !invitedBy && (
+          <p className={px.invited}>
+            A personal invitation from 24 Frames. Sign in — or create your account — to compose your quotation with the studio.
+          </p>
+        )}
         {invitedBy && (
           <p className={px.invited}>
             Invited by <b>{invitedBy}</b>, your relationship manager at 24 Frames. Create your account to compose your

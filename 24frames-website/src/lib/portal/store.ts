@@ -22,6 +22,7 @@ interface FileDb {
   accounts: PortalAccount[];
   quotes: PortalQuote[];
   access: StaffAccess[];
+  docs: Record<string, Record<string, unknown>>;
 }
 const dataDir = () => path.resolve(process.env.STUDIO_DATA_DIR || path.join(process.cwd(), ".studio-data"));
 const dbFile = () => path.join(dataDir(), "portal-db.json");
@@ -37,9 +38,9 @@ async function load(): Promise<FileDb> {
   try {
     const raw = await fs.readFile(dbFile(), "utf8");
     const parsed = JSON.parse(raw) as Partial<FileDb>;
-    return { accounts: parsed.accounts ?? [], quotes: parsed.quotes ?? [], access: parsed.access ?? [] };
+    return { accounts: parsed.accounts ?? [], quotes: parsed.quotes ?? [], access: parsed.access ?? [], docs: parsed.docs ?? {} };
   } catch (err) {
-    if ((err as NodeJS.ErrnoException).code === "ENOENT") return { accounts: [], quotes: [], access: [] };
+    if ((err as NodeJS.ErrnoException).code === "ENOENT") return { accounts: [], quotes: [], access: [], docs: {} };
     throw new StorageUnavailableError(`Portal records could not be read: ${(err as Error).message}`);
   }
 }
@@ -310,3 +311,57 @@ export async function managerCard(id: string | null | undefined): Promise<Manage
   if (!m || !m.active || m.role === "client") return null;
   return { name: m.name, phone: m.phone, email: m.email };
 }
+
+export async function listAccounts(): Promise<PortalAccount[]> {
+  if (pgEnabled()) {
+    return portalSql(async (s) => {
+      const rows = await s<{ data: PortalAccount }[]>`select data from portal.accounts order by created_at`;
+      return rows.map((r) => r.data);
+    });
+  }
+  return (await load()).accounts;
+}
+
+/* ---------------- documents (notifications, follow-ups, links, settings) ---------------- */
+
+export type DocKind = "notification" | "followup" | "pricelink" | "settings";
+
+export async function listDocs<T>(kind: DocKind): Promise<T[]> {
+  if (pgEnabled()) {
+    return portalSql(async (s) => {
+      const rows = await s<{ data: T }[]>`select data from portal.docs where kind = ${kind} order by updated_at desc limit 5000`;
+      return rows.map((r) => r.data);
+    });
+  }
+  return Object.values((await load()).docs[kind] ?? {}) as T[];
+}
+
+export async function getDoc<T>(kind: DocKind, id: string): Promise<T | null> {
+  if (pgEnabled()) {
+    return portalSql(async (s) => {
+      const rows = await s<{ data: T }[]>`select data from portal.docs where kind = ${kind} and id = ${id}`;
+      return rows[0]?.data ?? null;
+    });
+  }
+  return ((await load()).docs[kind]?.[id] as T) ?? null;
+}
+
+export async function putDocs<T extends { id: string }>(kind: DocKind, docs: T[]): Promise<void> {
+  if (!docs.length) return;
+  if (pgEnabled()) {
+    return portalSql(async (s) => {
+      for (const d of docs) {
+        await s`insert into portal.docs (kind, id, data, updated_at) values (${kind}, ${d.id}, ${s.json(d as never)}, now())
+                on conflict (kind, id) do update set data = excluded.data, updated_at = now()`;
+      }
+    });
+  }
+  return exclusive(async () => {
+    const db = await load();
+    db.docs[kind] = db.docs[kind] ?? {};
+    for (const d of docs) db.docs[kind][d.id] = d;
+    await save(db);
+  });
+}
+
+export const putDoc = <T extends { id: string }>(kind: DocKind, doc: T) => putDocs(kind, [doc]).then(() => doc);

@@ -6,6 +6,8 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import StoryExploreStillsButton from "@/components/stories/StoryExploreStillsButton";
 import StoryStillsGallery from "@/components/stories/StoryStillsGallery";
+import StoryAlbum from "@/components/stories/StoryAlbum";
+import { STORY_ALBUMS } from "@/data/storyAlbums";
 import styles from "./StoryDetail.module.css";
 
 interface PageProps {
@@ -184,6 +186,9 @@ export default async function StoryDetailPage({ params }: PageProps) {
             </div>
           </div>
         </section>
+
+        {/* ── The Album (the couple's own edit, laid out as an heirloom book) ── */}
+        {STORY_ALBUMS[slug] && <StoryAlbum album={STORY_ALBUMS[slug]} couple={story.coupleNames} />}
 
         {/* ── Curated Exhibition Stills Gallery (Alternating Editorial Composition) ── */}
         <StoryStillsGallery

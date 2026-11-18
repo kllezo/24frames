@@ -1,0 +1,380 @@
+/* ============================================================
+   24 FRAMES — AUTONOMOUS FLOATING PHOTOGRAPHIC GALLERY
+   Continuous horizontal drift, 125% pause-and-enlarge, collision-free
+   ============================================================ */
+
+.section {
+  position: relative;
+  background-color: #FAF8F2;
+  padding: clamp(4rem, 7vh, 7rem) 0 clamp(4.5rem, 8vh, 7.5rem);
+  overflow: hidden;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 4vw, 3.5rem);
+}
+
+/* ── Section Header ── */
+.header {
+  margin-bottom: clamp(2rem, 4vh, 3.5rem);
+  will-change: transform, opacity;
+}
+
+.headerMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.label {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6B2733;
+}
+
+.badge {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #77766E;
+  background: #F2EEE5;
+  border: 1px solid #E4DED2;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.title {
+  font-family: var(--font-editorial, 'Italiana', 'Cormorant Garamond', serif);
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  font-weight: 400;
+  color: #20231F;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin: 0 0 0.85rem;
+}
+
+.subRow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.goldRule {
+  display: inline-block;
+  width: 36px;
+  height: 2px;
+  background-color: #C8A84E;
+  border-radius: 1px;
+}
+
+.subtitle {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: clamp(0.7rem, 0.85vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #555850;
+  text-transform: uppercase;
+}
+
+/* ── Autonomous Floating Viewport ── */
+.stageViewport {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 2rem);
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+/* Pause everything if user leaves tab */
+.stagePaused .ribbonRow {
+  animation-play-state: paused !important;
+}
+
+/* ── Row Track (Provides hover boundary, focus context, and vertical headroom) ── */
+.rowTrack {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+  /* Crucial: generous vertical headroom so 125% scale & offsets NEVER get clipped */
+  padding: clamp(2.25rem, 3.8vw, 3.75rem) 0;
+  outline: none;
+  cursor: default;
+}
+
+/* Hovering anywhere inside this track pauses the entire track */
+.rowTrack:hover .ribbonRow,
+.rowTrack:focus-within .ribbonRow,
+.rowPinnedPaused .ribbonRow {
+  animation-play-state: paused !important;
+}
+
+/* ── Ribbon Row (Continuous Seamless Horizontal Drift) ── */
+.ribbonRow {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 2.8vw, 36px);
+  width: max-content;
+  will-change: transform;
+}
+
+.ribbonLeft {
+  animation: driftLeft 52s linear infinite;
+}
+
+.ribbonRight {
+  animation: driftRight 60s linear infinite;
+}
+
+@keyframes driftLeft {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes driftRight {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ── Individual Photo Card (Asymmetrical, Rounded, 125% Scale) ── */
+.photoCard {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: clamp(16px, 2vw, 24px);
+  overflow: visible; /* Allows refined elevation & caption action visibility */
+  background-color: #EAE5D9;
+  box-shadow: 
+    0 12px 32px rgba(71, 26, 32, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  outline: none;
+  z-index: 2;
+  transform-origin: center center;
+  transform: scale(1) translateY(var(--offset, 0px));
+  transition: 
+    transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.38s ease,
+    border-color 0.38s ease;
+  will-change: transform;
+}
+
+/* 125% Scale on Hover, Keyboard Focus, or Pinned Click */
+.photoCard:hover,
+.photoCard:focus-visible,
+.photoCardPinned {
+  transform: scale(1.25) translateY(var(--offset, 0px));
+  z-index: 50;
+  box-shadow: 
+    0 28px 65px rgba(71, 26, 32, 0.24),
+    0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.photoCard:focus-visible {
+  outline: 2px solid #6B2733;
+  outline-offset: 4px;
+}
+
+/* Inner Container for Image Clipping to Rounded Corners */
+.cardImageContainer {
+  position: relative;
+  width: 100%;
+  border-radius: clamp(16px, 2vw, 24px);
+  overflow: hidden;
+  background-color: #EAE5D9;
+  border: 1.5px solid rgba(228, 222, 210, 0.9);
+  transition: border-color 0.35s ease;
+}
+
+.photoCard:hover .cardImageContainer,
+.photoCardPinned .cardImageContainer {
+  border-color: #C8A84E;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.photoCard:hover .cardImage,
+.photoCardPinned .cardImage {
+  transform: scale(1.03);
+}
+
+.cardVignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(45, 15, 19, 0.15) 75%,
+    rgba(45, 15, 19, 0.65) 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Refined Editorial Caption Tag ── */
+.captionTag {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  right: 14px;
+  background: rgba(250, 248, 242, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(228, 222, 210, 0.95);
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+}
+
+.captionTop {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.frameBadge {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #6B2733;
+  background: #EAE5D9;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+}
+
+.tagTitle {
+  font-family: var(--font-cinema, 'Cinzel', serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #20231F;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tagLocation {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.625rem;
+  color: #77766E;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Secondary Action Row visible on enlargement / hover */
+.enlargedActionRow {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(228, 222, 210, 0.8);
+}
+
+.photoCard:hover .enlargedActionRow,
+.photoCardPinned .enlargedActionRow {
+  display: flex;
+}
+
+.openProjectLink {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6B2733;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.openProjectLink:hover {
+  color: #2D0F13;
+  text-decoration: underline;
+}
+
+.dismissBtn {
+  background: none;
+  border: none;
+  color: #77766E;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+  transition: color 0.2s ease;
+}
+
+.dismissBtn:hover {
+  color: #20231F;
+}
+
+/* ── Prefers-Reduced-Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .ribbonLeft,
+  .ribbonRight {
+    animation: none !important;
+  }
+
+  .rowTrack {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+}
+
+/* ── Touch Devices ── */
+@media (hover: none) and (pointer: coarse) {
+  .rowTrack {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .rowTrack::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── Mobile Layout ── */
+@media (max-width: 768px) {
+  .photoCard {
+    width: 270px !important;
+  }
+
+  .photoCard:hover,
+  .photoCardPinned {
+    transform: scale(1.15) translateY(var(--offset, 0px));
+  }
+}

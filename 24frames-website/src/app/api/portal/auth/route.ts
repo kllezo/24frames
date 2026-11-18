@@ -5,6 +5,7 @@ import { PORTAL_COOKIE, portalCookieOptions, signPortal } from "@/lib/portal/ses
 import { body, deskAllowed, json, portalError, sameOrigin } from "@/lib/portal/guard";
 import { safeEqual } from "@/lib/studio/session";
 import type { PortalAccount } from "@/lib/portal/types";
+import { applyLink, usableLink } from "@/lib/portal/pricelinks";
 
 /* Portal sign-in, client sign-up and the one-time founder set-up.
    Failed attempts are throttled per address: 6 failures → 10 minutes. */
@@ -25,6 +26,8 @@ type Body = {
   phone?: string;
   pin?: string;
   invite?: string;
+  /** A custom price link token. */
+  price?: string;
 };
 
 function home(a: PortalAccount) {
@@ -60,6 +63,7 @@ export async function POST(request: Request) {
   try {
     if (b?.action === "login") {
       const account = email ? await findAccountByEmail(email) : null;
+      if (account?.pendingSignup) return json({ error: "We have your enquiry — choose “Create account” with this email to set your password." }, 409);
       const ok = account && account.active && (await verifyPassword(password, account.passwordHash));
       if (!ok || !account) return fail("That email and password don't match.");
       attempts.delete(key);
@@ -67,6 +71,11 @@ export async function POST(request: Request) {
         return json({ error: "This email no longer has access to the studio desk. Please contact the founder." }, 403);
       }
       await updateAccount(account.id, { lastLoginAt: new Date().toISOString() });
+      // A client who signs in through a custom price link moves onto that rate card.
+      if (account.role === "client") {
+        const link = await usableLink(b.price, account.email, account.id);
+        if (link && link.id !== account.priceLinkId) return signedIn(await applyLink(account, link));
+      }
       return signedIn(account);
     }
 
@@ -86,8 +95,27 @@ export async function POST(request: Request) {
       const invitedBy = await readInvite(b.invite);
       const manager = invitedBy ? await getAccount(invitedBy) : null;
       const managerId = manager && manager.active && manager.role !== "client" && (await deskAllowed(manager)) ? manager.id : null;
+      // A couple who first wrote in through the enquiry form claims their record by signing up.
+      const existing = await findAccountByEmail(email);
+      if (existing && existing.role === "client" && existing.pendingSignup) {
+        let claimed =
+          (await updateAccount(existing.id, {
+            name,
+            phone,
+            location,
+            passwordHash: await hashPassword(password),
+            pendingSignup: false,
+            lastLoginAt: new Date().toISOString(),
+            ...(existing.managerId ? {} : { managerId }),
+          })) ?? existing;
+        const link = await usableLink(b.price, email, claimed.id);
+        if (link) claimed = await applyLink(claimed, link);
+        return signedIn(claimed, 201);
+      }
       const created = await createAccount({ role: "client", name, email, phone, location, passwordHash: await hashPassword(password), createdBy: managerId });
-      const account = managerId ? (await updateAccount(created.id, { managerId })) ?? created : created;
+      let account = (await updateAccount(created.id, { managerId, source: managerId ? "rm_link" : "website" })) ?? created;
+      const link = await usableLink(b.price, email, null);
+      if (link) account = await applyLink(account, link);
       return signedIn(account, 201);
     }
 

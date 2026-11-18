@@ -4,57 +4,60 @@
 
 import type { PlanningRequest } from "./types";
 
+export interface PlanningPartner {
+  name: string;
+  /** What a 24 Frames couple gets there, e.g. "3–4% off". */
+  perk?: string;
+  /** Round logo or photo; leave empty until the brand sends one. */
+  image?: string;
+  /** Not confirmed yet — shown as an empty logo circle with no name. */
+  placeholder?: boolean;
+}
+
 export interface PlanningService {
   id: string;
   title: string;
-  /** Short line under the title. */
+  /** One line under the title. */
   line: string;
-  /** What we actually help with. */
-  detail: string;
-  tags: string[];
   image: string;
+  /** Five partner brands; couples mention 24 Frames there to redeem the privilege. */
+  partners: PlanningPartner[];
 }
+
+/* Partner brands: replace each placeholder with the brand's name, its
+   privilege and a square logo in /public/images/partners/ as the studio
+   confirms them. */
+const soon = (n: number): PlanningPartner => ({ name: `Partner ${n}`, placeholder: true });
+const fill = (known: PlanningPartner[]): PlanningPartner[] => [...known, ...Array.from({ length: 5 - known.length }, (_, i) => soon(known.length + i + 1))];
 
 export const PLANNING_SERVICES: PlanningService[] = [
   {
     id: "venues",
-    title: "Venues",
-    line: "Farmhouses, resorts & open-air estates",
-    detail: "A shortlist matched to your guest count, season and ceremony — from a farmhouse for the Haldi to the wedding venue itself.",
-    tags: ["Farmhouses", "Resorts", "Palaces", "Outdoor lawns"],
+    title: "Venue selection",
+    line: "Farmhouses, resorts and palaces that welcome our couples",
     image: "/images/disciplines/weddings/IMG_6320-mobile.webp",
-  },
-  {
-    id: "planning",
-    title: "Planning & management",
-    line: "One team for the whole celebration",
-    detail: "Timelines, vendors, hospitality and the flow of each day — run by one team so your family can simply be present.",
-    tags: ["Timelines", "Vendors", "Guest hospitality", "On-the-day crew"],
-    image: "/images/disciplines/weddings/IMG_6275-mobile.webp",
+    partners: fill([]),
   },
   {
     id: "decor",
-    title: "Décor & theming",
-    line: "Mandaps, florals, lighting & stages",
-    detail: "Every space designed around one idea — and designed to photograph beautifully, because we know how it will be filmed.",
-    tags: ["Mandap", "Florals", "Lighting", "Stage design"],
+    title: "Event décor",
+    line: "Mandaps, florals and lighting from designers we trust",
     image: "/images/stories/karthik-and-gayathri/IMG_6329-mobile.webp",
+    partners: fill([]),
   },
   {
     id: "jewellery",
-    title: "Jewellery",
-    line: "Bridal sets, heirlooms & rentals",
-    detail: "Introductions to jewellers we trust for bridal sets, statement pieces and rentals for each occasion.",
-    tags: ["Bridal sets", "Heirloom pieces", "Rentals"],
+    title: "Jewellery curation",
+    line: "Bridal sets and heirlooms from houses we work with",
     image: "/images/disciplines/fashion/IMG_6279-mobile.webp",
+    partners: fill([{ name: "PMJ Diamonds", perk: "3–4% off" }]),
   },
   {
     id: "makeup",
-    title: "Makeup & styling",
-    line: "Artists, hair & draping",
-    detail: "Bridal makeup artists, hair and saree draping — trialled in advance and timed to your shoot schedule.",
-    tags: ["Bridal makeup", "Hair", "Draping", "Family styling"],
+    title: "Professional makeup artistry",
+    line: "Bridal artists, hair and draping, trialled in advance",
     image: "/images/disciplines/fashion/IMG_6285-mobile.webp",
+    partners: fill([]),
   },
 ];
 
@@ -70,5 +73,8 @@ export function cleanPlanning(input: unknown): PlanningRequest | undefined {
   return { services, note };
 }
 
+/* Titles for services retired from the list, so older quotations still read well. */
+const LEGACY_TITLES: Record<string, string> = { planning: "Planning & management" };
+
 export const planningTitles = (p: PlanningRequest | undefined) =>
-  (p?.services ?? []).map((id) => PLANNING_SERVICES.find((s) => s.id === id)?.title ?? id);
+  (p?.services ?? []).map((id) => PLANNING_SERVICES.find((s) => s.id === id)?.title ?? LEGACY_TITLES[id] ?? id);

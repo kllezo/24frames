@@ -490,10 +490,17 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.25rem;
-  padding-bottom: 0.85rem;
+  padding: 0.85rem 0;
   margin-bottom: 1rem;
   border-bottom: 1px solid rgba(9, 69, 62, 0.12);
   width: 100%;
+  /* Back and Continue stay in reach on every stage while the couple scrolls. */
+  position: sticky;
+  top: var(--atelier-header-h, 62px);
+  z-index: 40;
+  background: rgba(250, 247, 240, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .stageTopNavLeft {
