@@ -339,22 +339,10 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
       <div className={styles.container}>
         {/* ── Section Header ────────────────────────────────────── */}
         <div ref={headerRef} className={styles.header}>
-          <div className={styles.headerTop}>
-            <div className={styles.headerMeta}>
-              <span className={styles.chapterLabel}>The Collection</span>
-              <span className={styles.curatorialBadge}>Five Practices of Optics</span>
-            </div>
-          </div>
           <h2 className={styles.title}>
             The <span className={styles.cursiveAccent}>Collection</span>
           </h2>
-          <p className={styles.subtitle}>
-            From intimate Vedic rituals to high-fashion spreads and cinematic master films.
-            Select any discipline to enter its dedicated portfolio.
-          </p>
-          <p className={styles.headerCursiveQuote}>
-            “Every fleeting ritual holds a lifetime of meaning.”
-          </p>
+          <p className={styles.subtitle}>Five disciplines, one eye for the moment that never comes again.</p>
         </div>
 
         {/* ── Outer Showcase Frame ──────────────────────────────── */}
@@ -533,58 +521,22 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                     className={styles.activeContent}
                     aria-hidden={!isSelected}
                   >
-                    <div className={styles.activeTopRow}>
-                      <div className={styles.activeMetaTag}>
-                        <span className={styles.activeCategory}>{discipline.shortTitle}</span>
-                      </div>
-                      <div className={styles.cardTopBrand} aria-hidden="true">
-                        <span className={styles.cardBrandKicker}>PHANI GOGIREDDY</span>
-                        <span className={styles.cardBrandWordmark}>24 FRAMES</span>
-                      </div>
-                      <span className={styles.activeStatusPill}>
-                        {discipline.count.includes("ANAMORPHIC")
-                          ? discipline.count
-                          : `${discipline.count} MASTER FILMS`}
-                      </span>
-                    </div>
+                    <span className={styles.activeKicker}>
+                      {discipline.number} — {discipline.shortTitle}
+                    </span>
 
                     <div className={styles.activeBottomBlock}>
                       <h3 className={styles.activeTitle}>{discipline.title}</h3>
                       <p className={styles.activeTagline}>{discipline.tagline}</p>
-                      <p className={styles.activeDescription}>{discipline.heroDescription}</p>
-
-                      <div className={styles.activeButtonRow}>
-                        <Link
-                          href={discipline.href}
-                          className={styles.btnPrimary}
-                          data-custom-nav="true"
-                          onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
-                          aria-label={`Enter the full ${discipline.title} portfolio`}
-                        >
-                          <span>VIEW GALLERY</span>
-                          <span className={styles.btnArrow}>→</span>
-                        </Link>
-
-                        {discipline.id === "weddings" && (
-                          <Link
-                            href="/stories"
-                            className={styles.btnSecondary}
-                            data-custom-nav="true"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault();
-                              if (isDraggingRef.current) return;
-                              navigateWithCameraTransition("/stories", {
-                                image: displayImage,
-                              });
-                            }}
-                            aria-label="Explore client love stories"
-                          >
-                            <span>EXPLORE LOVE STORIES</span>
-                            <span className={styles.btnSubArrow}>↗</span>
-                          </Link>
-                        )}
-                      </div>
+                      <Link
+                        href={discipline.href}
+                        className={styles.textLink}
+                        data-custom-nav="true"
+                        onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
+                        aria-label={`Enter the full ${discipline.title} portfolio`}
+                      >
+                        View gallery <span aria-hidden="true">→</span>
+                      </Link>
                     </div>
                   </div>
 
@@ -594,23 +546,8 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
                     aria-hidden={isSelected}
                   >
                     <div className={styles.compactBottomBlock}>
+                      <span className={styles.compactNumber}>{discipline.number}</span>
                       <h4 className={styles.compactTitle}>{discipline.title}</h4>
-
-                      <Link
-                        href={discipline.href}
-                        className={styles.compactBtn}
-                        data-custom-nav="true"
-                        onClick={(e) => handleNavigateClick(e, discipline, displayImage)}
-                        aria-label={`View ${discipline.title} gallery`}
-                      >
-                        <span>VIEW GALLERY</span>
-                        <span className={styles.compactBtnArrow}>→</span>
-                      </Link>
-
-                      <div className={styles.compactCountRow}>
-                        <span className={styles.compactCount}>{discipline.count.split(" ")[0]}</span>
-                        <span className={styles.compactArrow}>→</span>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -638,13 +575,6 @@ export default function TheCollection({ isDedicatedRoute = false }: TheCollectio
               onClick={() => scrollToMobileCard(idx)}
             />
           ))}
-        </div>
-
-        {/* ── Subtle Mid-Page Cursive Editorial Note ── */}
-        <div className={styles.bottomCursiveQuoteRow} aria-hidden="true">
-          <p className={styles.bottomCursiveQuote}>
-            “Five disciplines of optics, devoted to moments that never come again.”
-          </p>
         </div>
 
         {/* ── Discreet Standalone Archive Link with Deliberate Whitespace ── */}

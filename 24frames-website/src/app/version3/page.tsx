@@ -5,7 +5,7 @@ import Footer from "@/components/version3/layout/Footer";
 import HeroSection from "@/components/version3/homepage/HeroSection";
 import LivingContactSheet from "@/components/version3/homepage/LivingContactSheet";
 import TheCollection from "@/components/version3/homepage/TheCollection";
-import FounderRecognitionSection from "@/components/version3/homepage/FounderRecognitionSection";
+import ArtistChapter from "@/components/version3/homepage/ArtistChapter";
 import AsSeenInStrip from "@/components/version3/homepage/AsSeenInStrip";
 import ClientGalleryExperience from "@/components/version3/homepage/ClientGalleryExperience";
 import InvitationCTA from "@/components/version3/homepage/InvitationCTA";
@@ -31,9 +31,6 @@ export default function Version3Page() {
         {/* The First Frame */}
         <HeroSection />
 
-        {/* The Artist — Phani Gogireddy, right after the opening photograph */}
-        <FounderRecognitionSection />
-
         {/* The Vows — wedding stories and films */}
         <LivingContactSheet />
 
@@ -47,6 +44,10 @@ export default function Version3Page() {
 
         {/* The client gallery experience */}
         <ClientGalleryExperience />
+
+        {/* The Artist — after the work and the client experience: the studio
+            leads, and most shoots are covered by Phani's crew. */}
+        <ArtistChapter />
 
         {/* The invitation */}
         <InvitationCTA />

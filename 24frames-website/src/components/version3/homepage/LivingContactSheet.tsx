@@ -83,7 +83,7 @@ export const ITEM_VIDEO_01: GalleryFilmItem = {
 export const ITEM_PROJECT_02: GalleryProjectItem = {
   id: "project-02",
   orderNumber: "02",
-  categoryLabel: "02 —— TRADITIONAL WEDDING",
+  categoryLabel: "04 —— TRADITIONAL WEDDING",
   clientNames: "Sireesh & Harshitha",
   captionTitle: "Sireesh & Harshitha",
   captionSub: "Sacred Wedding Union · Telangana",
@@ -119,7 +119,7 @@ export const ITEM_PROJECT_02_MANDAP: GalleryProjectItem = {
 export const ITEM_PROJECT_03: GalleryProjectItem = {
   id: "project-03",
   orderNumber: "03",
-  categoryLabel: "03 —— PRE-WEDDING COLLECTION",
+  categoryLabel: "02 —— PRE-WEDDING COLLECTION",
   clientNames: "Hrithika & Abhishek",
   captionTitle: "Hrithika & Abhishek",
   captionSub: "Nine-Scene Celebration · Hyderabad",
@@ -138,7 +138,7 @@ export const ITEM_PROJECT_03: GalleryProjectItem = {
 export const ITEM_PROJECT_04: GalleryProjectItem = {
   id: "project-04",
   orderNumber: "04",
-  categoryLabel: "04 —— FINE-ART HERITAGE WEDDING",
+  categoryLabel: "03 —— FINE-ART HERITAGE WEDDING",
   clientNames: "Karthik & Gayathri",
   captionTitle: "Karthik & Gayathri",
   captionSub: "Fine-Art Wedding · Botanical Glasshouse",
@@ -1657,9 +1657,9 @@ export default function LivingContactSheet() {
 
               {/* Delicate handwritten accent floating beside */}
               <div className={styles.floatingCursiveAccent} aria-hidden="true">
-                and somehow,
+                and for a moment,
                 <br />
-                time stood still
+                the world waited
               </div>
             </div>
           </div>
@@ -1667,7 +1667,7 @@ export default function LivingContactSheet() {
 
         {/* Narrative Cursive Bridge Line */}
         <div className={styles.cursiveBridge} aria-hidden="true">
-          Where two journeys became one unbroken legacy.
+          Every glance, kept for the generations still to come.
         </div>
 
         {/* 04 — KARTHIK & GAYATRI (TEXT ON LEFT, PHOTO ON RIGHT) */}
@@ -1761,11 +1761,8 @@ export default function LivingContactSheet() {
         </div>
 
         {/* Narrative Cursive Bridge Line */}
-        <div
-          className={`${styles.cursiveBridge} ${styles.cursiveBridgeSireesh}`}
-          aria-hidden="true"
-        >
-          In the sacred flame, promises made to outlive generations.
+        <div className={styles.cursiveBridge} aria-hidden="true">
+          Before the sacred fire, a lifetime of quiet promises.
         </div>
 
         {/* 05 — SIREESH & HARSHITHA (ASYMMETRIC EDITORIAL STILLS COMPOSITION) */}
@@ -1830,6 +1827,11 @@ export default function LivingContactSheet() {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* Narrative Cursive Bridge Line — into the closing film */}
+        <div className={styles.cursiveBridge} aria-hidden="true">
+          And when the music rose, the night was only theirs.
         </div>
       </div>
 

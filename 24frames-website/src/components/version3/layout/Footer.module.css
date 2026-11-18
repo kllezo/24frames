@@ -596,12 +596,16 @@
 .footer::before {
   content: "";
   position: absolute;
-  top: clamp(1.4rem, 2.4vw, 2rem);
-  left: clamp(1.25rem, 4vw, 4rem);
-  right: clamp(1.25rem, 4vw, 4rem);
-  height: 22px;
-  border: 1px solid rgba(91, 31, 42, 0.28);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(140px, 16vw, 220px);
+  border: 3px solid #5b1f2a;
   border-bottom: 0;
-  border-radius: 22px 22px 0 0;
+  border-radius: 28px 28px 0 0;
+  /* Oxblood glow that sits at the line and fades as it comes down. */
+  background: linear-gradient(to bottom, rgba(91, 31, 42, 0.16), rgba(91, 31, 42, 0.05) 45%, rgba(91, 31, 42, 0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 30%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0, #000 30%, transparent 100%);
   pointer-events: none;
 }

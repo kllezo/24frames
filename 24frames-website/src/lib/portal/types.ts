@@ -32,6 +32,8 @@ export interface PortalAccount {
   source?: LeadSource;
   /** Clients: a custom rate card (1 = the studio's normal rates). Never shown to the client. */
   priceFactor?: number | null;
+  /** Clients: exact per-service prices (service id → rupees) that replace the rate card for those services. */
+  priceOverrides?: Record<string, number> | null;
   /** Clients: the custom price link they arrived through, if any. */
   priceLinkId?: string | null;
   /** Sales: the superadmin lets them see every lead, not only their own. */
@@ -81,6 +83,7 @@ export interface CrmClient {
   latestUpdatedAt: string | null;
   source: LeadSource;
   priceFactor: number | null;
+  priceOverrides: Record<string, number> | null;
   enquiry: EnquiryBrief | null;
 }
 
@@ -195,7 +198,10 @@ export interface FollowUp {
 /** A custom rate card shared as a link. */
 export interface PriceLink {
   id: string;
+  /** Percentage rate card (1 = normal rates). */
   factor: number;
+  /** Exact per-service prices typed by the team (service id → rupees); these win over `factor`. */
+  prices?: Record<string, number> | null;
   label: string;
   email: string | null;
   createdById: string;

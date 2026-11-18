@@ -57,7 +57,7 @@ export default function HeroSection() {
     >
       {/* ── FULL-BLEED CINEMATIC PHOTOGRAPH (Edge-to-edge) ── */}
       <div ref={frameRef} className={styles.cinematicCanvas}>
-        {/* Real Landscape Photograph: Hrithika & Abhishek Cover (with dedicated mobile portrait crop) */}
+        {/* Laptop/desktop: Shravan & Manasa at dusk on the beach. Phones keep the Hrithika & Abhishek portrait crop. */}
         <picture>
           <source
             media="(max-width: 820px)"
@@ -78,17 +78,11 @@ export default function HeroSection() {
             media="(max-width: 820px)"
             srcSet="/images/portfolio/hrithika-abhishek/cover-mobile.jpg"
           />
-          <source
-            srcSet="/images/portfolio/hrithika-abhishek/cover.avif"
-            type="image/avif"
-          />
-          <source
-            srcSet="/images/portfolio/hrithika-abhishek/cover.webp"
-            type="image/webp"
-          />
+          <source srcSet="/images/v3/hero/beach-dusk-wide.avif" type="image/avif" />
+          <source srcSet="/images/v3/hero/beach-dusk-wide.webp" type="image/webp" />
           <img
             ref={heroImgRef}
-            src="/images/portfolio/hrithika-abhishek/cover.jpg"
+            src="/images/v3/hero/beach-dusk-wide.jpg"
             alt="Some moments deserve to outlive time — 24 Frames Master Wedding Commission"
             className={styles.heroImage}
             loading="eager"
@@ -118,7 +112,10 @@ export default function HeroSection() {
         {/* Bottom Bar: Frame Metadata & Scroll Prompt */}
         <div ref={metadataRef} className={styles.frameBottomBar}>
           <div className={styles.filmMetadata}>
-            <span className={styles.filmSubject}>Hrithika &amp; Abhishek · Hyderabad</span>
+            <span className={styles.filmSubject}>
+              <span className={styles.subjectDesk}>Shravan &amp; Manasa · Pre-wedding</span>
+              <span className={styles.subjectMobile}>Hrithika &amp; Abhishek · Hyderabad</span>
+            </span>
           </div>
 
           <Link

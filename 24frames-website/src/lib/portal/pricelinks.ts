@@ -7,7 +7,7 @@ import { randomBytes } from "node:crypto";
 import { getConfig } from "@/lib/studio/server/repository";
 import { getAccount, getDoc, listQuotesForClient, mutateQuote, putDoc, updateAccount } from "./store";
 import { prepareClientDraft } from "./drafts";
-import { configFor } from "./pricing";
+import { cleanFactor, configFor } from "./pricing";
 import type { PortalAccount, PriceLink } from "./types";
 
 export const newLinkId = () => randomBytes(18).toString("base64url");
@@ -25,7 +25,7 @@ export async function usableLink(token: string | null | undefined, email: string
 /** Put a client on a link's rate card and re-price the quotations they can still edit. */
 export async function applyLink(account: PortalAccount, link: PriceLink): Promise<PortalAccount> {
   const creator = await getAccount(link.createdById);
-  const patch: Partial<PortalAccount> = { priceFactor: link.factor, priceLinkId: link.id };
+  const patch: Partial<PortalAccount> = { priceFactor: cleanFactor(link.factor), priceOverrides: link.prices ?? null, priceLinkId: link.id };
   if (!account.managerId && creator && creator.active && creator.role !== "client") patch.managerId = creator.id;
   if (!account.source || account.source === "website") patch.source = "price_link";
   const next = (await updateAccount(account.id, patch)) ?? { ...account, ...patch };

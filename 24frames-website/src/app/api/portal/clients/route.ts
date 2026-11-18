@@ -37,6 +37,7 @@ export async function GET() {
           latestUpdatedAt: latest?.updatedAt ?? null,
           source: c.source ?? (c.createdBy ? "rm_link" : "website"),
           priceFactor: c.priceFactor ?? null,
+          priceOverrides: c.priceOverrides ?? null,
           enquiry: c.enquiry ?? null,
         };
       });
@@ -71,8 +72,10 @@ export async function PATCH(request: Request) {
     if (b.priceFactor !== undefined) {
       if (me.role !== "owner" && client.managerId !== me.id) return json({ error: "Only the founder or this client's manager can set custom rates." }, 403);
       const factor = b.priceFactor === null ? null : cleanFactor(b.priceFactor);
-      await updateAccount(client.id, { priceFactor: factor });
-      return json({ ok: true, priceFactor: factor, label: factorLabel(factor) });
+      /* Removing custom rates also clears any exact prices set through a link. */
+      const patch = b.priceFactor === null ? { priceFactor: null, priceOverrides: null } : { priceFactor: factor };
+      await updateAccount(client.id, patch);
+      return json({ ok: true, priceFactor: factor, priceOverrides: b.priceFactor === null ? null : client.priceOverrides ?? null, label: factorLabel(factor) });
     }
 
     if (b.managerId === undefined) return json({ error: "Nothing to change." }, 400);

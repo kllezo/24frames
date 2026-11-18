@@ -7,19 +7,23 @@ import qx from "../studio/quotes/quotes.module.css";
 import ix from "./insights.module.css";
 import DeskTop from "./DeskTop";
 import { formatDateLong } from "@/lib/commission/format";
-import { factorLabel } from "@/lib/portal/pricing";
+import { rateLabel } from "@/lib/portal/pricing";
+import { formatINR } from "@/lib/commission/format";
 import type { PriceLink, PublicAccount } from "@/lib/portal/types";
 
 type Link = PriceLink & { url: string };
+type Svc = { id: string; name: string; price: number };
 
 /* Custom price links: for a client who can invest more (or deserves a
    gesture), set a rate card and share the link. Whoever signs up — or
    signs in — through it sees those prices everywhere, every time; the
    studio's normal rates never reach them. */
-export default function PriceLinks({ me }: { me: PublicAccount }) {
+export default function PriceLinks({ me, services }: { me: PublicAccount; services: Svc[] }) {
   const [links, setLinks] = useState<Link[] | null>(null);
   const [label, setLabel] = useState("");
+  const [mode, setMode] = useState<"percent" | "exact">("percent");
   const [percent, setPercent] = useState("15");
+  const [prices, setPrices] = useState<Record<string, string>>({});
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
@@ -48,12 +52,17 @@ export default function PriceLinks({ me }: { me: PublicAccount }) {
     const res = await fetch("/api/portal/pricelinks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ label, percent: Number(percent), email }),
+      body: JSON.stringify(
+        mode === "exact"
+          ? { mode, label, email, prices: Object.fromEntries(Object.entries(prices).filter(([, v]) => v.trim() !== "").map(([k, v]) => [k, Number(v.replace(/[^\d.]/g, ""))])) }
+          : { mode, label, percent: Number(percent), email },
+      ),
     }).catch(() => null);
     const d = res ? ((await res.json().catch(() => ({}))) as { link?: Link; error?: string }) : {};
     if (res?.ok && d.link) {
       setLabel("");
       setEmail("");
+      setPrices({});
       await load();
       await copy(d.link.url);
     } else setMsg({ ok: false, text: d.error ?? "Could not create the link." });
@@ -65,6 +74,11 @@ export default function PriceLinks({ me }: { me: PublicAccount }) {
   }
 
   const pct = Number(percent);
+  const changed = services.filter((s) => {
+    const v = (prices[s.id] ?? "").replace(/[^\d.]/g, "");
+    return v !== "" && Number(v) !== s.price;
+  }).length;
+  const ready = !!label.trim() && (mode === "exact" ? changed > 0 : Number.isFinite(pct) && pct !== 0);
   return (
     <div className={`${cx.cinema} ${qx.page}`}>
       <DeskTop me={me} current="links" />
@@ -91,23 +105,59 @@ export default function PriceLinks({ me }: { me: PublicAccount }) {
                 For
                 <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="e.g. Reddy family — destination wedding" maxLength={80} />
               </label>
+              <div className={ix.seg} role="tablist" aria-label="How to set the prices">
+                <button role="tab" aria-selected={mode === "percent"} className={mode === "percent" ? ix.segOn : ""} onClick={() => setMode("percent")}>
+                  % on normal rates
+                </button>
+                <button role="tab" aria-selected={mode === "exact"} className={mode === "exact" ? ix.segOn : ""} onClick={() => setMode("exact")}>
+                  Exact prices
+                </button>
+              </div>
               <div className={ix.formRow}>
-                <label>
-                  Adjustment on normal rates (%)
-                  <input inputMode="decimal" value={percent} onChange={(e) => setPercent(e.target.value)} />
-                </label>
+                {mode === "percent" && (
+                  <label>
+                    Adjustment on normal rates (%)
+                    <input inputMode="decimal" value={percent} onChange={(e) => setPercent(e.target.value)} />
+                  </label>
+                )}
                 <label>
                   Only for this email (optional)
                   <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="client@example.com" />
                 </label>
               </div>
+              {mode === "exact" && (
+                <div className={ix.priceTable}>
+                  <div className={ix.priceHead}>
+                    <span>Service · per professional, per event</span>
+                    <span>Normal</span>
+                    <span>For this client</span>
+                  </div>
+                  {services.map((s) => (
+                    <label key={s.id} className={ix.priceRow}>
+                      <span>{s.name}</span>
+                      <span className={ix.priceStd}>{formatINR(s.price)}</span>
+                      <input
+                        inputMode="numeric"
+                        placeholder={String(s.price)}
+                        value={prices[s.id] ?? ""}
+                        onChange={(e) => setPrices((p) => ({ ...p, [s.id]: e.target.value }))}
+                        aria-label={`Price of ${s.name} for this client`}
+                      />
+                    </label>
+                  ))}
+                </div>
+              )}
               <p className={ix.panelNote}>
-                {Number.isFinite(pct) && pct !== 0
-                  ? `A ₹1,00,000 package becomes ₹${Math.round(100000 * (1 + pct / 100)).toLocaleString("en-IN")} for this client.`
-                  : "Enter a percentage — positive for a premium, negative for a gesture."}{" "}
+                {mode === "exact"
+                  ? changed
+                    ? `${changed} service${changed === 1 ? "" : "s"} repriced; everything left blank stays at the normal rate.`
+                    : "Type the price you want for any service — leave the rest blank to keep the normal rate."
+                  : Number.isFinite(pct) && pct !== 0
+                    ? `A ₹1,00,000 package becomes ₹${Math.round(100000 * (1 + pct / 100)).toLocaleString("en-IN")} for this client.`
+                    : "Enter a percentage — positive for a premium, negative for a gesture."}{" "}
                 Leads who sign up through your link are assigned to you.
               </p>
-              <button className={base.btnPrimary} onClick={create} disabled={!label.trim() || !Number.isFinite(pct) || pct === 0}>
+              <button className={base.btnPrimary} onClick={create} disabled={!ready}>
                 Create & copy link
               </button>
               {msg && <p className={msg.ok ? ix.msgOk : ix.msgErr}>{msg.text}</p>}
@@ -144,7 +194,7 @@ export default function PriceLinks({ me }: { me: PublicAccount }) {
             {links?.map((l) => (
               <li key={l.id} style={l.active ? undefined : { opacity: 0.55 }}>
                 <span className={ix.listTitle}>
-                  {l.label} <span className={`${ix.pill} ${ix.pillGold}`}>{factorLabel(l.factor)}</span>
+                  {l.label} <span className={`${ix.pill} ${ix.pillGold}`}>{rateLabel(l)}</span>
                 </span>
                 <span className={ix.listActions}>
                   {l.active && (

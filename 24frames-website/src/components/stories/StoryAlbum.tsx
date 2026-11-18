@@ -30,7 +30,7 @@ function spreads(frames: AlbumFrame[]): Spread[] {
   return out;
 }
 
-const plate = (n: number) => `Plate ${String(n).padStart(2, "0")}`;
+const plate = (n: number) => `photo ${n}`;
 
 export default function StoryAlbum({ album, couple }: { album: Album; couple: string }) {
   const [open, setOpen] = useState<number | null>(null);
@@ -91,12 +91,10 @@ export default function StoryAlbum({ album, couple }: { album: Album; couple: st
             {g.frames.map(({ f, n }) => (
               <figure key={n} className={s.fig}>
                 <Img f={f} n={n} eager={gi === 0} />
-                <figcaption className={s.cap}>{plate(n)}</figcaption>
               </figure>
             ))}
             {(g.kind === "offsetL" || g.kind === "offsetR") && (
               <p className={s.aside}>
-                <span>{plate(g.frames[0].n)}</span>
                 <em>{couple}</em>
               </p>
             )}
@@ -109,7 +107,7 @@ export default function StoryAlbum({ album, couple }: { album: Album; couple: st
           <button type="button" className={s.vClose} onClick={close} aria-label="Close">
             Close
           </button>
-          <button type="button" className={`${s.vNav} ${s.vPrev}`} onClick={(e) => (e.stopPropagation(), step(-1))} aria-label="Previous plate">
+          <button type="button" className={`${s.vNav} ${s.vPrev}`} onClick={(e) => (e.stopPropagation(), step(-1))} aria-label="Previous photo">
             ←
           </button>
           <picture onClick={(e) => e.stopPropagation()}>
@@ -117,11 +115,11 @@ export default function StoryAlbum({ album, couple }: { album: Album; couple: st
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className={s.vImg} src={album.frames[open].src} alt={`${couple} — ${plate(open + 1)}`} />
           </picture>
-          <button type="button" className={`${s.vNav} ${s.vNext}`} onClick={(e) => (e.stopPropagation(), step(1))} aria-label="Next plate">
+          <button type="button" className={`${s.vNav} ${s.vNext}`} onClick={(e) => (e.stopPropagation(), step(1))} aria-label="Next photo">
             →
           </button>
           <p className={s.vCount}>
-            {plate(open + 1)} <span>/ {total}</span>
+            {open + 1} <span>/ {total}</span>
           </p>
         </div>
       )}

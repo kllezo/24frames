@@ -1363,3 +1363,13 @@
     white-space: nowrap;
   }
 }
+
+/* Price links: exact per-service prices */
+.priceTable { display: grid; border: 1px solid rgba(16, 48, 42, 0.12); border-radius: 4px; overflow: hidden; }
+.priceHead, .priceRow { display: grid; grid-template-columns: minmax(0, 1fr) 96px 130px; gap: 12px; align-items: center; padding: 9px 12px; }
+.priceHead { background: rgba(16, 48, 42, 0.04); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #6d7a74; }
+.priceRow { border-top: 1px solid rgba(16, 48, 42, 0.08); font-size: 14px; }
+.priceStd { color: #8a948f; font-variant-numeric: tabular-nums; }
+.priceRow input { width: 100%; padding: 7px 9px; border: 1px solid rgba(16, 48, 42, 0.2); border-radius: 4px; font: inherit; background: #fffdf7; }
+.priceRow input:focus { outline: none; border-color: #a98a52; }
+@media (max-width: 560px) { .priceHead, .priceRow { grid-template-columns: minmax(0, 1fr) 110px; } .priceHead span:nth-child(2), .priceStd { display: none; } }

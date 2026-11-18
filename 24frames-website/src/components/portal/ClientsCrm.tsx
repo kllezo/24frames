@@ -11,7 +11,7 @@ import { Detail, type StaffMember } from "./Desk";
 import { formatDateLong, formatINR } from "@/lib/commission/format";
 import { coupleNames } from "@/lib/commission/model";
 import type { StudioConfig } from "@/lib/commission/types";
-import { factorLabel } from "@/lib/portal/pricing";
+import { factorLabel, rateLabel } from "@/lib/portal/pricing";
 import {
   SOURCE_LABEL,
   STATUS_LABEL,
@@ -137,7 +137,7 @@ export default function ClientsCrm({ me, config }: { me: PublicAccount; config: 
           </div>
           <div className={ix.kpi}>
             <dt>On custom rates</dt>
-            <dd>{rows ? rows.filter((r) => r.priceFactor).length : "—"}</dd>
+            <dd>{rows ? rows.filter((r) => r.priceFactor || r.priceOverrides).length : "—"}</dd>
           </div>
         </dl>
 
@@ -206,7 +206,7 @@ export default function ClientsCrm({ me, config }: { me: PublicAccount; config: 
                       <span className={px.cellSub}>
                         <a href={`mailto:${r.email}`}>{r.email}</a>
                       </span>
-                      {r.priceFactor && <span className={`${ix.pill} ${ix.pillGold}`}>{factorLabel(r.priceFactor)}</span>}
+                      {(r.priceFactor || r.priceOverrides) && <span className={`${ix.pill} ${ix.pillGold}`}>{rateLabel({ factor: r.priceFactor, prices: r.priceOverrides })}</span>}
                     </td>
                     <td>
                       {r.phone ? <a href={`tel:${r.phone}`}>{r.phone}</a> : "—"}
@@ -409,9 +409,9 @@ function Rates({ client, canPrice, onChange }: { client: CrmClient; canPrice: bo
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ clientId: client.id, priceFactor: factor }),
     }).catch(() => null);
-    const d = res ? ((await res.json().catch(() => ({}))) as { priceFactor?: number | null; label?: string; error?: string }) : {};
+    const d = res ? ((await res.json().catch(() => ({}))) as { priceFactor?: number | null; priceOverrides?: Record<string, number> | null; label?: string; error?: string }) : {};
     if (res?.ok) {
-      onChange({ priceFactor: d.priceFactor ?? null });
+      onChange({ priceFactor: d.priceFactor ?? null, priceOverrides: d.priceOverrides ?? null });
       setMsg({ ok: true, text: `${d.label}. Applies to every quotation they open or start from now on.` });
     } else setMsg({ ok: false, text: d.error ?? "Could not save." });
   }
@@ -430,7 +430,7 @@ function Rates({ client, canPrice, onChange }: { client: CrmClient; canPrice: bo
     <div className={ix.panel}>
       <div className={ix.panelHead}>
         <h3 className={ix.panelTitle}>Rate card</h3>
-        <span className={`${ix.pill} ${client.priceFactor ? ix.pillGold : ""}`}>{factorLabel(client.priceFactor)}</span>
+        <span className={`${ix.pill} ${client.priceFactor || client.priceOverrides ? ix.pillGold : ""}`}>{rateLabel({ factor: client.priceFactor, prices: client.priceOverrides })}</span>
       </div>
       {canPrice ? (
         <div className={ix.form}>
@@ -443,7 +443,7 @@ function Rates({ client, canPrice, onChange }: { client: CrmClient; canPrice: bo
               Save rates
             </button>
           </div>
-          {client.priceFactor && (
+          {(client.priceFactor || client.priceOverrides) && (
             <button className={base.btnGhost} onClick={() => (setPct(""), save(null))}>
               Back to standard rates
             </button>

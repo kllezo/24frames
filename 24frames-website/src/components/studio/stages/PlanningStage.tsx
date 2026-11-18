@@ -1,28 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import styles from "../stages.module.css";
 import px from "../planning.module.css";
 import { StageFooter, StageHeader } from "./StageChrome";
-import { PLANNING_SERVICES, cleanPlanning } from "@/lib/commission/planning";
+import PartnerBloom from "./PartnerBloom";
+import { PLANNING_SERVICES } from "@/lib/commission/planning";
 import type { StageProps } from "./types";
 
-/* Frame 02 — beyond photography. The couple can tick the planning services
-   they would like help with (venues, planning, décor, jewellery, makeup).
-   Entirely optional and never priced here: the ticks reach their
-   relationship manager as a follow-up, separate from the photography. */
-export default function PlanningStage({ draft, actions, go, portal }: StageProps) {
-  const chosen = new Set(draft.planning?.services ?? []);
-  const note = draft.planning?.note ?? "";
-  const locked = !!portal && !portal.editable;
-
-  const set = (services: string[], nextNote = note) => actions.setPlanning(cleanPlanning({ services, note: nextNote }));
-  const toggle = (id: string) => {
-    if (locked) return;
-    const next = new Set(chosen);
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
-    set(PLANNING_SERVICES.map((s) => s.id).filter((s) => next.has(s)));
-  };
+/* Frame 02 — the 24 Frames privileges. Nothing to choose here: four
+   services, each a single circle set alternately left and right. Opening
+   one blooms it into a flower of its five partner brands; couples mention 24 Frames
+   at those brands to redeem their privilege, and the sales team walks them
+   through the offers on the call or in person. */
+export default function PlanningStage({ go }: StageProps) {
+  const [open, setOpen] = useState<string | null>(null);
 
   return (
     <div className={styles.stageInner}>
@@ -30,76 +22,35 @@ export default function PlanningStage({ draft, actions, go, portal }: StageProps
         frame="02"
         kicker="Frame 02 · The Planning"
         title={<>Planning an event? <em>We&apos;ve got you covered.</em></>}
-        lead="Along with capturing your special moments, we can help you plan your celebration too — whether it's a beautiful farmhouse for your Haldi, the perfect wedding venue, décor, jewellery or makeup artists. Tick anything you'd like help with; it's entirely optional."
+        lead="As a 24 Frames couple, the brands we work with welcome you with privileges of their own. Mention our name when you visit — your relationship manager will walk you through every offer."
       />
 
-      <ul className={px.grid} role="list">
+      <ol className={px.rows} role="list">
         {PLANNING_SERVICES.map((s, i) => {
-          const on = chosen.has(s.id);
+          const on = open === s.id;
+          const side = i % 2 === 0 ? px.left : px.right;
           return (
-            <li key={s.id} className={px.cell} style={{ "--i": i } as React.CSSProperties}>
-              <button
-                type="button"
-                className={`${px.card} ${on ? px.cardOn : ""}`}
-                aria-pressed={on}
-                onClick={() => toggle(s.id)}
-                disabled={locked}
-              >
-                <span className={px.media}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={s.image} alt="" loading={i < 3 ? "eager" : "lazy"} decoding="async" />
-                  <span className={px.no} aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-                  <span className={px.tick} aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" /></svg>
-                  </span>
-                </span>
-                <span className={px.body}>
-                  <span className={px.title}>{s.title}</span>
-                  <span className={px.line}>{s.line}</span>
-                  <span className={px.detail}>{s.detail}</span>
-                  <span className={px.tags}>
-                    {s.tags.map((t) => (
-                      <span key={t}>{t}</span>
-                    ))}
-                  </span>
-                  <span className={px.cta}>{on ? "Added — we'll be in touch" : "I'd like help with this"}</span>
-                </span>
-              </button>
+            <li key={s.id} className={`${px.row} ${side} ${on ? px.rowOpen : ""}`} style={{ "--i": i } as React.CSSProperties}>
+              <div className={px.stage}>
+                <PartnerBloom service={s} open={on} onToggle={() => setOpen(on ? null : s.id)} eager={i < 2} />
+              </div>
+
+              <div className={px.copy}>
+                <span className={px.no}>{String(i + 1).padStart(2, "0")}</span>
+                <h3 className={px.title}>{s.title}</h3>
+                <p className={px.line}>{s.line}</p>
+                <button type="button" className={px.more} onClick={() => setOpen(on ? null : s.id)} aria-expanded={on}>
+                  {on ? "Hide partners" : "See our partners"} <span aria-hidden="true">→</span>
+                </button>
+              </div>
             </li>
           );
         })}
-      </ul>
+      </ol>
 
-      <div className={`${px.notePanel} ${chosen.size ? px.noteOpen : ""}`}>
-        <div className={px.noteHead}>
-          <p className={px.noteKicker}>{chosen.size ? `${chosen.size} selected` : "Nothing selected"}</p>
-          <p className={px.noteText}>
-            {chosen.size
-              ? "Your relationship manager will share options and pricing for these separately — they are not added to your photography quotation."
-              : "No problem — you can come back to this at any time."}
-          </p>
-        </div>
-        {chosen.size > 0 && (
-          <label className={px.noteField}>
-            <span>Anything we should know? (optional)</span>
-            <textarea
-              rows={3}
-              maxLength={1500}
-              value={note}
-              disabled={locked}
-              onChange={(e) => set([...chosen], e.target.value)}
-              placeholder="A venue you love, a look you have in mind, dates, budget…"
-            />
-          </label>
-        )}
-      </div>
+      <p className={px.footnote}>Privileges are offered by each partner and may change; your relationship manager will confirm the current offers.</p>
 
-      <StageFooter
-        onBack={() => go("couple")}
-        backLabel="The couple"
-        onNext={() => go("celebration")}
-        nextLabel={chosen.size ? "Continue to photography" : "Skip to photography"}
-      />
+      <StageFooter onBack={() => go("couple")} backLabel="The couple" onNext={() => go("celebration")} nextLabel="Continue to photography" />
     </div>
   );
 }

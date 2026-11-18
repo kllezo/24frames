@@ -1,42 +1,28 @@
 import Link from "next/link";
 import s from "./VowsOpening.module.css";
 
-/* The opening of The Vows — the chapter title, a line about the work and
-   the featured Bellamkonda wedding — as a calm, static composition
-   (it used to live inside the pinned hero-to-logo transition). */
+/* The opening of The Vows — chapter heading set to the left over a
+   hairline, one wide photograph of the featured Bellamkonda wedding,
+   then a short note about it. */
 export default function VowsOpening() {
   return (
     <div className={s.opening} id="vows" data-header-theme="light">
-      <div className={s.intro}>
-        <p className={s.kicker}>The Vows</p>
+      <header className={s.head}>
         <h2 className={s.title}>
-          Love, in its <em>truest form.</em>
+          The <span className={s.cursive}>Vows</span>
         </h2>
-        <p className={s.lead}>
-          Intimate stories and iconic days — real people, photographed honestly and filmed with a cinematographer&apos;s
-          patience.
-        </p>
-        <a href="#stories-showcase" className={s.link}>
-          Explore the stories
-        </a>
-      </div>
+        <p className={s.subtitle}>Love, in its truest form.</p>
+      </header>
+      <div className={s.rule} aria-hidden="true" />
 
-      <Link href="/stories/bellam-srikonda" className={s.arch} aria-label="Bellamkonda Sai Sreenivas & Kavya Reddy — view the story">
+      <Link href="/stories/bellam-srikonda" className={s.frame} aria-label="Bellamkonda Sai Sreenivas & Kavya Reddy — view the story">
         <picture>
-          <source
-            type="image/avif"
-            srcSet="/images/stories/bellam-srikonda/IMG_6339-mobile.avif 720w, /images/stories/bellam-srikonda/IMG_6339.avif 1108w"
-            sizes="(max-width: 900px) 80vw, 30vw"
-          />
-          <source
-            type="image/webp"
-            srcSet="/images/stories/bellam-srikonda/IMG_6339-mobile.webp 720w, /images/stories/bellam-srikonda/IMG_6339.webp 1108w"
-            sizes="(max-width: 900px) 80vw, 30vw"
-          />
+          <source type="image/avif" srcSet="/images/v3/stories/bellamkonda-wide.avif" />
+          <source type="image/webp" srcSet="/images/v3/stories/bellamkonda-wide.webp" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/stories/bellam-srikonda/IMG_6339.jpg"
-            alt="Bellamkonda Sai Sreenivas and Kavya Reddy at their reception"
+            src="/images/v3/stories/bellamkonda-wide.jpg"
+            alt="Bellamkonda Sai Sreenivas and Kavya Reddy on their reception stage"
             loading="lazy"
             decoding="async"
           />
@@ -44,18 +30,18 @@ export default function VowsOpening() {
       </Link>
 
       <div className={s.feature}>
-        <p className={s.kicker}>Featured wedding</p>
-        <h3 className={s.names}>
-          <Link href="/stories/bellam-srikonda">Bellamkonda Sai Sreenivas &amp; Kavya Reddy</Link>
-        </h3>
-        <p className={s.venue}>GMR Arena &amp; Shamshabad Estate, Hyderabad</p>
-        <p className={s.copy}>
-          The quiet, overwhelming union of two people, set against the grandeur of a celebration — and every personal
-          moment in between, captured with honesty and cinematic depth.
-        </p>
-        <Link href="/stories/bellam-srikonda" className={s.link}>
-          View the story
-        </Link>
+        <div>
+          <p className={s.kicker}>Featured wedding</p>
+          <h3 className={s.names}>
+            <Link href="/stories/bellam-srikonda">Bellamkonda Sai Sreenivas &amp; Kavya Reddy</Link>
+          </h3>
+        </div>
+        <div>
+          <p className={s.copy}>A grand celebration — and the quiet moments only the two of them shared.</p>
+          <Link href="/stories/bellam-srikonda" className={s.link}>
+            View the story
+          </Link>
+        </div>
       </div>
     </div>
   );

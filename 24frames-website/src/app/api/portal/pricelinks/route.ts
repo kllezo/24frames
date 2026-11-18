@@ -1,6 +1,7 @@
 import { body, json, portalError, requireRole, sameOrigin } from "@/lib/portal/guard";
 import { getDoc, listDocs, putDoc } from "@/lib/portal/store";
-import { cleanFactor } from "@/lib/portal/pricing";
+import { cleanFactor, cleanOverrides } from "@/lib/portal/pricing";
+import { getConfig } from "@/lib/studio/server/repository";
 import { newLinkId } from "@/lib/portal/pricelinks";
 import type { PriceLink } from "@/lib/portal/types";
 
@@ -29,11 +30,22 @@ export async function POST(request: Request) {
   if (!sameOrigin(request)) return json({ error: "Not allowed." }, 403);
   const me = await requireRole("owner", "sales");
   if (me instanceof Response) return me;
-  const b = await body<{ percent?: number; label?: string; email?: string }>(request, 2000);
-  const pct = Number(b?.percent);
-  if (!Number.isFinite(pct) || pct < -50 || pct > 200) return json({ error: "Enter an adjustment between −50% and +200%." }, 422);
-  const factor = cleanFactor(1 + pct / 100);
-  if (!factor) return json({ error: "Choose an adjustment other than 0% — that is the normal rate card." }, 422);
+  const b = await body<{ mode?: "percent" | "exact"; percent?: number; prices?: Record<string, number>; label?: string; email?: string }>(request, 8000);
+  let factor = 1;
+  let prices: Record<string, number> | null = null;
+  if (b?.mode === "exact") {
+    /* Exact prices: the team types the price for any service; blanks stay at the normal rate. */
+    const config = (await getConfig()).config;
+    prices = cleanOverrides(b.prices, config);
+    if (prices) for (const s of config.services) if (prices[s.id] === s.price) delete prices[s.id];
+    if (!prices || !Object.keys(prices).length) return json({ error: "Type a new price for at least one service." }, 422);
+  } else {
+    const pct = Number(b?.percent);
+    if (!Number.isFinite(pct) || pct < -50 || pct > 200) return json({ error: "Enter an adjustment between −50% and +200%." }, 422);
+    const f = cleanFactor(1 + pct / 100);
+    if (!f) return json({ error: "Choose an adjustment other than 0% — that is the normal rate card." }, 422);
+    factor = f;
+  }
   const label = (b?.label ?? "").trim().slice(0, 80);
   if (label.length < 2) return json({ error: "Name the client or occasion this link is for." }, 422);
   const email = (b?.email ?? "").trim().toLowerCase();
@@ -42,6 +54,7 @@ export async function POST(request: Request) {
     const link: PriceLink = {
       id: newLinkId(),
       factor,
+      prices,
       label,
       email: email || null,
       createdById: me.id,
