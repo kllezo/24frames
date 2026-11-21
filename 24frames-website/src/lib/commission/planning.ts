@@ -70,11 +70,14 @@ export const PLANNING_SERVICES: PlanningService[] = [
     title: "Jewellery curation",
     line: "Bridal sets and heirlooms from houses we work with",
     image: "/images/disciplines/fashion/IMG_6279-mobile.webp",
-    partners: fill([
-      { name: "PMJ Jewels", perk: "3–4% off", image: "/images/partners/pmj.webp", fit: "contain" },
+    // Petals fan lower-left → top → lower-right; index 2 is the top centre.
+    partners: [
+      soon(4),
       { name: "SKT", perk: "Gold & Diamonds", image: "/images/partners/skt.png", fit: "contain" },
+      { name: "PMJ Jewels", perk: "3–4% off", image: "/images/partners/pmj.webp", fit: "contain" },
       { name: "Devi Pavitra", perk: "Gold & Diamonds", image: "/images/partners/devi-pavitra.png", fit: "contain" },
-    ]),
+      soon(5),
+    ],
   },
   {
     id: "makeup",
