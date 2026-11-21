@@ -100,9 +100,17 @@ async function withDeadline<T>(work: Promise<T>): Promise<T> {
 async function db(): Promise<Sql> {
   const s = sql();
   if (!ready) {
-    ready = s
-      .unsafe(STUDIO_SCHEMA_SQL)
-      .then(() => undefined)
+    // The setup SQL takes exclusive table locks (enable row level security),
+    // so running it on every process start queues behind live queries and
+    // stalls the site. Run it only when the schema is missing, inside a
+    // transaction with a short lock timeout. portal.docs is the last table
+    // the schema creates; update this check when adding newer tables.
+    ready = s<{ t: string | null }[]>`select to_regclass('portal.docs')::text as t`
+      .then((rows) =>
+        rows[0]?.t
+          ? undefined
+          : s.unsafe(`begin; set local lock_timeout = '4s'; ${STUDIO_SCHEMA_SQL}; commit;`).then(() => undefined),
+      )
       .catch((err) => {
         ready = null;
         throw err;
