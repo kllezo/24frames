@@ -113,11 +113,10 @@ export default function PartnerBloom({
           return (
             <g key={k} ref={(n) => void (petals.current[k] = n)} style={{ opacity: 0 }}>
               <path d={PETAL} fill={`url(#pf${uid})`} stroke={`url(#pe${uid})`} strokeWidth="2.4" filter={`url(#sh${uid})`} />
-              <path d="M0,-10 Q3,-150 0,-292" fill="none" stroke="#e2cfa6" strokeWidth="1.2" opacity=".7" />
               <path d={PETAL} fill={`url(#ps${uid})`} opacity=".7" />
               <g ref={(n) => void (labels.current[k] = n)}>
                 {/* The brand's logo disc — an empty pearl disc until the logo arrives. */}
-                <g transform={`translate(0,${p.placeholder ? 0 : -30})`}>
+                <g transform={`translate(0,${p.placeholder || p.image ? 0 : -30})`}>
                   {p.image && p.fit === "contain" ? (
                     <>
                       <circle r="52" fill="#fffdf8" />
@@ -139,7 +138,8 @@ export default function PartnerBloom({
                   <circle r="52" fill="none" stroke="#c9a768" strokeWidth="2" />
                   <circle r="58" fill="none" stroke="#e5d2a8" strokeWidth="1" />
                 </g>
-                {!p.placeholder && (
+                {/* A logo speaks for itself; only petals without one carry a name. */}
+                {!p.placeholder && !p.image && (
                   <>
                     <text
                       className={px.petalName}
