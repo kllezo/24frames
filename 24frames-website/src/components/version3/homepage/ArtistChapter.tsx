@@ -98,15 +98,16 @@ export default function ArtistChapter() {
 
         <div className={s.letter}>
           <p className={`${s.para} ${s.reveal}`}>
-            Ten years and more than a thousand weddings later, that belief still decides every frame. I bring the light,
+            Ten years and more than a thousand weddings later, that belief still decides every frame. My team and I bring the light,
             framing and patience of Telugu cinema to real celebrations.
           </p>
           <p className={`${s.para} ${s.reveal}`}>
             We take the time to know your families first — so that on the day, it never feels like being photographed.
             It simply feels like your wedding.
           </p>
-          <p className={`${s.signature} ${s.reveal}`} aria-label="Signed, Phani Gogireddy">
+          <p className={`${s.signature} ${s.reveal}`} aria-label="Signed, Phani Gogireddy and the 24 Frames team">
             Phani Gogireddy
+            <span className={s.signTeam}>&amp; the 24 Frames team</span>
           </p>
 
           <dl className={`${s.figures} ${s.reveal}`}>

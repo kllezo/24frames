@@ -10,18 +10,21 @@ import type { PlanningService } from "@/lib/commission/planning";
 
 const PETAL =
   "M0,0 C-52,-14 -128,-78 -126,-158 C-124,-226 -62,-252 -22,-276 C-10,-283 -4,-296 0,-312 C4,-296 10,-283 22,-276 C62,-252 124,-226 126,-158 C128,-78 52,-14 0,0 Z";
-const ANGLES = [126, 198, 270, 342, 414]; // lower-left first, round to lower-right
-const OPEN_SECONDS = 2.3;
+/* Petals fan from lower-left round to lower-right (126° → 414°). Five is
+   the classic bloom; six or more spread evenly over the same arc. */
+const anglesFor = (n: number) => (n <= 1 ? [270] : Array.from({ length: n }, (_, k) => 126 + (k * 288) / (n - 1)));
+const OPEN_SECONDS = 2.5;
 const BASE = 150; // petal base distance from the centre (viewBox units), just under the shrunk photo
 
 const clamp = (x: number) => Math.min(1, Math.max(0, x));
 const easeOut = (x: number) => 1 - Math.pow(1 - x, 4);
 
 /* Spiral twist: each petal unwinds 200° into place while it grows. */
-function petalAt(k: number, t: number) {
+function petalAt(k: number, t: number, angles: number[]) {
   const p = clamp((t - k * 0.12) / 1.7);
   const e = easeOut(p);
-  return { angle: ANGLES[k] - 200 * (1 - e), scale: e, opacity: clamp(p * 2) };
+  const fit = angles.length > 5 ? 5 / angles.length + 0.05 : 1;
+  return { angle: angles[k] - 200 * (1 - e), scale: e * fit, opacity: clamp(p * 2) };
 }
 
 export default function PartnerBloom({
@@ -41,12 +44,13 @@ export default function PartnerBloom({
   const time = useRef(0);
 
   useEffect(() => {
+    const angles = anglesFor(service.partners.length);
     const draw = (t: number) =>
-      ANGLES.forEach((_, k) => {
+      angles.forEach((_, k) => {
         const g = petals.current[k];
         const l = labels.current[k];
         if (!g || !l) return;
-        const s = petalAt(k, t);
+        const s = petalAt(k, t, angles);
         g.setAttribute("transform", `rotate(${s.angle + 90}) translate(0,-${BASE}) scale(${Math.max(s.scale, 0.001)})`);
         g.style.opacity = String(s.opacity);
         l.setAttribute("transform", `translate(0,-170) rotate(${-(s.angle + 90)})`);
@@ -68,7 +72,7 @@ export default function PartnerBloom({
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [open]);
+  }, [open, service.partners.length]);
 
   return (
     <div className={`${px.bloom} ${open ? px.bloomOpen : ""}`}>
@@ -114,7 +118,12 @@ export default function PartnerBloom({
               <g ref={(n) => void (labels.current[k] = n)}>
                 {/* The brand's logo disc — an empty pearl disc until the logo arrives. */}
                 <g transform={`translate(0,${p.placeholder ? 0 : -30})`}>
-                  {p.image ? (
+                  {p.image && p.fit === "contain" ? (
+                    <>
+                      <circle r="52" fill="#fffdf8" />
+                      <image href={p.image} x="-38" y="-38" width="76" height="76" preserveAspectRatio="xMidYMid meet" />
+                    </>
+                  ) : p.image ? (
                     <>
                       <clipPath id={`lc${uid}${k}`}>
                         <circle r="52" />
@@ -132,7 +141,12 @@ export default function PartnerBloom({
                 </g>
                 {!p.placeholder && (
                   <>
-                    <text className={px.petalName} textAnchor="middle" y="58">
+                    <text
+                      className={px.petalName}
+                      textAnchor="middle"
+                      y="58"
+                      {...(p.name.length > 15 ? { textLength: 232, lengthAdjust: "spacingAndGlyphs" as const } : {})}
+                    >
                       {p.name}
                     </text>
                     {p.perk && (

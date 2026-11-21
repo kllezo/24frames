@@ -20,7 +20,8 @@
   color: #FAF8F2;
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  /* The dark band curls up at both ends, like a ╰──╯. */
+  border-radius: 0 0 clamp(28px, 4vw, 56px) clamp(28px, 4vw, 56px);
 }
 
 .headerPattern {

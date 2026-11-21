@@ -1995,6 +1995,11 @@
   position: absolute;
   left: 0;
   top: 1.75rem;
+  /* One line only: a long label wrapped onto the typed value once it floated up. */
+  white-space: nowrap;
+  max-width: calc(100% / 0.78);
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 14px;
   color: var(--sage);
   pointer-events: none;

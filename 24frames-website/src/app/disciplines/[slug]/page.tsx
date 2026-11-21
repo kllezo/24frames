@@ -168,6 +168,7 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
                   src={discipline.heroImage}
                   alt={discipline.title}
                   className={`${styles.heroImg} ${styles[`${slug}HeroImg`] || ""}`}
+                  style={discipline.heroFocus ? { objectPosition: discipline.heroFocus } : undefined}
                   loading="eager"
                   fetchPriority="high"
                   decoding="sync"
@@ -305,6 +306,7 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
                         src={related.heroImage}
                         alt={related.title}
                         className={styles.relatedImg}
+                        style={related.heroFocus ? { objectPosition: related.heroFocus } : undefined}
                         loading="lazy"
                         decoding="async"
                       />

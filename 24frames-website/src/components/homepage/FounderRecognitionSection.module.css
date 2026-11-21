@@ -1159,3 +1159,35 @@
     width: auto !important;
   }
 }
+
+/* The letter — drop cap, serif paragraphs and a handwritten signature. */
+.letterPara {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.25rem, 1.6vw, 1.45rem);
+  line-height: 1.6;
+  color: #2d3933;
+  margin: 0 0 1.3rem;
+}
+.letterFirst::first-letter {
+  float: left;
+  font-size: 4.2em;
+  line-height: 0.8;
+  padding: 0.08em 0.12em 0 0;
+  color: var(--color-kllezo-green, #09453e);
+}
+.letterSignature {
+  font-family: var(--font-allura), "Allura", cursive;
+  font-size: clamp(2.6rem, 3.6vw, 3.3rem);
+  line-height: 1;
+  color: #141713;
+  margin: 1.4rem 0 0;
+}
+.letterTeam {
+  display: block;
+  margin-top: 0.7rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #8a7d76;
+}

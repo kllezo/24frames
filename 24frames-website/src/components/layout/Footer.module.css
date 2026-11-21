@@ -51,7 +51,7 @@
   font-size: clamp(1.25rem, 1.9vw, 2rem);
   font-weight: 400;
   letter-spacing: 0.01em;
-  color: #09453E;
+  color: #09453e;
 }
 
 .planLine em {
@@ -96,7 +96,7 @@
   font-weight: 500;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: #09453E;
+  color: #09453e;
 }
 
 .brandPlace {
@@ -153,7 +153,7 @@
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #09453E;
+  color: #09453e;
 }
 
 .colContent {
@@ -162,7 +162,7 @@
   gap: 0.55rem;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.8rem;
-  color: #4A5750;
+  color: #4a5750;
   line-height: 1.5;
   font-style: normal;
 }
@@ -175,7 +175,7 @@
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   font-size: 1.85rem;
   font-weight: 500;
-  color: #09453E;
+  color: #09453e;
   text-decoration: none;
   margin-bottom: 0.15rem;
   transition: transform 0.2s ease, color 0.2s ease;
@@ -196,7 +196,7 @@
 }
 
 .contactEmail {
-  color: #4A5750;
+  color: #4a5750;
   text-decoration: none;
   font-size: 0.78rem;
   margin: 0;
@@ -204,11 +204,11 @@
 }
 
 .contactEmail:hover {
-  color: #09453E;
+  color: #09453e;
 }
 
 .contactPhone {
-  color: #4A5750;
+  color: #4a5750;
   text-decoration: none;
   font-size: 0.78rem;
   font-weight: 500;
@@ -217,7 +217,7 @@
 }
 
 .contactPhone:hover {
-  color: #09453E;
+  color: #09453e;
 }
 
 /* Column 02: Explore */
@@ -231,7 +231,7 @@
 }
 
 .navLink {
-  color: #2D3E35;
+  color: #2d3e35;
   text-decoration: none;
   font-size: 0.82rem;
   display: inline-block;
@@ -239,7 +239,7 @@
 }
 
 .navLink:hover {
-  color: #09453E;
+  color: #09453e;
   font-weight: 500;
   transform: translateX(2px);
 }
@@ -247,7 +247,7 @@
 /* Column 03: Studio Atelier */
 .studioName {
   font-weight: 500;
-  color: #2D3E35;
+  color: #2d3e35;
   margin: 0;
   font-size: 0.82rem;
 }
@@ -267,11 +267,11 @@
 }
 
 .studioAddressLink:hover .studioLine {
-  color: #09453E;
+  color: #09453e;
 }
 
 .studioAddressLink:hover .studioMapBadge {
-  color: #09453E;
+  color: #09453e;
 }
 
 .studioLine {
@@ -329,7 +329,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  color: #2D3E35;
+  color: #2d3e35;
   text-decoration: none;
   font-size: 0.82rem;
   font-weight: 500;
@@ -337,14 +337,14 @@
 }
 
 .socialLink:hover {
-  color: #09453E;
+  color: #09453e;
   transform: translateX(2px);
 }
 
 .socialSvg {
   width: 17px;
   height: 17px;
-  color: #09453E;
+  color: #09453e;
 }
 
 /* Column 05: Begin a Commission */
@@ -353,7 +353,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background: #09453E;
+  background: #09453e;
   color: #FAF8F2;
   padding: 0.55rem 0.55rem 0.55rem 1.4rem;
   border-radius: 9999px;
@@ -394,7 +394,7 @@
 .commissionPillBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 26px rgba(9, 69, 62, 0.28);
-  background: #0D574F;
+  background: #0d574f;
 }
 
 .commissionPillBtn:hover .commissionCircleBadge {
@@ -407,7 +407,7 @@
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.18em;
-  color: #09453E;
+  color: #09453e;
   text-transform: uppercase;
 }
 
@@ -437,7 +437,7 @@
 
 .bottomStar {
   font-size: 1rem;
-  color: #09453E;
+  color: #09453e;
   line-height: 1;
 }
 
@@ -447,7 +447,7 @@
   font-weight: 500;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: #09453E;
+  color: #09453e;
 }
 
 .bottomBar {
@@ -484,14 +484,14 @@
 }
 
 .bottomLink {
-  color: #2D3E35;
+  color: #2d3e35;
   text-decoration: none;
   font-size: 0.75rem;
   transition: color 0.2s ease;
 }
 
 .bottomLink:hover {
-  color: #09453E;
+  color: #09453e;
 }
 
 .bottomDot {
@@ -504,7 +504,7 @@
   border-radius: 50%;
   border: 1px solid rgba(9, 69, 62, 0.25);
   background: transparent;
-  color: #09453E;
+  color: #09453e;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -518,9 +518,9 @@
 }
 
 .backToTopBtn:hover {
-  background: #09453E;
+  background: #09453e;
   color: #FAF8F2;
-  border-color: #09453E;
+  border-color: #09453e;
   transform: translateY(-2px);
 }
 
@@ -596,12 +596,17 @@
 .footer::before {
   content: "";
   position: absolute;
-  top: clamp(1.4rem, 2.4vw, 2rem);
-  left: clamp(1.25rem, 4vw, 4rem);
-  right: clamp(1.25rem, 4vw, 4rem);
-  height: 22px;
-  border: 1px solid rgba(9, 69, 62, 0.28);
+  /* One line that runs along both screen edges, the full height of the
+     footer, curving across the top — ╭────╮. The tint sits at the line and
+     fades as it comes down. */
+  inset: 0;
+  border: 3px solid #09453e;
   border-bottom: 0;
-  border-radius: 22px 22px 0 0;
+  border-radius: clamp(36px, 5vw, 64px) clamp(36px, 5vw, 64px) 0 0;
+  /* A deep band of colour at the line that fades as it comes down; the
+     sides catch a little of it too so the line melts into the walls. */
+  background:
+    linear-gradient(to bottom, rgba(9, 69, 62, 0.34) 0, rgba(9, 69, 62, 0.18) clamp(50px, 6vw, 90px), rgba(9, 69, 62, 0.06) clamp(130px, 14vw, 200px), rgba(9, 69, 62, 0) clamp(240px, 26vw, 360px)),
+    linear-gradient(to right, rgba(9, 69, 62, 0.10), rgba(9, 69, 62, 0) 48px, rgba(9, 69, 62, 0) calc(100% - 48px), rgba(9, 69, 62, 0.10));
   pointer-events: none;
 }
