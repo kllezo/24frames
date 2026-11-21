@@ -55,7 +55,7 @@ export interface CelebrationScale {
   description: string;
 }
 
-export const CELEBRATION_SCALES: CelebrationScale[] = [
+const CELEBRATION_SCALES: CelebrationScale[] = [
   { id: "intimate", title: "Intimate", description: "A single day, close family." },
   { id: "signature", title: "Signature", description: "A multi-day celebration." },
   { id: "grand", title: "Grand production", description: "A large guest list and multiple crews." },
@@ -110,7 +110,7 @@ const COMMISSION_CATEGORIES: CommissionCategory[] = [
   },
 ];
 
-export function getTimelineConfig(categoryId: string) {
+function getTimelineConfig(categoryId: string) {
   switch (categoryId) {
     case "fashion":
       return {

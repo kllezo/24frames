@@ -1,6 +1,8 @@
-import type { NextConfig } from "next";
+/* Plain JS (not .ts) so the config loads on hosts without the native SWC
+   compiler, e.g. Hostinger, which builds with the WebAssembly fallback. */
 
-const nextConfig: NextConfig = {
+/** @type {import("next").NextConfig} */
+const nextConfig = {
   compress: true,
   // Dev only: lets several local addresses load the dev server (e.g. one
   // portal login per address while testing). No effect on production.
