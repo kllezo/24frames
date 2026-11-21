@@ -5,6 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./LivingContactSheet.module.css";
+import VowsOpening from "./VowsOpening";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -82,7 +83,7 @@ export const ITEM_VIDEO_01: GalleryFilmItem = {
 export const ITEM_PROJECT_02: GalleryProjectItem = {
   id: "project-02",
   orderNumber: "02",
-  categoryLabel: "02 —— TRADITIONAL WEDDING",
+  categoryLabel: "04 —— TRADITIONAL WEDDING",
   clientNames: "Sireesh & Harshitha",
   captionTitle: "Sireesh & Harshitha",
   captionSub: "Sacred Wedding Union · Telangana",
@@ -118,7 +119,7 @@ export const ITEM_PROJECT_02_MANDAP: GalleryProjectItem = {
 export const ITEM_PROJECT_03: GalleryProjectItem = {
   id: "project-03",
   orderNumber: "03",
-  categoryLabel: "03 —— PRE-WEDDING COLLECTION",
+  categoryLabel: "02 —— PRE-WEDDING COLLECTION",
   clientNames: "Hrithika & Abhishek",
   captionTitle: "Hrithika & Abhishek",
   captionSub: "Nine-Scene Celebration · Hyderabad",
@@ -137,7 +138,7 @@ export const ITEM_PROJECT_03: GalleryProjectItem = {
 export const ITEM_PROJECT_04: GalleryProjectItem = {
   id: "project-04",
   orderNumber: "04",
-  categoryLabel: "04 —— FINE-ART HERITAGE WEDDING",
+  categoryLabel: "03 —— FINE-ART HERITAGE WEDDING",
   clientNames: "Karthik & Gayathri",
   captionTitle: "Karthik & Gayathri",
   captionSub: "Fine-Art Wedding · Botanical Glasshouse",
@@ -1415,6 +1416,8 @@ export default function LivingContactSheet() {
         </defs>
       </svg>
 
+      <VowsOpening />
+
       <div className={styles.mainContainer}>
         {/* Curated Exhibition Anchors */}
         <div id="exhibition" className={styles.anchorOffset} aria-hidden="true" />
@@ -1654,9 +1657,9 @@ export default function LivingContactSheet() {
 
               {/* Delicate handwritten accent floating beside */}
               <div className={styles.floatingCursiveAccent} aria-hidden="true">
-                and somehow,
+                and for a moment,
                 <br />
-                time stood still
+                the world waited
               </div>
             </div>
           </div>
@@ -1664,7 +1667,7 @@ export default function LivingContactSheet() {
 
         {/* Narrative Cursive Bridge Line */}
         <div className={styles.cursiveBridge} aria-hidden="true">
-          Where two journeys became one unbroken legacy.
+          Every glance, kept for the generations still to come.
         </div>
 
         {/* 04 — KARTHIK & GAYATRI (TEXT ON LEFT, PHOTO ON RIGHT) */}
@@ -1731,7 +1734,7 @@ export default function LivingContactSheet() {
                         <linearGradient id="brushIvoryGrad" x1="100%" y1="0%" x2="0%" y2="100%">
                           <stop offset="0%" stopColor="#FAF8F5" />
                           <stop offset="60%" stopColor="#EAE5DC" />
-                          <stop offset="100%" stopColor="#09453E" stopOpacity="0.15" />
+                          <stop offset="100%" stopColor="#09453e" stopOpacity="0.15" />
                         </linearGradient>
                       </defs>
                       {/* Painterly brush strokes sweeping diagonally from top-right towards center */}
@@ -1758,11 +1761,8 @@ export default function LivingContactSheet() {
         </div>
 
         {/* Narrative Cursive Bridge Line */}
-        <div
-          className={`${styles.cursiveBridge} ${styles.cursiveBridgeSireesh}`}
-          aria-hidden="true"
-        >
-          In the sacred flame, promises made to outlive generations.
+        <div className={styles.cursiveBridge} aria-hidden="true">
+          Before the sacred fire, a lifetime of quiet promises.
         </div>
 
         {/* 05 — SIREESH & HARSHITHA (ASYMMETRIC EDITORIAL STILLS COMPOSITION) */}
@@ -1827,6 +1827,11 @@ export default function LivingContactSheet() {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* Narrative Cursive Bridge Line — into the closing film */}
+        <div className={styles.cursiveBridge} aria-hidden="true">
+          And when the music rose, the night was only theirs.
         </div>
       </div>
 
@@ -1894,9 +1899,9 @@ export default function LivingContactSheet() {
               </linearGradient>
 
               <linearGradient id="deepGreenWaveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#0B1511" stopOpacity="0.98" />
-                <stop offset="60%" stopColor="#0E1B15" stopOpacity="0.95" />
-                <stop offset="100%" stopColor="#07100D" stopOpacity="1" />
+                <stop offset="0%" stopColor="#0b1511" stopOpacity="0.98" />
+                <stop offset="60%" stopColor="#0e1b15" stopOpacity="0.95" />
+                <stop offset="100%" stopColor="#07100d" stopOpacity="1" />
               </linearGradient>
 
               <filter id="champagneGlowFilter" x="-20%" y="-20%" width="140%" height="140%">

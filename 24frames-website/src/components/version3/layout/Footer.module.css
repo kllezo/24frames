@@ -596,16 +596,13 @@
 .footer::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: clamp(140px, 16vw, 220px);
+  /* One line that runs along both screen edges, the full height of the
+     footer, curving across the top — ╭────╮. The tint sits at the line and
+     fades as it comes down. */
+  inset: 0;
   border: 3px solid #5b1f2a;
   border-bottom: 0;
   border-radius: 28px 28px 0 0;
-  /* Oxblood glow that sits at the line and fades as it comes down. */
-  background: linear-gradient(to bottom, rgba(91, 31, 42, 0.16), rgba(91, 31, 42, 0.05) 45%, rgba(91, 31, 42, 0) 100%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 30%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0, #000 30%, transparent 100%);
+  background: linear-gradient(to bottom, rgba(91, 31, 42, 0.16), rgba(91, 31, 42, 0.05) clamp(60px, 7vw, 100px), rgba(91, 31, 42, 0) clamp(140px, 16vw, 220px));
   pointer-events: none;
 }

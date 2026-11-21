@@ -654,8 +654,18 @@ export default function FounderRecognitionSection({
 
             {/* 3. Wide Cream Biography Panel */}
             <div ref={bioRef} className={styles.bioPanel}>
-              <p className={styles.bioText}>
-                Established in 2016 from a modest setup of two computers, 24 Frames was founded on an unyielding dedication to heartfelt visual storytelling. Bringing cinematic framing, lighting nuance, and deep emotional sensitivity from Telugu cinema to real weddings, Phani Gogireddy has shaped South India&apos;s premier luxury wedding film aesthetic. Today, backed by a 6,000 sq. ft. studio and an award-winning creative team, the company has documented over 1,000 celebrated unions across India and abroad.
+              {/* A short letter in the studio's voice — Phani and the team. */}
+              <p className={`${styles.letterPara} ${styles.letterFirst}`}>
+                Ten years and more than a thousand weddings later, that belief still decides every frame. My team and I
+                bring the light, framing and patience of Telugu cinema to real celebrations.
+              </p>
+              <p className={styles.letterPara}>
+                We take the time to know your families first — so that on the day, it never feels like being
+                photographed. It simply feels like your wedding.
+              </p>
+              <p className={styles.letterSignature} aria-label="Signed, Phani Gogireddy and the 24 Frames team">
+                Phani Gogireddy
+                <span className={styles.letterTeam}>&amp; the 24 Frames team</span>
               </p>
             </div>
 

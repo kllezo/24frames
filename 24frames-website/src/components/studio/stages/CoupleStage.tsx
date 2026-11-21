@@ -69,7 +69,7 @@ export default function CoupleStage({ draft, actions, go }: StageProps) {
                   maxLength={60}
                   disabled={!!c.weddingDate}
                 />
-                <span>Approximate, e.g. late February 2027</span>
+                <span>Approximate date</span>
               </label>
             </div>
             <div className={cx.dateFoot}>
@@ -78,7 +78,7 @@ export default function CoupleStage({ draft, actions, go }: StageProps) {
                   ? "That date has already passed — choose today or a later date."
                   : c.weddingDate
                     ? `${weekdayOf(c.weddingDate)}, ${formatDateLong(c.weddingDate)}`
-                    : c.approximateDate.trim() ? "Using the approximate date." : "Choose one — an exact date or an approximate one."}
+                    : c.approximateDate.trim() ? "Using the approximate date." : "Choose one — an exact date, or an approximate one like \u201clate Feb 2027\u201d."}
               </span>
               {(c.weddingDate || c.approximateDate) && (
                 <button type="button" className={base.btnText} onClick={() => actions.couple({ weddingDate: "", approximateDate: "" })}>

@@ -105,7 +105,7 @@ export default function HeroSection() {
             Some moments deserve to outlive time.
           </h1>
           <p className={styles.supportingCopy}>
-            Quiet honesty, cinematic framing, and generational memories documented by Phani Gogireddy.
+            Cinematic light, quiet honesty and heirloom craft — your celebration, composed to be handed down for generations.
           </p>
         </div>
 

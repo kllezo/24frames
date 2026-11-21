@@ -87,6 +87,27 @@
   color: rgba(32, 35, 31, 0.42);
 }
 
+/* "Plan your events with" — one word per frame on the last row */
+.tileWord {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0 4px;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(0.95rem, 3.2vmin, 2.6rem);
+  letter-spacing: 0.01em;
+  color: #164b40;
+  text-align: center;
+  line-height: 1;
+  user-select: none;
+}
+.tileWordItalic {
+  font-style: italic;
+  color: #a98a52;
+}
+
 /* Final 24th Tile Signature */
 .finalTile {
   background: #FFFFFF !important;

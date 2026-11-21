@@ -45,11 +45,11 @@ function ClientProposal({ config, draft, quote, go, consultant, portal }: StageP
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "share_update", note: "", via: "studio" }),
         }).catch(() => null);
-        window.location.assign(`/account?updated=${encodeURIComponent(portal!.reference)}`);
+        window.location.assign(`/account/submitted?ref=${encodeURIComponent(portal!.reference)}&changes=1`);
         return;
       }
       if (res.ok) {
-        window.location.assign(`/account?sent=${encodeURIComponent(portal!.reference)}`);
+        window.location.assign(`/account/submitted?ref=${encodeURIComponent(portal!.reference)}`);
         return;
       }
       if (res.status === 401) {

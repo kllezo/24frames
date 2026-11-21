@@ -12,6 +12,10 @@ const FRAME_COLORS = [
   "#D5CCBC", "#DBD3C3", "#E1DACB", "#E7E1D3", "#EDE7DB", "#FFFFFF", // Row 4: 18–23
 ];
 
+/* The last row reads "Plan your events with" — one word per frame — and
+   the 24th frame answers with the logo. Keyed by tile index. */
+const ROW4_WORDS: Record<number, string> = { 19: "Plan", 20: "your", 21: "events", 22: "with" };
+
 interface PreloaderProps {
   onComplete: () => void;
 }
@@ -149,19 +153,19 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       opacity: 1,
       scale: 1,
       y: 0,
-      duration: 0.32,
-      stagger: 0.045,
+      duration: 0.34,
+      stagger: 0.06,
       ease: "power2.out",
     }, 1.04);
 
-    // Final 24th Tile reveals in natural cadence directly after tile 23 (1.24s – 1.62s)
+    // Final 24th Tile reveals directly after "with" (1.30s – 1.68s)
     tl.to(finalTile, {
       opacity: 1,
       scale: 1,
       y: 0,
       duration: 0.38,
       ease: "power2.out",
-    }, 1.24);
+    }, 1.30);
 
     // Row 3 begins fading as Row 4 establishes (1.12s – 1.42s)
     tl.to(row3, {
@@ -173,14 +177,14 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     }, 1.12);
 
     /* ── Step 4: Continue until only the 24th tile remains ── */
-    // Row 4 (frames 19–23) fades away (1.38s – 1.72s)
+    // Row 4 holds so "Plan your events with" can be read, then fades (1.95s – 2.35s)
     tl.to(row4, {
       opacity: 0,
-      scale: 0.90,
-      duration: 0.32,
+      scale: 0.94,
+      duration: 0.34,
       stagger: 0.03,
       ease: "power2.inOut",
-    }, 1.38);
+    }, 1.95);
 
     /* ── Step 5: Let the final tile resolve into the 24 FRAMES wordmark ── */
     if (finalInner) {
@@ -188,7 +192,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         opacity: 1,
         duration: 0.35,
         ease: "power2.out",
-      }, 1.65);
+      }, 1.6);
     }
 
     // Subtle breath & luminous warm gold elevation on the standalone 24th frame
@@ -197,13 +201,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       boxShadow: "0 18px 48px rgba(22, 75, 64, 0.16), 0 0 28px rgba(200, 168, 78, 0.32)",
       duration: 0.35,
       ease: "power2.out",
-    }, 1.70);
+    }, 2.15);
 
     tl.to(finalTile, {
       scale: 1.0,
       duration: 0.30,
       ease: "power2.inOut",
-    }, 2.05);
+    }, 2.5);
 
     /* ── Step 6: Fade the final tile and wordmark out completely to reveal the homepage ── */
     tl.to(finalTile, {
@@ -211,7 +215,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       scale: 0.94,
       duration: 0.36,
       ease: "power2.in",
-    }, 2.38);
+    }, 2.8);
 
   }, [onComplete]);
 
@@ -270,6 +274,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               >
                 {String(index + 1).padStart(2, "0")}
               </span>
+              {ROW4_WORDS[index] && (
+                <span className={`${styles.tileWord} ${index === 22 ? styles.tileWordItalic : ""}`}>
+                  {ROW4_WORDS[index]}
+                </span>
+              )}
             </div>
           );
         })}

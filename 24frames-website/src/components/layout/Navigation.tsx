@@ -108,7 +108,9 @@ export default function Navigation() {
 
         const navHeader = document.querySelector('header[role="banner"]');
         const elements = document.elementsFromPoint(window.innerWidth / 2, 45);
-        const target = elements.find((el) => el !== navHeader && !navHeader?.contains(el));
+        const target = elements.find(
+          (el) => el !== navHeader && !navHeader?.contains(el) && !el.closest("[data-ct-overlay]"),
+        );
 
         if (target) {
           const themedAncestor = target.closest("[data-header-theme]");
@@ -184,6 +186,16 @@ export default function Navigation() {
       clearTimeout(t2);
     };
   }, []);
+
+  /* Client navigations keep this component mounted, so re-read the colour
+     under the header once the new page has painted (and again after the
+     shutter has opened), instead of waiting for the first scroll. */
+  useEffect(() => {
+    const timers = [60, 300, 800, 1500, 2600].map((ms) =>
+      setTimeout(() => window.dispatchEvent(new Event("scroll")), ms),
+    );
+    return () => timers.forEach(clearTimeout);
+  }, [pathname]);
 
   useEffect(() => {
     if (menuOpen) {

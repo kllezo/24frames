@@ -28,6 +28,28 @@ function getReducedMotionServerSnapshot() {
   return false;
 }
 
+/* The hero photograph of whatever page is showing: the largest image that
+   is actually on screen, preferring ones near the top. Used when a page has
+   no hand-picked focus target, so the gold ring always lands on a photo. */
+function heroPhoto(): HTMLElement | null {
+  const vh = window.innerHeight;
+  const vw = window.innerWidth;
+  let best: HTMLElement | null = null;
+  let bestScore = 0;
+  document.querySelectorAll<HTMLElement>("main img, main video, main [class*='hero'] picture").forEach((el) => {
+    const r = el.getBoundingClientRect();
+    const w = Math.max(0, Math.min(r.right, vw) - Math.max(r.left, 0));
+    const h = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+    if (w < 120 || h < 120) return;
+    const score = w * h * (1.2 - Math.min(1, Math.max(0, r.top) / vh) * 0.4);
+    if (score > bestScore) {
+      bestScore = score;
+      best = el;
+    }
+  });
+  return best;
+}
+
 // ── 8-Blade Aperture Geometry Constants ─────────────────────────────────
 const PIVOT_X = 750;
 const PIVOT_Y = 320;
@@ -212,10 +234,10 @@ export default function CinematicTransition() {
       ) as HTMLElement | null;
     }
     if (cleanUrl.includes("stories") && !cleanUrl.startsWith("/stories/")) {
-      // Stories: the primary Sireesh & Harshitha wedding image
-      return document.querySelector(
-        "a[href*='sirish-and-harshitha'] img, a[href*='sireesh'] img, [class*='storiesGrid'] a:first-child img, [class*='storyCard']:first-child img"
-      ) as HTMLElement | null;
+      // Stories: the Bellamkonda Sai Sreenivas & Kavya Reddy wedding — the featured story
+      return (document.querySelector(
+        "a[href*='bellam-srikonda'] img, [class*='storiesGrid'] a:first-child img, [class*='storyCard']:first-child img"
+      ) as HTMLElement | null) ?? heroPhoto();
     }
     if (cleanUrl.startsWith("/stories/")) {
       // Individual story pages: that story's own hero photograph
@@ -241,7 +263,8 @@ export default function CinematicTransition() {
       ) as HTMLElement | null;
     }
 
-    return null;
+    // Every other page: its hero photograph.
+    return heroPhoto();
   }, []);
 
   // Compute on-screen focal coordinates from real DOM element
@@ -274,17 +297,19 @@ export default function CinematicTransition() {
     const targetScreenX = rect.left + rect.width * 0.5;
     const targetScreenY = Math.max(70, Math.min(winH - 70, rect.top + rect.height * focalYRatio));
 
-    const desktopSize = Math.round(winH * 0.85);
+    // Fit the ring to the photo it lands on: a focus circle inside the frame.
+    const visW = Math.min(rect.width, winW - 32);
+    const visH = Math.min(rect.height, winH - 120);
     const size = isMobile
-      ? Math.max(90, Math.min(180, rect.width * 0.48))
-      : desktopSize;
+      ? Math.round(Math.max(110, Math.min(winW * 0.62, Math.min(visW, visH) * 0.72)))
+      : Math.round(Math.max(180, Math.min(winH * 0.72, Math.min(visW, visH) * 0.78)));
 
     return {
       x: targetScreenX - winW * 0.5,
       y: targetScreenY - winH * 0.5,
       width: size,
       height: size,
-      startSize: size,
+      startSize: Math.round(Math.min(winW, winH) * (isMobile ? 0.7 : 0.62)),
     };
   }, []);
 
@@ -445,9 +470,11 @@ export default function CinematicTransition() {
       const closeTl = gsap.timeline();
       masterTimelineRef.current = closeTl;
 
-      const closeDuration = isMobile ? 0.18 : 0.24;
-      const holdDuration = isMobile ? 40 : 60;
-      const openDuration = isMobile ? 0.20 : 0.26;
+      // A real leaf shutter: blades accelerate shut, land with a tiny mechanical
+      // rebound, then open with a long, eased release.
+      const closeDuration = isMobile ? 0.3 : 0.36;
+      const holdDuration = isMobile ? 70 : 90;
+      const openDuration = isMobile ? 0.42 : 0.52;
 
       closeTl.to([vignetteRef.current, cornersRef.current], {
         opacity: 0.85,
@@ -463,13 +490,19 @@ export default function CinematicTransition() {
 
       const closeBladeState = { angle: -38 };
       closeTl.to(closeBladeState, {
-        angle: 36,
+        angle: 37.5,
         duration: closeDuration,
-        ease: "power2.in",
+        ease: "power3.in",
         onUpdate: () => {
           setBladeAngle(closeBladeState.angle);
         },
       }, 0.00);
+      closeTl.to(closeBladeState, {
+        angle: 36,
+        duration: 0.09,
+        ease: "power1.out",
+        onUpdate: () => setBladeAngle(closeBladeState.angle),
+      }, closeDuration);
 
       if (backdropRef.current) {
         closeTl.to(backdropRef.current, {
@@ -503,7 +536,7 @@ export default function CinematicTransition() {
       openTl.to(openBladeState, {
         angle: -38,
         duration: openDuration,
-        ease: "power2.out",
+        ease: "expo.out",
         onUpdate: () => {
           setBladeAngle(openBladeState.angle);
         },
@@ -512,7 +545,7 @@ export default function CinematicTransition() {
       if (backdropRef.current) {
         openTl.to(backdropRef.current, {
           opacity: 0,
-          duration: openDuration * 0.7,
+          duration: openDuration * 0.55,
           ease: "power2.out",
         }, 0.00);
       }
@@ -537,12 +570,6 @@ export default function CinematicTransition() {
       if (vignetteRef.current) vignetteRef.current.style.display = "none";
       if (guideRingsRef.current) guideRingsRef.current.style.display = "none";
 
-      // On mobile viewports: restore immediate interaction instantly!
-      if (isMobile) {
-        forceReset();
-        return;
-      }
-
       // ── PHASE 3: THE GOLD FOCUS RING TRAVELS TO THE DESTINATION (DESKTOP) ──
       if (!focusRingRef.current) {
         forceReset();
@@ -559,74 +586,49 @@ export default function CinematicTransition() {
 
       const targetCoords = computeTargetCoordinates(targetEl, cleanUrl);
       const startSize = targetCoords.startSize || targetCoords.width;
+      const ring = focusRingRef.current;
 
-      // Make reticle visible at center (0, 0)
-      gsap.set(focusRingRef.current, {
+      // Size the ring once to its final size and animate only transform and
+      // opacity — no layout work per frame, so the pan stays smooth.
+      gsap.set(ring, {
         xPercent: -50,
         yPercent: -50,
         x: 0,
         y: 0,
-        width: startSize,
-        height: startSize,
-        scale: 1,
-        opacity: 1,
+        width: targetCoords.width,
+        height: targetCoords.height,
+        scale: startSize / targetCoords.width,
+        opacity: 0,
+        force3D: true,
       });
-
       if (reticleAssemblyRef.current) {
-        gsap.set(reticleAssemblyRef.current, { rotation: 0, transformOrigin: "400px 400px" });
+        gsap.set(reticleAssemblyRef.current, { rotation: -10, transformOrigin: "400px 400px" });
       }
 
-      // Optical focus element travels towards target (0.28s)
+      const panTime = isMobile ? 0.62 : 0.78;
       await new Promise<void>((resolve) => {
-        if (reticleAssemblyRef.current) {
-          gsap.to(reticleAssemblyRef.current, {
-            rotation: 16,
-            duration: 0.28,
-            ease: "power2.out",
-          });
-        }
-        ringTimelineRef.current = gsap.to(focusRingRef.current, {
-          xPercent: -50,
-          yPercent: -50,
+        const tl = gsap.timeline({ onComplete: () => resolve() });
+        ringTimelineRef.current = tl as unknown as gsap.core.Tween;
+        tl.to(ring, { opacity: 1, duration: 0.18, ease: "power1.out" }, 0);
+        tl.to(ring, {
           x: targetCoords.x,
           y: targetCoords.y,
-          width: targetCoords.width,
-          height: targetCoords.height,
-          duration: 0.28,
-          ease: "power2.out",
-          onComplete: () => resolve(),
-        });
-      });
-
-      // ── PHASE 4: BRIEF FOCUS SNAP & CLEANUP (0.16s) ──
-      await new Promise<void>((resolve) => {
-        if (!focusRingRef.current) {
-          resolve();
-          return;
+          scale: 1.06,
+          duration: panTime,
+          ease: "power3.inOut",
+        }, 0);
+        if (reticleAssemblyRef.current) {
+          tl.to(reticleAssemblyRef.current, { rotation: 18, duration: panTime + 0.2, ease: "power2.out" }, 0);
         }
-        gsap.to(focusRingRef.current, {
-          scale: 1.05,
-          duration: 0.06,
-          ease: "power1.out",
-          onComplete: () => {
-            if (!focusRingRef.current) {
-              resolve();
-              return;
-            }
-            gsap.to(focusRingRef.current, {
-              scale: 1.0,
-              opacity: 0,
-              duration: 0.10,
-              ease: "power1.inOut",
-              onComplete: () => resolve(),
-            });
-          },
-        });
+        // The focus "lock": a small settle onto the subject, a held beat, then fade.
+        tl.to(ring, { scale: 0.985, duration: 0.14, ease: "power2.out" }, panTime);
+        tl.to(ring, { scale: 1, duration: 0.12, ease: "power1.inOut" }, panTime + 0.14);
+        tl.to(ring, { opacity: 0, scale: 1.04, duration: 0.32, ease: "power1.in" }, panTime + 0.42);
       });
 
       forceReset();
     },
-    [isReducedMotion, router, clearSafetyTimeout, forceReset, resolveTargetElement, computeTargetCoordinates, performRouteSwapOrScroll]
+    [isReducedMotion, router, clearSafetyTimeout, forceReset, resolveTargetElement, computeTargetCoordinates, performRouteSwapOrScroll, setBladeAngle]
   );
 
   // Global click interceptor for eligible internal links
@@ -763,6 +765,7 @@ export default function CinematicTransition() {
     <div
       ref={overlayRef}
       className={styles.overlayRoot}
+      data-ct-overlay=""
       role="status"
       aria-live="polite"
       aria-label="Navigating to new frame"
@@ -905,11 +908,12 @@ export default function CinematicTransition() {
             aria-hidden="true"
           >
             <defs>
-              <radialGradient id="shutter-blade-grad" cx="30%" cy="30%" r="70%">
-                <stop offset="0%" stopColor="#222222" />
-                <stop offset="45%" stopColor="#141414" />
-                <stop offset="85%" stopColor="#080808" />
-                <stop offset="100%" stopColor="#000000" />
+              {/* Satin-black anodised metal, catching a little warm light near the pivot. */}
+              <radialGradient id="shutter-blade-grad" cx="62%" cy="18%" r="85%">
+                <stop offset="0%" stopColor="#2e2925" />
+                <stop offset="30%" stopColor="#1b1816" />
+                <stop offset="70%" stopColor="#0c0b0a" />
+                <stop offset="100%" stopColor="#030303" />
               </radialGradient>
               <linearGradient
                 id="shutter-blade-edge"
@@ -934,11 +938,21 @@ export default function CinematicTransition() {
                   className={styles.bladeActuator}
                   transform={`rotate(-38 ${PIVOT_X} ${PIVOT_Y})`}
                 >
+                  {/* The shadow this blade casts on the one beneath it — gives the stack depth. */}
+                  <path d={BLADE_PATH} fill="rgba(0, 0, 0, 0.55)" transform="translate(-16 12)" />
                   <path
                     d={BLADE_PATH}
                     fill="url(#shutter-blade-grad)"
                     stroke="url(#shutter-blade-edge)"
                     strokeWidth="1.8"
+                  />
+                  {/* The machined leading edge, catching the light as it sweeps. */}
+                  <path
+                    d="M 750 320 C 460 490, 150 500, -165 415"
+                    fill="none"
+                    stroke="rgba(236, 214, 170, 0.32)"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
                   />
                 </g>
               </g>

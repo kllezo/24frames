@@ -4,7 +4,6 @@ import { useRef, useEffect } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import HeroLogoTransition from "./HeroLogoTransition";
 import styles from "./HeroSection.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -112,7 +111,7 @@ export default function HeroSection() {
             Some moments deserve to outlive time.
           </h1>
           <p className={styles.supportingCopy}>
-            Quiet honesty, cinematic framing, and generational memories documented by Phani Gogireddy.
+            Cinematic light, quiet honesty and heirloom craft — your celebration, composed to be handed down for generations.
           </p>
         </div>
 
@@ -133,14 +132,7 @@ export default function HeroSection() {
           </Link>
         </div>
 
-        {/* ── Pure Hero Image → 24 FRAMES Logo Cinematic Transition ── */}
-        <HeroLogoTransition
-          heroSectionRef={sectionRef}
-          heroImageRef={heroImgRef}
-          headlineRef={headlineRef}
-          metadataRef={metadataRef}
-          topBarRef={topBarRef}
-        />
+
       </div>
     </section>
   );

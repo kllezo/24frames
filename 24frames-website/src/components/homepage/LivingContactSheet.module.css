@@ -5,7 +5,7 @@
    ========================================================================== */
 
 .section {
-  padding-top: clamp(4rem, 8vw, 6.5rem);
+  padding-top: clamp(6rem, 10vw, 9rem);
   padding-bottom: clamp(0.75rem, 1.5vw, 1.25rem);
   background-color: var(--color-bg, #FAF8F2);
   position: relative;
@@ -53,7 +53,7 @@
   grid-template-columns: 1fr 1.18fr 1fr;
   gap: clamp(1.5rem, 3vw, 3.25rem);
   align-items: start;
-  margin-bottom: clamp(5rem, 9vh, 8rem);
+  margin-bottom: clamp(7.5rem, 15vh, 12rem);
   position: relative;
 }
 
@@ -235,17 +235,19 @@
   font-size: clamp(1.75rem, 2.4vw, 2.3rem);
   color: var(--color-kllezo-green, #09453e);
   text-align: center;
-  margin: clamp(2.25rem, 4vw, 3.75rem) auto;
+  /* One rhythm between every story: equal space above and below each line. */
+  margin: clamp(5rem, 8vw, 7.5rem) auto;
   opacity: 0.88;
   letter-spacing: 0.02em;
   user-select: none;
-  max-width: 600px;
+  max-width: 760px;
+  text-wrap: balance;
   line-height: 1.3;
 }
 
 .cursiveBridgeSireesh {
   max-width: 520px;
-  margin: clamp(1.5rem, 3vh, 2.5rem) clamp(1rem, 3.5vw, 2.5rem) clamp(1.5rem, 3vh, 2.5rem) auto;
+  margin: clamp(3.5rem, 7vh, 5.5rem) clamp(1rem, 3.5vw, 2.5rem) clamp(2.5rem, 5vh, 4rem) auto;
   text-align: center;
   position: relative;
   z-index: 2;
@@ -388,7 +390,7 @@
    02 — VINITHA & VIVEKANANDA (CURVED PANEL WITH SVG MORPH ANIMATION)
    ══════════════════════════════════════════════════════════════════════════ */
 .editorialBlock {
-  margin-bottom: clamp(5rem, 9.5vh, 8.5rem);
+  margin-bottom: clamp(7.5rem, 15vh, 12rem);
   width: 100%;
   position: relative;
 }
@@ -400,7 +402,7 @@
 /* Full Bleed Film Block spanning edge to edge */
 .fullBleedFilmBlock {
   width: 100%;
-  margin-bottom: clamp(5rem, 9.5vh, 8.5rem);
+  margin-bottom: clamp(7.5rem, 15vh, 12rem);
   position: relative;
   overflow: hidden;
 }
@@ -416,11 +418,13 @@
 }
 
 .curvedPanelStage {
+  /* Edge to edge: the film runs the full width of the screen. */
   width: 100%;
-  height: clamp(490px, 59vh, 670px);
+  max-width: none;
+  height: clamp(340px, 42vh, 470px);
   position: relative;
   overflow: hidden;
-  background-color: #0E1613;
+  background-color: #0e1613;
   clip-path: url(#vinithaMorphClip);
   -webkit-clip-path: url(#vinithaMorphClip);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
@@ -638,7 +642,7 @@
    ══════════════════════════════════════════════════════════════════════════ */
 .duoSpreadBlock {
   max-width: 1180px;
-  margin: 0 auto clamp(5rem, 9.5vh, 8.5rem) auto;
+  margin: 0 auto;
 }
 
 /* Hrithika & Abhishek: PHOTO ON LEFT, TEXT ON RIGHT (User Directive) */
@@ -790,9 +794,8 @@
   position: relative;
   background-color: #E6E1D7;
   box-shadow: 0 20px 48px rgba(9, 69, 62, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05);
-  transform: translateY(clamp(-380px, -36vw, -540px));
-  margin-bottom: clamp(-380px, -36vw, -540px);
-  will-change: clip-path, transform;
+  /* No longer pulled up beside the Karthik still — the stories breathe. */
+  will-change: clip-path;
 }
 
 .sireeshContentCol {
@@ -809,15 +812,17 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: clamp(5rem, 9vh, 8rem);
+  margin-bottom: clamp(7.5rem, 15vh, 12rem);
 }
 
 .nishanthCurvedStage {
+  /* Edge to edge: the film runs the full width of the screen. */
   width: 100%;
-  height: clamp(540px, 65vh, 740px);
+  max-width: none;
+  height: clamp(360px, 45vh, 500px);
   position: relative;
   overflow: hidden;
-  background-color: #0E1613;
+  background-color: #0e1613;
   clip-path: url(#nishanthMorphClip);
   -webkit-clip-path: url(#nishanthMorphClip);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
@@ -1007,7 +1012,7 @@
   font-size: 110px;
   font-weight: 300;
   letter-spacing: 0.16em;
-  fill: #1A2721;
+  fill: #1a2721;
   text-transform: uppercase;
 }
 
@@ -1490,3 +1495,8 @@
     display: none;
   }
 }
+
+/* Clean-up pass: even rhythm across the Vows stories (version 3). */
+.editorialBlock.layeredSireeshBlock { margin-bottom: 0; }
+.nishanthClosingBlock { margin-top: 0; }
+.roundedImageCanvas, .tallPortraitCanvas { border-radius: 2px; }
