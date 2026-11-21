@@ -38,12 +38,62 @@ function sql(): Sql {
       // Serverless: keep connections few and short-lived.
       max: 3,
       idle_timeout: 20,
+      // Recycle connections regularly so none outlives a paused process.
+      max_lifetime: 60 * 5,
       connect_timeout: 10,
       ssl: local ? false : "require",
       onnotice: () => undefined,
     });
   }
   return client;
+}
+
+/* Hosts like Hostinger pause idle Node processes between visits. When one
+   wakes, its pooled sockets may be dead, and a query on a dead socket waits
+   forever (postgres.js has no query timeout). So every database call gets a
+   deadline; on a timeout or a dropped connection the client is thrown away
+   and the call is retried once on a fresh connection. */
+const QUERY_TIMEOUT_MS = 9000;
+
+class DbTimeoutError extends Error {
+  code = "DB_TIMEOUT";
+  constructor() {
+    super("Database call timed out");
+  }
+}
+
+const CONNECTION_CODES = new Set([
+  "DB_TIMEOUT",
+  "CONNECTION_CLOSED",
+  "CONNECTION_ENDED",
+  "CONNECTION_DESTROYED",
+  "CONNECT_TIMEOUT",
+  "ECONNRESET",
+  "ECONNREFUSED",
+  "ETIMEDOUT",
+  "EPIPE",
+]);
+const isConnectionError = (err: unknown) => CONNECTION_CODES.has(String((err as { code?: string })?.code ?? ""));
+
+function resetClient() {
+  const old = client;
+  client = null;
+  ready = null;
+  old?.end({ timeout: 0 }).catch(() => undefined);
+}
+
+async function withDeadline<T>(work: Promise<T>): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      work,
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new DbTimeoutError()), QUERY_TIMEOUT_MS);
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 /** Ensures the schema exists (idempotent, once per server instance). */
@@ -58,11 +108,7 @@ async function db(): Promise<Sql> {
         throw err;
       });
   }
-  try {
-    await ready;
-  } catch (err) {
-    throw unavailable(err);
-  }
+  await ready;
   return s;
 }
 
@@ -76,11 +122,17 @@ function unavailable(err: unknown): StorageUnavailableError {
 }
 
 async function guarded<T>(fn: (s: Sql) => Promise<T>): Promise<T> {
-  const s = await db();
-  try {
-    return await fn(s);
-  } catch (err) {
-    throw unavailable(err);
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const s = await withDeadline(db());
+      return await withDeadline(fn(s));
+    } catch (err) {
+      if (isConnectionError(err)) {
+        resetClient();
+        if (attempt === 0) continue;
+      }
+      throw unavailable(err);
+    }
   }
 }
 
