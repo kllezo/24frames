@@ -10,6 +10,8 @@ export interface PlanningPartner {
   perk?: string;
   /** Round logo or photo; leave empty until the brand sends one. */
   image?: string;
+  /** "contain" sits a wordmark logo inside the pearl disc instead of filling the circle. */
+  fit?: "contain";
   /** Not confirmed yet — shown as an empty logo circle with no name. */
   placeholder?: boolean;
 }
@@ -34,9 +36,16 @@ export const PLANNING_SERVICES: PlanningService[] = [
   {
     id: "venues",
     title: "Venue selection",
-    line: "Farmhouses, resorts and palaces that welcome our couples",
+    line: "Glass houses, farmhouses, lakefronts and resorts that welcome our couples",
     image: "/images/disciplines/weddings/IMG_6320-mobile.webp",
-    partners: fill([]),
+    partners: [
+      { name: "Glass houses", perk: "Engagements" },
+      { name: "Farmhouses" },
+      { name: "Lakefront venues", perk: "Gandipet" },
+      { name: "Luxury resorts" },
+      { name: "Convention centres" },
+      { name: "Hotels & banquets", perk: "Luxury hotels" },
+    ],
   },
   {
     id: "decor",
@@ -46,11 +55,26 @@ export const PLANNING_SERVICES: PlanningService[] = [
     partners: fill([]),
   },
   {
+    id: "costumes",
+    title: "Costumes & bridal designers",
+    line: "Bridal couture, sarees and family outfits from labels we work with",
+    image: "/images/disciplines/fashion/IMG_6280-mobile.webp",
+    partners: fill([
+      { name: "Sowmya Reddy", image: "/images/partners/sowmya-reddy-symbol.svg", fit: "contain" },
+      { name: "Suvarna Mandir" },
+      { name: "Reshu Varma", image: "/images/partners/reshu-varma.jpg" },
+    ]),
+  },
+  {
     id: "jewellery",
     title: "Jewellery curation",
     line: "Bridal sets and heirlooms from houses we work with",
     image: "/images/disciplines/fashion/IMG_6279-mobile.webp",
-    partners: fill([{ name: "PMJ Diamonds", perk: "3–4% off" }]),
+    partners: fill([
+      { name: "PMJ Jewels", perk: "3–4% off", image: "/images/partners/pmj.webp", fit: "contain" },
+      { name: "SKT", perk: "Gold & Diamonds", image: "/images/partners/skt.png", fit: "contain" },
+      { name: "Devi Pavitra", perk: "Gold & Diamonds", image: "/images/partners/devi-pavitra.png", fit: "contain" },
+    ]),
   },
   {
     id: "makeup",

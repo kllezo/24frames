@@ -602,7 +602,11 @@
   inset: 0;
   border: 3px solid #09453e;
   border-bottom: 0;
-  border-radius: 28px 28px 0 0;
-  background: linear-gradient(to bottom, rgba(9, 69, 62, 0.16), rgba(9, 69, 62, 0.05) clamp(60px, 7vw, 100px), rgba(9, 69, 62, 0) clamp(140px, 16vw, 220px));
+  border-radius: clamp(36px, 5vw, 64px) clamp(36px, 5vw, 64px) 0 0;
+  /* A deep band of colour at the line that fades as it comes down; the
+     sides catch a little of it too so the line melts into the walls. */
+  background:
+    linear-gradient(to bottom, rgba(9, 69, 62, 0.34) 0, rgba(9, 69, 62, 0.18) clamp(50px, 6vw, 90px), rgba(9, 69, 62, 0.06) clamp(130px, 14vw, 200px), rgba(9, 69, 62, 0) clamp(240px, 26vw, 360px)),
+    linear-gradient(to right, rgba(9, 69, 62, 0.10), rgba(9, 69, 62, 0) 48px, rgba(9, 69, 62, 0) calc(100% - 48px), rgba(9, 69, 62, 0.10));
   pointer-events: none;
 }

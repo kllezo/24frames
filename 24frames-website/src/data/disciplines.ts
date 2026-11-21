@@ -51,6 +51,9 @@ export interface DisciplineItem {
   heroImage: string;
   heroWebp?: string;
   heroAspect?: "wide" | "cinematic" | "portrait";
+  /** CSS object-position that keeps the subject in frame wherever the hero
+     is cropped (the page hero and the "Other Practices" cards). */
+  heroFocus?: string;
   href: string;
   metadata: DisciplineMetadata;
   gallery: DisciplineGalleryImage[];
@@ -78,6 +81,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "The result is a timeless photographic testament that balances monumental architectural scale with tender, unscripted human joy."
     ],
     heroImage: "/images/portfolio/sireesh-harshitha/cover.jpg",
+    heroFocus: "50% 100%",
     heroWebp: "/images/portfolio/sireesh-harshitha/cover.webp",
     heroAspect: "cinematic",
     href: "/disciplines/weddings",
@@ -194,7 +198,9 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Verified historical commissions include the grand reception coverage of Indian cinema star Bellamkonda Sai Sreenivas & Kavya Reddy, longstanding mentorship associations with Tollywood actor Manchu Manoj, and official collaborations honored by industry stalwarts such as Dia Mirza and veteran cinematographer K.K. Senthil Kumar (ISC).",
       "Every portrait is captured using Hasselblad medium format and custom-calibrated cinema lenses to render nuanced skin tones and authentic textile textures."
     ],
-    heroImage: "/images/disciplines/celebrities/IMG_6476.jpg",
+    heroImage: "/images/disciplines/celebrities/ac5a03ed-7e13-465b-92b0-c7bd3053af69.JPG",
+    heroWebp: "/images/disciplines/celebrities/ac5a03ed-7e13-465b-92b0-c7bd3053af69.JPG.webp",
+    heroFocus: "50% 16%",
     heroAspect: "cinematic",
     href: "/disciplines/celebrities",
     metadata: {
@@ -206,36 +212,6 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       primaryLocations: ["Jubilee Hills", "Banjara Hills", "Shamshabad", "Chennai"]
     },
     gallery: [
-      {
-        id: "c-01",
-        title: "Tollywood Luminary & Cinema Icon",
-        client: "Bellamkonda Sai Sreenivas Milestone",
-        location: "Grand Reception Stage, Shamshabad",
-        year: "2024",
-        image: "/images/disciplines/celebrities/IMG_6472.jpg",
-        caption: "Actor Bellamkonda Sai Sreenivas captured with nuanced cinema-grade key illumination and commanding presence.",
-        aspect: "portrait"
-      },
-      {
-        id: "c-02",
-        title: "Sculptural Key Light Portraiture & Gaze",
-        client: "Tollywood Celebrity Study",
-        location: "GMR Arena VIP Suite",
-        year: "2024",
-        image: "/images/disciplines/celebrities/IMG_6473.jpg",
-        caption: "Deliberate chiaroscuro shadow-play rendering sculpted jawlines and introspective depth.",
-        aspect: "portrait"
-      },
-      {
-        id: "c-03",
-        title: "Grand Reception Character Study in Black Tie",
-        client: "Indian Cinema Gala Feature",
-        location: "Grand Foyer",
-        year: "2024",
-        image: "/images/disciplines/celebrities/IMG_6477.jpg",
-        caption: "Formal black-tie elegance documented with optical precision and natural poise.",
-        aspect: "portrait"
-      },
       {
         id: "c-04",
         title: "VIP Luminary Milestone & Stage Presence",
@@ -315,6 +291,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Our proprietary low-light colour science ensures that stage lighting, laser arrays, and floral projections are rendered with cinematic fidelity without blown highlights."
     ],
     heroImage: "/images/disciplines/events/IMG_6485.jpg",
+    heroFocus: "50% 60%",
     heroAspect: "cinematic",
     href: "/disciplines/events",
     metadata: {
@@ -435,6 +412,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Every frame is retouched with restraint: honoring authentic skin textures and natural fabric movement while maintaining magazine-cover polish."
     ],
     heroImage: "/images/disciplines/fashion/IMG_6280.jpg",
+    heroFocus: "50% 32%",
     heroAspect: "cinematic",
     href: "/disciplines/fashion",
     metadata: {
@@ -555,6 +533,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
       "Color grading is performed in DaVinci Resolve using our proprietary custom 24F film emulsion look, honoring organic skin tones while lending timeless celluloid warmth."
     ],
     heroImage: "/images/disciplines/cinema/IMG_6319.jpg",
+    heroFocus: "50% 96%",
     heroAspect: "cinematic",
     href: "/disciplines/cinema",
     metadata: {
