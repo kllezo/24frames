@@ -330,9 +330,15 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
         </section>
 
         {/* ── Restrained Commission Inquiry CTA ───────────────────── */}
-        <section className={styles.inquirySection} aria-label="Commission Inquiry">
+        <section className={`${styles.inquirySection} ${styles.inquiryPhoto}`} aria-label="Commission Inquiry" data-header-theme="dark">
+          <picture className={styles.inquiryBg} aria-hidden="true">
+            <source type="image/avif" srcSet="/images/v3/hero/beach-dusk-wide.avif" />
+            <source type="image/webp" srcSet="/images/v3/hero/beach-dusk-wide.webp" />
+            <img src="/images/v3/hero/beach-dusk-wide.jpg" alt="" loading="lazy" decoding="async" />
+          </picture>
+          <div className={styles.inquiryScrim} aria-hidden="true" />
           <div className={styles.container}>
-            <div className={styles.inquiryBox}>
+            <div className={styles.inquiryContent}>
               <span className={styles.inquiryLabel}>COMMISSION INQUIRY</span>
               <h2 className={styles.inquiryTitle}>
                 Commission 24 Frames for Your Celebration
