@@ -26,34 +26,55 @@ export const databaseUrl = () => process.env.DATABASE_URL || process.env.POSTGRE
 
 type Sql = ReturnType<typeof postgres>;
 let client: Sql | null = null;
+let schemaChecked = false;
 let ready: Promise<void> | null = null;
+/** Calls currently running, and when the last one touched the database. */
+let inFlight = 0;
+let lastUsed = 0;
+
+/* Hostinger pauses idle Node processes between visits. A paused process's
+   sockets are usually cut by the time it wakes, and postgres.js would wait
+   on them forever. Two defences:
+   1. If the client has sat idle longer than STALE_AFTER_MS (by wall clock,
+      which jumps across a pause), it is replaced before use, so a woken
+      process starts on fresh connections instead of dead ones.
+   2. Every call still has a deadline; on a timeout or a dropped connection
+      the client is replaced (once per client, even when several parallel
+      calls fail together) and the call is retried on the fresh one. */
+const STALE_AFTER_MS = 15_000;
+const QUERY_TIMEOUT_MS = 12_000;
+
+function createClient(): Sql {
+  const url = databaseUrl();
+  const local = /@(localhost|127\.0\.0\.1)(:|\/)/.test(url);
+  return postgres(url, {
+    // Supabase's transaction pooler does not support prepared statements.
+    prepare: false,
+    // A handful of parallel queries per page (the team view runs six).
+    max: 6,
+    idle_timeout: 20,
+    // Recycle connections regularly so none outlives a paused process.
+    max_lifetime: 60 * 5,
+    connect_timeout: 8,
+    ssl: local ? false : "require",
+    onnotice: () => undefined,
+  });
+}
 
 function sql(): Sql {
-  if (!client) {
-    const url = databaseUrl();
-    const local = /@(localhost|127\.0\.0\.1)(:|\/)/.test(url);
-    client = postgres(url, {
-      // Supabase's transaction pooler does not support prepared statements.
-      prepare: false,
-      // Serverless: keep connections few and short-lived.
-      max: 3,
-      idle_timeout: 20,
-      // Recycle connections regularly so none outlives a paused process.
-      max_lifetime: 60 * 5,
-      connect_timeout: 10,
-      ssl: local ? false : "require",
-      onnotice: () => undefined,
-    });
-  }
+  if (client && inFlight === 0 && Date.now() - lastUsed > STALE_AFTER_MS) replaceClient(client);
+  if (!client) client = createClient();
   return client;
 }
 
-/* Hosts like Hostinger pause idle Node processes between visits. When one
-   wakes, its pooled sockets may be dead, and a query on a dead socket waits
-   forever (postgres.js has no query timeout). So every database call gets a
-   deadline; on a timeout or a dropped connection the client is thrown away
-   and the call is retried once on a fresh connection. */
-const QUERY_TIMEOUT_MS = 9000;
+/** Retires `stale` if it is still the current client; a no-op otherwise, so
+    parallel failures on one client trigger a single replacement. */
+function replaceClient(stale: Sql) {
+  if (client !== stale) return;
+  client = null;
+  ready = null;
+  stale.end({ timeout: 0 }).catch(() => undefined);
+}
 
 class DbTimeoutError extends Error {
   code = "DB_TIMEOUT";
@@ -75,13 +96,6 @@ const CONNECTION_CODES = new Set([
 ]);
 const isConnectionError = (err: unknown) => CONNECTION_CODES.has(String((err as { code?: string })?.code ?? ""));
 
-function resetClient() {
-  const old = client;
-  client = null;
-  ready = null;
-  old?.end({ timeout: 0 }).catch(() => undefined);
-}
-
 async function withDeadline<T>(work: Promise<T>): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
@@ -96,28 +110,28 @@ async function withDeadline<T>(work: Promise<T>): Promise<T> {
   }
 }
 
-/** Ensures the schema exists (idempotent, once per server instance). */
-async function db(): Promise<Sql> {
-  const s = sql();
+/** Ensures the schema exists. The setup SQL takes exclusive table locks
+    (enable row level security), so it runs only when the schema is missing,
+    in a transaction with a short lock timeout. portal.docs is the last table
+    the schema creates; update this check when adding newer tables. */
+async function ensureSchema(s: Sql): Promise<void> {
+  if (schemaChecked) return;
   if (!ready) {
-    // The setup SQL takes exclusive table locks (enable row level security),
-    // so running it on every process start queues behind live queries and
-    // stalls the site. Run it only when the schema is missing, inside a
-    // transaction with a short lock timeout. portal.docs is the last table
-    // the schema creates; update this check when adding newer tables.
     ready = s<{ t: string | null }[]>`select to_regclass('portal.docs')::text as t`
       .then((rows) =>
         rows[0]?.t
           ? undefined
           : s.unsafe(`begin; set local lock_timeout = '4s'; ${STUDIO_SCHEMA_SQL}; commit;`).then(() => undefined),
       )
+      .then(() => {
+        schemaChecked = true;
+      })
       .catch((err) => {
         ready = null;
         throw err;
       });
   }
   await ready;
-  return s;
 }
 
 function unavailable(err: unknown): StorageUnavailableError {
@@ -131,15 +145,21 @@ function unavailable(err: unknown): StorageUnavailableError {
 
 async function guarded<T>(fn: (s: Sql) => Promise<T>): Promise<T> {
   for (let attempt = 0; ; attempt++) {
+    const s = sql();
+    inFlight++;
+    lastUsed = Date.now();
     try {
-      const s = await withDeadline(db());
+      await withDeadline(ensureSchema(s));
       return await withDeadline(fn(s));
     } catch (err) {
       if (isConnectionError(err)) {
-        resetClient();
-        if (attempt === 0) continue;
+        replaceClient(s);
+        if (attempt < 2) continue;
       }
       throw unavailable(err);
+    } finally {
+      inFlight--;
+      lastUsed = Date.now();
     }
   }
 }
