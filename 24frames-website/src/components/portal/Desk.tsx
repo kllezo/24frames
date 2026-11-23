@@ -6,6 +6,7 @@ import base from "../studio/studio.module.css";
 import qx from "../studio/quotes/quotes.module.css";
 import px from "./portal.module.css";
 import ix from "./insights.module.css";
+import sx from "./deskStages.module.css";
 import CommissionSheet from "../studio/CommissionSheet";
 import DeskTop from "./DeskTop";
 import { downloadBlob, useProposalPdf } from "../studio/ProposalPreview";
@@ -59,6 +60,16 @@ const TABS: { id: Tab; label: string; statuses?: QuoteStatus[] }[] = [
   { id: "lost", label: "Lost" },
   { id: "all", label: "All" },
 ];
+
+/* The five stages shown as cards; the rest sit in a quiet row below. */
+const STAGES: { id: Tab; label: string; hint: string }[] = [
+  { id: "updates", label: "Notifications", hint: "Client changes and replies" },
+  { id: "inbox", label: "New & in review", hint: "Fresh requests to check" },
+  { id: "approval", label: "Awaiting founder", hint: "Needs the founder's yes" },
+  { id: "approved", label: "Ready to share", hint: "Approved, not yet sent" },
+  { id: "shared", label: "With clients", hint: "Shared or accepted" },
+];
+const MORE_TABS = TABS.filter((t) => t.id === "returned" || t.id === "lost" || t.id === "all");
 
 const ACTION_LABEL: Record<string, string> = {
   created: "Started the quotation",
@@ -154,6 +165,7 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
     for (const t of TABS) if (t.statuses) c[t.id] = pool.filter((q) => !q.lost && t.statuses!.includes(q.status)).length;
     c.updates = pool.filter((q) => q.attention).length;
     c.lost = pool.filter((q) => q.lost).length;
+    c.all = pool.filter((q) => q.status !== "draft").length;
     return c;
   }, [quotes, mine, me.id]);
 
@@ -191,50 +203,69 @@ export default function Desk({ me, config }: { me: PublicAccount; config: Studio
               Online quotations, <em>from request to yes.</em>
             </h1>
           </div>
-          <ul className={ix.strip} style={{ margin: 0 }}>
-            <li className={counts.updates ? ix.stripHot : ""}>Notifications <b>{counts.updates ?? "—"}</b></li>
-            <li>In review <b>{counts.inbox ?? "—"}</b></li>
-            <li className={me.role === "owner" && counts.approval ? ix.stripHot : ""}>Awaiting founder <b>{counts.approval ?? "—"}</b></li>
-            <li>Ready to share <b>{counts.approved ?? "—"}</b></li>
-            <li>Lost <b>{counts.lost ?? "—"}</b></li>
-          </ul>
         </header>
 
-        <div className={qx.tools}>
-          <div className={px.tabs} role="tablist" aria-label="Quotations">
-            {TABS.map((t) => (
+        {/* The pipeline at a glance: each stage is a card with its count, and
+            clicking a card filters the list to it. */}
+        <div className={sx.stages} role="tablist" aria-label="Quotation stages">
+          {STAGES.map((st) => {
+            const n = counts[st.id] ?? 0;
+            const hot = n > 0 && (st.id === "updates" || (st.id === "approval" ? me.role === "owner" : st.id === "inbox"));
+            return (
+              <button
+                key={st.id}
+                role="tab"
+                aria-selected={tab === st.id}
+                className={`${sx.stage} ${tab === st.id ? sx.stageOn : ""} ${hot ? sx.stageHot : ""}`}
+                onClick={() => {
+                  setTab(st.id);
+                  setOpenId(null);
+                }}
+              >
+                <span className={sx.stageLabel}>
+                  {hot && <span className={sx.stageDot} aria-hidden="true" />}
+                  {st.label}
+                </span>
+                <span className={sx.stageCount}>{quotes ? n : "—"}</span>
+                <span className={sx.stageHint}>{st.hint}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className={`${qx.tools} ${sx.tools}`}>
+          <div className={sx.more} role="tablist" aria-label="Other quotations">
+            {MORE_TABS.map((t) => (
               <button
                 key={t.id}
                 role="tab"
                 aria-selected={tab === t.id}
-                className={`${px.tab} ${tab === t.id ? px.tabOn : ""}`}
+                className={`${sx.moreTab} ${tab === t.id ? sx.moreOn : ""}`}
                 onClick={() => {
                   setTab(t.id);
                   setOpenId(null);
                 }}
               >
-                {t.label}
-                {counts[t.id] ? <span className={px.tabCount}>{counts[t.id]}</span> : null}
+                {t.label} <span className={sx.moreCount}>{quotes ? (counts[t.id] ?? 0) : "—"}</span>
               </button>
             ))}
           </div>
-          <label className={px.mineToggle}>
+          <label className={sx.switch}>
             <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} />
+            <span className={sx.switchTrack} aria-hidden="true" />
             <span>Only my clients</span>
           </label>
           <button className={base.btnSecondary} onClick={copyLink}>
             Copy my client link
           </button>
-          {(
-            <input
-              className={px.searchInput}
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search client, couple or reference"
-              aria-label="Search quotations"
-            />
-          )}
+          <input
+            className={px.searchInput}
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search client, couple or reference"
+            aria-label="Search quotations"
+          />
         </div>
 
         {linkMsg && <p className={px.ok} role="status">{linkMsg}</p>}
