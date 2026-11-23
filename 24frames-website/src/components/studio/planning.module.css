@@ -30,8 +30,37 @@
 .flower { position: absolute; left: 50%; top: 50%; width: var(--F); height: var(--F); transform: translate(-50%, -50%); overflow: visible; pointer-events: none; }
 .halo { opacity: 0; transition: opacity 1.6s ease; }
 .bloomOpen .halo { opacity: 1; }
-.petalName { font-family: var(--serif, Georgia, serif); font-size: 30px; fill: #5b1f2a; }
-.petalPerk { font-family: var(--serif, Georgia, serif); font-size: 20px; letter-spacing: 0.5px; fill: #8a6a3c; }
+.petalMono { font-family: var(--serif, Georgia, serif); font-style: italic; font-size: 54px; fill: #a9824a; letter-spacing: 1px; }
+
+/* The partners, named beside the flower once it opens. */
+.partners {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+  max-width: 360px;
+}
+.right .partners { justify-items: end; margin-left: auto; }
+.partners li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(169, 138, 82, 0.22);
+  width: 100%;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: partnerIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(0.5s + var(--k) * 0.12s);
+}
+.right .partners li { flex-direction: row-reverse; text-align: right; }
+.partnerNo { font-family: var(--mono, ui-monospace, monospace); font-size: 10.5px; letter-spacing: 0.12em; color: #a98a52; min-width: 18px; }
+.partnerName { font-family: var(--serif, Georgia, serif); font-size: 19px; color: #1d2a26; }
+.partnerPerk { margin-left: auto; font-size: 12.5px; letter-spacing: 0.04em; color: #8a6a3c; white-space: nowrap; }
+.right .partnerPerk { margin-left: 0; margin-right: auto; }
+@keyframes partnerIn { to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .partners li { animation: none; opacity: 1; transform: none; } }
 
 .core {
   all: unset;

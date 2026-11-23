@@ -39,6 +39,19 @@ export default function PlanningStage({ go }: StageProps) {
                 <span className={px.no}>{String(i + 1).padStart(2, "0")}</span>
                 <h3 className={px.title}>{s.title}</h3>
                 <p className={px.line}>{s.line}</p>
+                {on && (
+                  <ol className={px.partners}>
+                    {s.partners
+                      .filter((p) => !p.placeholder)
+                      .map((p, k) => (
+                        <li key={p.name} style={{ "--k": k } as React.CSSProperties}>
+                          <span className={px.partnerNo}>{String(k + 1).padStart(2, "0")}</span>
+                          <span className={px.partnerName}>{p.name}</span>
+                          {p.perk && <span className={px.partnerPerk}>{p.perk}</span>}
+                        </li>
+                      ))}
+                  </ol>
+                )}
                 <button type="button" className={px.more} onClick={() => setOpen(on ? null : s.id)} aria-expanded={on}>
                   {on ? "Hide partners" : "See our partners"} <span aria-hidden="true">→</span>
                 </button>

@@ -16,6 +16,15 @@ const anglesFor = (n: number) => (n <= 1 ? [270] : Array.from({ length: n }, (_,
 const OPEN_SECONDS = 2.5;
 const BASE = 150; // petal base distance from the centre (viewBox units), just under the shrunk photo
 
+/** "Lakefront venues" → "Lv"; "Farmhouses" → "F". */
+const monogram = (name: string) =>
+  name
+    .split(/[\s&]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w, i) => (i === 0 ? w[0].toUpperCase() : w[0].toLowerCase()))
+    .join("");
+
 const clamp = (x: number) => Math.min(1, Math.max(0, x));
 const easeOut = (x: number) => 1 - Math.pow(1 - x, 4);
 
@@ -115,45 +124,39 @@ export default function PartnerBloom({
               <path d={PETAL} fill={`url(#pf${uid})`} stroke={`url(#pe${uid})`} strokeWidth="2.4" filter={`url(#sh${uid})`} />
               <path d={PETAL} fill={`url(#ps${uid})`} opacity=".7" />
               <g ref={(n) => void (labels.current[k] = n)}>
-                {/* The brand's logo disc — an empty pearl disc until the logo arrives. */}
-                <g transform={`translate(0,${p.placeholder || p.image ? 0 : -30})`}>
-                  {p.image && p.fit === "contain" ? (
-                    <>
-                      <circle r="52" fill="#fffdf8" />
-                      <image href={p.image} x="-38" y="-38" width="76" height="76" preserveAspectRatio="xMidYMid meet" />
-                    </>
-                  ) : p.image ? (
-                    <>
-                      <clipPath id={`lc${uid}${k}`}>
-                        <circle r="52" />
-                      </clipPath>
-                      <image href={p.image} x="-52" y="-52" width="104" height="104" clipPath={`url(#lc${uid}${k})`} preserveAspectRatio="xMidYMid slice" />
-                    </>
-                  ) : (
-                    <>
-                      <circle r="52" fill={`url(#pd${uid})`} />
-                      <path d="M-14,-6 L-7,-15 H7 L14,-6 L0,14 Z M-14,-6 H14 M-7,-15 L-3,-6 L0,14 M7,-15 L3,-6 L0,14" fill="none" stroke="#b98f4a" strokeWidth="1.6" strokeLinejoin="round" opacity=".75" />
-                    </>
-                  )}
-                  <circle r="52" fill="none" stroke="#c9a768" strokeWidth="2" />
-                  <circle r="58" fill="none" stroke="#e5d2a8" strokeWidth="1" />
-                </g>
-                {/* A logo speaks for itself; only petals without one carry a name. */}
-                {!p.placeholder && !p.image && (
+                {/* A large disc at the heart of the petal: the brand's logo, or a
+                    gold monogram for partners without one. Names are listed
+                    beside the flower, not squeezed into the petal. */}
+                {!p.placeholder && (
                   <>
-                    <text
-                      className={px.petalName}
-                      textAnchor="middle"
-                      y="58"
-                      {...(p.name.length > 15 ? { textLength: 232, lengthAdjust: "spacingAndGlyphs" as const } : {})}
-                    >
-                      {p.name}
-                    </text>
-                    {p.perk && (
-                      <text className={px.petalPerk} textAnchor="middle" y="86">
-                        {p.perk}
-                      </text>
+                    {p.image && p.fit === "contain" ? (
+                      <>
+                        <circle r="74" fill="#fffdf8" />
+                        <image href={p.image} x="-54" y="-54" width="108" height="108" preserveAspectRatio="xMidYMid meet" />
+                      </>
+                    ) : p.image ? (
+                      <>
+                        <clipPath id={`lc${uid}${k}`}>
+                          <circle r="74" />
+                        </clipPath>
+                        <image href={p.image} x="-74" y="-74" width="148" height="148" clipPath={`url(#lc${uid}${k})`} preserveAspectRatio="xMidYMid slice" />
+                      </>
+                    ) : (
+                      <>
+                        <circle r="74" fill={`url(#pd${uid})`} />
+                        <text className={px.petalMono} textAnchor="middle" dominantBaseline="central">
+                          {monogram(p.name)}
+                        </text>
+                      </>
                     )}
+                    <circle r="74" fill="none" stroke="#c9a768" strokeWidth="2" />
+                    <circle r="82" fill="none" stroke="#e5d2a8" strokeWidth="1" />
+                  </>
+                )}
+                {p.placeholder && (
+                  <>
+                    <circle r="74" fill={`url(#pd${uid})`} />
+                    <circle r="74" fill="none" stroke="#c9a768" strokeWidth="2" opacity=".6" />
                   </>
                 )}
               </g>
