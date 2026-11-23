@@ -1,0 +1,79 @@
+/* Quotations desk — the pipeline as five clickable stage cards. */
+.stages {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0.6rem 0 1.1rem;
+}
+.stage {
+  all: unset;
+  box-sizing: border-box;
+  display: grid;
+  gap: 6px;
+  padding: 16px 18px 14px;
+  background: var(--paper, #fffdf8);
+  border: 1px solid var(--line, rgba(16, 48, 42, 0.12));
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+.stage:hover { border-color: var(--line-strong, rgba(16, 48, 42, 0.3)); transform: translateY(-1px); }
+.stage:focus-visible { outline: 2px solid var(--forest, #0f3d35); outline-offset: 2px; }
+.stageOn {
+  border-color: var(--forest, #0f3d35);
+  box-shadow: 0 14px 30px -22px rgba(16, 48, 42, 0.7), inset 0 0 0 1px var(--forest, #0f3d35);
+}
+.stageHot { background: rgba(169, 138, 82, 0.08); border-color: rgba(169, 138, 82, 0.55); }
+.stageHot.stageOn { border-color: var(--forest, #0f3d35); }
+.stageLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sage, #6b7a73);
+}
+.stageOn .stageLabel { color: var(--forest-ink, #10302a); }
+.stageDot { width: 7px; height: 7px; border-radius: 50%; background: #c0522f; box-shadow: 0 0 0 3px rgba(192, 82, 47, 0.15); }
+.stageCount {
+  font-family: var(--serif, var(--font-cormorant), Georgia, serif);
+  font-size: clamp(34px, 3.4vw, 46px);
+  line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--forest-ink, #10302a);
+}
+.stageHint { font-size: 12px; color: var(--sage, #6b7a73); }
+
+.tools { gap: 0.9rem 1.2rem; }
+.more { display: inline-flex; align-items: center; gap: 2px; margin-right: auto; }
+.moreTab {
+  all: unset;
+  cursor: pointer;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--sage, #6b7a73);
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+.moreTab:hover { color: var(--forest-ink, #10302a); }
+.moreOn { color: var(--forest-ink, #10302a); background: var(--paper, #fffdf8); border-color: var(--line-strong, rgba(16, 48, 42, 0.3)); }
+.moreCount { font-family: var(--serif, Georgia, serif); font-size: 15px; margin-left: 3px; font-variant-numeric: lining-nums; }
+
+.switch { display: inline-flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--forest-ink, #10302a); cursor: pointer; white-space: nowrap; }
+.switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.switchTrack { position: relative; width: 34px; height: 20px; border-radius: 999px; background: rgba(16, 48, 42, 0.18); transition: background 0.2s ease; }
+.switchTrack::after { content: ""; position: absolute; left: 3px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fffdf8; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); transition: transform 0.2s ease; }
+.switch input:checked + .switchTrack { background: var(--forest, #0f3d35); }
+.switch input:checked + .switchTrack::after { transform: translateX(14px); }
+.switch input:focus-visible + .switchTrack { outline: 2px solid var(--forest, #0f3d35); outline-offset: 2px; }
+
+@media (max-width: 1000px) {
+  .stages { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .stages { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding-bottom: 4px; }
+  .stage { flex: 0 0 62%; scroll-snap-align: start; }
+  .more { margin-right: 0; flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) { .stage { transition: none; } .stage:hover { transform: none; } }
