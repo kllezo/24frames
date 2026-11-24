@@ -12,24 +12,21 @@ import type { PortalAccount, PriceLink } from "./types";
 
 export const newLinkId = () => randomBytes(18).toString("base64url");
 
-/** The link a token names, if it may still be used by this email. */
-export async function usableLink(token: string | null | undefined, email: string, accountId: string | null = null): Promise<PriceLink | null> {
+/** The link a token names, if it is valid and switched on. A link works for
+    anyone who opens it — any number of accounts, on any email or phone. */
+export async function usableLink(token: string | null | undefined): Promise<PriceLink | null> {
   if (!token || token.length > 60 || !/^[\w-]+$/.test(token)) return null;
   const link = await getDoc<PriceLink>("pricelink", token);
   if (!link || !link.active) return null;
-  if (link.email && link.email !== email.trim().toLowerCase()) return null;
-  if (link.usedBy && link.usedBy !== accountId) return null;
   return link;
 }
 
 /** Why a link can't be used, in the couple's words — null when it can (or the email isn't known yet). */
-export async function linkProblem(token: string | null | undefined, email: string | null = null, accountId: string | null = null): Promise<string | null> {
+export async function linkProblem(token: string | null | undefined): Promise<string | null> {
   if (!token) return null;
   const link = token.length <= 60 && /^[\w-]+$/.test(token) ? await getDoc<PriceLink>("pricelink", token) : null;
-  if (!link) return "This personal price link isn't valid. Please ask the studio to send it again.";
-  if (!link.active) return "This personal price link has been switched off. Please ask the studio for a new one.";
-  if (link.usedBy && link.usedBy !== accountId) return "This personal price link has already been used by another account. Please ask the studio for your own link.";
-  if (email && link.email && link.email !== email.trim().toLowerCase()) return "This personal price link was made for a different email address. Sign in or sign up with the email the studio has for you.";
+  if (!link) return "This personal price link isn't valid. Please ask 24 Frames to send it again.";
+  if (!link.active) return "This personal price link has been switched off. Please ask 24 Frames for a new one.";
   return null;
 }
 
@@ -41,7 +38,8 @@ export async function applyLink(account: PortalAccount, link: PriceLink): Promis
   if (!account.source || account.source === "website") patch.source = "price_link";
   const next = (await updateAccount(account.id, patch)) ?? { ...account, ...patch };
   const now = new Date().toISOString();
-  await putDoc<PriceLink>("pricelink", { ...link, usedBy: account.id, usedByName: account.name, usedAt: link.usedAt ?? now });
+  const ids = Array.from(new Set([...(link.usedByIds ?? (link.usedBy ? [link.usedBy] : [])), account.id]));
+  await putDoc<PriceLink>("pricelink", { ...link, usedBy: account.id, usedByName: account.name, usedAt: link.usedAt ?? now, usedByIds: ids });
   const config = configFor((await getConfig()).config, next);
   for (const q of await listQuotesForClient(account.id)) {
     if (q.status !== "draft" && q.status !== "submitted") continue;

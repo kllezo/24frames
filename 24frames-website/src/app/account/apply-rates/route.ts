@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   const me = await currentAccount();
   if (!me || me.role !== "client") return NextResponse.redirect(publicUrl(request, `/account/login?price=${encodeURIComponent(url.searchParams.get("price") ?? "")}`));
   try {
-    const link = await usableLink(url.searchParams.get("price"), me.email, me.id);
+    const link = await usableLink(url.searchParams.get("price"));
     if (link && link.id !== me.priceLinkId) await applyLink(me, link);
   } catch (err) {
     console.error("[portal] price link not applied", err);

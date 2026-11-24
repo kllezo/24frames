@@ -24,7 +24,6 @@ export default function PriceLinks({ me, services }: { me: PublicAccount; servic
   const [mode, setMode] = useState<"percent" | "exact">("percent");
   const [percent, setPercent] = useState("15");
   const [prices, setPrices] = useState<Record<string, string>>({});
-  const [email, setEmail] = useState("");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const load = useCallback(async () => {
@@ -54,14 +53,13 @@ export default function PriceLinks({ me, services }: { me: PublicAccount; servic
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(
         mode === "exact"
-          ? { mode, label, email, prices: Object.fromEntries(Object.entries(prices).filter(([, v]) => v.trim() !== "").map(([k, v]) => [k, Number(v.replace(/[^\d.]/g, ""))])) }
-          : { mode, label, percent: Number(percent), email },
+          ? { mode, label, prices: Object.fromEntries(Object.entries(prices).filter(([, v]) => v.trim() !== "").map(([k, v]) => [k, Number(v.replace(/[^\d.]/g, ""))])) }
+          : { mode, label, percent: Number(percent) },
       ),
     }).catch(() => null);
     const d = res ? ((await res.json().catch(() => ({}))) as { link?: Link; error?: string }) : {};
     if (res?.ok && d.link) {
       setLabel("");
-      setEmail("");
       setPrices({});
       await load();
       await copy(d.link.url);
@@ -120,10 +118,6 @@ export default function PriceLinks({ me, services }: { me: PublicAccount; servic
                     <input inputMode="decimal" value={percent} onChange={(e) => setPercent(e.target.value)} />
                   </label>
                 )}
-                <label>
-                  Only for this email (optional)
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="client@example.com" />
-                </label>
               </div>
               {mode === "exact" && (
                 <div className={ix.priceTable}>
@@ -208,8 +202,10 @@ export default function PriceLinks({ me, services }: { me: PublicAccount; servic
                 </span>
                 <span className={ix.listSub}>
                   By {l.createdByName} · {formatDateLong(l.createdAt.slice(0, 10))}
-                  {l.email ? ` · only for ${l.email}` : ""}
-                  {l.usedByName ? ` · used by ${l.usedByName}` : " · not used yet"}
+                  {(() => {
+                    const n = l.usedByIds?.length ?? (l.usedBy ? 1 : 0);
+                    return n === 0 ? " · not used yet" : n === 1 ? ` · used by ${l.usedByName}` : ` · used by ${n} accounts, latest ${l.usedByName}`;
+                  })()}
                   <span className={ix.linkUrl}>{l.url}</span>
                 </span>
               </li>

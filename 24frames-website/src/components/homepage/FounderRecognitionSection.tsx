@@ -105,7 +105,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageSrc: "/images/magazines/gen-next-india.webp",
     imageAlt: "GenNext-India magazine cover featuring Phani Gogireddy holding the Excellence star award",
     sourceUrl: "https://www.youtube.com/@24framesphotography",
-    sourceLabel: "Explore Studio Archive →",
+    sourceLabel: "Explore the Archive →",
     aspectRatio: "505 / 811",
   },
 ];
@@ -648,7 +648,7 @@ export default function FounderRecognitionSection({
               <div className={styles.statDivider} aria-hidden="true" />
               <div className={styles.statBox}>
                 <span className={styles.statNumber}>6,000</span>
-                <span className={styles.statDesc}>SQ. FT. CREATIVE STUDIO</span>
+                <span className={styles.statDesc}>SQ. FT. CREATIVE SPACE</span>
               </div>
             </div>
 

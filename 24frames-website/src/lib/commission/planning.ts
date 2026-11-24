@@ -53,7 +53,7 @@ export const PLANNING_SERVICES: PlanningService[] = [
     line: "Mandaps, florals and lighting from designers we trust",
     image: "/images/stories/karthik-and-gayathri/IMG_6329-mobile.webp",
     partners: fill([
-      { name: "Design by Raja", perk: "Wedding décor studio", image: "/images/partners/design-by-raja.png", fit: "contain" },
+      { name: "Design by Raja", perk: "Wedding décor", image: "/images/partners/design-by-raja.png", fit: "contain" },
       { name: "Alankara" },
       { name: "Marvam" },
     ]),

@@ -244,6 +244,40 @@ export default async function DisciplineDetailPage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* ── Full films on YouTube ── */}
+        {discipline.films && discipline.films.length > 0 && (
+          <section className={styles.filmsSection} aria-label="Full films">
+            <div className={styles.container}>
+              <div className={styles.filmsHead}>
+                <span className={styles.curatorialLabel}>THE FILMS</span>
+                <h2 className={styles.filmsTitle}>
+                  Watch the <em>full features</em>
+                </h2>
+              </div>
+              <div className={styles.filmsGrid}>
+                {discipline.films.map((f) => (
+                  <figure key={f.youtubeId} className={styles.film}>
+                    <div className={styles.filmFrame}>
+                      <iframe
+                        src={`https://www.youtube-nocookie.com/embed/${f.youtubeId}?rel=0&modestbranding=1`}
+                        title={`${f.title} — ${f.caption}`}
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allowFullScreen
+                      />
+                    </div>
+                    <figcaption>
+                      <b>{f.title}</b>
+                      <span>{f.caption}</span>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ── Interactive Cinema Motion Pictures & Full-Screen Gallery ── */}
         <DisciplineInteractiveMedia
           videos={discipline.videos}

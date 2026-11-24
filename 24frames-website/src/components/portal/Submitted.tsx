@@ -24,7 +24,7 @@ export default function Submitted({
   const wa = manager?.phone.replace(/[^\d]/g, "") ?? "";
   const steps = changes
     ? [
-        ["Your changes reach the studio", `${rm ?? "Your relationship manager"} has been told what changed.`],
+        ["Your changes reach 24 Frames", `${rm ?? "Your relationship manager"} has been told what changed.`],
         ["We review them", "Prices are re-checked against your updated selections."],
         ["Your updated quotation", "It appears in your account as soon as it is ready."],
       ]
@@ -51,7 +51,7 @@ export default function Submitted({
         </h1>
         <p className={s.lead}>
           {changes
-            ? "Your changes are with the studio. We'll look them over and update your quotation."
+            ? "Your changes are with 24 Frames. We'll look them over and update your quotation."
             : `Your quotation${couple ? ` for ${couple}` : ""} is now with 24 Frames. It is the first step of something we'll take great care of.`}
         </p>
 
@@ -110,7 +110,7 @@ export default function Submitted({
             Back to 24 Frames
           </Link>
         </div>
-        <p className={s.fine}>The estimate is indicative; the studio confirms your final price after reviewing your selections.</p>
+        <p className={s.fine}>The estimate is indicative; 24 Frames confirms your final price after reviewing your selections.</p>
       </div>
     </main>
   );

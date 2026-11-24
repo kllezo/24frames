@@ -92,7 +92,7 @@ export function applyAction(
     case "save": {
       if (!isClient) return new Error("Only the client edits their own selections.");
       if (!["draft", "submitted", "sent"].includes(q.status)) {
-        return new Error("The studio is finalising this quotation — it can be edited again once it is shared with you.");
+        return new Error("We are finalising this quotation — it can be edited again once it is shared with you.");
       }
       // Opening a quotation re-saves it; only a real change counts as a revision
       // (and only a real change reopens a quotation the studio has shared).
@@ -116,8 +116,8 @@ export function applyAction(
       };
     }
     case "submit": {
-      if (!isClient) return new Error("Only the client can send their quotation to the studio.");
-      if (q.status !== "draft") return new Error("This quotation has already been sent to the studio.");
+      if (!isClient) return new Error("Only the client can send their quotation to 24 Frames.");
+      if (q.status !== "draft") return new Error("This quotation has already been sent to 24 Frames.");
       return {
         ...q,
         draft: action.draft,
@@ -147,7 +147,7 @@ export function applyAction(
       };
     }
     case "price": {
-      if (!isStaff) return new Error("Only the studio can set the price.");
+      if (!isStaff) return new Error("Only the 24 Frames team can set the price.");
       if (!["submitted", "rejected"].includes(q.status)) return new Error("The price can be changed while the quotation is with sales.");
       const price = cleanPrice(action.finalPrice);
       return {
@@ -160,7 +160,7 @@ export function applyAction(
       };
     }
     case "send_for_approval": {
-      if (!isStaff) return new Error("Only the studio can request approval.");
+      if (!isStaff) return new Error("Only the 24 Frames team can request approval.");
       if (!["submitted", "rejected"].includes(q.status)) return new Error("This quotation is not with sales.");
       const price = cleanPrice(action.finalPrice);
       return {
@@ -194,7 +194,7 @@ export function applyAction(
       };
     }
     case "forward": {
-      if (!isStaff) return new Error("Only the studio can share the quotation.");
+      if (!isStaff) return new Error("Only the 24 Frames team can share the quotation.");
       if (q.status !== "approved") return new Error("Only an approved quotation can be shared with the client.");
       return {
         ...q,
@@ -233,7 +233,7 @@ export function applyAction(
       };
     }
     case "reopen": {
-      if (!isStaff) return new Error("Only the studio can reopen a quotation.");
+      if (!isStaff) return new Error("Only the 24 Frames team can reopen a quotation.");
       if (!["pending_approval", "approved", "rejected", "sent", "accepted"].includes(q.status)) return new Error("This quotation is already open for changes.");
       return {
         ...q,
@@ -248,7 +248,7 @@ export function applyAction(
       };
     }
     case "seen": {
-      if (!isStaff) return new Error("Only the studio can clear a notification.");
+      if (!isStaff) return new Error("Only the 24 Frames team can clear a notification.");
       return { ...q, attention: null };
     }
     case "assign": {
@@ -263,7 +263,7 @@ export function applyAction(
       };
     }
     case "log_consultation": {
-      if (!isStaff) return new Error("Only the studio logs consultations.");
+      if (!isStaff) return new Error("Only the 24 Frames team logs consultations.");
       const entry = { id: action.id, at: action.at, mode: action.mode, by: by.name, note: action.note.trim().slice(0, 1000) };
       return {
         ...q,
@@ -273,7 +273,7 @@ export function applyAction(
       };
     }
     case "confirm_booking": {
-      if (!isStaff) return new Error("Only the studio confirms a booking.");
+      if (!isStaff) return new Error("Only the 24 Frames team confirms a booking.");
       if (!["approved", "sent"].includes(q.status)) return new Error("Only an approved quotation can be confirmed as a booking.");
       return {
         ...q,
@@ -287,7 +287,7 @@ export function applyAction(
       };
     }
     case "mark_lost": {
-      if (!isStaff) return new Error("Only the studio closes an enquiry.");
+      if (!isStaff) return new Error("Only the 24 Frames team closes an enquiry.");
       if (q.status === "accepted") return new Error("A confirmed booking can't be marked as lost.");
       if (!Object.hasOwn(LOST_LABEL, action.reason)) return new Error("Choose why the enquiry was lost.");
       const detail = action.detail.trim().slice(0, 1000);
@@ -300,12 +300,12 @@ export function applyAction(
       };
     }
     case "revive": {
-      if (!isStaff) return new Error("Only the studio reopens an enquiry.");
+      if (!isStaff) return new Error("Only the 24 Frames team reopens an enquiry.");
       if (!q.lost) return q;
       return { ...q, lost: null, history: log({ action: "revived", note: action.note.trim().slice(0, 500) || undefined }), updatedAt: now };
     }
     case "production": {
-      if (!isStaff) return new Error("Only the studio updates production.");
+      if (!isStaff) return new Error("Only the 24 Frames team updates production.");
       if (!q.production) return new Error("Production starts once the booking is confirmed.");
       const p = q.production;
       const status = action.status ?? p.status;
@@ -327,7 +327,7 @@ export function applyAction(
       };
     }
     case "record_payment": {
-      if (!isStaff) return new Error("Only the studio records payments.");
+      if (!isStaff) return new Error("Only the 24 Frames team records payments.");
       if (q.status !== "accepted") return new Error("Payments are recorded against a confirmed booking.");
       const amount = Math.round(action.amount);
       if (!Number.isFinite(amount) || amount <= 0 || amount > MAX_PRICE) return new Error("Enter a valid amount.");
@@ -340,7 +340,7 @@ export function applyAction(
       };
     }
     case "deliverables": {
-      if (!isStaff) return new Error("Only the studio can change the deliverables.");
+      if (!isStaff) return new Error("Only the 24 Frames team can change the deliverables.");
       if (q.status === "draft") return new Error("Deliverables can be tailored once the client has sent the quotation.");
       if (q.lost) return new Error("This enquiry was marked lost.");
       const note = action.note.trim().slice(0, 400);
@@ -348,7 +348,7 @@ export function applyAction(
         ...q,
         deliverables: action.items,
         deliverablesUpdate: { at: now, by: by.name, note, seenByClient: false },
-        history: log({ action: "deliverables", note: note || (action.items ? "Deliverables tailored for this couple." : "Deliverables reset to the studio standard.") }),
+        history: log({ action: "deliverables", note: note || (action.items ? "Deliverables tailored for this couple." : "Deliverables reset to the standard list.") }),
         updatedAt: now,
       };
     }

@@ -89,7 +89,7 @@ export default function ClientHome({
       <main className={qx.main}>
         {sentRef && (
           <div className={px.flash} role="status">
-            <b>Thank you — quotation {sentRef} is with the studio.</b> Our team will review your selections, confirm the
+            <b>Thank you — quotation {sentRef} is with 24 Frames.</b> Our team will review your selections, confirm the
             details with you and share your final quotation here.
           </div>
         )}
@@ -133,7 +133,7 @@ export default function ClientHome({
             )}
           </div>
           <p className={px.managerNote}>
-            Prefer to build it together? Your manager can walk you through every choice — on a video call or at the studio.
+            Prefer to build it together? Your manager can walk you through every choice — on a video call or at our office.
           </p>
         </section>
 
@@ -222,11 +222,11 @@ function QuoteCard({
             {formatDateLong(q.consultations[q.consultations.length - 1].at.slice(0, 10))}
           </p>
         )}
-        {q.unshared && <p className={px.cardUnshared}>You have changes the studio hasn&apos;t seen yet.</p>}
+        {q.unshared && <p className={px.cardUnshared}>You have changes we haven&apos;t seen yet.</p>}
         {dlNotice && (
           <div className={px.cardNotice} role="status">
             <p>
-              <b>The studio updated your deliverables</b> · {formatDateLong(dlNotice.at.slice(0, 10))}
+              <b>24 Frames updated your deliverables</b> · {formatDateLong(dlNotice.at.slice(0, 10))}
               {dlNotice.note && <span> — “{dlNotice.note}”</span>}
             </p>
             <p className={px.cardNoticeFine}>Your quotation PDF now lists them.</p>

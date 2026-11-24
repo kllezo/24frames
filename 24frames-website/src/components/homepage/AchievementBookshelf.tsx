@@ -99,7 +99,7 @@ const ACHIEVEMENTS: Achievement[] = [
     organization: "Hyderabad Photo Trade Expo",
     year: "2024",
     citation: "Creative Entrepreneurship & Industry Leadership",
-    description: "Keynote speaker and honoree for scaling profitable photography businesses and integrating cinema camera workflows into commercial wedding studios across South India.",
+    description: "Keynote speaker and honoree for scaling profitable photography businesses and integrating cinema camera workflows into commercial wedding businesses across South India.",
     image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80&auto=format",
     shelf: 2,
     color: "#77766E",

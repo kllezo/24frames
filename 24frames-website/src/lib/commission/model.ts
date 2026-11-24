@@ -1,5 +1,6 @@
 /* Draft factories and pure helpers for working with a commission. */
 
+import { TIER_RENAMES } from "./defaults";
 import { CUSTOM_EVENT_TYPE } from "./defaults";
 import type {
   CelebrationEvent,
@@ -144,9 +145,12 @@ export function normaliseDraft(input: CommissionDraft, config: StudioConfig): Co
   const assignments = (input.assignments ?? []).filter(
     (a) => eventIds.has(a.eventId) && serviceIds.has(a.serviceId) && a.quantity > 0,
   );
+  // Timelines retired in Nov 2026 move to the nearest current one.
+  const tierId = input.deliveryTierId && TIER_RENAMES[input.deliveryTierId] ? TIER_RENAMES[input.deliveryTierId] : input.deliveryTierId;
   return {
     ...base,
     ...input,
+    deliveryTierId: tierId ?? base.deliveryTierId,
     couple,
     events,
     assignments,

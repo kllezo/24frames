@@ -1,44 +1,30 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { lockClick } from "../ui/shutter";
-import styles from "../delivery.module.css";
 import cx from "../cinema.module.css";
 import st from "../stages.module.css";
-import base from "../studio.module.css";
 import { StageFooter, StageHeader } from "./StageChrome";
 import AnimatedNumber from "../ui/AnimatedNumber";
 import IllustrativeTag from "../ui/IllustrativeTag";
 import { formatINR } from "@/lib/commission/format";
 import type { StageProps } from "./types";
 
-/** A brass padlock. Closed on every timeline; the chosen one springs open. */
-function BrassLock({ open, className }: { open?: boolean; className?: string }) {
-  const id = useId().replace(/:/g, "");
-  return (
-    <svg className={`${className ?? ""} ${open ? cx.lockOpen : ""}`} viewBox="0 0 40 50" aria-hidden="true">
-      <defs>
-        <linearGradient id={`b${id}`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#f3dfa6" />
-          <stop offset="0.45" stopColor="#c9a25a" />
-          <stop offset="1" stopColor="#8a6a32" />
-        </linearGradient>
-        <linearGradient id={`s${id}`} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#8a6a32" />
-          <stop offset="0.5" stopColor="#f0d99a" />
-          <stop offset="1" stopColor="#8a6a32" />
-        </linearGradient>
-      </defs>
-      <path className={cx.lockShackle} d="M12.5 23v-8a7.5 7.5 0 0 1 15 0v8" fill="none" stroke={`url(#s${id})`} strokeWidth="3.4" strokeLinecap="round" />
-      <rect x="6" y="22" width="28" height="23" rx="4.5" fill={`url(#b${id})`} />
-      <rect x="8.2" y="24.2" width="23.6" height="18.6" rx="3" fill="none" stroke="rgba(255,248,225,0.55)" strokeWidth="0.8" />
-      <g className={cx.lockKey}>
-        <circle cx="20" cy="31.5" r="2.6" fill="#3a2a10" />
-        <path d="M18.7 33h2.6l.8 5.2h-4.2z" fill="#3a2a10" />
-      </g>
-    </svg>
-  );
-}
+const ICONS = {
+  bolt: <path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12z" />,
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5V12l3 2" />
+    </>
+  ),
+  calendar: (
+    <>
+      <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
+      <path d="M3.5 10h17M8 3v4M16 3v4" />
+    </>
+  ),
+};
 
 export default function DeliveryStage({ config, draft, quote, actions, go }: StageProps) {
   const tiers = useMemo(
@@ -46,27 +32,15 @@ export default function DeliveryStage({ config, draft, quote, actions, go }: Sta
     [config.deliveryTiers],
   );
   const pp = quote.postProduction;
-  const selectedIdx = tiers.findIndex((t) => t.id === draft.deliveryTierId);
-  const selected = selectedIdx >= 0 ? tiers[selectedIdx] : null;
-  // Stops sit at the centre of equal columns, so labels and track align.
-  const pos = (i: number) => ((i + 0.5) / Math.max(1, tiers.length)) * 100;
-  const track = useRef<HTMLDivElement>(null);
+  const selected = tiers.find((t) => t.id === draft.deliveryTierId) ?? null;
   const lastTier = useRef(draft.deliveryTierId);
   useEffect(() => {
     if (lastTier.current && draft.deliveryTierId && lastTier.current !== draft.deliveryTierId) lockClick();
     lastTier.current = draft.deliveryTierId;
   }, [draft.deliveryTierId]);
-  const dragging = useRef(false);
-  /** Slide: the knob jumps to the stop nearest the finger. */
-  function pickAt(x: number) {
-    const r = track.current?.getBoundingClientRect();
-    if (!r || !tiers.length) return;
-    const f = Math.min(0.999, Math.max(0, (x - r.left) / r.width));
-    const t = tiers[Math.floor(f * tiers.length)];
-    if (t && t.id !== draft.deliveryTierId) actions.setTier(t.id);
-  }
   const roundTo = config.postProduction.roundTo || 1;
-  const feeAt = (m: number) => Math.round((pp.baseFee * m) / roundTo) * roundTo;
+  const priceOf = (t: (typeof tiers)[number]) =>
+    typeof t.fee === "number" ? t.fee : pp.baseFee > 0 ? Math.round((pp.baseFee * t.multiplier) / roundTo) * roundTo : null;
 
   function onKey(e: React.KeyboardEvent, i: number) {
     let next = -1;
@@ -85,107 +59,76 @@ export default function DeliveryStage({ config, draft, quote, actions, go }: Sta
         frame="06"
         kicker="Frame 06 · The Delivery"
         title={<>When would you like to <em>relive it?</em></>}
-        lead="Choose how soon your story comes home. Sooner moves it to the front of our edit suite."
+        lead="Choose how soon your story comes home. Every timeline carries the same quality standards."
       >
         <IllustrativeTag show={config.pricingIsIllustrative} />
       </StageHeader>
 
       {tiers.length === 0 ? (
         <div className={st.emptyState}>
-          <p>The studio has not configured any delivery timelines yet.</p>
-          <p className={st.muted}>Delivery tiers are managed in Studio admin → Post-production.</p>
+          <p>No delivery timelines are set up yet.</p>
+          <p className={st.muted}>Delivery timelines are managed in the admin → Post-production.</p>
         </div>
       ) : (
         <>
-          <section
-            className={cx.tl}
-            role="radiogroup"
-            aria-label="Delivery timeline"
-            style={{ "--sel": `${selected ? pos(selectedIdx) : pos(0)}%`, "--first": `${pos(0)}%`, "--n": tiers.length } as React.CSSProperties}
-            onPointerDown={(e) => {
-              dragging.current = true;
-              (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-              pickAt(e.clientX);
-            }}
-            onPointerMove={(e) => { if (dragging.current) pickAt(e.clientX); }}
-            onPointerUp={() => { dragging.current = false; }}
-            onPointerCancel={() => { dragging.current = false; }}
-          >
-            <div className={cx.tlStops}>
-              {tiers.map((t, i) => {
-                const isSel = t.id === draft.deliveryTierId;
-                const months = t.days >= 90;
-                return (
-                  <button
-                    key={t.id}
-                    id={`tier-${t.id}`}
-                    role="radio"
-                    aria-checked={isSel}
-                    tabIndex={isSel || (!selected && i === 0) ? 0 : -1}
-                    className={`${cx.tlStop} ${isSel ? cx.tlOn : ""}`}
-                    onClick={() => actions.setTier(t.id)}
-                    onKeyDown={(e) => onKey(e, i)}
-                    aria-label={`${t.priorityName}, ${months ? Math.round(t.days / 30) + " months" : t.days + " days"}`}
-                  >
-                    <span className={cx.tlNum}>{months ? Math.round(t.days / 30) : t.days}</span>
-                    <span className={cx.tlUnit}>{months ? "months" : "days"}</span>
-                  </button>
-                );
-              })}
-            </div>
-            <div className={cx.tlTrack} ref={track} aria-hidden="true">
-              <span className={cx.tlFill} />
-              {tiers.map((t, i) => {
-                const on = t.id === draft.deliveryTierId;
-                return (
-                  <span key={on ? `${t.id}-open` : t.id} className={`${cx.tlMed} ${on ? cx.tlMedOn : ""}`} style={{ left: `${pos(i)}%` }}>
-                    <span className={cx.tlMedRing} />
-                    <BrassLock open={on} className={cx.tlMedLock} />
+          <div className={cx.dtList} role="radiogroup" aria-label="Delivery timeline">
+            {tiers.map((t, i) => {
+              const on = t.id === draft.deliveryTierId;
+              const price = priceOf(t);
+              return (
+                <button
+                  key={t.id}
+                  id={`tier-${t.id}`}
+                  type="button"
+                  role="radio"
+                  aria-checked={on}
+                  tabIndex={on || (!selected && i === 0) ? 0 : -1}
+                  className={`${cx.dtCard} ${on ? cx.dtOn : ""}`}
+                  onClick={() => actions.setTier(t.id)}
+                  onKeyDown={(e) => onKey(e, i)}
+                >
+                  <span className={cx.dtTop}>
+                    <span className={cx.dtName}>{t.priorityName}</span>
+                    {t.badge && <span className={cx.dtBadge}>{t.badge}</span>}
+                    <span className={cx.dtRadio} aria-hidden="true" />
                   </span>
-                );
-              })}
-            </div>
-            <div className={cx.tlNames} aria-hidden="true">
-              {tiers.map((t) => (
-                <span key={t.id} className={t.id === draft.deliveryTierId ? cx.tlOn : ""}>
-                  <b>{t.priorityName}</b>
-                  <small>{pp.baseFee > 0 ? formatINR(feeAt(t.multiplier)) : "—"}</small>
-                </span>
-              ))}
-            </div>
-          </section>
+                  <span className={cx.dtPrice}>{price !== null ? formatINR(price) : "—"}</span>
+                  <span className={cx.dtWindow}>
+                    <svg viewBox="0 0 24 24" aria-hidden="true" className={t.icon === "bolt" ? cx.dtIconBolt : ""}>
+                      {ICONS[t.icon ?? (i === 0 ? "bolt" : i === tiers.length - 1 ? "calendar" : "clock")]}
+                    </svg>
+                    {t.window ?? t.label}
+                  </span>
+                  <span className={cx.dtMeaning}>{t.meaning}</span>
+                  {t.covers.length > 0 && (
+                    <span className={cx.dtCovers}>
+                      {t.covers.slice(0, 4).map((c) => <span key={c}>{c}</span>)}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
 
           {selected ? (
-            <section className={cx.vaultResult} key={selected.id} aria-live="polite">
-              <div className={cx.vaultCopy}>
-                <p className={cx.vaultLabel}>{selected.label}</p>
-                <h2 className={cx.vaultTitle}>{selected.priorityName}</h2>
-                <p className={cx.vaultMeaning}>{selected.meaning}</p>
-                {selected.covers.length > 0 && (
-                  <div className={cx.dosChips}>
-                    {selected.covers.slice(0, 4).map((c) => <span key={c}>{c}</span>)}
-                  </div>
-                )}
+            <section className={cx.dtSummary} aria-live="polite">
+              <div>
+                <p className={cx.vaultLabel}>Post-production · {selected.window ?? selected.label}</p>
                 <details className={cx.vaultTerms}>
                   <summary>Terms</summary>
                   <p>{selected.expectations}</p>
                   <p>{selected.conditions}</p>
                 </details>
               </div>
-              <div className={cx.vaultFeeCard}>
-                <p>Post-production</p>
+              <div className={cx.dtSummaryFee}>
                 <AnimatedNumber value={pp.finalFee} className={cx.vaultFeeFig} />
-                <small>
-                  {pp.overridden
-                    ? `Studio adjusted — ${pp.overrideReason}`
-                    : `${formatINR(pp.baseFee)} base × ${pp.multiplier ?? 1}× for this timeline`}
-                </small>
+                {pp.overridden && <small>Adjusted — {pp.overrideReason}</small>}
+                {!pp.overridden && pp.finalFee === 0 && <small>Charged once your crew is chosen</small>}
               </div>
             </section>
           ) : (
-            <p className={cx.vaultHint}>Slide the key, or tap a lock to open its timeline.</p>
+            <p className={cx.vaultHint}>Choose a timeline to continue.</p>
           )}
-
         </>
       )}
 
@@ -199,4 +142,3 @@ export default function DeliveryStage({ config, draft, quote, actions, go }: Sta
     </div>
   );
 }
-

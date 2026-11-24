@@ -625,7 +625,7 @@ export default function ClientGalleryExperience({
                   </svg>
                 </a>
                 <a
-                  href="https://wa.me/919014433074"
+                  href="https://wa.me/919160656734"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.socialIconBtn}

@@ -366,7 +366,7 @@ export default function ProposalDocument({ draft, quote, config, reference, issu
           </Text>
         ) : null}
         {quote.illustrative ? (
-          <Text style={{ fontSize: 7.5, color: "#8a6a2e", marginTop: 4, letterSpacing: 1 }}>ILLUSTRATIVE PRICING — NOT APPROVED STUDIO RATES</Text>
+          <Text style={{ fontSize: 7.5, color: "#8a6a2e", marginTop: 4, letterSpacing: 1 }}>ILLUSTRATIVE PRICING — NOT FINAL RATES</Text>
         ) : null}
 
         <Text style={[label, { fontSize: 11, marginTop: 30, marginBottom: 9 }]}>Payment Terms</Text>

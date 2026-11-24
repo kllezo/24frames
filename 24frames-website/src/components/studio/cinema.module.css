@@ -5979,3 +5979,453 @@ img.overtureCrest {
     align-items: flex-start;
   }
 }
+
+/* Delivery — one card per timeline: name, fixed price, window, a line. */
+.dtList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(12px, 1.6vw, 20px);
+  margin: clamp(1.5rem, 3vw, 2.5rem) 0 1.5rem;
+}
+
+.dtCard {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.3rem, 2.2vw, 1.8rem);
+  cursor: pointer;
+  background: #fffdf8;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 18px 40px -30px rgba(12, 48, 40, 0.35);
+  transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.dtCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(169, 138, 82, 0.55);
+}
+
+.dtCard:focus-visible {
+  outline: 2px solid var(--gold, #a98a52);
+  outline-offset: 3px;
+}
+
+.dtOn {
+  border-color: var(--forest-ink);
+  box-shadow: 0 0 0 1px var(--forest-ink), 0 24px 50px -28px rgba(12, 48, 40, 0.5);
+}
+
+.dtTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.6rem;
+  padding-right: 30px; /* room for the radio */
+}
+
+.dtName {
+  white-space: nowrap;
+  font-family: var(--serif);
+  font-size: clamp(22px, 2vw, 26px);
+  font-weight: 500;
+  color: var(--forest-ink);
+}
+
+.dtBadge {
+  padding: 0.25rem 0.65rem;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #1d6b3f;
+  background: rgba(46, 160, 92, 0.13);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.dtRadio {
+  position: absolute;
+  top: clamp(1.3rem, 2.2vw, 1.8rem);
+  right: clamp(1.3rem, 2.2vw, 1.8rem);
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid rgba(12, 48, 40, 0.3);
+  border-radius: 50%;
+  transition: border 0.25s var(--ease), background 0.25s var(--ease);
+}
+
+.dtOn .dtRadio {
+  border: 6px solid var(--forest-ink);
+  background: #fffdf8;
+}
+
+.dtPrice {
+  font-family: var(--serif);
+  font-size: clamp(34px, 3.4vw, 44px);
+  font-weight: 500;
+  line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--forest-ink);
+}
+
+.dtWindow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.dtWindow svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dtWindow svg.dtIconBolt {
+  stroke: #1d8a4c;
+}
+
+.dtMeaning {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--sage);
+}
+
+.dtCovers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.dtCovers span {
+  padding: 0.2rem 0.6rem;
+  font-size: 11.5px;
+  color: var(--forest-ink);
+  background: rgba(169, 138, 82, 0.1);
+  border-radius: 999px;
+}
+
+.dtSummary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  padding: 1.1rem 1.4rem;
+  background: rgba(255, 253, 248, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.dtSummaryFee {
+  display: grid;
+  justify-items: end;
+  gap: 0.2rem;
+}
+
+.dtSummaryFee small {
+  font-size: 12px;
+  color: var(--sage);
+}
+
+/* Full composition — every occasion against every role, with quiet
+   round steppers; the occasion and subtotal columns stay pinned while
+   the roles scroll sideways. */
+.cm {
+  position: relative;
+  overflow-x: auto;
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+  background: #fffdf8;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 30px 60px -48px rgba(16, 48, 42, 0.45);
+  scrollbar-width: thin;
+}
+
+.cm:focus-visible {
+  outline: 2px solid var(--gold, #a98a52);
+  outline-offset: 3px;
+}
+
+.cmTable {
+  width: 100%;
+  min-width: max-content;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.cmTable th,
+.cmTable td {
+  padding: 0.85rem 0.6rem;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--line);
+  background: #fffdf8;
+}
+
+.cmTable thead th {
+  padding: 1.2rem 0.5rem 1rem;
+  vertical-align: bottom;
+  background: linear-gradient(180deg, #fbf6ec, #fffdf8);
+}
+
+/* Pinned first and last columns */
+.cmCorner,
+.cmEvent,
+.cmFootLabel {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  min-width: 180px;
+  text-align: left !important;
+  box-shadow: 1px 0 0 var(--line);
+}
+
+.cmTotalHead,
+.cmTotal {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  min-width: 104px;
+  box-shadow: -1px 0 0 var(--line);
+}
+
+.cmCorner {
+  padding-left: 1.3rem !important;
+}
+
+.cmCorner span,
+.cmTotalHead {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
+.cmCorner small {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 12px;
+  color: rgba(20, 30, 28, 0.5);
+}
+
+.cmSvc {
+  all: unset;
+  display: grid;
+  justify-items: center;
+  gap: 0.3rem;
+  width: 96px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.cmSvc img {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #fffdf8, 0 0 0 3px rgba(169, 138, 82, 0.55);
+  transition: transform 0.3s var(--ease);
+}
+
+.cmSvc:hover img {
+  transform: scale(1.07);
+}
+
+.cmSvc span {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.15;
+  color: var(--forest-ink);
+}
+
+.cmSvc small {
+  font-size: 12px;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--sage);
+}
+
+.cmSvc:focus-visible {
+  outline: 2px solid var(--gold, #a98a52);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.cmEvent {
+  padding-left: 1.3rem !important;
+}
+
+.cmEvent {
+  white-space: nowrap;
+}
+
+.cmEventIn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cmEventIn img {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.cmEventIn > span {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.cmEvent b {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 500;
+  color: var(--forest-ink);
+}
+
+.cmEvent small {
+  font-size: 12px;
+  color: var(--sage);
+}
+
+/* A round stepper: quiet when empty, forest and gold once someone is cast. */
+.cmStep {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 3px;
+  background: rgba(12, 48, 40, 0.04);
+  border: 1px solid rgba(12, 48, 40, 0.1);
+  border-radius: 999px;
+  transition: background 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+
+.cmStep button {
+  all: unset;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  font-size: 17px;
+  line-height: 1;
+  color: var(--forest-ink);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.cmStep button:hover:not(:disabled) {
+  color: #fffdf8;
+  background: var(--forest-ink);
+}
+
+.cmStep button:disabled {
+  opacity: 0.28;
+  cursor: default;
+}
+
+.cmStep button:focus-visible {
+  outline: 2px solid var(--gold, #a98a52);
+  outline-offset: 1px;
+}
+
+.cmStep span {
+  min-width: 22px;
+  font-family: var(--serif);
+  font-size: 19px;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: rgba(12, 48, 40, 0.45);
+}
+
+.cmOn {
+  background: #fbf3e2 !important;
+}
+
+.cmOn .cmStep {
+  background: var(--forest-ink);
+  border-color: var(--forest-ink);
+}
+
+.cmOn .cmStep span,
+.cmOn .cmStep button {
+  color: #fff6e3;
+}
+
+.cmOn .cmStep button:hover:not(:disabled) {
+  color: var(--forest-ink);
+  background: #f3dfa6;
+}
+
+/* The suggestion sits in a fixed-height line, so rows never jump. */
+.cmSug,
+.cmSugSpace {
+  display: block;
+  height: 18px;
+  margin: 0.35rem auto 0;
+}
+
+.cmSug {
+  all: unset;
+  display: block;
+  height: 18px;
+  margin: 0.35rem auto 0;
+  padding: 0 0.5rem;
+  font-size: 11px;
+  line-height: 18px;
+  color: #8a6a3c;
+  background: rgba(200, 168, 78, 0.14);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.cmSug:hover {
+  color: #fffdf8;
+  background: #a98a52;
+}
+
+.cmTotal {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--forest-ink);
+}
+
+.cmTable tbody tr:hover td:not(.cmOn),
+.cmTable tbody tr:hover th {
+  background: #fcf8f0;
+}
+
+.cmTable tfoot th,
+.cmTable tfoot td {
+  border-bottom: 0;
+  font-size: 13.5px;
+  color: var(--sage);
+  background: #faf5ea;
+}
+
+.cmFootLabel {
+  padding-left: 1.3rem !important;
+  font-weight: 600;
+  color: var(--forest-ink) !important;
+}
+
+.cmTable tfoot .cmTotal {
+  font-size: 22px;
+  color: var(--forest-ink);
+}

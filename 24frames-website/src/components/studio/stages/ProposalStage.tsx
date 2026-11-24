@@ -58,7 +58,7 @@ function ClientProposal({ config, draft, quote, go, consultant, portal }: StageP
       }
       setError([data.error ?? `Could not send (${res.status}).`, ...(data.issues?.map((i) => i.message) ?? [])].join(" "));
     } catch {
-      setError("We couldn't reach the studio. Your selections are saved — please try again.");
+      setError("We couldn't reach 24 Frames. Your selections are saved — please try again.");
     } finally {
       setBusy(false);
     }
@@ -77,7 +77,7 @@ function ClientProposal({ config, draft, quote, go, consultant, portal }: StageP
         <aside className={styles.submitPanel}>
           <p className={base.kicker}>Estimated investment</p>
           <p className={styles.submitTotal}>{formatINR(quote.grandTotal)}</p>
-          <p className={st.muted}>The studio confirms your final price after reviewing your selections.</p>
+          <p className={st.muted}>24 Frames confirms your final price after reviewing your selections.</p>
           {messages.length > 0 ? (
             <div className={st.checklist} role="status">
               <p><b>To send, please complete:</b></p>
@@ -86,10 +86,10 @@ function ClientProposal({ config, draft, quote, go, consultant, portal }: StageP
           ) : null}
           {portal!.editable ? (
             <button className={`${base.btnPrimaryLg} ${styles.submitBtn}`} onClick={send} disabled={busy || messages.length > 0}>
-              {busy ? "Sending…" : alreadySent ? `Send my changes to ${portal!.manager?.name.split(" ")[0] ?? "the studio"}` : "Send to 24 Frames"}
+              {busy ? "Sending…" : alreadySent ? `Send my changes to ${portal!.manager?.name.split(" ")[0] ?? "24 Frames"}` : "Send to 24 Frames"}
             </button>
           ) : (
-            <p className={st.muted}>The studio is finalising this quotation. You can edit it again once it is shared with you.</p>
+            <p className={st.muted}>We are finalising this quotation. You can edit it again once it is shared with you.</p>
           )}
           {error && <p className={base.error} role="alert">{error}</p>}
           <button
@@ -140,14 +140,14 @@ function StudioProposal({ config, draft, quote, actions, go, consultant, onConfi
         onConfigRefresh(data.config);
       }
       if (res.status === 401) {
-        setError("The studio session has expired. Sign in again — this commission is kept on this screen.");
+        setError("Your session has expired. Sign in again — this commission is kept on this screen.");
       } else {
         setError(
           [data.error ?? `Submission failed (${res.status}).`, ...(data.issues?.map((i) => i.message) ?? [])].join(" "),
         );
       }
     } catch {
-      setError("The studio server could not be reached. Nothing was submitted — please try again.");
+      setError("The server could not be reached. Nothing was submitted — please try again.");
     } finally {
       setBusy(false);
     }
@@ -159,7 +159,7 @@ function StudioProposal({ config, draft, quote, actions, go, consultant, onConfi
         frame="08"
         kicker="Frame 08 · The Proposal"
         title={<>A proposal, composed <em>for {coupleNames(draft.couple, "you")}.</em></>}
-        lead="Preview the proposal exactly as it will be shared. Submitting records the commission with the studio and issues its reference."
+        lead="Preview the proposal exactly as it will be shared. Submitting records the commission and issues its reference."
       />
 
       <div className={styles.proposalGrid}>
@@ -197,7 +197,7 @@ function StudioProposal({ config, draft, quote, actions, go, consultant, onConfi
             <pre>{message}</pre>
           </details>
           <p className={styles.fine}>
-            Submitting stores this commission in the studio records. The PDF and WhatsApp message are prepared next —
+            Submitting stores this commission in the records. The PDF and WhatsApp message are prepared next —
             nothing is sent automatically.
           </p>
         </aside>

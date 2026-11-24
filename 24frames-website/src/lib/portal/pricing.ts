@@ -47,6 +47,7 @@ export function scaleConfig(config: StudioConfig, factor: number | null | undefi
       video: bands(config.postProduction.video),
     },
     charges: config.charges.map((c) => (c.kind === "fixed" ? { ...c, amount: round100(c.amount * f) } : c)),
+    deliveryTiers: config.deliveryTiers.map((t) => (typeof t.fee === "number" ? { ...t, fee: round100(t.fee * f) } : t)),
   };
 }
 

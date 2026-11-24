@@ -101,7 +101,7 @@ export default function RootLayout({
                 addressRegion: "Telangana",
                 addressCountry: "IN",
               },
-              telephone: "+919014433074",
+              telephone: "+919160656734",
               email: "hello@24framesphotography.com",
               priceRange: "$$$$",
               sameAs: [

@@ -116,7 +116,7 @@ function getTimelineConfig(categoryId: string) {
       return {
         stageEyebrow: "STAGE II · EDITORIAL SCHEDULE & LOCATIONS",
         headline: "Outline your shoot schedule & locations.",
-        subtitle: "Detail your editorial shoots, lookbook sessions, studio spaces, and call dates.",
+        subtitle: "Detail your editorial shoots, lookbook sessions, shoot spaces, and call dates.",
         entryTag: "SHOOT / EDITORIAL",
         defaultName: "Editorial Shoot / Lookbook Session",
         nameLabel: "Shoot / Editorial Name",
@@ -124,8 +124,8 @@ function getTimelineConfig(categoryId: string) {
         cityLabel: "City / Destination",
         cityPlaceholder: "e.g. Mumbai, Paris, Hyderabad, Como",
         dateLabel: "Shoot Date",
-        venueLabel: "Studio / Location (Optional)",
-        venuePlaceholder: "e.g. Famous Studios, Mehboob Studio, Heritage Villa",
+        venueLabel: "Shoot location (Optional)",
+        venuePlaceholder: "e.g. Ramoji Film City, Heritage Villa",
         scopeLabel: "Creative Scope & Specific Requirements (Optional)",
         scopePlaceholder: "Detail your designer collection, styling theme, and editorial deliverables...",
         addBtnLabel: "Add another shoot or lookbook",
@@ -135,7 +135,7 @@ function getTimelineConfig(categoryId: string) {
       return {
         stageEyebrow: "STAGE II · CAMPAIGN PRODUCTION SCHEDULE",
         headline: "Define your campaign production schedule.",
-        subtitle: "Map the shooting schedule, key production locations, and studio dates for your campaign.",
+        subtitle: "Map the shooting schedule, key production locations, and shoot dates for your campaign.",
         entryTag: "CAMPAIGN PRODUCTION",
         defaultName: "Brand Campaign Shoot",
         nameLabel: "Campaign / Project Name",
@@ -143,8 +143,8 @@ function getTimelineConfig(categoryId: string) {
         cityLabel: "City / Destination",
         cityPlaceholder: "e.g. Bengaluru, Mumbai, Hyderabad, Dubai",
         dateLabel: "Shoot Date",
-        venueLabel: "Studio / Shoot Location (Optional)",
-        venuePlaceholder: "e.g. Studio 01, Hotel Property, On-location Estate",
+        venueLabel: "Shoot location (Optional)",
+        venuePlaceholder: "e.g. Sound stage, Hotel property, On-location estate",
         scopeLabel: "Creative Scope & Specific Requirements (Optional)",
         scopePlaceholder: "Describe campaign objectives, advertising deliverables, and format requirements...",
         addBtnLabel: "Add another campaign shoot date",
@@ -590,7 +590,7 @@ export default function InquirePage() {
     `----------------------------------------\n` +
     `Assembled via 24 Frames Commission Atelier.`;
 
-  const whatsappHref = `https://wa.me/919014433074?text=${encodeURIComponent(formattedBriefText)}`;
+  const whatsappHref = `https://wa.me/919160656734?text=${encodeURIComponent(formattedBriefText)}`;
 
   const handleCopyBrief = async () => {
     try {
@@ -789,7 +789,7 @@ export default function InquirePage() {
                 <p className={styles.invitationNarrative}>
                   A master wedding film is not simply recorded; it is commissioned with purpose.
                   Through natural light, optical cinema primes, and quiet observation, Phani Gogireddy
-                  and the 24 Frames studio preserve the sacred weight, spontaneous tears, and regal
+                  and the 24 Frames team preserve the sacred weight, spontaneous tears, and regal
                   elegance of your family’s most defining celebration.
                 </p>
 
@@ -1267,7 +1267,7 @@ export default function InquirePage() {
               <h2 className={styles.stageHeadline}>Your Master Commission Brief.</h2>
               <p className={styles.stageSubtitle}>
                 This archival document has been live-assembled from your selections. Review your
-                brief, provide your essential contact details, and present your commission to the studio.
+                brief, provide your essential contact details, and present your commission to us.
               </p>
             </div>
 
@@ -1528,7 +1528,7 @@ export default function InquirePage() {
 
                 <p className={styles.confirmationSubtitle}>
                   Your commission brief for <strong>{currentCategory.title}</strong> has been assembled and formatted.
-                  To present it directly to Phani Gogireddy and our executive studio team, dispatch your brief via WhatsApp below.
+                  To present it directly to Phani Gogireddy and our executive team, dispatch your brief via WhatsApp below.
                 </p>
               </div>
 
@@ -1565,7 +1565,7 @@ export default function InquirePage() {
                   className={styles.whatsAppDispatchBtn}
                   aria-label="Dispatch commission brief directly via WhatsApp"
                 >
-                  <span>DISPATCH BRIEF VIA WHATSAPP (+91 90144 33074)</span>
+                  <span>DISPATCH BRIEF VIA WHATSAPP (+91 91606 56734)</span>
                   <span className={styles.btnArrowIcon}>↗</span>
                 </a>
 

@@ -254,7 +254,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                       className={styles.finalLogoImg}
                     />
                   </div>
-                  <span className={styles.finalTag}>CINEMA STUDIO</span>
+                  <span className={styles.finalTag}>PHOTOGRAPHY · CINEMA</span>
                 </div>
               </div>
             );

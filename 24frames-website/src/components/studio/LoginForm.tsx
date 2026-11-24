@@ -16,13 +16,13 @@ export default function LoginForm({
   const [pin, setPin] = useState("");
   const [consultant, setConsultant] = useState("");
   const [error, setError] = useState<string | null>(
-    reason === "timeout" ? "Your studio session timed out. Sign in to continue." : null,
+    reason === "timeout" ? "Your session timed out. Sign in to continue." : null,
   );
   const [busy, setBusy] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!pin.trim()) return setError("Enter the studio PIN.");
+    if (!pin.trim()) return setError("Enter the access PIN.");
     setBusy(true);
     setError(null);
     try {
@@ -40,7 +40,7 @@ export default function LoginForm({
       }
       window.location.assign(next);
     } catch {
-      setError("The studio server could not be reached.");
+      setError("The server could not be reached.");
       setBusy(false);
     }
   }
@@ -57,12 +57,12 @@ export default function LoginForm({
       <section className={styles.loginPanel}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className={styles.loginLogo} src="/images/logo-dark-header.png" alt="24 Frames" />
-        <p className={styles.kicker}>Studio access</p>
+        <p className={styles.kicker}>Private access</p>
         <h1 className={styles.loginTitle}>
           Enter the <em>atelier</em>
         </h1>
         <p className={styles.loginLead}>
-          This consultation space is reserved for the 24 Frames studio. Sign in to begin a couple&apos;s commission.
+          This consultation space is reserved for the 24 Frames team. Sign in to begin a couple&apos;s commission.
         </p>
 
         {!configured ? (
@@ -84,7 +84,7 @@ export default function LoginForm({
               />
             </label>
             <label className={styles.field}>
-              <span className={styles.fieldLabel}>Studio PIN</span>
+              <span className={styles.fieldLabel}>Access PIN</span>
               <input
                 className={`${styles.input} ${styles.pinInput}`}
                 type="password"
@@ -103,7 +103,7 @@ export default function LoginForm({
               </p>
             )}
             <button className={styles.btnPrimary} type="submit" disabled={busy}>
-              {busy ? "Opening…" : "Enter the studio"}
+              {busy ? "Opening…" : "Enter"}
             </button>
           </form>
         )}

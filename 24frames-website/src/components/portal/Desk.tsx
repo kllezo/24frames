@@ -910,7 +910,7 @@ function DeliverablesEditor({
         <div>
           <h3 id={`dl-${q.id}`} className={dx.title}>Deliverables</h3>
           <p className={dx.sub}>
-            {tailored ? "Tailored for this couple" : "The studio's standard list"}
+            {tailored ? "Tailored for this couple" : "The standard list"}
             {q.deliverablesUpdate && ` · last changed by ${q.deliverablesUpdate.by} ${ago(q.deliverablesUpdate.at)}`}
             {q.deliverablesUpdate && (q.deliverablesUpdate.seenByClient ? " · seen by the client" : " · not yet seen by the client")}
           </p>

@@ -17,7 +17,7 @@ export default function V2Footer() {
           <div>
             <h3>Contact</h3>
             <a href="mailto:hello@24framesphotography.com">hello@24framesphotography.com</a>
-            <a href="tel:+919014433074">+91 90144 33074</a>
+            <a href="tel:+919160656734">+91 91606 56734</a>
           </div>
           <div>
             <h3>Studio</h3>
@@ -28,7 +28,7 @@ export default function V2Footer() {
             <h3>Follow</h3>
             <a href="https://www.instagram.com/24framesphotography_official/" target="_blank" rel="noreferrer">Instagram</a>
             <a href="https://youtube.com/@24framesphotography" target="_blank" rel="noreferrer">YouTube</a>
-            <a href="https://wa.me/919014433074" target="_blank" rel="noreferrer">WhatsApp</a>
+            <a href="https://wa.me/919160656734" target="_blank" rel="noreferrer">WhatsApp</a>
           </div>
           <div>
             <h3>Explore</h3>

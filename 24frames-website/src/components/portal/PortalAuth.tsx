@@ -84,7 +84,7 @@ export default function PortalAuth({
       activate: { kicker: "", title: null, cta: "" },
     },
     staff: {
-      login: { kicker: "The studio desk", title: <>Every quotation, <em>in one place.</em></>, cta: "Enter the desk" },
+      login: { kicker: "The team desk", title: <>Every quotation, <em>in one place.</em></>, cta: "Enter the desk" },
       signup: { kicker: "", title: null, cta: "" },
       setup: { kicker: "First visit", title: <>Set up the <em>founder account.</em></>, cta: "Create founder account" },
       activate: { kicker: "Authorised by the founder", title: <>Activate your <em>desk access.</em></>, cta: "Activate my access" },
@@ -123,7 +123,7 @@ export default function PortalAuth({
         )}
         {price && !priceProblem && !invitedBy && (
           <p className={px.invited}>
-            A personal invitation from 24 Frames. Sign in — or create your account — to compose your quotation with the studio.
+            A personal invitation from 24 Frames. Sign in — or create your account — to compose your quotation with us.
           </p>
         )}
         {invitedBy && (
@@ -198,7 +198,7 @@ export default function PortalAuth({
         {mode === "setup" && (
           <label className={cx.lux}>
             <input type="password" inputMode="numeric" value={f.pin} onChange={set("pin")} placeholder=" " maxLength={32} autoComplete="off" required />
-            <span>Studio PIN</span>
+            <span>Access PIN</span>
           </label>
         )}
 
@@ -210,7 +210,7 @@ export default function PortalAuth({
 
         <p className={qx.fine}>
           {audience === "client" ? (
-            <>Studio team? <a href="/desk/login">Sign in to the desk</a>.</>
+            <>24 Frames team? <a href="/desk/login">Sign in to the desk</a>.</>
           ) : (
             <>Planning your wedding? <a href="/account/login">Client sign-in</a>.</>
           )}

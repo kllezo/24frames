@@ -54,6 +54,8 @@ export interface DisciplineItem {
   /** CSS object-position that keeps the subject in frame wherever the hero
      is cropped (the page hero and the "Other Practices" cards). */
   heroFocus?: string;
+  /** Full films on YouTube, embedded on the discipline page. */
+  films?: { youtubeId: string; title: string; caption: string }[];
   href: string;
   metadata: DisciplineMetadata;
   gallery: DisciplineGalleryImage[];
@@ -184,7 +186,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     fullDescription:
       "24 Frames has earned the enduring trust of South Indian cinema stars, public luminaries, and esteemed private families. We craft character studies that balance the gravitas of iconic personalities with the vulnerability of intimate family milestones.",
     curatorialNotes: [
-      "Our celebrity portraiture eschews superficial studio gloss in favor of cinema-grade key lighting, dimensional shadows, and honest expressions.",
+      "Our celebrity portraiture eschews superficial gloss in favor of cinema-grade key lighting, dimensional shadows, and honest expressions.",
       "Verified historical commissions include the grand reception coverage of Indian cinema star Bellamkonda Sai Sreenivas & Kavya Reddy, longstanding mentorship associations with Tollywood actor Manchu Manoj, and official collaborations honored by industry stalwarts such as Dia Mirza and veteran cinematographer K.K. Senthil Kumar (ISC).",
       "Every portrait is captured using Hasselblad medium format and custom-calibrated cinema lenses to render nuanced skin tones and authentic textile textures."
     ],
@@ -438,7 +440,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         id: "f-03",
         title: "Tactile Embroidery & Handwoven Silk Study",
         client: "Archival Textile Campaign",
-        location: "Studio Stage",
+        location: "Sound Stage",
         year: "2024",
         image: "/images/disciplines/fashion/IMG_6280.jpg",
         caption: "Macro optical focus preserving intricate gold zardozi motifs and artisanal heritage weaving.",
@@ -511,6 +513,18 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     number: "05",
     title: "Cinema & Feature Films",
     shortTitle: "Cinema",
+    films: [
+      {
+        youtubeId: "2EICGi0eENA",
+        title: "Bellamkonda Sai Sreenivas & Kavya Reddy",
+        caption: "Grand reception — a luxury celebration",
+      },
+      {
+        youtubeId: "N7DYak71gu0",
+        title: "Dileep & Alekhya",
+        caption: "A grand housewarming ceremony",
+      },
+    ],
     count: "50+ Anamorphic Films",
     tagline: "2.39:1 Anamorphic motion pictures paired with orchestral audio scores.",
     heroDescription:
@@ -579,9 +593,9 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
     gallery: [
       {
         id: "film-still-05",
-        title: "Chiaroscuro Studio Character Lighting",
+        title: "Chiaroscuro Character Lighting",
         client: "Tollywood Character Study",
-        location: "24 Frames Studio",
+        location: "24 Frames, Hyderabad",
         year: "2024",
         image: "/images/disciplines/cinema/IMG_6319.jpg",
         caption: "Sculptural portrait lighting highlighting emotional poise and deep textured shadows.",
@@ -621,7 +635,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         id: "film-still-01",
         title: "Theatrical Cinema Scenography & Volumetric Contrast",
         client: "Feature Cinema Unit",
-        location: "Hyderabad Studio Stage",
+        location: "Hyderabad Sound Stage",
         year: "2024",
         image: "/images/disciplines/cinema/IMG_6471.jpg",
         caption: "Widescreen anamorphic cinema frame demonstrating volumetric key lighting and dimensional contrast.",

@@ -121,7 +121,7 @@ export type LostReason = "budget" | "date_unavailable" | "competitor" | "no_resp
 export const LOST_LABEL: Record<LostReason, string> = {
   budget: "Over their budget",
   date_unavailable: "Date unavailable",
-  competitor: "Chose another studio",
+  competitor: "Chose another photographer",
   no_response: "Stopped responding",
   postponed: "Wedding postponed / cancelled",
   scope: "Needs we don't cover",
@@ -211,6 +211,8 @@ export interface PriceLink {
   usedBy: string | null;
   usedByName: string | null;
   usedAt: string | null;
+  /** Every account that has joined through this link — a link is reusable by any number of people. */
+  usedByIds?: string[];
   active: boolean;
 }
 
@@ -272,7 +274,7 @@ export interface QuoteEvent {
 /** How a relationship manager walked the client through the quotation. */
 export type ConsultMode = "studio" | "video" | "phone" | "whatsapp";
 export const CONSULT_LABEL: Record<ConsultMode, string> = {
-  studio: "In the studio",
+  studio: "At our office",
   video: "Zoom / video call",
   phone: "Phone call",
   whatsapp: "WhatsApp",
@@ -353,7 +355,7 @@ export const hasUnsharedChanges = (q: PortalQuote) =>
 
 export const STATUS_LABEL: Record<QuoteStatus, string> = {
   draft: "In progress",
-  submitted: "With the studio",
+  submitted: "With sales",
   pending_approval: "Awaiting founder",
   approved: "Approved",
   rejected: "Returned",
@@ -364,10 +366,10 @@ export const STATUS_LABEL: Record<QuoteStatus, string> = {
 /** What the client sees — internal steps read as "being prepared". */
 export const CLIENT_STATUS_LABEL: Record<QuoteStatus, string> = {
   draft: "In progress",
-  submitted: "Being prepared by the studio",
-  pending_approval: "Being prepared by the studio",
-  approved: "Being prepared by the studio",
-  rejected: "Being prepared by the studio",
+  submitted: "Being prepared by 24 Frames",
+  pending_approval: "Being prepared by 24 Frames",
+  approved: "Being prepared by 24 Frames",
+  rejected: "Being prepared by 24 Frames",
   sent: "Your quotation is ready",
   accepted: "Accepted",
 };

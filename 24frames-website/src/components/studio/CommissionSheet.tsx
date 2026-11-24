@@ -137,7 +137,7 @@ export default function CommissionSheet({
                           <td>{l.quantity}</td>
                           <td>
                             {formatINR(l.unitPrice)}
-                            {l.overridden && <small>Studio adjusted · {l.overrideReason}</small>}
+                            {l.overridden && <small>Adjusted · {l.overrideReason}</small>}
                           </td>
                           <td>{formatINR(l.lineTotal)}</td>
                         </tr>
@@ -182,9 +182,9 @@ export default function CommissionSheet({
         </div>
         <dl className={styles.facts}>
           <div><dt>Timeline</dt><dd>{pp.tierLabel ? `${pp.priorityName} — ${pp.tierLabel}` : "Not yet chosen"}</dd></div>
-          <div><dt>Base fee</dt><dd>{formatINR(pp.baseFee)}</dd></div>
-          <div><dt>Priority multiplier</dt><dd>{pp.multiplier !== null ? `${pp.multiplier}×` : "—"}</dd></div>
-          <div><dt>Post-production fee</dt><dd>{formatINR(pp.finalFee)}{pp.overridden ? ` (studio adjusted from ${formatINR(pp.computedFee)} — ${pp.overrideReason})` : ""}</dd></div>
+          {!pp.fixed && <div><dt>Base fee</dt><dd>{formatINR(pp.baseFee)}</dd></div>}
+          {!pp.fixed && <div><dt>Priority multiplier</dt><dd>{pp.multiplier !== null ? `${pp.multiplier}×` : "—"}</dd></div>}
+          <div><dt>Post-production fee</dt><dd>{formatINR(pp.finalFee)}{pp.overridden ? ` (adjusted from ${formatINR(pp.computedFee)} — ${pp.overrideReason})` : ""}</dd></div>
         </dl>
       </section>
 

@@ -149,7 +149,7 @@ export default function ArtistPreview() {
             <div className={styles.biography}>
               <p className={styles.bio}>
                 From the film sets of Tollywood to directing one of South India&apos;s most
-                revered cinematic wedding studios, Phani has spent fourteen years preserving
+                revered cinematic wedding houses, Phani has spent fourteen years preserving
                 Telugu heritage, high-profile royal unions, and the quiet intimacy of families.
               </p>
               <p className={styles.bioSecondary}>

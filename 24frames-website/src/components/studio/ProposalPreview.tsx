@@ -92,8 +92,8 @@ export default function ProposalPreview({
             <p>The proposal could not be composed.</p>
             {/chunk/i.test(state.message) ? (
               <>
-                <small>The studio was updated while this page was open. Reload to continue — your commission is kept.</small>
-                <button className={base.btnSecondary} onClick={() => window.location.reload()}>Reload the studio</button>
+                <small>The site was updated while this page was open. Reload to continue — your commission is kept.</small>
+                <button className={base.btnSecondary} onClick={() => window.location.reload()}>Reload the page</button>
               </>
             ) : (
               <>

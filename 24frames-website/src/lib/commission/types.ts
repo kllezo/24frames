@@ -98,6 +98,13 @@ export interface DeliveryTier {
   /** "Express Priority" */
   priorityName: string;
   multiplier: number;
+  /** Fixed post-production price for this timeline (replaces the band × multiplier formula when set). */
+  fee?: number;
+  /** "15–20 days" — the window shown to the couple. */
+  window?: string;
+  /** Small highlight, e.g. "Fastest delivery". */
+  badge?: string;
+  icon?: "bolt" | "clock" | "calendar";
   meaning: string;
   whyPrice: string;
   covers: string[];
@@ -130,7 +137,7 @@ export interface StudioDetails {
   name: string;
   tagline: string;
   phoneDisplay: string;
-  /** Digits only, with country code, e.g. 919014433074. */
+  /** Digits only, with country code, e.g. 919160656734. */
   whatsappNumber: string;
   email: string;
   website: string;
@@ -163,6 +170,8 @@ export interface StudioConfig {
   charges: ChargeDefinition[];
   tax: TaxConfig;
   proposal: ProposalSettings;
+  /** Bumped when a pricing revision has been applied to a saved configuration. */
+  pricingRevision?: number;
 }
 
 /* ---------- Commission draft (consultation state) ---------- */
@@ -289,6 +298,8 @@ export interface PostProductionQuote {
   tierLabel: string | null;
   priorityName: string | null;
   multiplier: number | null;
+  /** True when the timeline has a fixed price (no band formula). */
+  fixed?: boolean;
   /** baseFee × multiplier, rounded — before any manual override. */
   computedFee: number;
   finalFee: number;

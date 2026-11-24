@@ -47,16 +47,16 @@ export function buildWhatsAppMessage(
   L.push(`*Post-production*`);
   L.push(
     pp.tierLabel
-      ? `${pp.priorityName} — ${pp.tierLabel}${pp.multiplier !== null ? ` (${pp.multiplier}×)` : ""}`
+      ? `${pp.priorityName} — ${pp.tierLabel}${!pp.fixed && pp.multiplier !== null ? ` (${pp.multiplier}×)` : ""}`
       : "Delivery timeline not yet chosen",
   );
   L.push("");
   L.push(`Creative production: ${formatINR(quote.productionSubtotal)}`);
-  L.push(`Post-production: ${formatINR(pp.finalFee)}${pp.overridden ? " (studio adjusted)" : ""}`);
+  L.push(`Post-production: ${formatINR(pp.finalFee)}${pp.overridden ? " (adjusted)" : ""}`);
   for (const c of quote.charges) L.push(`${c.label}: ${formatINR(c.amount)}`);
   if (quote.tax) L.push(`${quote.tax.label} (${quote.tax.ratePercent}%): ${formatINR(quote.tax.amount)}`);
   L.push(`*Estimated total: ${formatINR(quote.grandTotal)}*`);
-  if (quote.illustrative) L.push(`_Illustrative pricing — to be confirmed by the studio._`);
+  if (quote.illustrative) L.push(`_Illustrative pricing — to be confirmed by 24 Frames._`);
   L.push("");
   L.push(config.proposal.closingMessage);
   L.push(`— ${config.studio.name} · ${config.studio.phoneDisplay}`);
