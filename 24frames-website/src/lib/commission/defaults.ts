@@ -14,9 +14,9 @@ import type { DeliveryTier, StudioConfig } from "./types";
 export const DELIVERY_TIERS_2026: DeliveryTier[] = [
   {
     id: "express-15",
-    label: "15–20 days",
-    window: "15–20 days",
-    days: 20,
+    label: "15 days",
+    window: "15 days",
+    days: 15,
     priorityName: "Express Delivery",
     badge: "Fastest delivery",
     icon: "bolt",
@@ -25,15 +25,15 @@ export const DELIVERY_TIERS_2026: DeliveryTier[] = [
     meaning: "Priority editing and accelerated post-production.",
     whyPrice: "Your edit moves to the front of the queue, with editors and colourists dedicated to it.",
     covers: ["Luxury gallery link", "Colour-corrected photographs", "Films"],
-    expectations: "Your luxury gallery link with colour-corrected photographs and films within 15–20 days of your last event.",
+    expectations: "Your luxury gallery link with colour-corrected photographs and films within 15 days of your last event.",
     conditions: "Subject to capacity during peak season. Confirmed at booking.",
     available: true,
   },
   {
     id: "standard-45",
-    label: "40–45 days",
-    window: "40–45 days",
-    days: 45,
+    label: "30 days",
+    window: "30 days",
+    days: 30,
     priorityName: "Standard Delivery",
     icon: "clock",
     fee: 60000,
@@ -41,14 +41,14 @@ export const DELIVERY_TIERS_2026: DeliveryTier[] = [
     meaning: "Standard post-production and delivery timeline.",
     whyPrice: "The usual pace of our edit suite.",
     covers: ["Edited photographs", "Films", "Album selection"],
-    expectations: "Complete delivery within 40–45 days of your last event.",
+    expectations: "Complete delivery within 30 days of your last event.",
     conditions: "Standard timeline.",
     available: true,
   },
   {
     id: "classic-60",
-    label: "50–60 days",
-    window: "50–60 days",
+    label: "60 days",
+    window: "60 days",
     days: 60,
     priorityName: "Classic Delivery",
     icon: "calendar",
@@ -57,7 +57,7 @@ export const DELIVERY_TIERS_2026: DeliveryTier[] = [
     meaning: "Flexible delivery timeline with the same quality standards.",
     whyPrice: "A relaxed window lets us schedule your edit flexibly — reflected in a lower price.",
     covers: ["Edited photographs", "Films", "Album selection"],
-    expectations: "Complete delivery within 50–60 days of your last event.",
+    expectations: "Complete delivery within 60 days of your last event.",
     conditions: "Delivery dates are scheduled within the window.",
     available: true,
   },
@@ -71,7 +71,7 @@ export const TIER_RENAMES: Record<string, string> = {
   "archival-180": "classic-60",
 };
 
-export const PRICING_REVISION = 2;
+export const PRICING_REVISION = 3;
 const SERVICE_PRICES_2026: Record<string, number> = {
   "traditional-photographer": 20000,
   "traditional-videographer": 20000,
@@ -488,7 +488,20 @@ export function reviseConfig(config: StudioConfig): StudioConfig {
     }),
   };
   // The Nov 2026 rate card and fixed delivery prices, applied once; later admin edits are kept.
-  if ((config.pricingRevision ?? 0) < PRICING_REVISION) {
+  const rev = config.pricingRevision ?? 0;
+  // Revision 3 only changes the delivery windows (15 / 30 / 60 days); prices already set are kept.
+  if (rev === 2) {
+    const fresh = new Map(DELIVERY_TIERS_2026.map((t) => [t.id, t]));
+    return {
+      ...named,
+      pricingRevision: PRICING_REVISION,
+      deliveryTiers: named.deliveryTiers.map((t) => {
+        const f = fresh.get(t.id);
+        return f ? { ...t, label: f.label, window: f.window, days: f.days, expectations: f.expectations } : t;
+      }),
+    };
+  }
+  if (rev < PRICING_REVISION) {
     return {
       ...named,
       pricingRevision: PRICING_REVISION,
