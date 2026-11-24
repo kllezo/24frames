@@ -285,8 +285,14 @@
 /* ─────────────────────────────────────────────────────────────
    STAGE 0: THE INVITATION
    ───────────────────────────────────────────────────────────── */
+/* The invitation fills the first screen, so the footer waits below the fold. */
 .invitationSection {
   width: 100%;
+  min-height: calc(100svh - 96px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: clamp(3rem, 9vh, 6.5rem);
 }
 
 .invitationCard {

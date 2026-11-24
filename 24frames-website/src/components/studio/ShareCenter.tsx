@@ -70,7 +70,7 @@ export default function ShareCenter({ record }: { record: CommissionRecord }) {
     }).catch(() => null);
     const data = res?.ok ? ((await res.json()) as { activity: ShareActivity }) : null;
     if (data) setActivity((a) => [...a, data.activity]);
-    else setNote("This action happened on this device but could not be recorded in the studio log.");
+    else setNote("This action happened on this device but could not be recorded in the activity log.");
   }
 
   function download() {
@@ -98,7 +98,7 @@ export default function ShareCenter({ record }: { record: CommissionRecord }) {
     void log(
       "whatsapp_click_to_chat",
       "opened",
-      `WhatsApp opened for ${to === "couple" ? `the couple (+${digits})` : "the studio number"} with the summary. PDF to be attached manually.`,
+      `WhatsApp opened for ${to === "couple" ? `the couple (+${digits})` : "the 24 Frames number"} with the summary. PDF to be attached manually.`,
     );
     setNote("WhatsApp is open with the summary. Attach the downloaded PDF in the chat before sending — it is not attached automatically.");
   }
@@ -112,7 +112,7 @@ export default function ShareCenter({ record }: { record: CommissionRecord }) {
     const res = await fetch(`/api/studio/commissions/${record.id}/pdf`, { method: "POST", body: form }).catch(() => null);
     const data = res ? await res.json().catch(() => ({})) : {};
     if (!res?.ok || !data.url) {
-      setNote(`The PDF link could not be created: ${data.error ?? "the studio server could not be reached"}.`);
+      setNote(`The PDF link could not be created: ${data.error ?? "the server could not be reached"}.`);
       return null;
     }
     setPdfUrl(data.url);
@@ -141,7 +141,7 @@ export default function ShareCenter({ record }: { record: CommissionRecord }) {
     void log(
       "whatsapp_click_to_chat",
       "opened",
-      `WhatsApp opened for ${to === "couple" ? `the couple (+${digits})` : "the studio number"} with the summary and a private PDF link.`,
+      `WhatsApp opened for ${to === "couple" ? `the couple (+${digits})` : "the 24 Frames number"} with the summary and a private PDF link.`,
     );
     setNote("WhatsApp is open with the message and the PDF link. Press send in WhatsApp to deliver it.");
   }
@@ -191,7 +191,7 @@ export default function ShareCenter({ record }: { record: CommissionRecord }) {
                 {linking ? "Preparing the PDF…" : "Send PDF on WhatsApp"}
               </button>
               <button className={base.btnSecondary} onClick={() => sendPdfOnWhatsApp("studio")} disabled={state.status !== "ready" || linking}>
-                Send to studio WhatsApp
+                Send to 24 Frames WhatsApp
               </button>
             </div>
             <div className={styles.shareRow}>

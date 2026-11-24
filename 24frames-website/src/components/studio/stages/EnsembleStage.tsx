@@ -40,54 +40,37 @@ export default function EnsembleStage(props: StageProps) {
   const g = event ? guidance.get(event.id) : undefined;
   const openService = services.find((s) => s.id === dossier) ?? null;
 
+  const castHead = (compact: boolean) => (
+    <div className={`${cx.castHead} ${compact ? cx.castHeadCompact : ""}`}>
+      <StageHeader
+        frame="05"
+        kicker="Frame 05 · The Casting"
+        title={<>Cast your crew, <em>occasion by occasion.</em></>}
+      />
+      <div className={cx.castTools}>
+        <div className={base.segmented} role="tablist" aria-label="View">
+          <button role="tab" aria-selected={view === "catalogue"} className={view === "catalogue" ? base.segOn : ""} onClick={() => setView("catalogue")}>
+            Occasion by occasion
+          </button>
+          <button role="tab" aria-selected={view === "matrix"} className={view === "matrix" ? base.segOn : ""} onClick={() => setView("matrix")}>
+            Full composition
+          </button>
+        </div>
+        <span className={base.mono}>
+          {plural(quote.totalProfessionals, "PROFESSIONAL").toUpperCase()} · {formatINR(quote.productionSubtotal)}
+        </span>
+      </div>
+    </div>
+  );
+
   return (
     <div className={st.stageInner}>
-      <div className={cx.castHead}>
-        <StageHeader
-          frame="05"
-          kicker="Frame 05 · The Casting"
-          title={<>Cast your crew, <em>occasion by occasion.</em></>}
-        />
-        <div className={cx.castTools}>
-          <div className={base.segmented} role="tablist" aria-label="View">
-            <button role="tab" aria-selected={view === "catalogue"} className={view === "catalogue" ? base.segOn : ""} onClick={() => setView("catalogue")}>
-              Occasion by occasion
-            </button>
-            <button role="tab" aria-selected={view === "matrix"} className={view === "matrix" ? base.segOn : ""} onClick={() => setView("matrix")}>
-              Full composition
-            </button>
-          </div>
-          <span className={base.mono}>
-            {plural(quote.totalProfessionals, "PROFESSIONAL").toUpperCase()} · {formatINR(quote.productionSubtotal)}
-          </span>
-        </div>
-      </div>
-
+      {view !== "catalogue" && castHead(false)}
       {view === "catalogue" ? (
         <>
-          <div className={styles.eventTabs} role="tablist" aria-label="Casting for occasion" data-cast-top>
-            {draft.events.map((e, i) => {
-              const pe = quote.events.find((x) => x.eventId === e.id);
-              return (
-                <button
-                  key={e.id}
-                  role="tab"
-                  aria-selected={e.id === focusEvent}
-                  className={`${styles.eventTab} ${e.id === focusEvent ? styles.eventTabOn : ""}`}
-                  onClick={() => setFocusEvent(e.id)}
-                >
-                  <span className={base.mono}>{String(i + 1).padStart(2, "0")}</span>
-                  <span className={styles.eventTabName}>{eventDisplayName(e, config)}</span>
-                  <span className={styles.eventTabMeta}>
-                    {pe && pe.professionals > 0 ? `${pe.professionals} · ${formatINR(pe.subtotal)}` : "No team yet"}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
+          {/* The occasion banner leads the frame; the title sits small beneath it. */}
           {event && (
-            <section className={`${cx.scene} ${cx.sceneThemed}`} data-theme={event.type} key={event.id} aria-live="polite">
+            <section className={`${cx.scene} ${cx.sceneThemed} ${cx.sceneLead}`} data-theme={event.type} key={event.id} aria-live="polite">
               <span className={cx.scenePattern} aria-hidden="true" />
               <p className={cx.sceneKicker}>
                 Occasion {draft.events.findIndex((e) => e.id === event.id) + 1} of {draft.events.length}
@@ -112,6 +95,29 @@ export default function EnsembleStage(props: StageProps) {
               </div>
             </section>
           )}
+
+          <div className={styles.eventTabs} role="tablist" aria-label="Casting for occasion" data-cast-top>
+            {draft.events.map((e, i) => {
+              const pe = quote.events.find((x) => x.eventId === e.id);
+              return (
+                <button
+                  key={e.id}
+                  role="tab"
+                  aria-selected={e.id === focusEvent}
+                  className={`${styles.eventTab} ${e.id === focusEvent ? styles.eventTabOn : ""}`}
+                  onClick={() => setFocusEvent(e.id)}
+                >
+                  <span className={base.mono}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className={styles.eventTabName}>{eventDisplayName(e, config)}</span>
+                  <span className={styles.eventTabMeta}>
+                    {pe && pe.professionals > 0 ? `${pe.professionals} · ${formatINR(pe.subtotal)}` : "No team yet"}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className={cx.castHeadSlot}>{castHead(true)}</div>
 
           {g && <GuidancePanel guidance={g} event={event!} {...props} />}
 
@@ -147,7 +153,7 @@ export default function EnsembleStage(props: StageProps) {
                     <p className={cx.posterLine}>{story?.headline ?? s.introduction}</p>
                     {sug && sug.quantity !== q && (
                       <button className={cx.posterSug} onClick={() => event && actions.setQuantity(event.id, s.id, Math.min(sug.quantity, MAX_QTY))} title={sug.reason}>
-                        ✦ Studio suggests {sug.quantity}
+                        ✦ Suggested {sug.quantity}
                       </button>
                     )}
                     {event && (
@@ -235,11 +241,11 @@ function GuidancePanel({ guidance, event, config }: { guidance: EventGuidance; e
   if (guidance.suggestions.length === 0 && guidance.notes.length === 0) return null;
   const names = new Map(config.services.map((s) => [s.id, s.name]));
   return (
-    <section className={styles.guidance} aria-label={`Studio guidance for ${eventDisplayName(event, config)}`}>
+    <section className={styles.guidance} aria-label={`Guidance for ${eventDisplayName(event, config)}`}>
       <button className={styles.guidanceHead} onClick={() => setOpen((o) => !o)} aria-expanded={open}>
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 11v6M12 7.5v.5" /></svg>
         <span>
-          <b>Studio guidance</b> — a suggested team of{" "}
+          <b>Our recommendation</b> — a suggested team of{" "}
           {plural(guidance.suggestions.reduce((s, x) => s + x.quantity, 0), "professional")}. Suggestions are never added for you.
         </span>
         <span className={base.mono}>{open ? "HIDE" : "WHY"}</span>
@@ -273,23 +279,31 @@ function Matrix({
   guidance,
   onOpen,
 }: StageProps & { services: ServiceDefinition[]; guidance: Map<string, EventGuidance>; onOpen: (id: string) => void }) {
+  const short = (name: string) =>
+    name
+      .replace(/ (Photographer|Videographer)$/, (m) => (m === " Photographer" ? " Photo" : " Video"))
+      .replace("Aerial Photography & Drone", "Aerial")
+      .replace("Creative Cinematography", "Cinematography");
   return (
-    <div className={`${styles.matrixWrap} ${cx.mxWrap}`} data-lenis-prevent tabIndex={0} aria-label="Composition matrix — scroll horizontally on small screens">
-      <table className={`${styles.matrix} ${cx.mx}`}>
+    <div className={cx.cm} data-lenis-prevent tabIndex={0} aria-label="Full composition — scroll sideways on small screens">
+      <table className={cx.cmTable}>
         <thead>
           <tr>
-            <th scope="col" className={styles.matrixCorner}>Event</th>
+            <th scope="col" className={cx.cmCorner}>
+              <span>Occasion</span>
+              <small>Crew per event</small>
+            </th>
             {services.map((s) => (
               <th key={s.id} scope="col">
-                <button className={`${styles.matrixSvc} ${cx.mxSvc}`} onClick={() => onOpen(s.id)}>
+                <button className={cx.cmSvc} onClick={() => onOpen(s.id)} title={`${s.name} — full profile`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={optimised(s.image, 256)} alt="" loading="lazy" decoding="async" />
-                  <span>{s.name.replace(/ (Photographer|Videographer)$/, (m) => m === " Photographer" ? " Photo" : " Video").replace("Aerial Photography & Drone", "Aerial").replace("Creative Cinematography", "Cinematography")}</span>
+                  <span>{short(s.name)}</span>
                   <small>{formatINR(s.price)}</small>
                 </button>
               </th>
             ))}
-            <th scope="col" className={styles.matrixTotalHead}>Subtotal</th>
+            <th scope="col" className={cx.cmTotalHead}>Subtotal</th>
           </tr>
         </thead>
         <tbody>
@@ -298,39 +312,57 @@ function Matrix({
             const g = guidance.get(e.id);
             return (
               <tr key={e.id}>
-                <th scope="row">
+                <th scope="row" className={cx.cmEvent}>
+                  <div className={cx.cmEventIn}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className={cx.mxThumb} src={optimised(occasionImage(e.type), 256)} alt="" loading="lazy" decoding="async" />
-                  <span className={styles.matrixEvent}>{eventDisplayName(e, config)}</span>
-                  <small>{e.guestCount ? `${groupIndian(e.guestCount)} guests` : ""}</small>
+                  <img src={optimised(occasionImage(e.type), 256)} alt="" loading="lazy" decoding="async" />
+                  <span>
+                    <b>{eventDisplayName(e, config)}</b>
+                    <small>
+                      {pe && pe.professionals > 0 ? `${pe.professionals} ${pe.professionals === 1 ? "person" : "people"}` : "No one yet"}
+                      {e.guestCount ? ` · ${groupIndian(e.guestCount)} guests` : ""}
+                    </small>
+                  </span>
+                  </div>
                 </th>
                 {services.map((s) => {
                   const q = getAssignment(draft, e.id, s.id)?.quantity ?? 0;
                   const sug = g?.suggestions.find((x) => x.serviceId === s.id);
+                  const label = `${s.name}, ${eventDisplayName(e, config)}`;
                   return (
-                    <td key={s.id} className={q > 0 ? styles.matrixOn : ""}>
-                      <Stepper size="sm" value={q} label={`${s.name}, ${eventDisplayName(e, config)}`} onChange={(n) => actions.setQuantity(e.id, s.id, n)} />
-                      {sug && sug.quantity !== q && (
-                        <button className={styles.matrixSug} onClick={() => actions.setQuantity(e.id, s.id, Math.min(sug.quantity, MAX_QTY))} title={sug.reason}>
-                          suggest {sug.quantity}
+                    <td key={s.id} className={q > 0 ? cx.cmOn : ""}>
+                      <div className={cx.cmStep}>
+                        <button type="button" aria-label={`One fewer — ${label}`} disabled={q === 0} onClick={() => actions.setQuantity(e.id, s.id, q - 1)}>
+                          −
                         </button>
+                        <span aria-live="polite" aria-label={`${q} — ${label}`}>{q}</span>
+                        <button type="button" aria-label={`One more — ${label}`} disabled={q >= MAX_QTY} onClick={() => actions.setQuantity(e.id, s.id, q + 1)}>
+                          +
+                        </button>
+                      </div>
+                      {sug && sug.quantity !== q ? (
+                        <button className={cx.cmSug} onClick={() => actions.setQuantity(e.id, s.id, Math.min(sug.quantity, MAX_QTY))} title={sug.reason}>
+                          Suggested {sug.quantity}
+                        </button>
+                      ) : (
+                        <span className={cx.cmSugSpace} aria-hidden="true" />
                       )}
                     </td>
                   );
                 })}
-                <td className={styles.matrixTotal}><AnimatedNumber value={pe?.subtotal ?? 0} /></td>
+                <td className={cx.cmTotal}><AnimatedNumber value={pe?.subtotal ?? 0} /></td>
               </tr>
             );
           })}
         </tbody>
         <tfoot>
           <tr>
-            <th scope="row">Creative production</th>
+            <th scope="row" className={cx.cmFootLabel}>Creative production</th>
             {services.map((s) => {
               const total = quote.lines.filter((l) => l.serviceId === s.id).reduce((a, l) => a + l.lineTotal, 0);
               return <td key={s.id}>{total ? formatINR(total) : "—"}</td>;
             })}
-            <td className={styles.matrixTotal}><AnimatedNumber value={quote.productionSubtotal} /></td>
+            <td className={cx.cmTotal}><AnimatedNumber value={quote.productionSubtotal} /></td>
           </tr>
         </tfoot>
       </table>
@@ -432,7 +464,7 @@ function Dossier({
                       />
                     ) : (
                       <button className={styles.overrideLink} onClick={() => setEditing(e.id)}>
-                        {a?.unitPriceOverride != null ? `Studio price ${formatINR(a.unitPriceOverride)} · change` : "Adjust price"}
+                        {a?.unitPriceOverride != null ? `Agreed price ${formatINR(a.unitPriceOverride)} · change` : "Adjust price"}
                       </button>
                     )
                   )}
@@ -473,7 +505,7 @@ function PriceOverride({
   const valid = price !== "" && Number.isFinite(n) && n >= 0 && reason.trim().length > 0;
   return (
     <div className={styles.override}>
-      <p className={st.muted}>For the consultant: record a negotiated unit price. It appears on the proposal as a studio adjustment. Catalogue price {formatINR(catalogue)}.</p>
+      <p className={st.muted}>For the consultant: record a negotiated unit price. It appears on the proposal as an adjustment. Catalogue price {formatINR(catalogue)}.</p>
       <label className={base.field}>
         <span className={base.fieldLabel}>Unit price (₹)</span>
         <input className={base.input} type="number" min={0} inputMode="numeric" value={price} onChange={(e) => setPrice(e.target.value)} />

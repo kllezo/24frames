@@ -92,7 +92,7 @@ export default function CommissionStudio({
               FRAME {current.frame} <span aria-hidden="true">/</span> {String(STAGES.length - 1).padStart(2, "0")} · {current.title.toUpperCase()}
             </span>
           ) : (
-            <span className={styles.mono}>{portal ? `YOUR QUOTATION · ${portal.reference}` : "PRIVATE COMMISSION STUDIO"}</span>
+            <span className={styles.mono}>{portal ? `YOUR QUOTATION · ${portal.reference}` : "PRIVATE COMMISSION"}</span>
           )}
           {names && <span className={styles.topbarNames}>{names}</span>}
         </div>
@@ -113,7 +113,7 @@ export default function CommissionStudio({
             </button>
           </nav>
         ) : (
-        <nav className={styles.topbarActions} aria-label="Studio">
+        <nav className={styles.topbarActions} aria-label="Consultation">
             <span className={styles.consultant} title="Signed-in consultant">
               {consultant}
             </span>
@@ -121,7 +121,7 @@ export default function CommissionStudio({
               Quotes
             </a>
             <a className={styles.btnGhost} href="/quotebuilder/admin" data-no-transition>
-              Studio admin
+              Admin
             </a>
             <button className={styles.btnGhost} onClick={() => setConfirmReset(true)}>
               New consultation
@@ -206,7 +206,7 @@ export default function CommissionStudio({
         <h2 id="reset-title">Begin a new consultation?</h2>
         <p>
           {names ? `${names}'s` : "The current"} commission will be cleared from this screen.
-          {state.submitted ? " It has been submitted and remains in the studio records." : " It has not been submitted."}
+          {state.submitted ? " It has been submitted and remains in the records." : " It has not been submitted."}
         </p>
         <div className={styles.dialogActions}>
           <button className={styles.btnSecondary} onClick={() => setConfirmReset(false)}>

@@ -248,8 +248,8 @@ export function PostProductionEditor({ config, setConfig }: Props) {
   return (
     <div className={styles.stack}>
       <p className={styles.fine}>
-        Final post-production fee = base fee from the budget bands × the delivery multiplier, rounded. Live streaming and other
-        services in the “None” pool never count towards the band.
+        Each delivery timeline has a fixed post-production price. A timeline without a fixed price falls back to the budget
+        bands × its multiplier. Live streaming and other services in the “None” pool never count towards the band.
       </p>
       <div className={styles.grid}>
         <Select
@@ -279,7 +279,10 @@ export function PostProductionEditor({ config, setConfig }: Props) {
             <Text label="Label" value={t.label} onChange={(v) => updateTier(t.id, { label: v })} />
             <Text label="Priority name" value={t.priorityName} onChange={(v) => updateTier(t.id, { priorityName: v })} />
             <Num label="Days" value={t.days} min={1} onChange={(v) => updateTier(t.id, { days: v ?? 1 })} />
-            <Num label="Multiplier" value={t.multiplier} step={0.05} onChange={(v) => updateTier(t.id, { multiplier: v ?? 1 })} />
+            <Num label="Fixed price (₹)" nullable value={t.fee ?? null} min={0} step={1000} onChange={(v) => updateTier(t.id, { fee: v ?? undefined })} />
+            <Text label="Window shown, e.g. 15–20 days" value={t.window ?? ""} onChange={(v) => updateTier(t.id, { window: v || undefined })} />
+            <Text label="Badge (optional)" value={t.badge ?? ""} onChange={(v) => updateTier(t.id, { badge: v || undefined })} />
+            {t.fee === undefined && <Num label="Multiplier" value={t.multiplier} step={0.05} onChange={(v) => updateTier(t.id, { multiplier: v ?? 1 })} />}
             <Check label="Available" checked={t.available} onChange={(v) => updateTier(t.id, { available: v })} />
             <label className={`${base.field} ${base.checkField}`}>
               <input type="radio" name="defaultTier" checked={config.defaultDeliveryTierId === t.id} onChange={() => setConfig({ ...config, defaultDeliveryTierId: t.id })} />

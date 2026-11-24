@@ -12,6 +12,7 @@
                                    ↘ rejected → (sales revises) → pending_approval
    ============================================================ */
 
+import type { Deliverable } from "@/lib/commission/deliverables";
 import type { CommissionDraft, CommissionQuote } from "@/lib/commission/types";
 
 export type PortalRole = "client" | "sales" | "owner";
@@ -120,7 +121,7 @@ export type LostReason = "budget" | "date_unavailable" | "competitor" | "no_resp
 export const LOST_LABEL: Record<LostReason, string> = {
   budget: "Over their budget",
   date_unavailable: "Date unavailable",
-  competitor: "Chose another studio",
+  competitor: "Chose another photographer",
   no_response: "Stopped responding",
   postponed: "Wedding postponed / cancelled",
   scope: "Needs we don't cover",
@@ -172,7 +173,7 @@ export interface DeskNotification {
   id: string;
   to: string;
   at: string;
-  kind: "rm_changed" | "lead_assigned" | "lead_removed" | "booking" | "target" | "price_link" | "enquiry";
+  kind: "rm_changed" | "lead_assigned" | "lead_removed" | "booking" | "target" | "price_link" | "enquiry" | "deliverables";
   text: string;
   quoteId?: string | null;
   clientId?: string | null;
@@ -210,6 +211,8 @@ export interface PriceLink {
   usedBy: string | null;
   usedByName: string | null;
   usedAt: string | null;
+  /** Every account that has joined through this link — a link is reusable by any number of people. */
+  usedByIds?: string[];
   active: boolean;
 }
 
@@ -262,7 +265,8 @@ export interface QuoteEvent {
     | "lost"
     | "revived"
     | "production"
-    | "payment";
+    | "payment"
+    | "deliverables";
   note?: string;
   price?: number;
 }
@@ -270,7 +274,7 @@ export interface QuoteEvent {
 /** How a relationship manager walked the client through the quotation. */
 export type ConsultMode = "studio" | "video" | "phone" | "whatsapp";
 export const CONSULT_LABEL: Record<ConsultMode, string> = {
-  studio: "In the studio",
+  studio: "At our office",
   video: "Zoom / video call",
   phone: "Phone call",
   whatsapp: "WhatsApp",
@@ -339,6 +343,10 @@ export interface PortalQuote {
   production?: Production | null;
   /** Payments received against the booking. */
   payments?: Payment[];
+  /** Deliverables tailored by the sales team (null = the studio's standard list). */
+  deliverables?: Deliverable[] | null;
+  /** The last time the studio changed the deliverables — shown to the client until they open it. */
+  deliverablesUpdate?: { at: string; by: string; note: string; seenByClient: boolean } | null;
 }
 
 /** True when the client has saved changes the studio hasn't been told about. */
@@ -347,7 +355,7 @@ export const hasUnsharedChanges = (q: PortalQuote) =>
 
 export const STATUS_LABEL: Record<QuoteStatus, string> = {
   draft: "In progress",
-  submitted: "With the studio",
+  submitted: "With sales",
   pending_approval: "Awaiting founder",
   approved: "Approved",
   rejected: "Returned",
@@ -358,10 +366,10 @@ export const STATUS_LABEL: Record<QuoteStatus, string> = {
 /** What the client sees — internal steps read as "being prepared". */
 export const CLIENT_STATUS_LABEL: Record<QuoteStatus, string> = {
   draft: "In progress",
-  submitted: "Being prepared by the studio",
-  pending_approval: "Being prepared by the studio",
-  approved: "Being prepared by the studio",
-  rejected: "Being prepared by the studio",
+  submitted: "Being prepared by 24 Frames",
+  pending_approval: "Being prepared by 24 Frames",
+  approved: "Being prepared by 24 Frames",
+  rejected: "Being prepared by 24 Frames",
   sent: "Your quotation is ready",
   accepted: "Accepted",
 };
@@ -384,6 +392,8 @@ export function forClient(q: PortalQuote, manager: ManagerCard | null = null) {
     unshared: hasUnsharedChanges(q),
     lastSharedAt: q.lastSharedAt ?? null,
     consultations: (q.consultations ?? []).map((c) => ({ at: c.at, mode: c.mode, by: c.by })),
+    deliverables: q.deliverables ?? null,
+    deliverablesUpdate: q.deliverablesUpdate ? { at: q.deliverablesUpdate.at, note: q.deliverablesUpdate.note, seen: q.deliverablesUpdate.seenByClient } : null,
   };
 }
 export type ClientQuote = ReturnType<typeof forClient>;

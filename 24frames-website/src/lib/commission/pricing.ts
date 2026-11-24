@@ -174,7 +174,9 @@ export function quotePostProduction(
   const baseFee = resolutions.reduce((sum, r) => sum + r.fee, 0);
   const tier = config.deliveryTiers.find((t) => t.id === draft.deliveryTierId && t.available) ?? null;
   const multiplier = tier ? tier.multiplier : null;
-  const computedFee = tier ? roundTo(baseFee * tier.multiplier, pp.roundTo) : 0;
+  // A timeline with a fixed price charges exactly that once any crew is chosen; otherwise the band formula applies.
+  const fixed = tier && isFiniteNumber(tier.fee) ? tier.fee : null;
+  const computedFee = !tier ? 0 : fixed !== null ? (subtotals.production > 0 ? Math.round(fixed) : 0) : roundTo(baseFee * tier.multiplier, pp.roundTo);
 
   const override = draft.postProductionOverride;
   const overridden = !!override && isFiniteNumber(override.amount) && override.amount >= 0;
@@ -187,6 +189,7 @@ export function quotePostProduction(
     tierLabel: tier?.label ?? null,
     priorityName: tier?.priorityName ?? null,
     multiplier,
+    fixed: fixed !== null,
     computedFee,
     finalFee: overridden ? Math.round(override!.amount) : computedFee,
     overridden,

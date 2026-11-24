@@ -4,8 +4,8 @@
 .rows { list-style: none; margin: clamp(28px, 4vw, 56px) 0 0; padding: 0; display: grid; gap: clamp(40px, 6vw, 88px); }
 
 .row {
-  --D: clamp(200px, 20vw, 260px);   /* the service circle */
-  --F: calc(var(--D) * 2.1);        /* the bloomed flower */
+  --D: clamp(210px, 21vw, 280px);   /* the service circle */
+  --F: calc(var(--D) * 2.45);       /* the bloomed lotus */
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
@@ -28,9 +28,10 @@
 
 .bloom { position: absolute; inset: 0; display: grid; place-items: center; }
 .flower { position: absolute; left: 50%; top: 50%; width: var(--F); height: var(--F); transform: translate(-50%, -50%); overflow: visible; pointer-events: none; }
-.halo { opacity: 0; transition: opacity 1.6s ease; }
-.bloomOpen .halo { opacity: 1; }
-.petalMono { font-family: var(--serif, Georgia, serif); font-style: italic; font-size: 54px; fill: #a9824a; letter-spacing: 1px; }
+.halo { opacity: 0; transform: scale(0.6); transform-origin: center; transform-box: fill-box; transition: opacity 1.8s ease, transform 2.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.bloomOpen .halo { opacity: 1; transform: none; animation: haloBreath 5s ease-in-out 2.4s infinite; }
+@keyframes haloBreath { 50% { opacity: 0.72; } }
+.petalMono { font-family: var(--serif, Georgia, serif); font-style: italic; font-size: 66px; fill: #a9824a; letter-spacing: 1px; }
 
 /* The partners, named beside the flower once it opens. */
 .partners {
@@ -76,8 +77,8 @@
 }
 .core:hover { transform: scale(1.02); }
 .core:focus-visible { outline: 2px solid var(--gold, #a98a52); outline-offset: 12px; }
-.bloomOpen .core { transform: scale(0.72); }
-.bloomOpen .core:hover { transform: scale(0.74); }
+.bloomOpen .core { transform: scale(0.66); box-shadow: 0 0 0 1px rgba(169, 138, 82, 0.7), 0 0 0 7px rgba(255, 250, 244, 0.95), 0 0 0 9px rgba(222, 168, 172, 0.55), 0 0 60px 10px rgba(246, 213, 140, 0.45); }
+.bloomOpen .core:hover { transform: scale(0.68); }
 .core img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; transition: filter 0.8s ease; }
 .bloomOpen .core img { filter: brightness(0.55) saturate(0.8); }
 .coreClose {
@@ -118,7 +119,7 @@
 .footnote { margin: clamp(32px, 4vw, 48px) 0 0; font-size: 12.5px; color: var(--sage, #66716b); text-align: center; }
 
 @media (max-width: 820px) {
-  .row, .right { --D: min(42vw, 210px); grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .row, .right { --D: min(40vw, 210px); --F: min(calc(var(--D) * 2.45), 92vw); grid-template-columns: 1fr; justify-items: center; text-align: center; }
   .right .stage { order: 0; }
   .right .copy, .copy { text-align: center; justify-items: center; justify-self: center; }
 }

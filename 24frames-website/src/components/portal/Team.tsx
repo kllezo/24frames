@@ -46,6 +46,7 @@ const ACTION: Record<string, string> = {
   revived: "revived",
   production: "moved production",
   payment: "recorded a payment",
+  deliverables: "updated the deliverables",
   note: "added a note",
 };
 

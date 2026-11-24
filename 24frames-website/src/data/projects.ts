@@ -108,7 +108,7 @@ export const PROJECTS_DATA: Record<string, ProjectDetail> = {
       "The visual arc moves from quiet morning architectural stone portraits and an autumn meadow walk to the radiant euphoria of an evening stage celebration showered in golden confetti."
     ],
     filmReel: {
-      camera: "Nikon Z9 & Z8 Studio Flagships",
+      camera: "Nikon Z9 & Z8 Flagships",
       lens: "Nikkor Z 35mm f/1.8 S & 85mm f/1.2 S",
       aspectRatio: "16:9 Cinema Wide",
       colorProfile: "N-Log 10-bit Raw",

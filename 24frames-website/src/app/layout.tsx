@@ -42,7 +42,7 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://24frames-kllezo.vercel.app"),
+  metadataBase: new URL("https://24framesphotography.in"),
   title: "24 Frames Photography — Cinematic Wedding Films & Photography | Hyderabad",
   description:
     "Premium cinematic wedding photography and films by Phani Gogireddy. Capturing South India's grandest celebrations with editorial artistry. ET Excellence Award 2025 Winner. Official Nikon India Partner.",
@@ -90,9 +90,9 @@ export default function RootLayout({
                 name: "Phani Gogireddy",
                 jobTitle: "Principal Cinematographer & Photographer",
               },
-              url: "https://24frames-kllezo.vercel.app",
-              logo: "https://24frames-kllezo.vercel.app/images/logo.png",
-              image: "https://24frames-kllezo.vercel.app/images/portfolio/hrithika-abhishek/cover.jpg",
+              url: "https://24framesphotography.in",
+              logo: "https://24framesphotography.in/images/logo.png",
+              image: "https://24framesphotography.in/images/portfolio/hrithika-abhishek/cover.jpg",
               description:
                 "Premium cinematic wedding photography and films by Phani Gogireddy. Capturing South India's grandest celebrations with editorial artistry.",
               address: {
@@ -101,7 +101,7 @@ export default function RootLayout({
                 addressRegion: "Telangana",
                 addressCountry: "IN",
               },
-              telephone: "+919014433074",
+              telephone: "+919160656734",
               email: "hello@24framesphotography.com",
               priceRange: "$$$$",
               sameAs: [

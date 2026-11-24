@@ -327,8 +327,9 @@ export default function CelebrationStage({ config, draft, actions, go }: StagePr
                       </span>
                     </button>
                     {latest && (
-                      <button className={cx.tileRemove} onClick={() => remove(latest)} aria-label={`Remove ${p.label}`} title="Remove">
+                      <button className={cx.tileRemove} onClick={() => remove(latest)} aria-label={`Unselect ${p.label}`}>
                         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" /></svg>
+                        <span>Unselect</span>
                       </button>
                     )}
                   </>
@@ -365,8 +366,9 @@ export default function CelebrationStage({ config, draft, actions, go }: StagePr
                           <svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" /></svg>
                         </span>
                       </button>
-                      <button className={cx.tileRemove} onClick={() => remove(e)} aria-label={`Remove ${eventDisplayName(e, config)}`} title="Remove">
+                      <button className={cx.tileRemove} onClick={() => remove(e)} aria-label={`Delete ${eventDisplayName(e, config)}`}>
                         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" /></svg>
+                        <span>Delete</span>
                       </button>
                     </>
                   )}

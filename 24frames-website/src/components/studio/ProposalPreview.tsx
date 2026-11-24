@@ -6,6 +6,7 @@ import base from "./studio.module.css";
 import { proposalFilename, renderProposalPdf } from "./pdf/generate";
 import type { ProposalInput } from "./pdf/ProposalDocument";
 import { coupleNames } from "@/lib/commission/model";
+import { deliverablesKey } from "@/lib/commission/deliverables";
 
 export type PdfState =
   | { status: "idle" | "rendering" }
@@ -42,7 +43,7 @@ export function useProposalPdf(input: Omit<ProposalInput, "origin"> | null, auto
     }
   }, []);
 
-  const key = input ? `${input.reference}|${input.draft.updatedAt}|${input.quote.grandTotal}|${input.config.version}|${input.finalPrice ?? ""}` : "";
+  const key = input ? `${input.reference}|${input.draft.updatedAt}|${input.quote.grandTotal}|${input.config.version}|${input.finalPrice ?? ""}|${deliverablesKey(input.deliverables)}` : "";
   useEffect(() => {
     if (auto && key) void render();
   }, [auto, key, render]);
@@ -91,8 +92,8 @@ export default function ProposalPreview({
             <p>The proposal could not be composed.</p>
             {/chunk/i.test(state.message) ? (
               <>
-                <small>The studio was updated while this page was open. Reload to continue — your commission is kept.</small>
-                <button className={base.btnSecondary} onClick={() => window.location.reload()}>Reload the studio</button>
+                <small>The site was updated while this page was open. Reload to continue — your commission is kept.</small>
+                <button className={base.btnSecondary} onClick={() => window.location.reload()}>Reload the page</button>
               </>
             ) : (
               <>

@@ -54,8 +54,8 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
           {/* Right: invitation line resting on the signature */}
           <div className={styles.brandTitleBlock}>
             <p className={styles.planLine}>
-              <span className={styles.planRule} aria-hidden="true" />
-              Plan your events <em>with</em>
+              <span>Plan your events</span>
+              <em>with</em>
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className={styles.monumentalLogo} src="/images/v3/logo-dark.webp" alt="24 Frames" loading="lazy" decoding="async" />
@@ -86,8 +86,8 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
               >
                 hello@24framesphotography.com
               </a>
-              <a href="tel:+919014433074" className={styles.contactPhone}>
-                +91 90144 33074
+              <a href="tel:+919160656734" className={styles.contactPhone}>
+                +91 91606 56734
               </a>
             </div>
           </div>
@@ -115,16 +115,16 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
           <div className={styles.gridCol}>
             <div className={styles.colHeader}>
               <span className={styles.colNum}>03 —</span>
-              <span className={styles.colTitle}>STUDIO ATELIER</span>
+              <span className={styles.colTitle}>THE ATELIER</span>
             </div>
             <address className={styles.colContent}>
-              <p className={styles.studioName}>24 Frames Creative Studio</p>
+              <p className={styles.studioName}>24 Frames</p>
               <a
                 href="https://maps.app.goo.gl/ttz9jqZsHW9cSJdt9"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.studioAddressLink}
-                aria-label="View 24 Frames Studio Atelier on Google Maps"
+                aria-label="View the 24 Frames atelier on Google Maps"
               >
                 <span className={styles.studioLine}>Jubilee Hills, Hyderabad</span>
                 <span className={styles.studioLine}>Telangana 500033, India</span>
@@ -214,7 +214,7 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
                 </li>
                 <li>
                   <a
-                    href="https://wa.me/919014433074"
+                    href="https://wa.me/919160656734"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.socialLink}

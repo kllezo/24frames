@@ -1,3 +1,4 @@
+import { publicOrigin } from "@/lib/site";
 import { getAccount } from "@/lib/portal/store";
 import { deskAllowed, json, portalError, requireRole } from "@/lib/portal/guard";
 import { readInvite, signInvite } from "@/lib/portal/invite";
@@ -21,6 +22,6 @@ export async function POST(request: Request) {
   if (me instanceof Response) return me;
   const token = await signInvite(me.id);
   if (!token) return json({ error: "Invites need STUDIO_SESSION_SECRET to be configured." }, 503);
-  const origin = request.headers.get("origin") || new URL(request.url).origin;
+  const origin = publicOrigin(request);
   return json({ url: `${origin}/account/login?invite=${encodeURIComponent(token)}` });
 }

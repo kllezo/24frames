@@ -1,3 +1,4 @@
+import { publicOrigin } from "@/lib/site";
 import { randomBytes } from "node:crypto";
 import { NextResponse } from "next/server";
 import { noStore, requireStudio, storageError } from "@/lib/studio/server/guard";
@@ -30,7 +31,7 @@ export async function POST(request: Request, ctx: RouteContext<"/api/studio/comm
     }
     const token = randomBytes(24).toString("hex");
     await saveMedia(`proposal-${token}.pdf`, "application/pdf", bytes);
-    const origin = new URL(request.url).origin;
+    const origin = publicOrigin(request);
     return noStore(NextResponse.json({ url: `${origin}/api/proposal/${token}` }));
   } catch (err) {
     return storageError(err);

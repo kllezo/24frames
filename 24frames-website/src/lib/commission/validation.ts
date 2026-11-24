@@ -210,7 +210,7 @@ export function validateConfig(input: unknown): ValidationIssue[] {
   });
 
   if (!c.studio || !/^\d{8,15}$/.test(c.studio.whatsappNumber ?? "")) {
-    issues.push({ path: "studio.whatsappNumber", message: "WhatsApp number must be digits only, including country code (e.g. 919014433074)." });
+    issues.push({ path: "studio.whatsappNumber", message: "WhatsApp number must be digits only, including country code (e.g. 919160656734)." });
   }
   if (!c.proposal || !isNum(c.proposal.validityDays) || c.proposal.validityDays < 1) {
     issues.push({ path: "proposal.validityDays", message: "Proposal validity must be at least one day." });

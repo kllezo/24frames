@@ -5,7 +5,7 @@ import { PORTAL_COOKIE, portalCookieOptions, signPortal } from "@/lib/portal/ses
 import { body, deskAllowed, json, portalError, sameOrigin } from "@/lib/portal/guard";
 import { safeEqual } from "@/lib/studio/session";
 import type { PortalAccount } from "@/lib/portal/types";
-import { applyLink, usableLink } from "@/lib/portal/pricelinks";
+import { applyLink, linkProblem, usableLink } from "@/lib/portal/pricelinks";
 
 /* Portal sign-in, client sign-up and the one-time founder set-up.
    Failed attempts are throttled per address: 6 failures → 10 minutes. */
@@ -68,12 +68,14 @@ export async function POST(request: Request) {
       if (!ok || !account) return fail("That email and password don't match.");
       attempts.delete(key);
       if (!(await deskAllowed(account))) {
-        return json({ error: "This email no longer has access to the studio desk. Please contact the founder." }, 403);
+        return json({ error: "This email no longer has access to the team desk. Please contact the founder." }, 403);
       }
       await updateAccount(account.id, { lastLoginAt: new Date().toISOString() });
       // A client who signs in through a custom price link moves onto that rate card.
       if (account.role === "client") {
-        const link = await usableLink(b.price, account.email, account.id);
+        const problem = b.price ? await linkProblem(b.price) : null;
+        if (problem) return json({ error: problem }, 409);
+        const link = await usableLink(b.price);
         if (link && link.id !== account.priceLinkId) return signedIn(await applyLink(account, link));
       }
       return signedIn(account);
@@ -89,8 +91,10 @@ export async function POST(request: Request) {
       if (location.length < 2) return json({ error: "Please tell us your city or location." }, 422);
       const problem = passwordProblem(password);
       if (problem) return json({ error: problem }, 422);
+      const linkIssue = b.price ? await linkProblem(b.price) : null;
+      if (linkIssue) return json({ error: linkIssue }, 409);
       const staff = await getAccess(email);
-      if (staff?.active) return json({ error: "This email is authorised for the studio desk — activate it at /desk/login." }, 409);
+      if (staff?.active) return json({ error: "This email is authorised for the team desk — activate it at /desk/login." }, 409);
       // Signed up through a relationship manager's link → they look after this client.
       const invitedBy = await readInvite(b.invite);
       const manager = invitedBy ? await getAccount(invitedBy) : null;
@@ -108,13 +112,13 @@ export async function POST(request: Request) {
             lastLoginAt: new Date().toISOString(),
             ...(existing.managerId ? {} : { managerId }),
           })) ?? existing;
-        const link = await usableLink(b.price, email, claimed.id);
+        const link = await usableLink(b.price);
         if (link) claimed = await applyLink(claimed, link);
         return signedIn(claimed, 201);
       }
       const created = await createAccount({ role: "client", name, email, phone, location, passwordHash: await hashPassword(password), createdBy: managerId });
       let account = (await updateAccount(created.id, { managerId, source: managerId ? "rm_link" : "website" })) ?? created;
-      const link = await usableLink(b.price, email, null);
+      const link = await usableLink(b.price);
       if (link) account = await applyLink(account, link);
       return signedIn(account, 201);
     }
@@ -123,7 +127,7 @@ export async function POST(request: Request) {
       const pin = process.env.STUDIO_PIN;
       if (!pin || pin.length < 4) return json({ error: "Founder set-up needs STUDIO_PIN to be configured." }, 503);
       if ((await countOwners()) > 0) return json({ error: "The founder account already exists. Sign in instead." }, 409);
-      if (!safeEqual((b.pin ?? "").trim(), pin)) return fail("That studio PIN isn't right.");
+      if (!safeEqual((b.pin ?? "").trim(), pin)) return fail("That access PIN isn't right.");
       const name = (b.name ?? "").trim();
       if (name.length < 2) return json({ error: "Please enter the founder's name." }, 422);
       if (!EMAIL.test(email)) return json({ error: "Please enter a valid email address." }, 422);
@@ -137,7 +141,7 @@ export async function POST(request: Request) {
     /* A team member whose email the superadmin has authorised sets their own password. */
     if (b?.action === "activate") {
       const access = EMAIL.test(email) ? await getAccess(email) : null;
-      if (!access || !access.active) return fail("This email hasn't been given access to the studio desk. Ask the founder to authorise it.", 403);
+      if (!access || !access.active) return fail("This email hasn't been given access to the team desk. Ask the founder to authorise it.", 403);
       if (await findAccountByEmail(email)) return json({ error: "This email is already activated — sign in instead." }, 409);
       const name = (b.name ?? "").trim() || access.name;
       if (name.length < 2) return json({ error: "Please enter your name." }, 422);

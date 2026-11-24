@@ -72,22 +72,22 @@ export default function ShareUpdate({
       return;
     }
     const data = res ? ((await res.json().catch(() => ({}))) as { error?: string }) : {};
-    setError(data.error ?? "We couldn't reach the studio. Your changes are saved — please try again.");
+    setError(data.error ?? "We couldn't reach 24 Frames. Your changes are saved — please try again.");
   }
 
   return (
     <dialog data-lenis-prevent ref={ref} className={base.dialog} onClose={onClose} aria-labelledby="share-title">
       {request ? (
         <>
-          <h2 id="share-title">{first ? `Ask ${first} to change your quotation` : "Ask the studio to change your quotation"}</h2>
+          <h2 id="share-title">{first ? `Ask ${first} to change your quotation` : "Ask 24 Frames to change your quotation"}</h2>
           <p>
-            {reference} is locked while the studio finalises it, or once it&apos;s accepted. Tell{" "}
+            {reference} is locked while we finalise it, or once it&apos;s accepted. Tell{" "}
             {first ?? "your relationship manager"} what you&apos;d like to change — they&apos;ll reopen it so you can edit, or update it for you.
           </p>
         </>
       ) : (
         <>
-          <h2 id="share-title">{first ? `Let ${first} know about your changes` : "Send your changes to the studio"}</h2>
+          <h2 id="share-title">{first ? `Let ${first} know about your changes` : "Send your changes to 24 Frames"}</h2>
           <p>
             Your changes to {reference} are saved.{" "}
             {first
@@ -117,7 +117,7 @@ export default function ShareUpdate({
           </button>
         )}
         <button className={base.btnPrimary} onClick={() => share("studio")} disabled={busy}>
-          {busy ? "Sending…" : request ? "Send request" : first ? `Notify ${first}` : "Notify the studio"}
+          {busy ? "Sending…" : request ? "Send request" : first ? `Notify ${first}` : "Notify 24 Frames"}
         </button>
       </div>
     </dialog>

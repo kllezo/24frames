@@ -8,18 +8,90 @@
    This file is the ONLY place these demo values live.
    ============================================================ */
 
-import type { StudioConfig } from "./types";
+import type { DeliveryTier, StudioConfig } from "./types";
+
+/* Post-production is a fixed price per delivery timeline (Nov 2026). */
+export const DELIVERY_TIERS_2026: DeliveryTier[] = [
+  {
+    id: "express-15",
+    label: "15–20 days",
+    window: "15–20 days",
+    days: 20,
+    priorityName: "Express Delivery",
+    badge: "Fastest delivery",
+    icon: "bolt",
+    fee: 79000,
+    multiplier: 1,
+    meaning: "Priority editing and accelerated post-production.",
+    whyPrice: "Your edit moves to the front of the queue, with editors and colourists dedicated to it.",
+    covers: ["Luxury gallery link", "Colour-corrected photographs", "Films"],
+    expectations: "Your luxury gallery link with colour-corrected photographs and films within 15–20 days of your last event.",
+    conditions: "Subject to capacity during peak season. Confirmed at booking.",
+    available: true,
+  },
+  {
+    id: "standard-45",
+    label: "40–45 days",
+    window: "40–45 days",
+    days: 45,
+    priorityName: "Standard Delivery",
+    icon: "clock",
+    fee: 60000,
+    multiplier: 1,
+    meaning: "Standard post-production and delivery timeline.",
+    whyPrice: "The usual pace of our edit suite.",
+    covers: ["Edited photographs", "Films", "Album selection"],
+    expectations: "Complete delivery within 40–45 days of your last event.",
+    conditions: "Standard timeline.",
+    available: true,
+  },
+  {
+    id: "classic-60",
+    label: "50–60 days",
+    window: "50–60 days",
+    days: 60,
+    priorityName: "Classic Delivery",
+    icon: "calendar",
+    fee: 55000,
+    multiplier: 1,
+    meaning: "Flexible delivery timeline with the same quality standards.",
+    whyPrice: "A relaxed window lets us schedule your edit flexibly — reflected in a lower price.",
+    covers: ["Edited photographs", "Films", "Album selection"],
+    expectations: "Complete delivery within 50–60 days of your last event.",
+    conditions: "Delivery dates are scheduled within the window.",
+    available: true,
+  },
+];
+
+/** Old timeline ids → the nearest current one, for drafts saved before Nov 2026. */
+export const TIER_RENAMES: Record<string, string> = {
+  "priority-30": "standard-45",
+  "standard-60": "classic-60",
+  "extended-90": "classic-60",
+  "archival-180": "classic-60",
+};
+
+export const PRICING_REVISION = 2;
+const SERVICE_PRICES_2026: Record<string, number> = {
+  "traditional-photographer": 20000,
+  "traditional-videographer": 20000,
+  "candid-photographer": 30000,
+  "candid-videographer": 30000,
+  "web-live-stream": 20000,
+  "aerial-drone": 20000,
+};
 
 export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
   version: 1,
   updatedAt: "2026-11-07T00:00:00.000Z",
-  pricingIsIllustrative: true,
+  pricingIsIllustrative: false,
+  pricingRevision: PRICING_REVISION,
 
   studio: {
     name: "24 Frames Photography",
     tagline: "Cinematic wedding films & photography",
-    phoneDisplay: "+91 90144 33074",
-    whatsappNumber: "919014433074",
+    phoneDisplay: "+91 91606 56734",
+    whatsappNumber: "919160656734",
     email: "hello@24framesphotography.com",
     website: "24framesphotography.com",
     instagram: "@24framesphotography_official",
@@ -54,7 +126,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       suitableFor: ["engagement", "haldi", "mehendi", "wedding", "reception", "post-wedding"],
       recommendedNote:
         "One photographer for up to 150 guests; add one for roughly every 300–400 additional guests or for each parallel ritual.",
-      price: 60000,
+      price: 20000,
       unitLabel: "per photographer · per event",
       unitNoun: "photographer",
       minQuantity: 0,
@@ -90,7 +162,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       suitableFor: ["engagement", "haldi", "mehendi", "sangeet", "wedding", "reception"],
       recommendedNote:
         "One videographer for most events; two when the ceremony and guest areas need simultaneous coverage or guests exceed ~400.",
-      price: 70000,
+      price: 20000,
       unitLabel: "per videographer · per event",
       unitNoun: "videographer",
       minQuantity: 0,
@@ -125,7 +197,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       suitableFor: [],
       recommendedNote:
         "One candid photographer for intimate events; two for 200–700 guests; three for grand celebrations with many simultaneous moments.",
-      price: 80000,
+      price: 30000,
       unitLabel: "per photographer · per event",
       unitNoun: "photographer",
       minQuantity: 0,
@@ -160,7 +232,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       suitableFor: [],
       recommendedNote:
         "One candid videographer for most events; two when guests exceed ~300 or multiple stories unfold at once.",
-      price: 95000,
+      price: 30000,
       unitLabel: "per videographer · per event",
       unitNoun: "videographer",
       minQuantity: 0,
@@ -196,7 +268,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       suitableFor: ["sangeet", "wedding", "reception", "pre-wedding"],
       recommendedNote:
         "One drone operator for outdoor or large venues. Subject to local airspace permissions, weather and venue approval.",
-      price: 45000,
+      price: 20000,
       unitLabel: "per operator · per event",
       unitNoun: "operator",
       minQuantity: 0,
@@ -272,7 +344,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       suitableFor: ["wedding", "reception", "engagement"],
       recommendedNote:
         "One stream setup per event. Requires a stable wired internet connection of at least 20 Mbps upload at the venue.",
-      price: 40000,
+      price: 20000,
       unitLabel: "per stream setup · per event",
       unitNoun: "stream setup",
       minQuantity: 0,
@@ -283,7 +355,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       technicalNotes: [
         "Venue must provide a stable wired connection — minimum 20 Mbps upload recommended.",
         "Power backup near the broadcast desk.",
-        "Stream quality depends on venue connectivity, which the studio cannot guarantee.",
+        "Stream quality depends on venue connectivity, which we cannot guarantee.",
       ],
       active: true,
     },
@@ -342,82 +414,14 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     roundTo: 100,
   },
 
-  deliveryTiers: [
-    {
-      id: "express-15",
-      label: "Within 15 days",
-      days: 15,
-      priorityName: "Express Priority",
-      multiplier: 2.0,
-      meaning: "Your collection moves to the front of the edit suite the morning after the celebration.",
-      whyPrice:
-        "Editors, colourists and sound designers are dedicated to your commission ahead of the queue, often working extended hours.",
-      covers: ["Edited photographs", "Highlight film", "Teaser"],
-      expectations:
-        "Final photographs and the highlight film within 15 days of your last event. Full-length films may follow if the studio confirms otherwise.",
-      conditions: "Subject to studio capacity during peak season. Confirmed at booking.",
-      available: true,
-    },
-    {
-      id: "priority-30",
-      label: "Within 30 days",
-      days: 30,
-      priorityName: "Priority Delivery",
-      multiplier: 1.5,
-      meaning: "A reserved place in the edit calendar with an accelerated review cycle.",
-      whyPrice: "Your project is scheduled ahead of standard commissions with a dedicated review slot.",
-      covers: ["Edited photographs", "Highlight film", "Full-length films"],
-      expectations: "Your complete collection within a month of your final event.",
-      conditions: "Subject to studio capacity. Confirmed at booking.",
-      available: true,
-    },
-    {
-      id: "standard-60",
-      label: "Within 60 days",
-      days: 60,
-      priorityName: "Standard Delivery",
-      multiplier: 1.0,
-      meaning: "The studio's considered pace — every frame selected, graded and finished with care.",
-      whyPrice: "The baseline post-production fee. No priority surcharge.",
-      covers: ["Edited photographs", "Highlight film", "Full-length films", "Album selection"],
-      expectations: "Complete delivery within two months of your final event.",
-      conditions: "Standard studio timeline.",
-      available: true,
-    },
-    {
-      id: "extended-90",
-      label: "Within 3 months",
-      days: 90,
-      priorityName: "Extended Production",
-      multiplier: 0.8,
-      meaning: "A relaxed production window that lets the studio schedule your edit flexibly.",
-      whyPrice: "Flexible scheduling lets the studio balance its calendar — reflected in a lower fee.",
-      covers: ["Edited photographs", "Highlight film", "Full-length films", "Album selection"],
-      expectations: "Complete delivery within three months of your final event.",
-      conditions: "Delivery dates are scheduled by the studio within the window.",
-      available: true,
-    },
-    {
-      id: "archival-180",
-      label: "Within 6 months",
-      days: 180,
-      priorityName: "Archival Timeline",
-      multiplier: 0.6,
-      meaning: "The most economical timeline, for couples in no hurry.",
-      whyPrice: "Your edit is scheduled in the studio's quieter periods, lowering production cost.",
-      covers: ["Edited photographs", "Highlight film", "Full-length films", "Album selection"],
-      expectations: "Complete delivery within six months of your final event.",
-      conditions: "Delivery dates are scheduled by the studio within the window.",
-      available: false,
-    },
-  ],
-  defaultDeliveryTierId: "standard-60",
+  deliveryTiers: DELIVERY_TIERS_2026,
+  defaultDeliveryTierId: "standard-45",
 
   charges: [
     {
       id: "outstation-travel",
       label: "Outstation travel & accommodation",
-      description: "Crew travel and stay for celebrations outside the studio's home city.",
+      description: "Crew travel and stay for celebrations outside our home city.",
       kind: "fixed",
       amount: 25000,
       available: true,
@@ -436,7 +440,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     enabled: false,
     label: "GST",
     ratePercent: 18,
-    note: "Tax is not applied until the studio confirms its tax treatment.",
+    note: "Tax is not applied until the tax treatment is confirmed.",
   },
 
   proposal: {
@@ -474,15 +478,26 @@ const SERVICE_NAMES: Record<string, { from: string; to: string }> = {
 
 /** Brings a config saved before these revisions up to date: renames roles
     that still carry their original default name, and retires the
-    six-month delivery timeline. Admin-chosen names are left alone. */
+    three- and six-month delivery timelines (only 15, 30 and 60 days are offered). Admin-chosen names are left alone. */
 export function reviseConfig(config: StudioConfig): StudioConfig {
-  return {
+  const named = {
     ...config,
     services: config.services.map((s) => {
       const r = SERVICE_NAMES[s.id];
       return r && s.name === r.from ? { ...s, name: r.to } : s;
     }),
-    deliveryTiers: config.deliveryTiers.map((t) => (t.id === "archival-180" ? { ...t, available: false } : t)),
-    defaultDeliveryTierId: config.defaultDeliveryTierId === "archival-180" ? "standard-60" : config.defaultDeliveryTierId,
   };
+  // The Nov 2026 rate card and fixed delivery prices, applied once; later admin edits are kept.
+  if ((config.pricingRevision ?? 0) < PRICING_REVISION) {
+    return {
+      ...named,
+      pricingRevision: PRICING_REVISION,
+      pricingIsIllustrative: false,
+      studio: { ...named.studio, phoneDisplay: "+91 91606 56734", whatsappNumber: "919160656734" },
+      services: named.services.map((s) => (s.id in SERVICE_PRICES_2026 ? { ...s, price: SERVICE_PRICES_2026[s.id] } : s)),
+      deliveryTiers: DELIVERY_TIERS_2026,
+      defaultDeliveryTierId: "standard-45",
+    };
+  }
+  return named;
 }

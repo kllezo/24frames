@@ -14,6 +14,8 @@ import { Document, Image, Page, Svg, Path, Text, View } from "@react-pdf/rendere
 import type { Style } from "@react-pdf/types";
 import { coupleNames, eventDisplayName } from "@/lib/commission/model";
 import type { CelebrationEvent, CommissionDraft, CommissionQuote, StudioConfig } from "@/lib/commission/types";
+import { DEFAULT_DELIVERABLES, type Deliverable } from "@/lib/commission/deliverables";
+import { cameraBreakdown, crewTotals } from "@/lib/commission/crew";
 
 export interface ProposalInput {
   draft: CommissionDraft;
@@ -25,6 +27,8 @@ export interface ProposalInput {
   origin: string;
   /** Price agreed by the studio (after sales adjustment / founder approval). */
   finalPrice?: number | null;
+  /** Deliverables tailored by the sales team; the studio standard when absent. */
+  deliverables?: Deliverable[] | null;
 }
 
 /* Page geometry and palette taken from the reference proposal. */
@@ -151,7 +155,7 @@ function ScopeGrid({ list }: { list: ScopeBlock[] }) {
   );
 }
 
-export default function ProposalDocument({ draft, quote, config, reference, issuedAt, origin, finalPrice }: ProposalInput) {
+export default function ProposalDocument({ draft, quote, config, reference, issuedAt, origin, finalPrice, deliverables }: ProposalInput) {
   const c = draft.couple;
   const names = coupleNames(c);
   const img = (p: string) => (p.startsWith("http") ? p : `${origin}${p}`);
@@ -159,6 +163,11 @@ export default function ProposalDocument({ draft, quote, config, reference, issu
   const logo = art("logo.jpg");
   const serviceName = new Map(config.services.map((s) => [s.id, s.name]));
   const tier = config.deliveryTiers.find((t) => t.id === quote.postProduction.tierId) ?? null;
+  const crew = crewTotals(quote);
+  const gives = deliverables && deliverables.length ? deliverables : DEFAULT_DELIVERABLES;
+  // The deliverables zig-zag down the page; six boxes sit a little tighter than five.
+  const step = gives.length > 5 ? 119 : 143;
+  const boxH = step - 13;
 
   /* Scope blocks — one per occasion, written the way the studio writes them. */
   const blocks = draft.events.map((e) => {
@@ -322,22 +331,22 @@ export default function ProposalDocument({ draft, quote, config, reference, issu
         <Image src={art("deliver-floral.jpg")} style={abs(495.9, 0, 103.1, 121.9)} />
         <Text style={[heading, abs(42, 34)]}>Deliverables</Text>
         <View style={[rule, abs(43, 76)]} />
-        {[
-          { x: 31, y: 102, t: "Photos", d: "Approximately 1000-1500 meticulously edited photos will be provided on your hard drive, all raw images from your events will be included on the hard drive" },
-          { x: 207, y: 245, t: "Wedding Film 4K", d: "Around 2-3 minutes engagement teaser & Around 5-8 minutes wedding film showcasing the highlights of your over all wedding will be available on the cloud." },
-          { x: 31, y: 388, t: "Traditional Video", d: "Fully edited, 4K videos of your events will be delivered on the hard drive." },
-          { x: 207, y: 531, t: "Luxury Albums", d: "Complimentary four luxury albums (Physical & Digital) each with 30 sheets, will be provided." },
-          { x: 34, y: 674, t: "Pic-Time Link", d: "Get all your pictures, reels & teasers in a link which is an AI based luxurious online gallery." },
-        ].map((b) => (
-          <View key={b.t} style={[abs(b.x, b.y, 364, 130), { backgroundColor: C.box, borderRadius: 20, paddingTop: 22, paddingLeft: 38, paddingRight: 30 }]}>
-            <Text style={[label, { marginBottom: 9 }]}>{b.t}</Text>
-            <Text style={body}>{b.d}</Text>
+        {gives.map((b, i) => (
+          <View
+            key={i}
+            style={[abs(i % 2 ? 207 : 31, 102 + i * step, 364, boxH), { backgroundColor: C.box, borderRadius: 20, paddingTop: 20, paddingLeft: 38, paddingRight: 30 }]}
+          >
+            <Text style={[label, { marginBottom: 8 }]}>{b.title}</Text>
+            <Text style={[body, b.detail.length > 200 ? { fontSize: 10, lineHeight: 1.35 } : {}]}>{b.detail}</Text>
           </View>
         ))}
-        <Image src={art("arrow-right.jpg")} style={abs(412.3, 172.4, 25.9, 55.8)} />
-        <Image src={art("arrow-left.jpg")} style={abs(163.4, 317.7, 25.9, 53.1)} />
-        <Image src={art("arrow-right.jpg")} style={abs(412.3, 458, 25.9, 55.8)} />
-        <Image src={art("arrow-left.jpg")} style={abs(163.4, 612, 25.9, 53.1)} />
+        {gives.slice(0, -1).map((_, i) =>
+          i % 2 ? (
+            <Image key={`a${i}`} src={art("arrow-left.jpg")} style={abs(163.4, 102 + i * step + boxH * 0.56, 25.9, 53.1)} />
+          ) : (
+            <Image key={`a${i}`} src={art("arrow-right.jpg")} style={abs(412.3, 102 + i * step + boxH * 0.54, 25.9, 55.8)} />
+          ),
+        )}
       </Page>
 
       {/* 09 · Quote */}
@@ -350,8 +359,14 @@ export default function ProposalDocument({ draft, quote, config, reference, issu
           Total price: {discounted ? <Text style={{ textDecoration: "line-through", color: C.grey }}>{lakh(total)}</Text> : <Text style={{ fontFamily: SANS_BOLD }}>{lakh(total)}</Text>}
         </Text>
         {discounted ? <Text style={{ fontFamily: SANS_BOLD, fontSize: 14.5 }}>Discounted price : {lakh(discounted)}</Text> : null}
+        {crew.operators > 0 ? (
+          <Text style={{ fontSize: 11.5, marginTop: 10, color: C.forest }}>
+            Crew: <Text style={{ fontFamily: SANS_BOLD }}>{crew.cameras} cameras</Text> ({cameraBreakdown(crew)}) ·{" "}
+            <Text style={{ fontFamily: SANS_BOLD }}>{crew.operators} camera operators</Text> across {crew.events} event{crew.events === 1 ? "" : "s"}
+          </Text>
+        ) : null}
         {quote.illustrative ? (
-          <Text style={{ fontSize: 7.5, color: "#8a6a2e", marginTop: 4, letterSpacing: 1 }}>ILLUSTRATIVE PRICING — NOT APPROVED STUDIO RATES</Text>
+          <Text style={{ fontSize: 7.5, color: "#8a6a2e", marginTop: 4, letterSpacing: 1 }}>ILLUSTRATIVE PRICING — NOT FINAL RATES</Text>
         ) : null}
 
         <Text style={[label, { fontSize: 11, marginTop: 30, marginBottom: 9 }]}>Payment Terms</Text>

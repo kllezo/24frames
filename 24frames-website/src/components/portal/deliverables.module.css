@@ -1,0 +1,131 @@
+/* Deliverables editor on a desk quotation */
+.panel {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.1rem, 2.4vw, 1.6rem);
+  background: #fffaf2;
+  border: 1px solid rgba(12, 48, 40, 0.12);
+  border-radius: 18px;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem 1.2rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(24px, 2.4vw, 30px);
+  font-weight: 500;
+  color: var(--forest-ink, #0c3028);
+}
+
+.sub {
+  margin: 0.2rem 0 0;
+  font-size: 13px;
+  color: rgba(20, 30, 28, 0.62);
+}
+
+.list {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(20, 30, 28, 0.82);
+}
+
+.list b {
+  color: var(--forest-ink, #0c3028);
+}
+
+.rows {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.42fr) 1fr auto;
+  gap: 0.6rem;
+  align-items: start;
+}
+
+.rowTitle,
+.rowDetail {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  font-size: 14px;
+  color: var(--forest-ink, #0c3028);
+  background: #fff;
+  border: 1px solid rgba(12, 48, 40, 0.18);
+  border-radius: 10px;
+}
+
+.rowTitle {
+  font-weight: 600;
+}
+
+.rowDetail {
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.rowTitle:focus,
+.rowDetail:focus {
+  outline: 2px solid rgba(22, 75, 64, 0.35);
+  outline-offset: 1px;
+}
+
+.rowRemove {
+  height: 38px;
+  padding: 0 0.8rem;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7a2e22;
+  background: transparent;
+  border: 1px solid rgba(122, 46, 34, 0.28);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.rowRemove:hover {
+  color: #fff;
+  background: #7a2e22;
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.count {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(20, 30, 28, 0.55);
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .rowRemove {
+    justify-self: start;
+  }
+}

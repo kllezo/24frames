@@ -14,7 +14,7 @@ export default function QuotesGate({ consultant: initial }: { consultant: string
   async function enter(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim() || !pin.trim()) {
-      setError("Enter your name and the studio PIN.");
+      setError("Enter your name and the access PIN.");
       return;
     }
     setBusy(true);
@@ -50,14 +50,14 @@ export default function QuotesGate({ consultant: initial }: { consultant: string
         </label>
         <label className={cx.lux}>
           <input type="password" inputMode="numeric" value={pin} onChange={(e) => setPin(e.target.value)} placeholder=" " maxLength={32} autoComplete="current-password" />
-          <span>Studio PIN</span>
+          <span>Access PIN</span>
         </label>
         {error && <p className={qx.error} role="alert">{error}</p>}
         <button className={base.btnPrimary} disabled={busy}>
           {busy ? "Opening…" : "Open the quote book"}
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 6l6 6-6 6" /></svg>
         </button>
-        <p className={qx.fine}>For the 24 Frames studio only. Access lasts 15 minutes.</p>
+        <p className={qx.fine}>For the 24 Frames team only. Access lasts 15 minutes.</p>
       </form>
     </div>
   );

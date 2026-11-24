@@ -20,6 +20,7 @@ export default function PortalAuth({
   storageIssue = null,
   invite = null,
   price = null,
+  priceProblem = null,
 }: {
   audience: "client" | "staff";
   next: string;
@@ -29,6 +30,8 @@ export default function PortalAuth({
   invite?: string | null;
   /** A custom price link (clients) — applied at sign-up or sign-in. */
   price?: string | null;
+  /** Why a custom price link can't be used here, shown instead of silently falling back to normal rates. */
+  priceProblem?: string | null;
 }) {
   const [mode, setMode] = useState<Mode>(initialMode);
   const [invitedBy, setInvitedBy] = useState<string | null>(null);
@@ -75,13 +78,13 @@ export default function PortalAuth({
 
   const copy = {
     client: {
-      login: { kicker: "Your quotations", title: <>Welcome <em>back.</em></>, cta: "Sign in" },
-      signup: { kicker: "Begin online", title: <>Compose your wedding, <em>at your pace.</em></>, cta: "Create my account" },
+      login: { kicker: "The client lounge", title: <>Your celebration, <em>right where you left it.</em></>, cta: "Sign in" },
+      signup: { kicker: "Begin your commission", title: <>Every frame begins <em>with a conversation.</em></>, cta: "Create my account" },
       setup: { kicker: "", title: null, cta: "" },
       activate: { kicker: "", title: null, cta: "" },
     },
     staff: {
-      login: { kicker: "The studio desk", title: <>Every quotation, <em>in one place.</em></>, cta: "Enter the desk" },
+      login: { kicker: "The team desk", title: <>Every quotation, <em>in one place.</em></>, cta: "Enter the desk" },
       signup: { kicker: "", title: null, cta: "" },
       setup: { kicker: "First visit", title: <>Set up the <em>founder account.</em></>, cta: "Create founder account" },
       activate: { kicker: "Authorised by the founder", title: <>Activate your <em>desk access.</em></>, cta: "Activate my access" },
@@ -92,20 +95,35 @@ export default function PortalAuth({
     <div className={`${cx.cinema} ${qx.page} ${px.authPage}`}>
       <aside className={px.authArt} aria-hidden="true">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={audience === "client" ? "/images/proposal/cover-photo.jpg" : "/images/proposal/workflow-photo.jpg"} alt="" />
+        <img src={audience === "client" ? "/images/portfolio/karthik-gayathri/cover.jpg" : "/images/proposal/workflow-photo.jpg"} alt="" />
+        {audience === "client" && (
+          <figure className={px.authInset}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/stories/sirish-and-harshitha/IMG_6346.jpg" alt="" />
+          </figure>
+        )}
         <span className={px.authArtCaption}>Photography · Cinema · Legacies</span>
       </aside>
 
       <form className={`${qx.gate} ${px.authForm}`} onSubmit={submit}>
-        <Link href="/" className={px.authHome} aria-label="24 Frames home">
+        <Link href="/" className={px.authLockup} aria-label="Plan your events with 24 Frames — home">
+          <span className={px.authPlan} aria-hidden="true">
+            <span>Plan your events</span>
+            <em>with</em>
+          </span>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className={qx.gateLogo} src="/images/logo-dark-header.png" alt="24 Frames" />
+          <img src="/images/logo-dark-header.png" alt="" />
         </Link>
         <p className={base.kicker}>{copy.kicker}</p>
         <h1 className={qx.gateTitle}>{copy.title}</h1>
-        {price && !invitedBy && (
+        {priceProblem && (
+          <p className={qx.error} role="alert">
+            {priceProblem}
+          </p>
+        )}
+        {price && !priceProblem && !invitedBy && (
           <p className={px.invited}>
-            A personal invitation from 24 Frames. Sign in — or create your account — to compose your quotation with the studio.
+            A personal invitation from 24 Frames. Sign in — or create your account — to compose your quotation with us.
           </p>
         )}
         {invitedBy && (
@@ -180,7 +198,7 @@ export default function PortalAuth({
         {mode === "setup" && (
           <label className={cx.lux}>
             <input type="password" inputMode="numeric" value={f.pin} onChange={set("pin")} placeholder=" " maxLength={32} autoComplete="off" required />
-            <span>Studio PIN</span>
+            <span>Access PIN</span>
           </label>
         )}
 
@@ -192,7 +210,7 @@ export default function PortalAuth({
 
         <p className={qx.fine}>
           {audience === "client" ? (
-            <>Studio team? <a href="/desk/login">Sign in to the desk</a>.</>
+            <>24 Frames team? <a href="/desk/login">Sign in to the desk</a>.</>
           ) : (
             <>Planning your wedding? <a href="/account/login">Client sign-in</a>.</>
           )}

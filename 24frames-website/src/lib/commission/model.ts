@@ -1,5 +1,6 @@
 /* Draft factories and pure helpers for working with a commission. */
 
+import { TIER_RENAMES } from "./defaults";
 import { CUSTOM_EVENT_TYPE } from "./defaults";
 import type {
   CelebrationEvent,
@@ -136,15 +137,20 @@ export function overlappingEventIds(events: CelebrationEvent[]): Set<string> {
 export function normaliseDraft(input: CommissionDraft, config: StudioConfig): CommissionDraft {
   const base = createDraft(config);
   const couple = { ...emptyCouple(), ...(input.couple ?? {}) };
+  // Email is no longer offered as a contact preference; older drafts fall back to WhatsApp.
+  if (couple.preferredContact === "email") couple.preferredContact = "whatsapp";
   const events = (input.events ?? []).map((e) => ({ ...createEvent(e.type, config), ...e }));
   const eventIds = new Set(events.map((e) => e.id));
   const serviceIds = new Set(config.services.map((s) => s.id));
   const assignments = (input.assignments ?? []).filter(
     (a) => eventIds.has(a.eventId) && serviceIds.has(a.serviceId) && a.quantity > 0,
   );
+  // Timelines retired in Nov 2026 move to the nearest current one.
+  const tierId = input.deliveryTierId && TIER_RENAMES[input.deliveryTierId] ? TIER_RENAMES[input.deliveryTierId] : input.deliveryTierId;
   return {
     ...base,
     ...input,
+    deliveryTierId: tierId ?? base.deliveryTierId,
     couple,
     events,
     assignments,

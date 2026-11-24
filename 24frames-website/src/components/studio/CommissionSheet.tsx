@@ -14,6 +14,7 @@ import {
 import { coupleNames, eventDisplayName, eventTypeLabel, weddingDateLabel } from "@/lib/commission/model";
 import type { CommissionDraft, CommissionQuote, StudioConfig } from "@/lib/commission/types";
 import { planningTitles } from "@/lib/commission/planning";
+import { cameraBreakdown, crewTotals } from "@/lib/commission/crew";
 
 export type SheetSection = "couple" | "planning" | "celebration" | "ensemble" | "delivery";
 
@@ -37,6 +38,8 @@ export default function CommissionSheet({
 }) {
   const c = draft.couple;
   const pp = quote.postProduction;
+  const crew = crewTotals(quote);
+  const peakEvent = crew.peak ? draft.events.find((e) => e.id === crew.peak!.eventId) : null;
   const date = weddingDateLabel(c, formatDateLong);
   const edit = (section: SheetSection, label = "Revise") =>
     onEdit ? (
@@ -134,7 +137,7 @@ export default function CommissionSheet({
                           <td>{l.quantity}</td>
                           <td>
                             {formatINR(l.unitPrice)}
-                            {l.overridden && <small>Studio adjusted · {l.overrideReason}</small>}
+                            {l.overridden && <small>Adjusted · {l.overrideReason}</small>}
                           </td>
                           <td>{formatINR(l.lineTotal)}</td>
                         </tr>
@@ -148,6 +151,27 @@ export default function CommissionSheet({
             );
           })}
         </ol>
+        {crew.operators > 0 && (
+          <div className={styles.crewTotals} aria-label="Cameras and crew">
+            <div>
+              <span className={styles.crewNum}>{crew.cameras}</span>
+              <span className={styles.crewLabel}>Cameras in total</span>
+              <small>{cameraBreakdown(crew)}</small>
+            </div>
+            <div>
+              <span className={styles.crewNum}>{crew.operators}</span>
+              <span className={styles.crewLabel}>Camera operators in total</span>
+              <small>across {crew.events} event{crew.events === 1 ? "" : "s"}</small>
+            </div>
+            {crew.peak && peakEvent && (
+              <div>
+                <span className={styles.crewNum}>{crew.peak.operators}</span>
+                <span className={styles.crewLabel}>Largest team on one day</span>
+                <small>{eventDisplayName(peakEvent, config)}</small>
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       <section className={styles.section}>
@@ -158,9 +182,9 @@ export default function CommissionSheet({
         </div>
         <dl className={styles.facts}>
           <div><dt>Timeline</dt><dd>{pp.tierLabel ? `${pp.priorityName} — ${pp.tierLabel}` : "Not yet chosen"}</dd></div>
-          <div><dt>Base fee</dt><dd>{formatINR(pp.baseFee)}</dd></div>
-          <div><dt>Priority multiplier</dt><dd>{pp.multiplier !== null ? `${pp.multiplier}×` : "—"}</dd></div>
-          <div><dt>Post-production fee</dt><dd>{formatINR(pp.finalFee)}{pp.overridden ? ` (studio adjusted from ${formatINR(pp.computedFee)} — ${pp.overrideReason})` : ""}</dd></div>
+          {!pp.fixed && <div><dt>Base fee</dt><dd>{formatINR(pp.baseFee)}</dd></div>}
+          {!pp.fixed && <div><dt>Priority multiplier</dt><dd>{pp.multiplier !== null ? `${pp.multiplier}×` : "—"}</dd></div>}
+          <div><dt>Post-production fee</dt><dd>{formatINR(pp.finalFee)}{pp.overridden ? ` (adjusted from ${formatINR(pp.computedFee)} — ${pp.overrideReason})` : ""}</dd></div>
         </dl>
       </section>
 

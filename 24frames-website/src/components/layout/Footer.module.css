@@ -35,23 +35,26 @@
   margin-bottom: clamp(3.5rem, 6vw, 5.5rem);
 }
 
+/* "Plan your events with" sits to the left of the signature, as tall as it. */
 .brandTitleBlock {
+  --logo-w: clamp(220px, 32vw, 500px);
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  gap: clamp(1rem, 2.2vw, 2rem);
   min-width: 0;
 }
 
 .planLine {
-  display: flex;
-  align-items: center;
-  gap: 1.1rem;
-  margin: 0 0 clamp(0.6rem, 1.2vw, 1.1rem);
+  display: grid;
+  justify-items: end;
+  margin: 0;
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(1.25rem, 1.9vw, 2rem);
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  font-size: calc(var(--logo-w) / 4.65 * 0.52);
+  line-height: 0.98;
+  font-weight: 500;
+  letter-spacing: 0.005em;
   color: #09453e;
+  white-space: nowrap;
 }
 
 .planLine em {
@@ -59,16 +62,9 @@
   color: #8a6d2b;
 }
 
-.planRule {
-  display: inline-block;
-  width: clamp(48px, 8vw, 120px);
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(200, 168, 78, 0.85));
-}
-
 .monumentalLogo {
   display: block;
-  width: clamp(240px, 38vw, 560px);
+  width: var(--logo-w);
   max-width: 100%;
   height: auto;
   margin: 0;
@@ -547,11 +543,8 @@
   }
 
   .brandTitleBlock {
-    align-items: flex-start;
-  }
-
-  .planRule {
-    display: none;
+    --logo-w: min(280px, 44vw);
+    justify-content: flex-start;
   }
 
   .columnsGrid {

@@ -64,7 +64,7 @@ export default function IdleLock({ onWipe }: { onWipe: () => void }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ pin }),
     }).catch(() => null);
-    if (!res) return setError("The studio server could not be reached.");
+    if (!res) return setError("The server could not be reached.");
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
       setPin("");
@@ -86,13 +86,13 @@ export default function IdleLock({ onWipe }: { onWipe: () => void }) {
           <circle cx="24" cy="30" r="2.2" />
           <path d="M24 32v4" />
         </svg>
-        <h2 id="lock-title">The studio is paused</h2>
+        <h2 id="lock-title">The consultation is paused</h2>
         <p>For the couple&apos;s privacy, this consultation locked after a period of inactivity.</p>
         <input
           className={`${styles.input} ${styles.pinInput}`}
           type="password"
           inputMode="numeric"
-          aria-label="Studio PIN"
+          aria-label="Access PIN"
           value={pin}
           onChange={(e) => setPin(e.target.value)}
           autoFocus
