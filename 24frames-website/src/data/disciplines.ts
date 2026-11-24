@@ -149,16 +149,6 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         image: "/images/disciplines/weddings/IMG_6274.jpg",
         caption: "Deep devotion and sacred mantras preserved with cinema-grade optical precision.",
         aspect: "portrait"
-      },
-      {
-        id: "w-09",
-        title: "Royal Architectural Silhouette & Evening Poise",
-        client: "Grand Heritage Celebration",
-        location: "Courtyard Arcade",
-        year: "2024",
-        image: "/images/disciplines/weddings/IMG_6275.jpg",
-        caption: "Monumental arches and regal bridal composure documented under soft dusk illumination.",
-        aspect: "portrait"
       }
     ],
     quotes: [

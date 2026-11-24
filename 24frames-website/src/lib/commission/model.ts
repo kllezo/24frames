@@ -136,6 +136,8 @@ export function overlappingEventIds(events: CelebrationEvent[]): Set<string> {
 export function normaliseDraft(input: CommissionDraft, config: StudioConfig): CommissionDraft {
   const base = createDraft(config);
   const couple = { ...emptyCouple(), ...(input.couple ?? {}) };
+  // Email is no longer offered as a contact preference; older drafts fall back to WhatsApp.
+  if (couple.preferredContact === "email") couple.preferredContact = "whatsapp";
   const events = (input.events ?? []).map((e) => ({ ...createEvent(e.type, config), ...e }));
   const eventIds = new Set(events.map((e) => e.id));
   const serviceIds = new Set(config.services.map((s) => s.id));

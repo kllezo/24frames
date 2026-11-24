@@ -52,7 +52,11 @@ export const PLANNING_SERVICES: PlanningService[] = [
     title: "Event décor",
     line: "Mandaps, florals and lighting from designers we trust",
     image: "/images/stories/karthik-and-gayathri/IMG_6329-mobile.webp",
-    partners: fill([]),
+    partners: fill([
+      { name: "Design by Raja", perk: "Wedding décor studio", image: "/images/partners/design-by-raja.png", fit: "contain" },
+      { name: "Alankara" },
+      { name: "Marvam" },
+    ]),
   },
   {
     id: "costumes",
@@ -72,11 +76,11 @@ export const PLANNING_SERVICES: PlanningService[] = [
     image: "/images/disciplines/fashion/IMG_6279-mobile.webp",
     // Petals fan lower-left → top → lower-right; index 2 is the top centre.
     partners: [
-      soon(4),
+      { name: "Emmadi Silver", perk: "Silver jewellery", image: "/images/partners/emmadi-silver.png", fit: "contain" },
       { name: "SKT", perk: "Gold & Diamonds", image: "/images/partners/skt.png", fit: "contain" },
       { name: "PMJ Jewels", perk: "3–4% off", image: "/images/partners/pmj.webp", fit: "contain" },
       { name: "Devi Pavitra", perk: "Gold & Diamonds", image: "/images/partners/devi-pavitra.png", fit: "contain" },
-      soon(5),
+      { name: "Malabar Gold & Diamonds", perk: "Gold & Diamonds" },
     ],
   },
   {

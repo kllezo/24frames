@@ -14,7 +14,6 @@ import type { StageProps } from "./types";
 const CONTACTS: { id: PreferredContact; label: string }[] = [
   { id: "whatsapp", label: "WhatsApp" },
   { id: "call", label: "Phone call" },
-  { id: "email", label: "Email" },
 ];
 
 export default function CoupleStage({ draft, actions, go }: StageProps) {

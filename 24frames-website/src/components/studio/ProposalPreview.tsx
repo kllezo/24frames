@@ -6,6 +6,7 @@ import base from "./studio.module.css";
 import { proposalFilename, renderProposalPdf } from "./pdf/generate";
 import type { ProposalInput } from "./pdf/ProposalDocument";
 import { coupleNames } from "@/lib/commission/model";
+import { deliverablesKey } from "@/lib/commission/deliverables";
 
 export type PdfState =
   | { status: "idle" | "rendering" }
@@ -42,7 +43,7 @@ export function useProposalPdf(input: Omit<ProposalInput, "origin"> | null, auto
     }
   }, []);
 
-  const key = input ? `${input.reference}|${input.draft.updatedAt}|${input.quote.grandTotal}|${input.config.version}|${input.finalPrice ?? ""}` : "";
+  const key = input ? `${input.reference}|${input.draft.updatedAt}|${input.quote.grandTotal}|${input.config.version}|${input.finalPrice ?? ""}|${deliverablesKey(input.deliverables)}` : "";
   useEffect(() => {
     if (auto && key) void render();
   }, [auto, key, render]);

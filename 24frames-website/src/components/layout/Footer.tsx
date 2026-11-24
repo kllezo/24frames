@@ -54,8 +54,8 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
           {/* Right: invitation line resting on the signature */}
           <div className={styles.brandTitleBlock}>
             <p className={styles.planLine}>
-              <span className={styles.planRule} aria-hidden="true" />
-              Plan your events <em>with</em>
+              <span>Plan your events</span>
+              <em>with</em>
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className={styles.monumentalLogo} src="/images/logo-dark.webp" alt="24 Frames" loading="lazy" decoding="async" />

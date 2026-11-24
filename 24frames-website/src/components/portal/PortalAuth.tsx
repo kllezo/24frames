@@ -75,8 +75,8 @@ export default function PortalAuth({
 
   const copy = {
     client: {
-      login: { kicker: "Your quotations", title: <>Welcome <em>back.</em></>, cta: "Sign in" },
-      signup: { kicker: "Begin online", title: <>Compose your wedding, <em>at your pace.</em></>, cta: "Create my account" },
+      login: { kicker: "The client lounge", title: <>Your celebration, <em>right where you left it.</em></>, cta: "Sign in" },
+      signup: { kicker: "Begin your commission", title: <>Every frame begins <em>with a conversation.</em></>, cta: "Create my account" },
       setup: { kicker: "", title: null, cta: "" },
       activate: { kicker: "", title: null, cta: "" },
     },
@@ -92,14 +92,24 @@ export default function PortalAuth({
     <div className={`${cx.cinema} ${qx.page} ${px.authPage}`}>
       <aside className={px.authArt} aria-hidden="true">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={audience === "client" ? "/images/proposal/cover-photo.jpg" : "/images/proposal/workflow-photo.jpg"} alt="" />
+        <img src={audience === "client" ? "/images/portfolio/karthik-gayathri/cover.jpg" : "/images/proposal/workflow-photo.jpg"} alt="" />
+        {audience === "client" && (
+          <figure className={px.authInset}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/stories/sirish-and-harshitha/IMG_6346.jpg" alt="" />
+          </figure>
+        )}
         <span className={px.authArtCaption}>Photography · Cinema · Legacies</span>
       </aside>
 
       <form className={`${qx.gate} ${px.authForm}`} onSubmit={submit}>
-        <Link href="/" className={px.authHome} aria-label="24 Frames home">
+        <Link href="/" className={px.authLockup} aria-label="Plan your events with 24 Frames — home">
+          <span className={px.authPlan} aria-hidden="true">
+            <span>Plan your events</span>
+            <em>with</em>
+          </span>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className={qx.gateLogo} src="/images/logo-dark-header.png" alt="24 Frames" />
+          <img src="/images/logo-dark-header.png" alt="" />
         </Link>
         <p className={base.kicker}>{copy.kicker}</p>
         <h1 className={qx.gateTitle}>{copy.title}</h1>

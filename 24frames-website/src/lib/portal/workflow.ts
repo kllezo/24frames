@@ -4,6 +4,7 @@
      sales    price · send_for_approval · forward · assign · log_consultation · seen
      owner    everything sales can do, plus approve · reject            */
 
+import type { Deliverable } from "@/lib/commission/deliverables";
 import type { CommissionDraft, CommissionQuote } from "@/lib/commission/types";
 import {
   CONSULT_LABEL,
@@ -36,7 +37,9 @@ export type QuoteAction =
   | { type: "mark_lost"; reason: LostReason; detail: string }
   | { type: "revive"; note: string }
   | { type: "production"; status?: ProductionStatus; crew?: string; notes?: string; dueDate?: string | null; note?: string }
-  | { type: "record_payment"; id: string; amount: number; note: string; at: string };
+  | { type: "record_payment"; id: string; amount: number; note: string; at: string }
+  | { type: "deliverables"; items: Deliverable[] | null; note: string }
+  | { type: "deliverables_seen" };
 
 const addDays = (iso: string, d: number) => {
   const t = new Date(`${iso}T00:00:00Z`);
@@ -335,6 +338,23 @@ export function applyAction(
         history: log({ action: "payment", price: amount, note: entry.note || undefined }),
         updatedAt: now,
       };
+    }
+    case "deliverables": {
+      if (!isStaff) return new Error("Only the studio can change the deliverables.");
+      if (q.status === "draft") return new Error("Deliverables can be tailored once the client has sent the quotation.");
+      if (q.lost) return new Error("This enquiry was marked lost.");
+      const note = action.note.trim().slice(0, 400);
+      return {
+        ...q,
+        deliverables: action.items,
+        deliverablesUpdate: { at: now, by: by.name, note, seenByClient: false },
+        history: log({ action: "deliverables", note: note || (action.items ? "Deliverables tailored for this couple." : "Deliverables reset to the studio standard.") }),
+        updatedAt: now,
+      };
+    }
+    case "deliverables_seen": {
+      if (!isClient || !q.deliverablesUpdate || q.deliverablesUpdate.seenByClient) return q;
+      return { ...q, deliverablesUpdate: { ...q.deliverablesUpdate, seenByClient: true } };
     }
   }
 }

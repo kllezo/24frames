@@ -395,7 +395,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       covers: ["Edited photographs", "Highlight film", "Full-length films", "Album selection"],
       expectations: "Complete delivery within three months of your final event.",
       conditions: "Delivery dates are scheduled by the studio within the window.",
-      available: true,
+      available: false,
     },
     {
       id: "archival-180",
@@ -474,7 +474,7 @@ const SERVICE_NAMES: Record<string, { from: string; to: string }> = {
 
 /** Brings a config saved before these revisions up to date: renames roles
     that still carry their original default name, and retires the
-    six-month delivery timeline. Admin-chosen names are left alone. */
+    three- and six-month delivery timelines (only 15, 30 and 60 days are offered). Admin-chosen names are left alone. */
 export function reviseConfig(config: StudioConfig): StudioConfig {
   return {
     ...config,
@@ -482,7 +482,7 @@ export function reviseConfig(config: StudioConfig): StudioConfig {
       const r = SERVICE_NAMES[s.id];
       return r && s.name === r.from ? { ...s, name: r.to } : s;
     }),
-    deliveryTiers: config.deliveryTiers.map((t) => (t.id === "archival-180" ? { ...t, available: false } : t)),
-    defaultDeliveryTierId: config.defaultDeliveryTierId === "archival-180" ? "standard-60" : config.defaultDeliveryTierId,
+    deliveryTiers: config.deliveryTiers.map((t) => (t.days > 60 ? { ...t, available: false } : t)),
+    defaultDeliveryTierId: ["archival-180", "extended-90"].includes(config.defaultDeliveryTierId ?? "") ? "standard-60" : config.defaultDeliveryTierId,
   };
 }

@@ -501,7 +501,7 @@ const OCCASION_IMAGES: Record<EventKey, string> = {
   mehendi: "/images/disciplines/fashion/IMG_6279.jpg",
   sangeet: "/images/stories/sirish-and-harshitha/IMG_6349.jpg",
   cocktail: "/images/stories/bellam-srikonda/IMG_6344.jpg",
-  wedding: "/images/disciplines/weddings/IMG_6275.jpg",
+  wedding: "/images/disciplines/weddings/IMG_6290.jpg",
   reception: "/images/portfolio/bellamkonda-kavya-reception/cover.jpg",
   "pre-wedding": "/images/stories/sirish-and-harshitha/IMG_6347.jpg",
   "post-wedding": "/images/portfolio/hrithika-abhishek/cover.jpg",

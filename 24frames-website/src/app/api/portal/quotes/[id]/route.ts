@@ -1,7 +1,8 @@
 import { getConfig } from "@/lib/studio/server/repository";
 import { validateDraftForSubmit } from "@/lib/commission/validation";
 import { randomUUID } from "node:crypto";
-import { getAccount, getQuote, managerCard, mutateQuote } from "@/lib/portal/store";
+import { getAccount, getQuote, listAccounts, managerCard, mutateQuote } from "@/lib/portal/store";
+import { cleanDeliverables } from "@/lib/commission/deliverables";
 import { body, deskAllowed, json, leadVisible, portalError, requireRole, sameOrigin } from "@/lib/portal/guard";
 import { configFor } from "@/lib/portal/pricing";
 import { notify } from "@/lib/portal/notify";
@@ -53,6 +54,7 @@ export async function POST(request: Request, ctx: Ctx) {
     notes?: string;
     dueDate?: string | null;
     amount?: number;
+    deliverables?: unknown;
   }>(request);
   if (!b?.action) return json({ error: "Missing action." }, 400);
 
@@ -124,6 +126,10 @@ export async function POST(request: Request, ctx: Ctx) {
       if (!Number.isFinite(amount) || amount <= 0) return json({ error: "Enter a valid amount." }, 422);
       const at = typeof b.at === "string" && !Number.isNaN(Date.parse(b.at)) ? new Date(b.at).toISOString() : new Date().toISOString();
       action = { type: "record_payment", id: randomUUID(), amount, note: String(b.note ?? ""), at };
+    } else if (b.action === "deliverables") {
+      action = { type: "deliverables", items: cleanDeliverables(b.deliverables), note: String(b.note ?? "") };
+    } else if (b.action === "deliverables_seen") {
+      action = { type: "deliverables_seen" };
     } else {
       return json({ error: "Unknown action." }, 400);
     }
@@ -148,6 +154,16 @@ export async function POST(request: Request, ctx: Ctx) {
         quoteId: result.id,
         clientId: result.clientId,
       });
+    }
+    if (action.type === "deliverables") {
+      // The founder and the relationship manager hear about it on the desk; the client sees it on their quotation.
+      const owners = (await listAccounts()).filter((a) => a.role === "owner" && a.active).map((a) => a.id);
+      await notify(
+        [...owners, result.managerId].filter((id) => id !== me.id),
+        "deliverables",
+        `${me.name} updated the deliverables on ${result.clientName}'s quotation (${result.reference}) — the PDF now reflects them.`,
+        { quoteId: result.id, clientId: result.clientId },
+      );
     }
     return json({ quote: await view(result, me) });
   } catch (err) {

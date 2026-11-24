@@ -14,6 +14,7 @@ import {
 import { coupleNames, eventDisplayName, eventTypeLabel, weddingDateLabel } from "@/lib/commission/model";
 import type { CommissionDraft, CommissionQuote, StudioConfig } from "@/lib/commission/types";
 import { planningTitles } from "@/lib/commission/planning";
+import { cameraBreakdown, crewTotals } from "@/lib/commission/crew";
 
 export type SheetSection = "couple" | "planning" | "celebration" | "ensemble" | "delivery";
 
@@ -37,6 +38,8 @@ export default function CommissionSheet({
 }) {
   const c = draft.couple;
   const pp = quote.postProduction;
+  const crew = crewTotals(quote);
+  const peakEvent = crew.peak ? draft.events.find((e) => e.id === crew.peak!.eventId) : null;
   const date = weddingDateLabel(c, formatDateLong);
   const edit = (section: SheetSection, label = "Revise") =>
     onEdit ? (
@@ -148,6 +151,27 @@ export default function CommissionSheet({
             );
           })}
         </ol>
+        {crew.operators > 0 && (
+          <div className={styles.crewTotals} aria-label="Cameras and crew">
+            <div>
+              <span className={styles.crewNum}>{crew.cameras}</span>
+              <span className={styles.crewLabel}>Cameras in total</span>
+              <small>{cameraBreakdown(crew)}</small>
+            </div>
+            <div>
+              <span className={styles.crewNum}>{crew.operators}</span>
+              <span className={styles.crewLabel}>Camera operators in total</span>
+              <small>across {crew.events} event{crew.events === 1 ? "" : "s"}</small>
+            </div>
+            {crew.peak && peakEvent && (
+              <div>
+                <span className={styles.crewNum}>{crew.peak.operators}</span>
+                <span className={styles.crewLabel}>Largest team on one day</span>
+                <small>{eventDisplayName(peakEvent, config)}</small>
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       <section className={styles.section}>

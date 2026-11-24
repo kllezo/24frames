@@ -12,6 +12,7 @@
                                    ↘ rejected → (sales revises) → pending_approval
    ============================================================ */
 
+import type { Deliverable } from "@/lib/commission/deliverables";
 import type { CommissionDraft, CommissionQuote } from "@/lib/commission/types";
 
 export type PortalRole = "client" | "sales" | "owner";
@@ -172,7 +173,7 @@ export interface DeskNotification {
   id: string;
   to: string;
   at: string;
-  kind: "rm_changed" | "lead_assigned" | "lead_removed" | "booking" | "target" | "price_link" | "enquiry";
+  kind: "rm_changed" | "lead_assigned" | "lead_removed" | "booking" | "target" | "price_link" | "enquiry" | "deliverables";
   text: string;
   quoteId?: string | null;
   clientId?: string | null;
@@ -262,7 +263,8 @@ export interface QuoteEvent {
     | "lost"
     | "revived"
     | "production"
-    | "payment";
+    | "payment"
+    | "deliverables";
   note?: string;
   price?: number;
 }
@@ -339,6 +341,10 @@ export interface PortalQuote {
   production?: Production | null;
   /** Payments received against the booking. */
   payments?: Payment[];
+  /** Deliverables tailored by the sales team (null = the studio's standard list). */
+  deliverables?: Deliverable[] | null;
+  /** The last time the studio changed the deliverables — shown to the client until they open it. */
+  deliverablesUpdate?: { at: string; by: string; note: string; seenByClient: boolean } | null;
 }
 
 /** True when the client has saved changes the studio hasn't been told about. */
@@ -384,6 +390,8 @@ export function forClient(q: PortalQuote, manager: ManagerCard | null = null) {
     unshared: hasUnsharedChanges(q),
     lastSharedAt: q.lastSharedAt ?? null,
     consultations: (q.consultations ?? []).map((c) => ({ at: c.at, mode: c.mode, by: c.by })),
+    deliverables: q.deliverables ?? null,
+    deliverablesUpdate: q.deliverablesUpdate ? { at: q.deliverablesUpdate.at, note: q.deliverablesUpdate.note, seen: q.deliverablesUpdate.seenByClient } : null,
   };
 }
 export type ClientQuote = ReturnType<typeof forClient>;

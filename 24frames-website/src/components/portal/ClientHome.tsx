@@ -191,10 +191,21 @@ function QuoteCard({
   const ready = q.status === "sent" || q.status === "accepted";
   const [wantPdf, setWantPdf] = useState(false);
   const { state } = useProposalPdf(
-    wantPdf ? { draft: q.draft, quote: q.quote, config, reference: q.reference, issuedAt: q.updatedAt, consultant: "24 Frames", finalPrice: q.finalPrice } : null,
+    wantPdf ? { draft: q.draft, quote: q.quote, config, reference: q.reference, issuedAt: q.updatedAt, consultant: "24 Frames", finalPrice: q.finalPrice, deliverables: q.deliverables } : null,
   );
   const names = coupleNames(q.draft.couple, "Your celebration");
   const events = q.draft.events.map((e) => eventDisplayName(e, config));
+  const [dlSeen, setDlSeen] = useState(false);
+  const dlNotice = q.deliverablesUpdate && !q.deliverablesUpdate.seen && !dlSeen ? q.deliverablesUpdate : null;
+  const markSeen = () => {
+    if (!dlNotice) return;
+    setDlSeen(true);
+    void fetch(`/api/portal/quotes/${q.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "deliverables_seen" }),
+    }).catch(() => null);
+  };
 
   return (
     <li className={`${px.card} ${ready ? px.cardReady : ""}`}>
@@ -212,6 +223,16 @@ function QuoteCard({
           </p>
         )}
         {q.unshared && <p className={px.cardUnshared}>You have changes the studio hasn&apos;t seen yet.</p>}
+        {dlNotice && (
+          <div className={px.cardNotice} role="status">
+            <p>
+              <b>The studio updated your deliverables</b> · {formatDateLong(dlNotice.at.slice(0, 10))}
+              {dlNotice.note && <span> — “{dlNotice.note}”</span>}
+            </p>
+            <p className={px.cardNoticeFine}>Your quotation PDF now lists them.</p>
+            <button type="button" className={base.btnText} onClick={markSeen}>Got it</button>
+          </div>
+        )}
       </div>
       <div className={px.cardSide}>
         <span className={`${px.chip} ${px[`chip_${q.status}`] ?? ""}`}>{q.statusLabel}</span>
@@ -240,7 +261,11 @@ function QuoteCard({
           {ready && (
             <button
               className={base.btnSecondary}
-              onClick={() => (state.status === "ready" ? downloadBlob(state.blob, state.filename) : setWantPdf(true))}
+              onClick={() => {
+                markSeen();
+                if (state.status === "ready") downloadBlob(state.blob, state.filename);
+                else setWantPdf(true);
+              }}
               disabled={state.status === "rendering"}
             >
               {state.status === "rendering" ? "Preparing PDF…" : state.status === "ready" ? "Download PDF" : "Prepare PDF"}

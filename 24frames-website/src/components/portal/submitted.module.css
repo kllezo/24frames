@@ -41,7 +41,7 @@
 .facts div { display: grid; gap: 4px; }
 .facts div + div { border-left: 1px solid rgba(169, 138, 82, 0.2); }
 .facts dt { font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8a948f; }
-.facts dd { margin: 0; font-family: var(--font-cormorant), Georgia, serif; font-size: clamp(18px, 2.6vw, 22px); color: #10302a; overflow-wrap: anywhere; }
+.facts dd { margin: 0; font-family: var(--font-cormorant), Georgia, serif; font-size: clamp(18px, 2.6vw, 22px); color: #10302a; overflow-wrap: break-word; }
 
 .steps { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 14px; text-align: left; }
 .steps li { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; font-size: 14px; line-height: 1.55; color: #5f6a64; opacity: 0; animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; animation-delay: calc(1.4s + var(--i) * 0.15s); }

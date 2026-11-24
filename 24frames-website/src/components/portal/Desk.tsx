@@ -7,6 +7,8 @@ import qx from "../studio/quotes/quotes.module.css";
 import px from "./portal.module.css";
 import ix from "./insights.module.css";
 import sx from "./deskStages.module.css";
+import dx from "./deliverables.module.css";
+import { DEFAULT_DELIVERABLES, MAX_DELIVERABLES, type Deliverable } from "@/lib/commission/deliverables";
 import CommissionSheet from "../studio/CommissionSheet";
 import DeskTop from "./DeskTop";
 import { downloadBlob, useProposalPdf } from "../studio/ProposalPreview";
@@ -93,6 +95,7 @@ const ACTION_LABEL: Record<string, string> = {
   revived: "Reopened the lost enquiry",
   production: "Moved production to",
   payment: "Recorded a payment",
+  deliverables: "Updated the deliverables",
 };
 
 /* The studio desk: sales review online quotations, set the final price,
@@ -344,7 +347,7 @@ export function Detail({
   const pct = estimate ? (delta / estimate) * 100 : 0;
   const editingPrice = q.status === "submitted" || q.status === "rejected";
   const { state } = useProposalPdf(
-    wantPdf ? { draft: q.draft, quote: q.quote, config, reference: q.reference, issuedAt: q.updatedAt, consultant: q.salesOwner ?? me.name, finalPrice: q.finalPrice } : null,
+    wantPdf ? { draft: q.draft, quote: q.quote, config, reference: q.reference, issuedAt: q.updatedAt, consultant: q.salesOwner ?? me.name, finalPrice: q.finalPrice, deliverables: q.deliverables ?? null } : null,
   );
 
   async function act(action: string, extra: Record<string, unknown> = {}, ok = "Saved.") {
@@ -552,6 +555,8 @@ export function Detail({
           </p>
         )}
       </section>
+
+      {q.status !== "draft" && !q.lost && <DeliverablesEditor q={q} busy={busy} act={act} />}
 
       <section className={px.sheet}>
         <CommissionSheet config={config} draft={q.draft} quote={q.quote} reference={q.reference} />
@@ -875,6 +880,97 @@ function Outcome({
             Cancel
           </button>
         </div>
+      )}
+    </section>
+  );
+}
+
+/* After the quotation is composed with the couple, the sales team can
+   tailor what they receive. Saving rewrites the PDF's Deliverables page
+   and tells the founder, the relationship manager and the client. */
+function DeliverablesEditor({
+  q,
+  busy,
+  act,
+}: {
+  q: PortalQuote;
+  busy: boolean;
+  act: (action: string, extra?: Record<string, unknown>, ok?: string) => Promise<void>;
+}) {
+  const saved = q.deliverables && q.deliverables.length ? q.deliverables : DEFAULT_DELIVERABLES;
+  const [open, setOpen] = useState(false);
+  const [rows, setRows] = useState<Deliverable[]>(saved);
+  const [note, setNote] = useState("");
+  const tailored = !!(q.deliverables && q.deliverables.length);
+  const set = (i: number, patch: Partial<Deliverable>) => setRows((r) => r.map((d, j) => (j === i ? { ...d, ...patch } : d)));
+
+  return (
+    <section className={dx.panel} aria-labelledby={`dl-${q.id}`}>
+      <div className={dx.head}>
+        <div>
+          <h3 id={`dl-${q.id}`} className={dx.title}>Deliverables</h3>
+          <p className={dx.sub}>
+            {tailored ? "Tailored for this couple" : "The studio's standard list"}
+            {q.deliverablesUpdate && ` · last changed by ${q.deliverablesUpdate.by} ${ago(q.deliverablesUpdate.at)}`}
+            {q.deliverablesUpdate && (q.deliverablesUpdate.seenByClient ? " · seen by the client" : " · not yet seen by the client")}
+          </p>
+        </div>
+        {!open && (
+          <button type="button" className={base.btnSecondary} onClick={() => { setRows(saved); setOpen(true); }}>
+            Edit deliverables
+          </button>
+        )}
+      </div>
+
+      {!open ? (
+        <ol className={dx.list}>
+          {saved.map((d, i) => (
+            <li key={i}><b>{d.title}</b> — {d.detail}</li>
+          ))}
+        </ol>
+      ) : (
+        <>
+          <ol className={dx.rows}>
+            {rows.map((d, i) => (
+              <li key={i} className={dx.row}>
+                <input className={dx.rowTitle} value={d.title} maxLength={60} placeholder="Title, e.g. Photos" onChange={(e) => set(i, { title: e.target.value })} aria-label={`Deliverable ${i + 1} title`} />
+                <textarea className={dx.rowDetail} rows={2} value={d.detail} maxLength={320} placeholder="What the couple receives" onChange={(e) => set(i, { detail: e.target.value })} aria-label={`Deliverable ${i + 1} detail`} />
+                <button type="button" className={dx.rowRemove} onClick={() => setRows((r) => r.filter((_, j) => j !== i))} aria-label={`Remove deliverable ${i + 1}`}>
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ol>
+          <div className={dx.tools}>
+            <button type="button" className={px.nudge} disabled={rows.length >= MAX_DELIVERABLES} onClick={() => setRows((r) => [...r, { title: "", detail: "" }])}>
+              + Add a deliverable
+            </button>
+            <button type="button" className={px.nudge} onClick={() => setRows(DEFAULT_DELIVERABLES)}>
+              Reset to the studio standard
+            </button>
+            <span className={dx.count}>{rows.length} / {MAX_DELIVERABLES}</span>
+          </div>
+          <label className={px.field}>
+            <span>Note for the client (optional)</span>
+            <input value={note} maxLength={400} onChange={(e) => setNote(e.target.value)} placeholder="e.g. Added a second album, as discussed." />
+          </label>
+          <div className={px.actions}>
+            <button type="button" className={base.btnGhost} disabled={busy} onClick={() => setOpen(false)}>Cancel</button>
+            <button
+              type="button"
+              className={base.btnPrimary}
+              disabled={busy || !rows.some((d) => d.title.trim() || d.detail.trim())}
+              onClick={async () => {
+                const same = JSON.stringify(rows) === JSON.stringify(DEFAULT_DELIVERABLES);
+                await act("deliverables", { deliverables: same ? null : rows, note }, "Deliverables saved — the PDF is updated, and the founder and client are notified.");
+                setOpen(false);
+                setNote("");
+              }}
+            >
+              Save &amp; notify
+            </button>
+          </div>
+        </>
       )}
     </section>
   );

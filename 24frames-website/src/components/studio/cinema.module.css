@@ -2299,7 +2299,7 @@
   font-size: clamp(38px, 3.6vw, 52px);
   line-height: 1.05;
   color: var(--forest-ink);
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .inviteNames em {
@@ -2376,7 +2376,7 @@
   font-family: var(--serif);
   font-size: 16px;
   color: var(--forest-ink);
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .inviteNote {
@@ -3304,40 +3304,43 @@
   color: var(--forest);
 }
 
+/* Always visible on a chosen tile — touch screens have no hover. */
 .tileRemove {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
+  top: 17px;
+  right: 56px; /* just left of the tick, clear of the roman numeral */
   z-index: 3;
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 30px;
+  padding: 0 0.75rem 0 0.6rem;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--forest-ink);
-  background: rgba(255, 250, 240, 0.9);
-  border: 0;
-  border-radius: 50%;
-  opacity: 0;
+  background: rgba(255, 250, 240, 0.94);
+  border: 1px solid rgba(12, 48, 40, 0.14);
+  border-radius: 999px;
+  box-shadow: 0 6px 16px rgba(10, 30, 25, 0.16);
   cursor: pointer;
-  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  transition: background 0.25s var(--ease), color 0.25s var(--ease), transform 0.25s var(--ease);
 }
 
 .tileRemove svg {
-  width: 12px;
-  height: 12px;
+  width: 11px;
+  height: 11px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.6;
+  stroke-width: 1.7;
 }
 
-.occasion:hover .tileRemove,
+.tileRemove:hover,
 .tileRemove:focus-visible {
-  opacity: 1;
-}
-
-.tileRemove:hover {
-  transform: scale(1.1);
+  color: #fffaf0;
+  background: #7a2e22;
+  transform: translateY(-1px);
 }
 
 .popLayer {
