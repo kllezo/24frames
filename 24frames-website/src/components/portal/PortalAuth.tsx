@@ -20,6 +20,7 @@ export default function PortalAuth({
   storageIssue = null,
   invite = null,
   price = null,
+  priceProblem = null,
 }: {
   audience: "client" | "staff";
   next: string;
@@ -29,6 +30,8 @@ export default function PortalAuth({
   invite?: string | null;
   /** A custom price link (clients) — applied at sign-up or sign-in. */
   price?: string | null;
+  /** Why a custom price link can't be used here, shown instead of silently falling back to normal rates. */
+  priceProblem?: string | null;
 }) {
   const [mode, setMode] = useState<Mode>(initialMode);
   const [invitedBy, setInvitedBy] = useState<string | null>(null);
@@ -113,7 +116,12 @@ export default function PortalAuth({
         </Link>
         <p className={base.kicker}>{copy.kicker}</p>
         <h1 className={qx.gateTitle}>{copy.title}</h1>
-        {price && !invitedBy && (
+        {priceProblem && (
+          <p className={qx.error} role="alert">
+            {priceProblem}
+          </p>
+        )}
+        {price && !priceProblem && !invitedBy && (
           <p className={px.invited}>
             A personal invitation from 24 Frames. Sign in — or create your account — to compose your quotation with the studio.
           </p>

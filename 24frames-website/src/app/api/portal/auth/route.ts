@@ -5,7 +5,7 @@ import { PORTAL_COOKIE, portalCookieOptions, signPortal } from "@/lib/portal/ses
 import { body, deskAllowed, json, portalError, sameOrigin } from "@/lib/portal/guard";
 import { safeEqual } from "@/lib/studio/session";
 import type { PortalAccount } from "@/lib/portal/types";
-import { applyLink, usableLink } from "@/lib/portal/pricelinks";
+import { applyLink, linkProblem, usableLink } from "@/lib/portal/pricelinks";
 
 /* Portal sign-in, client sign-up and the one-time founder set-up.
    Failed attempts are throttled per address: 6 failures → 10 minutes. */
@@ -73,6 +73,8 @@ export async function POST(request: Request) {
       await updateAccount(account.id, { lastLoginAt: new Date().toISOString() });
       // A client who signs in through a custom price link moves onto that rate card.
       if (account.role === "client") {
+        const problem = b.price ? await linkProblem(b.price, account.email, account.id) : null;
+        if (problem) return json({ error: problem }, 409);
         const link = await usableLink(b.price, account.email, account.id);
         if (link && link.id !== account.priceLinkId) return signedIn(await applyLink(account, link));
       }
@@ -89,6 +91,8 @@ export async function POST(request: Request) {
       if (location.length < 2) return json({ error: "Please tell us your city or location." }, 422);
       const problem = passwordProblem(password);
       if (problem) return json({ error: problem }, 422);
+      const linkIssue = b.price ? await linkProblem(b.price, email) : null;
+      if (linkIssue) return json({ error: linkIssue }, 409);
       const staff = await getAccess(email);
       if (staff?.active) return json({ error: "This email is authorised for the studio desk — activate it at /desk/login." }, 409);
       // Signed up through a relationship manager's link → they look after this client.

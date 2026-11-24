@@ -40,54 +40,37 @@ export default function EnsembleStage(props: StageProps) {
   const g = event ? guidance.get(event.id) : undefined;
   const openService = services.find((s) => s.id === dossier) ?? null;
 
+  const castHead = (compact: boolean) => (
+    <div className={`${cx.castHead} ${compact ? cx.castHeadCompact : ""}`}>
+      <StageHeader
+        frame="05"
+        kicker="Frame 05 · The Casting"
+        title={<>Cast your crew, <em>occasion by occasion.</em></>}
+      />
+      <div className={cx.castTools}>
+        <div className={base.segmented} role="tablist" aria-label="View">
+          <button role="tab" aria-selected={view === "catalogue"} className={view === "catalogue" ? base.segOn : ""} onClick={() => setView("catalogue")}>
+            Occasion by occasion
+          </button>
+          <button role="tab" aria-selected={view === "matrix"} className={view === "matrix" ? base.segOn : ""} onClick={() => setView("matrix")}>
+            Full composition
+          </button>
+        </div>
+        <span className={base.mono}>
+          {plural(quote.totalProfessionals, "PROFESSIONAL").toUpperCase()} · {formatINR(quote.productionSubtotal)}
+        </span>
+      </div>
+    </div>
+  );
+
   return (
     <div className={st.stageInner}>
-      <div className={cx.castHead}>
-        <StageHeader
-          frame="05"
-          kicker="Frame 05 · The Casting"
-          title={<>Cast your crew, <em>occasion by occasion.</em></>}
-        />
-        <div className={cx.castTools}>
-          <div className={base.segmented} role="tablist" aria-label="View">
-            <button role="tab" aria-selected={view === "catalogue"} className={view === "catalogue" ? base.segOn : ""} onClick={() => setView("catalogue")}>
-              Occasion by occasion
-            </button>
-            <button role="tab" aria-selected={view === "matrix"} className={view === "matrix" ? base.segOn : ""} onClick={() => setView("matrix")}>
-              Full composition
-            </button>
-          </div>
-          <span className={base.mono}>
-            {plural(quote.totalProfessionals, "PROFESSIONAL").toUpperCase()} · {formatINR(quote.productionSubtotal)}
-          </span>
-        </div>
-      </div>
-
+      {view !== "catalogue" && castHead(false)}
       {view === "catalogue" ? (
         <>
-          <div className={styles.eventTabs} role="tablist" aria-label="Casting for occasion" data-cast-top>
-            {draft.events.map((e, i) => {
-              const pe = quote.events.find((x) => x.eventId === e.id);
-              return (
-                <button
-                  key={e.id}
-                  role="tab"
-                  aria-selected={e.id === focusEvent}
-                  className={`${styles.eventTab} ${e.id === focusEvent ? styles.eventTabOn : ""}`}
-                  onClick={() => setFocusEvent(e.id)}
-                >
-                  <span className={base.mono}>{String(i + 1).padStart(2, "0")}</span>
-                  <span className={styles.eventTabName}>{eventDisplayName(e, config)}</span>
-                  <span className={styles.eventTabMeta}>
-                    {pe && pe.professionals > 0 ? `${pe.professionals} · ${formatINR(pe.subtotal)}` : "No team yet"}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
+          {/* The occasion banner leads the frame; the title sits small beneath it. */}
           {event && (
-            <section className={`${cx.scene} ${cx.sceneThemed}`} data-theme={event.type} key={event.id} aria-live="polite">
+            <section className={`${cx.scene} ${cx.sceneThemed} ${cx.sceneLead}`} data-theme={event.type} key={event.id} aria-live="polite">
               <span className={cx.scenePattern} aria-hidden="true" />
               <p className={cx.sceneKicker}>
                 Occasion {draft.events.findIndex((e) => e.id === event.id) + 1} of {draft.events.length}
@@ -112,6 +95,29 @@ export default function EnsembleStage(props: StageProps) {
               </div>
             </section>
           )}
+
+          <div className={styles.eventTabs} role="tablist" aria-label="Casting for occasion" data-cast-top>
+            {draft.events.map((e, i) => {
+              const pe = quote.events.find((x) => x.eventId === e.id);
+              return (
+                <button
+                  key={e.id}
+                  role="tab"
+                  aria-selected={e.id === focusEvent}
+                  className={`${styles.eventTab} ${e.id === focusEvent ? styles.eventTabOn : ""}`}
+                  onClick={() => setFocusEvent(e.id)}
+                >
+                  <span className={base.mono}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className={styles.eventTabName}>{eventDisplayName(e, config)}</span>
+                  <span className={styles.eventTabMeta}>
+                    {pe && pe.professionals > 0 ? `${pe.professionals} · ${formatINR(pe.subtotal)}` : "No team yet"}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className={cx.castHeadSlot}>{castHead(true)}</div>
 
           {g && <GuidancePanel guidance={g} event={event!} {...props} />}
 

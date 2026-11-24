@@ -5924,3 +5924,58 @@ img.overtureCrest {
     aspect-ratio: 4 / 4.4;
   }
 }
+
+/* Casting, occasion by occasion: the occasion banner leads the frame and
+   the stage title sits small beneath it, beside the view switch. */
+.castHeadSlot {
+  margin: clamp(1rem, 2vw, 1.5rem) 0 clamp(1rem, 2vw, 1.4rem);
+  padding-bottom: clamp(0.9rem, 1.6vw, 1.2rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.castHeadCompact {
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.castHeadCompact header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 1rem;
+}
+
+.castHeadCompact header > span[aria-hidden="true"] {
+  display: none;
+}
+
+.castHeadCompact header > p {
+  margin: 0;
+}
+
+.castHeadCompact h1 {
+  margin: 0 !important;
+  font-size: clamp(22px, 2.3vw, 30px) !important;
+  line-height: 1.15 !important;
+}
+
+.castHeadCompact .castTools {
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 0;
+}
+
+/* The banner opens the frame, so it needs no space above and a little less inside. */
+.sceneLead {
+  margin-top: 0.4rem;
+  padding-top: 2.1rem;
+  padding-bottom: 1.8rem;
+}
+
+@media (max-width: 760px) {
+  .castHeadCompact .castTools {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

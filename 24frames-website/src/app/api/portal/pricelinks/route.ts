@@ -1,3 +1,4 @@
+import { publicOrigin } from "@/lib/site";
 import { body, json, portalError, requireRole, sameOrigin } from "@/lib/portal/guard";
 import { getDoc, listDocs, putDoc } from "@/lib/portal/store";
 import { cleanFactor, cleanOverrides } from "@/lib/portal/pricing";
@@ -10,7 +11,7 @@ import type { PriceLink } from "@/lib/portal/types";
    studio's normal rates) and can be limited to one email. */
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const urlFor = (request: Request, id: string) => `${request.headers.get("origin") || new URL(request.url).origin}/account/login?price=${id}`;
+const urlFor = (request: Request, id: string) => `${publicOrigin(request)}/account/login?price=${id}`;
 
 export async function GET(request: Request) {
   const me = await requireRole("owner", "sales");

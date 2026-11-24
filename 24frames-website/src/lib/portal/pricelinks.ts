@@ -22,6 +22,17 @@ export async function usableLink(token: string | null | undefined, email: string
   return link;
 }
 
+/** Why a link can't be used, in the couple's words — null when it can (or the email isn't known yet). */
+export async function linkProblem(token: string | null | undefined, email: string | null = null, accountId: string | null = null): Promise<string | null> {
+  if (!token) return null;
+  const link = token.length <= 60 && /^[\w-]+$/.test(token) ? await getDoc<PriceLink>("pricelink", token) : null;
+  if (!link) return "This personal price link isn't valid. Please ask the studio to send it again.";
+  if (!link.active) return "This personal price link has been switched off. Please ask the studio for a new one.";
+  if (link.usedBy && link.usedBy !== accountId) return "This personal price link has already been used by another account. Please ask the studio for your own link.";
+  if (email && link.email && link.email !== email.trim().toLowerCase()) return "This personal price link was made for a different email address. Sign in or sign up with the email the studio has for you.";
+  return null;
+}
+
 /** Put a client on a link's rate card and re-price the quotations they can still edit. */
 export async function applyLink(account: PortalAccount, link: PriceLink): Promise<PortalAccount> {
   const creator = await getAccount(link.createdById);
