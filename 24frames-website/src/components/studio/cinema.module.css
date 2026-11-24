@@ -6429,3 +6429,28 @@ img.overtureCrest {
   font-size: 22px;
   color: var(--forest-ink);
 }
+
+/* Delivery vault: the timeline's window with its icon, and the badge beside the name. */
+.vaultWindow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.vaultWindow svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vaultTitle .dtBadge {
+  margin-left: 0.7rem;
+  vertical-align: middle;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-style: normal;
+}
