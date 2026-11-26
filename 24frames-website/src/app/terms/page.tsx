@@ -59,7 +59,7 @@ export default function TermsPage() {
                 These terms and all bespoke commission agreements are governed by the laws of India, under the jurisdiction of courts in Hyderabad, Telangana.
               </p>
               <p style={{ fontStyle: "italic", fontSize: "0.85rem", color: "#77766E", marginTop: "1rem" }}>
-                * Note: Studio commercial terms, cancellation policies, and payment milestone terms are subject to final studio owner confirmation and standard contract templates prior to public launch.
+                * Note: 24 Frames commercial terms, cancellation policies, and payment milestone terms are subject to final confirmation by the founder and standard contract templates prior to public launch.
               </p>
             </section>
           </div>

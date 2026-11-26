@@ -71,7 +71,9 @@ export const TIER_RENAMES: Record<string, string> = {
   "archival-180": "classic-60",
 };
 
-export const PRICING_REVISION = 4;
+export const PRICING_REVISION = 5;
+const REMOVED_PHOTOS = ["IMG_6275", "IMG_6277"];
+const REPLACEMENT_PHOTO = "/images/stories/karthik-and-gayathri/IMG_6326.jpg";
 const SERVICE_PRICES_2026: Record<string, number> = {
   "traditional-photographer": 20000,
   "traditional-videographer": 20000,
@@ -131,8 +133,8 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       unitNoun: "photographer",
       minQuantity: 0,
       maxQuantity: 6,
-      image: "/images/disciplines/weddings/IMG_6277.jpg",
-      imageAlt: "Couple walking together with family through a garden ceremony",
+      image: "/images/stories/karthik-and-gayathri/IMG_6326.jpg",
+      imageAlt: "Couple garlanded on stage, surrounded by blooms",
       postProductionGroup: "photo",
       active: true,
     },
@@ -415,7 +417,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
   },
 
   deliveryTiers: DELIVERY_TIERS_2026,
-  defaultDeliveryTierId: "standard-45",
+  defaultDeliveryTierId: null,
 
   charges: [
     {
@@ -457,7 +459,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       "Aerial coverage and live streaming depend on venue permissions, weather and connectivity.",
     ],
     coverImage: "/images/portfolio/sireesh-harshitha/cover.jpg",
-    celebrationImage: "/images/disciplines/weddings/IMG_6277.jpg",
+    celebrationImage: "/images/stories/karthik-and-gayathri/IMG_6326.jpg",
     closingImage: "/images/disciplines/cinema/IMG_6289.jpg",
     referencePrefix: "24F",
   },
@@ -522,6 +524,16 @@ export function reviseConfig(config: StudioConfig): StudioConfig {
   // Revision 4 retires the Lead Story Teller from the crew and the composition.
   if (rev < 4) {
     out = { ...out, services: out.services.map((s) => (RETIRED_SERVICES.includes(s.id) ? { ...s, active: false } : s)) };
+  }
+  // Revision 5: post-production is charged only once the couple picks a timeline (no
+  // timeline preselected), and the photo removed from the site leaves the crew and proposal.
+  if (rev < 5) {
+    out = {
+      ...out,
+      defaultDeliveryTierId: null,
+      services: out.services.map((s) => (REMOVED_PHOTOS.some((r) => s.image?.includes(r)) ? { ...s, image: REPLACEMENT_PHOTO } : s)),
+      proposal: REMOVED_PHOTOS.some((r) => out.proposal?.celebrationImage?.includes(r)) ? { ...out.proposal, celebrationImage: REPLACEMENT_PHOTO } : out.proposal,
+    };
   }
   return rev < PRICING_REVISION ? { ...out, pricingRevision: PRICING_REVISION } : out;
 }

@@ -138,7 +138,7 @@ export const DISCIPLINES_DATA: Record<string, DisciplineItem> = {
         client: "Royal Vedic Commission",
         location: "Heritage Palace Grounds",
         year: "2024",
-        image: "/images/disciplines/weddings/IMG_6277.jpg",
+        image: "/images/stories/karthik-and-gayathri/IMG_6326.jpg",
         caption: "Akshata blessings showered under the sacred mandapam in natural architectural dawn light.",
         aspect: "portrait"
       },

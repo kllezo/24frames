@@ -66,7 +66,7 @@ export default function PrivacyPage() {
                 For questions regarding personal data or commission records, please contact our atelier directly via <Link href="/inquire" style={{ color: "#09453E", textDecoration: "underline" }}>the Atelier Inquire desk</Link> or by reaching our Hyderabad office.
               </p>
               <p style={{ fontStyle: "italic", fontSize: "0.85rem", color: "#77766E", marginTop: "1rem" }}>
-                * Note: Studio legal entity registration details, registered address, and official data protection officer contacts are subject to final studio owner confirmation prior to public launch.
+                * Note: 24 Frames legal entity registration details, registered address, and official data protection officer contacts are subject to final confirmation by the founder prior to public launch.
               </p>
             </section>
           </div>

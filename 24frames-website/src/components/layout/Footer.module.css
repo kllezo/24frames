@@ -35,7 +35,7 @@
   margin-bottom: clamp(3.5rem, 6vw, 5.5rem);
 }
 
-/* "Plan your events with" sits to the left of the signature, as tall as it. */
+/* "Plan your events with" reads as one line to the left of the signature. */
 .brandTitleBlock {
   --logo-w: clamp(220px, 32vw, 500px);
   display: flex;
@@ -45,12 +45,13 @@
 }
 
 .planLine {
-  display: grid;
-  justify-items: end;
+  display: flex;
+  align-items: baseline;
+  gap: 0.28em;
   margin: 0;
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: calc(var(--logo-w) / 4.65 * 0.52);
-  line-height: 0.98;
+  font-size: calc(var(--logo-w) / 4.65 * 0.46);
+  line-height: 1;
   font-weight: 500;
   letter-spacing: 0.005em;
   color: #09453e;
@@ -543,8 +544,14 @@
   }
 
   .brandTitleBlock {
-    --logo-w: min(280px, 44vw);
-    justify-content: flex-start;
+    --logo-w: min(300px, 72vw);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .planLine {
+    font-size: clamp(1.15rem, 5.4vw, 1.6rem);
   }
 
   .columnsGrid {

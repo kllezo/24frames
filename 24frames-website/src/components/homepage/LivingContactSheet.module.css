@@ -1500,3 +1500,22 @@
 .editorialBlock.layeredSireeshBlock { margin-bottom: 0; }
 .nishanthClosingBlock { margin-top: 0; }
 .roundedImageCanvas, .tallPortraitCanvas { border-radius: 2px; }
+
+/* Phones: the film posters carry their own title lettering, so the scrim
+   deepens towards the bottom where our words sit, and the play button
+   moves to the top corner — nothing stacks on top of anything else. */
+@media (max-width: 768px) {
+  .filmGradientScrim,
+  .nishanthGradientScrim {
+    background: linear-gradient(180deg, rgba(6, 14, 11, 0.18) 0%, rgba(6, 14, 11, 0.45) 38%, rgba(6, 14, 11, 0.86) 70%, rgba(6, 14, 11, 0.96) 100%);
+  }
+
+  .filmPlaySide {
+    top: clamp(3.25rem, 9vh, 4.5rem);
+    bottom: auto;
+  }
+
+  .filmNarrativeSide {
+    max-width: 100%;
+  }
+}

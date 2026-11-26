@@ -15,31 +15,35 @@
   background: var(--night);
 }
 
-.reelFrame {
+/* A blurred wash of the photograph fills the panel… */
+.reelWash {
   position: absolute;
-  inset: 0;
-  margin: 0;
-  opacity: 0;
-  clip-path: inset(0 0 0 100%);
-  transition: opacity 1.4s var(--ease-io), clip-path 1.6s var(--ease-io);
-}
-
-.reelFrame img {
-  width: 100%;
-  height: 100%;
+  inset: -40px;
+  width: calc(100% + 80px);
+  height: calc(100% + 80px);
   object-fit: cover;
-  transform: scale(1.14);
-  transition: transform 7s linear;
+  filter: blur(28px) saturate(1.05) brightness(0.92);
+  opacity: 0.85;
 }
 
-.reelActive {
-  opacity: 1;
-  clip-path: inset(0 0 0 0);
+/* …and the photograph itself sits centred on it, whole and still. */
+.reelStill {
+  position: absolute;
+  inset: clamp(1.25rem, 3vw, 2.5rem) clamp(2.25rem, 4vw, 3.5rem) clamp(4rem, 7vw, 5.5rem);
+  margin: 0;
+  display: grid;
+  place-items: center;
   z-index: 1;
 }
 
-.reelActive img {
-  transform: scale(1.02);
+.reelStill img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  box-shadow: 0 0 0 1px rgba(201, 167, 104, 0.55), 0 0 0 8px rgba(255, 250, 240, 0.12), 0 30px 70px -30px rgba(6, 30, 26, 0.7);
 }
 
 .reel::after {
@@ -59,10 +63,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-}
-
-.reelCounter span:first-child {
-  color: rgba(251, 245, 233, 0.75);
 }
 
 .reelCaption {
