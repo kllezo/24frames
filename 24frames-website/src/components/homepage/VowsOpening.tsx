@@ -1,4 +1,5 @@
 import Link from "next/link";
+import MobileStoryStrip from "./MobileStoryStrip";
 import s from "./VowsOpening.module.css";
 
 /* The opening of The Vows — chapter heading set to the left over a
@@ -38,6 +39,11 @@ export default function VowsOpening() {
         </div>
         <div>
           <p className={s.copy}>A grand celebration — and the quiet moments only the two of them shared.</p>
+          <MobileStoryStrip
+            images={["/images/stories/bellam-srikonda/IMG_6340-mobile.webp", "/images/stories/bellam-srikonda/IMG_6341-mobile.webp", "/images/stories/bellam-srikonda/IMG_6342-mobile.webp", "/images/stories/bellam-srikonda/IMG_6343-mobile.webp"]}
+            href="/stories/bellam-srikonda"
+            names="Bellamkonda Sai Sreenivas & Kavya Reddy"
+          />
           <Link href="/stories/bellam-srikonda" className={s.link}>
             View the story
           </Link>

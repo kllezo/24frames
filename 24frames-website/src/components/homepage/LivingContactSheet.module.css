@@ -1551,3 +1551,40 @@
     margin: 0 auto;
   }
 }
+
+/* Phones: pictures first. The long story descriptions, film excerpts and
+   handwritten asides give way to a swipeable row of extra photographs, and
+   the stories sit closer together. */
+@media (max-width: 768px) {
+  .storyDescription,
+  .filmExcerpt,
+  .nishanthExcerpt,
+  .floatingCursiveAccent,
+  .cursiveBridge {
+    display: none !important;
+  }
+
+  .editorialBlock {
+    margin-bottom: clamp(3.5rem, 9vh, 4.5rem);
+  }
+
+  .duoGridHrithika,
+  .duoGridKarthik,
+  .layeredGrid {
+    gap: 1.1rem;
+  }
+
+  .duoContentSide,
+  .sireeshContentCol {
+    gap: 0.6rem;
+  }
+
+  /* Every story opens with its main photograph on a phone. */
+  .duoGridKarthik .duoVisualSide {
+    order: -1;
+  }
+
+  .duoGridKarthik .duoContentSide {
+    padding-top: 0;
+  }
+}

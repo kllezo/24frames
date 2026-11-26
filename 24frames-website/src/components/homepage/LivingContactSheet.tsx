@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./LivingContactSheet.module.css";
 import VowsOpening from "./VowsOpening";
+import MobileStoryStrip from "./MobileStoryStrip";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -1651,6 +1652,7 @@ export default function LivingContactSheet() {
                 </Link>
               </h4>
               <p className={styles.storyDescription}>{ITEM_PROJECT_03.narrative}</p>
+              <MobileStoryStrip images={["/images/stories/hrithika-abhishek/IMG_6334-mobile.webp", "/images/stories/hrithika-abhishek/IMG_6324-mobile.webp", "/images/stories/hrithika-abhishek/IMG_6337-mobile.webp", "/images/stories/hrithika-abhishek/IMG_6338-mobile.webp"]} href={ITEM_PROJECT_03.storyUrl} names={ITEM_PROJECT_03.clientNames} />
               <Link href={ITEM_PROJECT_03.storyUrl} className={styles.btnViewStoryText}>
                 VIEW STORY <span className={styles.actionArrow}>——→</span>
               </Link>
@@ -1682,6 +1684,7 @@ export default function LivingContactSheet() {
                 </Link>
               </h4>
               <p className={styles.storyDescription}>{ITEM_PROJECT_04.narrative}</p>
+              <MobileStoryStrip images={["/images/stories/karthik-and-gayathri/IMG_6326-mobile.webp", "/images/stories/karthik-and-gayathri/IMG_6328-mobile.webp", "/images/stories/karthik-and-gayathri/IMG_6332-mobile.webp", "/images/stories/karthik-and-gayathri/IMG_6336-mobile.webp"]} href={ITEM_PROJECT_04.storyUrl} names={ITEM_PROJECT_04.clientNames} />
               <Link href={ITEM_PROJECT_04.storyUrl} className={styles.btnViewStoryText}>
                 VIEW STORY <span className={styles.actionArrow}>——→</span>
               </Link>
@@ -1822,6 +1825,7 @@ export default function LivingContactSheet() {
                 </Link>
               </h4>
               <p className={styles.storyDescription}>{ITEM_PROJECT_02.narrative}</p>
+              <MobileStoryStrip images={["/images/stories/sirish-and-harshitha/IMG_6346-mobile.webp", "/images/stories/sirish-and-harshitha/IMG_6349-mobile.webp", "/images/stories/sirish-and-harshitha/IMG_6350-mobile.webp", "/images/stories/sirish-and-harshitha/IMG_6356-mobile.webp"]} href={ITEM_PROJECT_02.storyUrl} names={ITEM_PROJECT_02.clientNames} />
               <Link href={ITEM_PROJECT_02.storyUrl} className={styles.btnViewStoryText}>
                 VIEW STORY <span className={styles.actionArrow}>——→</span>
               </Link>
