@@ -2697,7 +2697,7 @@
 }
 
 /* ============================================================
-   Frame 03 — the crew gallery (all seven at once)
+   Frame 03 — the crew gallery (every role at once)
    ============================================================ */
 
 .gallery {
@@ -5865,17 +5865,19 @@ img.overtureCrest {
   }
 }
 
-/* Casting cards: seven roles set as a 4 + 3 exhibition wall — smaller
-   cards, the shorter second row centred beneath the first. */
+/* Casting cards: six roles set as a 3 + 3 exhibition wall, the wall
+   narrowed so each card keeps the size it had in four columns. */
 .posterGrid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 18px;
+  max-width: 76%;
+  margin-inline: auto;
 }
 
 .posterGrid > .poster {
-  flex: 0 0 calc((100% - 3 * 18px) / 4);
+  flex: 0 0 calc((100% - 2 * 18px) / 3);
   aspect-ratio: 3 / 4.15;
 }
 
@@ -5913,6 +5915,9 @@ img.overtureCrest {
 }
 
 @media (max-width: 1100px) {
+  .posterGrid {
+    max-width: none;
+  }
   .posterGrid > .poster {
     flex-basis: calc((100% - 18px) / 2);
   }
@@ -6453,4 +6458,35 @@ img.overtureCrest {
   font-family: var(--sans);
   font-size: 12px;
   font-style: normal;
+}
+
+/* The plain-English role in brackets beside a studio title, e.g.
+   "Creative Artist (Candid Photographer)" — set on its own quiet line. */
+.rolePlain {
+  display: block;
+  margin-top: 0.2em;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: max(11px, 0.42em);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+/* In the composition header the bracket sits small beneath the title, and
+   every title keeps two lines' room so the portraits stay level. */
+.cmSvc span {
+  display: grid;
+  align-content: start;
+  min-height: 2.05em;
+}
+
+.cmSvc .rolePlain {
+  margin-top: 0.15em;
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+  color: var(--sage);
+  opacity: 1;
 }
