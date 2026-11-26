@@ -1,7 +1,6 @@
 "use client";
 
 import { optimised } from "../ui/optimised";
-import { useEffect, useState } from "react";
 import styles from "../stages.module.css";
 import base from "../studio.module.css";
 import { STAGES } from "../state/store";
@@ -11,48 +10,34 @@ import cx from "../cinema.module.css";
 import { coupleNames } from "@/lib/commission/model";
 import type { StageProps } from "./types";
 
-const REEL = [
-  { src: "/images/portfolio/sireesh-harshitha/cover.jpg", caption: "Sirish & Harshitha" },
-  { src: "/images/disciplines/cinema/IMG_6289.jpg", caption: "The Arches" },
-  { src: "/images/stories/hrithika-abhishek/IMG_6337.jpg", caption: "Hrithika · Haldi" },
-  { src: "/images/portfolio/hrithika-abhishek/cover.jpg", caption: "Hrithika & Abhishek" },
-];
+/* One still frame, shown whole: the photograph sits centred on a soft,
+   blurred wash of itself, so nothing is cropped and nothing moves. */
+const STILL = { src: "/images/portfolio/sireesh-harshitha/cover.jpg", caption: "Sirish & Harshitha" };
 
 const HEADLINE = ["Every", "celebration", "deserves", "its", "own", "visual", "legacy."];
 
 export default function Overture({ draft, actions, go, hasProgress }: StageProps & { hasProgress: boolean }) {
-  const [frame, setFrame] = useState(0);
   const names = coupleNames(draft.couple, "");
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = window.setInterval(() => setFrame((f) => (f + 1) % REEL.length), 5200);
-    return () => window.clearInterval(t);
-  }, []);
 
   return (
     <main className={styles.overture}>
       <div className={styles.reel} aria-hidden="true">
-        {REEL.map((r, i) => (
-          <figure key={r.src} className={`${styles.reelFrame} ${i === frame ? styles.reelActive : ""}`}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={optimised(r.src, 1200)} alt="" data-depth="-16" decoding="async" />
-          </figure>
-        ))}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className={styles.reelWash} src={optimised(STILL.src, 640)} alt="" decoding="async" />
+        <figure className={styles.reelStill}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={optimised(STILL.src, 1200)} alt="" decoding="async" fetchPriority="high" />
+        </figure>
         <div className={styles.reelCounter}>
-          <span className={base.mono}>
-            {String(frame + 1).padStart(2, "0")} / {String(REEL.length).padStart(2, "0")}
-          </span>
-          <span className={styles.reelCaption}>{REEL[frame].caption}</span>
+          <span className={styles.reelCaption}>{STILL.caption}</span>
         </div>
-        <div className={styles.sprockets} />
       </div>
 
       <section className={styles.overtureText}>
         <Motes className={cx.motes} />
-        <span className={cx.depthWrap} data-depth="10"><Crest className={cx.overtureCrest} /></span>
+        <span className={cx.depthWrap}><Crest className={cx.overtureCrest} /></span>
         <p className={base.kicker}>By private appointment · 24 Frames</p>
-        <h1 className={styles.overtureTitle} tabIndex={-1} data-depth="5">
+        <h1 className={styles.overtureTitle} tabIndex={-1}>
           {HEADLINE.map((w, i) => (
             <span key={i}>
               <span className={styles.word} style={{ animationDelay: `${180 + i * 90}ms` }}>

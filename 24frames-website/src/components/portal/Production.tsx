@@ -81,14 +81,20 @@ export default function Production({ me, config }: { me: PublicAccount; config: 
         <ol className={ix.rail} aria-label="Production stages">
           <li>
             <button className={`${ix.railStep} ${stage === "all" ? ix.railOn : ""}`} onClick={() => setStage("all")}>
-              <b>{quotes?.length ?? 0}</b>
+              <b>
+                {quotes?.length ?? 0}
+                <small>{(quotes?.length ?? 0) === 1 ? "booking" : "bookings"}</small>
+              </b>
               <span>All</span>
             </button>
           </li>
           {lanes.map((l, i) => (
             <li key={l.id}>
               <button className={`${ix.railStep} ${stage === l.id ? ix.railOn : ""} ${l.jobs.length ? ix.railBusy : ""}`} onClick={() => setStage(l.id)}>
-                <b>{l.jobs.length}</b>
+                <b>
+                  {l.jobs.length}
+                  <small>{l.jobs.length === 1 ? "booking" : "bookings"}</small>
+                </b>
                 <span>
                   {i + 1}. {l.label}
                 </span>
@@ -125,10 +131,16 @@ export default function Production({ me, config }: { me: PublicAccount; config: 
                   {firstDate(q) ? formatDateLong(firstDate(q)) : "Date TBC"} · {plural(q.draft.events.length, "occasion")}
                   {q.draft.couple.city ? ` · ${q.draft.couple.city}` : ""}
                 </span>
-                <span className={ix.progress} aria-label={`Stage ${idx + 1} of ${PRODUCTION_STEPS.length}`}>
-                  {PRODUCTION_STEPS.map((s, i) => (
-                    <i key={s.id} className={i <= idx ? ix.progressOn : ""} />
-                  ))}
+                <span className={ix.progressWrap}>
+                  <span className={ix.progressCaption} aria-hidden="true">
+                    <span>Stage {idx + 1} of {PRODUCTION_STEPS.length}</span>
+                    {idx + 1 < PRODUCTION_STEPS.length ? <span>Next · {PRODUCTION_STEPS[idx + 1].label}</span> : <span>Complete</span>}
+                  </span>
+                  <span className={ix.progress} aria-label={`Stage ${idx + 1} of ${PRODUCTION_STEPS.length}: ${PRODUCTION_LABEL[p.status]}`}>
+                    {PRODUCTION_STEPS.map((s, i) => (
+                      <i key={s.id} className={i <= idx ? ix.progressOn : ""} title={`${i + 1}. ${s.label}`} />
+                    ))}
+                  </span>
                 </span>
                 <span className={ix.jobFoot}>
                   <span>{q.managerName ? `RM · ${q.managerName}` : "No RM"}</span>

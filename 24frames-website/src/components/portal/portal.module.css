@@ -54,8 +54,9 @@
 
 /* "Plan your events with" sits to the left of the logo, as tall as it. */
 .authLockup {
-  --logo-w: min(230px, 52vw);
+  --logo-w: min(230px, 46vw);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: clamp(0.8rem, 2vw, 1.2rem);
   width: fit-content;
@@ -70,11 +71,12 @@
 }
 
 .authPlan {
-  display: grid;
-  justify-items: end;
+  display: flex;
+  align-items: baseline;
+  gap: 0.28em;
   font-family: var(--serif);
-  font-size: calc(var(--logo-w) / 4.65 * 0.52);
-  line-height: 0.98;
+  font-size: calc(var(--logo-w) / 4.65 * 0.5);
+  line-height: 1;
   font-weight: 500;
   color: var(--forest-ink, #0c3028);
   white-space: nowrap;

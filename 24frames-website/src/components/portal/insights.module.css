@@ -1264,11 +1264,23 @@
   transition: background 0.2s;
 }
 .railStep b {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
   font-family: var(--serif);
   font-size: 24px;
   font-weight: 400;
   line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
   color: var(--sage);
+}
+/* A quiet word beside each count, so "1" never reads as a letter. */
+.railStep b small {
+  font-family: var(--sans, inherit);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.7;
 }
 .railStep span {
   font-size: 11px;
@@ -1316,6 +1328,20 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 0.8rem;
+}
+.progressWrap {
+  display: grid;
+  gap: 0.35rem;
+}
+.progressCaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage);
+  opacity: 0.85;
 }
 .progress {
   display: grid;
