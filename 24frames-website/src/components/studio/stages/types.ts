@@ -1,3 +1,4 @@
+import type { Deliverable } from "@/lib/commission/deliverables";
 import type { CommissionDraft, CommissionQuote, CommissionRecord, StudioConfig } from "@/lib/commission/types";
 import type { StageId, StudioActions } from "../state/store";
 import type { ManagerCard } from "@/lib/portal/types";
@@ -24,6 +25,8 @@ export interface PortalInfo {
   initialDraft: CommissionDraft | null;
   /** Their relationship manager, once assigned. */
   manager: ManagerCard | null;
-  /** Saved changes the studio hasn't been told about yet. */
+  /** Saved changes the team hasn't been told about yet. */
   unshared: boolean;
+  /** Deliverables the sales team tailored for this couple (null = the standard list). */
+  deliverables?: Deliverable[] | null;
 }

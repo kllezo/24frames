@@ -25,7 +25,7 @@ function ClientProposal({ config, draft, quote, go, consultant, portal }: StageP
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const issuedAt = useMemo(() => new Date().toISOString(), []);
-  const { state, render } = useProposalPdf({ draft, quote, config, reference: portal!.reference, issuedAt, consultant });
+  const { state, render } = useProposalPdf({ draft, quote, config, reference: portal!.reference, issuedAt, consultant, deliverables: portal!.deliverables ?? null });
   const alreadySent = portal!.status !== "draft";
 
   async function send() {
