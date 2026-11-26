@@ -35,12 +35,15 @@
   margin-bottom: clamp(3.5rem, 6vw, 5.5rem);
 }
 
-/* "Plan your events with" reads as one line to the left of the signature. */
+/* "Plan your events with" — one large line, as tall as the 24 FRAMES
+   wordmark, resting on the same line to its left. */
 .brandTitleBlock {
-  --logo-w: clamp(220px, 32vw, 500px);
+  --logo-w: clamp(240px, 31vw, 470px);
+  flex: 1 1 auto;
   display: flex;
-  align-items: center;
-  gap: clamp(1rem, 2.2vw, 2rem);
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(1.25rem, 3vw, 3rem);
   min-width: 0;
 }
 
@@ -50,12 +53,17 @@
   gap: 0.28em;
   margin: 0;
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: calc(var(--logo-w) / 4.65 * 0.46);
-  line-height: 1;
+  font-size: calc(var(--logo-w) * 0.2);
+  line-height: 0.9;
   font-weight: 500;
-  letter-spacing: 0.005em;
+  letter-spacing: 0;
   color: #09453e;
   white-space: nowrap;
+}
+
+/* The motto already runs along the divider below, so the brand line has the row to itself. */
+.topRow .statementCol {
+  display: none;
 }
 
 .planLine em {
@@ -551,7 +559,7 @@
   }
 
   .planLine {
-    font-size: clamp(1.15rem, 5.4vw, 1.6rem);
+    font-size: clamp(1.6rem, 9vw, 2.6rem);
   }
 
   .columnsGrid {
