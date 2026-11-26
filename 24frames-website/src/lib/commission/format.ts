@@ -112,3 +112,9 @@ export function todayISO(now = new Date()): string {
 export function isPastDate(iso: string, today = todayISO()): boolean {
   return !!iso && /^\d{4}-\d{2}-\d{2}$/.test(iso) && iso < today;
 }
+
+/** Splits a role name like "Story Teller (Cinematographer)" into its title and the plain-English role in brackets. */
+export function roleParts(name: string): { title: string; plain: string | null } {
+  const m = name.match(/^(.*?)\s*\(([^()]+)\)\s*$/);
+  return m ? { title: m[1], plain: m[2] } : { title: name, plain: null };
+}

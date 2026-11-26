@@ -41,9 +41,9 @@ export default function Analytics({ me }: { me: PublicAccount }) {
       <DeskTop me={me} current="analytics" />
       <main className={qx.main}>
         <header className={ix.hero}>
-          <p className={ix.heroKicker}>Superadmin · studio analytics</p>
+          <p className={ix.heroKicker}>Superadmin · analytics</p>
           <h1 className={ix.heroTitle}>
-            The studio, <em>in numbers.</em>
+            24 Frames, <em>in numbers.</em>
           </h1>
         </header>
         {error && <p className={qx.error}>{error}</p>}

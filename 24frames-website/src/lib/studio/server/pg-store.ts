@@ -139,7 +139,7 @@ function unavailable(err: unknown): StorageUnavailableError {
   console.error("[studio] database error", err);
   const code = (err as { code?: string }).code;
   return new StorageUnavailableError(
-    `The studio database could not be reached${code ? ` (${code})` : ""}. Check DATABASE_URL.`,
+    `The database could not be reached${code ? ` (${code})` : ""}. Check DATABASE_URL.`,
   );
 }
 

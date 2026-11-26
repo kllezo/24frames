@@ -15,7 +15,7 @@ export default function AdminGate() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!pin.trim()) return setError("Enter the studio PIN.");
+    if (!pin.trim()) return setError("Enter the admin PIN.");
     setBusy(true);
     setError(null);
     const res = await fetch("/api/studio/auth", {
@@ -28,7 +28,7 @@ export default function AdminGate() {
       return;
     }
     const data = res ? await res.json().catch(() => null) : null;
-    setError(data?.error ?? "The studio server could not be reached.");
+    setError(data?.error ?? "The server could not be reached.");
     setPin("");
     setBusy(false);
   }
@@ -37,14 +37,14 @@ export default function AdminGate() {
     <main className={`${cx.cinema} ${cx.gate}`}>
       <form className={cx.gateCard} onSubmit={submit}>
         <Crest className={cx.gateCrest} />
-        <p className={styles.kicker}>Studio admin</p>
+        <p className={styles.kicker}>Admin</p>
         <h1 className={cx.gateTitle}>
           The <em>private</em> rooms
         </h1>
         <span className={cx.ornament} aria-hidden="true"><i /></span>
-        <p className={cx.gateLead}>Prices, delivery bands and every couple&apos;s records live here. Confirm the studio PIN to enter.</p>
+        <p className={cx.gateLead}>Prices, delivery bands and every couple&apos;s records live here. Confirm the admin PIN to enter.</p>
         <label className={styles.field}>
-          <span className={styles.fieldLabel}>Studio PIN</span>
+          <span className={styles.fieldLabel}>Admin PIN</span>
           <input
             className={`${styles.input} ${styles.pinInput}`}
             type="password"

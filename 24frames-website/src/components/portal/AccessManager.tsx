@@ -74,7 +74,7 @@ export default function AccessManager({ me }: { me: PublicAccount }) {
           <div>
             <p className={base.kicker}>Superadmin</p>
             <h1 className={qx.title}>
-              Who holds a key <em>to the studio desk.</em>
+              Who holds a key <em>to the team desk.</em>
             </h1>
           </div>
           <dl className={qx.stats}>

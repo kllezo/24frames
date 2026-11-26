@@ -18,7 +18,7 @@ const script = Allura({ subsets: ["latin"], weight: ["400"], variable: "--studio
 
 /* Private studio experience — never indexed, never linked publicly. */
 export const metadata: Metadata = {
-  title: "24 Frames · Private Studio",
+  title: "24 Frames · Quote Builder",
   robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
   referrer: "no-referrer",
 };

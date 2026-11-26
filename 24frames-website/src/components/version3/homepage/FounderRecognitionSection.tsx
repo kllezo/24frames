@@ -104,7 +104,7 @@ export const VERIFIED_RECOGNITIONS: VerifiedRecognition[] = [
     imageSrc: "/images/magazines/gen-next-india.webp",
     imageAlt: "GenNext-India magazine cover featuring Phani Gogireddy holding the Excellence star award",
     sourceUrl: "https://www.youtube.com/@24framesphotography",
-    sourceLabel: "Explore Studio Archive →",
+    sourceLabel: "Explore the Archive →",
     aspectRatio: "505 / 811",
   },
 ];
@@ -523,7 +523,7 @@ export default function FounderRecognitionSection({
                 Ten years and more than a thousand weddings later, across India and abroad, that belief still
                 decides every frame. I bring the light, framing and patience of Telugu cinema to real celebrations —
                 and we take the time to know your families, so that on the day it never feels like being
-                photographed. Today our team works from a 6,000 sq. ft. studio in Hyderabad.
+                photographed. Today our team works from a 6,000 sq. ft. office in Hyderabad.
               </p>
             </div>
 
@@ -671,7 +671,7 @@ export default function FounderRecognitionSection({
               <div className={styles.statDivider} aria-hidden="true" />
               <div className={styles.statBox}>
                 <span className={styles.statNumber}>6,000</span>
-                <span className={styles.statDesc}>SQ. FT. CREATIVE STUDIO</span>
+                <span className={styles.statDesc}>SQ. FT. CREATIVE OFFICE</span>
               </div>
             </div>
 

@@ -9,11 +9,11 @@ import { StorageUnavailableError } from "./repository";
 export async function requireStudio(): Promise<StudioSession | NextResponse> {
   const secret = sessionSecret();
   if (!secret) {
-    return NextResponse.json({ error: "Studio access is not configured on this server." }, { status: 503 });
+    return NextResponse.json({ error: "Access is not configured on this server." }, { status: 503 });
   }
   const store = await cookies();
   const session = await verifySession(store.get(SESSION_COOKIE)?.value, secret);
-  if (!session) return NextResponse.json({ error: "Studio session expired. Sign in again." }, { status: 401 });
+  if (!session) return NextResponse.json({ error: "Session expired. Sign in again." }, { status: 401 });
   return session;
 }
 
@@ -23,7 +23,7 @@ export async function requireAdmin(): Promise<StudioSession | NextResponse> {
   if (session instanceof NextResponse) return session;
   const store = await cookies();
   if (!(await verifyAdmin(store.get(ADMIN_COOKIE)?.value, sessionSecret()!))) {
-    return NextResponse.json({ error: "Confirm the studio PIN to use the admin.", code: "admin_required" }, { status: 403 });
+    return NextResponse.json({ error: "Confirm the admin PIN to use the admin.", code: "admin_required" }, { status: 403 });
   }
   return session;
 }
@@ -38,7 +38,7 @@ export function storageError(err: unknown) {
     return noStore(NextResponse.json({ error: err.message, code: "storage_unavailable" }, { status: 503 }));
   }
   console.error("[studio] unexpected error", err);
-  return noStore(NextResponse.json({ error: "Something went wrong on the studio server." }, { status: 500 }));
+  return noStore(NextResponse.json({ error: "Something went wrong on the server." }, { status: 500 }));
 }
 
 export async function readJson<T>(request: Request, maxBytes = 512_000): Promise<T | null> {

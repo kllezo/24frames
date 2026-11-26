@@ -344,14 +344,14 @@ export function StudioEditor({ config, setConfig }: Props) {
     <div className={styles.stack}>
       <h2 className={styles.h2}>Pricing status</h2>
       <Check
-        label="Label all prices as illustrative (turn off only once real studio prices are entered)"
+        label="Label all prices as illustrative (turn off only once real prices are entered)"
         checked={config.pricingIsIllustrative}
         onChange={(v) => setConfig({ ...config, pricingIsIllustrative: v })}
       />
 
-      <h2 className={styles.h2}>Studio contact</h2>
+      <h2 className={styles.h2}>Contact</h2>
       <div className={styles.grid}>
-        <Text label="Studio name" value={st.name} onChange={(v) => setStudio({ name: v })} />
+        <Text label="Business name" value={st.name} onChange={(v) => setStudio({ name: v })} />
         <Text label="Phone (display)" value={st.phoneDisplay} onChange={(v) => setStudio({ phoneDisplay: v })} />
         <Text label="WhatsApp number (digits with country code)" value={st.whatsappNumber} onChange={(v) => setStudio({ whatsappNumber: v.replace(/\D/g, "") })} />
         <Text label="Email" value={st.email} onChange={(v) => setStudio({ email: v })} />

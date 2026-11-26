@@ -15,7 +15,7 @@ const STEPS = [
   {
     no: "01",
     title: "We meet your people",
-    body: "Before any camera comes out, we sit down with you — at the studio or on a call — to learn your families, your rituals and the moments you can't imagine losing.",
+    body: "Before any camera comes out, we sit down with you — at our office or on a call — to learn your families, your rituals and the moments you can't imagine losing.",
     image: "/images/gallery-experience/event-wise-photos-primary.webp",
     alt: "A couple laughing together during a mehendi ceremony",
   },
@@ -155,7 +155,7 @@ export default function HomeEditorial() {
           </p>
           <p className={s.body}>
             More than a thousand weddings later, across India and abroad, that belief still decides every frame. We are
-            a bigger team now, working from a 6,000 sq. ft. studio in Hyderabad — but we still get to know your families,
+            a bigger team now, working from a 6,000 sq. ft. office in Hyderabad — but we still get to know your families,
             your rituals and the way you two move through a room, so that on the day it doesn&apos;t feel like being
             photographed. It feels like being among friends.
           </p>
@@ -171,7 +171,7 @@ export default function HomeEditorial() {
         <dl>
           <div><dt>2016</dt><dd>Founded in Hyderabad</dd></div>
           <div><dt>1,000+</dt><dd>Weddings filmed</dd></div>
-          <div><dt>6,000 sq ft</dt><dd>Studio &amp; editing suites</dd></div>
+          <div><dt>6,000 sq ft</dt><dd>Office &amp; editing suites</dd></div>
           <div><dt>India &amp; abroad</dt><dd>Wherever you celebrate</dd></div>
         </dl>
       </section>

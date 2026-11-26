@@ -120,7 +120,7 @@ export default function ArtistChapter() {
               <dd>1,000+</dd>
             </div>
             <div>
-              <dt>Studio, sq. ft.</dt>
+              <dt>Office, sq. ft.</dt>
               <dd>6,000</dd>
             </div>
           </dl>

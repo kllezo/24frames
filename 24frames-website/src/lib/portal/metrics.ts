@@ -150,7 +150,7 @@ export function studioAnalytics(
     const add = (k: string, v: number) => cat.set(k, (cat.get(k) ?? 0) + v * scale);
     for (const l of q.quote.lines) add(l.serviceName, l.lineTotal);
     add("Post-production & delivery", q.quote.postProduction.finalFee);
-    if (q.quote.chargesTotal) add("Studio charges", q.quote.chargesTotal);
+    if (q.quote.chargesTotal) add("Other charges", q.quote.chargesTotal);
     if (q.quote.tax?.amount) add("Tax", q.quote.tax.amount);
   }
   const revenueByCategory = [...cat.entries()].map(([name, value]) => ({ name, value: Math.round(value) })).sort((a, b) => b.value - a.value);

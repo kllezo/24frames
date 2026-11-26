@@ -27,7 +27,7 @@ export default function LockBar({ portal }: { portal: PortalInfo }) {
           </>
         ) : (
           <>
-            <b>The studio is finalising your quotation, so it&apos;s view-only for now.</b> You can edit it again once
+            <b>24 Frames is finalising your quotation, so it&apos;s view-only for now.</b> You can edit it again once
             it&apos;s shared with you — or ask {first ?? "your relationship manager"} for a change.
           </>
         )}

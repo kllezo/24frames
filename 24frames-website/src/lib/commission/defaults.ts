@@ -71,7 +71,7 @@ export const TIER_RENAMES: Record<string, string> = {
   "archival-180": "classic-60",
 };
 
-export const PRICING_REVISION = 3;
+export const PRICING_REVISION = 4;
 const SERVICE_PRICES_2026: Record<string, number> = {
   "traditional-photographer": 20000,
   "traditional-videographer": 20000,
@@ -175,7 +175,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     {
       id: "candid-photographer",
       order: 3,
-      name: "Creative Artist",
+      name: "Creative Artist (Candid Photographer)",
       epithet: "The Witness",
       introduction:
         "Unposed, unhurried, unseen — the photographer who catches the moments nobody planned.",
@@ -210,7 +210,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     {
       id: "candid-videographer",
       order: 4,
-      name: "Story Teller",
+      name: "Story Teller (Cinematographer)",
       epithet: "The Storyteller",
       introduction:
         "Documentary-style filmmaking that follows emotion, not the programme.",
@@ -318,7 +318,7 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
       imageAlt: "Couple embracing beneath a sweeping rose silk drape",
       postProductionGroup: "video",
       signature: true,
-      active: true,
+      active: false,
     },
     {
       id: "web-live-stream",
@@ -466,15 +466,18 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
 export const CUSTOM_EVENT_TYPE = "custom";
 
 /** Names the studio uses on its own proposals (Prem & Ravali format). */
-const SERVICE_NAMES: Record<string, { from: string; to: string }> = {
-  "traditional-photographer": { from: "Traditional Photographer", to: "Event Photographer" },
-  "traditional-videographer": { from: "Traditional Videographer", to: "Event Videographer" },
-  "candid-photographer": { from: "Candid Photographer", to: "Creative Artist" },
-  "candid-videographer": { from: "Candid Videographer", to: "Story Teller" },
-  "aerial-drone": { from: "Aerial Photography & Drone", to: "Drone" },
-  "creative-cinematography": { from: "Creative Cinematography", to: "Lead Story Teller" },
-  "web-live-stream": { from: "Web Live Stream", to: "Web Live" },
+const SERVICE_NAMES: Record<string, { from: string[]; to: string }> = {
+  "traditional-photographer": { from: ["Traditional Photographer"], to: "Event Photographer" },
+  "traditional-videographer": { from: ["Traditional Videographer"], to: "Event Videographer" },
+  "candid-photographer": { from: ["Candid Photographer", "Creative Artist"], to: "Creative Artist (Candid Photographer)" },
+  "candid-videographer": { from: ["Candid Videographer", "Story Teller"], to: "Story Teller (Cinematographer)" },
+  "aerial-drone": { from: ["Aerial Photography & Drone"], to: "Drone" },
+  "creative-cinematography": { from: ["Creative Cinematography"], to: "Lead Story Teller" },
+  "web-live-stream": { from: ["Web Live Stream"], to: "Web Live" },
 };
+
+/** Roles the studio has retired from consultations; switched off once, an admin may switch them back on. */
+const RETIRED_SERVICES = ["creative-cinematography"];
 
 /** Brings a config saved before these revisions up to date: renames roles
     that still carry their original default name, and retires the
@@ -484,33 +487,35 @@ export function reviseConfig(config: StudioConfig): StudioConfig {
     ...config,
     services: config.services.map((s) => {
       const r = SERVICE_NAMES[s.id];
-      return r && s.name === r.from ? { ...s, name: r.to } : s;
+      return r && r.from.includes(s.name) ? { ...s, name: r.to } : s;
     }),
   };
   // The Nov 2026 rate card and fixed delivery prices, applied once; later admin edits are kept.
   const rev = config.pricingRevision ?? 0;
-  // Revision 3 only changes the delivery windows (15 / 30 / 60 days); prices already set are kept.
-  if (rev === 2) {
+  let out: StudioConfig = named;
+  if (rev < 2) {
+    out = {
+      ...out,
+      pricingIsIllustrative: false,
+      studio: { ...out.studio, phoneDisplay: "+91 91606 56734", whatsappNumber: "919160656734" },
+      services: out.services.map((s) => (s.id in SERVICE_PRICES_2026 ? { ...s, price: SERVICE_PRICES_2026[s.id] } : s)),
+      deliveryTiers: DELIVERY_TIERS_2026,
+      defaultDeliveryTierId: "standard-45",
+    };
+  } else if (rev === 2) {
+    // Revision 3 only changes the delivery windows (15 / 30 / 60 days); prices already set are kept.
     const fresh = new Map(DELIVERY_TIERS_2026.map((t) => [t.id, t]));
-    return {
-      ...named,
-      pricingRevision: PRICING_REVISION,
-      deliveryTiers: named.deliveryTiers.map((t) => {
+    out = {
+      ...out,
+      deliveryTiers: out.deliveryTiers.map((t) => {
         const f = fresh.get(t.id);
         return f ? { ...t, label: f.label, window: f.window, days: f.days, expectations: f.expectations } : t;
       }),
     };
   }
-  if (rev < PRICING_REVISION) {
-    return {
-      ...named,
-      pricingRevision: PRICING_REVISION,
-      pricingIsIllustrative: false,
-      studio: { ...named.studio, phoneDisplay: "+91 91606 56734", whatsappNumber: "919160656734" },
-      services: named.services.map((s) => (s.id in SERVICE_PRICES_2026 ? { ...s, price: SERVICE_PRICES_2026[s.id] } : s)),
-      deliveryTiers: DELIVERY_TIERS_2026,
-      defaultDeliveryTierId: "standard-45",
-    };
+  // Revision 4 retires the Lead Story Teller from the crew and the composition.
+  if (rev < 4) {
+    out = { ...out, services: out.services.map((s) => (RETIRED_SERVICES.includes(s.id) ? { ...s, active: false } : s)) };
   }
-  return named;
+  return rev < PRICING_REVISION ? { ...out, pricingRevision: PRICING_REVISION } : out;
 }

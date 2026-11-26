@@ -8,14 +8,16 @@ import cx from "../cinema.module.css";
 import st from "../stages.module.css";
 import base from "../studio.module.css";
 import { StageFooter, StageHeader } from "./StageChrome";
-import { roman } from "@/lib/commission/format";
+import { roleParts, roman } from "@/lib/commission/format";
 import { eventDisplayName } from "@/lib/commission/model";
+
+const NUMBER_WORDS: Record<number, string> = { 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten" };
 import { storyFor } from "@/lib/commission/stories";
 import type { StageProps } from "./types";
 
 /* Frame 03 — the crew on a single screen. A name on the left brings
    that person forward on the right; nothing to scroll through. */
-/* Frame 03 — the crew as medallions on a gilded orbit. The seven
+/* Frame 04 — the crew as medallions on a gilded orbit. The
    portraits sit around a fine gold circle; the chosen one rests at the
    crown, enlarged and in colour, and its story is set inside the orbit
    like the words on a crest. Tap a medallion, swipe, or use the arrows:
@@ -216,7 +218,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
           frame="04"
           kicker="Frame 04 · The Crew"
           title={<>Know your crew <em>before you choose.</em></>}
-          lead="Seven kinds of photographers and filmmakers, each seeing your day differently. Understand what each one brings — then pick who joins every occasion."
+          lead={`${NUMBER_WORDS[need] ?? need} kinds of photographers and filmmakers, each seeing your day differently. Understand what each one brings — then pick who joins every occasion.`}
         />
         <div className={cx.crewGate} aria-live="polite">
           {seen.size >= need ? (
@@ -313,7 +315,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
           <div className={cx.medInfo}>
             <div key={svc.id} className={cx.medInfoBody} aria-live="polite">
               <p className={cx.fanEpithet}>{svc.epithet}</p>
-              <h2 className={cx.spotName}>{svc.name}</h2>
+              <h2 className={cx.spotName}>{roleParts(svc.name).title}{roleParts(svc.name).plain && <small className={cx.rolePlain}>({roleParts(svc.name).plain})</small>}</h2>
               <p className={cx.spotIntro}>{svc.introduction}</p>
               {occasions.length > 0 && (
                 <ul className={cx.spotAt}>
@@ -342,7 +344,7 @@ export default function CrewStage({ config, draft, go }: StageProps) {
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 6l6 6-6 6" /></svg>
                 </button>
               ) : (
-                <p className={cx.medCtaNote}>Meet all seven to choose your crew · {seen.size} of {need}</p>
+                <p className={cx.medCtaNote}>Meet all {(NUMBER_WORDS[need] ?? String(need)).toLowerCase()} to choose your crew · {seen.size} of {need}</p>
               )}
             </div>
           </div>

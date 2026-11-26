@@ -50,7 +50,7 @@ export default function DeskTop({ me, current }: { me: PublicAccount; current: D
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className={qx.logo} src="/images/logo-dark-header.png" alt="24 Frames" />
       </Link>
-      <nav className={`${px.deskNav} ${ix.nav}`} aria-label="Studio desk">
+      <nav className={`${px.deskNav} ${ix.nav}`} aria-label="Team desk">
         {main.map((l) => (
           <a
             key={l.id}

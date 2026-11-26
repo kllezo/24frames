@@ -88,7 +88,7 @@ export default function PriceLinks({ me, services }: { me: PublicAccount; servic
           </h1>
           <p className={ix.heroLine}>
             When you know a client can invest more — or deserves a gesture — set their rates and share the link. They sign up or sign in through it and
-            are priced on that card from then on: every visit, every new quotation, every redo. They never see the studio&apos;s normal rates, and the
+            are priced on that card from then on: every visit, every new quotation, every redo. They never see the normal rates, and the
             link names nothing in its address.
           </p>
         </section>

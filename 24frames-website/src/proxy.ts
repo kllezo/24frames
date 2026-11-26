@@ -39,7 +39,7 @@ export async function proxy(request: NextRequest) {
 
   if (!session) {
     if (isApi) {
-      return harden(NextResponse.json({ error: "Studio session expired. Sign in again." }, { status: 401 }));
+      return harden(NextResponse.json({ error: "Session expired. Sign in again." }, { status: 401 }));
     }
     const url = request.nextUrl.clone();
     url.pathname = "/quotebuilder/login";

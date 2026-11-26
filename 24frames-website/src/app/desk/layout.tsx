@@ -3,7 +3,7 @@ import StudioLayout, { viewport as studioViewport } from "../quotebuilder/layout
 
 /* The 24 Frames portal shares the studio's fonts and theme. Never indexed. */
 export const metadata: Metadata = {
-  title: "24 Frames · Studio Desk",
+  title: "24 Frames · Team Desk",
   robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
   referrer: "no-referrer",
 };

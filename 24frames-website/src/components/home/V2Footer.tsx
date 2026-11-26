@@ -20,7 +20,7 @@ export default function V2Footer() {
             <a href="tel:+919160656734">+91 91606 56734</a>
           </div>
           <div>
-            <h3>Studio</h3>
+            <h3>Contact</h3>
             <p>Jubilee Hills, Hyderabad<br />Telangana 500033</p>
             <a href="https://maps.app.goo.gl/ttz9jqZsHW9cSJdt9" target="_blank" rel="noreferrer">View on map</a>
           </div>

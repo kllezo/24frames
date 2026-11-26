@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     ]);
 
     if (scope === "studio") {
-      if (!me.superadmin) return json({ error: "Only the superadmin sees studio analytics." }, 403);
+      if (!me.superadmin) return json({ error: "Only the superadmin sees these analytics." }, 403);
       return json({ analytics: studioAnalytics(quotes, clients, staff, followups, settings, today), settings });
     }
 

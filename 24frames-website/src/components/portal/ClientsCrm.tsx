@@ -117,7 +117,7 @@ export default function ClientsCrm({ me, config }: { me: PublicAccount; config: 
           </h1>
           <p className={ix.heroLine}>
             {isOwner
-              ? "Every lead in the studio. Choose a client to open their quotations, set custom rates or plan a follow-up."
+              ? "Every lead at 24 Frames. Choose a client to open their quotations, set custom rates or plan a follow-up."
               : "Your leads (and unassigned ones). Choose a client to open their quotations, set custom rates or plan a follow-up."}
           </p>
         </section>

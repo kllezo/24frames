@@ -13,7 +13,7 @@ import { scrollToElement } from "../ui/scroll";
 import { flyToFolio } from "../ui/fly";
 import IllustrativeTag from "../ui/IllustrativeTag";
 import AnimatedNumber from "../ui/AnimatedNumber";
-import { formatDateLong, formatINR, groupIndian, plural, roman } from "@/lib/commission/format";
+import { formatDateLong, formatINR, groupIndian, plural, roleParts, roman } from "@/lib/commission/format";
 import { occasionImage, occasionLine, storyFor } from "@/lib/commission/stories";
 import { eventDisplayName, getAssignment } from "@/lib/commission/model";
 import { guidanceFor, type EventGuidance } from "@/lib/commission/recommendations";
@@ -148,7 +148,7 @@ export default function EnsembleStage(props: StageProps) {
                   {q > 0 && <span className={cx.posterCount} aria-hidden="true">×{q}</span>}
                   <div className={cx.posterBody}>
                     <h3 className={cx.posterName}>
-                      <button className={cx.posterNameBtn} onClick={() => setDossier(s.id)} aria-label={`${s.name} — full profile`}>{s.name}</button>
+                      <button className={cx.posterNameBtn} onClick={() => setDossier(s.id)} aria-label={`${s.name} — full profile`}>{roleParts(s.name).title}{roleParts(s.name).plain && <small className={cx.rolePlain}>({roleParts(s.name).plain})</small>}</button>
                     </h3>
                     <p className={cx.posterLine}>{story?.headline ?? s.introduction}</p>
                     {sug && sug.quantity !== q && (
@@ -298,7 +298,7 @@ function Matrix({
                 <button className={cx.cmSvc} onClick={() => onOpen(s.id)} title={`${s.name} — full profile`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={optimised(s.image, 256)} alt="" loading="lazy" decoding="async" />
-                  <span>{short(s.name)}</span>
+                  <span>{short(roleParts(s.name).title)}{roleParts(s.name).plain && <small className={cx.rolePlain}>({short(roleParts(s.name).plain ?? "")})</small>}</span>
                   <small>{formatINR(s.price)}</small>
                 </button>
               </th>

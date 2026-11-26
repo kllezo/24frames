@@ -28,7 +28,7 @@ export default function TermsPage() {
             <section style={{ marginBottom: "2rem" }}>
               <h2 style={{ fontFamily: "var(--font-headline, serif)", fontSize: "1.5rem", color: "#142821", marginBottom: "0.75rem" }}>1. Bespoke Commission Scope</h2>
               <p>
-                All wedding cinematography, celebrity portraits, and cultural celebration assignments booked with 24 Frames Photography are governed by an individual bespoke Commission Agreement executed between the patron and studio management. The inquiry form on this website serves as an initial inquiry and does not constitute a confirmed contract or date reservation until formal agreement and retainer receipt.
+                All wedding cinematography, celebrity portraits, and cultural celebration assignments booked with 24 Frames Photography are governed by an individual bespoke Commission Agreement executed between the patron and 24 Frames management. The inquiry form on this website serves as an initial inquiry and does not constitute a confirmed contract or date reservation until formal agreement and retainer receipt.
               </p>
             </section>
 
@@ -42,7 +42,7 @@ export default function TermsPage() {
             <section style={{ marginBottom: "2rem" }}>
               <h2 style={{ fontFamily: "var(--font-headline, serif)", fontSize: "1.5rem", color: "#142821", marginBottom: "0.75rem" }}>3. Client License &amp; Heirloom Usage</h2>
               <p>
-                Commissioned clients receive personal heirloom reproduction rights as detailed in their specific engagement contract, allowing personal printing, framing, family distribution, and non-commercial social sharing. Commercial exploitation or licensing to third-party wedding vendors requires prior written studio authorization.
+                Commissioned clients receive personal heirloom reproduction rights as detailed in their specific engagement contract, allowing personal printing, framing, family distribution, and non-commercial social sharing. Commercial exploitation or licensing to third-party wedding vendors requires prior written authorization from 24 Frames.
               </p>
             </section>
 
