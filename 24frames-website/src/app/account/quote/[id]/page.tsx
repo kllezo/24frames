@@ -39,6 +39,7 @@ export default async function ClientQuotePage({ params }: { params: Promise<{ id
         initialDraft: q.draft,
         manager,
         unshared: view.unshared,
+        deliverables: q.deliverables ?? null,
       }}
     />
   );

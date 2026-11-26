@@ -4,5 +4,5 @@ export const STUDIO_SOCIAL_LINKS = {
   whatsapp: "https://wa.me/919160656734",
   phoneDisplay: "+91 91606 56734",
   phoneTel: "tel:+919160656734",
-  email: "hello@24framesphotography.com",
+  email: "hello@24framesphotography.in",
 };

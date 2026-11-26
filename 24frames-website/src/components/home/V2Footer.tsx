@@ -16,7 +16,7 @@ export default function V2Footer() {
         <div className={s.footCols}>
           <div>
             <h3>Contact</h3>
-            <a href="mailto:hello@24framesphotography.com">hello@24framesphotography.com</a>
+            <a href="mailto:hello@24framesphotography.in">hello@24framesphotography.in</a>
             <a href="tel:+919160656734">+91 91606 56734</a>
           </div>
           <div>

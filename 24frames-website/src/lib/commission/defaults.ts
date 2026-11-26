@@ -92,8 +92,8 @@ export const DEFAULT_STUDIO_CONFIG: StudioConfig = {
     tagline: "Cinematic wedding films & photography",
     phoneDisplay: "+91 91606 56734",
     whatsappNumber: "919160656734",
-    email: "hello@24framesphotography.com",
-    website: "24framesphotography.com",
+    email: "hello@24framesphotography.in",
+    website: "24framesphotography.in",
     instagram: "@24framesphotography_official",
     address: "Hyderabad, Telangana, India",
   },
@@ -485,6 +485,12 @@ const RETIRED_SERVICES = ["creative-cinematography"];
 export function reviseConfig(config: StudioConfig): StudioConfig {
   const named = {
     ...config,
+    // The .com address never had a mailbox; the studio's mail lives on the .in domain.
+    studio: {
+      ...config.studio,
+      ...(config.studio?.email === "hello@24framesphotography.com" ? { email: "hello@24framesphotography.in" } : {}),
+      ...(config.studio?.website === "24framesphotography.com" ? { website: "24framesphotography.in" } : {}),
+    },
     services: config.services.map((s) => {
       const r = SERVICE_NAMES[s.id];
       return r && r.from.includes(s.name) ? { ...s, name: r.to } : s;

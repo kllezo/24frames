@@ -102,7 +102,7 @@ export default function RootLayout({
                 addressCountry: "IN",
               },
               telephone: "+919160656734",
-              email: "hello@24framesphotography.com",
+              email: "hello@24framesphotography.in",
               priceRange: "$$$$",
               sameAs: [
                 "https://www.instagram.com/24framesphotography_official/",

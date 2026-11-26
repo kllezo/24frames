@@ -72,7 +72,7 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
             </div>
             <div className={styles.colContent}>
               <a
-                href="mailto:hello@24framesphotography.com"
+                href="mailto:hello@24framesphotography.in"
                 className={styles.emailBigLink}
               >
                 <span>Email</span>
@@ -81,10 +81,10 @@ export default function Footer({ hideCommissionCta = false }: FooterProps) {
                 </span>
               </a>
               <a
-                href="mailto:hello@24framesphotography.com"
+                href="mailto:hello@24framesphotography.in"
                 className={styles.contactEmail}
               >
-                hello@24framesphotography.com
+                hello@24framesphotography.in
               </a>
               <a href="tel:+919160656734" className={styles.contactPhone}>
                 +91 91606 56734
