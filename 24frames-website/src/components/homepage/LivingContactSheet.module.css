@@ -1559,6 +1559,7 @@
   .storyDescription,
   .filmExcerpt,
   .nishanthExcerpt,
+  .nishanthFilmLabelGroup,
   .floatingCursiveAccent,
   .cursiveBridge {
     display: none !important;
