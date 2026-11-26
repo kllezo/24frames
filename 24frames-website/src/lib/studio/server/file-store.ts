@@ -117,7 +117,7 @@ async function load(): Promise<Database> {
     return { ...emptyDb(), ...(JSON.parse(raw) as Database) };
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code === "ENOENT") return emptyDb();
-    throw new StorageUnavailableError(`Studio records could not be read: ${(err as Error).message}`);
+    throw new StorageUnavailableError(`Records could not be read: ${(err as Error).message}`);
   }
 }
 
@@ -129,7 +129,7 @@ async function save(db: Database): Promise<void> {
     await fs.rename(tmp, dbFile());
   } catch (err) {
     throw new StorageUnavailableError(
-      `Studio records could not be saved (${(err as NodeJS.ErrnoException).code ?? "error"}). ` +
+      `Records could not be saved (${(err as NodeJS.ErrnoException).code ?? "error"}). ` +
         "Configure a writable STUDIO_DATA_DIR or a database adapter.",
     );
   }

@@ -40,7 +40,7 @@ export async function POST(request: Request) {
         NextResponse.json(
           {
             error:
-              "Studio pricing changed during this consultation. The estimate has been refreshed — please review it before submitting.",
+              "Pricing changed during this consultation. The estimate has been refreshed — please review it before submitting.",
             code: "pricing_changed",
             config,
           },

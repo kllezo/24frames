@@ -31,7 +31,7 @@ export async function POST(request: Request) {
   if (!configured()) {
     return noStore(
       NextResponse.json(
-        { error: "WhatsApp Business Cloud API is not configured for this studio.", code: "not_configured" },
+        { error: "WhatsApp Business Cloud API is not configured yet.", code: "not_configured" },
         { status: 501 },
       ),
     );

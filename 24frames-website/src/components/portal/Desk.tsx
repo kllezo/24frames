@@ -76,7 +76,7 @@ const MORE_TABS = TABS.filter((t) => t.id === "returned" || t.id === "lost" || t
 const ACTION_LABEL: Record<string, string> = {
   created: "Started the quotation",
   saved: "Saved",
-  submitted: "Sent it to the studio",
+  submitted: "Sent it to 24 Frames",
   revised: "Revised the selections",
   priced: "Set the price",
   sent_for_approval: "Sent to the founder for approval",
@@ -85,7 +85,7 @@ const ACTION_LABEL: Record<string, string> = {
   forwarded: "Shared the quotation with the client",
   accepted: "Accepted the quotation",
   note: "Added a note",
-  update_shared: "Sent an update to the studio",
+  update_shared: "Sent an update to 24 Frames",
   change_requested: "Asked to change the quotation",
   reopened: "Reopened the quotation for changes",
   assigned: "Relationship manager set to",
@@ -426,7 +426,7 @@ export function Detail({
       <section className={px.pricePanel}>
         <div className={px.priceRow}>
           <div>
-            <span className={px.priceLabel}>Studio estimate</span>
+            <span className={px.priceLabel}>Builder estimate</span>
             <span className={px.priceValue}>{formatINR(estimate)}</span>
           </div>
           <div>
@@ -946,7 +946,7 @@ function DeliverablesEditor({
               + Add a deliverable
             </button>
             <button type="button" className={px.nudge} onClick={() => setRows(DEFAULT_DELIVERABLES)}>
-              Reset to the studio standard
+              Reset to the standard list
             </button>
             <span className={dx.count}>{rows.length} / {MAX_DELIVERABLES}</span>
           </div>

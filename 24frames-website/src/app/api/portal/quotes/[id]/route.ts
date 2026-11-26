@@ -149,8 +149,10 @@ export async function POST(request: Request, ctx: Ctx) {
     });
     if (result === null) return json({ error: "Quotation not found." }, 404);
     if (result instanceof Error) return json({ error: result.message }, 409);
-    if ((action.type === "accept" || action.type === "confirm_booking") && result.managerId && result.managerId !== me.id) {
-      await notify([result.managerId], "booking", `${result.clientName}'s booking (${result.reference}) is confirmed — the production brief is ready.`, {
+    if (action.type === "accept" || action.type === "confirm_booking") {
+      // A confirmed booking reaches the relationship manager and the founder (even when no manager is assigned).
+      const owners = (await listAccounts()).filter((a) => a.role === "owner" && a.active).map((a) => a.id);
+      await notify([result.managerId, ...owners].filter((id) => id && id !== me.id), "booking", `${result.clientName}'s booking (${result.reference}) is confirmed — the production brief is ready.`, {
         quoteId: result.id,
         clientId: result.clientId,
       });

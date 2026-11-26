@@ -57,7 +57,8 @@ export function sameOrigin(request: Request): boolean {
   if (!origin) return true;
   try {
     const host = new URL(origin).host;
-    return host === new URL(request.url).host || host === request.headers.get("x-forwarded-host");
+    const forwarded = (request.headers.get("x-forwarded-host") ?? "").split(",").map((h) => h.trim());
+    return host === new URL(request.url).host || host === request.headers.get("host") || forwarded.includes(host);
   } catch {
     return false;
   }

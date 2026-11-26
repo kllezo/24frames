@@ -14,7 +14,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "records", label: "Commission records" },
   { id: "services", label: "Creative services" },
   { id: "post", label: "Post-production & delivery" },
-  { id: "studio", label: "Studio & proposal" },
+  { id: "studio", label: "Business & proposal" },
 ];
 
 export default function StudioAdmin({
@@ -68,7 +68,7 @@ export default function StudioAdmin({
   }
 
   async function resetDefaults() {
-    if (!window.confirm("Replace the entire studio configuration with the illustrative demo defaults?")) return;
+    if (!window.confirm("Replace the entire configuration with the illustrative demo defaults?")) return;
     setBusy(true);
     const res = await fetch("/api/studio/config/reset", { method: "POST" }).catch(() => null);
     if (res?.status === 403) { window.location.reload(); return; }
@@ -89,7 +89,7 @@ export default function StudioAdmin({
       <header className={styles.head}>
         <div>
           <a className={base.btnText} href="/quotebuilder" data-no-transition>← Back to the consultation</a>
-          <p className={base.kicker}>Studio administration</p>
+          <p className={base.kicker}>Administration</p>
           <h1 className={styles.title}>The atelier ledger</h1>
           <p className={styles.meta}>
             Signed in as {consultant} · Configuration v{saved.version}

@@ -63,7 +63,7 @@ export default function PrivacyPage() {
             <section style={{ marginBottom: "2rem" }}>
               <h2 style={{ fontFamily: "var(--font-headline, serif)", fontSize: "1.5rem", color: "#142821", marginBottom: "0.75rem" }}>6. Contact &amp; Verification</h2>
               <p>
-                For questions regarding personal data or commission records, please contact our atelier directly via <Link href="/inquire" style={{ color: "#09453E", textDecoration: "underline" }}>the Atelier Inquire desk</Link> or by reaching our Hyderabad studio.
+                For questions regarding personal data or commission records, please contact our atelier directly via <Link href="/inquire" style={{ color: "#09453E", textDecoration: "underline" }}>the Atelier Inquire desk</Link> or by reaching our Hyderabad office.
               </p>
               <p style={{ fontStyle: "italic", fontSize: "0.85rem", color: "#77766E", marginTop: "1rem" }}>
                 * Note: Studio legal entity registration details, registered address, and official data protection officer contacts are subject to final studio owner confirmation prior to public launch.
