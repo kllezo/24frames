@@ -157,6 +157,7 @@ export default function FounderRecognitionSection({
   const scrollTrack = useCallback((direction: "left" | "right") => {
     if (!carouselTrackRef.current) return;
     const offset = direction === "left" ? -260 : 260;
+    archiveHoldUntilRef.current = Date.now() + 2500; // let the arrow's glide finish before drifting again
     carouselTrackRef.current.scrollBy({ left: offset, behavior: "smooth" });
   }, []);
 
@@ -174,10 +175,12 @@ export default function FounderRecognitionSection({
     };
   }, [updateScrollState]);
 
-  /* ── The Verified Archive drifts on its own: one card every few seconds,
-        pausing while the visitor hovers, touches, has a proof open, or the
-        panel is off screen; loops back to the first card at the end. ── */
+  /* ── The Verified Archive glides on its own: a slow, continuous drift
+        over a doubled row of cards, so it loops without a jump. It pauses
+        while the visitor hovers, touches, uses the arrows, has a proof
+        open, or the panel is off screen. ── */
   const archivePausedRef = useRef(false);
+  const archiveHoldUntilRef = useRef(0);
   useEffect(() => {
     archivePausedRef.current = activeItem !== null;
   }, [activeItem]);
@@ -186,33 +189,51 @@ export default function FounderRecognitionSection({
     if (!track) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    const SPEED = 28; // pixels per second — slow enough to read as it passes
     let hovering = false;
     let visible = false;
-    let resumeAt = 0;
+    let pos = track.scrollLeft;
+    let applied = track.scrollLeft;
+    let last = performance.now();
+    let raf = 0;
     const pause = () => { hovering = true; };
-    const resume = () => { hovering = false; resumeAt = Date.now() + 2500; };
-    const onTouch = () => { resumeAt = Date.now() + 6000; };
+    const resume = () => { hovering = false; archiveHoldUntilRef.current = Date.now() + 1200; };
+    const onTouch = () => { archiveHoldUntilRef.current = Date.now() + 5000; };
     track.addEventListener("pointerenter", pause);
     track.addEventListener("pointerleave", resume);
     track.addEventListener("focusin", pause);
     track.addEventListener("focusout", resume);
     track.addEventListener("touchstart", onTouch, { passive: true });
 
-    const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0.35 });
+    const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0.2 });
     io.observe(track);
 
-    const timer = window.setInterval(() => {
-      if (!visible || hovering || archivePausedRef.current || Date.now() < resumeAt) return;
-      const card = track.firstElementChild as HTMLElement | null;
-      const gap = parseFloat(getComputedStyle(track).columnGap || "0") || 0;
-      const stepPx = (card?.offsetWidth ?? 260) + gap;
-      const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 6;
-      track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + stepPx, behavior: "smooth" });
-    }, 3200);
+    const step = (now: number) => {
+      const dt = Math.min(0.25, (now - last) / 1000); // steady speed even when frames arrive slowly
+      last = now;
+      const held = !visible || hovering || archivePausedRef.current || Date.now() < archiveHoldUntilRef.current;
+      // The visitor (or an arrow) moved the row: carry on from where it is now.
+      // (Compared with the whole pixel we last set, since browsers round scrollLeft.)
+      if (Math.abs(track.scrollLeft - applied) > 2) pos = applied = track.scrollLeft;
+      if (!held) {
+        const half = track.scrollWidth / 2;
+        pos += SPEED * dt;
+        if (half > track.clientWidth && pos >= half) pos -= half;
+        const next = Math.round(pos);
+        if (next !== applied) {
+          track.style.scrollBehavior = "auto";
+          track.scrollLeft = next;
+          applied = track.scrollLeft;
+        }
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
 
     return () => {
-      window.clearInterval(timer);
+      cancelAnimationFrame(raf);
       io.disconnect();
+      track.style.scrollBehavior = "";
       track.removeEventListener("pointerenter", pause);
       track.removeEventListener("pointerleave", resume);
       track.removeEventListener("focusin", pause);
@@ -558,11 +579,15 @@ export default function FounderRecognitionSection({
                   ref={carouselTrackRef}
                   className={styles.carouselTrack}
                 >
-                  {VERIFIED_RECOGNITIONS.map((item, idx) => (
+                  {[...VERIFIED_RECOGNITIONS, ...VERIFIED_RECOGNITIONS].map((item, n) => {
+                    const idx = n % VERIFIED_RECOGNITIONS.length;
+                    const clone = n >= VERIFIED_RECOGNITIONS.length; // the second row, there only so the glide loops seamlessly
+                    return (
                     <div
-                      key={item.id}
+                      key={`${item.id}${clone ? "-loop" : ""}`}
+                      aria-hidden={clone || undefined}
                       ref={(el) => {
-                        triggerRefs.current[item.id] = el;
+                        if (!clone) triggerRefs.current[item.id] = el;
                       }}
                       className={styles.magazineCard}
                       onClick={() => handleOpenItem(item)}
@@ -573,7 +598,7 @@ export default function FounderRecognitionSection({
                         }
                       }}
                       role="button"
-                      tabIndex={0}
+                      tabIndex={clone ? -1 : 0}
                       aria-haspopup="dialog"
                       aria-label={`View evidence for ${item.milestoneTitle}`}
                     >
@@ -614,7 +639,8 @@ export default function FounderRecognitionSection({
                         </div>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 

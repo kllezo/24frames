@@ -12,20 +12,22 @@ import type { PlanningService } from "@/lib/commission/planning";
    card beside the flower. Opening also glides the page so the flower
    sits in the middle of the screen. */
 
-/* A lotus petal: narrow at the heart, full through the body, drawn to a soft point. */
+/* A lotus petal: a slender almond, narrow at the heart and drawn to a fine point. */
 const PETAL =
-  "M0,0 C-48,-16 -124,-82 -124,-160 C-124,-226 -66,-262 -26,-286 C-12,-294 -4,-304 0,-318 C4,-304 12,-294 26,-286 C66,-262 124,-226 124,-160 C124,-82 48,-16 0,0 Z";
-/* The fine midrib and two side veins that make a petal read as a petal. */
-const VEINS = "M0,-14 C-2,-120 -2,-220 0,-300 M0,-40 C-30,-110 -46,-190 -40,-260 M0,-40 C30,-110 46,-190 40,-260";
+  "M0,0 C-38,-34 -98,-112 -98,-192 C-98,-262 -44,-306 0,-340 C44,-306 98,-262 98,-192 C98,-112 38,-34 0,0 Z";
+/* The fine midrib and side veins that make a petal read as a petal. */
+const VEINS = "M0,-18 C-1,-130 -1,-240 0,-326 M0,-46 C-26,-120 -40,-200 -34,-280 M0,-46 C26,-120 40,-200 34,-280";
+/* Gold stamens ringing the heart, between the seal and the petals. */
+const STAMENS = Array.from({ length: 36 }, (_, i) => (i * 360) / 36);
 
 /* A full ring: the first petal points straight up, the rest evenly round. */
 const anglesFor = (n: number) => Array.from({ length: Math.max(n, 1) }, (_, k) => 270 + (k * 360) / Math.max(n, 1));
 const OPEN_SECONDS = 2.9;
-const BASE = 150; // ivory petal base distance from the centre (viewBox units), just outside the shrunk heart
-const OUTER_BASE = 132; // the blush petals start a little further in, behind
-const OUTER_SCALE = 1.1; // and reach further out, so their tips frame the ivory ring
-const DISC_Y = 168; // the logo disc sits at the widest part of the petal
-const R = 92; // logo disc radius
+const BASE = 146; // ivory petal base distance from the centre (viewBox units), just outside the shrunk heart
+const OUTER_BASE = 128; // the blush petals start a little further in, behind
+const OUTER_SCALE = 1.06; // and reach further out, so their tips frame the ivory ring
+const DISC_Y = 196; // the logo medallion sits at the widest part of the petal
+const R = 72; // logo medallion radius — a jewel on the petal, not a plate
 
 /** "Lakefront venues" → "Lv"; "Farmhouses" → "F". */
 const monogram = (name: string) =>
@@ -143,26 +145,27 @@ export default function PartnerBloom({
     <div ref={root} className={`${px.bloom} ${open ? px.bloomOpen : ""}`}>
       <svg className={px.flower} viewBox="-500 -500 1000 1000" aria-hidden="true">
         <defs>
-          {/* Ivory petal: warm champagne at the heart, pearl through the body, the faintest blush at the tip. */}
-          <linearGradient id={`pf${uid}`} x1="0" y1="0" x2="0" y2="-318" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stopColor="#ecd7a8" />
-            <stop offset=".22" stopColor="#f7ebd2" />
-            <stop offset=".6" stopColor="#fffaf1" />
-            <stop offset=".92" stopColor="#fdf3ec" />
-            <stop offset="1" stopColor="#f7e3dc" />
+          {/* Ivory petal: warm champagne at the heart, pearl through the body, a natural lotus blush at the tip. */}
+          <linearGradient id={`pf${uid}`} x1="0" y1="0" x2="0" y2="-340" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stopColor="#efdcb4" />
+            <stop offset=".2" stopColor="#f9efdc" />
+            <stop offset=".55" stopColor="#fffbf4" />
+            <stop offset=".8" stopColor="#fdf1ec" />
+            <stop offset=".93" stopColor="#f6d6d6" />
+            <stop offset="1" stopColor="#eab3bb" />
           </linearGradient>
-          {/* Blush petal: pale at the heart, deepening to a rose tip, like a real lotus. */}
-          <linearGradient id={`pb${uid}`} x1="0" y1="0" x2="0" y2="-318" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stopColor="#fbeee6" />
-            <stop offset=".35" stopColor="#f6d5d2" />
-            <stop offset=".75" stopColor="#eaaab4" />
-            <stop offset="1" stopColor="#d9848f" />
+          {/* Blush petal: pale at the heart, deepening to a rose tip. */}
+          <linearGradient id={`pb${uid}`} x1="0" y1="0" x2="0" y2="-340" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stopColor="#fbefe9" />
+            <stop offset=".4" stopColor="#f5d4d3" />
+            <stop offset=".78" stopColor="#e8a8b2" />
+            <stop offset="1" stopColor="#d4818e" />
           </linearGradient>
-          {/* Side light across each petal, so it reads as curved, not flat. */}
-          <linearGradient id={`pl${uid}`} x1="-124" y1="0" x2="124" y2="0" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stopColor="#fff" stopOpacity=".55" />
-            <stop offset=".45" stopColor="#fff" stopOpacity="0" />
-            <stop offset="1" stopColor="#7a4a3a" stopOpacity=".08" />
+          {/* Side light across each petal, so it reads as gently cupped, not flat. */}
+          <linearGradient id={`pl${uid}`} x1="-98" y1="0" x2="98" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stopColor="#fff" stopOpacity=".6" />
+            <stop offset=".42" stopColor="#fff" stopOpacity="0" />
+            <stop offset="1" stopColor="#7a4a3a" stopOpacity=".07" />
           </linearGradient>
           <linearGradient id={`pe${uid}`} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0" stopColor="#ecd29c" />
@@ -180,10 +183,10 @@ export default function PartnerBloom({
             <stop offset="1" stopColor="#dfc79a" />
           </radialGradient>
           <filter id={`sh${uid}`} x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="10" stdDeviation="11" floodColor="#6b5530" floodOpacity=".2" />
+            <feDropShadow dx="0" dy="6" stdDeviation="8" floodColor="#6b5530" floodOpacity=".14" />
           </filter>
           <filter id={`so${uid}`} x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="6" stdDeviation="9" floodColor="#a0606a" floodOpacity=".16" />
+            <feDropShadow dx="0" dy="4" stdDeviation="7" floodColor="#a0606a" floodOpacity=".12" />
           </filter>
         </defs>
         <circle className={px.halo} r="490" fill={`url(#pg${uid})`} />
@@ -191,7 +194,7 @@ export default function PartnerBloom({
         {/* The outer ring: large blush petals, opening first, behind. */}
         {[...service.partners.keys()].map((k) => (
           <g key={`o${k}`} ref={(n) => void (outers.current[k] = n)} style={{ opacity: 0 }}>
-            <path d={PETAL} fill={`url(#pb${uid})`} stroke="#dba3aa" strokeWidth="1.4" filter={`url(#so${uid})`} />
+            <path d={PETAL} fill={`url(#pb${uid})`} stroke="#d99aa4" strokeWidth="1" filter={`url(#so${uid})`} />
             <path d={PETAL} fill={`url(#pl${uid})`} />
             <path d={VEINS} fill="none" stroke="#c97f8b" strokeWidth="1.3" strokeLinecap="round" opacity=".28" />
           </g>
@@ -209,10 +212,10 @@ export default function PartnerBloom({
               className={`${pickable ? px.petalPick : ""} ${selected === k ? px.petalOn : ""}`}
               onClick={pickable ? () => onPick!(k) : undefined}
             >
-              <path d={PETAL} fill={`url(#pf${uid})`} stroke={`url(#pe${uid})`} strokeWidth="2.2" filter={`url(#sh${uid})`} />
+              <path d={PETAL} fill={`url(#pf${uid})`} stroke={`url(#pe${uid})`} strokeWidth="1.4" filter={`url(#sh${uid})`} />
               <path d={PETAL} fill={`url(#pl${uid})`} />
               <path d={VEINS} fill="none" stroke="#c9a768" strokeWidth="1.1" strokeLinecap="round" opacity=".22" />
-              {selected === k && <path d={PETAL} fill="none" stroke="#b8904c" strokeWidth="5" opacity=".85" />}
+              {selected === k && <path d={PETAL} fill="none" stroke="#b8904c" strokeWidth="3.5" opacity=".9" />}
               <g ref={(n) => void (labels.current[k] = n)}>
                 {/* A disc at the heart of the petal: the brand's logo, or a
                     gold monogram for partners without one. Names are listed
@@ -239,8 +242,8 @@ export default function PartnerBloom({
                         </text>
                       </>
                     )}
-                    <circle r={R} fill="none" stroke="#c9a768" strokeWidth="2.2" />
-                    <circle r={R + 7} fill="none" stroke="#e8cfa6" strokeWidth="1" />
+                    <circle r={R} fill="none" stroke="#c9a768" strokeWidth="1.6" />
+                    <circle r={R + 6} fill="none" stroke="#e3c999" strokeWidth=".8" />
                   </>
                 )}
                 {p.placeholder && (
@@ -253,6 +256,16 @@ export default function PartnerBloom({
             </g>
           );
         })}
+
+        {/* A ring of fine gold stamens around the heart — the lotus's own crown. */}
+        <g className={px.stamens}>
+          {STAMENS.map((a) => (
+            <g key={a} transform={`rotate(${a})`}>
+              <line x1="0" y1="-128" x2="0" y2={a % 20 === 0 ? -150 : -142} stroke="#c9a768" strokeWidth="1.2" strokeLinecap="round" opacity=".75" />
+              <circle cy={a % 20 === 0 ? -152 : -144} r={a % 20 === 0 ? 3.4 : 2.4} fill="#d8b46a" />
+            </g>
+          ))}
+        </g>
       </svg>
 
       <button

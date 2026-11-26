@@ -1191,3 +1191,21 @@
   text-transform: uppercase;
   color: #8a7d76;
 }
+
+/* Laptops and desktops: the portrait keeps its own 3:4 shape and is sized
+   to the screen height, so the whole photograph — wordmark to knees — is
+   always inside the frame while the column stays pinned. */
+@media (min-width: 1025px) {
+  .portraitWrap {
+    aspect-ratio: 3 / 4;
+    width: auto;
+    max-width: 100%;
+    align-self: flex-start;
+    height: clamp(300px, calc(100vh - 21rem), 533px);
+    height: clamp(300px, calc(100svh - 21rem), 533px);
+  }
+
+  .portraitImg {
+    object-position: center top;
+  }
+}

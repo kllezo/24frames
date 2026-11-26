@@ -1519,3 +1519,35 @@
     max-width: 100%;
   }
 }
+
+/* Every story photograph in the Vows shares the Hrithika & Abhishek frame:
+   4:5, up to 480px wide — Karthik & Gayathri and Sireesh & Harshitha included. */
+.duoGridKarthik {
+  grid-template-columns: 1fr minmax(320px, 480px);
+}
+
+.roundedImageCanvas,
+.tallPortraitCanvas {
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 4 / 5;
+}
+
+.duoGridKarthik .duoVisualSide,
+.layeredPortraitCol {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .duoGridKarthik {
+    grid-template-columns: 1fr;
+  }
+
+  .roundedImageCanvas,
+  .tallPortraitCanvas {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}

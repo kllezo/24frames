@@ -192,7 +192,10 @@ export default function CommissionStudio({
             {state.stage === "proposal" && <ProposalStage {...props} />}
           </main>
 
-          <Ledger config={config} draft={state.draft} quote={quote} onReview={() => go("commission")} />
+          {/* The running estimate appears once the couple starts casting the crew (Frame 05). */}
+          {stageIdx >= STAGES.findIndex((s) => s.id === "ensemble") && (
+            <Ledger config={config} draft={state.draft} quote={quote} onReview={() => go("commission")} />
+          )}
         </div>
       )}
 
