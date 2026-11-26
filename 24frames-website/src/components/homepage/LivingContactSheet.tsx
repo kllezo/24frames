@@ -9,6 +9,8 @@ import VowsOpening from "./VowsOpening";
 import MobileStoryStrip from "./MobileStoryStrip";
 
 gsap.registerPlugin(ScrollTrigger);
+// Don't re-measure every scroll animation when a phone's address bar shows or hides.
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 /* ── Content Interfaces ────────────────────────────────────────── */
 export interface GalleryProjectItem {
@@ -1330,7 +1332,20 @@ export default function LivingContactSheet() {
         });
       }
 
-
+      // Phones: no scroll-driven reveals. Each effect is set to its finished
+      // state once, so the photographs simply sit there — nothing redraws on
+      // every scroll frame or re-measures when the address bar slides away,
+      // which is what made the Vows jump on mobile.
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        ScrollTrigger.getAll().forEach((st) => {
+          const trigger = st.trigger as Node | undefined;
+          if (!trigger || !sectionRef.current?.contains(trigger)) return;
+          const anim = st.animation;
+          st.kill(false, true); // keep the animation itself, so it can be set to its end
+          anim?.progress(1);
+          anim?.kill();
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
