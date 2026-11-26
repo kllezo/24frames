@@ -127,3 +127,8 @@
   .frame img { object-position: 50% 70%; }
   .feature { grid-template-columns: 1fr; gap: 1.4rem; }
 }
+
+/* Phones: the photographs carry the featured story; the line of copy steps aside. */
+@media (max-width: 768px) {
+  .copy { display: none; }
+}

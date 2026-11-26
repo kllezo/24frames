@@ -31,7 +31,7 @@
 .halo { opacity: 0; transform: scale(0.6); transform-origin: center; transform-box: fill-box; transition: opacity 1.8s ease, transform 2.4s cubic-bezier(0.22, 1, 0.36, 1); }
 .bloomOpen .halo { opacity: 1; transform: none; animation: haloBreath 5s ease-in-out 2.4s infinite; }
 @keyframes haloBreath { 50% { opacity: 0.72; } }
-.petalMono { font-family: var(--serif, Georgia, serif); font-style: italic; font-size: 66px; fill: #a9824a; letter-spacing: 1px; }
+.petalMono { font-family: var(--serif, Georgia, serif); font-style: italic; font-size: 54px; fill: #a9824a; letter-spacing: 1px; }
 
 /* The partners, named beside the flower once it opens. */
 .partners {
@@ -127,6 +127,10 @@
   margin-top: calc(var(--D) * 0.02);
 }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* The gold stamens appear once the petals have opened. */
+.stamens { opacity: 0; transform: scale(0.85); transform-origin: center; transform-box: fill-box; transition: opacity 0.4s ease, transform 0.4s ease; }
+.bloomOpen .stamens { opacity: 1; transform: none; transition: opacity 1.2s ease 1.6s, transform 1.6s cubic-bezier(0.22, 1, 0.36, 1) 1.4s; }
 
 /* Petals you can tap once the flower is open. */
 .petalPick { pointer-events: visiblePainted; cursor: pointer; }
