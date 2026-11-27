@@ -21,7 +21,17 @@ export default function PlanningStage({ go }: StageProps) {
   // On a phone the card lands below the list, so bring it into view.
   useEffect(() => {
     if (pick === null || window.innerWidth > 820) return;
-    const t = window.setTimeout(() => document.querySelector(`.${px.card}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 80);
+    const t = window.setTimeout(() => {
+      const card = document.querySelector<HTMLElement>(`.${px.card}`);
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      const below = r.bottom + 16 - window.innerHeight;
+      if (below <= 0) return; // already in view
+      const lenis = (window as unknown as { __studioLenis?: { scrollTo: (to: number, o?: object) => void } }).__studioLenis;
+      const top = window.scrollY + Math.min(below, r.top - 72);
+      if (lenis) lenis.scrollTo(top, { duration: 0.9 });
+      else window.scrollTo({ top, behavior: "smooth" });
+    }, 80);
     return () => window.clearTimeout(t);
   }, [pick]);
   const toggle = (id: string) => {

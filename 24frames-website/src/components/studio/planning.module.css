@@ -27,8 +27,9 @@
 .rowOpen .stage { height: var(--F); }
 
 .bloom { position: absolute; inset: 0; display: grid; place-items: center; }
-.flower { position: absolute; left: 50%; top: 50%; width: var(--F); height: var(--F); transform: translate(-50%, -50%); overflow: visible; pointer-events: none; }
-.halo { opacity: 0; transform: scale(0.6); transform-origin: center; transform-box: fill-box; transition: opacity 1.8s ease, transform 2.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.flower { position: absolute; left: 50%; top: 50%; width: var(--F); height: var(--F); transform: translate(-50%, -50%); overflow: visible; pointer-events: none; will-change: transform; contain: layout style; }
+/* The warm glow behind the flower: its own layer, so its breathing never repaints the petals. */
+.halo { position: absolute; left: 50%; top: 50%; width: calc(var(--F) * 0.98); height: calc(var(--F) * 0.98); margin: calc(var(--F) * -0.49) 0 0 calc(var(--F) * -0.49); border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(246, 220, 160, 0.5) 0%, rgba(243, 204, 204, 0.2) 55%, rgba(243, 204, 204, 0) 100%); opacity: 0; transform: scale(0.6); will-change: opacity, transform; transition: opacity 1.8s ease, transform 2.4s cubic-bezier(0.22, 1, 0.36, 1); }
 .bloomOpen .halo { opacity: 1; transform: none; animation: haloBreath 5s ease-in-out 2.4s infinite; }
 @keyframes haloBreath { 50% { opacity: 0.72; } }
 .petalMono { font-family: var(--serif, Georgia, serif); font-style: italic; font-size: 54px; fill: #a9824a; letter-spacing: 1px; }
@@ -134,7 +135,7 @@
 
 /* Petals you can tap once the flower is open. */
 .petalPick { pointer-events: visiblePainted; cursor: pointer; }
-.petalPick:hover > path:first-child { filter: brightness(1.03); }
+.petalPick:hover > path:nth-child(2) { filter: brightness(1.03); }
 
 /* The partner's card: a photograph and a few lines, beside the flower. */
 .hint { margin: 10px 0 0; font-size: 12.5px; font-style: italic; color: var(--sage, #66716b); }

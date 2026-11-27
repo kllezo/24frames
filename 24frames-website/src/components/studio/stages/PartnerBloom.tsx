@@ -83,24 +83,74 @@ export default function PartnerBloom({
   const time = useRef(0);
 
   // Glide the page so the opened flower sits in the middle of the screen.
-  // Run again once the stage has finished growing, since the page may
-  // have been too short to reach the right spot at first.
+  // The glide is driven frame by frame and re-aims at the flower's centre on
+  // every frame, so it follows the stage as it grows (a native smooth scroll
+  // is cut short by that growth, which made the page lurch).
   useEffect(() => {
     if (!open || !root.current) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const glide = (duration: number) => {
+    const aim = () => {
       const stage = root.current?.parentElement;
-      if (!stage) return;
+      if (!stage) return window.scrollY;
+      // The stage grows to a square as wide as itself. Beside the copy (desktop)
+      // it is centred in its row, so its top edge moves while it grows: aim at
+      // where its centre will settle, not where its top happens to be now.
       const r = stage.getBoundingClientRect();
-      const finalHeight = r.width; // the stage grows to a square the size of the flower
-      const top = Math.max(0, window.scrollY + r.top + finalHeight / 2 - window.innerHeight / 2);
-      const lenis = (window as unknown as { __lenis?: { scrollTo: (to: number, o?: object) => void } }).__lenis;
-      if (lenis) lenis.scrollTo(top, { duration: reduce ? 0 : duration, immediate: reduce });
-      else window.scrollTo({ top, behavior: reduce ? "auto" : "smooth" });
+      const row = stage.parentElement;
+      const copy = row && [...row.children].find((c) => c !== stage);
+      const sideBySide = !!row && getComputedStyle(row).gridTemplateColumns.trim().split(/\s+/).length > 1;
+      const centre =
+        sideBySide && row && copy
+          ? row.getBoundingClientRect().top + Math.max(r.width, copy.getBoundingClientRect().height) / 2
+          : r.top + r.width / 2;
+      const want = window.scrollY + centre - window.innerHeight / 2;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      return Math.max(0, Math.min(want, max));
     };
-    glide(1.4);
-    const again = window.setTimeout(() => glide(0.6), 1000);
-    return () => window.clearTimeout(again);
+    // The builder runs its own Lenis; scrolling past it natively makes the two fight.
+    const lenis = (window as unknown as { __studioLenis?: { scrollTo: (to: number, o?: object) => void } }).__studioLenis;
+    const jump = (y: number) => (lenis ? lenis.scrollTo(y, { immediate: true, force: true }) : window.scrollTo(0, y));
+    if (reduce) {
+      jump(aim());
+      return;
+    }
+    const DURATION = 1300;
+    // The stage grows while we glide; without this the browser's scroll
+    // anchoring adds that growth to the scroll position and the page lurches.
+    const html = document.documentElement;
+    const anchor = html.style.overflowAnchor;
+    html.style.overflowAnchor = "none";
+    const from = window.scrollY;
+    const t0 = performance.now();
+    let raf = 0;
+    let anchorTimer = 0;
+    const stop = () => {
+      cancelAnimationFrame(raf);
+      // Hand anchoring back once the stage has finished growing.
+      window.clearTimeout(anchorTimer);
+      anchorTimer = window.setTimeout(() => (html.style.overflowAnchor = anchor), 1000);
+    };
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - t0) / DURATION);
+      const eased = 1 - Math.pow(1 - p, 3);
+      jump(from + (aim() - from) * eased);
+      if (p < 1) raf = requestAnimationFrame(tick);
+      else stop();
+    };
+    raf = requestAnimationFrame(tick);
+    // A visitor who scrolls themselves takes over at once.
+    const opts = { passive: true } as const;
+    window.addEventListener("wheel", stop, opts);
+    window.addEventListener("touchstart", stop, opts);
+    window.addEventListener("keydown", stop);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(anchorTimer);
+      html.style.overflowAnchor = anchor;
+      window.removeEventListener("wheel", stop);
+      window.removeEventListener("touchstart", stop);
+      window.removeEventListener("keydown", stop);
+    };
   }, [open]);
 
   useEffect(() => {
@@ -131,7 +181,7 @@ export default function PartnerBloom({
     let raf = 0;
     let last = performance.now();
     const step = (now: number) => {
-      const dt = (now - last) / 1000;
+      const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
       last = now;
       time.current = Math.min(OPEN_SECONDS, Math.max(0, time.current + dt * (open ? 1 : -2.6)));
       draw(time.current);
@@ -143,6 +193,7 @@ export default function PartnerBloom({
 
   return (
     <div ref={root} className={`${px.bloom} ${open ? px.bloomOpen : ""}`}>
+      <span className={px.halo} aria-hidden="true" />
       <svg className={px.flower} viewBox="-500 -500 1000 1000" aria-hidden="true">
         <defs>
           {/* Ivory petal: warm champagne at the heart, pearl through the body, a natural lotus blush at the tip. */}
@@ -172,29 +223,18 @@ export default function PartnerBloom({
             <stop offset=".5" stopColor="#b8904c" />
             <stop offset="1" stopColor="#e9cf94" />
           </linearGradient>
-          <radialGradient id={`pg${uid}`} cx=".5" cy=".5" r=".5">
-            <stop offset="0" stopColor="#f6dca0" stopOpacity=".5" />
-            <stop offset=".55" stopColor="#f3cccc" stopOpacity=".2" />
-            <stop offset="1" stopColor="#f3cccc" stopOpacity="0" />
-          </radialGradient>
           <radialGradient id={`pd${uid}`} cx=".38" cy=".32" r=".8">
             <stop offset="0" stopColor="#fffdf8" />
             <stop offset=".6" stopColor="#f3e7cd" />
             <stop offset="1" stopColor="#dfc79a" />
           </radialGradient>
-          <filter id={`sh${uid}`} x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="6" stdDeviation="8" floodColor="#6b5530" floodOpacity=".14" />
-          </filter>
-          <filter id={`so${uid}`} x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="4" stdDeviation="7" floodColor="#a0606a" floodOpacity=".12" />
-          </filter>
         </defs>
-        <circle className={px.halo} r="490" fill={`url(#pg${uid})`} />
 
         {/* The outer ring: large blush petals, opening first, behind. */}
         {[...service.partners.keys()].map((k) => (
           <g key={`o${k}`} ref={(n) => void (outers.current[k] = n)} style={{ opacity: 0 }}>
-            <path d={PETAL} fill={`url(#pb${uid})`} stroke="#d99aa4" strokeWidth="1" filter={`url(#so${uid})`} />
+            <path d={PETAL} transform="translate(0,5)" fill="#a0606a" opacity=".08" />
+            <path d={PETAL} fill={`url(#pb${uid})`} stroke="#d99aa4" strokeWidth="1" />
             <path d={PETAL} fill={`url(#pl${uid})`} />
             <path d={VEINS} fill="none" stroke="#c97f8b" strokeWidth="1.3" strokeLinecap="round" opacity=".28" />
           </g>
@@ -212,7 +252,8 @@ export default function PartnerBloom({
               className={`${pickable ? px.petalPick : ""} ${selected === k ? px.petalOn : ""}`}
               onClick={pickable ? () => onPick!(k) : undefined}
             >
-              <path d={PETAL} fill={`url(#pf${uid})`} stroke={`url(#pe${uid})`} strokeWidth="1.4" filter={`url(#sh${uid})`} />
+              <path d={PETAL} transform="translate(0,6)" fill="#6b5530" opacity=".09" />
+              <path d={PETAL} fill={`url(#pf${uid})`} stroke={`url(#pe${uid})`} strokeWidth="1.4" />
               <path d={PETAL} fill={`url(#pl${uid})`} />
               <path d={VEINS} fill="none" stroke="#c9a768" strokeWidth="1.1" strokeLinecap="round" opacity=".22" />
               {selected === k && <path d={PETAL} fill="none" stroke="#b8904c" strokeWidth="3.5" opacity=".9" />}
