@@ -7,6 +7,11 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "lenis/dist/lenis.css";
 
+// Phones fire "resize" whenever the address bar shows or hides; don't let
+// that re-measure every scroll animation in the middle of a scroll.
+gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 export default function SmoothScroll() {
   const pathname = usePathname();
   const hasScrolledDownRef = useRef(false);
@@ -185,9 +190,18 @@ export default function SmoothScroll() {
     window.addEventListener("popstate", handlePopState);
     window.addEventListener("hashchange", handlePopState);
 
-    // Handle responsive breakpoint changes
+    // Handle responsive breakpoint changes. On phones, scrolling shows and
+    // hides the address bar, which fires "resize" with only the height
+    // changed; refreshing every ScrollTrigger then re-measures the pinned
+    // hero mid-scroll and the page jumps. So refresh only when the width
+    // changes (rotation, a real window resize), once the resizing settles.
+    let lastWidth = window.innerWidth;
+    let resizeTimer = 0;
     const handleResize = () => {
-      ScrollTrigger.refresh();
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => ScrollTrigger.refresh(), 180);
     };
 
     window.addEventListener("resize", handleResize, { passive: true });
@@ -195,6 +209,7 @@ export default function SmoothScroll() {
     return () => {
       window.removeEventListener("scroll", handleScrollTopHash);
       window.removeEventListener("resize", handleResize);
+      window.clearTimeout(resizeTimer);
       window.removeEventListener("popstate", handlePopState);
       window.removeEventListener("hashchange", handlePopState);
       document.removeEventListener("click", handleAnchorClick, { capture: true });
