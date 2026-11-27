@@ -9,14 +9,14 @@ import type { PlanningService } from "@/lib/commission/planning";
    ivory petals — one per partner brand, each carrying its logo — spiral
    open in front of them, while the photograph gives way to the 24 Frames
    seal at the heart of the flower. Tapping a petal opens that partner's
-   card beside the flower. Opening also glides the page so the flower
-   sits in the middle of the screen. */
+   card beside the flower. The page keeps the flower still while it
+   opens and closes (see PlanningStage). */
 
-/* A lotus petal: a slender almond, narrow at the heart and drawn to a fine point. */
+/* A lotus petal: a slender almond with a softly rounded tip. */
 const PETAL =
-  "M0,0 C-38,-34 -98,-112 -98,-192 C-98,-262 -44,-306 0,-340 C44,-306 98,-262 98,-192 C98,-112 38,-34 0,0 Z";
+  "M0,0 C-38,-34 -98,-112 -98,-192 C-98,-262 -66,-304 -34,-326 C-14,-340 14,-340 34,-326 C66,-304 98,-262 98,-192 C98,-112 38,-34 0,0 Z";
 /* The fine midrib and side veins that make a petal read as a petal. */
-const VEINS = "M0,-18 C-1,-130 -1,-240 0,-326 M0,-46 C-26,-120 -40,-200 -34,-280 M0,-46 C26,-120 40,-200 34,-280";
+const VEINS = "M0,-18 C-1,-130 -1,-240 0,-318 M0,-46 C-26,-120 -40,-200 -34,-280 M0,-46 C26,-120 40,-200 34,-280";
 /* Gold stamens ringing the heart, between the seal and the petals. */
 const STAMENS = Array.from({ length: 36 }, (_, i) => (i * 360) / 36);
 
@@ -79,29 +79,7 @@ export default function PartnerBloom({
   const petals = useRef<(SVGGElement | null)[]>([]);
   const outers = useRef<(SVGGElement | null)[]>([]);
   const labels = useRef<(SVGGElement | null)[]>([]);
-  const root = useRef<HTMLDivElement>(null);
   const time = useRef(0);
-
-  // Glide the page so the opened flower sits in the middle of the screen.
-  // Run again once the stage has finished growing, since the page may
-  // have been too short to reach the right spot at first.
-  useEffect(() => {
-    if (!open || !root.current) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const glide = (duration: number) => {
-      const stage = root.current?.parentElement;
-      if (!stage) return;
-      const r = stage.getBoundingClientRect();
-      const finalHeight = r.width; // the stage grows to a square the size of the flower
-      const top = Math.max(0, window.scrollY + r.top + finalHeight / 2 - window.innerHeight / 2);
-      const lenis = (window as unknown as { __lenis?: { scrollTo: (to: number, o?: object) => void } }).__lenis;
-      if (lenis) lenis.scrollTo(top, { duration: reduce ? 0 : duration, immediate: reduce });
-      else window.scrollTo({ top, behavior: reduce ? "auto" : "smooth" });
-    };
-    glide(1.4);
-    const again = window.setTimeout(() => glide(0.6), 1000);
-    return () => window.clearTimeout(again);
-  }, [open]);
 
   useEffect(() => {
     const angles = anglesFor(service.partners.length);
@@ -131,7 +109,7 @@ export default function PartnerBloom({
     let raf = 0;
     let last = performance.now();
     const step = (now: number) => {
-      const dt = (now - last) / 1000;
+      const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
       last = now;
       time.current = Math.min(OPEN_SECONDS, Math.max(0, time.current + dt * (open ? 1 : -2.6)));
       draw(time.current);
@@ -142,7 +120,8 @@ export default function PartnerBloom({
   }, [open, service.partners.length]);
 
   return (
-    <div ref={root} className={`${px.bloom} ${open ? px.bloomOpen : ""}`}>
+    <div className={`${px.bloom} ${open ? px.bloomOpen : ""}`}>
+      <span className={px.halo} aria-hidden="true" />
       <svg className={px.flower} viewBox="-500 -500 1000 1000" aria-hidden="true">
         <defs>
           {/* Ivory petal: warm champagne at the heart, pearl through the body, a natural lotus blush at the tip. */}
@@ -172,29 +151,18 @@ export default function PartnerBloom({
             <stop offset=".5" stopColor="#b8904c" />
             <stop offset="1" stopColor="#e9cf94" />
           </linearGradient>
-          <radialGradient id={`pg${uid}`} cx=".5" cy=".5" r=".5">
-            <stop offset="0" stopColor="#f6dca0" stopOpacity=".5" />
-            <stop offset=".55" stopColor="#f3cccc" stopOpacity=".2" />
-            <stop offset="1" stopColor="#f3cccc" stopOpacity="0" />
-          </radialGradient>
           <radialGradient id={`pd${uid}`} cx=".38" cy=".32" r=".8">
             <stop offset="0" stopColor="#fffdf8" />
             <stop offset=".6" stopColor="#f3e7cd" />
             <stop offset="1" stopColor="#dfc79a" />
           </radialGradient>
-          <filter id={`sh${uid}`} x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="6" stdDeviation="8" floodColor="#6b5530" floodOpacity=".14" />
-          </filter>
-          <filter id={`so${uid}`} x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="4" stdDeviation="7" floodColor="#a0606a" floodOpacity=".12" />
-          </filter>
         </defs>
-        <circle className={px.halo} r="490" fill={`url(#pg${uid})`} />
 
         {/* The outer ring: large blush petals, opening first, behind. */}
         {[...service.partners.keys()].map((k) => (
           <g key={`o${k}`} ref={(n) => void (outers.current[k] = n)} style={{ opacity: 0 }}>
-            <path d={PETAL} fill={`url(#pb${uid})`} stroke="#d99aa4" strokeWidth="1" filter={`url(#so${uid})`} />
+            <path d={PETAL} transform="translate(0,5)" fill="#a0606a" opacity=".08" />
+            <path d={PETAL} fill={`url(#pb${uid})`} stroke="#d99aa4" strokeWidth="1" />
             <path d={PETAL} fill={`url(#pl${uid})`} />
             <path d={VEINS} fill="none" stroke="#c97f8b" strokeWidth="1.3" strokeLinecap="round" opacity=".28" />
           </g>
@@ -212,7 +180,8 @@ export default function PartnerBloom({
               className={`${pickable ? px.petalPick : ""} ${selected === k ? px.petalOn : ""}`}
               onClick={pickable ? () => onPick!(k) : undefined}
             >
-              <path d={PETAL} fill={`url(#pf${uid})`} stroke={`url(#pe${uid})`} strokeWidth="1.4" filter={`url(#sh${uid})`} />
+              <path d={PETAL} transform="translate(0,6)" fill="#6b5530" opacity=".09" />
+              <path d={PETAL} fill={`url(#pf${uid})`} stroke={`url(#pe${uid})`} strokeWidth="1.4" />
               <path d={PETAL} fill={`url(#pl${uid})`} />
               <path d={VEINS} fill="none" stroke="#c9a768" strokeWidth="1.1" strokeLinecap="round" opacity=".22" />
               {selected === k && <path d={PETAL} fill="none" stroke="#b8904c" strokeWidth="3.5" opacity=".9" />}

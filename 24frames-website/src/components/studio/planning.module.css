@@ -27,8 +27,9 @@
 .rowOpen .stage { height: var(--F); }
 
 .bloom { position: absolute; inset: 0; display: grid; place-items: center; }
-.flower { position: absolute; left: 50%; top: 50%; width: var(--F); height: var(--F); transform: translate(-50%, -50%); overflow: visible; pointer-events: none; }
-.halo { opacity: 0; transform: scale(0.6); transform-origin: center; transform-box: fill-box; transition: opacity 1.8s ease, transform 2.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.flower { position: absolute; left: 50%; top: 50%; width: var(--F); height: var(--F); transform: translate(-50%, -50%); overflow: visible; pointer-events: none; will-change: transform; contain: layout style; }
+/* The warm glow behind the flower: its own layer, so its breathing never repaints the petals. */
+.halo { position: absolute; left: 50%; top: 50%; width: calc(var(--F) * 0.98); height: calc(var(--F) * 0.98); margin: calc(var(--F) * -0.49) 0 0 calc(var(--F) * -0.49); border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(246, 220, 160, 0.5) 0%, rgba(243, 204, 204, 0.2) 55%, rgba(243, 204, 204, 0) 100%); opacity: 0; transform: scale(0.6); will-change: opacity, transform; transition: opacity 1.8s ease, transform 2.4s cubic-bezier(0.22, 1, 0.36, 1); }
 .bloomOpen .halo { opacity: 1; transform: none; animation: haloBreath 5s ease-in-out 2.4s infinite; }
 @keyframes haloBreath { 50% { opacity: 0.72; } }
 .petalMono { font-family: var(--serif, Georgia, serif); font-style: italic; font-size: 54px; fill: #a9824a; letter-spacing: 1px; }
@@ -134,7 +135,7 @@
 
 /* Petals you can tap once the flower is open. */
 .petalPick { pointer-events: visiblePainted; cursor: pointer; }
-.petalPick:hover > path:first-child { filter: brightness(1.03); }
+.petalPick:hover > path:nth-child(2) { filter: brightness(1.03); }
 
 /* The partner's card: a photograph and a few lines, beside the flower. */
 .hint { margin: 10px 0 0; font-size: 12.5px; font-style: italic; color: var(--sage, #66716b); }
@@ -210,3 +211,170 @@
 @media (prefers-reduced-motion: reduce) {
   .row, .stage, .core, .halo { animation: none; transition: none; }
 }
+
+/* ── The services after the lotus: each opens in its own way. ─────────── */
+.rowOpen .stage[data-v="slide"] { height: calc(var(--D) * 1.85); }
+.rowOpen .stage[data-v="fan"] { height: calc(var(--D) * 2.1); }
+.rowOpen .stage[data-v="necklace"] { height: calc(var(--D) * 2); }
+.rowOpen .stage[data-v="orbit"] { height: calc(var(--D) * 2.2); }
+
+.show .core { transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s ease; }
+.show.showOpen .core,
+.show.showOpen .core:hover { transform: translateY(calc(var(--cy) * var(--D))) scale(0.62); }
+
+/* A partner: its mark, and on tiles and cards its name. */
+.tok {
+  all: unset;
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: calc(var(--D) * 0.035);
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  transition: transform 0.45s cubic-bezier(0.55, 0, 0.45, 1), opacity 0.3s ease;
+}
+.showOpen .tok {
+  opacity: 1;
+  pointer-events: auto;
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1) var(--d), opacity 0.45s ease var(--d);
+}
+.tokSoon { cursor: default; }
+.showOpen .tokSoon { pointer-events: none; }
+.tok:focus-visible { outline: 2px solid var(--gold, #a98a52); outline-offset: 4px; }
+
+.mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: calc(var(--D) * 0.34);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle at 38% 32%, #fffdf8 0%, #f3e7cd 62%, #dfc79a 100%);
+  box-shadow: 0 0 0 1.5px #c9a768, 0 0 0 calc(var(--D) * 0.018) #fffdf8, 0 0 0 calc(var(--D) * 0.022) rgba(201, 167, 104, 0.6), 0 10px 22px -12px rgba(107, 85, 48, 0.45);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.markContain { background: #fffdf8; }
+.markContain img { width: 72%; height: 72%; object-fit: contain; }
+.markMono { font-family: var(--serif, Georgia, serif); font-style: italic; font-size: calc(var(--D) * 0.13); color: #a9824a; }
+.tokSoon .mark { opacity: 0.75; }
+.tok:not(.tokSoon):hover .mark { transform: scale(1.06); }
+.tokOn .mark { box-shadow: 0 0 0 2.5px #b8904c, 0 0 0 calc(var(--D) * 0.03) #fffdf8, 0 0 0 calc(var(--D) * 0.036) #b8904c, 0 12px 26px -12px rgba(107, 85, 48, 0.55); }
+.tokName {
+  max-width: 100%;
+  font-family: var(--serif, Georgia, serif);
+  font-size: clamp(11px, calc(var(--D) * 0.055), 15px);
+  line-height: 1.15;
+  text-align: center;
+  color: #1d2a26;
+}
+
+/* Slide: tiles slide out from behind the circle, one after another, into a row. */
+.v_slide .tok {
+  width: calc(var(--D) * 0.42);
+  height: calc(var(--D) * 0.56);
+  padding: calc(var(--D) * 0.03);
+  border-radius: calc(var(--D) * 0.05);
+  background: linear-gradient(180deg, #fffdf8, #f7eedd);
+  box-shadow: 0 0 0 1px rgba(201, 167, 104, 0.55), 0 16px 30px -18px rgba(16, 48, 42, 0.45);
+  transform: translate(-50%, -50%) translate(0, calc(var(--cy) * var(--D))) scale(0.35);
+}
+.v_slide.showOpen .tok { transform: translate(-50%, -50%) translate(calc(var(--x) * var(--D)), calc(var(--y) * var(--D))) scale(1); }
+.v_slide .mark { width: calc(var(--D) * 0.26); }
+.v_slide .tokOn { box-shadow: 0 0 0 2px #b8904c, 0 18px 32px -18px rgba(16, 48, 42, 0.5); }
+
+/* Fan: arched cards rise out of the circle and fan open above it. */
+.v_fan .tok {
+  width: calc(var(--D) * 0.42);
+  height: calc(var(--D) * 0.7);
+  padding: calc(var(--D) * 0.05) calc(var(--D) * 0.025);
+  border-radius: 50% 50% calc(var(--D) * 0.04) calc(var(--D) * 0.04) / 36% 36% calc(var(--D) * 0.04) calc(var(--D) * 0.04);
+  background: linear-gradient(180deg, #fdf3ee 0%, #fffdf8 45%, #f6ead4 100%);
+  box-shadow: 0 0 0 1px rgba(201, 167, 104, 0.6), inset 0 0 0 calc(var(--D) * 0.016) #fffdf8, inset 0 0 0 calc(var(--D) * 0.02) rgba(201, 167, 104, 0.4), 0 18px 34px -20px rgba(16, 48, 42, 0.5);
+  transform-origin: 50% calc(50% + var(--D) * 1.1);
+  transform: translate(-50%, -50%) translate(0, calc(var(--y) * var(--D) + var(--D) * 0.25)) rotate(0deg) scale(0.5);
+}
+.v_fan.showOpen .tok { transform: translate(-50%, -50%) translate(0, calc(var(--y) * var(--D))) rotate(var(--r)) scale(1); }
+.v_fan .mark { width: calc(var(--D) * 0.26); }
+.v_fan .tokOn { box-shadow: 0 0 0 2px #b8904c, inset 0 0 0 calc(var(--D) * 0.016) #fffdf8, 0 20px 36px -20px rgba(16, 48, 42, 0.55); }
+
+/* Necklace: a gold chain draws itself beneath the circle; partners drop in as pendants. */
+.chain { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.chain path {
+  stroke: #c9a768;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.5s ease;
+}
+.showOpen .chain path { stroke-dashoffset: 0; transition: stroke-dashoffset 1.2s cubic-bezier(0.45, 0, 0.2, 1) 0.1s; }
+.v_necklace .tok {
+  transform-origin: 50% -40%;
+  transform: translate(-50%, -50%) translate(calc(var(--x) * var(--D)), calc(var(--y) * var(--D) - var(--D) * 0.2)) rotate(-16deg) scale(0.6);
+}
+.v_necklace.showOpen .tok {
+  transform: translate(-50%, -50%) translate(calc(var(--x) * var(--D)), calc(var(--y) * var(--D))) rotate(0deg) scale(1);
+  transition: transform 1s cubic-bezier(0.34, 1.5, 0.5, 1) calc(var(--d) + 0.45s), opacity 0.4s ease calc(var(--d) + 0.45s);
+}
+.v_necklace .tok::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(var(--D) * -0.055);
+  width: calc(var(--D) * 0.045);
+  height: calc(var(--D) * 0.07);
+  transform: translateX(-50%);
+  border: 1.5px solid #c9a768;
+  border-radius: 40%;
+}
+
+/* Orbit: partners spiral out of the circle and settle in a ring around it. */
+.ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--D) * 1.64);
+  height: calc(var(--D) * 1.64);
+  margin: calc(var(--D) * -0.82) 0 0 calc(var(--D) * -0.82);
+  border-radius: 50%;
+  border: 1px dashed rgba(185, 144, 76, 0.55);
+  opacity: 0;
+  transform: scale(0.4) rotate(-90deg);
+  transition: opacity 0.4s ease, transform 0.6s ease;
+  pointer-events: none;
+}
+.showOpen .ring { opacity: 1; transform: none; transition: opacity 1s ease 0.2s, transform 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s; }
+.v_orbit .tok { transform: translate(-50%, -50%) rotate(calc(var(--r) - 150deg)) translateY(0) rotate(calc(150deg - var(--r))) scale(0.4); }
+.v_orbit.showOpen .tok {
+  transform: translate(-50%, -50%) rotate(var(--r)) translateY(calc(var(--D) * -0.82)) rotate(calc(-1 * var(--r))) scale(1);
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--d) * 0.6), opacity 0.5s ease calc(var(--d) * 0.6);
+}
+
+@media (max-width: 820px) {
+  .v_slide .tokName { display: none; }
+  .v_slide .tok { height: calc(var(--D) * 0.42); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tok, .showOpen .tok, .chain path, .ring { transition: none !important; }
+}
+
+/* Back from a partner's card to the list. */
+.backToList {
+  all: unset;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8a6a3c;
+}
+.backToList:hover { color: var(--forest, #0f3d35); }
+.backToList:focus-visible { outline: 2px solid var(--gold, #a98a52); outline-offset: 3px; }
