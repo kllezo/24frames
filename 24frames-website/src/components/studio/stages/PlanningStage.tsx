@@ -6,20 +6,59 @@ import styles from "../stages.module.css";
 import px from "../planning.module.css";
 import { StageFooter, StageHeader } from "./StageChrome";
 import PartnerBloom from "./PartnerBloom";
-import PartnerShowcase, { type ShowcaseVariant } from "./PartnerShowcase";
 import { PLANNING_SERVICES } from "@/lib/commission/planning";
 import type { StageProps } from "./types";
 
-/* The first service blooms as the lotus; each one after it opens in its own way. */
-const VARIANT: Record<string, ShowcaseVariant> = { decor: "slide", costumes: "fan", jewellery: "necklace", makeup: "orbit" };
 const sideBySide = () => window.innerWidth > 820;
 
 type Lenisish = { scrollTo: (to: number, o?: object) => void; resize?: () => void };
 
+const studioLenis = () => (window as unknown as { __studioLenis?: Lenisish }).__studioLenis;
+const jumpTo = (y: number) => {
+  const lenis = studioLenis();
+  if (lenis) {
+    lenis.resize?.(); // the page may just have grown; let Lenis know how far it can go
+    lenis.scrollTo(y, { immediate: true, force: true });
+  } else window.scrollTo(0, y);
+};
+
+/* Glide the page until a service's circle sits in the middle of the screen,
+   then resolve — the flower opens or closes only once it is centred. The
+   aim is re-measured every frame, so it lands true even if the page shifts. */
+function glideToCentre(id: string): Promise<void> {
+  const el = document.querySelector<HTMLElement>(`[data-stage="${id}"]`);
+  if (!el) return Promise.resolve();
+  const aim = () => {
+    const r = el.getBoundingClientRect();
+    const want = window.scrollY + r.top + r.height / 2 - window.innerHeight / 2;
+    return Math.max(0, Math.min(want, document.documentElement.scrollHeight - window.innerHeight));
+  };
+  const from = window.scrollY;
+  const distance = Math.abs(aim() - from);
+  if (distance < 3) return Promise.resolve();
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    jumpTo(aim());
+    return Promise.resolve();
+  }
+  // Short hops are quick; long ones take a little longer, never sluggish.
+  const duration = Math.min(1000, 420 + distance * 0.45);
+  return new Promise((resolve) => {
+    const t0 = performance.now();
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - t0) / duration);
+      const eased = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; // ease in and out
+      jumpTo(from + (aim() - from) * eased);
+      if (p < 1) requestAnimationFrame(tick);
+      else resolve();
+    };
+    requestAnimationFrame(tick);
+  });
+}
+
 /* Keep an opening or closing service exactly where it is on screen: while
    its row grows or shrinks, scroll by however far it would have moved, so
    the flower never drifts up or down. A visitor who scrolls takes over. */
-function holdStill(id: string) {
+function holdStill(id: string, opening?: boolean) {
   const el = document.querySelector<HTMLElement>(`[data-stage="${id}"]`);
   if (!el) return () => {};
   const centre = () => {
@@ -30,7 +69,6 @@ function holdStill(id: string) {
   const html = document.documentElement;
   const anchor = html.style.overflowAnchor;
   html.style.overflowAnchor = "none"; // the browser's own anchoring would fight us
-  const lenis = (window as unknown as { __studioLenis?: Lenisish }).__studioLenis;
   const t0 = performance.now();
   let raf = 0;
   const end = () => {
@@ -47,20 +85,18 @@ function holdStill(id: string) {
   let settledAt = t0;
   const tick = (now: number) => {
     const drift = centre() - start;
-    if (Math.abs(drift) >= 0.5) {
-      const to = window.scrollY + drift;
-      if (lenis) {
-        lenis.resize?.(); // the page just grew; let Lenis know how far it can now go
-        lenis.scrollTo(to, { immediate: true, force: true });
-      }
-      else window.scrollTo(0, to);
-    }
+    if (Math.abs(drift) >= 0.5) jumpTo(window.scrollY + drift);
     const h = el.offsetHeight + row.offsetHeight;
     if (h !== size) {
       size = h;
       settledAt = now;
     }
-    const still = now - settledAt > 300 && now - t0 > 1000;
+    // When opening or closing, also wait for the stage to reach its final
+    // size: a busy phone can start the growth a beat late.
+    const core = el.querySelector<HTMLElement>("button[aria-expanded]");
+    const target = opening === undefined ? null : opening ? el.offsetWidth : core?.offsetWidth ?? el.offsetHeight;
+    const arrived = target === null || Math.abs(el.offsetHeight - target) <= 1;
+    const still = arrived && now - settledAt > 300 && now - t0 > 1000;
     if (!still && now - t0 < 4000) raf = requestAnimationFrame(tick);
     else end();
   };
@@ -83,9 +119,9 @@ export default function PlanningStage({ go }: StageProps) {
   const [pick, setPick] = useState<number | null>(null);
   const release = useRef<() => void>(() => {});
   useEffect(() => () => release.current(), []);
-  const keep = (id: string | null) => {
+  const keep = (id: string | null, opening?: boolean) => {
     release.current();
-    if (id) release.current = holdStill(id);
+    if (id) release.current = holdStill(id, opening);
   };
   const choose = (k: number | null) => {
     if (open && sideBySide()) keep(open); // the card swaps in beside the flower
@@ -107,10 +143,21 @@ export default function PlanningStage({ go }: StageProps) {
     }, 80);
     return () => window.clearTimeout(t);
   }, [pick]);
-  const toggle = (id: string) => {
-    keep(id);
-    setPick(null);
-    setOpen((o) => (o === id ? null : id));
+  // Opening or closing: first glide the circle to the middle of the screen,
+  // then bloom or fold it there, holding it still while its row resizes.
+  const busy = useRef(false);
+  const toggle = async (id: string) => {
+    if (busy.current) return;
+    busy.current = true;
+    release.current();
+    try {
+      await glideToCentre(id);
+    } finally {
+      keep(id, open !== id);
+      setPick(null);
+      setOpen((o) => (o === id ? null : id));
+      busy.current = false;
+    }
   };
 
   return (
@@ -128,27 +175,15 @@ export default function PlanningStage({ go }: StageProps) {
           const side = i % 2 === 0 ? px.left : px.right;
           return (
             <li key={s.id} className={`${px.row} ${side} ${on ? px.rowOpen : ""}`} style={{ "--i": i } as React.CSSProperties}>
-              <div className={px.stage} data-stage={s.id} data-v={VARIANT[s.id] ?? "lotus"}>
-                {VARIANT[s.id] ? (
-                  <PartnerShowcase
-                    service={s}
-                    variant={VARIANT[s.id]}
-                    open={on}
-                    onToggle={() => toggle(s.id)}
-                    eager={i < 2}
-                    selected={on ? pick : null}
-                    onPick={(k) => choose(pick === k ? null : k)}
-                  />
-                ) : (
-                  <PartnerBloom
-                    service={s}
-                    open={on}
-                    onToggle={() => toggle(s.id)}
-                    eager={i < 2}
-                    selected={on ? pick : null}
-                    onPick={(k) => choose(pick === k ? null : k)}
-                  />
-                )}
+              <div className={px.stage} data-stage={s.id}>
+                <PartnerBloom
+                  service={s}
+                  open={on}
+                  onToggle={() => toggle(s.id)}
+                  eager={i < 2}
+                  selected={on ? pick : null}
+                  onPick={(k) => choose(pick === k ? null : k)}
+                />
               </div>
 
               <div className={px.copy}>
@@ -170,7 +205,7 @@ export default function PlanningStage({ go }: StageProps) {
                     )}
                   </ol>
                 )}
-                {on && pick === null && <p className={px.hint}>Tap {VARIANT[s.id] ? "a partner" : "a petal"} or a name to see the place and the privilege.</p>}
+                {on && pick === null && <p className={px.hint}>Tap a petal or a name to see the place and the privilege.</p>}
                 {on && pick !== null && s.partners[pick] && (() => {
                   const p = s.partners[pick];
                   return (
