@@ -9,14 +9,14 @@ import type { PlanningService } from "@/lib/commission/planning";
    ivory petals — one per partner brand, each carrying its logo — spiral
    open in front of them, while the photograph gives way to the 24 Frames
    seal at the heart of the flower. Tapping a petal opens that partner's
-   card beside the flower. Opening also glides the page so the flower
-   sits in the middle of the screen. */
+   card beside the flower. The page keeps the flower still while it
+   opens and closes (see PlanningStage). */
 
-/* A lotus petal: a slender almond, narrow at the heart and drawn to a fine point. */
+/* A lotus petal: a slender almond with a softly rounded tip. */
 const PETAL =
-  "M0,0 C-38,-34 -98,-112 -98,-192 C-98,-262 -44,-306 0,-340 C44,-306 98,-262 98,-192 C98,-112 38,-34 0,0 Z";
+  "M0,0 C-38,-34 -98,-112 -98,-192 C-98,-262 -66,-304 -34,-326 C-14,-340 14,-340 34,-326 C66,-304 98,-262 98,-192 C98,-112 38,-34 0,0 Z";
 /* The fine midrib and side veins that make a petal read as a petal. */
-const VEINS = "M0,-18 C-1,-130 -1,-240 0,-326 M0,-46 C-26,-120 -40,-200 -34,-280 M0,-46 C26,-120 40,-200 34,-280";
+const VEINS = "M0,-18 C-1,-130 -1,-240 0,-318 M0,-46 C-26,-120 -40,-200 -34,-280 M0,-46 C26,-120 40,-200 34,-280";
 /* Gold stamens ringing the heart, between the seal and the petals. */
 const STAMENS = Array.from({ length: 36 }, (_, i) => (i * 360) / 36);
 
@@ -79,79 +79,7 @@ export default function PartnerBloom({
   const petals = useRef<(SVGGElement | null)[]>([]);
   const outers = useRef<(SVGGElement | null)[]>([]);
   const labels = useRef<(SVGGElement | null)[]>([]);
-  const root = useRef<HTMLDivElement>(null);
   const time = useRef(0);
-
-  // Glide the page so the opened flower sits in the middle of the screen.
-  // The glide is driven frame by frame and re-aims at the flower's centre on
-  // every frame, so it follows the stage as it grows (a native smooth scroll
-  // is cut short by that growth, which made the page lurch).
-  useEffect(() => {
-    if (!open || !root.current) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const aim = () => {
-      const stage = root.current?.parentElement;
-      if (!stage) return window.scrollY;
-      // The stage grows to a square as wide as itself. Beside the copy (desktop)
-      // it is centred in its row, so its top edge moves while it grows: aim at
-      // where its centre will settle, not where its top happens to be now.
-      const r = stage.getBoundingClientRect();
-      const row = stage.parentElement;
-      const copy = row && [...row.children].find((c) => c !== stage);
-      const sideBySide = !!row && getComputedStyle(row).gridTemplateColumns.trim().split(/\s+/).length > 1;
-      const centre =
-        sideBySide && row && copy
-          ? row.getBoundingClientRect().top + Math.max(r.width, copy.getBoundingClientRect().height) / 2
-          : r.top + r.width / 2;
-      const want = window.scrollY + centre - window.innerHeight / 2;
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      return Math.max(0, Math.min(want, max));
-    };
-    // The builder runs its own Lenis; scrolling past it natively makes the two fight.
-    const lenis = (window as unknown as { __studioLenis?: { scrollTo: (to: number, o?: object) => void } }).__studioLenis;
-    const jump = (y: number) => (lenis ? lenis.scrollTo(y, { immediate: true, force: true }) : window.scrollTo(0, y));
-    if (reduce) {
-      jump(aim());
-      return;
-    }
-    const DURATION = 1300;
-    // The stage grows while we glide; without this the browser's scroll
-    // anchoring adds that growth to the scroll position and the page lurches.
-    const html = document.documentElement;
-    const anchor = html.style.overflowAnchor;
-    html.style.overflowAnchor = "none";
-    const from = window.scrollY;
-    const t0 = performance.now();
-    let raf = 0;
-    let anchorTimer = 0;
-    const stop = () => {
-      cancelAnimationFrame(raf);
-      // Hand anchoring back once the stage has finished growing.
-      window.clearTimeout(anchorTimer);
-      anchorTimer = window.setTimeout(() => (html.style.overflowAnchor = anchor), 1000);
-    };
-    const tick = (now: number) => {
-      const p = Math.min(1, (now - t0) / DURATION);
-      const eased = 1 - Math.pow(1 - p, 3);
-      jump(from + (aim() - from) * eased);
-      if (p < 1) raf = requestAnimationFrame(tick);
-      else stop();
-    };
-    raf = requestAnimationFrame(tick);
-    // A visitor who scrolls themselves takes over at once.
-    const opts = { passive: true } as const;
-    window.addEventListener("wheel", stop, opts);
-    window.addEventListener("touchstart", stop, opts);
-    window.addEventListener("keydown", stop);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.clearTimeout(anchorTimer);
-      html.style.overflowAnchor = anchor;
-      window.removeEventListener("wheel", stop);
-      window.removeEventListener("touchstart", stop);
-      window.removeEventListener("keydown", stop);
-    };
-  }, [open]);
 
   useEffect(() => {
     const angles = anglesFor(service.partners.length);
@@ -192,7 +120,7 @@ export default function PartnerBloom({
   }, [open, service.partners.length]);
 
   return (
-    <div ref={root} className={`${px.bloom} ${open ? px.bloomOpen : ""}`}>
+    <div className={`${px.bloom} ${open ? px.bloomOpen : ""}`}>
       <span className={px.halo} aria-hidden="true" />
       <svg className={px.flower} viewBox="-500 -500 1000 1000" aria-hidden="true">
         <defs>
