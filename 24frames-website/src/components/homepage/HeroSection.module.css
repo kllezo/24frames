@@ -8,7 +8,9 @@
   position: relative;
   width: 100%;
   height: 100vh;
-  height: 100dvh;
+  /* The small viewport height stays fixed while a phone's address bar
+     shows and hides; 100dvh would resize the pinned hero mid-scroll. */
+  height: 100svh;
   min-height: 640px;
   margin: 0;
   padding: 0;
@@ -242,7 +244,6 @@
 @media (max-width: 768px) {
   .heroSection {
     height: 100svh;
-    height: 100dvh;
     min-height: 580px;
     max-height: 920px;
   }

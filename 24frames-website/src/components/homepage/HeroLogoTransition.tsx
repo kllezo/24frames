@@ -244,6 +244,7 @@ export default function HeroLogoTransition({
         start: "top top",
         end: pinDistance,
         pin: true,
+        anticipatePin: 1, // pin a frame early so a fast touch fling doesn't jolt
         scrub: 0.35,
         onUpdate: (self) => {
           const progress = self.progress;
